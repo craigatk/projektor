@@ -1,0 +1,194 @@
+{
+  "id": "CVYSUNPI011X",
+  "test_suites": [
+    {
+      "idx": 1,
+      "class_name": "dashboard",
+      "test_count": 2,
+      "passing_count": 2,
+      "skipped_count": 0,
+      "failure_count": 0,
+      "start_ts": {
+        "date": { "year": 2019, "month": 10, "day": 3 },
+        "time": { "hour": 6, "minute": 48, "second": 11, "nano": 0 }
+      },
+      "duration": 4.245,
+      "test_cases": [
+        {
+          "idx": 1,
+          "test_suite_idx": 0,
+          "name": "dashboard should show failed test case summaries on dashboard page",
+          "class_name": "should show failed test case summaries on dashboard page",
+          "duration": 2.412,
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "idx": 2,
+          "test_suite_idx": 0,
+          "name": "dashboard when tests all passed should show test suite list on dashboard",
+          "class_name": "when tests all passed should show test suite list on dashboard",
+          "duration": 1.833,
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "idx": 2,
+      "class_name": "test case",
+      "test_count": 3,
+      "passing_count": 3,
+      "skipped_count": 0,
+      "failure_count": 0,
+      "start_ts": {
+        "date": { "year": 2019, "month": 10, "day": 3 },
+        "time": { "hour": 6, "minute": 48, "second": 51, "nano": 0 }
+      },
+      "duration": 10.825,
+      "test_cases": [
+        {
+          "idx": 1,
+          "test_suite_idx": 0,
+          "name": "test case should show test suite system out and err",
+          "class_name": "should show test suite system out and err",
+          "duration": 5.241,
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "idx": 2,
+          "test_suite_idx": 0,
+          "name": "test case when test case passed should redirect to summary tab",
+          "class_name": "when test case passed should redirect to summary tab",
+          "duration": 3.036,
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "idx": 3,
+          "test_suite_idx": 0,
+          "name": "test case should highlight multiple system out lines when shift-clicking",
+          "class_name": "should highlight multiple system out lines when shift-clicking",
+          "duration": 2.548,
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "idx": 3,
+      "class_name": "test run with failed test cases",
+      "test_count": 1,
+      "passing_count": 1,
+      "skipped_count": 0,
+      "failure_count": 0,
+      "start_ts": {
+        "date": { "year": 2019, "month": 10, "day": 3 },
+        "time": { "hour": 6, "minute": 49, "second": 26, "nano": 0 }
+      },
+      "duration": 3.172,
+      "test_cases": [
+        {
+          "idx": 1,
+          "test_suite_idx": 0,
+          "name": "test run with failed test cases should link from test case details to test suites in package",
+          "class_name": "should link from test case details to test suites in package",
+          "duration": 3.172,
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "idx": 4,
+      "class_name": "test suite",
+      "test_count": 2,
+      "passing_count": 2,
+      "skipped_count": 0,
+      "failure_count": 0,
+      "start_ts": {
+        "date": { "year": 2019, "month": 10, "day": 3 },
+        "time": { "hour": 6, "minute": 49, "second": 11, "nano": 0 }
+      },
+      "duration": 6.475,
+      "test_cases": [
+        {
+          "idx": 1,
+          "test_suite_idx": 0,
+          "name": "test suite should link from test case details to test suite",
+          "class_name": "should link from test case details to test suite",
+          "duration": 3.197,
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "idx": 2,
+          "test_suite_idx": 0,
+          "name": "test suite should show test suite system out and err",
+          "class_name": "should show test suite system out and err",
+          "duration": 3.278,
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "idx": 5,
+      "class_name": "side nav",
+      "test_count": 1,
+      "passing_count": 1,
+      "skipped_count": 0,
+      "failure_count": 0,
+      "start_ts": {
+        "date": { "year": 2019, "month": 10, "day": 3 },
+        "time": { "hour": 6, "minute": 48, "second": 38, "nano": 0 }
+      },
+      "duration": 2.63,
+      "test_cases": [
+        {
+          "idx": 1,
+          "test_suite_idx": 0,
+          "name": "side nav should link to failed test cases",
+          "class_name": "should link to failed test cases",
+          "duration": 2.63,
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "idx": 6,
+      "class_name": "test run with failed test cases",
+      "test_count": 2,
+      "passing_count": 2,
+      "skipped_count": 0,
+      "failure_count": 0,
+      "start_ts": {
+        "date": { "year": 2019, "month": 10, "day": 3 },
+        "time": { "hour": 6, "minute": 48, "second": 24, "nano": 0 }
+      },
+      "duration": 6.536,
+      "test_cases": [
+        {
+          "idx": 1,
+          "test_suite_idx": 0,
+          "name": "test run with failed test cases should show failed test case summaries on failed tests page",
+          "class_name": "should show failed test case summaries on failed tests page",
+          "duration": 3.561,
+          "passed": true,
+          "skipped": false
+        },
+        {
+          "idx": 2,
+          "test_suite_idx": 0,
+          "name": "test run with failed test cases should link from failed tests page to failed test case system out and system err",
+          "class_name": "should link from failed tests page to failed test case system out and system err",
+          "duration": 2.975,
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    }
+  ]
+}

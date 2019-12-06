@@ -1,0 +1,10 @@
+{
+  "name": "cypress-common",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "chai-colors": "1.0.1",
+    "cypress": "3.4.1"
+  }
+}

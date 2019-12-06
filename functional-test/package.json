@@ -1,0 +1,16 @@
+{
+  "name": "functional-test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "format": "prettier --write cypress/integration/*.js"
+  },
+  "devDependencies": {
+    "chai-colors": "1.0.1",
+    "cypress": "3.4.1",
+    "prettier": "1.18.2"
+  }
+}

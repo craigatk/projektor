@@ -1,0 +1,30 @@
+[
+  {
+    "idx": 1,
+    "package_name": "projektor.example.spock",
+    "class_name": "PassingSpec",
+    "test_count": 1,
+    "passing_count": 1,
+    "skipped_count": 0,
+    "failure_count": 0,
+    "start_ts": {
+      "date": { "year": 2019, "month": 9, "day": 4 },
+      "time": { "hour": 7, "minute": 53, "second": 28, "nano": 0 }
+    },
+    "duration": 0.067
+  },
+  {
+    "idx": 2,
+    "package_name": "projektor.example.spock",
+    "class_name": "FailingSpec",
+    "test_count": 2,
+    "passing_count": 0,
+    "skipped_count": 0,
+    "failure_count": 2,
+    "start_ts": {
+      "date": { "year": 2019, "month": 9, "day": 4 },
+      "time": { "hour": 7, "minute": 53, "second": 28, "nano": 0 }
+    },
+    "duration": 0.281
+  }
+]

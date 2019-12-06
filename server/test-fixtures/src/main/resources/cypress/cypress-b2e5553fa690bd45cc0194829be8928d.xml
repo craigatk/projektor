@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="2.63" tests="1" failures="0">
+  <testsuite name="Root Suite" timestamp="2019-10-03T11:48:38" tests="0" failures="0" time="0">
+  </testsuite>
+  <testsuite name="side nav" timestamp="2019-10-03T11:48:38" tests="1" failures="0" time="2.63">
+    <testcase name="side nav should link to failed test cases" time="2.63" classname="should link to failed test cases">
+    </testcase>
+  </testsuite>
+</testsuites>

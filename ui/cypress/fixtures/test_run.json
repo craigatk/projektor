@@ -1,0 +1,89 @@
+{
+  "id": "IMFFOWW3AVYL",
+  "test_suites": [
+    {
+      "idx": 1,
+      "package_name": "projektor.example.spock",
+      "class_name": "PassingSpec",
+      "test_count": 1,
+      "passing_count": 1,
+      "skipped_count": 0,
+      "failure_count": 0,
+      "start_ts": {
+        "date": { "year": 2019, "month": 9, "day": 23 },
+        "time": { "hour": 7, "minute": 53, "second": 38, "nano": 0 }
+      },
+      "duration": 0.001,
+      "test_cases": [
+        {
+          "idx": 1,
+          "test_suite_idx": 0,
+          "name": "should pass",
+          "package_name": "projektor.example.spock",
+          "class_name": "PassingSpec",
+          "duration": 0.001,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "idx": 2,
+      "package_name": "projektor.example.spock",
+      "class_name": "FailingSpec",
+      "test_count": 2,
+      "passing_count": 0,
+      "skipped_count": 0,
+      "failure_count": 2,
+      "start_ts": {
+        "date": { "year": 2019, "month": 9, "day": 23 },
+        "time": { "hour": 7, "minute": 53, "second": 38, "nano": 0 }
+      },
+      "duration": 0.236,
+      "test_cases": [
+        {
+          "idx": 1,
+          "test_suite_idx": 0,
+          "name": "should fail",
+          "package_name": "projektor.example.spock",
+          "class_name": "FailingSpec",
+          "duration": 0.209,
+          "passed": false
+        },
+        {
+          "idx": 2,
+          "test_suite_idx": 0,
+          "name": "should fail with output",
+          "package_name": "projektor.example.spock",
+          "class_name": "FailingSpec",
+          "duration": 0.027,
+          "passed": false
+        }
+      ]
+    },
+    {
+      "idx": 3,
+      "package_name": "projektor.example.spock",
+      "class_name": "OutputSpec",
+      "test_count": 1,
+      "passing_count": 1,
+      "skipped_count": 0,
+      "failure_count": 0,
+      "start_ts": {
+        "date": { "year": 2019, "month": 9, "day": 23 },
+        "time": { "hour": 7, "minute": 53, "second": 38, "nano": 0 }
+      },
+      "duration": 0.313,
+      "test_cases": [
+        {
+          "idx": 1,
+          "test_suite_idx": 0,
+          "name": "should include system out and system err",
+          "package_name": "projektor.example.spock",
+          "class_name": "OutputSpec",
+          "duration": 0.313,
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="4.245" tests="2" failures="0">
+  <testsuite name="Root Suite" timestamp="2019-10-03T11:48:11" tests="0" failures="0" time="0">
+  </testsuite>
+  <testsuite name="dashboard" timestamp="2019-10-03T11:48:11" tests="2" failures="0" time="4.245">
+    <testcase name="dashboard should show failed test case summaries on dashboard page" time="2.412" classname="should show failed test case summaries on dashboard page">
+    </testcase>
+    <testcase name="dashboard when tests all passed should show test suite list on dashboard" time="1.833" classname="when tests all passed should show test suite list on dashboard">
+    </testcase>
+  </testsuite>
+</testsuites>

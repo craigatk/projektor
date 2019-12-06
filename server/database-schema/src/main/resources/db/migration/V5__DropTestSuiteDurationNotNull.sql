@@ -1,0 +1,2 @@
+ALTER TABLE test_suite ALTER COLUMN duration DROP NOT NULL;
+ALTER TABLE test_case ALTER COLUMN duration DROP NOT NULL;

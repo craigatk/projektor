@@ -1,0 +1,11 @@
+{
+  "idx": 1,
+  "test_suite_idx": 5,
+  "name": "side nav should link to failed test cases",
+  "class_name": "should link to failed test cases",
+  "duration": 2.63,
+  "passed": true,
+  "skipped": false,
+  "has_system_out": false,
+  "has_system_err": false
+}

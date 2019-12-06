@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="3.172" tests="1" failures="0">
+  <testsuite name="Root Suite" timestamp="2019-10-03T11:49:26" tests="0" failures="0" time="0">
+  </testsuite>
+  <testsuite name="test run with failed test cases" timestamp="2019-10-03T11:49:26" tests="1" failures="0" time="3.172">
+    <testcase name="test run with failed test cases should link from test case details to test suites in package" time="3.172" classname="should link from test case details to test suites in package">
+    </testcase>
+  </testsuite>
+</testsuites>

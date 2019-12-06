@@ -1,0 +1,1 @@
+CREATE INDEX idx_test_case_duration on test_case(duration);

@@ -1,0 +1,49 @@
+
+package projektor.testsuite
+
+import io.ktor.http.*
+import io.ktor.server.testing.*
+import io.ktor.util.KtorExperimentalAPI
+import kotlin.test.*
+import projektor.ApplicationTestCase
+import projektor.createTestRun
+import projektor.createTestSuite
+import projektor.incomingresults.randomPublicId
+import projektor.server.api.TestSuiteOutput
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
+
+@KtorExperimentalAPI
+class GetTestSuiteSystemOutApplicationTest : ApplicationTestCase() {
+    @Test
+    fun shouldFetchTestSuiteSystemOutFromDatabase() {
+        val publicId = randomPublicId()
+        val testSuiteIdx = 1
+        val systemOut = """Here is some system output
+            With multiple
+            Lines
+        """.trimIndent()
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Get, "/run/$publicId/suite/$testSuiteIdx/systemOut") {
+                val testRun = createTestRun(publicId, 1)
+                testRunDao.insert(testRun)
+
+                val testSuiteDB1 = createTestSuite(testRun.id, "ShouldFind", 1)
+                testSuiteDB1.systemOut = systemOut
+                testSuiteDB1.systemErr = "Some system err"
+                testSuiteDao.insert(testSuiteDB1)
+
+                val testSuiteDB2 = createTestSuite(testRun.id, "AnotherOne", 2)
+                testSuiteDB2.systemOut = "Some other output"
+                testSuiteDB2.systemErr = "Some other system err"
+                testSuiteDao.insert(testSuiteDB2)
+            }.apply {
+                val responseOutput = objectMapper.readValue(response.content, TestSuiteOutput::class.java)
+                assertNotNull(responseOutput)
+
+                expectThat(responseOutput.value).isEqualTo(systemOut)
+            }
+        }
+    }
+}

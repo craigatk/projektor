@@ -1,0 +1,34 @@
+[
+  {
+    "idx": 1,
+    "test_suite_idx": 1,
+    "name": "should fail",
+    "package_name": "projektor.example.spock",
+    "class_name": "FailingSpec",
+    "duration": 0.237,
+    "passed": false,
+    "has_system_out": true,
+    "has_system_err": true,
+    "failure": {
+      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
+      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec.should fail(FailingSpec.groovy:8)\n"
+    }
+  },
+  {
+    "idx": 2,
+    "test_suite_idx": 1,
+    "name": "should fail with output",
+    "package_name": "projektor.example.spock",
+    "class_name": "FailingSpec",
+    "duration": 0.044,
+    "passed": false,
+    "has_system_out": true,
+    "has_system_err": true,
+    "failure": {
+      "failure_message": "Condition not satisfied:\n\nactual \u003d\u003d 3\n|      |\n1      false\n",
+      "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
+      "failure_text": "Condition not satisfied:\n\nactual \u003d\u003d 3\n|      |\n1      false\n\n\tat projektor.example.spock.FailingSpec.should fail with output(FailingSpec.groovy:22)\n"
+    }
+  }
+]

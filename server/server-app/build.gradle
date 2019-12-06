@@ -1,0 +1,72 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "5.2.0"
+    id "application"
+}
+
+apply from: '../../gradle/kotlin.gradle'
+
+repositories {
+    jcenter()
+    maven { url "https://dl.bintray.com/kotlin/ktor" }
+}
+
+mainClassName = 'io.ktor.server.netty.EngineMain'
+
+// This task will generate your fat JAR and put it in the ./build/libs/ directory
+shadowJar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
+
+jar.enabled = false // We only use the -all jar produced by Shadow
+
+group 'dev.projektor'
+version '1.0'
+
+dependencies {
+    implementation project(':server:database-schema')
+    implementation project(':server:server-api')
+    implementation project(':server:test-results-merge')
+    implementation project(':server:test-results-parser')
+
+    implementation "io.ktor:ktor-server-netty:$ktor_version"
+    implementation "io.ktor:ktor-jackson:$ktor_version"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9"
+    implementation "org.koin:koin-ktor:${koin_version}"
+    implementation "org.koin:koin-logger-slf4j:${koin_version}"
+
+    implementation 'org.simpleflatmapper:sfm-jooq:7.0.3'
+
+    implementation "ch.qos.logback:logback-classic:1.2.3"
+
+    implementation "org.apache.commons:commons-lang3:3.8.1"
+
+    testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
+
+    testImplementation(project(':server:test-fixtures'))
+
+    testImplementation 'org.awaitility:awaitility-kotlin:4.0.0'
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.5.2"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.5.2"
+
+    testImplementation "org.koin:koin-test:${koin_version}"
+}
+
+task cleanStaticResources(type: Delete) {
+    delete 'src/main/resources/static/'
+}
+
+evaluationDependsOn(':ui')
+
+task copyUI(type: Copy, dependsOn: ['cleanStaticResources', ':ui:assemble']){
+    from tasks.getByPath(':ui:assemble').outputs
+    into 'src/main/resources/static'
+}
+
+assemble.dependsOn(copyUI)
+runShadow.dependsOn(copyUI)
+shadowJar.dependsOn(copyUI)
+
+task stage(dependsOn: 'shadowJar')

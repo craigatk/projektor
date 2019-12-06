@@ -1,0 +1,72 @@
+plugins {
+    id "com.avast.gradle.docker-compose" version "0.9.4"
+    id 'nu.studer.jooq' version '3.0.3'
+    id "org.flywaydb.flyway" version "6.0.0"
+    id "java-library"
+}
+
+dependencies {
+    api "org.flywaydb:flyway-core:6.0.0"
+    api "com.zaxxer:HikariCP:3.3.1"
+    api 'org.jooq:jooq:3.11.11'
+
+    // Needs to be 'compile' scope so the Flyway plugin can see it
+    compile "org.postgresql:postgresql:$postgresDriverVersion"
+
+    jooqRuntime "org.postgresql:postgresql:$postgresDriverVersion"
+}
+
+flyway {
+    url = 'jdbc:postgresql://localhost:5433/projektordb'
+    user = 'testuser'
+    password = 'testpass'
+}
+
+jooq {
+    version = '3.11.11'
+    edition = 'OSS'
+    model(sourceSets.main) {
+        jdbc {
+            driver = 'org.postgresql.Driver'
+            url = 'jdbc:postgresql://localhost:5433/projektordb'
+            user = 'testuser'
+            password = 'testpass'
+        }
+        generator {
+            name = 'org.jooq.codegen.DefaultGenerator'
+            strategy {
+                name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+            }
+            database {
+                name = 'org.jooq.meta.postgres.PostgresDatabase'
+                excludes = "flyway_schema_history"
+                inputSchema = "public"
+            }
+            generate {
+                relations = true
+                deprecated = false
+                records = true
+                fluentSetters = true
+                pojos = true
+                pojosEqualsAndHashCode = true
+                daos = true
+            }
+            target {
+                packageName = 'projektor.database.generated'
+                directory = 'src/main/java'
+            }
+        }
+    }
+}
+
+// removes the task dependency from compileJava to generateSampleJooqSchemaSource
+project.tasks.getByName('compileJava').dependsOn -= 'generateModelJooqSchemaSource'
+
+generateModelJooqSchemaSource.inputs.dir("${projectDir}/src/main/resources/db/migration")
+generateModelJooqSchemaSource.outputs.cacheIf { true }
+
+task generateJooq(dependsOn: generateModelJooqSchemaSource)
+
+flywayMigrate.dependsOn composeUp
+generateJooq.dependsOn flywayMigrate
+generateJooq.finalizedBy composeDownForced

@@ -1,0 +1,10 @@
+include 'server:database-schema',
+        'functional-test',
+        'publishers:gradle-plugin',
+        'server:server-app',
+        'server:server-api',
+        'server:server-example-loader',
+        ':server:test-fixtures',
+        'server:test-results-merge',
+        'server:test-results-parser',
+        'ui'

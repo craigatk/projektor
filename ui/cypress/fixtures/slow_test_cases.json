@@ -1,0 +1,118 @@
+[
+  {
+    "idx": 1,
+    "test_suite_idx": 3,
+    "name": "should include system out and system err",
+    "package_name": "projektor.example.spock",
+    "class_name": "OutputSpec",
+    "duration": 0.229,
+    "passed": true,
+    "skipped": false,
+    "has_system_out": false,
+    "has_system_err": false
+  },
+  {
+    "idx": 1,
+    "test_suite_idx": 4,
+    "name": "should run test case 1",
+    "package_name": "projektor.example.spock",
+    "class_name": "IgnoreSomeMethodsSpec",
+    "duration": 0.156,
+    "passed": true,
+    "skipped": false,
+    "has_system_out": false,
+    "has_system_err": false
+  },
+  {
+    "idx": 1,
+    "test_suite_idx": 2,
+    "name": "should fail",
+    "package_name": "projektor.example.spock",
+    "class_name": "FailingSpec",
+    "duration": 0.119,
+    "passed": false,
+    "skipped": false,
+    "has_system_out": false,
+    "has_system_err": false
+  },
+  {
+    "idx": 2,
+    "test_suite_idx": 2,
+    "name": "should fail with output",
+    "package_name": "projektor.example.spock",
+    "class_name": "FailingSpec",
+    "duration": 0.006,
+    "passed": false,
+    "skipped": false
+  },
+  {
+    "idx": 5,
+    "test_suite_idx": 4,
+    "name": "should run test case 5",
+    "package_name": "projektor.example.spock",
+    "class_name": "IgnoreSomeMethodsSpec",
+    "duration": 0.003,
+    "passed": true,
+    "skipped": false,
+    "has_system_out": false,
+    "has_system_err": false
+  },
+  {
+    "idx": 6,
+    "test_suite_idx": 5,
+    "name": "should fail test case 6",
+    "package_name": "projektor.example.spock",
+    "class_name": "IgnoreSomeMethodsAndSomeFailingSpec",
+    "duration": 0.002,
+    "passed": false,
+    "skipped": false
+  },
+  {
+    "idx": 1,
+    "test_suite_idx": 1,
+    "name": "should pass",
+    "package_name": "projektor.example.spock",
+    "class_name": "PassingSpec",
+    "duration": 0.002,
+    "passed": true,
+    "skipped": false,
+    "has_system_out": false,
+    "has_system_err": false
+  },
+  {
+    "idx": 1,
+    "test_suite_idx": 5,
+    "name": "should run test case 1",
+    "package_name": "projektor.example.spock",
+    "class_name": "IgnoreSomeMethodsAndSomeFailingSpec",
+    "duration": 0.002,
+    "passed": true,
+    "skipped": false,
+    "has_system_out": false,
+    "has_system_err": false
+  },
+  {
+    "idx": 5,
+    "test_suite_idx": 5,
+    "name": "should run test case 5",
+    "package_name": "projektor.example.spock",
+    "class_name": "IgnoreSomeMethodsAndSomeFailingSpec",
+    "duration": 0.001,
+    "passed": true,
+    "skipped": false,
+    "has_system_out": false,
+    "has_system_err": false
+  },
+  {
+    "idx": 6,
+    "test_suite_idx": 4,
+    "name": "should not run test case 6",
+    "package_name": "projektor.example.spock",
+    "class_name": "IgnoreSomeMethodsSpec",
+    "duration": 0.001,
+    "passed": true,
+    "skipped": true,
+    "has_system_out": false,
+    "has_system_err": false
+  }
+]

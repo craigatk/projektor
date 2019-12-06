@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="projektor.example.spock.IgnoreSomeMethodsAndSomeFailingSpec" tests="10" skipped="2" failures="1" errors="0" timestamp="2019-10-01T13:15:45" hostname="Craigs-MacBook-Pro.local" time="0.011">
+  <properties/>
+  <testcase name="should run test case 1" classname="projektor.example.spock.IgnoreSomeMethodsAndSomeFailingSpec" time="0.002"/>
+  <testcase name="should run test case 2" classname="projektor.example.spock.IgnoreSomeMethodsAndSomeFailingSpec" time="0.0"/>
+  <testcase name="should not run test case 3" classname="projektor.example.spock.IgnoreSomeMethodsAndSomeFailingSpec" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="should run test case 4" classname="projektor.example.spock.IgnoreSomeMethodsAndSomeFailingSpec" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="should run test case 5" classname="projektor.example.spock.IgnoreSomeMethodsAndSomeFailingSpec" time="0.001"/>
+  <testcase name="should fail test case 6" classname="projektor.example.spock.IgnoreSomeMethodsAndSomeFailingSpec" time="0.002">
+    <failure message="Condition not satisfied:&#10;&#10;false&#10;" type="org.spockframework.runtime.ConditionNotSatisfiedError">Condition not satisfied:
+
+false
+
+	at projektor.example.spock.IgnoreSomeMethodsAndSomeFailingSpec.should fail test case 6(IgnoreSomeMethodsAndSomeFailingSpec.groovy:36)
+</failure>
+  </testcase>
+  <testcase name="should fail test case 7" classname="projektor.example.spock.IgnoreSomeMethodsAndSomeFailingSpec" time="0.0"/>
+  <testcase name="should run test case 8" classname="projektor.example.spock.IgnoreSomeMethodsAndSomeFailingSpec" time="0.001"/>
+  <testcase name="should run test case 9" classname="projektor.example.spock.IgnoreSomeMethodsAndSomeFailingSpec" time="0.001"/>
+  <testcase name="should run test case 10" classname="projektor.example.spock.IgnoreSomeMethodsAndSomeFailingSpec" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

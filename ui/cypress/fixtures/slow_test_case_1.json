@@ -1,0 +1,12 @@
+{
+  "idx": 1,
+  "test_suite_idx": 3,
+  "name": "should include system out and system err",
+  "package_name": "projektor.example.spock",
+  "class_name": "OutputSpec",
+  "duration": 0.229,
+  "passed": true,
+  "skipped": false,
+  "has_system_out": false,
+  "has_system_err": false
+}

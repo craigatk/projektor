@@ -1,0 +1,31 @@
+{
+  "id": "YY0TCTNOAO5W",
+  "test_suites": [
+    {
+      "idx": 1,
+      "package_name": "projektor.example.spock",
+      "class_name": "PassingSpec",
+      "test_count": 1,
+      "passing_count": 1,
+      "skipped_count": 0,
+      "failure_count": 0,
+      "start_ts": {
+        "date": { "year": 2019, "month": 10, "day": 1 },
+        "time": { "hour": 8, "minute": 15, "second": 45, "nano": 0 }
+      },
+      "duration": 0.002,
+      "test_cases": [
+        {
+          "idx": 1,
+          "test_suite_idx": 0,
+          "name": "should pass",
+          "package_name": "projektor.example.spock",
+          "class_name": "PassingSpec",
+          "duration": 0.002,
+          "passed": true,
+          "skipped": false
+        }
+      ]
+    }
+  ]
+}

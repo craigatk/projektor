@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="6.536" tests="2" failures="0">
+  <testsuite name="Root Suite" timestamp="2019-10-03T11:48:24" tests="0" failures="0" time="0">
+  </testsuite>
+  <testsuite name="test run with failed test cases" timestamp="2019-10-03T11:48:24" tests="2" failures="0" time="6.536">
+    <testcase name="test run with failed test cases should show failed test case summaries on failed tests page" time="3.561" classname="should show failed test case summaries on failed tests page">
+    </testcase>
+    <testcase name="test run with failed test cases should link from failed tests page to failed test case system out and system err" time="2.975" classname="should link from failed tests page to failed test case system out and system err">
+    </testcase>
+  </testsuite>
+</testsuites>

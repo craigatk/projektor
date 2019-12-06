@@ -1,0 +1,28 @@
+{
+  "idx": 5,
+  "class_name": "side nav",
+  "test_count": 1,
+  "passing_count": 1,
+  "skipped_count": 0,
+  "failure_count": 0,
+  "start_ts": {
+    "date": { "year": 2019, "month": 10, "day": 3 },
+    "time": { "hour": 6, "minute": 48, "second": 38, "nano": 0 }
+  },
+  "has_system_out": false,
+  "has_system_err": false,
+  "duration": 2.63,
+  "test_cases": [
+    {
+      "idx": 1,
+      "test_suite_idx": 0,
+      "name": "side nav should link to failed test cases",
+      "class_name": "should link to failed test cases",
+      "duration": 2.63,
+      "passed": true,
+      "skipped": false,
+      "has_system_out": false,
+      "has_system_err": false
+    }
+  ]
+}

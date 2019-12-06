@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="10.825" tests="3" failures="0">
+  <testsuite name="Root Suite" timestamp="2019-10-03T11:48:51" tests="0" failures="0" time="0">
+  </testsuite>
+  <testsuite name="test case" timestamp="2019-10-03T11:48:51" tests="3" failures="0" time="10.825">
+    <testcase name="test case should show test suite system out and err" time="5.241" classname="should show test suite system out and err">
+    </testcase>
+    <testcase name="test case when test case passed should redirect to summary tab" time="3.036" classname="when test case passed should redirect to summary tab">
+    </testcase>
+    <testcase name="test case should highlight multiple system out lines when shift-clicking" time="2.548" classname="should highlight multiple system out lines when shift-clicking">
+    </testcase>
+  </testsuite>
+</testsuites>

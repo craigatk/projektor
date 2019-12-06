@@ -1,0 +1,1 @@
+docker build -t myapp:v1.0.2 .

@@ -1,0 +1,12 @@
+apply from: "../../gradle/kotlin.gradle"
+apply plugin: "application"
+
+mainClassName = "projektor.server.example.MainKt"
+
+dependencies {
+    implementation project(":server:server-api")
+    implementation project(":server:test-fixtures")
+
+    implementation "com.squareup.okhttp3:okhttp:4.1.0"
+    implementation 'com.google.code.gson:gson:2.8.5'
+}
