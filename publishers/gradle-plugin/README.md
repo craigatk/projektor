@@ -11,7 +11,7 @@ To apply this plugin to your project:
 
 ```
 plugins {
-  id "projektor.publish"
+  id "dev.projektor.publish"
 }
 ```
 

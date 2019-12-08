@@ -39,7 +39,7 @@ include 'project1', 'project2', 'project3'
             }
 
             plugins {
-                id 'projektor.publish'
+                id 'dev.projektor.publish'
             }
         """.stripIndent()
 

@@ -3,7 +3,8 @@ plugins {
 }
 
 node {
-    download = false
+    version = '12.13.1'
+    yarnVersion = '1.19.2'
 }
 
 task assemble(type: YarnTask) {

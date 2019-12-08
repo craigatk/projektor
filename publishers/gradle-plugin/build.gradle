@@ -8,21 +8,21 @@ plugins {
 gradlePlugin {
     plugins {
         projektorPlugin {
-            id = 'projektor.publish'
+            id = 'dev.projektor.publish'
             implementationClass = 'projektor.plugin.ProjektorPublishPlugin'
         }
     }
 }
 
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/craigatk/projektor")
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
-                password = project.findProperty("gpr.key") ?: System.getenv("GPR_API_KEY")
-            }
+pluginBundle {
+    website = 'https://github.com/craigatk/projektor'
+    vcsUrl = 'https://github.com/craigatk/projektor'
+    description = 'Automatically publish test reports to a Projektor report server'
+    tags = ['testing', 'report']
+
+    plugins {
+        projektorPlugin {
+            displayName = 'Projektor publishing plugin'
         }
     }
 }
@@ -32,7 +32,7 @@ repositories {
 }
 
 group = "projektor"
-version = "0.1.10"
+version = "1.0.0"
 
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.2.1")

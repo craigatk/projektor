@@ -14,7 +14,7 @@ abstract class SingleProjectSpec extends ProjectSpec {
 
             plugins {
                 id 'groovy'
-                id 'projektor.publish'
+                id 'dev.projektor.publish'
             }
             
             repositories {
