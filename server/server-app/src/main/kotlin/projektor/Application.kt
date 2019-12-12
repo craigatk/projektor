@@ -29,7 +29,6 @@ fun Application.main() {
     val dataSource = DataSourceConfig.createDataSource(environment.config)
     DataSourceConfig.flywayMigrate(dataSource)
     val dslContext = DSL.using(dataSource, SQLDialect.POSTGRES)
-
     val appModule = createAppModule(dataSource, dslContext)
 
     install(CORS) {
