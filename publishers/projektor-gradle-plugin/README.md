@@ -11,9 +11,11 @@ To apply this plugin to your project:
 
 ```
 plugins {
-  id "dev.projektor.publish"
+  id "dev.projektor.publish" version "1.0.0"
 }
 ```
+
+See https://plugins.gradle.org/plugin/dev.projektor.publish for the latest version.
 
 By default the plugin publishes results from all `Test` tasks in the project
 when the build finishes.

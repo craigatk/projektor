@@ -11,6 +11,14 @@ buildscript {
     }
 }
 
+plugins {
+    id "dev.projektor.publish" version "1.0.0"
+}
+
+projektor {
+    serverUrl = "https://projektorlive.herokuapp.com"
+}
+
 allprojects {
     buildscript {
         repositories {

@@ -31,8 +31,8 @@ repositories {
     jcenter()
 }
 
-group = "projektor"
-version = "1.0.0"
+group = "dev.projektor"
+version = "1.0.1"
 
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.2.1")
@@ -42,4 +42,8 @@ dependencies {
     }
 
     testImplementation "com.github.tomakehurst:wiremock-jre8:2.25.0"
+}
+
+test {
+    maxParallelForks = Runtime.runtime.availableProcessors()
 }

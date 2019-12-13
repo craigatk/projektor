@@ -1,6 +1,6 @@
 include 'server:database-schema',
         'functional-test',
-        'publishers:gradle-plugin',
+        'publishers:projektor-gradle-plugin',
         'server:server-app',
         'server:server-api',
         'server:server-example-loader',

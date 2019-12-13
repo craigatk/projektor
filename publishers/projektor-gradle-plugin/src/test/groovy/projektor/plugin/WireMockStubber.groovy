@@ -21,7 +21,8 @@ class WireMockStubber {
 
     void stubResultsPostSuccess(String resultsId) {
         wireMockServer.stubFor(post(urlEqualTo("/results")).willReturn(aResponse()
-                .withStatus(200).withBody("""{"id": "${resultsId}", "uri": "/tests/${resultsId}"}""")))
+                .withStatus(200)
+                .withBody("""{"id": "${resultsId}", "uri": "/tests/${resultsId}"}""")))
     }
 
     List<LoggedRequest> findResultsRequests() {
