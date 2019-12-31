@@ -55,14 +55,14 @@ dependencies {
 }
 
 task cleanStaticResources(type: Delete) {
-    delete 'src/main/resources/static/'
+    delete "${projectDir}/src/main/resources/static/"
 }
 
 evaluationDependsOn(':ui')
 
 task copyUI(type: Copy, dependsOn: ['cleanStaticResources', ':ui:assemble']){
     from tasks.getByPath(':ui:assemble').outputs
-    into 'src/main/resources/static'
+    into "${projectDir}/src/main/resources/static"
 }
 
 assemble.dependsOn(copyUI)

@@ -21,6 +21,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: Set env
+        run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:11})
       - name: ui install
         run: |
           cd ui
@@ -44,7 +46,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./server/server-app/build/libs/server-app-1.0-all.jar
-          asset_name: projektor-server-${{ github.ref:10 }}.jar
+          asset_name: projektor-server-${{ env.RELEASE_VERSION }}.jar
           asset_content_type: application/java-archive
