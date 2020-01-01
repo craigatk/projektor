@@ -64,11 +64,9 @@ task copyUI(type: Copy, dependsOn: ['cleanStaticResources', ':ui:assemble']){
     from tasks.getByPath(':ui:assemble').outputs
     into "${projectDir}/src/main/resources/static"
 }
+processResources.mustRunAfter(copyUI)
 
+runShadow.dependsOn(copyUI)
 shadowJar.dependsOn(copyUI)
-
-if (System.getProperty('includeUi', 'false') == 'true') {
-    processResources.dependsOn(copyUI)
-}
 
 task stage(dependsOn: 'shadowJar')
