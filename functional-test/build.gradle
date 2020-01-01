@@ -16,6 +16,7 @@ task functionalTest(type: YarnTask) {
 
 // https://github.com/psxpaul/gradle-execfork-plugin
 task startServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {
+    systemProperties['includeUi'] = "true"
     dependsOn ':server:server-app:shadowJar'
     classpath = tasks.getByPath(':server:server-app:shadowJar').outputs.files
     main = 'io.ktor.server.netty.EngineMain'
