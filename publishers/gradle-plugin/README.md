@@ -1,4 +1,4 @@
-# gradle-plugin
+# Projektor Gradle plugin
 
 This Gradle plugin supports automatically gathering and publishing
 the XML test results to the Projektor server. It listens to the 
@@ -11,7 +11,7 @@ To apply this plugin to your project:
 
 ```
 plugins {
-  id "dev.projektor.publish" version "1.0.0"
+  id "dev.projektor.publish" version "1.0.2"
 }
 ```
 

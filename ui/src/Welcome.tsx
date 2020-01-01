@@ -49,8 +49,12 @@ const Welcome = (props: RouteComponentProps) => {
 
           <Typography>
             To get started, publish your JUnit-format XML test results to the
-            "/results" endpoint or use the Projektor Gradle or Javascript/Node
-            plugins to easily handle the collection and publishing.
+            "/results" endpoint or use the{" "}
+            <a href="https://github.com/craigatk/projektor/tree/master/publishers/gradle-plugin">
+              Projektor Gradle plugin
+            </a>{" "}
+            or Javascript/Node script to easily handle the collection and
+            publishing.
           </Typography>
         </Paper>
       </main>
