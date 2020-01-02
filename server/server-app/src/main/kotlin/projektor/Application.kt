@@ -6,8 +6,12 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.ktor.application.*
 import io.ktor.features.CORS
+import io.ktor.features.CachingHeaders
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
+import io.ktor.http.CacheControl
+import io.ktor.http.ContentType
+import io.ktor.http.content.CachingOptions
 import io.ktor.jackson.jackson
 import io.ktor.routing.*
 import io.ktor.util.KtorExperimentalAPI
@@ -48,6 +52,16 @@ fun Application.main() {
     install(Koin) {
         SLF4JLogger()
         modules(appModule)
+    }
+    install(CachingHeaders) {
+        options { outgoingContent ->
+            val oneDayInSeconds = 24 * 60 * 60
+            when (outgoingContent.contentType?.withoutParameters()) {
+                ContentType.Application.Json -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = oneDayInSeconds))
+                ContentType.Application.JavaScript -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 7 * oneDayInSeconds))
+                else -> null
+            }
+        }
     }
 
     val testResultsService: TestResultsService by inject()
