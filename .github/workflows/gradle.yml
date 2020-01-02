@@ -115,6 +115,4 @@ jobs:
     - name: Run functional tests
       env:
         DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
-        GPR_USER: ${{ secrets.GPR_USER }}
-        GPR_API_KEY: ${{ secrets.GPR_KEY }}
-      run: ./gradlew assemble :functional-test:functionalTest -Pgpr.user=${{ secrets.GPR_USER }} -Pgpr.key=${{ secrets.GITHUB_TOKEN }}
+      run: ./gradlew :functional-test:functionalTest

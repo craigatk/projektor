@@ -4,12 +4,27 @@ on:
     tags:
       - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
-name: Upload Release Asset
+name: Release
 
 jobs:
   build:
-    name: Upload Release Asset
+    name: Create and upload release
     runs-on: ubuntu-latest
+    services:
+      database:
+        image: postgres:11.2-alpine
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: projektordb
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@master
@@ -29,7 +44,19 @@ jobs:
           yarn install
       - name: Build project
         run: |
-          ./gradlew :server:server-app:shadowJar -DincludeUi=true
+          ./gradlew :server:server-app:shadowJar
+      - name: cypress-common install
+        run: |
+          cd cypress-common
+          yarn install
+      - name: functional-test install
+        run: |
+          cd functional-test
+          yarn install
+      - name: Run functional tests
+        env:
+          DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
+        run: ./gradlew :functional-test:functionalTest
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.0.0
