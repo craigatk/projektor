@@ -4,6 +4,7 @@
 *.iws
 .DS_Store
 .cache
+.yarn-cache
 .gradle
 .nb-gradle
 .classpath
