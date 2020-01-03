@@ -65,7 +65,7 @@ jobs:
     - name: Cache Node dependencies
       uses: actions/cache@v1
       with:
-        path: ~/ui/.cache'
+        path: ~/ui/.cache
         key: ${{ runner.os }}-node-${{ hashFiles('~/ui/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-node
