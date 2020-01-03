@@ -70,6 +70,7 @@ fun Application.main() {
     val testSuiteService: TestSuiteService by inject()
 
     routing {
+        health()
         results(testResultsService)
         testCases(testCaseService)
         testSuites(testSuiteService)
