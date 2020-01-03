@@ -30,7 +30,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.gradle
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle', '**/gradle.properties', 'settings.gradle') }}
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*gradle*') }}
         restore-keys: |
           ${{ runner.os }}-gradle
     - name: Build with Gradle
