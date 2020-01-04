@@ -62,13 +62,13 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 10
-    - name: Cache Node dependencies
+    - name: Cache UI Node dependencies
       uses: actions/cache@v1
       with:
-        path: .yarn-cache
-        key: ${{ runner.os }}-node-${{ hashFiles('ui/yarn.lock') }}
+        path: ui/node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('ui/yarn.lock') }}
         restore-keys: |
-          ${{ runner.os }}-node
+          ${{ runner.os }}-node-modules
     - name: ui test
       run: |
         cd ui
