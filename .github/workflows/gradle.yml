@@ -30,9 +30,9 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.gradle
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*gradle*') }}
+        key: ${{ runner.os }}-gradle-6-0-1-${{ hashFiles('**/*gradle*') }}
         restore-keys: |
-          ${{ runner.os }}-gradle
+          ${{ runner.os }}-gradle-6-0-1
     - name: Build with Gradle
       env:
         DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
