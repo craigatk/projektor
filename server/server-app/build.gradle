@@ -1,5 +1,6 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "5.2.0"
+    id "com.heroku.sdk.heroku-gradle" version "1.0.4"
     id "application"
 }
 
@@ -70,3 +71,11 @@ runShadow.dependsOn(copyUI)
 shadowJar.dependsOn(copyUI)
 
 task stage(dependsOn: 'shadowJar')
+
+heroku {
+    includes = ["${projectDir}/build/libs/server-app-1.0-all.jar"]
+    includeBuildDir = false
+    appName = "projektorlive"
+}
+
+deployHeroku.dependsOn('shadowJar')
