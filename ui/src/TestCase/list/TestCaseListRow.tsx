@@ -24,6 +24,7 @@ const TestCaseListRow = ({
       key="test-result-cell"
       role="rowcell"
       data-testid={`test-case-result-${testCase.testSuiteIdx}-${testCase.idx}`}
+      size="small"
     >
       <TestCaseResultIcon testCase={testCase} />
     </TableCell>
@@ -33,6 +34,7 @@ const TestCaseListRow = ({
       data-testid={`test-case-name-${testCase.testSuiteIdx}-${testCase.idx}`}
       key="test-name-cell"
       role="rowcell"
+      size="small"
     >
       <Link
         to={`/tests/${publicId}/suite/${testCase.testSuiteIdx}/case/${testCase.idx}/`}
@@ -47,6 +49,7 @@ const TestCaseListRow = ({
       key="test-duration-cell"
       role="rowcell"
       data-testid={`test-case-duration-${testCase.testSuiteIdx}-${testCase.idx}`}
+      size="small"
     >
       {testCase.duration}s
     </TableCell>

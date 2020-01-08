@@ -28,7 +28,10 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
       <TableBody>
         {testSuites.map(testSuite => (
           <TableRow key={`test-stuite-${testSuite.idx}`}>
-            <TableCell data-testid={`test-suite-class-name-${testSuite.idx}`}>
+            <TableCell
+              data-testid={`test-suite-class-name-${testSuite.idx}`}
+              size="small"
+            >
               <Link to={`/tests/${publicId}/suite/${testSuite.idx}/`}>
                 {testSuite.packageName != null
                   ? `${testSuite.packageName}.`
@@ -36,11 +39,11 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
                 {testSuite.className}
               </Link>
             </TableCell>
-            <TableCell>{testSuite.testCount}</TableCell>
-            <TableCell>{testSuite.passingCount}</TableCell>
-            <TableCell>{testSuite.failureCount}</TableCell>
-            <TableCell>{testSuite.skippedCount}</TableCell>
-            <TableCell>{testSuite.duration}</TableCell>
+            <TableCell size="small">{testSuite.testCount}</TableCell>
+            <TableCell size="small">{testSuite.passingCount}</TableCell>
+            <TableCell size="small">{testSuite.failureCount}</TableCell>
+            <TableCell size="small">{testSuite.skippedCount}</TableCell>
+            <TableCell size="small">{testSuite.duration}</TableCell>
           </TableRow>
         ))}
       </TableBody>
