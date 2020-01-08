@@ -4,7 +4,7 @@ plugins {
 
 node {
     version = '12.13.1'
-    yarnVersion = '1.19.2'
+    yarnVersion = '1.21.1'
 }
 
 task assemble(type: YarnTask) {
