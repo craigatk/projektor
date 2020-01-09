@@ -5,7 +5,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { TestSuite } from "../model/TestRunModel";
-import { Link } from "@reach/router";
+import CleanLink from "../Link/CleanLink";
 
 interface TestSuiteListProps {
   publicId: String;
@@ -32,12 +32,12 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
               data-testid={`test-suite-class-name-${testSuite.idx}`}
               size="small"
             >
-              <Link to={`/tests/${publicId}/suite/${testSuite.idx}/`}>
+              <CleanLink to={`/tests/${publicId}/suite/${testSuite.idx}/`}>
                 {testSuite.packageName != null
                   ? `${testSuite.packageName}.`
                   : null}
                 {testSuite.className}
-              </Link>
+              </CleanLink>
             </TableCell>
             <TableCell size="small">{testSuite.testCount}</TableCell>
             <TableCell size="small">{testSuite.passingCount}</TableCell>

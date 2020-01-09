@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { TestCase } from "../model/TestRunModel";
 import { Link } from "@reach/router";
 import { Typography } from "@material-ui/core";
+import CleanLink from "../Link/CleanLink";
 
 const useStyles = makeStyles(() => ({
   panelActions: {
@@ -50,32 +51,32 @@ const TestCaseFailurePanel = ({
       <ExpansionPanelActions className={classes.panelActions}>
         {!testCase.passed && (
           <Button>
-            <Link
+            <CleanLink
               to={`/tests/${publicId}/suite/${testCase.testSuiteIdx}/case/${testCase.idx}/failure`}
               data-testid={`test-case-summary-failure-link-${testCaseIdentifier}`}
             >
               Failure Details
-            </Link>
+            </CleanLink>
           </Button>
         )}
         {testCase.hasSystemOut && (
           <Button>
-            <Link
+            <CleanLink
               to={`/tests/${publicId}/suite/${testCase.testSuiteIdx}/case/${testCase.idx}/systemOut`}
               data-testid={`test-case-summary-system-out-link-${testCaseIdentifier}`}
             >
               System Out
-            </Link>
+            </CleanLink>
           </Button>
         )}
         {testCase.hasSystemErr && (
           <Button>
-            <Link
+            <CleanLink
               to={`/tests/${publicId}/suite/${testCase.testSuiteIdx}/case/${testCase.idx}/systemErr`}
               data-testid={`test-case-summary-system-err-link-${testCaseIdentifier}`}
             >
               System Err
-            </Link>
+            </CleanLink>
           </Button>
         )}
       </ExpansionPanelActions>

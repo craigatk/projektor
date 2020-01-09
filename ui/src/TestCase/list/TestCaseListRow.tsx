@@ -2,8 +2,8 @@ import * as React from "react";
 import { TableCell, TableRow } from "@material-ui/core";
 import { TestCase } from "../../model/TestRunModel";
 import TestCaseResultIcon from "../TestCaseResultIcon";
-import { Link } from "@reach/router";
 import { fullTestCaseName } from "../../model/TestCaseHelpers";
+import CleanLink from "../../Link/CleanLink";
 
 interface TestCaseListRowProps {
   publicId: string;
@@ -36,12 +36,12 @@ const TestCaseListRow = ({
       role="rowcell"
       size="small"
     >
-      <Link
+      <CleanLink
         to={`/tests/${publicId}/suite/${testCase.testSuiteIdx}/case/${testCase.idx}/`}
         data-testid={`test-case-name-link-${testCase.testSuiteIdx}-${testCase.idx}`}
       >
         {showFullTestCaseName ? fullTestCaseName(testCase) : testCase.name}
-      </Link>
+      </CleanLink>
     </TableCell>
   );
   const durationRowCell = (

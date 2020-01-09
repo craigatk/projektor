@@ -1,6 +1,7 @@
 import * as React from "react";
 import { List, ListItem, ListItemText, makeStyles } from "@material-ui/core";
 import { Link } from "@reach/router";
+import CleanLink from "../Link/CleanLink";
 
 interface TestRunDurationProps {
   publicId: string;
@@ -53,13 +54,13 @@ const TestRunDuration = ({
         <ListItemText
           primary={
             <span>
-              <Link
+              <CleanLink
                 to={`/tests/${publicId}/slow`}
                 className={classes.label}
                 data-testid="test-run-slow-test-cases-link"
               >
                 Slowest test case
-              </Link>
+              </CleanLink>
               <span data-testid="test-run-slowest-test-case-duration">
                 {slowestTestCaseDuration}s
               </span>

@@ -14,6 +14,7 @@ import TestSuiteSystemOut from "../TestOutput/TestSuiteSystemOut";
 import TestSuiteSystemErr from "../TestOutput/TestSuiteSystemErr";
 import { getTabCurrentValue } from "../Tabs/TabValue";
 import BreadcrumbPageHeader from "../BreadcrumbPageHeader";
+import CleanLink from "../Link/CleanLink";
 
 interface TestSuiteDetailsProps {
   publicId: string;
@@ -34,13 +35,13 @@ const buildHeaderIntermediateLinks = (publicId, testSuite) => {
 
   if (testSuite.packageName != null && testSuite.packageName !== "") {
     headerIntermediateLinks.push(
-      <Link
+      <CleanLink
         to={`/tests/${publicId}/suites/package/${testSuite.packageName}`}
         data-testid={`breadcrumb-link-package-name`}
         key="package-name-link"
       >
         {testSuite.packageName}
-      </Link>
+      </CleanLink>
     );
   }
 

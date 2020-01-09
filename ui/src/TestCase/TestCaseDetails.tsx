@@ -16,6 +16,7 @@ import TestSuiteSystemOut from "../TestOutput/TestSuiteSystemOut";
 import TestSuiteSystemErr from "../TestOutput/TestSuiteSystemErr";
 import { getTabCurrentValue } from "../Tabs/TabValue";
 import TestCaseSummary from "./TestCaseSummary";
+import CleanLink from "../Link/CleanLink";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -39,25 +40,25 @@ const buildHeaderIntermediateLinks = (
 
   if (testCase.packageName != null && testCase.packageName !== "") {
     headerIntermediateLinks.push(
-      <Link
+      <CleanLink
         to={`/tests/${publicId}/suites/package/${testCase.packageName}`}
         data-testid={`breadcrumb-link-package-name`}
         key="package-name-link"
       >
         {testCase.packageName}
-      </Link>
+      </CleanLink>
     );
   }
 
   if (testCase.className != null && testCase.className !== "") {
     headerIntermediateLinks.push(
-      <Link
+      <CleanLink
         to={`/tests/${publicId}/suite/${testCase.testSuiteIdx}/`}
         data-testid={`breadcrumb-link-class-name`}
         key="class-name-link"
       >
         {testCase.className}
-      </Link>
+      </CleanLink>
     );
   }
   return headerIntermediateLinks;
