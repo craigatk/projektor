@@ -14,14 +14,14 @@ import projektor.server.api.SaveResultsResponse
 
 class DatabaseSchemaApplicationTest : ApplicationTestCase() {
     @Test
-    fun shouldParseRequestAndSaveResultsForPassingTest() {
+    fun `should support saving results to a different schema`() {
         val requestBody = resultsXmlLoader.passing()
 
         databaseSchema = "projektor"
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/results") {
-                dslContext.execute("CREATE SCHEMA IF NOT EXISTS projektor")
+                dslContext.execute("CREATE SCHEMA IF NOT EXISTS projektor;")
 
                 addHeader(HttpHeaders.ContentType, "text/plain")
                 setBody(requestBody)

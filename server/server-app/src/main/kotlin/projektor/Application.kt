@@ -31,7 +31,7 @@ import projektor.testsuite.TestSuiteService
 fun Application.main() {
     val dataSourceConfig = DataSourceConfig.createDataSourceConfig(environment.config)
     val dataSource = DataSourceConfig.createDataSource(dataSourceConfig)
-    DataSourceConfig.flywayMigrate(dataSource)
+    DataSourceConfig.flywayMigrate(dataSource, dataSourceConfig)
     val dslContext = DataSourceConfig.createDSLContext(dataSource, dataSourceConfig)
 
     val appModule = createAppModule(dataSource, dslContext)

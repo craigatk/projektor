@@ -34,9 +34,10 @@ data class DataSourceConfig(val jdbcUrl: String, val username: String, val passw
             return HikariDataSource(hikariConfig)
         }
 
-        fun flywayMigrate(dataSource: DataSource) {
+        fun flywayMigrate(dataSource: DataSource, dataSourceConfig: DataSourceConfig) {
             val flyway = Flyway.configure()
                     .dataSource(dataSource)
+                    .schemas(dataSourceConfig.schema)
                     .load()
 
             flyway.migrate()

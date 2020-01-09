@@ -27,13 +27,21 @@ open class DatabaseRepositoryTestCase : KoinTest {
     fun setup() {
         val hikariConfig = HikariConfig()
 
-        hikariConfig.username = System.getenv("DB_USERNAME") ?: "testuser"
-        hikariConfig.password = System.getenv("DB_PASSWORD") ?: "testpass"
-        hikariConfig.jdbcUrl = System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5433/projektordb"
+        val dataSourceConfig = DataSourceConfig(
+                System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5433/projektordb",
+                System.getenv("DB_USERNAME") ?: "testuser",
+                System.getenv("DB_PASSWORD") ?: "testpass",
+                "public"
+        )
+
+        hikariConfig.username = dataSourceConfig.username
+        hikariConfig.password = dataSourceConfig.password
+        hikariConfig.jdbcUrl = dataSourceConfig.jdbcUrl
+        hikariConfig.schema = dataSourceConfig.schema
         hikariConfig.maximumPoolSize = 3
 
         dataSource = HikariDataSource(hikariConfig)
-        DataSourceConfig.flywayMigrate(dataSource)
+        DataSourceConfig.flywayMigrate(dataSource, dataSourceConfig)
 
         dslContext = DSL.using(dataSource, SQLDialect.POSTGRES)
 
