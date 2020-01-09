@@ -38,12 +38,17 @@ open class ApplicationTestCase {
     lateinit var testFailureDao: TestFailureDao
     lateinit var application: Application
 
+    protected var databaseSchema: String = "public"
+
     fun createTestApplication(application: Application) {
+        val schema = databaseSchema
+
         (application.environment.config as MapApplicationConfig).apply {
             // Set here the properties
             put("ktor.datasource.username", System.getenv("DB_USERNAME") ?: "testuser")
             put("ktor.datasource.password", System.getenv("DB_PASSWORD") ?: "testpass")
             put("ktor.datasource.jdbcUrl", System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5433/projektordb")
+            put("ktor.datasource.schema", schema)
         }
 
         application.main()

@@ -58,6 +58,11 @@ DB_PASSWORD=testpass
 DB_URL=jdbc:postgresql://localhost:5433/projektordb
 ```
 
+#### Schema
+
+You can optionally set the database schema to use by setting the `DB_SCHEMA` environment variable.
+If that is not set, the server will default to the `public` schema.
+
 ## Publishing plugins
 
 Projektor includes two publishing plugins to make publishing your test reports easier,

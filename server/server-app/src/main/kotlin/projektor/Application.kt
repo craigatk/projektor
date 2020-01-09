@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import io.ktor.application.*
+import io.ktor.application.Application
+import io.ktor.application.install
 import io.ktor.features.CORS
 import io.ktor.features.CachingHeaders
 import io.ktor.features.CallLogging
@@ -13,10 +14,8 @@ import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
 import io.ktor.http.content.CachingOptions
 import io.ktor.jackson.jackson
-import io.ktor.routing.*
+import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
-import org.jooq.SQLDialect
-import org.jooq.impl.DSL
 import org.koin.Logger.SLF4JLogger
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
@@ -30,9 +29,11 @@ import projektor.testsuite.TestSuiteService
 
 @KtorExperimentalAPI
 fun Application.main() {
-    val dataSource = DataSourceConfig.createDataSource(environment.config)
+    val dataSourceConfig = DataSourceConfig.createDataSourceConfig(environment.config)
+    val dataSource = DataSourceConfig.createDataSource(dataSourceConfig)
     DataSourceConfig.flywayMigrate(dataSource)
-    val dslContext = DSL.using(dataSource, SQLDialect.POSTGRES)
+    val dslContext = DataSourceConfig.createDSLContext(dataSource, dataSourceConfig)
+
     val appModule = createAppModule(dataSource, dslContext)
 
     install(CORS) {
