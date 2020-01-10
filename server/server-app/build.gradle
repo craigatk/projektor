@@ -28,8 +28,7 @@ version '1.0'
 dependencies {
     implementation project(':server:database-schema')
     implementation project(':server:server-api')
-    implementation project(':server:test-results-merge')
-    implementation project(':server:junit-results-parser')
+    implementation project(':server:test-results-parser')
 
     implementation "io.ktor:ktor-server-netty:$ktor_version"
     implementation "io.ktor:ktor-jackson:$ktor_version"

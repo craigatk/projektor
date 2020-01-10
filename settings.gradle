@@ -6,7 +6,7 @@ include 'server:database-schema',
         'server:server-api',
         'server:server-example-loader',
         'server:test-fixtures',
-        'server:test-results-merge',
+        'server:test-results-parser',
         'ui'
 
 boolean isCI = Boolean.valueOf(System.getenv("GITHUB_ACTIONS"))

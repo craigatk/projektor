@@ -1,7 +1,7 @@
 apply from: "../../gradle/kotlin.gradle"
 
 dependencies {
-    implementation project(":server:test-results-merge")
+    implementation project(":server:test-results-parser")
 
     implementation "org.reflections:reflections:0.9.11"
 }
