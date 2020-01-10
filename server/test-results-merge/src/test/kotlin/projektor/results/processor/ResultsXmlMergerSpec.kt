@@ -1,4 +1,4 @@
-package projecktor.results.merge
+package projektor.results.processor
 
 import io.kotlintest.specs.StringSpec
 import strikt.api.expectThat

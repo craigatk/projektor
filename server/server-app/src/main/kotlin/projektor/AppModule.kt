@@ -6,7 +6,7 @@ import org.koin.dsl.module
 import projektor.incomingresults.TestResultsService
 import projektor.incomingresults.processing.ResultsProcessingDatabaseRepository
 import projektor.incomingresults.processing.ResultsProcessingRepository
-import projektor.parser.JUnitResultsParser
+import projektor.results.processor.TestResultsProcessor
 import projektor.testcase.TestCaseDatabaseRepository
 import projektor.testcase.TestCaseRepository
 import projektor.testcase.TestCaseService
@@ -19,7 +19,7 @@ import projektor.testsuite.TestSuiteService
 
 fun createAppModule(dataSource: HikariDataSource, dslContext: DSLContext) = module {
     single { dataSource }
-    single { JUnitResultsParser() }
+    single { TestResultsProcessor() }
     single { dslContext }
     single<TestCaseRepository> { TestCaseDatabaseRepository(get()) }
     single<TestSuiteRepository> { TestSuiteDatabaseRepository(get()) }

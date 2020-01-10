@@ -1,6 +1,5 @@
 package projektor.parser
 
-import projecktor.results.merge.ResultsXmlMerger
 import projektor.parser.model.TestCase
 import projektor.parser.model.TestSuite
 import spock.lang.Specification
@@ -109,14 +108,21 @@ A line in the then block
 
     void 'should parse multiple results from wrapped test suites XML'() {
         given:
-        String resultsGroup = ResultsXmlMerger.wrappedInTestSuitesXml(
+        String testSuitesXml =
                 [resultsXmlLoader.passing(),
                  resultsXmlLoader.failing(),
                  resultsXmlLoader.output()]
-        )
+                        .join("")
+        .replace("""<?xml version="1.0" encoding="UTF-8"?>""", "")
+
+        String resultsWrappedInTestSuitesXML = """<?xml version="1.0" encoding="UTF-8"?>
+            <testsuites>
+            ${testSuitesXml}
+            </testsuites>
+            """.stripIndent()
 
         when:
-        List<TestSuite> testSuites = testResultsParser.parseResultsGroup(resultsGroup)
+        List<TestSuite> testSuites = testResultsParser.parseResultsGroup(resultsWrappedInTestSuitesXML)
 
         then:
         testSuites.size() == 3

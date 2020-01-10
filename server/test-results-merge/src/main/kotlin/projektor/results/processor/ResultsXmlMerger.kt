@@ -1,4 +1,4 @@
-package projecktor.results.merge
+package projektor.results.processor
 
 object ResultsXmlMerger {
     @JvmStatic
@@ -9,7 +9,7 @@ object ResultsXmlMerger {
             resultsXmlList
                     .map { removeXmlHeader(it) }
                     .joinToString("")
-                    .let(::wrappedInTestSuitesXml)
+                    .let(ResultsXmlMerger::wrappedInTestSuitesXml)
 
     @JvmStatic
     fun wrappedInTestSuitesXml(resultsXml: String) = """<?xml version="1.0" encoding="UTF-8"?>
@@ -28,7 +28,7 @@ object ResultsXmlMerger {
 
     @JvmStatic
     fun cleanAndMergeBlob(resultsBlob: String): String = resultsBlob
-            .let(::removeXmlHeader)
-            .let(::removeTestSuitesWrapper)
-            .let(::wrappedInTestSuitesXml)
+            .let(ResultsXmlMerger::removeXmlHeader)
+            .let(ResultsXmlMerger::removeTestSuitesWrapper)
+            .let(ResultsXmlMerger::wrappedInTestSuitesXml)
 }

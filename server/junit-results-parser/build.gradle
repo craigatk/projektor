@@ -7,8 +7,6 @@ group 'Example'
 version '1.0-SNAPSHOT'
 
 dependencies {
-    implementation(project(':server:test-results-merge'))
-
     implementation "com.fasterxml.jackson.core:jackson-core:2.9.7"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.9"
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8'

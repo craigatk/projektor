@@ -3,8 +3,8 @@ package projektor.incomingresults
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import projektor.incomingresults.processing.ResultsProcessingRepository
-import projektor.parser.JUnitResultsParser
 import projektor.parser.model.TestSuite
+import projektor.results.processor.TestResultsProcessor
 import projektor.server.api.PublicId
 import projektor.server.api.ResultsProcessing
 import projektor.server.api.ResultsProcessingStatus
@@ -13,7 +13,7 @@ import projektor.testrun.TestRunRepository
 
 @kotlinx.coroutines.ObsoleteCoroutinesApi
 class TestResultsService(
-    private val JUnitResultsParser: JUnitResultsParser,
+    private val testResultsProcessor: TestResultsProcessor,
     private val testRunRepository: TestRunRepository,
     private val resultsProcessingRepository: ResultsProcessingRepository
 ) {
@@ -48,7 +48,7 @@ class TestResultsService(
 
     private suspend fun parseTestSuites(publicId: PublicId, resultsBlob: String): List<TestSuite> {
         val testSuitesWithTestCases = try {
-            val parsedTestSuites = JUnitResultsParser.parseResultsBlob(resultsBlob)
+            val parsedTestSuites = testResultsProcessor.parseResultsBlob(resultsBlob)
             parsedTestSuites.filter { !it.testCases.isNullOrEmpty() }
         } catch (e: Exception) {
             val errorMessage = "Error parsing test results: ${e.message}"

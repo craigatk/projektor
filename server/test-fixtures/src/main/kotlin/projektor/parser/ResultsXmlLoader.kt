@@ -2,7 +2,7 @@ package projektor.parser
 
 import org.reflections.Reflections
 import org.reflections.scanners.ResourcesScanner
-import projecktor.results.merge.ResultsXmlMerger
+import projektor.results.processor.ResultsXmlMerger
 
 class ResultsXmlLoader {
     fun passing() = loadTextFromFile("TEST-projektor.example.spock.PassingSpec.xml")
