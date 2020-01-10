@@ -17,7 +17,7 @@ class JUnitResultsParserSpec extends Specification {
         String testResultsStr = resultsXmlLoader.passing()
 
         when:
-        TestSuite testSuite = testResultsParser.parseResults(testResultsStr)
+        TestSuite testSuite = testResultsParser.parseTestSuite(testResultsStr)
 
         then:
         testSuite.name == 'projektor.example.spock.PassingSpec'
@@ -35,7 +35,7 @@ class JUnitResultsParserSpec extends Specification {
         String testResultsStr = resultsXmlLoader.failing()
 
         when:
-        TestSuite testSuite = testResultsParser.parseResults(testResultsStr)
+        TestSuite testSuite = testResultsParser.parseTestSuite(testResultsStr)
 
         then:
         testSuite.name == 'projektor.example.spock.FailingSpec'
@@ -73,7 +73,7 @@ A line in the then block
         String testResultsStr = resultsXmlLoader.output()
 
         when:
-        TestSuite testSuite = testResultsParser.parseResults(testResultsStr)
+        TestSuite testSuite = testResultsParser.parseTestSuite(testResultsStr)
 
         then:
         testSuite.systemOut != null
@@ -88,7 +88,7 @@ A line in the then block
 
     void 'should parse whether test case is ignored'() {
         when:
-        TestSuite testSuite = testResultsParser.parseResults(resultsXmlLoader.someIgnored())
+        TestSuite testSuite = testResultsParser.parseTestSuite(resultsXmlLoader.someIgnored())
 
         then:
         List<TestCase> testCases = testSuite.testCases
@@ -122,7 +122,7 @@ A line in the then block
             """.stripIndent()
 
         when:
-        List<TestSuite> testSuites = testResultsParser.parseResultsGroup(resultsWrappedInTestSuitesXML)
+        List<TestSuite> testSuites = testResultsParser.parseTestSuites(resultsWrappedInTestSuitesXML)
 
         then:
         testSuites.size() == 3

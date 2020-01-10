@@ -13,14 +13,38 @@ public class JUnitResultsParser {
     private final ObjectMapper mapper = new XmlMapper()
             .registerModule(new JavaTimeModule());
 
-    public TestSuite parseResults(String results) throws IOException {
-        TestSuite testSuite = mapper.readValue(results, TestSuite.class);
+    /**
+     * Parses a test suite XML in this format
+     *
+     * <?xml version="1.0" encoding="UTF-8"?>
+     * <testsuite>
+     * </testsuite>
+     *
+     * @param testSuiteXml
+     * @return
+     * @throws IOException
+     */
+    public TestSuite parseTestSuite(String testSuiteXml) throws IOException {
+        TestSuite testSuite = mapper.readValue(testSuiteXml, TestSuite.class);
 
         return testSuite;
     }
 
-    public List<TestSuite> parseResultsGroup(String resultsGroup) throws IOException {
-        TestSuites testSuites = mapper.readValue(resultsGroup, TestSuites.class);
+    /**
+     * Parses a list of test suites in this format
+     *
+     * <?xml version="1.0" encoding="UTF-8"?>
+     * <testsuites>
+     *   <testsuite>
+     *   </testsuite>
+     * </testsuites>
+     *
+     * @param testSuitesXml
+     * @return
+     * @throws IOException
+     */
+    public List<TestSuite> parseTestSuites(String testSuitesXml) throws IOException {
+        TestSuites testSuites = mapper.readValue(testSuitesXml, TestSuites.class);
 
         return testSuites.testSuites;
     }

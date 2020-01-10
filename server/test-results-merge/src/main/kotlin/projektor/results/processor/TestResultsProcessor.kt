@@ -44,7 +44,8 @@ class TestResultsProcessor {
     fun parseResultsBlob(resultsBlob: String?): List<TestSuite> {
         return if (!resultsBlob.isNullOrEmpty()) {
             val resultsGroup = cleanAndMergeBlob(resultsBlob)
-            junitResultsParser.parseResultsGroup(resultsGroup)
+
+            junitResultsParser.parseTestSuites(resultsGroup)
         } else {
             listOf()
         }
