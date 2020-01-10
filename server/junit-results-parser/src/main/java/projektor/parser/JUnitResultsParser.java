@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class TestResultsParser {
+public class JUnitResultsParser {
     private final ObjectMapper mapper = new XmlMapper()
             .registerModule(new JavaTimeModule());
 

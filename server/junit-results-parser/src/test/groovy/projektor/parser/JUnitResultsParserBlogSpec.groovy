@@ -4,9 +4,9 @@ import projektor.parser.model.TestSuite
 import spock.lang.Specification
 import spock.lang.Subject
 
-class TestResultsParserBlogSpec extends Specification {
+class JUnitResultsParserBlogSpec extends Specification {
     @Subject
-    TestResultsParser testResultsParser = new TestResultsParser()
+    JUnitResultsParser testResultsParser = new JUnitResultsParser()
 
     ResultsXmlLoader resultsXmlLoader = new ResultsXmlLoader()
 

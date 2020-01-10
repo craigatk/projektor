@@ -1,12 +1,12 @@
 include 'server:database-schema',
         'functional-test',
         'publishers:gradle-plugin',
+        'server:junit-results-parser',
         'server:server-app',
         'server:server-api',
         'server:server-example-loader',
-        ':server:test-fixtures',
+        'server:test-fixtures',
         'server:test-results-merge',
-        'server:test-results-parser',
         'ui'
 
 boolean isCI = Boolean.valueOf(System.getenv("GITHUB_ACTIONS"))
