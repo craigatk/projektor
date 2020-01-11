@@ -20,6 +20,7 @@ import projektor.database.generated.tables.TestCase;
 import projektor.database.generated.tables.TestFailure;
 import projektor.database.generated.tables.TestRun;
 import projektor.database.generated.tables.TestSuite;
+import projektor.database.generated.tables.TestSuiteGroup;
 
 
 /**
@@ -35,7 +36,7 @@ import projektor.database.generated.tables.TestSuite;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = -93533833;
+    private static final long serialVersionUID = -947223234;
 
     /**
      * The reference instance of <code>public</code>
@@ -68,6 +69,11 @@ public class Public extends SchemaImpl {
     public final TestSuite TEST_SUITE = projektor.database.generated.tables.TestSuite.TEST_SUITE;
 
     /**
+     * The table <code>public.test_suite_group</code>.
+     */
+    public final TestSuiteGroup TEST_SUITE_GROUP = projektor.database.generated.tables.TestSuiteGroup.TEST_SUITE_GROUP;
+
+    /**
      * No further instances allowed
      */
     private Public() {
@@ -97,6 +103,7 @@ public class Public extends SchemaImpl {
             Sequences.TEST_FAILURE_ID_SEQ,
             Sequences.TEST_FAILURE_TEST_CASE_ID_SEQ,
             Sequences.TEST_RUN_ID_SEQ,
+            Sequences.TEST_SUITE_GROUP_ID_SEQ,
             Sequences.TEST_SUITE_ID_SEQ,
             Sequences.TEST_SUITE_TEST_RUN_ID_SEQ);
     }
@@ -114,6 +121,7 @@ public class Public extends SchemaImpl {
             TestCase.TEST_CASE,
             TestFailure.TEST_FAILURE,
             TestRun.TEST_RUN,
-            TestSuite.TEST_SUITE);
+            TestSuite.TEST_SUITE,
+            TestSuiteGroup.TEST_SUITE_GROUP);
     }
 }

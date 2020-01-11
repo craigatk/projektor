@@ -142,4 +142,11 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     public List<projektor.database.generated.tables.pojos.TestRun> fetchByCreatedTimestamp(Timestamp... values) {
         return fetch(TestRun.TEST_RUN.CREATED_TIMESTAMP, values);
     }
+
+    /**
+     * Fetch records that have <code>grouped_results IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestRun> fetchByGroupedResults(Boolean... values) {
+        return fetch(TestRun.TEST_RUN.GROUPED_RESULTS, values);
+    }
 }

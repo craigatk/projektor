@@ -170,4 +170,11 @@ public class TestSuiteDao extends DAOImpl<TestSuiteRecord, projektor.database.ge
     public List<projektor.database.generated.tables.pojos.TestSuite> fetchByHasSystemErr(Boolean... values) {
         return fetch(TestSuite.TEST_SUITE.HAS_SYSTEM_ERR, values);
     }
+
+    /**
+     * Fetch records that have <code>test_suite_group_id IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestSuite> fetchByTestSuiteGroupId(Long... values) {
+        return fetch(TestSuite.TEST_SUITE.TEST_SUITE_GROUP_ID, values);
+    }
 }

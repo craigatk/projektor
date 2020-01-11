@@ -3,6 +3,7 @@ package projektor
 import com.zaxxer.hikari.HikariDataSource
 import org.jooq.DSLContext
 import org.koin.dsl.module
+import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
 import projektor.incomingresults.processing.ResultsProcessingDatabaseRepository
 import projektor.incomingresults.processing.ResultsProcessingRepository
@@ -27,6 +28,7 @@ fun createAppModule(dataSource: HikariDataSource, dslContext: DSLContext) = modu
     single<ResultsProcessingRepository> { ResultsProcessingDatabaseRepository(get()) }
     single { TestCaseService(get()) }
     single { TestSuiteService(get()) }
+    single { TestResultsProcessingService(get()) }
     single { TestResultsService(get(), get(), get()) }
     single { TestRunService(get()) }
 }

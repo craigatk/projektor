@@ -11,6 +11,7 @@ import projektor.database.generated.tables.TestCase;
 import projektor.database.generated.tables.TestFailure;
 import projektor.database.generated.tables.TestRun;
 import projektor.database.generated.tables.TestSuite;
+import projektor.database.generated.tables.TestSuiteGroup;
 
 
 /**
@@ -50,4 +51,9 @@ public class Tables {
      * The table <code>public.test_suite</code>.
      */
     public static final TestSuite TEST_SUITE = projektor.database.generated.tables.TestSuite.TEST_SUITE;
+
+    /**
+     * The table <code>public.test_suite_group</code>.
+     */
+    public static final TestSuiteGroup TEST_SUITE_GROUP = projektor.database.generated.tables.TestSuiteGroup.TEST_SUITE_GROUP;
 }

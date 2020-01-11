@@ -24,7 +24,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestSuite implements Serializable {
 
-    private static final long serialVersionUID = -379600768;
+    private static final long serialVersionUID = 1228967105;
 
     private Long       id;
     private Long       testRunId;
@@ -42,6 +42,7 @@ public class TestSuite implements Serializable {
     private String     systemErr;
     private Boolean    hasSystemOut;
     private Boolean    hasSystemErr;
+    private Long       testSuiteGroupId;
 
     public TestSuite() {}
 
@@ -62,6 +63,7 @@ public class TestSuite implements Serializable {
         this.systemErr = value.systemErr;
         this.hasSystemOut = value.hasSystemOut;
         this.hasSystemErr = value.hasSystemErr;
+        this.testSuiteGroupId = value.testSuiteGroupId;
     }
 
     public TestSuite(
@@ -80,7 +82,8 @@ public class TestSuite implements Serializable {
         String     systemOut,
         String     systemErr,
         Boolean    hasSystemOut,
-        Boolean    hasSystemErr
+        Boolean    hasSystemErr,
+        Long       testSuiteGroupId
     ) {
         this.id = id;
         this.testRunId = testRunId;
@@ -98,6 +101,7 @@ public class TestSuite implements Serializable {
         this.systemErr = systemErr;
         this.hasSystemOut = hasSystemOut;
         this.hasSystemErr = hasSystemErr;
+        this.testSuiteGroupId = testSuiteGroupId;
     }
 
     public Long getId() {
@@ -244,6 +248,15 @@ public class TestSuite implements Serializable {
         return this;
     }
 
+    public Long getTestSuiteGroupId() {
+        return this.testSuiteGroupId;
+    }
+
+    public TestSuite setTestSuiteGroupId(Long testSuiteGroupId) {
+        this.testSuiteGroupId = testSuiteGroupId;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -349,6 +362,12 @@ public class TestSuite implements Serializable {
         }
         else if (!hasSystemErr.equals(other.hasSystemErr))
             return false;
+        if (testSuiteGroupId == null) {
+            if (other.testSuiteGroupId != null)
+                return false;
+        }
+        else if (!testSuiteGroupId.equals(other.testSuiteGroupId))
+            return false;
         return true;
     }
 
@@ -372,6 +391,7 @@ public class TestSuite implements Serializable {
         result = prime * result + ((this.systemErr == null) ? 0 : this.systemErr.hashCode());
         result = prime * result + ((this.hasSystemOut == null) ? 0 : this.hasSystemOut.hashCode());
         result = prime * result + ((this.hasSystemErr == null) ? 0 : this.hasSystemErr.hashCode());
+        result = prime * result + ((this.testSuiteGroupId == null) ? 0 : this.testSuiteGroupId.hashCode());
         return result;
     }
 
@@ -395,6 +415,7 @@ public class TestSuite implements Serializable {
         sb.append(", ").append(systemErr);
         sb.append(", ").append(hasSystemOut);
         sb.append(", ").append(hasSystemErr);
+        sb.append(", ").append(testSuiteGroupId);
 
         sb.append(")");
         return sb.toString();

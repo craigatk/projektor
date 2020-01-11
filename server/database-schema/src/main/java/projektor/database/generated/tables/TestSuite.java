@@ -43,7 +43,7 @@ import projektor.database.generated.tables.records.TestSuiteRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestSuite extends TableImpl<TestSuiteRecord> {
 
-    private static final long serialVersionUID = 1340454136;
+    private static final long serialVersionUID = -1352042569;
 
     /**
      * The reference instance of <code>public.test_suite</code>
@@ -139,6 +139,11 @@ public class TestSuite extends TableImpl<TestSuiteRecord> {
     public final TableField<TestSuiteRecord, Boolean> HAS_SYSTEM_ERR = createField("has_system_err", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     /**
+     * The column <code>public.test_suite.test_suite_group_id</code>.
+     */
+    public final TableField<TestSuiteRecord, Long> TEST_SUITE_GROUP_ID = createField("test_suite_group_id", org.jooq.impl.SQLDataType.BIGINT, this, "");
+
+    /**
      * Create a <code>public.test_suite</code> table reference
      */
     public TestSuite() {
@@ -216,11 +221,15 @@ public class TestSuite extends TableImpl<TestSuiteRecord> {
      */
     @Override
     public List<ForeignKey<TestSuiteRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<TestSuiteRecord, ?>>asList(Keys.TEST_SUITE__TEST_SUITE_TEST_RUN_ID_FKEY);
+        return Arrays.<ForeignKey<TestSuiteRecord, ?>>asList(Keys.TEST_SUITE__TEST_SUITE_TEST_RUN_ID_FKEY, Keys.TEST_SUITE__TEST_SUITE_TEST_SUITE_GROUP_ID_FKEY);
     }
 
     public TestRun testRun() {
         return new TestRun(this, Keys.TEST_SUITE__TEST_SUITE_TEST_RUN_ID_FKEY);
+    }
+
+    public TestSuiteGroup testSuiteGroup() {
+        return new TestSuiteGroup(this, Keys.TEST_SUITE__TEST_SUITE_TEST_SUITE_GROUP_ID_FKEY);
     }
 
     /**

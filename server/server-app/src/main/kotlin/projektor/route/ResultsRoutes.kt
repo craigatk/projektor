@@ -9,12 +9,16 @@ import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.getOrFail
+import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
 import projektor.server.api.PublicId
 import projektor.server.api.SaveResultsResponse
 
 @KtorExperimentalAPI
-fun Route.results(testResultsService: TestResultsService) {
+fun Route.results(
+    testResultsService: TestResultsService,
+    testResultsProcessingService: TestResultsProcessingService
+) {
     post("/results") {
         val resultsBlob = call.receive<String>()
 
@@ -29,7 +33,7 @@ fun Route.results(testResultsService: TestResultsService) {
     get("/results/{publicId}/status") {
         val publicId = call.parameters.getOrFail("publicId")
 
-        val processingResults = testResultsService.fetchResultsProcessing(PublicId(publicId))
+        val processingResults = testResultsProcessingService.fetchResultsProcessing(PublicId(publicId))
 
         processingResults
                 ?.let { call.respond(HttpStatusCode.OK, it) }

@@ -21,6 +21,7 @@ import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import org.slf4j.event.Level
 import projektor.database.DataSourceConfig
+import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
 import projektor.route.*
 import projektor.testcase.TestCaseService
@@ -66,13 +67,14 @@ fun Application.main() {
     }
 
     val testResultsService: TestResultsService by inject()
+    val testResultsProcessingService: TestResultsProcessingService by inject()
     val testRunService: TestRunService by inject()
     val testCaseService: TestCaseService by inject()
     val testSuiteService: TestSuiteService by inject()
 
     routing {
         health()
-        results(testResultsService)
+        results(testResultsService, testResultsProcessingService)
         testCases(testCaseService)
         testSuites(testSuiteService)
         testRuns(testRunService)

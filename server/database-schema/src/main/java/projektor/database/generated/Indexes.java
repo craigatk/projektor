@@ -15,6 +15,7 @@ import projektor.database.generated.tables.TestCase;
 import projektor.database.generated.tables.TestFailure;
 import projektor.database.generated.tables.TestRun;
 import projektor.database.generated.tables.TestSuite;
+import projektor.database.generated.tables.TestSuiteGroup;
 
 
 /**
@@ -46,6 +47,7 @@ public class Indexes {
     public static final Index TEST_RUN_PUBLIC_ID_KEY = Indexes0.TEST_RUN_PUBLIC_ID_KEY;
     public static final Index IDX_TEST_SUITE_IDX = Indexes0.IDX_TEST_SUITE_IDX;
     public static final Index TEST_SUITE_PKEY = Indexes0.TEST_SUITE_PKEY;
+    public static final Index TEST_SUITE_GROUP_PKEY = Indexes0.TEST_SUITE_GROUP_PKEY;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -64,5 +66,6 @@ public class Indexes {
         public static Index TEST_RUN_PUBLIC_ID_KEY = Internal.createIndex("test_run_public_id_key", TestRun.TEST_RUN, new OrderField[] { TestRun.TEST_RUN.PUBLIC_ID }, true);
         public static Index IDX_TEST_SUITE_IDX = Internal.createIndex("idx_test_suite_idx", TestSuite.TEST_SUITE, new OrderField[] { TestSuite.TEST_SUITE.IDX }, false);
         public static Index TEST_SUITE_PKEY = Internal.createIndex("test_suite_pkey", TestSuite.TEST_SUITE, new OrderField[] { TestSuite.TEST_SUITE.ID }, true);
+        public static Index TEST_SUITE_GROUP_PKEY = Internal.createIndex("test_suite_group_pkey", TestSuiteGroup.TEST_SUITE_GROUP, new OrderField[] { TestSuiteGroup.TEST_SUITE_GROUP.ID }, true);
     }
 }
