@@ -38,13 +38,13 @@ class ProjektorBuildFinishedListener implements BuildListener {
 
     private void collectAndPublishResults() {
         ProjectTestTaskResultsCollector projectTestTaskResultsCollector = new ProjectTestTaskResultsCollector(
-                this.projektorTaskFinishedListener.testTasks,
+                this.projektorTaskFinishedListener.testGroups,
                 logger
         )
 
-        if (projectTestTaskResultsCollector.hasTestTasks()) {
+        if (projectTestTaskResultsCollector.hasTestGroups()) {
             logger.info("Build finished, gathering and publishing Projektor test reports from " +
-                    "${projectTestTaskResultsCollector.testTaskCount()} test tasks")
+                    "${projectTestTaskResultsCollector.testGroupsCount()} test tasks")
             String resultsBlob = projectTestTaskResultsCollector.createResultsBlob()
 
             ProjektorResultsClient resultsClient = new ProjektorResultsClient(serverUrl, logger)

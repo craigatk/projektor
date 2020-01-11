@@ -7,7 +7,7 @@ import org.gradle.api.tasks.TaskState
 import org.gradle.api.tasks.testing.Test
 
 class ProjektorTaskFinishedListener implements TaskExecutionListener {
-    List<Test> testTasks = []
+    List<TestGroup> testGroups = []
 
     private final Logger logger
 
@@ -21,7 +21,7 @@ class ProjektorTaskFinishedListener implements TaskExecutionListener {
     @Override
     void afterExecute(Task task, TaskState taskState) {
         if (!taskState.skipped && !taskState.upToDate && task instanceof Test) {
-            testTasks.add(task)
+            testGroups.add(TestGroup.fromTask(task))
         }
     }
 }

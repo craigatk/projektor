@@ -5,28 +5,33 @@ import org.gradle.api.logging.Logger
 import org.gradle.api.tasks.testing.Test
 
 class ProjectTestTaskResultsCollector {
-    private final Collection<Test> testTasks
+    private final Collection<TestGroup> testGroups
     private final Logger logger
 
-    ProjectTestTaskResultsCollector(Collection<Test> testTasks, Logger logger) {
-        this.testTasks = testTasks
+    ProjectTestTaskResultsCollector(Collection<TestGroup> testGroups, Logger logger) {
+        this.testGroups = testGroups
         this.logger = logger
     }
 
     static ProjectTestTaskResultsCollector fromAllTasks(Collection<Task> allTasks, Logger logger) {
-        new ProjectTestTaskResultsCollector(allTasks.findAll { it instanceof Test }, logger)
+        Collection<Test> allTestTasks = allTasks.findAll { it instanceof Test }
+        Collection<TestGroup> testGroups = allTestTasks.collect { TestGroup.fromTask(it) }
+
+        return new ProjectTestTaskResultsCollector(testGroups, logger)
     }
 
-    boolean hasTestTasks() {
-        !testTasks.empty
+    boolean hasTestGroups() {
+        !testGroups.empty
     }
 
-    int testTaskCount() {
-        testTasks.size()
+    int testGroupsCount() {
+        testGroups.size()
     }
 
     String createResultsBlob() {
-        List<File> junitXmlDestinationDirectories = testTasks.collect { it.reports.junitXml.destination }
+        List<File> junitXmlDestinationDirectories = testGroups
+                .collect { it.task }
+                .collect { it.reports.junitXml.destination }
 
         ProjektorResultsCollector resultsCollector = new ProjektorResultsCollector(logger)
         String resultsBlob = resultsCollector.createResultsBlobFromJunitXmlResultsInDirectories(junitXmlDestinationDirectories)

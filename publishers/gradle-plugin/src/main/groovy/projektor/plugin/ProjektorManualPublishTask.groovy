@@ -16,7 +16,7 @@ class ProjektorManualPublishTask extends AbstractTask {
                 logger
         )
 
-        if (projectTestTaskResultsCollector.hasTestTasks()) {
+        if (projectTestTaskResultsCollector.hasTestGroups()) {
             String resultsBlob = projectTestTaskResultsCollector.createResultsBlob()
 
             ProjektorResultsClient resultsClient = new ProjektorResultsClient(serverUrl, logger)
