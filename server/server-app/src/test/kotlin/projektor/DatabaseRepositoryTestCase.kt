@@ -17,6 +17,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
     lateinit var dataSource: HikariDataSource
     lateinit var dslContext: DSLContext
     lateinit var testRunDao: TestRunDao
+    lateinit var testSuiteGroupDao: TestSuiteGroupDao
     lateinit var testSuiteDao: TestSuiteDao
     lateinit var testCaseDao: TestCaseDao
     lateinit var testFailureDao: TestFailureDao
@@ -50,6 +51,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
         }
 
         testRunDao = TestRunDao(dslContext.configuration())
+        testSuiteGroupDao = TestSuiteGroupDao(dslContext.configuration())
         testSuiteDao = TestSuiteDao(dslContext.configuration())
         testCaseDao = TestCaseDao(dslContext.configuration())
         testFailureDao = TestFailureDao(dslContext.configuration())

@@ -22,12 +22,13 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestSuiteGroup implements Serializable {
 
-    private static final long serialVersionUID = 744791188;
+    private static final long serialVersionUID = -441060363;
 
     private Long   id;
     private Long   testRunId;
     private String groupName;
     private String groupLabel;
+    private String directory;
 
     public TestSuiteGroup() {}
 
@@ -36,18 +37,21 @@ public class TestSuiteGroup implements Serializable {
         this.testRunId = value.testRunId;
         this.groupName = value.groupName;
         this.groupLabel = value.groupLabel;
+        this.directory = value.directory;
     }
 
     public TestSuiteGroup(
         Long   id,
         Long   testRunId,
         String groupName,
-        String groupLabel
+        String groupLabel,
+        String directory
     ) {
         this.id = id;
         this.testRunId = testRunId;
         this.groupName = groupName;
         this.groupLabel = groupLabel;
+        this.directory = directory;
     }
 
     public Long getId() {
@@ -86,6 +90,15 @@ public class TestSuiteGroup implements Serializable {
         return this;
     }
 
+    public String getDirectory() {
+        return this.directory;
+    }
+
+    public TestSuiteGroup setDirectory(String directory) {
+        this.directory = directory;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -119,6 +132,12 @@ public class TestSuiteGroup implements Serializable {
         }
         else if (!groupLabel.equals(other.groupLabel))
             return false;
+        if (directory == null) {
+            if (other.directory != null)
+                return false;
+        }
+        else if (!directory.equals(other.directory))
+            return false;
         return true;
     }
 
@@ -130,6 +149,7 @@ public class TestSuiteGroup implements Serializable {
         result = prime * result + ((this.testRunId == null) ? 0 : this.testRunId.hashCode());
         result = prime * result + ((this.groupName == null) ? 0 : this.groupName.hashCode());
         result = prime * result + ((this.groupLabel == null) ? 0 : this.groupLabel.hashCode());
+        result = prime * result + ((this.directory == null) ? 0 : this.directory.hashCode());
         return result;
     }
 
@@ -141,6 +161,7 @@ public class TestSuiteGroup implements Serializable {
         sb.append(", ").append(testRunId);
         sb.append(", ").append(groupName);
         sb.append(", ").append(groupLabel);
+        sb.append(", ").append(directory);
 
         sb.append(")");
         return sb.toString();

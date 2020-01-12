@@ -84,4 +84,11 @@ public class TestSuiteGroupDao extends DAOImpl<TestSuiteGroupRecord, projektor.d
     public List<projektor.database.generated.tables.pojos.TestSuiteGroup> fetchByGroupLabel(String... values) {
         return fetch(TestSuiteGroup.TEST_SUITE_GROUP.GROUP_LABEL, values);
     }
+
+    /**
+     * Fetch records that have <code>directory IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestSuiteGroup> fetchByDirectory(String... values) {
+        return fetch(TestSuiteGroup.TEST_SUITE_GROUP.DIRECTORY, values);
+    }
 }

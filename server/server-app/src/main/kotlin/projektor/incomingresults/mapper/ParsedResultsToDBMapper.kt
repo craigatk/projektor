@@ -5,15 +5,28 @@ import java.time.ZoneOffset
 import projektor.database.generated.tables.pojos.TestCase as TestCaseDB
 import projektor.database.generated.tables.pojos.TestFailure as TestFailureDB
 import projektor.database.generated.tables.pojos.TestSuite as TestSuiteDB
+import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
+import projektor.incomingresults.model.GroupedTestSuites
 import projektor.parser.model.Failure
 import projektor.parser.model.TestCase
 import projektor.parser.model.TestSuite
 
-fun TestSuite.toDB(testRunId: Long, testSuiteIdx: Int): TestSuiteDB {
+fun GroupedTestSuites.toDB(testRunId: Long): TestSuiteGroupDB {
+    val testSuiteGroupDB = TestSuiteGroupDB()
+    testSuiteGroupDB.testRunId = testRunId
+    testSuiteGroupDB.groupName = groupName
+    testSuiteGroupDB.groupLabel = groupLabel
+    testSuiteGroupDB.directory = directory
+
+    return testSuiteGroupDB
+}
+
+fun TestSuite.toDB(testRunId: Long, testGroupId: Long?, testSuiteIdx: Int): TestSuiteDB {
     val packageAndClassName = parsePackageAndClassName(name)
 
     val testSuiteDB = TestSuiteDB()
     testSuiteDB.testRunId = testRunId
+    testSuiteDB.testSuiteGroupId = testGroupId
     testSuiteDB.idx = testSuiteIdx
     testSuiteDB.packageName = packageAndClassName.first
     testSuiteDB.className = packageAndClassName.second

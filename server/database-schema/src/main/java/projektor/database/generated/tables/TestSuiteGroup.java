@@ -41,7 +41,7 @@ import projektor.database.generated.tables.records.TestSuiteGroupRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestSuiteGroup extends TableImpl<TestSuiteGroupRecord> {
 
-    private static final long serialVersionUID = 1728755892;
+    private static final long serialVersionUID = -1666017613;
 
     /**
      * The reference instance of <code>public.test_suite_group</code>
@@ -75,6 +75,11 @@ public class TestSuiteGroup extends TableImpl<TestSuiteGroupRecord> {
      * The column <code>public.test_suite_group.group_label</code>.
      */
     public final TableField<TestSuiteGroupRecord, String> GROUP_LABEL = createField("group_label", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>public.test_suite_group.directory</code>.
+     */
+    public final TableField<TestSuiteGroupRecord, String> DIRECTORY = createField("directory", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * Create a <code>public.test_suite_group</code> table reference
