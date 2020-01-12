@@ -5,6 +5,8 @@ import org.gradle.BuildResult
 import org.gradle.api.initialization.Settings
 import org.gradle.api.invocation.Gradle
 import org.gradle.api.logging.Logger
+import projektor.plugin.results.ProjektorResultsClient
+import projektor.plugin.results.ResultsLogger
 
 class ProjektorBuildFinishedListener implements BuildListener {
 

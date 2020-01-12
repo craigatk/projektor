@@ -1,4 +1,4 @@
-package projektor.plugin
+package projektor.plugin.results
 
 import org.gradle.api.logging.Logger
 

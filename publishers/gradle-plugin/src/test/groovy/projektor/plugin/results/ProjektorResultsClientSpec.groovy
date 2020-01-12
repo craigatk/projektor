@@ -1,9 +1,11 @@
-package projektor.plugin
+package projektor.plugin.results
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.api.logging.Logger
 import org.junit.Rule
+import projektor.plugin.WireMockStubber
+import projektor.plugin.PublishResult
 import spock.lang.Specification
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig

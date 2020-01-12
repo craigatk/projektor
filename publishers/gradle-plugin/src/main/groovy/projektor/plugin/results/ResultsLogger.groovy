@@ -1,6 +1,7 @@
-package projektor.plugin
+package projektor.plugin.results
 
 import org.gradle.api.logging.Logger
+import projektor.plugin.PublishResult
 
 class ResultsLogger {
     private final Logger logger

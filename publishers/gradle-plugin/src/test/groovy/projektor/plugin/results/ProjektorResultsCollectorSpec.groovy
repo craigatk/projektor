@@ -1,8 +1,9 @@
-package projektor.plugin
+package projektor.plugin.results
 
 import org.gradle.api.logging.Logger
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
+import projektor.plugin.results.ProjektorResultsCollector
 import spock.lang.Specification
 
 class ProjektorResultsCollectorSpec extends Specification {

@@ -1,4 +1,4 @@
-package projektor.plugin
+package projektor.plugin.results
 
 import groovy.json.JsonSlurper
 import okhttp3.MediaType
@@ -7,6 +7,7 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 import org.gradle.api.logging.Logger
+import projektor.plugin.PublishResult
 
 class ProjektorResultsClient {
     private final String serverUrl

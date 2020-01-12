@@ -3,6 +3,7 @@ package projektor.plugin
 import org.gradle.api.Task
 import org.gradle.api.logging.Logger
 import org.gradle.api.tasks.testing.Test
+import projektor.plugin.results.ProjektorResultsCollector
 
 class ProjectTestTaskResultsCollector {
     private final Collection<TestGroup> testGroups

@@ -9,7 +9,7 @@ class GroupedResultsSerializerSpec extends Specification {
     @Subject
     GroupedResultsSerializer groupedResultsSerializer = new GroupedResultsSerializer()
 
-    private final ObjectMapper mapper = new XmlMapper();
+    private final ObjectMapper mapper = new XmlMapper()
 
     def "should serialize grouped results with one test suite as a string"() {
         given:
