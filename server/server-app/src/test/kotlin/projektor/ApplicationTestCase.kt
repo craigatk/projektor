@@ -13,10 +13,7 @@ import io.ktor.util.KtorExperimentalAPI
 import kotlin.test.AfterTest
 import org.jooq.DSLContext
 import org.koin.ktor.ext.get
-import projektor.database.generated.tables.daos.TestCaseDao
-import projektor.database.generated.tables.daos.TestFailureDao
-import projektor.database.generated.tables.daos.TestRunDao
-import projektor.database.generated.tables.daos.TestSuiteDao
+import projektor.database.generated.tables.daos.*
 import projektor.parser.ResultsXmlLoader
 
 @KtorExperimentalAPI
@@ -33,6 +30,7 @@ open class ApplicationTestCase {
     lateinit var dataSource: HikariDataSource
     lateinit var dslContext: DSLContext
     lateinit var testRunDao: TestRunDao
+    lateinit var testSuiteGroupDao: TestSuiteGroupDao
     lateinit var testSuiteDao: TestSuiteDao
     lateinit var testCaseDao: TestCaseDao
     lateinit var testFailureDao: TestFailureDao
@@ -56,6 +54,7 @@ open class ApplicationTestCase {
         dataSource = application.get()
         dslContext = application.get()
         testRunDao = TestRunDao(dslContext.configuration())
+        testSuiteGroupDao = TestSuiteGroupDao(dslContext.configuration())
         testSuiteDao = TestSuiteDao(dslContext.configuration())
         testCaseDao = TestCaseDao(dslContext.configuration())
         testFailureDao = TestFailureDao(dslContext.configuration())

@@ -1,7 +1,6 @@
 package projektor.parser.grouped
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import projektor.parser.grouped.model.GroupedResults
 import projektor.parser.grouped.model.GroupedTestSuites
 import spock.lang.Specification
@@ -11,24 +10,7 @@ class GroupedResultsParserSpec extends Specification {
     @Subject
     GroupedResultsParser groupedResultsParser = new GroupedResultsParser()
 
-    private final ObjectMapper mapper = new XmlMapper();
-
-    def "should deserialize grouped results from a string"() {
-        given:
-        String groupedResultsXml = """<GroupedResults><groupedTestSuites><groupName>MyGroup</groupName><groupLabel>MyProject</groupLabel><directory>path/to/my-project</directory><testSuitesBlob><![CDATA[<testsuites>Yes</testsuites>]]></testSuitesBlob></groupedTestSuites></GroupedResults>"""
-
-        when:
-        GroupedResults groupedResults = groupedResultsParser.parseGroupedResults(groupedResultsXml)
-
-        then:
-        groupedResults.groupedTestSuites.size() == 1
-
-        GroupedTestSuites groupedTestSuites = groupedResults.groupedTestSuites[0]
-        groupedTestSuites.groupLabel == "MyProject"
-        groupedTestSuites.groupName == "MyGroup"
-        groupedTestSuites.directory == "path/to/my-project"
-        groupedTestSuites.testSuitesBlob == """<testsuites>Yes</testsuites>"""
-    }
+    private final ObjectMapper mapper = new ObjectMapper()
 
     def "should deserialize grouped results that were serialized"() {
         given:

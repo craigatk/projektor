@@ -12,24 +12,6 @@ class GroupedResultsSerializerSpec extends Specification {
 
     private GroupedResultsParser groupedResultsParser = new GroupedResultsParser()
 
-    def "should serialize grouped results with one test suite as a string"() {
-        given:
-        GroupedTestSuites groupedTestSuites = new GroupedTestSuites()
-        groupedTestSuites.groupLabel = "MyProject"
-        groupedTestSuites.groupName = "MyGroup"
-        groupedTestSuites.directory = "path/to/my-project"
-        groupedTestSuites.testSuitesBlob = """<testsuites>Yes</testsuites>"""
-
-        GroupedResults groupedResults = new GroupedResults()
-        groupedResults.groupedTestSuites = [groupedTestSuites]
-
-        when:
-        String groupedResultsXml = groupedResultsSerializer.serializeGroupedResults(groupedResults)
-
-        then:
-        groupedResultsXml == """<GroupedResults><groupedTestSuites><groupName>MyGroup</groupName><groupLabel>MyProject</groupLabel><directory>path/to/my-project</directory><testSuitesBlob><![CDATA[<testsuites>Yes</testsuites>]]></testSuitesBlob></groupedTestSuites></GroupedResults>"""
-    }
-
     def "should be able to deserialize grouped results that were serialized"() {
         given:
         List<GroupedTestSuites> groupedTestSuites = (1..3).collect { idx ->

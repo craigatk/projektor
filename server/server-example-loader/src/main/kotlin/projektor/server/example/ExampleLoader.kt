@@ -5,6 +5,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.ResultsXmlLoader
 import projektor.server.api.SaveResultsResponse
 
@@ -16,7 +17,7 @@ fun loadPassingExample() {
 
     val testResults = listOf(resultsXmlLoader.passing())
 
-    val saveResultsResponse = sendSaveResultsRequestToServer(testResults)
+    val saveResultsResponse = sendResultsToServer(testResults)
     println("View run with only passing tests at at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
@@ -32,24 +33,46 @@ fun loadAllExamples() {
             resultsXmlLoader.someIgnoredSomeFailing()
     )
 
-    val saveResultsResponse = sendSaveResultsRequestToServer(testResults)
+    val saveResultsResponse = sendResultsToServer(testResults)
     println("View run with all tests at at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
 fun loadCypressExamples() {
     val resultsXmlLoader = ResultsXmlLoader()
-    val saveResultsResponse = sendSaveResultsRequestToServer(resultsXmlLoader.cypressResults())
+    val saveResultsResponse = sendResultsToServer(resultsXmlLoader.cypressResults())
     println("View run with Cypress tests at at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
-fun sendSaveResultsRequestToServer(resultXmlList: List<String>): SaveResultsResponse =
-        resultXmlList.joinToString("\n").let(::sendSaveResultsRequestToServer)
+fun loadPassingGroupedExample() {
+    val groupedResultsXmlLoader = GroupedResultsXmlLoader()
+    val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults())
+    println("View run with passing grouped tests at at $uiBaseUrl${saveResultsResponse.uri}")
+}
 
-fun sendSaveResultsRequestToServer(resultsBlob: String): SaveResultsResponse {
+fun sendResultsToServer(resultXmlList: List<String>): SaveResultsResponse =
+        resultXmlList.joinToString("\n").let(::sendResultsToServer)
+
+fun sendResultsToServer(resultsBlob: String): SaveResultsResponse {
     val client = OkHttpClient()
     val plainTextMediaType = "text/plain".toMediaType()
     val url = "$serverBaseUrl/results"
     val requestBody = resultsBlob.toRequestBody(plainTextMediaType)
+
+    val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
+
+    val response = client.newCall(request).execute()
+    val responseString = response.body?.string()
+    return Gson().fromJson(responseString, SaveResultsResponse::class.java)
+}
+
+fun sendGroupedResultsToServer(groupedResultsJson: String): SaveResultsResponse {
+    val client = OkHttpClient()
+    val mediaType = "application/json".toMediaType()
+    val url = "$serverBaseUrl/groupedResults"
+    val requestBody = groupedResultsJson.toRequestBody(mediaType)
 
     val request = Request.Builder()
             .url(url)
