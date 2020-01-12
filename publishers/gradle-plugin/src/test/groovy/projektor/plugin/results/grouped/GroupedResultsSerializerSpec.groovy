@@ -1,7 +1,8 @@
 package projektor.plugin.results.grouped
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import projektor.parser.grouped.GroupedResultsParser
+import projektor.parser.grouped.model.GroupedResults as ServerGroupedResults
+import projektor.parser.grouped.model.GroupedTestSuites as ServerGroupedTestSuites
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -9,7 +10,7 @@ class GroupedResultsSerializerSpec extends Specification {
     @Subject
     GroupedResultsSerializer groupedResultsSerializer = new GroupedResultsSerializer()
 
-    private final ObjectMapper mapper = new XmlMapper()
+    private GroupedResultsParser groupedResultsParser = new GroupedResultsParser()
 
     def "should serialize grouped results with one test suite as a string"() {
         given:
@@ -44,24 +45,24 @@ class GroupedResultsSerializerSpec extends Specification {
 
         when:
         String groupedResultsXml = groupedResultsSerializer.serializeGroupedResults(groupedResults)
-        GroupedResults parsedGroupedResults = mapper.readValue(groupedResultsXml, GroupedResults)
+        ServerGroupedResults parsedGroupedResults = groupedResultsParser.parseGroupedResults(groupedResultsXml)
 
         then:
         parsedGroupedResults.groupedTestSuites.size() == 3
 
-        GroupedTestSuites groupedTestSuites1 = parsedGroupedResults.groupedTestSuites.find { it.groupName == "MyGroup1" }
+        ServerGroupedTestSuites groupedTestSuites1 = parsedGroupedResults.groupedTestSuites.find { it.groupName == "MyGroup1" }
         groupedTestSuites1.groupName == "MyGroup1"
         groupedTestSuites1.groupLabel == "MyLabel1"
         groupedTestSuites1.directory == "path/to/my-group-1"
         groupedTestSuites1.testSuitesBlob == """<testsuites>Blob1</testsuites>"""
 
-        GroupedTestSuites groupedTestSuites2 = parsedGroupedResults.groupedTestSuites.find { it.groupName == "MyGroup2" }
+        ServerGroupedTestSuites groupedTestSuites2 = parsedGroupedResults.groupedTestSuites.find { it.groupName == "MyGroup2" }
         groupedTestSuites2.groupName == "MyGroup2"
         groupedTestSuites2.groupLabel == "MyLabel2"
         groupedTestSuites2.directory == "path/to/my-group-2"
         groupedTestSuites2.testSuitesBlob == """<testsuites>Blob2</testsuites>"""
 
-        GroupedTestSuites groupedTestSuites3 = parsedGroupedResults.groupedTestSuites.find { it.groupName == "MyGroup3" }
+        ServerGroupedTestSuites groupedTestSuites3 = parsedGroupedResults.groupedTestSuites.find { it.groupName == "MyGroup3" }
         groupedTestSuites3.groupName == "MyGroup3"
         groupedTestSuites3.groupLabel == "MyLabel3"
         groupedTestSuites3.directory == "path/to/my-group-3"
