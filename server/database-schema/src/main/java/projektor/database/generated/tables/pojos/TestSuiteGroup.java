@@ -22,14 +22,12 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestSuiteGroup implements Serializable {
 
-    private static final long serialVersionUID = -320985481;
+    private static final long serialVersionUID = 744791188;
 
     private Long   id;
     private Long   testRunId;
     private String groupName;
-    private String projectName;
-    private String directory;
-    private String path;
+    private String groupLabel;
 
     public TestSuiteGroup() {}
 
@@ -37,25 +35,19 @@ public class TestSuiteGroup implements Serializable {
         this.id = value.id;
         this.testRunId = value.testRunId;
         this.groupName = value.groupName;
-        this.projectName = value.projectName;
-        this.directory = value.directory;
-        this.path = value.path;
+        this.groupLabel = value.groupLabel;
     }
 
     public TestSuiteGroup(
         Long   id,
         Long   testRunId,
         String groupName,
-        String projectName,
-        String directory,
-        String path
+        String groupLabel
     ) {
         this.id = id;
         this.testRunId = testRunId;
         this.groupName = groupName;
-        this.projectName = projectName;
-        this.directory = directory;
-        this.path = path;
+        this.groupLabel = groupLabel;
     }
 
     public Long getId() {
@@ -85,30 +77,12 @@ public class TestSuiteGroup implements Serializable {
         return this;
     }
 
-    public String getProjectName() {
-        return this.projectName;
+    public String getGroupLabel() {
+        return this.groupLabel;
     }
 
-    public TestSuiteGroup setProjectName(String projectName) {
-        this.projectName = projectName;
-        return this;
-    }
-
-    public String getDirectory() {
-        return this.directory;
-    }
-
-    public TestSuiteGroup setDirectory(String directory) {
-        this.directory = directory;
-        return this;
-    }
-
-    public String getPath() {
-        return this.path;
-    }
-
-    public TestSuiteGroup setPath(String path) {
-        this.path = path;
+    public TestSuiteGroup setGroupLabel(String groupLabel) {
+        this.groupLabel = groupLabel;
         return this;
     }
 
@@ -139,23 +113,11 @@ public class TestSuiteGroup implements Serializable {
         }
         else if (!groupName.equals(other.groupName))
             return false;
-        if (projectName == null) {
-            if (other.projectName != null)
+        if (groupLabel == null) {
+            if (other.groupLabel != null)
                 return false;
         }
-        else if (!projectName.equals(other.projectName))
-            return false;
-        if (directory == null) {
-            if (other.directory != null)
-                return false;
-        }
-        else if (!directory.equals(other.directory))
-            return false;
-        if (path == null) {
-            if (other.path != null)
-                return false;
-        }
-        else if (!path.equals(other.path))
+        else if (!groupLabel.equals(other.groupLabel))
             return false;
         return true;
     }
@@ -167,9 +129,7 @@ public class TestSuiteGroup implements Serializable {
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.testRunId == null) ? 0 : this.testRunId.hashCode());
         result = prime * result + ((this.groupName == null) ? 0 : this.groupName.hashCode());
-        result = prime * result + ((this.projectName == null) ? 0 : this.projectName.hashCode());
-        result = prime * result + ((this.directory == null) ? 0 : this.directory.hashCode());
-        result = prime * result + ((this.path == null) ? 0 : this.path.hashCode());
+        result = prime * result + ((this.groupLabel == null) ? 0 : this.groupLabel.hashCode());
         return result;
     }
 
@@ -180,9 +140,7 @@ public class TestSuiteGroup implements Serializable {
         sb.append(id);
         sb.append(", ").append(testRunId);
         sb.append(", ").append(groupName);
-        sb.append(", ").append(projectName);
-        sb.append(", ").append(directory);
-        sb.append(", ").append(path);
+        sb.append(", ").append(groupLabel);
 
         sb.append(")");
         return sb.toString();

@@ -79,23 +79,9 @@ public class TestSuiteGroupDao extends DAOImpl<TestSuiteGroupRecord, projektor.d
     }
 
     /**
-     * Fetch records that have <code>project_name IN (values)</code>
+     * Fetch records that have <code>group_label IN (values)</code>
      */
-    public List<projektor.database.generated.tables.pojos.TestSuiteGroup> fetchByProjectName(String... values) {
-        return fetch(TestSuiteGroup.TEST_SUITE_GROUP.PROJECT_NAME, values);
-    }
-
-    /**
-     * Fetch records that have <code>directory IN (values)</code>
-     */
-    public List<projektor.database.generated.tables.pojos.TestSuiteGroup> fetchByDirectory(String... values) {
-        return fetch(TestSuiteGroup.TEST_SUITE_GROUP.DIRECTORY, values);
-    }
-
-    /**
-     * Fetch records that have <code>path IN (values)</code>
-     */
-    public List<projektor.database.generated.tables.pojos.TestSuiteGroup> fetchByPath(String... values) {
-        return fetch(TestSuiteGroup.TEST_SUITE_GROUP.PATH, values);
+    public List<projektor.database.generated.tables.pojos.TestSuiteGroup> fetchByGroupLabel(String... values) {
+        return fetch(TestSuiteGroup.TEST_SUITE_GROUP.GROUP_LABEL, values);
     }
 }

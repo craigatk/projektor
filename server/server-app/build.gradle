@@ -29,7 +29,7 @@ dependencies {
     implementation project(':server:database-schema')
     implementation project(':server:server-api')
     implementation project(':server:test-results-parser')
-    implementation project(':grouped-results')
+    implementation project(':server:grouped-results-parser')
 
     implementation "io.ktor:ktor-server-netty:$ktor_version"
     implementation "io.ktor:ktor-jackson:$ktor_version"
