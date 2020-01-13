@@ -22,9 +22,13 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
       <TableHead>
         <TableRow>
           <TableCell>Test Suite</TableCell>
-          {anyTestSuiteHasGroupName(testSuites) && <TableCell>Group</TableCell>}
+          {anyTestSuiteHasGroupName(testSuites) && (
+            <TableCell data-testid="test-suite-list-header-group">
+              Group
+            </TableCell>
+          )}
           <TableCell>Passing tests</TableCell>
-          <TableCell>Failed tests</TableCell>y
+          <TableCell>Failed tests</TableCell>
           <TableCell>Duration (sec)</TableCell>
         </TableRow>
       </TableHead>
@@ -43,7 +47,12 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
               </CleanLink>
             </TableCell>
             {testSuiteHasGroupName(testSuite) && (
-              <TableCell size="small">{testSuite.groupName || ""}</TableCell>
+              <TableCell
+                data-testid={`test-suite-group-name-${testSuite.idx}`}
+                size="small"
+              >
+                {testSuite.groupName || ""}
+              </TableCell>
             )}
             <TableCell size="small">{testSuite.passingCount}</TableCell>
             <TableCell size="small">{testSuite.failureCount}</TableCell>
