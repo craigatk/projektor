@@ -8,6 +8,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.ResultsXmlLoader
 import projektor.server.api.SaveResultsResponse
+import java.io.File
 
 val serverBaseUrl = System.getenv("SERVER_URL") ?: "http://localhost:8080"
 val uiBaseUrl = System.getenv("SERVER_URL") ?: "http://localhost:1234"
@@ -46,6 +47,7 @@ fun loadCypressExamples() {
 fun loadPassingGroupedExample() {
     val groupedResultsXmlLoader = GroupedResultsXmlLoader()
     val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults())
+    File("temp.txt").writeText(groupedResultsXmlLoader.passingGroupedResults())
     println("View run with passing grouped tests at at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
