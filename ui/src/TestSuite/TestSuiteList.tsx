@@ -6,6 +6,10 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { TestSuite } from "../model/TestRunModel";
 import CleanLink from "../Link/CleanLink";
+import {
+  anyTestSuiteHasGroupName,
+  testSuiteHasGroupName
+} from "../model/TestSuiteHelpers";
 
 interface TestSuiteListProps {
   publicId: String;
@@ -18,10 +22,9 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
       <TableHead>
         <TableRow>
           <TableCell>Test Suite</TableCell>
-          <TableCell>Total tests</TableCell>
+          {anyTestSuiteHasGroupName(testSuites) && <TableCell>Group</TableCell>}
           <TableCell>Passing tests</TableCell>
-          <TableCell>Failed tests</TableCell>
-          <TableCell>Skipped tests</TableCell>
+          <TableCell>Failed tests</TableCell>y
           <TableCell>Duration (sec)</TableCell>
         </TableRow>
       </TableHead>
@@ -39,10 +42,11 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
                 {testSuite.className}
               </CleanLink>
             </TableCell>
-            <TableCell size="small">{testSuite.testCount}</TableCell>
+            {testSuiteHasGroupName(testSuite) && (
+              <TableCell size="small">{testSuite.groupName || ""}</TableCell>
+            )}
             <TableCell size="small">{testSuite.passingCount}</TableCell>
             <TableCell size="small">{testSuite.failureCount}</TableCell>
-            <TableCell size="small">{testSuite.skippedCount}</TableCell>
             <TableCell size="small">{testSuite.duration}</TableCell>
           </TableRow>
         ))}

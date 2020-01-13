@@ -23,7 +23,6 @@ class GetTestCaseApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/suite/$testSuiteIdx/case/$testCaseIdx") {
-                val testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteDao, testCaseDao, testFailureDao)
                 testRunDBGenerator.createTestRun(
                         publicId,
                         listOf(

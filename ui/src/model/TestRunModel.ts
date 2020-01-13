@@ -20,8 +20,8 @@ interface TestCase {
 
 interface TestSuite {
   idx: number;
-  packageName: String;
-  className: String;
+  packageName: string;
+  className: string;
   testCount: number;
   passingCount: number;
   skippedCount: number;
@@ -31,6 +31,8 @@ interface TestSuite {
   testCases: TestCase[];
   hasSystemOut: boolean;
   hasSystemErr: boolean;
+  groupName?: string;
+  groupLabel?: string;
 }
 
 interface TestSuiteOutput {

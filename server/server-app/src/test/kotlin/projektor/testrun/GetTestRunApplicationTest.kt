@@ -6,24 +6,23 @@ import io.ktor.util.KtorExperimentalAPI
 import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
-import projektor.TestRunDBGenerator
 import projektor.TestSuiteData
+import projektor.database.generated.tables.pojos.TestSuiteGroup
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.TestRun
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
 
 @KtorExperimentalAPI
 class GetTestRunApplicationTest : ApplicationTestCase() {
     @Test
-    fun shouldFetchTestRunFromDatabase() {
+    fun `should fetch test run from database`() {
         val publicId = randomPublicId()
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId") {
-                val testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteDao, testCaseDao, testFailureDao)
-
                 testRunDBGenerator.createTestRun(
                         publicId,
                         listOf(
@@ -62,6 +61,64 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
                 val testSuite2TestCases = testSuite2.testCases
                 assertNotNull(testSuite2TestCases)
                 expectThat(testSuite2TestCases).hasSize(3)
+            }
+        }
+    }
+
+    @Test
+    fun `should fetch grouped test run from database`() {
+        val publicId = randomPublicId()
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Get, "/run/$publicId") {
+                val testRun = testRunDBGenerator.createTestRun(
+                        publicId,
+                        listOf(
+                                TestSuiteData("projektor.TestSuite1",
+                                        listOf("testCase1"),
+                                        listOf(),
+                                        listOf()
+                                ),
+                                TestSuiteData("projektor.TestSuite2",
+                                        listOf("testCase2"),
+                                        listOf(),
+                                        listOf()
+                                )
+                        )
+                )
+
+                val testSuiteGroup = TestSuiteGroup()
+                testSuiteGroup.testRunId = testRun.id
+                testSuiteGroup.groupName = "MyGroup"
+                testSuiteGroup.groupLabel = "MyLabel"
+                testSuiteGroupDao.insert(testSuiteGroup)
+
+                testRunDBGenerator.addTestSuiteGroupToTestRun(testSuiteGroup, testRun, listOf("TestSuite1", "TestSuite2"))
+            }.apply {
+                val responseRun = objectMapper.readValue(response.content, TestRun::class.java)
+                assertNotNull(responseRun)
+
+                expectThat(responseRun.id).isEqualTo(publicId.id)
+
+                val testSuites = responseRun.testSuites
+                assertNotNull(testSuites)
+                expectThat(testSuites).hasSize(2)
+
+                val testSuite1 = testSuites.find { it.className == "TestSuite1" }
+                expectThat(testSuite1)
+                        .isNotNull()
+                        .and {
+                            get { groupName }.isEqualTo("MyGroup")
+                            get { groupLabel }.isEqualTo("MyLabel")
+                        }
+
+                val testSuite2 = testSuites.find { it.className == "TestSuite2" }
+                expectThat(testSuite2)
+                        .isNotNull()
+                        .and {
+                            get { groupName }.isEqualTo("MyGroup")
+                            get { groupLabel }.isEqualTo("MyLabel")
+                        }
             }
         }
     }

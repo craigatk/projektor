@@ -1,7 +1,6 @@
 package projektor.testsuite.repository
 
 import kotlin.test.Test
-import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import projektor.DatabaseRepositoryTestCase
 import projektor.TestSuiteData
@@ -9,7 +8,6 @@ import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGrou
 import projektor.incomingresults.randomPublicId
 import projektor.testsuite.TestSuiteDatabaseRepository
 import strikt.api.expectThat
-import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
@@ -41,18 +39,7 @@ class TestSuiteDatabaseRepositoryFetchGroupedSuitesTest : DatabaseRepositoryTest
         testSuiteGroup.groupLabel = "MyLabel"
         testSuiteGroupDao.insert(testSuiteGroup)
 
-        val testSuiteDBs = testSuiteDao.fetchByTestRunId(testRun.id)
-        expectThat(testSuiteDBs).hasSize(2)
-
-        val testSuite1DB = testSuiteDBs.find { it.className == "TestSuite1" }
-        assertNotNull(testSuite1DB)
-        testSuite1DB.testSuiteGroupId = testSuiteGroup.id
-        testSuiteDao.update(testSuite1DB)
-
-        val testSuite2DB = testSuiteDBs.find { it.className == "TestSuite2" }
-        assertNotNull(testSuite2DB)
-        testSuite2DB.testSuiteGroupId = testSuiteGroup.id
-        testSuiteDao.update(testSuite2DB)
+        testRunDBGenerator.addTestSuiteGroupToTestRun(testSuiteGroup, testRun, listOf("TestSuite1", "TestSuite2"))
 
         val testSuite1 = runBlocking { testSuiteDatabaseRepository.fetchTestSuite(publicId, 1) }
         expectThat(testSuite1)

@@ -34,6 +34,7 @@ open class ApplicationTestCase {
     lateinit var testSuiteDao: TestSuiteDao
     lateinit var testCaseDao: TestCaseDao
     lateinit var testFailureDao: TestFailureDao
+    lateinit var testRunDBGenerator: TestRunDBGenerator
     lateinit var application: Application
 
     protected var databaseSchema: String = "public"
@@ -58,6 +59,7 @@ open class ApplicationTestCase {
         testSuiteDao = TestSuiteDao(dslContext.configuration())
         testCaseDao = TestCaseDao(dslContext.configuration())
         testFailureDao = TestFailureDao(dslContext.configuration())
+        testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao)
 
         this.application = application
     }

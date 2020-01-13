@@ -57,7 +57,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
         testFailureDao = TestFailureDao(dslContext.configuration())
         resultsProcessingDao = ResultsProcessingDao(dslContext.configuration())
 
-        testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteDao, testCaseDao, testFailureDao)
+        testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao)
     }
 
     @AfterTest

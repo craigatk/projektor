@@ -7,7 +7,6 @@ import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
 import kotlin.test.*
 import projektor.ApplicationTestCase
-import projektor.TestRunDBGenerator
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.TestCase
@@ -22,7 +21,6 @@ class GetFailedTestCasesApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/${publicId.id}/cases/failed") {
-                val testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteDao, testCaseDao, testFailureDao)
                 testRunDBGenerator.createTestRun(
                         publicId,
                         listOf(TestSuiteData(

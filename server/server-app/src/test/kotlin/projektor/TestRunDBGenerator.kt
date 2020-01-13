@@ -3,19 +3,18 @@ package projektor
 import java.math.BigDecimal
 import java.sql.Timestamp
 import java.time.LocalDateTime
-import projektor.database.generated.tables.daos.TestCaseDao
-import projektor.database.generated.tables.daos.TestFailureDao
-import projektor.database.generated.tables.daos.TestRunDao
-import projektor.database.generated.tables.daos.TestSuiteDao
+import projektor.database.generated.tables.daos.*
 import projektor.database.generated.tables.pojos.TestCase as TestCaseDB
 import projektor.database.generated.tables.pojos.TestFailure as TestFailureDB
 import projektor.database.generated.tables.pojos.TestRun as TestRunDB
 import projektor.database.generated.tables.pojos.TestSuite as TestSuiteDB
+import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 import projektor.incomingresults.mapper.parsePackageAndClassName
 import projektor.server.api.PublicId
 
 class TestRunDBGenerator(
     private val testRunDao: TestRunDao,
+    private val testSuiteGroupDao: TestSuiteGroupDao,
     private val testSuiteDao: TestSuiteDao,
     private val testCaseDao: TestCaseDao,
     private val testFailureDao: TestFailureDao
@@ -60,6 +59,15 @@ class TestRunDBGenerator(
         }
 
         return testRun
+    }
+
+    fun addTestSuiteGroupToTestRun(testSuiteGroup: TestSuiteGroupDB, testRun: TestRunDB, testSuiteClassNames: List<String>) {
+        val testSuiteDBs = testSuiteDao.fetchByTestRunId(testRun.id).filter { it.className in testSuiteClassNames }
+
+        testSuiteDBs.forEach { testSuiteDB ->
+            testSuiteDB.testSuiteGroupId = testSuiteGroup.id
+            testSuiteDao.update(testSuiteDB)
+        }
     }
 }
 

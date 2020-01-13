@@ -7,7 +7,6 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import projektor.DatabaseRepositoryTestCase
-import projektor.TestRunDBGenerator
 import projektor.TestSuiteData
 import projektor.database.generated.tables.pojos.TestCase
 import projektor.database.generated.tables.pojos.TestRun
@@ -160,8 +159,6 @@ class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
     fun `should fetch test run with multiple test suites`() {
         val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
         val publicId = randomPublicId()
-
-        val testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteDao, testCaseDao, testFailureDao)
 
         testRunDBGenerator.createTestRun(
                 publicId,
