@@ -25,10 +25,12 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
                         .select(addPrefixToFields("test_cases_", Tables.TEST_CASE.fields().toList()))
                         .select(Tables.TEST_SUITE.IDX.`as`("test_cases_test_suite_idx"))
                         .select(addPrefixToFields("test_cases_failure_", Tables.TEST_FAILURE.fields().toList()))
+                        .select(Tables.TEST_SUITE_GROUP.fields().toList())
                         .from(Tables.TEST_SUITE)
                         .innerJoin(Tables.TEST_RUN).on(Tables.TEST_SUITE.TEST_RUN_ID.eq(Tables.TEST_RUN.ID))
                         .leftOuterJoin(Tables.TEST_CASE).on(Tables.TEST_CASE.TEST_SUITE_ID.eq(Tables.TEST_SUITE.ID))
                         .leftOuterJoin(Tables.TEST_FAILURE).on(Tables.TEST_FAILURE.TEST_CASE_ID.eq(Tables.TEST_CASE.ID))
+                        .leftOuterJoin(Tables.TEST_SUITE_GROUP).on(Tables.TEST_SUITE_GROUP.ID.eq(Tables.TEST_SUITE.TEST_SUITE_GROUP_ID))
                         .where(Tables.TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id).and(Tables.TEST_SUITE.IDX.eq(testSuiteIdx)))
                         .fetchResultSet()
 

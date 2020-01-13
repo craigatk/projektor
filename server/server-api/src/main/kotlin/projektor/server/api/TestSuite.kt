@@ -16,5 +16,7 @@ data class TestSuite(
     val duration: BigDecimal,
     val hasSystemOut: Boolean,
     val hasSystemErr: Boolean,
+    val groupName: String?,
+    val groupLabel: String?,
     val testCases: List<TestCase>?
 )
