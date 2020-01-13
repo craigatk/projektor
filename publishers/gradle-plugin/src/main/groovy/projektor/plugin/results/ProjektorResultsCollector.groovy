@@ -9,14 +9,12 @@ class ProjektorResultsCollector {
         this.logger = logger
     }
 
-    String createResultsBlobFromJunitXmlResultsInDirectories(List<File> junitXmlResultsDirectories) {
-        List<File> allJunitXmlFiles = junitXmlResultsDirectories.collect {
-            findJunitXmlReportsInDirectory(it)
-        }.flatten()
+    String createResultsBlobFromJunitXmlResultsInDirectory(File junitXmlResultsDirectory) {
+        List<File> junitXmlFiles =  findJunitXmlReportsInDirectory(junitXmlResultsDirectory)
 
-        logger.info("Found ${allJunitXmlFiles.size()} JUnit XML results files in ${junitXmlResultsDirectories.size()} directories")
+        logger.info("Found ${junitXmlFiles.size()} JUnit XML results files in ${junitXmlResultsDirectory.name} directory")
 
-        String resultsBlob = createResultsBlob(allJunitXmlFiles)
+        String resultsBlob = createResultsBlob(junitXmlFiles)
 
         return resultsBlob
     }

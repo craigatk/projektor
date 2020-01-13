@@ -33,7 +33,7 @@ In another file"""
         otherFile.text = otherFileContent
 
         when:
-        String resultsBlob = debugifyResultsCollector.createResultsBlobFromJunitXmlResultsInDirectories([tempFolder1.root])
+        String resultsBlob = debugifyResultsCollector.createResultsBlobFromJunitXmlResultsInDirectory(tempFolder1.root)
 
         then:
         resultsBlob.contains(resultsXmlFile1Content)

@@ -7,6 +7,7 @@ import org.gradle.api.invocation.Gradle
 import org.gradle.api.logging.Logger
 import projektor.plugin.results.ProjektorResultsClient
 import projektor.plugin.results.ResultsLogger
+import projektor.plugin.results.grouped.GroupedResults
 
 class ProjektorBuildFinishedListener implements BuildListener {
 
@@ -47,10 +48,10 @@ class ProjektorBuildFinishedListener implements BuildListener {
         if (projectTestTaskResultsCollector.hasTestGroups()) {
             logger.info("Build finished, gathering and publishing Projektor test reports from " +
                     "${projectTestTaskResultsCollector.testGroupsCount()} test tasks")
-            String resultsBlob = projectTestTaskResultsCollector.createResultsBlob()
+            GroupedResults groupedResults = projectTestTaskResultsCollector.createGroupedResults()
 
             ProjektorResultsClient resultsClient = new ProjektorResultsClient(serverUrl, logger)
-            PublishResult publishResult = resultsClient.sendResultsToServer(resultsBlob)
+            PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
 
             new ResultsLogger(logger).logReportResults(publishResult)
         } else {

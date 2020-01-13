@@ -20,14 +20,14 @@ class WireMockStubber {
     }
 
     void stubResultsPostSuccess(String resultsId) {
-        wireMockServer.stubFor(post(urlEqualTo("/results")).willReturn(aResponse()
+        wireMockServer.stubFor(post(urlEqualTo("/groupedResults")).willReturn(aResponse()
                 .withStatus(200)
                 .withBody("""{"id": "${resultsId}", "uri": "/tests/${resultsId}"}""")))
     }
 
     List<LoggedRequest> findResultsRequests() {
         wireMockServer.findRequestsMatching(
-                postRequestedFor(urlEqualTo("/results")).build()
+                postRequestedFor(urlEqualTo("/groupedResults")).build()
         ).requests
     }
 }

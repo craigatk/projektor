@@ -4,14 +4,18 @@ import org.gradle.api.Task
 import org.gradle.api.logging.Logger
 import org.gradle.api.tasks.testing.Test
 import projektor.plugin.results.ProjektorResultsCollector
+import projektor.plugin.results.grouped.GroupedResults
+import projektor.plugin.results.grouped.GroupedTestSuites
 
 class ProjectTestTaskResultsCollector {
     private final Collection<TestGroup> testGroups
     private final Logger logger
+    private final ProjektorResultsCollector resultsCollector
 
     ProjectTestTaskResultsCollector(Collection<TestGroup> testGroups, Logger logger) {
         this.testGroups = testGroups
         this.logger = logger
+        this.resultsCollector = new ProjektorResultsCollector(logger)
     }
 
     static ProjectTestTaskResultsCollector fromAllTasks(Collection<Task> allTasks, Logger logger) {
@@ -29,14 +33,19 @@ class ProjectTestTaskResultsCollector {
         testGroups.size()
     }
 
-    String createResultsBlob() {
-        List<File> junitXmlDestinationDirectories = testGroups
-                .collect { it.task }
-                .collect { it.reports.junitXml.destination }
+    GroupedResults createGroupedResults() {
+        List<GroupedTestSuites> groupedTestSuites = testGroups.collect {
+            File junitXmlResultsDirectory = it.task.reports.junitXml.destination
 
-        ProjektorResultsCollector resultsCollector = new ProjektorResultsCollector(logger)
-        String resultsBlob = resultsCollector.createResultsBlobFromJunitXmlResultsInDirectories(junitXmlDestinationDirectories)
+            String resultsBlob = resultsCollector.createResultsBlobFromJunitXmlResultsInDirectory(junitXmlResultsDirectory)
 
-        return resultsBlob
+            new GroupedTestSuites(
+                    groupName: it.projectName,
+                    groupLabel: it.taskName,
+                    testSuitesBlob: resultsBlob
+            )
+        }
+
+        return new GroupedResults(groupedTestSuites: groupedTestSuites)
     }
 }

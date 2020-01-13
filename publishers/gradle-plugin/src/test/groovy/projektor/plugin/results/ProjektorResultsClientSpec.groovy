@@ -6,6 +6,7 @@ import org.gradle.api.logging.Logger
 import org.junit.Rule
 import projektor.plugin.WireMockStubber
 import projektor.plugin.PublishResult
+import projektor.plugin.results.grouped.GroupedResults
 import spock.lang.Specification
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
@@ -25,14 +26,15 @@ class ProjektorResultsClientSpec extends Specification {
 
         ProjektorResultsClient resultsClient = new ProjektorResultsClient(serverUrl, logger)
 
-        String resultsBlob = """<testsuites>
-</testsuites>"""
+        GroupedResults groupedResults = new GroupedResults(
+                groupedTestSuites: []
+        )
 
         String resultsId = "ABC123"
         wireMockStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        PublishResult publishResult = resultsClient.sendResultsToServer(resultsBlob)
+        PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
 
         then:
         publishResult.successful
@@ -41,6 +43,6 @@ class ProjektorResultsClientSpec extends Specification {
         List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
         resultsRequests.size() == 1
 
-        resultsRequests[0].bodyAsString == resultsBlob
+        resultsRequests[0].bodyAsString == """{"groupedTestSuites":[]}"""
     }
 }
