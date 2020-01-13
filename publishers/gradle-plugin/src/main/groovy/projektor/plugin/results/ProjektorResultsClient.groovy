@@ -37,9 +37,13 @@ class ProjektorResultsClient {
                 .post(body)
                 .build()
 
-        Response response = client.newCall(request).execute()
+        Response response = null
 
-        if (response.successful) {
+        try {
+            response = client.newCall(request).execute()
+        } catch (Exception e) {}
+
+        if (response?.successful) {
             String testRunUri = new JsonSlurper().parseText(response.body().string()).uri
             String reportUrl = "${serverUrl}${testRunUri}"
 
