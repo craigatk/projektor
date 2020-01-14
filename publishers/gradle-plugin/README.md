@@ -11,7 +11,7 @@ To apply this plugin to your project:
 
 ```
 plugins {
-  id "dev.projektor.publish" version "1.0.2"
+  id "dev.projektor.publish" version "1.0.3"
 }
 ```
 
@@ -27,6 +27,13 @@ This can be a good way to easily share a specific test failure with colleagues.
 `./gradlew publishResults`
 
 Note: If you have a multi-project build, please apply the plugin to the root project.
+
+## Compatibility
+
+| Plugin version | Server version |
+| -------------- | -------------- |
+| 1.0.0 - 1.0.2  | 1.0.0+         |
+| 1.0.3+         | 1.0.6+         |
 
 ## Configuration
 
