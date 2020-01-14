@@ -12,7 +12,7 @@ buildscript {
 }
 
 plugins {
-    id "dev.projektor.publish" version "1.0.2"
+    id "dev.projektor.publish" version "1.0.3"
 }
 
 projektor {

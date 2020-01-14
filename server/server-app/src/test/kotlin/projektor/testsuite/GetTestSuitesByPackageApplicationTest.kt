@@ -19,7 +19,7 @@ import strikt.assertions.map
 @KtorExperimentalAPI
 class GetTestSuitesByPackageApplicationTest : ApplicationTestCase() {
     @Test
-    fun shouldFetchTestSuiteSummariesFromDatabase() {
+    fun `should get test suites by package`() {
         val publicId = randomPublicId()
 
         withTestApplication(::createTestApplication) {
