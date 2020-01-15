@@ -8,13 +8,17 @@ import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 import { TestCase } from "../model/TestRunModel";
-import { Link } from "@reach/router";
 import { Typography } from "@material-ui/core";
 import CleanLink from "../Link/CleanLink";
 
 const useStyles = makeStyles(() => ({
   panelActions: {
     justifyContent: "flex-start"
+  },
+  failureMessage: {
+    backgroundColor: "#EDEDED",
+    overflowX: "auto",
+    fontSize: "0.9em"
   }
 }));
 
@@ -40,7 +44,7 @@ const TestCaseFailurePanel = ({
           {testCase.packageName}.{testCase.className} {testCase.name}
         </Typography>
       </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
+      <ExpansionPanelDetails className={classes.failureMessage}>
         {testCase.failure != null && (
           <div>
             <pre>{testCase.failure.failureMessage}</pre>

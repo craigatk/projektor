@@ -23,7 +23,8 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     flexGrow: 1,
-    marginTop: "42px"
+    marginTop: "42px",
+    maxWidth: "calc(100% - 180px)"
   }
 }));
 

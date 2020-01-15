@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="projektor.testsuite.GetTestSuiteApplicationTest" tests="2" skipped="0" failures="1" errors="0" timestamp="2020-01-14T22:20:30" hostname="DESKTOP-F2BATC0" time="0.232">
+  <properties/>
+  <testcase name="should fetch grouped test suite from database" classname="projektor.testsuite.GetTestSuiteApplicationTest" time="0.105">
+    <failure message="strikt.internal.opentest4j.CompoundAssertionFailure: ▼ Expect that TestSuite(idx=1, packageName=projektor, className=TestSuite1, testCount=1, passingCount=1, skippedCount=0, failureCount=0, startTs=2020-01-14T16:20:30.059, hostname=hostname, duration=10.000, hasSystemOut=false, hasSystemErr=false, groupName=MyGroup, groupLabel=MyLabel, testCases=[TestCase(idx=1, testSuiteIdx=1, name=testCase1, packageName=null, className=testCase1ClassName, duration=2.500, passed=true, skipped=false, hasSystemOut=false, hasSystemErr=false, failure=null)]):&#13;&#10;  ✓ is not null&#13;&#10;  ▼ &quot;MyGroup&quot;:&#13;&#10;    ✗ is equal to &quot;MyGroup2&quot; : found &quot;MyGroup&quot;" type="strikt.internal.opentest4j.CompoundAssertionFailure">strikt.internal.opentest4j.CompoundAssertionFailure: ▼ Expect that TestSuite(idx=1, packageName=projektor, className=TestSuite1, testCount=1, passingCount=1, skippedCount=0, failureCount=0, startTs=2020-01-14T16:20:30.059, hostname=hostname, duration=10.000, hasSystemOut=false, hasSystemErr=false, groupName=MyGroup, groupLabel=MyLabel, testCases=[TestCase(idx=1, testSuiteIdx=1, name=testCase1, packageName=null, className=testCase1ClassName, duration=2.500, passed=true, skipped=false, hasSystemOut=false, hasSystemErr=false, failure=null)]):
+  ✓ is not null
+  ▼ &quot;MyGroup&quot;:
+    ✗ is equal to &quot;MyGroup2&quot; : found &quot;MyGroup&quot;
+	at strikt.internal.AssertionStrategy$Throwing.evaluate(AssertionStrategy.kt:107)
+	at strikt.internal.AssertionBuilder.and(AssertionBuilder.kt:39)
+	at projektor.testsuite.GetTestSuiteApplicationTest$should fetch grouped test suite from database$2.invoke(GetTestSuiteApplicationTest.kt:105)
+	at projektor.testsuite.GetTestSuiteApplicationTest$should fetch grouped test suite from database$2.invoke(GetTestSuiteApplicationTest.kt:18)
+	at io.ktor.server.testing.TestEngineKt$withTestApplication$1.invoke(TestEngine.kt:69)
+	at io.ktor.server.testing.TestEngineKt$withTestApplication$1.invoke(TestEngine.kt)
+	at io.ktor.server.testing.TestEngineKt.withApplication(TestEngine.kt:50)
+	at io.ktor.server.testing.TestEngineKt.withApplication$default(TestEngine.kt:44)
+	at io.ktor.server.testing.TestEngineKt.withTestApplication(TestEngine.kt:67)
+	at projektor.testsuite.GetTestSuiteApplicationTest.should fetch grouped test suite from database(GetTestSuiteApplicationTest.kt:72)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+	at org.junit.vintage.engine.execution.RunnerExecutor.execute(RunnerExecutor.java:40)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.Iterator.forEachRemaining(Iterator.java:116)
+	at java.util.Spliterators$IteratorSpliterator.forEachRemaining(Spliterators.java:1801)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:482)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+	at org.junit.vintage.engine.VintageTestEngine.executeAllChildren(VintageTestEngine.java:80)
+	at org.junit.vintage.engine.VintageTestEngine.execute(VintageTestEngine.java:71)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:229)
+	at org.junit.platform.launcher.core.DefaultLauncher.lambda$execute$6(DefaultLauncher.java:197)
+	at org.junit.platform.launcher.core.DefaultLauncher.withInterceptedStreams(DefaultLauncher.java:211)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:191)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:128)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.processAllTestClasses(JUnitPlatformTestClassProcessor.java:99)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.access$000(JUnitPlatformTestClassProcessor.java:79)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor.stop(JUnitPlatformTestClassProcessor.java:75)
+	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:61)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:94)
+	at com.sun.proxy.$Proxy2.stop(Unknown Source)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.stop(TestWorker.java:132)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.internal.remote.internal.hub.MessageHubBackedObjectConnection$DispatchWrapper.dispatch(MessageHubBackedObjectConnection.java:182)
+	at org.gradle.internal.remote.internal.hub.MessageHubBackedObjectConnection$DispatchWrapper.dispatch(MessageHubBackedObjectConnection.java:164)
+	at org.gradle.internal.remote.internal.hub.MessageHub$Handler.run(MessageHub.java:412)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.ManagedExecutorImpl$1.run(ManagedExecutorImpl.java:48)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.gradle.internal.concurrent.ThreadFactoryImpl$ManagedThreadRunnable.run(ThreadFactoryImpl.java:56)
+	at java.lang.Thread.run(Thread.java:748)
+</failure>
+  </testcase>
+  <testcase name="shouldFetchTestSuiteFromDatabase" classname="projektor.testsuite.GetTestSuiteApplicationTest" time="0.126"/>
+  <system-out><![CDATA[2020-01-14 16:20:30.015 [Test worker] INFO  ktor.test - No ktor.deployment.watch patterns specified, automatic reload is not active
+2020-01-14 16:20:30.016 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-38 - Starting...
+2020-01-14 16:20:30.026 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-38 - Start completed.
+2020-01-14 16:20:30.028 [Test worker] INFO  o.f.c.i.database.DatabaseFactory - Database: jdbc:postgresql://localhost:5433/projektordb (PostgreSQL 11.2)
+2020-01-14 16:20:30.040 [Test worker] INFO  o.f.core.internal.command.DbValidate - Successfully validated 9 migrations (execution time 00:00.007s)
+2020-01-14 16:20:30.045 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "public": 9
+2020-01-14 16:20:30.046 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
+2020-01-14 16:20:30.104 [DefaultDispatcher-worker-3 @request#130] INFO  ktor.test - 200 OK: GET - /run/Y1E4ML01NMIY/suite/1
+2020-01-14 16:20:30.115 [Test worker] INFO  ktor.test - Application stopping: io.ktor.application.Application@cec062d
+2020-01-14 16:20:30.115 [Test worker] INFO  ktor.test - Application stopped: io.ktor.application.Application@cec062d
+2020-01-14 16:20:30.115 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-38 - Shutdown initiated...
+2020-01-14 16:20:30.116 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-38 - Shutdown completed.
+2020-01-14 16:20:30.120 [Test worker] INFO  ktor.test - No ktor.deployment.watch patterns specified, automatic reload is not active
+2020-01-14 16:20:30.120 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-39 - Starting...
+2020-01-14 16:20:30.133 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-39 - Start completed.
+2020-01-14 16:20:30.136 [Test worker] INFO  o.f.c.i.database.DatabaseFactory - Database: jdbc:postgresql://localhost:5433/projektordb (PostgreSQL 11.2)
+2020-01-14 16:20:30.149 [Test worker] INFO  o.f.core.internal.command.DbValidate - Successfully validated 9 migrations (execution time 00:00.008s)
+2020-01-14 16:20:30.157 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "public": 9
+2020-01-14 16:20:30.159 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
+2020-01-14 16:20:30.229 [DefaultDispatcher-worker-2 @request#134] INFO  ktor.test - 200 OK: GET - /run/YPEJAQZBNYFO/suite/1
+2020-01-14 16:20:30.235 [Test worker] INFO  ktor.test - Application stopping: io.ktor.application.Application@70aeb5b2
+2020-01-14 16:20:30.235 [Test worker] INFO  ktor.test - Application stopped: io.ktor.application.Application@70aeb5b2
+2020-01-14 16:20:30.235 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-39 - Shutdown initiated...
+2020-01-14 16:20:30.245 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-39 - Shutdown completed.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

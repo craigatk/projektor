@@ -27,6 +27,7 @@ fun loadAllExamples() {
     val testResults = listOf(
             resultsXmlLoader.passing(),
             resultsXmlLoader.failing(),
+            resultsXmlLoader.failingLongFailureMessage(),
             resultsXmlLoader.longOutput(),
             resultsXmlLoader.output(),
             resultsXmlLoader.someIgnored(),
