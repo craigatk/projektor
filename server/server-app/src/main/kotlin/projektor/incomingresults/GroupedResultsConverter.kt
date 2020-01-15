@@ -13,11 +13,12 @@ class GroupedResultsConverter(
         val incomingGroupedResults = groupedResultsParser.parseGroupedResults(groupedResultsXml)
 
         val groupedTestSuites = incomingGroupedResults.groupedTestSuites.map {
+            val nonEmptyTestSuites = testResultsProcessor.parseResultsBlob(it.testSuitesBlob).filter { testSuite -> !testSuite.testCases.isNullOrEmpty() }
             GroupedTestSuites(
                     groupName = it.groupName,
                     groupLabel = it.groupLabel,
                     directory = it.directory,
-                    testSuites = testResultsProcessor.parseResultsBlob(it.testSuitesBlob)
+                    testSuites = nonEmptyTestSuites
             )
         }
 
