@@ -152,4 +152,30 @@ context("test case", () => {
     cy.getBreadcrumbEndingText().should("contain", "side nav");
     cy.getByTestId("breadcrumb-link-package-name").should("not.exist");
   });
+
+  it("when test case failed should show failure details", () => {
+    const publicId = "12345";
+
+    const testSuiteIdx = 1;
+    const testCaseIdx = 2;
+
+    cy.server();
+
+    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.route("GET", `run/${publicId}`, "fixture:test_run.json");
+    cy.route(
+      "GET",
+      `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
+      "fixture:failed_test_case_2.json"
+    );
+
+    cy.visit(
+      `http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`
+    );
+
+    cy.getByTestId("test-case-failure-text").should(
+      "contain",
+      "Condition not satisfied"
+    );
+  });
 });
