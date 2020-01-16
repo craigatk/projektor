@@ -1,11 +1,21 @@
 import { TestSuite } from "./TestRunModel";
 
-const anyTestSuiteHasGroupName = (testSuites: TestSuite[]) => {
+const anyTestSuiteHasGroupName = (testSuites: TestSuite[]): boolean => {
   return testSuites.filter(testSuiteHasGroupName).length > 0;
 };
 
-const testSuiteHasGroupName = (testSuite: TestSuite) => {
-  return testSuite.groupName;
+const testSuiteHasGroupName = (testSuite: TestSuite): boolean => {
+  return !!testSuite.groupName;
 };
 
-export { anyTestSuiteHasGroupName, testSuiteHasGroupName };
+const fullTestSuiteName = (testSuite: TestSuite): string => {
+  let fullName = testSuite.className;
+
+  if (testSuite.packageName) {
+    fullName = testSuite.packageName + "." + fullName;
+  }
+
+  return fullName;
+};
+
+export { anyTestSuiteHasGroupName, testSuiteHasGroupName, fullTestSuiteName };

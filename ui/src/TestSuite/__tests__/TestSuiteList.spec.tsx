@@ -42,8 +42,6 @@ describe("TestSuiteList", () => {
       <TestSuiteList publicId="12345" testSuites={[testSuite1, testSuite2]} />
     );
 
-    expect(queryByTestId("test-suite-list-header-group")).not.toBeNull();
-
     expect(getNodeText(getByTestId("test-suite-group-name-1"))).toBe("Group1");
     expect(getNodeText(getByTestId("test-suite-group-name-2"))).toBe("Group2");
   });
@@ -65,11 +63,9 @@ describe("TestSuiteList", () => {
       groupName: null
     };
 
-    const { getByTestId, queryByTestId } = render(
+    const { queryByTestId } = render(
       <TestSuiteList publicId="12345" testSuites={[testSuite]} />
     );
-
-    expect(queryByTestId("test-suite-list-header-group")).toBeNull();
 
     expect(queryByTestId("test-suite-group-name-1")).toBeNull();
   });
