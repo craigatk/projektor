@@ -12,6 +12,15 @@ interface TestSuiteListProps {
   testSuites: TestSuite[];
 }
 
+const headerStyle = {
+  paddingTop: "8px",
+  paddingBottom: "8px"
+};
+
+const cellStyle = {
+  padding: "6px 24px 6px 16px"
+};
+
 const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
   return (
     <div data-testid="test-suite-list">
@@ -33,7 +42,9 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
               >
                 {rowData.name}
               </CleanLink>
-            )
+            ),
+            cellStyle,
+            headerStyle
           },
           {
             title: "Group",
@@ -43,11 +54,13 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
               <span data-testid={`test-suite-group-name-${rowData.idx}`}>
                 {rowData.group}
               </span>
-            )
+            ),
+            cellStyle,
+            headerStyle
           },
-          { title: "Passed", field: "passed" },
-          { title: "Failed", field: "failed" },
-          { title: "Duration", field: "duration" }
+          { title: "Passed", field: "passed", cellStyle, headerStyle },
+          { title: "Failed", field: "failed", cellStyle, headerStyle },
+          { title: "Duration", field: "duration", cellStyle, headerStyle }
         ]}
         data={testSuites.map(testSuite => ({
           name: fullTestSuiteName(testSuite),
