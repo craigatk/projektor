@@ -16,6 +16,7 @@ import projektor.server.api.SaveResultsResponse
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
 
 @KtorExperimentalAPI
 class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
@@ -37,9 +38,24 @@ class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
                 val testRun = await untilNotNull { testRunDao.fetchOneByPublicId(publicId) }
                 assertNotNull(testRun)
 
+                val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
+                expectThat(testSuites).hasSize(3)
+
+                expectThat(testSuites.find { it.idx == 1 }).isNotNull()
+                expectThat(testSuites.find { it.idx == 2 }).isNotNull()
+                expectThat(testSuites.find { it.idx == 3 }).isNotNull()
+
                 val testSuiteGroups = testSuiteGroupDao.fetchByTestRunId(testRun.id)
                 expectThat(testSuiteGroups)
                         .hasSize(2)
+
+                val testSuiteGroup1 = testSuiteGroups.find { it.groupName == "Group1" }
+                assertNotNull(testSuiteGroup1)
+                expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup1.id)).hasSize(2)
+
+                val testSuiteGroup2 = testSuiteGroups.find { it.groupName == "Group2" }
+                assertNotNull(testSuiteGroup2)
+                expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2.id)).hasSize(1)
             }
         }
     }

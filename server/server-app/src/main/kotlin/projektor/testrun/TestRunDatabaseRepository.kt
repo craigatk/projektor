@@ -37,7 +37,7 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
 
                 logger.info("Inserted test run $publicId")
 
-                saveTestSuites(testSuites, testRunDB.id, null, configuration)
+                saveTestSuites(testSuites, testRunDB.id, null, 0, configuration)
             }
 
             testRunSummary
@@ -57,24 +57,34 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
 
                     logger.info("Inserted test run $publicId")
 
+                    var testSuiteStartingIndex = 0
+
                     groupedResults.groupedTestSuites.forEach { groupedTestSuites ->
                         val testSuiteGroupDB = groupedTestSuites.toDB(testRunDB.id)
                         testSuiteGroupDao.insert(testSuiteGroupDB)
 
-                        saveTestSuites(groupedTestSuites.testSuites, testRunDB.id, testSuiteGroupDB.id, configuration)
+                        saveTestSuites(groupedTestSuites.testSuites, testRunDB.id, testSuiteGroupDB.id, testSuiteStartingIndex, configuration)
+
+                        testSuiteStartingIndex += groupedTestSuites.testSuites.size
                     }
                 }
 
                 testRunSummary
             }
 
-    private fun saveTestSuites(testSuites: List<ParsedTestSuite>, testRunId: Long, testGroupId: Long?, configuration: Configuration) {
+    private fun saveTestSuites(
+        testSuites: List<ParsedTestSuite>,
+        testRunId: Long,
+        testGroupId: Long?,
+        testSuiteStartingIndex: Int,
+        configuration: Configuration
+    ) {
         val testSuiteDao = TestSuiteDao(configuration)
         val testCaseDao = TestCaseDao(configuration)
         val testFailureDao = TestFailureDao(configuration)
 
         testSuites.forEachIndexed { testSuiteIdx, testSuite ->
-            val testSuiteDB = testSuite.toDB(testRunId, testGroupId, testSuiteIdx + 1)
+            val testSuiteDB = testSuite.toDB(testRunId, testGroupId, testSuiteStartingIndex + testSuiteIdx + 1)
             testSuiteDao.insert(testSuiteDB)
 
             testSuite.testCases.forEachIndexed { testCaseIdx, testCase ->
