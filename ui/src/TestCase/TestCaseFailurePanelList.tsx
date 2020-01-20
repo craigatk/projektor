@@ -2,22 +2,27 @@ import * as React from "react";
 import { TestCase } from "../model/TestRunModel";
 import TestCaseFailurePanel from "./TestCaseFailurePanel";
 
+const showFullFailureMaxFailureCount = 5;
+
 interface TestCaseFailurePanelListProps {
-  testCases: TestCase[];
-  publicId: String;
+  failedTestCases: TestCase[];
+  publicId: string;
 }
 
 const TestCaseFailurePanelList = ({
-  testCases,
+  failedTestCases,
   publicId
 }: TestCaseFailurePanelListProps) => {
   return (
     <div>
-      {testCases.map(testCase => (
+      {failedTestCases.map(testCase => (
         <TestCaseFailurePanel
           testCase={testCase}
           publicId={publicId}
-          key={`test-case-${testCase.idx}`}
+          key={`test-case-${testCase.testSuiteIdx}-${testCase.idx}`}
+          showFullFailure={
+            failedTestCases.length <= showFullFailureMaxFailureCount
+          }
         />
       ))}
     </div>

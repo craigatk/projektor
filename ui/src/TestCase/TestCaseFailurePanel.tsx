@@ -24,12 +24,14 @@ const useStyles = makeStyles(() => ({
 
 interface TestCaseFailurePanelProps {
   testCase: TestCase;
-  publicId: String;
+  publicId: string;
+  showFullFailure?: boolean;
 }
 
 const TestCaseFailurePanel = ({
   testCase,
-  publicId
+  publicId,
+  showFullFailure
 }: TestCaseFailurePanelProps) => {
   const classes = useStyles({});
   const testCaseIdentifier = `${testCase.testSuiteIdx}-${testCase.idx}`;
@@ -47,7 +49,11 @@ const TestCaseFailurePanel = ({
       <ExpansionPanelDetails className={classes.failureMessage}>
         {testCase.failure != null && (
           <div>
-            <pre>{testCase.failure.failureMessage}</pre>
+            <pre data-testid={`test-case-failure-text-${testCaseIdentifier}`}>
+              {showFullFailure
+                ? testCase.failure.failureText
+                : testCase.failure.failureMessage}
+            </pre>
           </div>
         )}
       </ExpansionPanelDetails>

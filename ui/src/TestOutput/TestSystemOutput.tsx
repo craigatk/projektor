@@ -18,7 +18,8 @@ const useStyles = makeStyles({
     paddingTop: "10px",
     paddingBottom: "10px",
     backgroundColor: "#EDEDED",
-    borderRadius: "8px"
+    borderRadius: "8px",
+    overflowX: "auto"
   }
 });
 

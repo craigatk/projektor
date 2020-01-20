@@ -28,7 +28,7 @@ const FailedTestCases = ({ publicId }: FailedTestCasesProps) => {
         loadingState={loadingState}
         successComponent={
           <TestCaseFailurePanelList
-            testCases={failedTestCases}
+            failedTestCases={failedTestCases}
             publicId={publicId}
           />
         }
