@@ -18,7 +18,7 @@
   "devDependencies": {
     "axios-mock-adapter": "1.17.0",
     "jest": "24.9.0",
-    "jest-junit": "y10.0.0",
+    "jest-junit": "10.0.0",
     "prettier": "1.18.2"
   },
   "jest": {
