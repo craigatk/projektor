@@ -4,6 +4,7 @@ module.exports = {
   ],
   preset: 'ts-jest',
   testMatch: ['**/*.spec.{ts,tsx}'],
+  "reporters": [ "default", "jest-junit" ]
 }
 
 process.env = Object.assign(process.env, { API_BASE_URL: 'http://localhost:8080/' });

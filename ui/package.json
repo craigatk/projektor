@@ -21,6 +21,7 @@
     "chai-colors": "1.0.1",
     "cypress": "3.8.1",
     "jest": "24.9.0",
+    "jest-junit": "10.0.0",
     "parcel-bundler": "1.12.4",
     "parcel-plugin-clean-dist": "0.0.6",
     "prettier": "1.18.2",
@@ -45,5 +46,8 @@
     "react-dom": "16.12.0",
     "react-scroll": "1.7.14",
     "use-query-params": "0.4.1"
+  },
+  "jest-junit": {
+    "outputDirectory": "jestResults"
   }
 }
