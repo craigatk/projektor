@@ -1,5 +1,5 @@
 {
-  "name": "@specviewer/publish",
+  "name": "@projektor/publish",
   "version": "1.0.0",
   "main": "src/index.js",
   "bin": "src/index.js",
@@ -18,6 +18,13 @@
   "devDependencies": {
     "axios-mock-adapter": "1.17.0",
     "jest": "24.9.0",
+    "jest-junit": "y10.0.0",
     "prettier": "1.18.2"
+  },
+  "jest": {
+    "reporters": [ "default", "jest-junit" ]
+  },
+  "jest-junit": {
+    "outputDirectory": "testResults"
   }
 }
