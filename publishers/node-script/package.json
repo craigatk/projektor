@@ -1,5 +1,5 @@
 {
-  "name": "@projektor/publish",
+  "name": "projektor-publish",
   "version": "1.0.0",
   "main": "src/index.js",
   "bin": "src/index.js",
