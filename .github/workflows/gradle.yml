@@ -84,10 +84,14 @@ jobs:
         cd ui
         yarn install
 
+    - name: ui start server
+      run: |
+        cd ui
+        yarn start &
+
     - name: UI Cypress run
       uses: cypress-io/github-action@v1
       with:
-        start: yarn start
         wait-on: 'http://localhost:1234'
         working-directory: ui
         install: false
@@ -119,13 +123,13 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Cache UI Node dependencies
-      uses: actions/cache@v1
-      with:
-        path: ui/node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('ui/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-node-modules
+#    - name: Cache UI Node dependencies
+#      uses: actions/cache@v1
+#      with:
+#        path: ui/node_modules
+#        key: ${{ runner.os }}-node-modules-${{ hashFiles('ui/yarn.lock') }}
+#        restore-keys: |
+#          ${{ runner.os }}-node-modules
 
     - name: ui install
       run: |
