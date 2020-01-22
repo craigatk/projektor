@@ -80,6 +80,30 @@ class TestRunDatabaseRepositorySaveGroupedResultsTest : DatabaseRepositoryTestCa
                 .hasSize(2)
     }
 
+    @Test
+    fun `can save grouped test run with no test suites`() {
+        val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
+        val publicId = randomPublicId()
+
+        val testGroup = GroupedTestSuites(
+                listOf(),
+                "Group",
+                "Label",
+                "directory"
+        )
+
+        val groupedResults = GroupedResults(listOf(testGroup))
+
+        runBlocking { testRunDatabaseRepository.saveGroupedTestRun(publicId, groupedResults) }
+
+        val testRunDB = testRunDao.fetchOneByPublicId(publicId.id)
+        assertNotNull(testRunDB)
+
+        val testSuitesDB = testSuiteDao.fetchByTestRunId(testRunDB.id)
+        expectThat(testSuitesDB)
+                .hasSize(0)
+    }
+
     private fun createTestSuite(name: String): ParsedTestSuite {
         val testSuite = ParsedTestSuite()
         testSuite.name = name

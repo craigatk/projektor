@@ -18,7 +18,7 @@ fun toTestRunSummary(publicId: PublicId, testSuites: List<TestSuite>): TestRunSu
     val cumulativeDuration = allTestCases
             .mapNotNull { it.time }
             .fold(BigDecimal.ZERO, BigDecimal::add)
-    val averageDuration = cumulativeDuration.divide(totalTestCount.toBigDecimal(), roundingMathContext)
+    val averageDuration = calculateAverageDuration(cumulativeDuration, totalTestCount)
     val slowestTestCaseDuration = allTestCases
             .mapNotNull { it.time }
             .max()
@@ -36,4 +36,12 @@ fun toTestRunSummary(publicId: PublicId, testSuites: List<TestSuite>): TestRunSu
             slowestTestCaseDuration,
             LocalDateTime.now()
     )
+}
+
+private fun calculateAverageDuration(cumulativeDuration: BigDecimal, totalTestCount: Int): BigDecimal {
+    return if (cumulativeDuration > BigDecimal.ZERO && totalTestCount > 0) {
+        cumulativeDuration.divide(totalTestCount.toBigDecimal(), roundingMathContext)
+    } else {
+        BigDecimal.ZERO
+    }
 }
