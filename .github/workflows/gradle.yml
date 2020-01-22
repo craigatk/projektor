@@ -126,13 +126,13 @@ jobs:
     - name: Install Cypress dependencies
       run: |
         sudo apt-get install libgtk2.0-0 libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-    - name: Cache UI Node dependencies
-      uses: actions/cache@v1
-      with:
-        path: ui/node_modules
-        key: ${{ runner.os }}-ui-node-modules-${{ hashFiles('ui/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-ui-node-modules
+#    - name: Cache UI Node dependencies
+#      uses: actions/cache@v1
+#      with:
+#        path: ui/node_modules
+#        key: ${{ runner.os }}-ui-node-modules-${{ hashFiles('ui/yarn.lock') }}
+#        restore-keys: |
+#          ${{ runner.os }}-ui-node-modules
 
     - name: ui install
       run: |
