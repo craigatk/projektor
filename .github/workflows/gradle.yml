@@ -123,6 +123,9 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+    - name: Install Cypress dependencies
+      run: |
+        apt-get install libgtk2.0-0 libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
     - name: Cache UI Node dependencies
       uses: actions/cache@v1
       with:
