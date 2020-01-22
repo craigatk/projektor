@@ -36,8 +36,6 @@ jobs:
     - name: Build with Gradle
       env:
         DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
-        GPR_USER: ${{ secrets.GPR_USER }}
-        GPR_API_KEY: ${{ secrets.GPR_KEY }}
       run: ./gradlew check
 
   node-script-test:
@@ -81,11 +79,18 @@ jobs:
         cd cypress-common
         yarn install
 
-    - name: ui cypress
+    - name: ui install
       run: |
         cd ui
         yarn install
-        yarn cy:test
+
+    - name: UI Cypress run
+      uses: cypress-io/github-action@v1
+      with:
+        start: yarn start
+        wait-on: 'http://localhost:1234'
+        working-directory: ui
+        install: false
 
   assemble-and-functional-test:
     runs-on: ubuntu-latest
