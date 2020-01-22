@@ -64,9 +64,9 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ui/node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('ui/yarn.lock') }}
+        key: ${{ runner.os }}-ui-node-modules-${{ hashFiles('ui/yarn.lock') }}
         restore-keys: |
-          ${{ runner.os }}-node-modules
+          ${{ runner.os }}-ui-node-modules
 
     - name: ui test
       run: |
@@ -123,13 +123,13 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-#    - name: Cache UI Node dependencies
-#      uses: actions/cache@v1
-#      with:
-#        path: ui/node_modules
-#        key: ${{ runner.os }}-node-modules-${{ hashFiles('ui/yarn.lock') }}
-#        restore-keys: |
-#          ${{ runner.os }}-node-modules
+    - name: Cache UI Node dependencies
+      uses: actions/cache@v1
+      with:
+        path: ui/node_modules
+        key: ${{ runner.os }}-ui-node-modules-${{ hashFiles('ui/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-ui-node-modules
 
     - name: ui install
       run: |

@@ -53,10 +53,10 @@ jobs:
         run: |
           cd functional-test
           yarn install
-      - name: Run functional tests
-        env:
-          DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
-        run: ./gradlew :functional-test:functionalTest
+#      - name: Run functional tests
+#        env:
+#          DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
+#        run: ./gradlew :functional-test:functionalTest
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.0.0
