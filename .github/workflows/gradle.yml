@@ -56,17 +56,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - name: Install Cypress dependencies
+      run: |
+        sudo apt-get install xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
     - name: Install Node.js
       uses: actions/setup-node@v1
       with:
         node-version: 12
-    - name: Cache UI Node dependencies
-      uses: actions/cache@v1
-      with:
-        path: ui/node_modules
-        key: ${{ runner.os }}-ui-node-modules-${{ hashFiles('ui/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-ui-node-modules
+#    - name: Cache UI Node dependencies
+#      uses: actions/cache@v1
+#      with:
+#        path: ui/node_modules
+#        key: ${{ runner.os }}-ui-node-modules-${{ hashFiles('ui/yarn.lock') }}
+#        restore-keys: |
+#          ${{ runner.os }}-ui-node-modules
 
     - name: ui test
       run: |
@@ -83,6 +86,16 @@ jobs:
       run: |
         cd ui
         yarn install
+
+    - name: Cypress clear cache
+      run: |
+        cd ui
+        yarn cypress cache clear
+
+    - name: Cypress verify
+      run: |
+        cd ui
+        yarn cypress verify
 
     - name: ui start server
       run: |
