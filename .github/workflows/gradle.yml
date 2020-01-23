@@ -87,12 +87,6 @@ jobs:
         cd ui
         yarn install
 
-#    - name: Cypress install and verify
-#      run: |
-#        cd ui
-#        xvfb-run -s '-screen 0 1024x768x24' yarn cypress install
-#        xvfb-run -s '-screen 0 1024x768x24' yarn cypress verify
-
     - name: UI Cypress run
       run: |
         cd ui
@@ -127,7 +121,7 @@ jobs:
         java-version: 1.8
     - name: Install Cypress dependencies
       run: |
-        sudo apt-get install libgtk2.0-0 libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+        sudo apt-get install xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
 #    - name: Cache UI Node dependencies
 #      uses: actions/cache@v1
 #      with:
@@ -151,4 +145,4 @@ jobs:
     - name: Run functional tests
       env:
         DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
-      run: ./gradlew :functional-test:functionalTest
+      run: xvfb-run -s '-screen 0 1024x768x24' ./gradlew :functional-test:functionalTest
