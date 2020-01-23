@@ -87,28 +87,16 @@ jobs:
         cd ui
         yarn install
 
-    - name: Cypress clear cache
-      run: |
-        cd ui
-        yarn cypress cache clear
-
     - name: Cypress install and verify
       run: |
         cd ui
-        yarn cypress install
-        yarn cypress verify
-
-    - name: ui start server
-      run: |
-        cd ui
-        yarn start &
+        xvfb-run yarn cypress install
+        xvfb-run yarn cypress verify
 
     - name: UI Cypress run
-      uses: cypress-io/github-action@v1
-      with:
-        wait-on: 'http://localhost:1234'
-        working-directory: ui
-        install: false
+      run: |
+        cd ui
+        xvfb-run yarn cy:test
 
   assemble-and-functional-test:
     runs-on: ubuntu-latest
