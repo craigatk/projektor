@@ -92,9 +92,10 @@ jobs:
         cd ui
         yarn cypress cache clear
 
-    - name: Cypress verify
+    - name: Cypress install and verify
       run: |
         cd ui
+        yarn cypress install
         yarn cypress verify
 
     - name: ui start server
