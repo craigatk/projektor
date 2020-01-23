@@ -87,16 +87,16 @@ jobs:
         cd ui
         yarn install
 
-    - name: Cypress install and verify
-      run: |
-        cd ui
-        xvfb-run yarn cypress install
-        xvfb-run yarn cypress verify
+#    - name: Cypress install and verify
+#      run: |
+#        cd ui
+#        xvfb-run -s '-screen 0 1024x768x24' yarn cypress install
+#        xvfb-run -s '-screen 0 1024x768x24' yarn cypress verify
 
     - name: UI Cypress run
       run: |
         cd ui
-        xvfb-run yarn cy:test
+        xvfb-run -s '-screen 0 1024x768x24' yarn cy:test
 
   assemble-and-functional-test:
     runs-on: ubuntu-latest
