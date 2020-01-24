@@ -1,12 +1,12 @@
-# Projektor node-script
+# Projektor publishing script for Node
 
 Add the NPM package as a dev dependency with either NPM:
 
-`npm install --save-dev @projektor/publish`
+`npm install --save-dev projektor-publish`
 
 or Yarn
 
-`yarn add -D @projektor/publish`
+`yarn add -D projektor-publish`
 
 Then run this script to publish test results to the Projektor server:
 
