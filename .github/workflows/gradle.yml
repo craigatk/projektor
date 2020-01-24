@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   gradle-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     services:
       database:
         image: postgres:11.2-alpine
@@ -39,7 +39,7 @@ jobs:
       run: ./gradlew check
 
   node-script-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v1
     - name: Install Node.js
@@ -53,7 +53,7 @@ jobs:
         yarn test
 
   ui-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v1
     - name: Install Cypress dependencies
@@ -92,8 +92,10 @@ jobs:
         cd ui
         xvfb-run -s '-screen 0 1024x768x24' yarn cy:test
 
+    # xvfb-run is a workaround for Cypress issue https://github.com/cypress-io/cypress/issues/6184
+
   assemble-and-functional-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     services:
       database:
         image: postgres:11.2-alpine
@@ -146,3 +148,4 @@ jobs:
       env:
         DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
       run: xvfb-run -s '-screen 0 1024x768x24' ./gradlew :functional-test:functionalTest
+      # xvfb-run is a workaround for Cypress issue https://github.com/cypress-io/cypress/issues/6184

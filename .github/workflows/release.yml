@@ -9,7 +9,7 @@ name: Release
 jobs:
   build:
     name: Create and upload release
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     services:
       database:
         image: postgres:11.2-alpine
@@ -53,10 +53,12 @@ jobs:
         run: |
           cd functional-test
           yarn install
-#      - name: Run functional tests
-#        env:
-#          DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
-#        run: ./gradlew :functional-test:functionalTest
+
+      - name: Run functional tests
+        env:
+          DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
+        run: xvfb-run -s '-screen 0 1024x768x24' ./gradlew :functional-test:functionalTest
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.0.0
