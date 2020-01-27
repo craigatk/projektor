@@ -1,8 +1,8 @@
 {
   "name": "projektor-publish",
-  "version": "0.0.2",
-  "main": "src/index.js",
-  "bin": "src/index.js",
+  "version": "0.0.3",
+  "main": "./index.js",
+  "bin": "./bin/projektorPublish.js",
   "author": "Craig Atkinson",
   "license": "MIT",
   "private": false,
@@ -22,7 +22,10 @@
     "prettier": "1.18.2"
   },
   "jest": {
-    "reporters": [ "default", "jest-junit" ]
+    "reporters": [
+      "default",
+      "jest-junit"
+    ]
   },
   "jest-junit": {
     "outputDirectory": "testResults"
