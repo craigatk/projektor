@@ -6325,8 +6325,10 @@ process@^0.11.10:
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
   integrity sha1-czIwDoQBYb2j5podHZGn1LwW8YI=
 
-"projektor-publish@file:../publishers/node-script":
-  version "1.0.0"
+projektor-publish@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/projektor-publish/-/projektor-publish-1.0.1.tgz#a2b871bb7464fe1574d15b753fd1db70d721adeb"
+  integrity sha512-ouOw7UM2faj2S7Kb5AylkQM1Zx3SvXyhZMb01NPX17ml/TyrOAuj8jOlT2pQvQVu+y8ofpDvsZUMqrFDP9wcTA==
   dependencies:
     axios "0.19.0"
     glob "7.1.4"
