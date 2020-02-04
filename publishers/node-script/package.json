@@ -1,6 +1,6 @@
 {
   "name": "projektor-publish",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "./index.js",
   "bin": "./bin/projektorPublish.js",
   "author": "Craig Atkinson",
