@@ -2,7 +2,7 @@ on:
   push:
     # Sequence of patterns matched against refs/tags
     tags:
-      - 'n*' # Push events to matching n*, i.e. v1.0, v20.15.10
+      - 'node_*' # Push events to matching node_*, i.e. node_1.0, node_20.15.10
 
 name: Release Node script
 
