@@ -1,0 +1,34 @@
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'n*' # Push events to matching n*, i.e. v1.0, v20.15.10
+
+name: Release Node script
+
+jobs:
+  build:
+    name: Publish Node script release
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Set env
+        run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:11})
+
+      - name: Node script install
+        run: |
+          cd publishers/node-script
+          yarn install
+
+      - name: Node script publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          cd publishers/node-script
+          npm publish --access public
