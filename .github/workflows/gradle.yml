@@ -76,6 +76,7 @@ jobs:
         cd ui
         yarn install
         yarn test
+        yarn projektor-publish --serverUrl=https://projektorlive.herokuapp.com jestResults/*.xml
 
     - name: cypress-common install
       run: |
