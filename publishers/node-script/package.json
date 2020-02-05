@@ -1,6 +1,11 @@
 {
   "name": "projektor-publish",
-  "version": "1.0.3",
+  "version": "1.0.4",
+  "homepage": "https://github.com/craigatk/projektor/blob/master/publishers/node-script/README.md",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/craigatk/projektor.git"
+  },
   "main": "./index.js",
   "bin": "./bin/projektorPublish.js",
   "author": "Craig Atkinson",
