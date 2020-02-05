@@ -31,7 +31,22 @@ const sendResults = (resultsBlob, serverUrl) => {
     .catch(err => Promise.reject(err));
 };
 
+const collectAndSendResults = (serverUrl, resultsFileGlobs) => {
+  console.log(
+    `Gathering results from ${resultsFileGlobs} to send to Projektor server ${serverUrl}`
+  );
+
+  const resultsBlob = collectResults(resultsFileGlobs);
+
+  if (resultsBlob.length > 0) {
+    sendResults(resultsBlob, serverUrl).then(respData => {
+      console.log(`View Projektor results at ${serverUrl}${respData.uri}`);
+    });
+  }
+};
+
 module.exports = {
   collectResults,
-  sendResults
+  sendResults,
+  collectAndSendResults
 };

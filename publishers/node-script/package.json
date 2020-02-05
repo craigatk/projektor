@@ -3,8 +3,8 @@
   "version": "1.0.4",
   "homepage": "https://github.com/craigatk/projektor/blob/master/publishers/node-script/README.md",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/craigatk/projektor.git"
+    "type": "git",
+    "url": "https://github.com/craigatk/projektor.git"
   },
   "main": "./index.js",
   "bin": "./bin/projektorPublish.js",
@@ -24,7 +24,8 @@
     "axios-mock-adapter": "1.17.0",
     "jest": "24.9.0",
     "jest-junit": "10.0.0",
-    "prettier": "1.18.2"
+    "prettier": "1.18.2",
+    "wait-for-expect": "3.0.1"
   },
   "jest": {
     "reporters": [

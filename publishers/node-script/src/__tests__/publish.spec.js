@@ -1,6 +1,11 @@
+const waitForExpect = require("wait-for-expect");
 const axios = require("axios");
 const MockAdapter = require("axios-mock-adapter");
-const { collectResults, sendResults } = require("../publish");
+const {
+  collectResults,
+  sendResults,
+  collectAndSendResults
+} = require("../publish");
 
 describe("Projektor publisher", () => {
   let mockAxios;
@@ -60,5 +65,25 @@ describe("Projektor publisher", () => {
     expect(resultsBlob).not.toContain("resultsDir1-results2");
     expect(resultsBlob).not.toContain("resultsDir1-results1");
     expect(resultsBlob).toContain("resultsDir2-results2");
+  });
+
+  it("should collect and send results", async () => {
+    const fileGlob = "src/__tests__/resultsDir1/*.xml";
+    const serverUrl = "http://localhost:8080";
+
+    mockAxios
+      .onPost("http://localhost:8080/results")
+      .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
+
+    collectAndSendResults(serverUrl, [fileGlob]);
+
+    await waitForExpect(() => {
+      expect(mockAxios.history.post.length).toBe(1);
+
+      const postData = mockAxios.history.post[0].data;
+
+      expect(postData).toContain("resultsDir1-results1");
+      expect(postData).toContain("resultsDir1-results2");
+    });
   });
 });
