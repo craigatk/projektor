@@ -41,7 +41,9 @@ class ProjektorResultsClient {
 
         try {
             response = client.newCall(request).execute()
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            logger.error("Error publishing results to Projektor server ${serverUrl}", e)
+        }
 
         if (response?.successful) {
             String testRunUri = new JsonSlurper().parseText(response.body().string()).uri
@@ -49,7 +51,8 @@ class ProjektorResultsClient {
 
             publishResult.reportUrl = reportUrl
         } else {
-            logger.warn("Failed to upload Projektor report to ${serverUrl}")
+            String responseCode = response ? "- response code ${response.code()}" : ""
+            logger.warn("Failed to upload Projektor report to ${serverUrl} ${responseCode}")
         }
 
         return publishResult

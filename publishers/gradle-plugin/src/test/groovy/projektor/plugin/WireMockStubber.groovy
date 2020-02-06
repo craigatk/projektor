@@ -26,6 +26,11 @@ class WireMockStubber {
                 .withBody("""{"id": "${resultsId}", "uri": "/tests/${resultsId}"}""")))
     }
 
+    void stubResultsPostFailure(int statusCode) {
+        wireMockServer.stubFor(post(urlEqualTo("/groupedResults")).willReturn(aResponse()
+                .withStatus(statusCode)))
+    }
+
     void stubResultsNetworkingError() {
         wireMockServer.stubFor(post(urlEqualTo("/groupedResults")).willReturn(aResponse()
                 .withFault(Fault.CONNECTION_RESET_BY_PEER)
