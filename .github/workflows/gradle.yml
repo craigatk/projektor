@@ -51,6 +51,7 @@ jobs:
         cd publishers/node-script
         yarn install
         yarn test
+        yarn projektor-publish --serverUrl=https://projektorlive.herokuapp.com testResults/*.xml
 
   ui-test:
     runs-on: ubuntu-18.04
