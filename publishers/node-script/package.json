@@ -1,6 +1,6 @@
 {
   "name": "projektor-publish",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "homepage": "https://github.com/craigatk/projektor/blob/master/publishers/node-script/README.md",
   "repository": {
     "type": "git",
@@ -31,6 +31,10 @@
     "reporters": [
       "default",
       "jest-junit"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/test-projects/"
     ]
   },
   "jest-junit": {

@@ -39,9 +39,16 @@ const collectAndSendResults = (serverUrl, resultsFileGlobs) => {
   const resultsBlob = collectResults(resultsFileGlobs);
 
   if (resultsBlob.length > 0) {
-    sendResults(resultsBlob, serverUrl).then(respData => {
-      console.log(`View Projektor results at ${serverUrl}${respData.uri}`);
-    });
+    sendResults(resultsBlob, serverUrl)
+      .then(respData => {
+        console.log(`View Projektor results at ${serverUrl}${respData.uri}`);
+      })
+      .catch(e => {
+        console.error(
+          `Error publishing results to Projektor server ${serverUrl}`,
+          e.message
+        );
+      });
   }
 };
 
