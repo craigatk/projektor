@@ -46,12 +46,19 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12
+
     - name: node-script test
       run: |
         cd publishers/node-script
         yarn install
         yarn test
         yarn projektor-publish --serverUrl=https://projektorlive.herokuapp.com testResults/*.xml
+
+    - name: node-script CLI project test
+      run: |
+        cd publishers/node-script/test-projects/node-script-cli
+        yarn install
+        yarn test
 
   ui-test:
     runs-on: ubuntu-18.04
