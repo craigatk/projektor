@@ -15,3 +15,16 @@ Then run this script to publish test results to the Projektor server:
 You can include multiple file globs, such as:
 
 `yarn projektor-publish --serverUrl=<url> ui/test-results/*.xml ui/cypress/*.xml`
+
+Another configuration option is to store the config in `projektor.json` in the root of your project.
+Then you don't need to specify the parameters on the command line each time.
+
+```
+{
+  "serverUrl": "<url>",
+  "resultsFileGlobs": [
+    "ui/test-results/*.xml",
+    "ui/cypress/*.xml"
+  ]
+}
+```

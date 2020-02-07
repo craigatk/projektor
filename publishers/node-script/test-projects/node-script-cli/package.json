@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand",
     "format": "prettier --write src/*.js src/**/*.js"
   },
   "dependencies": {},
