@@ -1,4 +1,4 @@
-function run(args, projectConfigPath) {
+function run(args, defaultConfigFilePath) {
   const argv = require("minimist")(args);
   const fs = require("fs");
   const { collectAndSendResults } = require("./publish");
@@ -6,8 +6,10 @@ function run(args, projectConfigPath) {
   let serverUrl;
   let resultsFileGlobs;
 
-  if (fs.existsSync(projectConfigPath)) {
-    const configFileContents = fs.readFileSync(projectConfigPath);
+  const configFilePath = argv.configFile || defaultConfigFilePath;
+
+  if (fs.existsSync(configFilePath)) {
+    const configFileContents = fs.readFileSync(configFilePath);
     const config = JSON.parse(configFileContents);
 
     serverUrl = config.serverUrl;

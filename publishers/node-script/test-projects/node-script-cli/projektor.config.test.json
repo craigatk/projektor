@@ -1,0 +1,6 @@
+{
+  "serverUrl": "http://localhost:9002",
+  "resultsFileGlobs": [
+    "results/*.xml"
+  ]
+}

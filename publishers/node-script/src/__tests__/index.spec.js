@@ -30,4 +30,24 @@ describe("node script index", () => {
       expect(postData).toContain("resultsDir1-results2");
     });
   });
+
+  it("should use settings from custom projektor.json if it is specified on command line", async () => {
+    mockAxios
+      .onPost("http://localhost:8080/results")
+      .reply(200, { id: "DEF345", uri: "/tests/DEF345" });
+
+    run(
+      ["--configFile=src/__tests__/projektor.test.json"],
+      "projektor.fake.json"
+    );
+
+    await waitForExpect(() => {
+      expect(mockAxios.history.post.length).toBe(1);
+
+      const postData = mockAxios.history.post[0].data;
+
+      expect(postData).toContain("resultsDir1-results1");
+      expect(postData).toContain("resultsDir1-results2");
+    });
+  });
 });

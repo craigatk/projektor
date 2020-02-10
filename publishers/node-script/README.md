@@ -28,3 +28,7 @@ Then you don't need to specify the parameters on the command line each time.
   ]
 }
 ```
+
+You can also customize the name of the config file by passing the `--configFile=<path>` flag:
+
+`yarn projektor-publish --configFIle=projektor.cypress.json`
