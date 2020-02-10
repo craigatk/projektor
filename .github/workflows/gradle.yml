@@ -84,7 +84,7 @@ jobs:
         cd ui
         yarn install
         yarn test
-        yarn projektor-publish
+        yarn projektor-publish --configFile=projektor.jest.json
 
     - name: cypress-common install
       run: |
@@ -100,6 +100,7 @@ jobs:
       run: |
         cd ui
         xvfb-run -s '-screen 0 1024x768x24' yarn cy:test
+        yarn projektor-publish --configFile=projektor.cypress.json
 
     # xvfb-run is a workaround for Cypress issue https://github.com/cypress-io/cypress/issues/6184
 
