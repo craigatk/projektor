@@ -52,7 +52,7 @@ jobs:
         cd publishers/node-script
         yarn install
         yarn test
-        yarn projektor-publish --serverUrl=https://projektorlive.herokuapp.com testResults/*.xml
+        yarn projektor-publish
 
     - name: node-script CLI project test
       run: |
@@ -84,7 +84,7 @@ jobs:
         cd ui
         yarn install
         yarn test
-        yarn projektor-publish --serverUrl=https://projektorlive.herokuapp.com jestResults/*.xml
+        yarn projektor-publish
 
     - name: cypress-common install
       run: |
