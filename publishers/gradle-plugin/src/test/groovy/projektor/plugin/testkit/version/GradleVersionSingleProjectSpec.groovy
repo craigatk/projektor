@@ -44,9 +44,10 @@ class GradleVersionSingleProjectSpec extends SingleProjectSpec {
         resultsRequests.size() == 1
 
         where:
-        gradleVersion | _
-        "4.0"         | _
-        "5.0"         | _
-        "6.0.1"       | _
+        gradleVersion                   | _
+        "4.0"                           | _
+        "5.0"                           | _
+        "6.0.1"                         | _
+        GradleVersion.current().version | _
     }
 }
