@@ -1,7 +1,8 @@
-package projektor.plugin.testkit
+package projektor.plugin.testkit.task
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
+import projektor.plugin.testkit.MultiProjectSpec
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 

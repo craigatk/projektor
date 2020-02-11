@@ -1,4 +1,4 @@
-package projektor.plugin.testkit
+package projektor.plugin.testkit.util
 
 import org.junit.rules.TemporaryFolder
 
