@@ -87,13 +87,20 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
                         )
                 )
 
-                val testSuiteGroup = TestSuiteGroup()
-                testSuiteGroup.testRunId = testRun.id
-                testSuiteGroup.groupName = "MyGroup"
-                testSuiteGroup.groupLabel = "MyLabel"
-                testSuiteGroupDao.insert(testSuiteGroup)
+                val testSuiteGroup1 = TestSuiteGroup()
+                testSuiteGroup1.testRunId = testRun.id
+                testSuiteGroup1.groupName = "MyGroup1"
+                testSuiteGroup1.groupLabel = "MyLabel1"
+                testSuiteGroupDao.insert(testSuiteGroup1)
 
-                testRunDBGenerator.addTestSuiteGroupToTestRun(testSuiteGroup, testRun, listOf("TestSuite1", "TestSuite2"))
+                val testSuiteGroup2 = TestSuiteGroup()
+                testSuiteGroup2.testRunId = testRun.id
+                testSuiteGroup2.groupName = "MyGroup2"
+                testSuiteGroup2.groupLabel = "MyLabel2"
+                testSuiteGroupDao.insert(testSuiteGroup2)
+
+                testRunDBGenerator.addTestSuiteGroupToTestRun(testSuiteGroup1, testRun, listOf("TestSuite1"))
+                testRunDBGenerator.addTestSuiteGroupToTestRun(testSuiteGroup2, testRun, listOf("TestSuite2"))
             }.apply {
                 val responseRun = objectMapper.readValue(response.content, TestRun::class.java)
                 assertNotNull(responseRun)
@@ -108,16 +115,16 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
                 expectThat(testSuite1)
                         .isNotNull()
                         .and {
-                            get { groupName }.isEqualTo("MyGroup")
-                            get { groupLabel }.isEqualTo("MyLabel")
+                            get { groupName }.isEqualTo("MyGroup1")
+                            get { groupLabel }.isEqualTo("MyLabel1")
                         }
 
                 val testSuite2 = testSuites.find { it.className == "TestSuite2" }
                 expectThat(testSuite2)
                         .isNotNull()
                         .and {
-                            get { groupName }.isEqualTo("MyGroup")
-                            get { groupLabel }.isEqualTo("MyLabel")
+                            get { groupName }.isEqualTo("MyGroup2")
+                            get { groupLabel }.isEqualTo("MyLabel2")
                         }
             }
         }
