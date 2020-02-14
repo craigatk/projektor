@@ -17,6 +17,10 @@ class MultiProjectWithPluginAppliedToSubprojectsSpec extends ProjectSpec {
     File testDirectory2
     File testDirectory3
 
+    String getAdditionalPluginConfig() {
+        ""
+    }
+
     def setup() {
         settingsFile = projectRootDir.newFile('settings.gradle')
         settingsFile << """
@@ -71,6 +75,7 @@ include 'project1', 'project2', 'project3'
             
             projektor {
                 serverUrl = '${serverUrl}'
+                ${additionalPluginConfig}
             }
         """.stripIndent()
     }

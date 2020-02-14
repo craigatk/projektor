@@ -7,19 +7,15 @@ import org.gradle.api.logging.Logger
 class ProjektorPublishPlugin implements Plugin<Project> {
     private static final String LISTENER_APPLIED_PROPERTY_NAME = "projektorListenerApplied"
 
+    private static final String PUBLISH_TASK_NAME = "publishResults"
+
     void apply(Project project) {
         ProjektorPublishPluginExtension extension = project.extensions.create('projektor', ProjektorPublishPluginExtension.class) as ProjektorPublishPluginExtension
 
         project.afterEvaluate {
             conditionallyAddBuildListener(project, extension)
 
-            if (extension.manualPublishEnabled && extension.serverUrl) {
-                project.allprojects.each { proj ->
-                    proj.tasks.create("publishResults", ProjektorManualPublishTask, { task ->
-                        task.serverUrl = extension.serverUrl
-                    })
-                }
-            }
+            conditionallyAddPublishTask(project, extension)
         }
     }
 
@@ -58,5 +54,17 @@ class ProjektorPublishPlugin implements Plugin<Project> {
                 projektorTaskFinishedListener
         )
         project.gradle.addBuildListener(projektorBuildFinishedListener)
+    }
+
+    static void conditionallyAddPublishTask(Project project, ProjektorPublishPluginExtension extension) {
+        if (extension.manualPublishEnabled && extension.serverUrl) {
+            project.allprojects.each { proj ->
+                if (!proj.tasks.findByPath(PUBLISH_TASK_NAME)) {
+                    proj.tasks.create(PUBLISH_TASK_NAME, ProjektorManualPublishTask, { task ->
+                        task.serverUrl = extension.serverUrl
+                    })
+                }
+            }
+        }
     }
 }

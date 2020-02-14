@@ -2,11 +2,11 @@ package projektor.plugin.testkit.task
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
-import projektor.plugin.testkit.MultiProjectSpec
+import projektor.plugin.testkit.MultiProjectWithPluginAppliedToSubprojectsSpec
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
-class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
+class PublishResultsTaskMultiProjectWithPluginAppliedToSubprojectsSpec extends MultiProjectWithPluginAppliedToSubprojectsSpec {
 
     def setup() {
         specWriter.writeSpecFile(testDirectory1, "Sample1Spec1")
@@ -17,17 +17,26 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
 
         specWriter.writeSpecFile(testDirectory3, "Sample3Spec1")
         specWriter.writeSpecFile(testDirectory3, "Sample3Spec2")
-    }
 
-    def "when running publish task from root project should send results from each subproject"() {
-        given:
         rootBuildFile << """
+            plugins {
+                id 'dev.projektor.publish'
+            }
+
             projektor {
                 serverUrl = '${serverUrl}'
                 autoPublish = false
             }
         """.stripIndent()
+    }
 
+    @Override
+    String getAdditionalPluginConfig() {
+        "autoPublish = false"
+    }
+
+    def "when running publish task from root project should send results from each subproject"() {
+        given:
         String resultsId = "ABC123"
         wireMockStubber.stubResultsPostSuccess(resultsId)
 
@@ -78,13 +87,6 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
 
     def "when running publish task from single project should send results from only that subproject"() {
         given:
-        rootBuildFile << """
-            projektor {
-                serverUrl = '${serverUrl}'
-                autoPublish = false
-            }
-        """.stripIndent()
-
         String resultsId = "ABC123"
         wireMockStubber.stubResultsPostSuccess(resultsId)
 
