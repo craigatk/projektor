@@ -3,6 +3,8 @@ package projektor
 import com.zaxxer.hikari.HikariDataSource
 import org.jooq.DSLContext
 import org.koin.dsl.module
+import projektor.auth.AuthConfig
+import projektor.auth.AuthService
 import projektor.incomingresults.GroupedResultsConverter
 import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
@@ -21,10 +23,15 @@ import projektor.testsuite.TestSuiteDatabaseRepository
 import projektor.testsuite.TestSuiteRepository
 import projektor.testsuite.TestSuiteService
 
-fun createAppModule(dataSource: HikariDataSource, dslContext: DSLContext) = module {
+fun createAppModule(
+    dataSource: HikariDataSource,
+    authConfig: AuthConfig,
+    dslContext: DSLContext
+) = module {
     single { dataSource }
     single { TestResultsProcessor() }
     single { dslContext }
+    single { AuthService(authConfig) }
     single<TestCaseRepository> { TestCaseDatabaseRepository(get()) }
     single<TestSuiteRepository> { TestSuiteDatabaseRepository(get()) }
     single<TestRunRepository> { TestRunDatabaseRepository(get()) }

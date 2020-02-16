@@ -39,6 +39,8 @@ open class ApplicationTestCase {
 
     protected var databaseSchema: String = "public"
 
+    protected var publishToken: String? = null
+
     fun createTestApplication(application: Application) {
         val schema = databaseSchema
 
@@ -48,6 +50,7 @@ open class ApplicationTestCase {
             put("ktor.datasource.password", System.getenv("DB_PASSWORD") ?: "testpass")
             put("ktor.datasource.jdbcUrl", System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5433/projektordb")
             put("ktor.datasource.schema", schema)
+            publishToken?.let { put("ktor.auth.publishToken", it) }
         }
 
         application.main()

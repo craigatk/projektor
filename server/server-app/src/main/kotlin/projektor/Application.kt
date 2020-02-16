@@ -20,6 +20,8 @@ import org.koin.Logger.SLF4JLogger
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import org.slf4j.event.Level
+import projektor.auth.AuthConfig
+import projektor.auth.AuthService
 import projektor.database.DataSourceConfig
 import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
@@ -31,12 +33,13 @@ import projektor.testsuite.TestSuiteService
 
 @KtorExperimentalAPI
 fun Application.main() {
+    val authConfig = AuthConfig.createAuthConfig(environment.config)
     val dataSourceConfig = DataSourceConfig.createDataSourceConfig(environment.config)
     val dataSource = DataSourceConfig.createDataSource(dataSourceConfig)
     DataSourceConfig.flywayMigrate(dataSource, dataSourceConfig)
     val dslContext = DataSourceConfig.createDSLContext(dataSource, dataSourceConfig)
 
-    val appModule = createAppModule(dataSource, dslContext)
+    val appModule = createAppModule(dataSource, authConfig, dslContext)
 
     install(CORS) {
         anyHost()
@@ -67,6 +70,7 @@ fun Application.main() {
         }
     }
 
+    val authService: AuthService by inject()
     val testResultsService: TestResultsService by inject()
     val groupedTestResultsService: GroupedTestResultsService by inject()
     val testResultsProcessingService: TestResultsProcessingService by inject()
@@ -76,7 +80,7 @@ fun Application.main() {
 
     routing {
         health()
-        results(testResultsService, groupedTestResultsService, testResultsProcessingService)
+        results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService)
         testCases(testCaseService)
         testSuites(testSuiteService)
         testRuns(testRunService)

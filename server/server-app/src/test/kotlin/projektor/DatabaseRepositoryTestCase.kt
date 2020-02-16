@@ -10,6 +10,7 @@ import org.jooq.impl.DSL
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
+import projektor.auth.AuthConfig
 import projektor.database.DataSourceConfig
 import projektor.database.generated.tables.daos.*
 
@@ -47,7 +48,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
         dslContext = DSL.using(dataSource, SQLDialect.POSTGRES)
 
         startKoin {
-            modules(createAppModule(dataSource, dslContext))
+            modules(createAppModule(dataSource, AuthConfig(null), dslContext))
         }
 
         testRunDao = TestRunDao(dslContext.configuration())
