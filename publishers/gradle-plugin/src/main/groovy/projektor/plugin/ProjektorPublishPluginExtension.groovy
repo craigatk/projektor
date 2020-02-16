@@ -5,4 +5,5 @@ class ProjektorPublishPluginExtension {
     boolean autoPublishOnFailureOnly = false
     String serverUrl
     boolean manualPublishEnabled = true
+    String publishToken
 }

@@ -6,23 +6,24 @@ import org.gradle.api.initialization.Settings
 import org.gradle.api.invocation.Gradle
 import org.gradle.api.logging.Logger
 import projektor.plugin.results.ProjektorResultsClient
+import projektor.plugin.results.ResultsClientConfig
 import projektor.plugin.results.ResultsLogger
 import projektor.plugin.results.grouped.GroupedResults
 
 class ProjektorBuildFinishedListener implements BuildListener {
 
-    private final String serverUrl
+    private final ResultsClientConfig resultsClientConfig
     private final Logger logger
     private final boolean publishOnFailureOnly
     private final ProjektorTaskFinishedListener projektorTaskFinishedListener
 
     ProjektorBuildFinishedListener(
-            String serverUrl,
+            ResultsClientConfig resultsClientConfig,
             Logger logger,
             boolean publishOnFailureOnly,
             ProjektorTaskFinishedListener projektorTaskFinishedListener
     ) {
-        this.serverUrl = serverUrl
+        this.resultsClientConfig = resultsClientConfig
         this.logger = logger
         this.publishOnFailureOnly = publishOnFailureOnly
         this.projektorTaskFinishedListener = projektorTaskFinishedListener
@@ -50,7 +51,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
                     "${projectTestTaskResultsCollector.testGroupsCount()} test tasks")
             GroupedResults groupedResults = projectTestTaskResultsCollector.createGroupedResults()
 
-            ProjektorResultsClient resultsClient = new ProjektorResultsClient(serverUrl, logger)
+            ProjektorResultsClient resultsClient = new ProjektorResultsClient(resultsClientConfig, logger)
             PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
 
             new ResultsLogger(logger).logReportResults(publishResult)

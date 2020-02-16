@@ -12,12 +12,14 @@ import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.results.grouped.GroupedResultsSerializer
 
 class ProjektorResultsClient {
-    private final String serverUrl
+    static final String PUBLISH_TOKEN_NAME = "X-PROJEKTOR-PUBLISH"
+
+    private final ResultsClientConfig config
     private final Logger logger
     private final GroupedResultsSerializer groupedResultsSerializer = new GroupedResultsSerializer()
 
-    ProjektorResultsClient(String serverUrl, Logger logger) {
-        this.serverUrl = serverUrl
+    ProjektorResultsClient(ResultsClientConfig resultsClientConfig, Logger logger) {
+        this.config = resultsClientConfig
         this.logger = logger
     }
 
@@ -32,27 +34,30 @@ class ProjektorResultsClient {
 
         RequestBody body = RequestBody.create(mediaType, groupedResultsJson)
 
-        Request request = new Request.Builder()
-                .url("${serverUrl}/groupedResults")
+        Request.Builder requestBuilder = new Request.Builder()
+                .url("${config.serverUrl}/groupedResults")
                 .post(body)
-                .build()
+
+        config.maybePublishToken.ifPresent( { publishToken -> requestBuilder.header(PUBLISH_TOKEN_NAME, publishToken)})
+
+        Request request = requestBuilder.build()
 
         Response response = null
 
         try {
             response = client.newCall(request).execute()
         } catch (Exception e) {
-            logger.error("Error publishing results to Projektor server ${serverUrl}", e)
+            logger.error("Error publishing results to Projektor server ${config.serverUrl}", e)
         }
 
         if (response?.successful) {
             String testRunUri = new JsonSlurper().parseText(response.body().string()).uri
-            String reportUrl = "${serverUrl}${testRunUri}"
+            String reportUrl = "${config.serverUrl}${testRunUri}"
 
             publishResult.reportUrl = reportUrl
         } else {
             String responseCode = response ? "- response code ${response.code()}" : ""
-            logger.warn("Failed to upload Projektor report to ${serverUrl} ${responseCode}")
+            logger.warn("Failed to upload Projektor report to ${config.serverUrl} ${responseCode}")
         }
 
         return publishResult
