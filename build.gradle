@@ -12,11 +12,12 @@ buildscript {
 }
 
 plugins {
-    id "dev.projektor.publish" version "1.1.1"
+    id "dev.projektor.publish" version "1.2.0"
 }
 
 projektor {
     serverUrl = "https://projektorlive.herokuapp.com"
+    publishToken = System.getenv("PUBLISH_TOKEN") ?: projektor_publish_token
 }
 
 allprojects {
