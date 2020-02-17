@@ -75,7 +75,7 @@ describe("Projektor publisher", () => {
       .onPost("http://localhost:8080/results")
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
-    collectAndSendResults(serverUrl, [fileGlob]);
+    collectAndSendResults(serverUrl, null, [fileGlob]);
 
     await waitForExpect(() => {
       expect(mockAxios.history.post.length).toBe(1);
@@ -87,13 +87,37 @@ describe("Projektor publisher", () => {
     });
   });
 
+  it("should include publish token in header when specified", async () => {
+    const fileGlob = "src/__tests__/resultsDir1/*.xml";
+    const serverUrl = "http://localhost:8080";
+
+    mockAxios
+      .onPost("http://localhost:8080/results")
+      .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
+
+    const publishToken = "myPublishToken";
+
+    collectAndSendResults(serverUrl, publishToken, [fileGlob]);
+
+    await waitForExpect(() => {
+      expect(mockAxios.history.post.length).toBe(1);
+
+      const postRequest = mockAxios.history.post[0];
+      expect(postRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(publishToken);
+
+      const postData = postRequest.data;
+      expect(postData).toContain("resultsDir1-results1");
+      expect(postData).toContain("resultsDir1-results2");
+    });
+  });
+
   it("should handle error when posting to server", async () => {
     const fileGlob = "src/__tests__/resultsDir1/*.xml";
     const serverUrl = "http://localhost:8080";
 
     mockAxios.onPost("http://localhost:8080/results").reply(400, null);
 
-    collectAndSendResults(serverUrl, [fileGlob]);
+    collectAndSendResults(serverUrl, null, [fileGlob]);
 
     await waitForExpect(() => {
       expect(mockAxios.history.post.length).toBe(1);

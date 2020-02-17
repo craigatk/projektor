@@ -24,14 +24,24 @@ const collectResults = resultsFileGlobs => {
   return resultsBlob;
 };
 
-const sendResults = (resultsBlob, serverUrl) => {
-  return axios
+const sendResults = (resultsBlob, serverUrl, publishToken) => {
+  const headers = {};
+
+  if (publishToken) {
+    headers["X-PROJEKTOR-TOKEN"] = publishToken;
+  }
+
+  const axiosInstance = axios.create({
+    headers
+  });
+
+  return axiosInstance
     .post(`${serverUrl}/results`, resultsBlob)
     .then(resp => Promise.resolve(resp.data))
     .catch(err => Promise.reject(err));
 };
 
-const collectAndSendResults = (serverUrl, resultsFileGlobs) => {
+const collectAndSendResults = (serverUrl, publishToken, resultsFileGlobs) => {
   console.log(
     `Gathering results from ${resultsFileGlobs} to send to Projektor server ${serverUrl}`
   );
@@ -39,7 +49,7 @@ const collectAndSendResults = (serverUrl, resultsFileGlobs) => {
   const resultsBlob = collectResults(resultsFileGlobs);
 
   if (resultsBlob.length > 0) {
-    sendResults(resultsBlob, serverUrl)
+    sendResults(resultsBlob, serverUrl, publishToken)
       .then(respData => {
         console.log(`View Projektor results at ${serverUrl}${respData.uri}`);
       })

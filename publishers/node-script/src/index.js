@@ -1,4 +1,4 @@
-function run(args, defaultConfigFilePath) {
+function run(args, publishToken, defaultConfigFilePath) {
   const argv = require("minimist")(args);
   const fs = require("fs");
   const { collectAndSendResults } = require("./publish");
@@ -19,7 +19,7 @@ function run(args, defaultConfigFilePath) {
     resultsFileGlobs = argv._;
   }
 
-  collectAndSendResults(serverUrl, resultsFileGlobs);
+  collectAndSendResults(serverUrl, publishToken, resultsFileGlobs);
 }
 
 module.exports = {

@@ -19,12 +19,13 @@ describe("node script index", () => {
       .onPost("http://localhost:8080/results")
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
-    run([], "src/__tests__/projektor.test.json");
+    run([], null, "src/__tests__/projektor.test.json");
 
     await waitForExpect(() => {
       expect(mockAxios.history.post.length).toBe(1);
 
-      const postData = mockAxios.history.post[0].data;
+      const postRequest = mockAxios.history.post[0];
+      const postData = postRequest.data;
 
       expect(postData).toContain("resultsDir1-results1");
       expect(postData).toContain("resultsDir1-results2");
@@ -38,13 +39,15 @@ describe("node script index", () => {
 
     run(
       ["--configFile=src/__tests__/projektor.test.json"],
+      null,
       "projektor.fake.json"
     );
 
     await waitForExpect(() => {
       expect(mockAxios.history.post.length).toBe(1);
 
-      const postData = mockAxios.history.post[0].data;
+      const postRequest = mockAxios.history.post[0];
+      const postData = postRequest.data;
 
       expect(postData).toContain("resultsDir1-results1");
       expect(postData).toContain("resultsDir1-results2");
