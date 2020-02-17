@@ -12,7 +12,7 @@ import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.results.grouped.GroupedResultsSerializer
 
 class ProjektorResultsClient {
-    static final String PUBLISH_TOKEN_NAME = "X-PROJEKTOR-PUBLISH"
+    static final String PUBLISH_TOKEN_NAME = "X-PROJEKTOR-TOKEN"
 
     private final ResultsClientConfig config
     private final Logger logger
