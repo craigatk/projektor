@@ -2213,6 +2213,11 @@ commander@^2.11.0, commander@^2.19.0, commander@^2.20.0, commander@~2.20.3:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
 
+commander@^4.0.0:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-4.1.1.tgz#9fd602bd936294e9e9ef46a3f4d6964044b18068"
+  integrity sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==
+
 common-tags@1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.8.0.tgz#8e3153e542d4a39e9b10554434afaaf98956a937"
@@ -2955,6 +2960,14 @@ entities@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/entities/-/entities-2.0.0.tgz#68d6084cab1b079767540d80e56a39b423e4abf4"
   integrity sha512-D9f7V0JSRwIxlRI2mjMqufDrRDnx8p+eEOz7aUM9SuvF8gsBzra0/6tbjl1m8eQHrZlYj6PxqE00hZ1SAIKPLw==
+
+env-cmd@10.1.0:
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/env-cmd/-/env-cmd-10.1.0.tgz#c7f5d3b550c9519f137fdac4dd8fb6866a8c8c4b"
+  integrity sha512-mMdWTT9XKN7yNth/6N6g2GuKuJTsKMDHlQFUDacb/heQRRWOTIZ42t1rMHnQu4jYxU1ajdTeJM+9eEETlqToMA==
+  dependencies:
+    commander "^4.0.0"
+    cross-spawn "^7.0.0"
 
 envinfo@^7.3.1:
   version "7.5.0"
@@ -6325,10 +6338,10 @@ process@^0.11.10:
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
   integrity sha1-czIwDoQBYb2j5podHZGn1LwW8YI=
 
-projektor-publish@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/projektor-publish/-/projektor-publish-1.2.0.tgz#5ca85c15dd8ca0353d04c39c8a91997c09c1e2cc"
-  integrity sha512-mPwVcaSrJj4st8Kbzw3ByiRss/AGHjHAKNj1VRTsyaz/5bWsebD97Eoy1vPpjPFTAMcgeE5jhaVxTOqUIqeUYA==
+projektor-publish@1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/projektor-publish/-/projektor-publish-1.3.0.tgz#d76d3805b1eb9877588e1cad947d0439dc29a340"
+  integrity sha512-TGd7JZWFsxk/vutT8qLJcw9V0XB9cXfLsqhd8cULOGH4/iolixoqCJ9+GkcWim2lXZFjYtUPBA7sVmL93L4d7Q==
   dependencies:
     axios "0.19.0"
     glob "7.1.4"

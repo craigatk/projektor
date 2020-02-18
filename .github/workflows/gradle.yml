@@ -49,6 +49,8 @@ jobs:
         node-version: 12
 
     - name: node-script test
+      env:
+        PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
       run: |
         cd publishers/node-script
         yarn install
@@ -81,6 +83,8 @@ jobs:
 #          ${{ runner.os }}-ui-node-modules
 
     - name: ui test
+      env:
+        PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
       run: |
         cd ui
         yarn install
@@ -98,6 +102,8 @@ jobs:
         yarn install
 
     - name: UI Cypress run
+      env:
+        PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
       run: |
         cd ui
         xvfb-run -s '-screen 0 1024x768x24' yarn cy:test
