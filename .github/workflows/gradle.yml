@@ -36,7 +36,7 @@ jobs:
     - name: Build with Gradle
       env:
         DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
-        PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
       run: ./gradlew check
 
   node-script-test:
@@ -158,6 +158,6 @@ jobs:
     - name: Run functional tests
       env:
         DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
-        PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
       run: xvfb-run -s '-screen 0 1024x768x24' ./gradlew :functional-test:functionalTest
       # xvfb-run is a workaround for Cypress issue https://github.com/cypress-io/cypress/issues/6184
