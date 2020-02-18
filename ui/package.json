@@ -51,6 +51,7 @@
     "use-query-params": "0.4.1"
   },
   "jest-junit": {
+    "includeConsoleOutput": "true",
     "outputDirectory": "jestResults"
   }
 }
