@@ -1,4 +1,4 @@
-name: CI check
+name: Node script tests
 
 on: [push]
 
