@@ -1,6 +1,7 @@
 include 'server:database-schema',
         'functional-test',
         'publishers:gradle-plugin',
+        'publishers:node-script:publish-functional-test',
         'server:grouped-results-parser',
         'server:junit-results-parser',
         'server:server-app',
