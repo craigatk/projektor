@@ -37,6 +37,7 @@
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
+      "/publish-functional-test/",
       "/test-projects/"
     ],
     "includeConsoleOutput": "true"
