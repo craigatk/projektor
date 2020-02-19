@@ -39,30 +39,6 @@ jobs:
         PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
       run: ./gradlew check
 
-  node-script-test:
-    runs-on: ubuntu-18.04
-    steps:
-    - uses: actions/checkout@v1
-    - name: Install Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12
-
-    - name: node-script test
-      env:
-        PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
-      run: |
-        cd publishers/node-script
-        yarn install
-        yarn test
-        yarn projektor-publish
-
-    - name: node-script CLI project test
-      run: |
-        cd publishers/node-script/test-projects/node-script-cli
-        yarn install
-        yarn test
-
   ui-test:
     runs-on: ubuntu-18.04
     steps:
@@ -167,44 +143,3 @@ jobs:
         PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
       run: xvfb-run -s '-screen 0 1024x768x24' ./gradlew :functional-test:functionalTest
       # xvfb-run is a workaround for Cypress issue https://github.com/cypress-io/cypress/issues/6184
-
-  node-script-functional-test:
-    runs-on: ubuntu-18.04
-    services:
-      database:
-        image: postgres:11.2-alpine
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: testuser
-          POSTGRES_PASSWORD: testpass
-          POSTGRES_DB: projektordb
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    steps:
-      - uses: actions/checkout@v1
-      - name: Install Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12
-      - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-      - name: ui install
-        run: |
-          cd ui
-          yarn install
-      - name: functional test install
-        run: |
-          cd publishers/node-script/publish-functional-test
-          yarn install
-      - name: Run functional tests
-        env:
-          DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
-          PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
-        run: ./gradlew :publishers:node-script:publish-functional-test:allFunctionalTests
