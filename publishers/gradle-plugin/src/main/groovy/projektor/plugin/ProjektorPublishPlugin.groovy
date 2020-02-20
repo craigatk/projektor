@@ -52,6 +52,8 @@ class ProjektorPublishPlugin implements Plugin<Project> {
                 new ResultsClientConfig(extension.serverUrl, Optional.ofNullable(extension.publishToken)),
                 logger,
                 extension.autoPublishOnFailureOnly,
+                project.projectDir,
+                extension.additionalResultsDirs,
                 projektorTaskFinishedListener
         )
         project.gradle.addBuildListener(projektorBuildFinishedListener)
@@ -64,6 +66,7 @@ class ProjektorPublishPlugin implements Plugin<Project> {
                     proj.tasks.create(PUBLISH_TASK_NAME, ProjektorManualPublishTask, { task ->
                         task.serverUrl = extension.serverUrl
                         task.publishToken = extension.publishToken
+                        task.additionalResultsDirs = extension.additionalResultsDirs
                     })
                 }
             }

@@ -7,22 +7,31 @@ import projektor.plugin.results.ProjektorResultsCollector
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.results.grouped.GroupedTestSuites
 
-class ProjectTestTaskResultsCollector {
+class ProjectTestResultsCollector {
     private final Collection<TestGroup> testGroups
     private final Logger logger
     private final ProjektorResultsCollector resultsCollector
 
-    ProjectTestTaskResultsCollector(Collection<TestGroup> testGroups, Logger logger) {
+    ProjectTestResultsCollector(Collection<TestTaskGroup> testGroups, Logger logger) {
         this.testGroups = testGroups
         this.logger = logger
         this.resultsCollector = new ProjektorResultsCollector(logger)
     }
 
-    static ProjectTestTaskResultsCollector fromAllTasks(Collection<Task> allTasks, Logger logger) {
+    static ProjectTestResultsCollector fromAllTasks(
+            Collection<Task> allTasks,
+            File projectDir,
+            List<String> additionalResultsDirs,
+            Logger logger
+    ) {
         Collection<Test> allTestTasks = allTasks.findAll { it instanceof Test }
-        Collection<TestGroup> testGroups = allTestTasks.collect { TestGroup.fromTask(it) }
+        Collection<TestTaskGroup> testGroups = allTestTasks.collect { TestTaskGroup.fromTask(it) }
+        Collection<TestDirectoryGroup> additionalTestGroups = TestDirectoryGroup.listFromDirPaths(
+                projectDir,
+                additionalResultsDirs
+        )
 
-        return new ProjectTestTaskResultsCollector(testGroups, logger)
+        return new ProjectTestResultsCollector(testGroups + additionalTestGroups, logger)
     }
 
     boolean hasTestGroups() {
@@ -35,13 +44,13 @@ class ProjectTestTaskResultsCollector {
 
     GroupedResults createGroupedResults() {
         List<GroupedTestSuites> groupedTestSuites = testGroups.collect {
-            File junitXmlResultsDirectory = it.task.reports.junitXml.destination
+            File junitXmlResultsDirectory = it.resultsDir
 
             String resultsBlob = resultsCollector.createResultsBlobFromJunitXmlResultsInDirectory(junitXmlResultsDirectory)
 
             new GroupedTestSuites(
-                    groupName: it.projectName,
-                    groupLabel: it.taskName,
+                    groupName: it.name,
+                    groupLabel: it.label,
                     testSuitesBlob: resultsBlob
             )
         }

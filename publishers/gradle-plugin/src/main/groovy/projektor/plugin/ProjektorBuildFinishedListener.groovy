@@ -15,17 +15,23 @@ class ProjektorBuildFinishedListener implements BuildListener {
     private final ResultsClientConfig resultsClientConfig
     private final Logger logger
     private final boolean publishOnFailureOnly
+    private final File projectDir
+    private final List<String> additionalResultsDirs
     private final ProjektorTaskFinishedListener projektorTaskFinishedListener
 
     ProjektorBuildFinishedListener(
             ResultsClientConfig resultsClientConfig,
             Logger logger,
             boolean publishOnFailureOnly,
+            File projectDir,
+            List<String> additionalResultsDirs,
             ProjektorTaskFinishedListener projektorTaskFinishedListener
     ) {
         this.resultsClientConfig = resultsClientConfig
         this.logger = logger
         this.publishOnFailureOnly = publishOnFailureOnly
+        this.projectDir = projectDir
+        this.additionalResultsDirs = additionalResultsDirs
         this.projektorTaskFinishedListener = projektorTaskFinishedListener
     }
 
@@ -41,22 +47,23 @@ class ProjektorBuildFinishedListener implements BuildListener {
     }
 
     private void collectAndPublishResults() {
-        ProjectTestTaskResultsCollector projectTestTaskResultsCollector = new ProjectTestTaskResultsCollector(
-                this.projektorTaskFinishedListener.testGroups,
+        List<TestGroup> testGroupsFromAdditionalDirs = TestDirectoryGroup.listFromDirPaths(projectDir, additionalResultsDirs)
+        ProjectTestResultsCollector projectTestResultsCollector = new ProjectTestResultsCollector(
+                this.projektorTaskFinishedListener.testGroups + testGroupsFromAdditionalDirs,
                 logger
         )
 
-        if (projectTestTaskResultsCollector.hasTestGroups()) {
+        if (projectTestResultsCollector.hasTestGroups()) {
             logger.info("Build finished, gathering and publishing Projektor test reports from " +
-                    "${projectTestTaskResultsCollector.testGroupsCount()} test tasks")
-            GroupedResults groupedResults = projectTestTaskResultsCollector.createGroupedResults()
+                    "${projectTestResultsCollector.testGroupsCount()} test tasks")
+            GroupedResults groupedResults = projectTestResultsCollector.createGroupedResults()
 
             ProjektorResultsClient resultsClient = new ProjektorResultsClient(resultsClientConfig, logger)
             PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
 
             new ResultsLogger(logger).logReportResults(publishResult)
         } else {
-            logger.info("Projektor plugin applied but no test tasks executed in this build")
+            logger.info("Projektor plugin applied but no test results found in this build")
         }
     }
 

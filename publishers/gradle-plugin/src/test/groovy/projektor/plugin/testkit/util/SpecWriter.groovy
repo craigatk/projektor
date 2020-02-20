@@ -8,9 +8,13 @@ class SpecWriter {
     }
 
     File createTestDirectory(File projectDir) {
-        File testDirectory = new File(projectDir, "src/test/groovy/projektor")
-        testDirectory.mkdirs()
-        return testDirectory
+        return createProjectDir(projectDir, "src/test/groovy/projektor")
+    }
+
+    private File createProjectDir(File projectDir, String dirPath) {
+        File dir = new File(projectDir, dirPath)
+        dir.mkdirs()
+        return dir
     }
 
     File writeFailingSpecFile(File testDirectory, String specClass) {

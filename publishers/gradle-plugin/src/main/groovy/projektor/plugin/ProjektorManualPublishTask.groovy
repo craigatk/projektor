@@ -18,10 +18,16 @@ class ProjektorManualPublishTask extends AbstractTask {
     @Optional
     String publishToken
 
+    @Input
+    @Optional
+    List<String> additionalResultsDirs = []
+
     @TaskAction
     void publish() {
-        ProjectTestTaskResultsCollector projectTestTaskResultsCollector = ProjectTestTaskResultsCollector.fromAllTasks(
+        ProjectTestResultsCollector projectTestTaskResultsCollector = ProjectTestResultsCollector.fromAllTasks(
                 project.getAllTasks(false).get(project),
+                project.projectDir,
+                additionalResultsDirs,
                 logger
         )
 

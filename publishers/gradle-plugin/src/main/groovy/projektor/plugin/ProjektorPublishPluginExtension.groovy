@@ -6,4 +6,5 @@ class ProjektorPublishPluginExtension {
     String serverUrl
     boolean manualPublishEnabled = true
     String publishToken
+    List<String> additionalResultsDirs = []
 }

@@ -71,7 +71,14 @@ There is also the option to not add the `publishResults` task:
 projektor {
   serverUrl = "https://myserver"
   manualPublishEnabled = false
-}
+```
+
+You can also include results from arbitrary directories in your build with the `additionalResultsDirs` configuration option:
+
+```
+projektor {
+  serverUrl = "https://myserver"
+  additionalResultsDirs = ['build/testResultsDir']
 ```
 
 ## Development
