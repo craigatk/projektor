@@ -1,0 +1,9 @@
+apply from: '../../gradle/kotlin.gradle'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'io.minio:minio:6.0.13'
+}

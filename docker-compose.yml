@@ -9,3 +9,13 @@ services:
       - POSTGRES_DB=projektordb
     ports:
       - "5433:5432"
+  objectstorage:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./minio:/data
+    environment:
+      MINIO_ACCESS_KEY: minio_access_key
+      MINIO_SECRET_KEY: minio_secret_key
+    command: server /data
