@@ -113,16 +113,16 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    objectstorage:
-      image: minio/minio
-      ports:
-        - "9000:9000"
-      volumes:
-        - ./minio:/data
-      env:
-        MINIO_ACCESS_KEY: minio_access_key
-        MINIO_SECRET_KEY: minio_secret_key
-      options: server /data
+      objectstorage:
+        image: minio/minio
+        ports:
+          - "9000:9000"
+        volumes:
+          - ./minio:/data
+        env:
+          MINIO_ACCESS_KEY: minio_access_key
+          MINIO_SECRET_KEY: minio_secret_key
+        options: server /data
 
     steps:
     - uses: actions/checkout@v1
