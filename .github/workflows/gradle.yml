@@ -25,10 +25,10 @@ jobs:
           - "9000:9000"
         volumes:
           - ./minio:/data
-        environment:
+        env:
           MINIO_ACCESS_KEY: minio_access_key
           MINIO_SECRET_KEY: minio_secret_key
-        command: server /data
+        options: server /data
 
     steps:
     - uses: actions/checkout@v1
@@ -119,10 +119,10 @@ jobs:
         - "9000:9000"
       volumes:
         - ./minio:/data
-      environment:
+      env:
         MINIO_ACCESS_KEY: minio_access_key
         MINIO_SECRET_KEY: minio_secret_key
-      command: server /data
+      options: server /data
 
     steps:
     - uses: actions/checkout@v1
