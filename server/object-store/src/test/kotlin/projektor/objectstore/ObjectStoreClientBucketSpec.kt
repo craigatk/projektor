@@ -10,9 +10,10 @@ class ObjectStoreClientBucketSpec : StringSpec() {
 
     init {
         "should create bucket" {
-            client.createBucketIfNotExists("testbucket")
+            val bucketName = "testbucket"
+            client.createBucketIfNotExists(bucketName)
 
-            expectThat(client.bucketExists("testbucket")).isTrue()
+            expectThat(client.bucketExists(bucketName)).isTrue()
         }
     }
 }
