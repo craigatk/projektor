@@ -20,6 +20,8 @@ import org.koin.Logger.SLF4JLogger
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import org.slf4j.event.Level
+import projektor.asset.AssetStoreConfig
+import projektor.asset.AssetStoreService
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
 import projektor.database.DataSourceConfig
@@ -33,11 +35,16 @@ import projektor.testsuite.TestSuiteService
 
 @KtorExperimentalAPI
 fun Application.main() {
-    val authConfig = AuthConfig.createAuthConfig(environment.config)
-    val dataSourceConfig = DataSourceConfig.createDataSourceConfig(environment.config)
+    val applicationConfig = environment.config
+
+    val authConfig = AuthConfig.createAuthConfig(applicationConfig)
+
+    val dataSourceConfig = DataSourceConfig.createDataSourceConfig(applicationConfig)
     val dataSource = DataSourceConfig.createDataSource(dataSourceConfig)
     DataSourceConfig.flywayMigrate(dataSource, dataSourceConfig)
     val dslContext = DataSourceConfig.createDSLContext(dataSource, dataSourceConfig)
+
+    val assetStoreService = if (AssetStoreConfig.assetStoreEnabled(applicationConfig)) AssetStoreService(AssetStoreConfig.createAssetConfig(applicationConfig)) else null
 
     val appModule = createAppModule(dataSource, authConfig, dslContext)
 
@@ -79,6 +86,7 @@ fun Application.main() {
     val testSuiteService: TestSuiteService by inject()
 
     routing {
+        assetStore(assetStoreService)
         health()
         results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService)
         testCases(testCaseService)

@@ -43,7 +43,7 @@ import projektor.database.generated.tables.records.TestRunRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestRun extends TableImpl<TestRunRecord> {
 
-    private static final long serialVersionUID = 1205229785;
+    private static final long serialVersionUID = 1090604604;
 
     /**
      * The reference instance of <code>public.test_run</code>
@@ -112,6 +112,11 @@ public class TestRun extends TableImpl<TestRunRecord> {
      * The column <code>public.test_run.created_timestamp</code>.
      */
     public final TableField<TestRunRecord, Timestamp> CREATED_TIMESTAMP = createField("created_timestamp", org.jooq.impl.SQLDataType.TIMESTAMP, this, "");
+
+    /**
+     * The column <code>public.test_run.has_assets</code>.
+     */
+    public final TableField<TestRunRecord, Boolean> HAS_ASSETS = createField("has_assets", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     /**
      * Create a <code>public.test_run</code> table reference

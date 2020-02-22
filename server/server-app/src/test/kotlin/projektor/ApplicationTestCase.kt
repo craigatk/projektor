@@ -13,7 +13,10 @@ import io.ktor.util.KtorExperimentalAPI
 import kotlin.test.AfterTest
 import org.jooq.DSLContext
 import org.koin.ktor.ext.get
+import projektor.asset.AssetStoreConfig
 import projektor.database.generated.tables.daos.*
+import projektor.objectstore.ObjectStoreClient
+import projektor.objectstore.ObjectStoreConfig
 import projektor.parser.ResultsXmlLoader
 
 @KtorExperimentalAPI
@@ -41,6 +44,21 @@ open class ApplicationTestCase {
 
     protected var publishToken: String? = null
 
+    protected var assetStoreEnabled: Boolean? = null
+    protected val assetStoreConfig = AssetStoreConfig(
+            "http://localhost:9000",
+            "addassettestbucket",
+            true,
+            "minio_access_key",
+            "minio_secret_key"
+    )
+
+    protected val objectStoreClient = ObjectStoreClient(ObjectStoreConfig(
+            assetStoreConfig.url,
+            assetStoreConfig.accessKey,
+            assetStoreConfig.secretKey
+    ))
+
     fun createTestApplication(application: Application) {
         val schema = databaseSchema
 
@@ -50,7 +68,17 @@ open class ApplicationTestCase {
             put("ktor.datasource.password", System.getenv("DB_PASSWORD") ?: "testpass")
             put("ktor.datasource.jdbcUrl", System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5433/projektordb")
             put("ktor.datasource.schema", schema)
+
             publishToken?.let { put("ktor.auth.publishToken", it) }
+
+            assetStoreEnabled?.let {
+                put("ktor.assetStore.enabled", it.toString())
+                put("ktor.assetStore.url", assetStoreConfig.url)
+                put("ktor.assetStore.bucketName", assetStoreConfig.bucketName)
+                put("ktor.assetStore.autoCreateBucket", "true")
+                put("ktor.assetStore.accessKey", assetStoreConfig.accessKey)
+                put("ktor.assetStore.secretKey", assetStoreConfig.secretKey)
+            }
         }
 
         application.main()

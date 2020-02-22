@@ -30,6 +30,7 @@ dependencies {
     implementation project(':server:server-api')
     implementation project(':server:test-results-parser')
     implementation project(':server:grouped-results-parser')
+    implementation project(':server:object-store')
 
     implementation "io.ktor:ktor-server-netty:$ktor_version"
     implementation "io.ktor:ktor-jackson:$ktor_version"

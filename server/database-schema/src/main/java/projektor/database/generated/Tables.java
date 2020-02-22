@@ -10,6 +10,8 @@ import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.TestCase;
 import projektor.database.generated.tables.TestFailure;
 import projektor.database.generated.tables.TestRun;
+import projektor.database.generated.tables.TestRunAccess;
+import projektor.database.generated.tables.TestRunAsset;
 import projektor.database.generated.tables.TestSuite;
 import projektor.database.generated.tables.TestSuiteGroup;
 
@@ -46,6 +48,16 @@ public class Tables {
      * The table <code>public.test_run</code>.
      */
     public static final TestRun TEST_RUN = projektor.database.generated.tables.TestRun.TEST_RUN;
+
+    /**
+     * The table <code>public.test_run_access</code>.
+     */
+    public static final TestRunAccess TEST_RUN_ACCESS = projektor.database.generated.tables.TestRunAccess.TEST_RUN_ACCESS;
+
+    /**
+     * The table <code>public.test_run_asset</code>.
+     */
+    public static final TestRunAsset TEST_RUN_ASSET = projektor.database.generated.tables.TestRunAsset.TEST_RUN_ASSET;
 
     /**
      * The table <code>public.test_suite</code>.

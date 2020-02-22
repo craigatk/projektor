@@ -22,6 +22,10 @@ class ObjectStoreClient(private val config: ObjectStoreConfig) {
         minioClient.putObject(bucketName, objectName, localFilePath)
     }
 
+    fun putObject(bucketName: String, objectName: String, stream: InputStream) {
+        minioClient.putObject(bucketName, objectName, stream, "application/octet-stream")
+    }
+
     fun getObject(bucketName: String, objectName: String): InputStream =
             minioClient.getObject(bucketName, objectName)
 

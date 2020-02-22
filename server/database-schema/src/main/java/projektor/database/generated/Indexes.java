@@ -14,6 +14,8 @@ import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.TestCase;
 import projektor.database.generated.tables.TestFailure;
 import projektor.database.generated.tables.TestRun;
+import projektor.database.generated.tables.TestRunAccess;
+import projektor.database.generated.tables.TestRunAsset;
 import projektor.database.generated.tables.TestSuite;
 import projektor.database.generated.tables.TestSuiteGroup;
 
@@ -45,6 +47,8 @@ public class Indexes {
     public static final Index IDX_TEST_RUN_PUBLIC_ID = Indexes0.IDX_TEST_RUN_PUBLIC_ID;
     public static final Index TEST_RUN_PKEY = Indexes0.TEST_RUN_PKEY;
     public static final Index TEST_RUN_PUBLIC_ID_KEY = Indexes0.TEST_RUN_PUBLIC_ID_KEY;
+    public static final Index TEST_RUN_ACCESS_PKEY = Indexes0.TEST_RUN_ACCESS_PKEY;
+    public static final Index TEST_RUN_ASSET_PKEY = Indexes0.TEST_RUN_ASSET_PKEY;
     public static final Index IDX_TEST_SUITE_IDX = Indexes0.IDX_TEST_SUITE_IDX;
     public static final Index TEST_SUITE_PKEY = Indexes0.TEST_SUITE_PKEY;
     public static final Index TEST_SUITE_GROUP_PKEY = Indexes0.TEST_SUITE_GROUP_PKEY;
@@ -64,6 +68,8 @@ public class Indexes {
         public static Index IDX_TEST_RUN_PUBLIC_ID = Internal.createIndex("idx_test_run_public_id", TestRun.TEST_RUN, new OrderField[] { TestRun.TEST_RUN.PUBLIC_ID }, false);
         public static Index TEST_RUN_PKEY = Internal.createIndex("test_run_pkey", TestRun.TEST_RUN, new OrderField[] { TestRun.TEST_RUN.ID }, true);
         public static Index TEST_RUN_PUBLIC_ID_KEY = Internal.createIndex("test_run_public_id_key", TestRun.TEST_RUN, new OrderField[] { TestRun.TEST_RUN.PUBLIC_ID }, true);
+        public static Index TEST_RUN_ACCESS_PKEY = Internal.createIndex("test_run_access_pkey", TestRunAccess.TEST_RUN_ACCESS, new OrderField[] { TestRunAccess.TEST_RUN_ACCESS.TEST_RUN_ID }, true);
+        public static Index TEST_RUN_ASSET_PKEY = Internal.createIndex("test_run_asset_pkey", TestRunAsset.TEST_RUN_ASSET, new OrderField[] { TestRunAsset.TEST_RUN_ASSET.ID }, true);
         public static Index IDX_TEST_SUITE_IDX = Internal.createIndex("idx_test_suite_idx", TestSuite.TEST_SUITE, new OrderField[] { TestSuite.TEST_SUITE.IDX }, false);
         public static Index TEST_SUITE_PKEY = Internal.createIndex("test_suite_pkey", TestSuite.TEST_SUITE, new OrderField[] { TestSuite.TEST_SUITE.ID }, true);
         public static Index TEST_SUITE_GROUP_PKEY = Internal.createIndex("test_suite_group_pkey", TestSuiteGroup.TEST_SUITE_GROUP, new OrderField[] { TestSuiteGroup.TEST_SUITE_GROUP.ID }, true);

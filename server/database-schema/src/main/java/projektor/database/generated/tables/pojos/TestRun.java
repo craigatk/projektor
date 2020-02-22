@@ -24,7 +24,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestRun implements Serializable {
 
-    private static final long serialVersionUID = -2089042854;
+    private static final long serialVersionUID = -663408787;
 
     private Long       id;
     private String     publicId;
@@ -37,6 +37,7 @@ public class TestRun implements Serializable {
     private BigDecimal averageDuration;
     private BigDecimal slowestTestCaseDuration;
     private Timestamp  createdTimestamp;
+    private Boolean    hasAssets;
 
     public TestRun() {}
 
@@ -52,6 +53,7 @@ public class TestRun implements Serializable {
         this.averageDuration = value.averageDuration;
         this.slowestTestCaseDuration = value.slowestTestCaseDuration;
         this.createdTimestamp = value.createdTimestamp;
+        this.hasAssets = value.hasAssets;
     }
 
     public TestRun(
@@ -65,7 +67,8 @@ public class TestRun implements Serializable {
         BigDecimal cumulativeDuration,
         BigDecimal averageDuration,
         BigDecimal slowestTestCaseDuration,
-        Timestamp  createdTimestamp
+        Timestamp  createdTimestamp,
+        Boolean    hasAssets
     ) {
         this.id = id;
         this.publicId = publicId;
@@ -78,6 +81,7 @@ public class TestRun implements Serializable {
         this.averageDuration = averageDuration;
         this.slowestTestCaseDuration = slowestTestCaseDuration;
         this.createdTimestamp = createdTimestamp;
+        this.hasAssets = hasAssets;
     }
 
     public Long getId() {
@@ -179,6 +183,15 @@ public class TestRun implements Serializable {
         return this;
     }
 
+    public Boolean getHasAssets() {
+        return this.hasAssets;
+    }
+
+    public TestRun setHasAssets(Boolean hasAssets) {
+        this.hasAssets = hasAssets;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -254,6 +267,12 @@ public class TestRun implements Serializable {
         }
         else if (!createdTimestamp.equals(other.createdTimestamp))
             return false;
+        if (hasAssets == null) {
+            if (other.hasAssets != null)
+                return false;
+        }
+        else if (!hasAssets.equals(other.hasAssets))
+            return false;
         return true;
     }
 
@@ -272,6 +291,7 @@ public class TestRun implements Serializable {
         result = prime * result + ((this.averageDuration == null) ? 0 : this.averageDuration.hashCode());
         result = prime * result + ((this.slowestTestCaseDuration == null) ? 0 : this.slowestTestCaseDuration.hashCode());
         result = prime * result + ((this.createdTimestamp == null) ? 0 : this.createdTimestamp.hashCode());
+        result = prime * result + ((this.hasAssets == null) ? 0 : this.hasAssets.hashCode());
         return result;
     }
 
@@ -290,6 +310,7 @@ public class TestRun implements Serializable {
         sb.append(", ").append(averageDuration);
         sb.append(", ").append(slowestTestCaseDuration);
         sb.append(", ").append(createdTimestamp);
+        sb.append(", ").append(hasAssets);
 
         sb.append(")");
         return sb.toString();
