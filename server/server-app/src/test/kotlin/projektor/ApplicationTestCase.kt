@@ -13,7 +13,7 @@ import io.ktor.util.KtorExperimentalAPI
 import kotlin.test.AfterTest
 import org.jooq.DSLContext
 import org.koin.ktor.ext.get
-import projektor.asset.AssetStoreConfig
+import projektor.attachment.AttachmentStoreConfig
 import projektor.database.generated.tables.daos.*
 import projektor.objectstore.ObjectStoreClient
 import projektor.objectstore.ObjectStoreConfig
@@ -45,7 +45,7 @@ open class ApplicationTestCase {
     protected var publishToken: String? = null
 
     protected var assetStoreEnabled: Boolean? = null
-    protected val assetStoreConfig = AssetStoreConfig(
+    protected val attachmentStoreConfig = AttachmentStoreConfig(
             "http://localhost:9000",
             "addassettestbucket",
             true,
@@ -54,9 +54,9 @@ open class ApplicationTestCase {
     )
 
     protected val objectStoreClient = ObjectStoreClient(ObjectStoreConfig(
-            assetStoreConfig.url,
-            assetStoreConfig.accessKey,
-            assetStoreConfig.secretKey
+            attachmentStoreConfig.url,
+            attachmentStoreConfig.accessKey,
+            attachmentStoreConfig.secretKey
     ))
 
     fun createTestApplication(application: Application) {
@@ -72,12 +72,11 @@ open class ApplicationTestCase {
             publishToken?.let { put("ktor.auth.publishToken", it) }
 
             assetStoreEnabled?.let {
-                put("ktor.assetStore.enabled", it.toString())
-                put("ktor.assetStore.url", assetStoreConfig.url)
-                put("ktor.assetStore.bucketName", assetStoreConfig.bucketName)
-                put("ktor.assetStore.autoCreateBucket", "true")
-                put("ktor.assetStore.accessKey", assetStoreConfig.accessKey)
-                put("ktor.assetStore.secretKey", assetStoreConfig.secretKey)
+                put("ktor.attachment.url", attachmentStoreConfig.url)
+                put("ktor.attachment.bucketName", attachmentStoreConfig.bucketName)
+                put("ktor.attachment.autoCreateBucket", "true")
+                put("ktor.attachment.accessKey", attachmentStoreConfig.accessKey)
+                put("ktor.attachment.secretKey", attachmentStoreConfig.secretKey)
             }
         }
 

@@ -1,11 +1,11 @@
-package projektor.asset
+package projektor.attachment
 
 import java.io.InputStream
 import projektor.objectstore.ObjectStoreClient
 import projektor.objectstore.ObjectStoreConfig
 import projektor.server.api.PublicId
 
-class AssetStoreService(private val config: AssetStoreConfig) {
+class AttachmentStoreService(private val config: AttachmentStoreConfig) {
     private val objectStoreClient = ObjectStoreClient(ObjectStoreConfig(config.url, config.accessKey, config.secretKey))
 
     fun conditionallyCreateBucketIfNotExists() {
@@ -14,7 +14,7 @@ class AssetStoreService(private val config: AssetStoreConfig) {
         }
     }
 
-    fun addAsset(publicId: PublicId, assetName: String, assetStream: InputStream) {
+    fun addAttachment(publicId: PublicId, assetName: String, assetStream: InputStream) {
         objectStoreClient.putObject(config.bucketName, assetName, assetStream)
     }
 }

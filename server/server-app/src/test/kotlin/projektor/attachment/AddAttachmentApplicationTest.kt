@@ -1,4 +1,4 @@
-package projektor.asset
+package projektor.attachment
 
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -18,9 +18,9 @@ import strikt.assertions.isEqualTo
 
 @KtorExperimentalAPI
 @ExperimentalStdlibApi
-class AddAssetApplicationTest : ApplicationTestCase() {
+class AddAttachmentApplicationTest : ApplicationTestCase() {
     @Test
-    fun `should add asset to test run with valid key`() {
+    fun `should add attachment to test run with valid key`() {
         val publicId = randomPublicId()
         assetStoreEnabled = true
 
@@ -43,12 +43,14 @@ class AddAssetApplicationTest : ApplicationTestCase() {
                 expectThat(responseRun.id).isEqualTo(publicId.id)
             }
 
-            handleRequest(HttpMethod.Post, "/run/$publicId/asset/test-asset.txt") {
-                setBody(File("src/test/resources/test-asset.txt").readBytes())
+            handleRequest(HttpMethod.Post, "/run/$publicId/attachment/test-attachment.txt") {
+                setBody(File("src/test/resources/test-attachment.txt").readBytes())
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
-                expectThat(objectStoreClient.getObject(assetStoreConfig.bucketName, "test-asset.txt").readBytes().decodeToString()).isEqualTo("Here is a test asset file")
+                val storedAttachmentValue = objectStoreClient.getObject(attachmentStoreConfig.bucketName, "test-attachment.txt").readBytes().decodeToString()
+
+                expectThat(storedAttachmentValue).isEqualTo("Here is a test attachment file")
             }
         }
     }

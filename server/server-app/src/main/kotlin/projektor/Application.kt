@@ -20,8 +20,8 @@ import org.koin.Logger.SLF4JLogger
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import org.slf4j.event.Level
-import projektor.asset.AssetStoreConfig
-import projektor.asset.AssetStoreService
+import projektor.attachment.AttachmentStoreConfig
+import projektor.attachment.AttachmentStoreService
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
 import projektor.database.DataSourceConfig
@@ -44,7 +44,7 @@ fun Application.main() {
     DataSourceConfig.flywayMigrate(dataSource, dataSourceConfig)
     val dslContext = DataSourceConfig.createDSLContext(dataSource, dataSourceConfig)
 
-    val assetStoreService = if (AssetStoreConfig.assetStoreEnabled(applicationConfig)) AssetStoreService(AssetStoreConfig.createAssetConfig(applicationConfig)) else null
+    val attachmentService = if (AttachmentStoreConfig.attachmentStoreEnabled(applicationConfig)) AttachmentStoreService(AttachmentStoreConfig.createAttachmentStoreConfig(applicationConfig)) else null
 
     val appModule = createAppModule(dataSource, authConfig, dslContext)
 
@@ -86,7 +86,7 @@ fun Application.main() {
     val testSuiteService: TestSuiteService by inject()
 
     routing {
-        assetStore(assetStoreService)
+        attachments(attachmentService)
         health()
         results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService)
         testCases(testCaseService)
