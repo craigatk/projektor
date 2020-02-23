@@ -1,6 +1,7 @@
 package projektor.server.example
 
 import com.google.gson.Gson
+import java.io.File
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -50,6 +51,14 @@ fun loadPassingGroupedExample() {
     println("View run with passing grouped tests at at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
+fun loadPassingGroupedExampleWithAttachments() {
+    val groupedResultsXmlLoader = GroupedResultsXmlLoader()
+    val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults())
+    sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/attachment-1.txt")
+    sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/test-run-summary.png")
+    println("View run with passing grouped tests and attachments at at $uiBaseUrl${saveResultsResponse.uri}")
+}
+
 fun sendResultsToServer(resultXmlList: List<String>): SaveResultsResponse =
         resultXmlList.joinToString("\n").let(::sendResultsToServer)
 
@@ -67,6 +76,22 @@ fun sendResultsToServer(resultsBlob: String): SaveResultsResponse {
     val response = client.newCall(request).execute()
     val responseString = response.body?.string()
     return Gson().fromJson(responseString, SaveResultsResponse::class.java)
+}
+
+fun sendAttachmentToServer(publicId: String, attachmentFilePath: String) {
+    val attachmentFile = File(attachmentFilePath)
+    val client = OkHttpClient()
+    val mediaType = "octet/stream".toMediaType()
+    val url = "$serverBaseUrl/run/$publicId/attachment/${attachmentFile.name}"
+    val requestBody = attachmentFile.readBytes().toRequestBody(mediaType)
+
+    val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
+
+    val response = client.newCall(request).execute()
+    println("Response code ${response.code} from uploading attachment $attachmentFilePath")
 }
 
 fun sendGroupedResultsToServer(groupedResultsJson: String): SaveResultsResponse {

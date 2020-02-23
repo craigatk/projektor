@@ -5,4 +5,5 @@ fun main(args: Array<String>) {
     loadAllExamples()
     loadCypressExamples()
     loadPassingGroupedExample()
+    loadPassingGroupedExampleWithAttachments()
 }

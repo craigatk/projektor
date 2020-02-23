@@ -20,7 +20,7 @@ import strikt.assertions.isEqualTo
 @ExperimentalStdlibApi
 class AddAttachmentApplicationTest : ApplicationTestCase() {
     @Test
-    fun `should add attachment to test run with valid key`() {
+    fun `should add attachment to test run then get it`() {
         val publicId = randomPublicId()
         assetStoreEnabled = true
 
@@ -47,10 +47,13 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
                 setBody(File("src/test/resources/test-attachment.txt").readBytes())
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+            }
 
-                val storedAttachmentValue = objectStoreClient.getObject(attachmentStoreConfig.bucketName, "test-attachment.txt").readBytes().decodeToString()
+            handleRequest(HttpMethod.Get, "/run/$publicId/attachment/test-attachment.txt") {
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
-                expectThat(storedAttachmentValue).isEqualTo("Here is a test attachment file")
+                expectThat(response.byteContent?.decodeToString()).isEqualTo("Here is a test attachment file")
             }
         }
     }
