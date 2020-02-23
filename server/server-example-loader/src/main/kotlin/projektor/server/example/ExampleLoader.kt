@@ -82,7 +82,7 @@ fun sendAttachmentToServer(publicId: String, attachmentFilePath: String) {
     val attachmentFile = File(attachmentFilePath)
     val client = OkHttpClient()
     val mediaType = "octet/stream".toMediaType()
-    val url = "$serverBaseUrl/run/$publicId/attachment/${attachmentFile.name}"
+    val url = "$serverBaseUrl/run/$publicId/attachments/${attachmentFile.name}"
     val requestBody = attachmentFile.readBytes().toRequestBody(mediaType)
 
     val request = Request.Builder()

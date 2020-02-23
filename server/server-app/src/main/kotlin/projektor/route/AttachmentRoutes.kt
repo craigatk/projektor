@@ -12,11 +12,12 @@ import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.getOrFail
 import projektor.attachment.AttachmentStoreService
 import projektor.attachment.CreateAttachmentResponse
+import projektor.attachment.GetAttachmentsResponse
 import projektor.server.api.PublicId
 
 @KtorExperimentalAPI
 fun Route.attachments(attachmentStoreService: AttachmentStoreService?) {
-    post("/run/{publicId}/attachment/{attachmentName}") {
+    post("/run/{publicId}/attachments/{attachmentName}") {
         val publicId = call.parameters.getOrFail("publicId")
         val attachmentName = call.parameters.getOrFail("attachmentName")
         val attachmentStream = call.receiveStream()
@@ -32,7 +33,7 @@ fun Route.attachments(attachmentStoreService: AttachmentStoreService?) {
         }
     }
 
-    get("/run/{publicId}/attachment/{attachmentName}") {
+    get("/run/{publicId}/attachments/{attachmentName}") {
         val publicId = call.parameters.getOrFail("publicId")
         val attachmentName = call.parameters.getOrFail("attachmentName")
 
@@ -40,6 +41,18 @@ fun Route.attachments(attachmentStoreService: AttachmentStoreService?) {
             val attachment = attachmentStoreService.getAttachment(PublicId(publicId), attachmentName)
 
             call.respondBytes(attachment.readBytes())
+        } else {
+            call.respond(HttpStatusCode.BadRequest)
+        }
+    }
+
+    get("/run/{publicId}/attachments") {
+        val publicId = call.parameters.getOrFail("publicId")
+
+        if (attachmentStoreService != null) {
+            val attachments = attachmentStoreService.listAttachments(PublicId(publicId))
+
+            call.respond(HttpStatusCode.OK, GetAttachmentsResponse(attachments))
         } else {
             call.respond(HttpStatusCode.BadRequest)
         }

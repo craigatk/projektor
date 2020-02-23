@@ -5,7 +5,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import java.io.File
 import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
@@ -16,11 +15,9 @@ import projektor.server.api.TestRun
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 
-@KtorExperimentalAPI
-@ExperimentalStdlibApi
-class AddAttachmentApplicationTest : ApplicationTestCase() {
+class ListAttachmentsApplicationTest : ApplicationTestCase() {
     @Test
-    fun `should add attachment to test run then get it`() {
+    fun `should add attachments to test run then list them`() {
         val publicId = randomPublicId()
         assetStoreEnabled = true
 
@@ -48,12 +45,18 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
             }
+            handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-run-summary.png") {
+                setBody(File("src/test/resources/test-run-summary.png").readBytes())
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+            }
 
-            handleRequest(HttpMethod.Get, "/run/$publicId/attachments/test-attachment.txt") {
+            handleRequest(HttpMethod.Get, "/run/$publicId/attachments") {
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
-                expectThat(response.byteContent?.decodeToString()).isEqualTo("Here is a test attachment file")
+                val attachmentsResponse = objectMapper.readValue(response.content, GetAttachmentsResponse::class.java)
+                assertNotNull(attachmentsResponse)
             }
         }
     }

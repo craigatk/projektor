@@ -23,6 +23,10 @@ class AttachmentStoreService(private val config: AttachmentStoreConfig) {
     fun getAttachment(publicId: PublicId, assetName: String) =
         objectStoreClient.getObject(config.bucketName, attachmentKey(publicId, assetName))
 
+    fun listAttachments(publicId: PublicId): List<Attachment> {
+        return listOf()
+    }
+
     companion object {
         fun attachmentKey(publicId: PublicId, assetName: String) = "${publicId.id}-$assetName"
     }
