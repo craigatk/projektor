@@ -44,9 +44,9 @@ public class Sequences {
     public static final Sequence<Long> TEST_FAILURE_TEST_CASE_ID_SEQ = new SequenceImpl<Long>("test_failure_test_case_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
 
     /**
-     * The sequence <code>public.test_run_asset_id_seq</code>
+     * The sequence <code>public.test_run_attachment_id_seq</code>
      */
-    public static final Sequence<Long> TEST_RUN_ASSET_ID_SEQ = new SequenceImpl<Long>("test_run_asset_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
+    public static final Sequence<Long> TEST_RUN_ATTACHMENT_ID_SEQ = new SequenceImpl<Long>("test_run_attachment_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
 
     /**
      * The sequence <code>public.test_run_id_seq</code>

@@ -2,6 +2,7 @@ package projektor.route
 
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
+import io.ktor.request.header
 import io.ktor.request.receiveStream
 import io.ktor.response.respond
 import io.ktor.response.respondBytes
@@ -13,16 +14,23 @@ import io.ktor.util.getOrFail
 import projektor.attachment.AttachmentStoreService
 import projektor.attachment.CreateAttachmentResponse
 import projektor.attachment.GetAttachmentsResponse
+import projektor.auth.AuthConfig
+import projektor.auth.AuthService
 import projektor.server.api.PublicId
 
 @KtorExperimentalAPI
-fun Route.attachments(attachmentStoreService: AttachmentStoreService?) {
+fun Route.attachments(
+    attachmentStoreService: AttachmentStoreService?,
+    authService: AuthService
+) {
     post("/run/{publicId}/attachments/{attachmentName}") {
         val publicId = call.parameters.getOrFail("publicId")
         val attachmentName = call.parameters.getOrFail("attachmentName")
         val attachmentStream = call.receiveStream()
 
-        if (attachmentStoreService != null) {
+        if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
+            call.respond(HttpStatusCode.Unauthorized)
+        } else if (attachmentStoreService != null) {
             attachmentStoreService.conditionallyCreateBucketIfNotExists()
 
             attachmentStoreService.addAttachment(PublicId(publicId), attachmentName, attachmentStream)
@@ -40,7 +48,11 @@ fun Route.attachments(attachmentStoreService: AttachmentStoreService?) {
         if (attachmentStoreService != null) {
             val attachment = attachmentStoreService.getAttachment(PublicId(publicId), attachmentName)
 
-            call.respondBytes(attachment.readBytes())
+            if (attachment != null) {
+                call.respondBytes(attachment.readBytes())
+            } else {
+                call.respond(HttpStatusCode.NotFound)
+            }
         } else {
             call.respond(HttpStatusCode.BadRequest)
         }

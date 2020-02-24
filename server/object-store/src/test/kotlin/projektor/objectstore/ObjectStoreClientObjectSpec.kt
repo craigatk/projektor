@@ -6,6 +6,7 @@ import strikt.api.expectThat
 import strikt.assertions.containsIgnoringCase
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
+import strikt.assertions.isNull
 
 @ExperimentalStdlibApi
 class ObjectStoreClientObjectSpec : StringSpec() {
@@ -21,7 +22,14 @@ class ObjectStoreClientObjectSpec : StringSpec() {
         "should store and retrieve object" {
             client.putObject(bucketName, objectName, "src/test/resources/test_file.txt")
 
-            expectThat(client.getObject(bucketName, objectName).readBytes().decodeToString()).isEqualTo("Here is a test file")
+            expectThat(client.getObject(bucketName, objectName))
+                    .isNotNull()
+                    .and { get { readBytes().decodeToString() }.isEqualTo("Here is a test file") }
+        }
+
+        "when trying to get object that does not exist should return null"() {
+            expectThat(client.getObject(bucketName, "objectDoesNotExist"))
+                    .isNull()
         }
 
         "should delete object"() {

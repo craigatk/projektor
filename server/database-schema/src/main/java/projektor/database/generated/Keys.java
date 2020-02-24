@@ -15,15 +15,13 @@ import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.TestCase;
 import projektor.database.generated.tables.TestFailure;
 import projektor.database.generated.tables.TestRun;
-import projektor.database.generated.tables.TestRunAccess;
-import projektor.database.generated.tables.TestRunAsset;
+import projektor.database.generated.tables.TestRunAttachment;
 import projektor.database.generated.tables.TestSuite;
 import projektor.database.generated.tables.TestSuiteGroup;
 import projektor.database.generated.tables.records.ResultsProcessingRecord;
 import projektor.database.generated.tables.records.TestCaseRecord;
 import projektor.database.generated.tables.records.TestFailureRecord;
-import projektor.database.generated.tables.records.TestRunAccessRecord;
-import projektor.database.generated.tables.records.TestRunAssetRecord;
+import projektor.database.generated.tables.records.TestRunAttachmentRecord;
 import projektor.database.generated.tables.records.TestRunRecord;
 import projektor.database.generated.tables.records.TestSuiteGroupRecord;
 import projektor.database.generated.tables.records.TestSuiteRecord;
@@ -50,7 +48,7 @@ public class Keys {
     public static final Identity<TestCaseRecord, Long> IDENTITY_TEST_CASE = Identities0.IDENTITY_TEST_CASE;
     public static final Identity<TestFailureRecord, Long> IDENTITY_TEST_FAILURE = Identities0.IDENTITY_TEST_FAILURE;
     public static final Identity<TestRunRecord, Long> IDENTITY_TEST_RUN = Identities0.IDENTITY_TEST_RUN;
-    public static final Identity<TestRunAssetRecord, Long> IDENTITY_TEST_RUN_ASSET = Identities0.IDENTITY_TEST_RUN_ASSET;
+    public static final Identity<TestRunAttachmentRecord, Long> IDENTITY_TEST_RUN_ATTACHMENT = Identities0.IDENTITY_TEST_RUN_ATTACHMENT;
     public static final Identity<TestSuiteRecord, Long> IDENTITY_TEST_SUITE = Identities0.IDENTITY_TEST_SUITE;
     public static final Identity<TestSuiteGroupRecord, Long> IDENTITY_TEST_SUITE_GROUP = Identities0.IDENTITY_TEST_SUITE_GROUP;
 
@@ -63,8 +61,7 @@ public class Keys {
     public static final UniqueKey<TestFailureRecord> TEST_FAILURE_PKEY = UniqueKeys0.TEST_FAILURE_PKEY;
     public static final UniqueKey<TestRunRecord> TEST_RUN_PKEY = UniqueKeys0.TEST_RUN_PKEY;
     public static final UniqueKey<TestRunRecord> TEST_RUN_PUBLIC_ID_KEY = UniqueKeys0.TEST_RUN_PUBLIC_ID_KEY;
-    public static final UniqueKey<TestRunAccessRecord> TEST_RUN_ACCESS_PKEY = UniqueKeys0.TEST_RUN_ACCESS_PKEY;
-    public static final UniqueKey<TestRunAssetRecord> TEST_RUN_ASSET_PKEY = UniqueKeys0.TEST_RUN_ASSET_PKEY;
+    public static final UniqueKey<TestRunAttachmentRecord> TEST_RUN_ATTACHMENT_PKEY = UniqueKeys0.TEST_RUN_ATTACHMENT_PKEY;
     public static final UniqueKey<TestSuiteRecord> TEST_SUITE_PKEY = UniqueKeys0.TEST_SUITE_PKEY;
     public static final UniqueKey<TestSuiteGroupRecord> TEST_SUITE_GROUP_PKEY = UniqueKeys0.TEST_SUITE_GROUP_PKEY;
 
@@ -74,8 +71,7 @@ public class Keys {
 
     public static final ForeignKey<TestCaseRecord, TestSuiteRecord> TEST_CASE__TEST_CASE_TEST_SUITE_ID_FKEY = ForeignKeys0.TEST_CASE__TEST_CASE_TEST_SUITE_ID_FKEY;
     public static final ForeignKey<TestFailureRecord, TestCaseRecord> TEST_FAILURE__TEST_FAILURE_TEST_CASE_ID_FKEY = ForeignKeys0.TEST_FAILURE__TEST_FAILURE_TEST_CASE_ID_FKEY;
-    public static final ForeignKey<TestRunAccessRecord, TestRunRecord> TEST_RUN_ACCESS__TEST_RUN_ACCESS_TEST_RUN_ID_FKEY = ForeignKeys0.TEST_RUN_ACCESS__TEST_RUN_ACCESS_TEST_RUN_ID_FKEY;
-    public static final ForeignKey<TestRunAssetRecord, TestRunRecord> TEST_RUN_ASSET__TEST_RUN_ASSET_TEST_RUN_ID_FKEY = ForeignKeys0.TEST_RUN_ASSET__TEST_RUN_ASSET_TEST_RUN_ID_FKEY;
+    public static final ForeignKey<TestRunAttachmentRecord, TestRunRecord> TEST_RUN_ATTACHMENT__TEST_RUN_ATTACHMENT_TEST_RUN_ID_FKEY = ForeignKeys0.TEST_RUN_ATTACHMENT__TEST_RUN_ATTACHMENT_TEST_RUN_ID_FKEY;
     public static final ForeignKey<TestSuiteRecord, TestRunRecord> TEST_SUITE__TEST_SUITE_TEST_RUN_ID_FKEY = ForeignKeys0.TEST_SUITE__TEST_SUITE_TEST_RUN_ID_FKEY;
     public static final ForeignKey<TestSuiteRecord, TestSuiteGroupRecord> TEST_SUITE__TEST_SUITE_TEST_SUITE_GROUP_ID_FKEY = ForeignKeys0.TEST_SUITE__TEST_SUITE_TEST_SUITE_GROUP_ID_FKEY;
     public static final ForeignKey<TestSuiteGroupRecord, TestRunRecord> TEST_SUITE_GROUP__TEST_SUITE_GROUP_TEST_RUN_ID_FKEY = ForeignKeys0.TEST_SUITE_GROUP__TEST_SUITE_GROUP_TEST_RUN_ID_FKEY;
@@ -88,7 +84,7 @@ public class Keys {
         public static Identity<TestCaseRecord, Long> IDENTITY_TEST_CASE = Internal.createIdentity(TestCase.TEST_CASE, TestCase.TEST_CASE.ID);
         public static Identity<TestFailureRecord, Long> IDENTITY_TEST_FAILURE = Internal.createIdentity(TestFailure.TEST_FAILURE, TestFailure.TEST_FAILURE.ID);
         public static Identity<TestRunRecord, Long> IDENTITY_TEST_RUN = Internal.createIdentity(TestRun.TEST_RUN, TestRun.TEST_RUN.ID);
-        public static Identity<TestRunAssetRecord, Long> IDENTITY_TEST_RUN_ASSET = Internal.createIdentity(TestRunAsset.TEST_RUN_ASSET, TestRunAsset.TEST_RUN_ASSET.ID);
+        public static Identity<TestRunAttachmentRecord, Long> IDENTITY_TEST_RUN_ATTACHMENT = Internal.createIdentity(TestRunAttachment.TEST_RUN_ATTACHMENT, TestRunAttachment.TEST_RUN_ATTACHMENT.ID);
         public static Identity<TestSuiteRecord, Long> IDENTITY_TEST_SUITE = Internal.createIdentity(TestSuite.TEST_SUITE, TestSuite.TEST_SUITE.ID);
         public static Identity<TestSuiteGroupRecord, Long> IDENTITY_TEST_SUITE_GROUP = Internal.createIdentity(TestSuiteGroup.TEST_SUITE_GROUP, TestSuiteGroup.TEST_SUITE_GROUP.ID);
     }
@@ -99,8 +95,7 @@ public class Keys {
         public static final UniqueKey<TestFailureRecord> TEST_FAILURE_PKEY = Internal.createUniqueKey(TestFailure.TEST_FAILURE, "test_failure_pkey", TestFailure.TEST_FAILURE.ID);
         public static final UniqueKey<TestRunRecord> TEST_RUN_PKEY = Internal.createUniqueKey(TestRun.TEST_RUN, "test_run_pkey", TestRun.TEST_RUN.ID);
         public static final UniqueKey<TestRunRecord> TEST_RUN_PUBLIC_ID_KEY = Internal.createUniqueKey(TestRun.TEST_RUN, "test_run_public_id_key", TestRun.TEST_RUN.PUBLIC_ID);
-        public static final UniqueKey<TestRunAccessRecord> TEST_RUN_ACCESS_PKEY = Internal.createUniqueKey(TestRunAccess.TEST_RUN_ACCESS, "test_run_access_pkey", TestRunAccess.TEST_RUN_ACCESS.TEST_RUN_ID);
-        public static final UniqueKey<TestRunAssetRecord> TEST_RUN_ASSET_PKEY = Internal.createUniqueKey(TestRunAsset.TEST_RUN_ASSET, "test_run_asset_pkey", TestRunAsset.TEST_RUN_ASSET.ID);
+        public static final UniqueKey<TestRunAttachmentRecord> TEST_RUN_ATTACHMENT_PKEY = Internal.createUniqueKey(TestRunAttachment.TEST_RUN_ATTACHMENT, "test_run_attachment_pkey", TestRunAttachment.TEST_RUN_ATTACHMENT.ID);
         public static final UniqueKey<TestSuiteRecord> TEST_SUITE_PKEY = Internal.createUniqueKey(TestSuite.TEST_SUITE, "test_suite_pkey", TestSuite.TEST_SUITE.ID);
         public static final UniqueKey<TestSuiteGroupRecord> TEST_SUITE_GROUP_PKEY = Internal.createUniqueKey(TestSuiteGroup.TEST_SUITE_GROUP, "test_suite_group_pkey", TestSuiteGroup.TEST_SUITE_GROUP.ID);
     }
@@ -108,8 +103,7 @@ public class Keys {
     private static class ForeignKeys0 {
         public static final ForeignKey<TestCaseRecord, TestSuiteRecord> TEST_CASE__TEST_CASE_TEST_SUITE_ID_FKEY = Internal.createForeignKey(projektor.database.generated.Keys.TEST_SUITE_PKEY, TestCase.TEST_CASE, "test_case__test_case_test_suite_id_fkey", TestCase.TEST_CASE.TEST_SUITE_ID);
         public static final ForeignKey<TestFailureRecord, TestCaseRecord> TEST_FAILURE__TEST_FAILURE_TEST_CASE_ID_FKEY = Internal.createForeignKey(projektor.database.generated.Keys.TEST_CASE_PKEY, TestFailure.TEST_FAILURE, "test_failure__test_failure_test_case_id_fkey", TestFailure.TEST_FAILURE.TEST_CASE_ID);
-        public static final ForeignKey<TestRunAccessRecord, TestRunRecord> TEST_RUN_ACCESS__TEST_RUN_ACCESS_TEST_RUN_ID_FKEY = Internal.createForeignKey(projektor.database.generated.Keys.TEST_RUN_PKEY, TestRunAccess.TEST_RUN_ACCESS, "test_run_access__test_run_access_test_run_id_fkey", TestRunAccess.TEST_RUN_ACCESS.TEST_RUN_ID);
-        public static final ForeignKey<TestRunAssetRecord, TestRunRecord> TEST_RUN_ASSET__TEST_RUN_ASSET_TEST_RUN_ID_FKEY = Internal.createForeignKey(projektor.database.generated.Keys.TEST_RUN_PKEY, TestRunAsset.TEST_RUN_ASSET, "test_run_asset__test_run_asset_test_run_id_fkey", TestRunAsset.TEST_RUN_ASSET.TEST_RUN_ID);
+        public static final ForeignKey<TestRunAttachmentRecord, TestRunRecord> TEST_RUN_ATTACHMENT__TEST_RUN_ATTACHMENT_TEST_RUN_ID_FKEY = Internal.createForeignKey(projektor.database.generated.Keys.TEST_RUN_PKEY, TestRunAttachment.TEST_RUN_ATTACHMENT, "test_run_attachment__test_run_attachment_test_run_id_fkey", TestRunAttachment.TEST_RUN_ATTACHMENT.TEST_RUN_ID);
         public static final ForeignKey<TestSuiteRecord, TestRunRecord> TEST_SUITE__TEST_SUITE_TEST_RUN_ID_FKEY = Internal.createForeignKey(projektor.database.generated.Keys.TEST_RUN_PKEY, TestSuite.TEST_SUITE, "test_suite__test_suite_test_run_id_fkey", TestSuite.TEST_SUITE.TEST_RUN_ID);
         public static final ForeignKey<TestSuiteRecord, TestSuiteGroupRecord> TEST_SUITE__TEST_SUITE_TEST_SUITE_GROUP_ID_FKEY = Internal.createForeignKey(projektor.database.generated.Keys.TEST_SUITE_GROUP_PKEY, TestSuite.TEST_SUITE, "test_suite__test_suite_test_suite_group_id_fkey", TestSuite.TEST_SUITE.TEST_SUITE_GROUP_ID);
         public static final ForeignKey<TestSuiteGroupRecord, TestRunRecord> TEST_SUITE_GROUP__TEST_SUITE_GROUP_TEST_RUN_ID_FKEY = Internal.createForeignKey(projektor.database.generated.Keys.TEST_RUN_PKEY, TestSuiteGroup.TEST_SUITE_GROUP, "test_suite_group__test_suite_group_test_run_id_fkey", TestSuiteGroup.TEST_SUITE_GROUP.TEST_RUN_ID);

@@ -86,7 +86,7 @@ fun Application.main() {
     val testSuiteService: TestSuiteService by inject()
 
     routing {
-        attachments(attachmentService)
+        attachments(attachmentService, authService)
         health()
         results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService)
         testCases(testCaseService)

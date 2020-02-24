@@ -1,6 +1,7 @@
 package projektor.objectstore
 
 import io.minio.MinioClient
+import io.minio.errors.ErrorResponseException
 import java.io.InputStream
 
 class ObjectStoreClient(private val config: ObjectStoreConfig) {
@@ -26,8 +27,12 @@ class ObjectStoreClient(private val config: ObjectStoreConfig) {
         minioClient.putObject(bucketName, objectName, stream, "application/octet-stream")
     }
 
-    fun getObject(bucketName: String, objectName: String): InputStream =
-            minioClient.getObject(bucketName, objectName)
+    fun getObject(bucketName: String, objectName: String): InputStream? =
+            try {
+                minioClient.getObject(bucketName, objectName)
+            } catch (e: ErrorResponseException) {
+                null
+            }
 
     fun removeObject(bucketName: String, objectName: String) {
         minioClient.removeObject(bucketName, objectName)

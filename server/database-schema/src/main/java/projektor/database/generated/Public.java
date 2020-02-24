@@ -19,8 +19,7 @@ import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.TestCase;
 import projektor.database.generated.tables.TestFailure;
 import projektor.database.generated.tables.TestRun;
-import projektor.database.generated.tables.TestRunAccess;
-import projektor.database.generated.tables.TestRunAsset;
+import projektor.database.generated.tables.TestRunAttachment;
 import projektor.database.generated.tables.TestSuite;
 import projektor.database.generated.tables.TestSuiteGroup;
 
@@ -38,7 +37,7 @@ import projektor.database.generated.tables.TestSuiteGroup;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 265464711;
+    private static final long serialVersionUID = 655596416;
 
     /**
      * The reference instance of <code>public</code>
@@ -66,14 +65,9 @@ public class Public extends SchemaImpl {
     public final TestRun TEST_RUN = projektor.database.generated.tables.TestRun.TEST_RUN;
 
     /**
-     * The table <code>public.test_run_access</code>.
+     * The table <code>public.test_run_attachment</code>.
      */
-    public final TestRunAccess TEST_RUN_ACCESS = projektor.database.generated.tables.TestRunAccess.TEST_RUN_ACCESS;
-
-    /**
-     * The table <code>public.test_run_asset</code>.
-     */
-    public final TestRunAsset TEST_RUN_ASSET = projektor.database.generated.tables.TestRunAsset.TEST_RUN_ASSET;
+    public final TestRunAttachment TEST_RUN_ATTACHMENT = projektor.database.generated.tables.TestRunAttachment.TEST_RUN_ATTACHMENT;
 
     /**
      * The table <code>public.test_suite</code>.
@@ -114,7 +108,7 @@ public class Public extends SchemaImpl {
             Sequences.TEST_CASE_TEST_SUITE_ID_SEQ,
             Sequences.TEST_FAILURE_ID_SEQ,
             Sequences.TEST_FAILURE_TEST_CASE_ID_SEQ,
-            Sequences.TEST_RUN_ASSET_ID_SEQ,
+            Sequences.TEST_RUN_ATTACHMENT_ID_SEQ,
             Sequences.TEST_RUN_ID_SEQ,
             Sequences.TEST_SUITE_GROUP_ID_SEQ,
             Sequences.TEST_SUITE_ID_SEQ,
@@ -134,8 +128,7 @@ public class Public extends SchemaImpl {
             TestCase.TEST_CASE,
             TestFailure.TEST_FAILURE,
             TestRun.TEST_RUN,
-            TestRunAccess.TEST_RUN_ACCESS,
-            TestRunAsset.TEST_RUN_ASSET,
+            TestRunAttachment.TEST_RUN_ATTACHMENT,
             TestSuite.TEST_SUITE,
             TestSuiteGroup.TEST_SUITE_GROUP);
     }
