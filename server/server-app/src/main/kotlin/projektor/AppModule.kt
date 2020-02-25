@@ -1,8 +1,12 @@
 package projektor
 
 import com.zaxxer.hikari.HikariDataSource
+import io.ktor.util.KtorExperimentalAPI
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.jooq.DSLContext
 import org.koin.dsl.module
+import projektor.attachment.AttachmentDatabaseRepository
+import projektor.attachment.AttachmentRepository
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
 import projektor.incomingresults.GroupedResultsConverter
@@ -23,6 +27,8 @@ import projektor.testsuite.TestSuiteDatabaseRepository
 import projektor.testsuite.TestSuiteRepository
 import projektor.testsuite.TestSuiteService
 
+@ObsoleteCoroutinesApi
+@KtorExperimentalAPI
 fun createAppModule(
     dataSource: HikariDataSource,
     authConfig: AuthConfig,
@@ -35,6 +41,7 @@ fun createAppModule(
     single<TestCaseRepository> { TestCaseDatabaseRepository(get()) }
     single<TestSuiteRepository> { TestSuiteDatabaseRepository(get()) }
     single<TestRunRepository> { TestRunDatabaseRepository(get()) }
+    single<AttachmentRepository> { AttachmentDatabaseRepository(get()) }
     single<ResultsProcessingRepository> { ResultsProcessingDatabaseRepository(get()) }
     single { GroupedResultsParser() }
     single { GroupedResultsConverter(get(), get()) }

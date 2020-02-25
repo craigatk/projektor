@@ -31,7 +31,7 @@ import projektor.database.generated.tables.TestRun;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestRunRecord extends UpdatableRecordImpl<TestRunRecord> implements Record12<Long, String, Integer, Integer, Integer, Integer, Boolean, BigDecimal, BigDecimal, BigDecimal, Timestamp, Boolean> {
 
-    private static final long serialVersionUID = -1440047608;
+    private static final long serialVersionUID = 2144213784;
 
     /**
      * Setter for <code>public.test_run.id</code>.
@@ -199,17 +199,17 @@ public class TestRunRecord extends UpdatableRecordImpl<TestRunRecord> implements
     }
 
     /**
-     * Setter for <code>public.test_run.has_assets</code>.
+     * Setter for <code>public.test_run.has_attachments</code>.
      */
-    public TestRunRecord setHasAssets(Boolean value) {
+    public TestRunRecord setHasAttachments(Boolean value) {
         set(11, value);
         return this;
     }
 
     /**
-     * Getter for <code>public.test_run.has_assets</code>.
+     * Getter for <code>public.test_run.has_attachments</code>.
      */
-    public Boolean getHasAssets() {
+    public Boolean getHasAttachments() {
         return (Boolean) get(11);
     }
 
@@ -338,7 +338,7 @@ public class TestRunRecord extends UpdatableRecordImpl<TestRunRecord> implements
      */
     @Override
     public Field<Boolean> field12() {
-        return TestRun.TEST_RUN.HAS_ASSETS;
+        return TestRun.TEST_RUN.HAS_ATTACHMENTS;
     }
 
     /**
@@ -434,7 +434,7 @@ public class TestRunRecord extends UpdatableRecordImpl<TestRunRecord> implements
      */
     @Override
     public Boolean component12() {
-        return getHasAssets();
+        return getHasAttachments();
     }
 
     /**
@@ -530,7 +530,7 @@ public class TestRunRecord extends UpdatableRecordImpl<TestRunRecord> implements
      */
     @Override
     public Boolean value12() {
-        return getHasAssets();
+        return getHasAttachments();
     }
 
     /**
@@ -637,7 +637,7 @@ public class TestRunRecord extends UpdatableRecordImpl<TestRunRecord> implements
      */
     @Override
     public TestRunRecord value12(Boolean value) {
-        setHasAssets(value);
+        setHasAttachments(value);
         return this;
     }
 
@@ -675,7 +675,7 @@ public class TestRunRecord extends UpdatableRecordImpl<TestRunRecord> implements
     /**
      * Create a detached, initialised TestRunRecord
      */
-    public TestRunRecord(Long id, String publicId, Integer totalTestCount, Integer totalPassingCount, Integer totalSkippedCount, Integer totalFailureCount, Boolean passed, BigDecimal cumulativeDuration, BigDecimal averageDuration, BigDecimal slowestTestCaseDuration, Timestamp createdTimestamp, Boolean hasAssets) {
+    public TestRunRecord(Long id, String publicId, Integer totalTestCount, Integer totalPassingCount, Integer totalSkippedCount, Integer totalFailureCount, Boolean passed, BigDecimal cumulativeDuration, BigDecimal averageDuration, BigDecimal slowestTestCaseDuration, Timestamp createdTimestamp, Boolean hasAttachments) {
         super(TestRun.TEST_RUN);
 
         set(0, id);
@@ -689,6 +689,6 @@ public class TestRunRecord extends UpdatableRecordImpl<TestRunRecord> implements
         set(8, averageDuration);
         set(9, slowestTestCaseDuration);
         set(10, createdTimestamp);
-        set(11, hasAssets);
+        set(11, hasAttachments);
     }
 }

@@ -9,7 +9,7 @@ import projektor.server.api.ResultsProcessingStatus
 import projektor.server.api.TestRunSummary
 import projektor.testrun.TestRunRepository
 
-@kotlinx.coroutines.ObsoleteCoroutinesApi
+@ObsoleteCoroutinesApi
 class TestResultsService(
     private val testResultsProcessor: TestResultsProcessor,
     private val testRunRepository: TestRunRepository,

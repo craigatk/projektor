@@ -28,7 +28,7 @@ import projektor.database.generated.tables.TestRunAttachment;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestRunAttachmentRecord extends UpdatableRecordImpl<TestRunAttachmentRecord> implements Record5<Long, Long, String, String, Long> {
 
-    private static final long serialVersionUID = -2009506944;
+    private static final long serialVersionUID = -514824308;
 
     /**
      * Setter for <code>public.test_run_attachment.id</code>.
@@ -76,17 +76,17 @@ public class TestRunAttachmentRecord extends UpdatableRecordImpl<TestRunAttachme
     }
 
     /**
-     * Setter for <code>public.test_run_attachment.bucket_name</code>.
+     * Setter for <code>public.test_run_attachment.object_name</code>.
      */
-    public TestRunAttachmentRecord setBucketName(String value) {
+    public TestRunAttachmentRecord setObjectName(String value) {
         set(3, value);
         return this;
     }
 
     /**
-     * Getter for <code>public.test_run_attachment.bucket_name</code>.
+     * Getter for <code>public.test_run_attachment.object_name</code>.
      */
-    public String getBucketName() {
+    public String getObjectName() {
         return (String) get(3);
     }
 
@@ -166,7 +166,7 @@ public class TestRunAttachmentRecord extends UpdatableRecordImpl<TestRunAttachme
      */
     @Override
     public Field<String> field4() {
-        return TestRunAttachment.TEST_RUN_ATTACHMENT.BUCKET_NAME;
+        return TestRunAttachment.TEST_RUN_ATTACHMENT.OBJECT_NAME;
     }
 
     /**
@@ -206,7 +206,7 @@ public class TestRunAttachmentRecord extends UpdatableRecordImpl<TestRunAttachme
      */
     @Override
     public String component4() {
-        return getBucketName();
+        return getObjectName();
     }
 
     /**
@@ -246,7 +246,7 @@ public class TestRunAttachmentRecord extends UpdatableRecordImpl<TestRunAttachme
      */
     @Override
     public String value4() {
-        return getBucketName();
+        return getObjectName();
     }
 
     /**
@@ -289,7 +289,7 @@ public class TestRunAttachmentRecord extends UpdatableRecordImpl<TestRunAttachme
      */
     @Override
     public TestRunAttachmentRecord value4(String value) {
-        setBucketName(value);
+        setObjectName(value);
         return this;
     }
 
@@ -329,13 +329,13 @@ public class TestRunAttachmentRecord extends UpdatableRecordImpl<TestRunAttachme
     /**
      * Create a detached, initialised TestRunAttachmentRecord
      */
-    public TestRunAttachmentRecord(Long id, Long testRunId, String fileName, String bucketName, Long fileSize) {
+    public TestRunAttachmentRecord(Long id, Long testRunId, String fileName, String objectName, Long fileSize) {
         super(TestRunAttachment.TEST_RUN_ATTACHMENT);
 
         set(0, id);
         set(1, testRunId);
         set(2, fileName);
-        set(3, bucketName);
+        set(3, objectName);
         set(4, fileSize);
     }
 }

@@ -144,9 +144,9 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     }
 
     /**
-     * Fetch records that have <code>has_assets IN (values)</code>
+     * Fetch records that have <code>has_attachments IN (values)</code>
      */
-    public List<projektor.database.generated.tables.pojos.TestRun> fetchByHasAssets(Boolean... values) {
-        return fetch(TestRun.TEST_RUN.HAS_ASSETS, values);
+    public List<projektor.database.generated.tables.pojos.TestRun> fetchByHasAttachments(Boolean... values) {
+        return fetch(TestRun.TEST_RUN.HAS_ATTACHMENTS, values);
     }
 }

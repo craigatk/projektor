@@ -24,7 +24,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestRun implements Serializable {
 
-    private static final long serialVersionUID = -663408787;
+    private static final long serialVersionUID = 2068817104;
 
     private Long       id;
     private String     publicId;
@@ -37,7 +37,7 @@ public class TestRun implements Serializable {
     private BigDecimal averageDuration;
     private BigDecimal slowestTestCaseDuration;
     private Timestamp  createdTimestamp;
-    private Boolean    hasAssets;
+    private Boolean    hasAttachments;
 
     public TestRun() {}
 
@@ -53,7 +53,7 @@ public class TestRun implements Serializable {
         this.averageDuration = value.averageDuration;
         this.slowestTestCaseDuration = value.slowestTestCaseDuration;
         this.createdTimestamp = value.createdTimestamp;
-        this.hasAssets = value.hasAssets;
+        this.hasAttachments = value.hasAttachments;
     }
 
     public TestRun(
@@ -68,7 +68,7 @@ public class TestRun implements Serializable {
         BigDecimal averageDuration,
         BigDecimal slowestTestCaseDuration,
         Timestamp  createdTimestamp,
-        Boolean    hasAssets
+        Boolean    hasAttachments
     ) {
         this.id = id;
         this.publicId = publicId;
@@ -81,7 +81,7 @@ public class TestRun implements Serializable {
         this.averageDuration = averageDuration;
         this.slowestTestCaseDuration = slowestTestCaseDuration;
         this.createdTimestamp = createdTimestamp;
-        this.hasAssets = hasAssets;
+        this.hasAttachments = hasAttachments;
     }
 
     public Long getId() {
@@ -183,12 +183,12 @@ public class TestRun implements Serializable {
         return this;
     }
 
-    public Boolean getHasAssets() {
-        return this.hasAssets;
+    public Boolean getHasAttachments() {
+        return this.hasAttachments;
     }
 
-    public TestRun setHasAssets(Boolean hasAssets) {
-        this.hasAssets = hasAssets;
+    public TestRun setHasAttachments(Boolean hasAttachments) {
+        this.hasAttachments = hasAttachments;
         return this;
     }
 
@@ -267,11 +267,11 @@ public class TestRun implements Serializable {
         }
         else if (!createdTimestamp.equals(other.createdTimestamp))
             return false;
-        if (hasAssets == null) {
-            if (other.hasAssets != null)
+        if (hasAttachments == null) {
+            if (other.hasAttachments != null)
                 return false;
         }
-        else if (!hasAssets.equals(other.hasAssets))
+        else if (!hasAttachments.equals(other.hasAttachments))
             return false;
         return true;
     }
@@ -291,7 +291,7 @@ public class TestRun implements Serializable {
         result = prime * result + ((this.averageDuration == null) ? 0 : this.averageDuration.hashCode());
         result = prime * result + ((this.slowestTestCaseDuration == null) ? 0 : this.slowestTestCaseDuration.hashCode());
         result = prime * result + ((this.createdTimestamp == null) ? 0 : this.createdTimestamp.hashCode());
-        result = prime * result + ((this.hasAssets == null) ? 0 : this.hasAssets.hashCode());
+        result = prime * result + ((this.hasAttachments == null) ? 0 : this.hasAttachments.hashCode());
         return result;
     }
 
@@ -310,7 +310,7 @@ public class TestRun implements Serializable {
         sb.append(", ").append(averageDuration);
         sb.append(", ").append(slowestTestCaseDuration);
         sb.append(", ").append(createdTimestamp);
-        sb.append(", ").append(hasAssets);
+        sb.append(", ").append(hasAttachments);
 
         sb.append(")");
         return sb.toString();

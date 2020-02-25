@@ -41,7 +41,7 @@ import projektor.database.generated.tables.records.TestRunAttachmentRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestRunAttachment extends TableImpl<TestRunAttachmentRecord> {
 
-    private static final long serialVersionUID = 727929977;
+    private static final long serialVersionUID = -238894226;
 
     /**
      * The reference instance of <code>public.test_run_attachment</code>
@@ -72,9 +72,9 @@ public class TestRunAttachment extends TableImpl<TestRunAttachmentRecord> {
     public final TableField<TestRunAttachmentRecord, String> FILE_NAME = createField("file_name", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>public.test_run_attachment.bucket_name</code>.
+     * The column <code>public.test_run_attachment.object_name</code>.
      */
-    public final TableField<TestRunAttachmentRecord, String> BUCKET_NAME = createField("bucket_name", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<TestRunAttachmentRecord, String> OBJECT_NAME = createField("object_name", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>public.test_run_attachment.file_size</code>.

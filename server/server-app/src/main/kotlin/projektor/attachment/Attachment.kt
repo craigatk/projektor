@@ -1,3 +1,3 @@
 package projektor.attachment
 
-data class Attachment(val name: String, val size: Long?)
+data class Attachment(val fileName: String, val objectName: String, val fileSize: Long?)

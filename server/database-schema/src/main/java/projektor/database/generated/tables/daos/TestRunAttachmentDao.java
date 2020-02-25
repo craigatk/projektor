@@ -79,10 +79,10 @@ public class TestRunAttachmentDao extends DAOImpl<TestRunAttachmentRecord, proje
     }
 
     /**
-     * Fetch records that have <code>bucket_name IN (values)</code>
+     * Fetch records that have <code>object_name IN (values)</code>
      */
-    public List<projektor.database.generated.tables.pojos.TestRunAttachment> fetchByBucketName(String... values) {
-        return fetch(TestRunAttachment.TEST_RUN_ATTACHMENT.BUCKET_NAME, values);
+    public List<projektor.database.generated.tables.pojos.TestRunAttachment> fetchByObjectName(String... values) {
+        return fetch(TestRunAttachment.TEST_RUN_ATTACHMENT.OBJECT_NAME, values);
     }
 
     /**

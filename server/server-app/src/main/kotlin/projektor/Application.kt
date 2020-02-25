@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.ktor.application.Application
 import io.ktor.application.install
+import io.ktor.config.ApplicationConfig
 import io.ktor.features.CORS
 import io.ktor.features.CachingHeaders
 import io.ktor.features.CallLogging
@@ -16,12 +17,14 @@ import io.ktor.http.content.CachingOptions
 import io.ktor.jackson.jackson
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.koin.Logger.SLF4JLogger
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import org.slf4j.event.Level
+import projektor.attachment.AttachmentRepository
+import projektor.attachment.AttachmentService
 import projektor.attachment.AttachmentStoreConfig
-import projektor.attachment.AttachmentStoreService
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
 import projektor.database.DataSourceConfig
@@ -33,6 +36,7 @@ import projektor.testcase.TestCaseService
 import projektor.testrun.TestRunService
 import projektor.testsuite.TestSuiteService
 
+@ObsoleteCoroutinesApi
 @KtorExperimentalAPI
 fun Application.main() {
     val applicationConfig = environment.config
@@ -43,8 +47,6 @@ fun Application.main() {
     val dataSource = DataSourceConfig.createDataSource(dataSourceConfig)
     DataSourceConfig.flywayMigrate(dataSource, dataSourceConfig)
     val dslContext = DataSourceConfig.createDSLContext(dataSource, dataSourceConfig)
-
-    val attachmentService = if (AttachmentStoreConfig.attachmentStoreEnabled(applicationConfig)) AttachmentStoreService(AttachmentStoreConfig.createAttachmentStoreConfig(applicationConfig)) else null
 
     val appModule = createAppModule(dataSource, authConfig, dslContext)
 
@@ -85,6 +87,9 @@ fun Application.main() {
     val testCaseService: TestCaseService by inject()
     val testSuiteService: TestSuiteService by inject()
 
+    val attachmentRepository: AttachmentRepository by inject()
+    val attachmentService = conditionallyCreateAttachmentService(applicationConfig, attachmentRepository)
+
     routing {
         attachments(attachmentService, authService)
         health()
@@ -95,3 +100,10 @@ fun Application.main() {
         ui()
     }
 }
+
+@KtorExperimentalAPI
+private fun conditionallyCreateAttachmentService(applicationConfig: ApplicationConfig, attachmentRepository: AttachmentRepository): AttachmentService? =
+    if (AttachmentStoreConfig.attachmentStoreEnabled(applicationConfig))
+        AttachmentService(AttachmentStoreConfig.createAttachmentStoreConfig(applicationConfig), attachmentRepository)
+    else
+        null

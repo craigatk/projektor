@@ -22,12 +22,12 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestRunAttachment implements Serializable {
 
-    private static final long serialVersionUID = -1972256105;
+    private static final long serialVersionUID = 2122305706;
 
     private Long   id;
     private Long   testRunId;
     private String fileName;
-    private String bucketName;
+    private String objectName;
     private Long   fileSize;
 
     public TestRunAttachment() {}
@@ -36,7 +36,7 @@ public class TestRunAttachment implements Serializable {
         this.id = value.id;
         this.testRunId = value.testRunId;
         this.fileName = value.fileName;
-        this.bucketName = value.bucketName;
+        this.objectName = value.objectName;
         this.fileSize = value.fileSize;
     }
 
@@ -44,13 +44,13 @@ public class TestRunAttachment implements Serializable {
         Long   id,
         Long   testRunId,
         String fileName,
-        String bucketName,
+        String objectName,
         Long   fileSize
     ) {
         this.id = id;
         this.testRunId = testRunId;
         this.fileName = fileName;
-        this.bucketName = bucketName;
+        this.objectName = objectName;
         this.fileSize = fileSize;
     }
 
@@ -81,12 +81,12 @@ public class TestRunAttachment implements Serializable {
         return this;
     }
 
-    public String getBucketName() {
-        return this.bucketName;
+    public String getObjectName() {
+        return this.objectName;
     }
 
-    public TestRunAttachment setBucketName(String bucketName) {
-        this.bucketName = bucketName;
+    public TestRunAttachment setObjectName(String objectName) {
+        this.objectName = objectName;
         return this;
     }
 
@@ -126,11 +126,11 @@ public class TestRunAttachment implements Serializable {
         }
         else if (!fileName.equals(other.fileName))
             return false;
-        if (bucketName == null) {
-            if (other.bucketName != null)
+        if (objectName == null) {
+            if (other.objectName != null)
                 return false;
         }
-        else if (!bucketName.equals(other.bucketName))
+        else if (!objectName.equals(other.objectName))
             return false;
         if (fileSize == null) {
             if (other.fileSize != null)
@@ -148,7 +148,7 @@ public class TestRunAttachment implements Serializable {
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.testRunId == null) ? 0 : this.testRunId.hashCode());
         result = prime * result + ((this.fileName == null) ? 0 : this.fileName.hashCode());
-        result = prime * result + ((this.bucketName == null) ? 0 : this.bucketName.hashCode());
+        result = prime * result + ((this.objectName == null) ? 0 : this.objectName.hashCode());
         result = prime * result + ((this.fileSize == null) ? 0 : this.fileSize.hashCode());
         return result;
     }
@@ -160,7 +160,7 @@ public class TestRunAttachment implements Serializable {
         sb.append(id);
         sb.append(", ").append(testRunId);
         sb.append(", ").append(fileName);
-        sb.append(", ").append(bucketName);
+        sb.append(", ").append(objectName);
         sb.append(", ").append(fileSize);
 
         sb.append(")");

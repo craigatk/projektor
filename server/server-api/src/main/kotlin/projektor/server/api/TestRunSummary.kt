@@ -13,5 +13,6 @@ data class TestRunSummary(
     val cumulativeDuration: BigDecimal,
     val averageDuration: BigDecimal,
     val slowestTestCaseDuration: BigDecimal,
-    val createdTimestamp: LocalDateTime?
+    val createdTimestamp: LocalDateTime?,
+    val hasAttachments: Boolean
 )

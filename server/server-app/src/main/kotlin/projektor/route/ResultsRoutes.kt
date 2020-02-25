@@ -33,7 +33,7 @@ fun Route.results(
         } else if (resultsBlob.isNotBlank()) {
             val publicId = testResultsService.persistTestResultsAsync(resultsBlob)
 
-            call.respond(HttpStatusCode.OK, SaveResultsResponse(publicId.id, "/tests/${publicId.id}", null))
+            call.respond(HttpStatusCode.OK, SaveResultsResponse(publicId.id, "/tests/${publicId.id}"))
         } else {
             call.respond(HttpStatusCode.BadRequest)
         }
@@ -46,7 +46,7 @@ fun Route.results(
         } else if (groupedResultsBlob.isNotBlank()) {
             val publicId = groupedTestResultsService.persistTestResultsAsync(groupedResultsBlob)
 
-            call.respond(HttpStatusCode.OK, SaveResultsResponse(publicId.id, "/tests/${publicId.id}", null))
+            call.respond(HttpStatusCode.OK, SaveResultsResponse(publicId.id, "/tests/${publicId.id}"))
         } else {
             call.respond(HttpStatusCode.BadRequest)
         }
