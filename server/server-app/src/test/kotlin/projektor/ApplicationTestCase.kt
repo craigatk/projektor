@@ -45,7 +45,7 @@ open class ApplicationTestCase {
     protected var publishToken: String? = null
 
     protected var assetStoreEnabled: Boolean? = null
-    protected val attachmentStoreConfig = AttachmentStoreConfig(
+    private val attachmentStoreConfig = AttachmentStoreConfig(
             "http://localhost:9000",
             "addassettestbucket",
             true,

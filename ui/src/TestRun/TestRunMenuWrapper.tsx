@@ -12,6 +12,7 @@ import { TestRunSummary } from "../model/TestRunModel";
 import TestRunSideMenu from "./TestRunSideMenu";
 import SlowTestCasesPage from "../TestCase/slow/SlowTestCasesPage";
 import { AppBar, Typography } from "@material-ui/core";
+import AttachmentsPage from "../Attachments/AttachmentsPage";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -76,6 +77,7 @@ const TestRunMenuWrapper = ({
               testSuiteIdx={0}
               testCaseIdx={0}
             />
+            <AttachmentsPage path="/attachments" publicId={publicId} />
           </Router>
         </QueryParamProvider>
       </main>

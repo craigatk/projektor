@@ -1,7 +1,17 @@
+interface Attachment {
+  fileName: string;
+  objectName: string;
+  fileSize?: number;
+}
+
+interface Attachments {
+  attachments: Attachment[];
+}
+
 interface TestFailure {
-  failureMessage: String;
-  failureType: String;
-  failureText: String;
+  failureMessage: string;
+  failureType: string;
+  failureText: string;
 }
 
 interface TestCase {
@@ -49,10 +59,11 @@ interface TestRunSummary {
   cumulativeDuration: number;
   averageDuration: number;
   slowestTestCaseDuration: number;
+  hasAttachments: boolean;
 }
 
 interface TestRun extends TestRunSummary {
-  id: String;
+  id: string;
   testSuites: TestSuite[];
 }
 
@@ -70,6 +81,8 @@ interface TestResultsProcessing {
 }
 
 export {
+  Attachment,
+  Attachments,
   TestRunSummary,
   TestRun,
   TestSuite,

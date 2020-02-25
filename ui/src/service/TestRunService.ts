@@ -7,7 +7,8 @@ import {
   TestSuite,
   TestSuiteOutput,
   TestRunSummary,
-  TestResultsProcessing
+  TestResultsProcessing,
+  Attachments
 } from "../model/TestRunModel";
 import TestSuiteOutputType from "./TestSuiteOutputType";
 
@@ -104,7 +105,14 @@ const fetchTestResultsProcessing = (
     `/results/${publicId}/status`
   );
 
+const fetchAttachments = (
+  publicId: string
+): Promise<AxiosResponse<Attachments>> =>
+  // @ts-ignore
+  axiosInstance.get<Attachments>(`/run/${publicId}/attachments`);
+
 export {
+  fetchAttachments,
   fetchTestRun,
   fetchTestRunSummary,
   fetchFailedTestCases,

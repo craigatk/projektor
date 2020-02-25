@@ -14,6 +14,7 @@ import DashboardIcon from "../Icons/DashboardIcon";
 import FailedIcon from "../Icons/FailedIcon";
 import TotalIcon from "../Icons/TotalIcon";
 import SlowIcon from "../Icons/SlowIcon";
+import AttachmentIcon from "../Icons/AttachmentIcon";
 
 interface TestRunSideMenuProps {
   publicId: string;
@@ -109,6 +110,22 @@ const TestRunSideMenu = ({
             <ListItemText primary="Slow tests" data-testid="nav-link-slow" />
           </ListItem>
         </Link>
+        {testRunSummary.hasAttachments ? (
+          <Link
+            to={`/tests/${publicId}/attachments`}
+            className={classes.sideNavLink}
+          >
+            <ListItem button>
+              <ListItemIcon className={classes.sideNavIcon}>
+                <AttachmentIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="Attachments"
+                data-testid="nav-link-attachments"
+              />
+            </ListItem>
+          </Link>
+        ) : null}
       </List>
     </Drawer>
   );
