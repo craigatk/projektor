@@ -16,7 +16,17 @@ const AttachmentsList = ({ attachments }: AttachmentsListProps) => {
           sorting: true,
           paging: false
         }}
-        columns={[{ title: "File name", field: "fileName" }]}
+        columns={[
+          {
+            title: "File name",
+            field: "fileName",
+            render: rowData => (
+              <span data-testid={`attachment-file-name-${rowData.fileName}`}>
+                {rowData.fileName}
+              </span>
+            )
+          }
+        ]}
         data={attachments.attachments.map(attachment => ({
           fileName: attachment.fileName
         }))}
