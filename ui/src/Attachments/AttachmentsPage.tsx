@@ -32,7 +32,9 @@ const AttachmentsPage = ({ publicId }: AttachmentsPageProps) => {
 
       <LoadingSection
         loadingState={loadingState}
-        successComponent={<AttachmentsList attachments={attachments} />}
+        successComponent={
+          <AttachmentsList publicId={publicId} attachments={attachments} />
+        }
       />
     </div>
   );

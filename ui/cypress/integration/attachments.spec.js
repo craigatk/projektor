@@ -34,5 +34,8 @@ context("test run with attachments", () => {
       "contain",
       "test-run-summary.png"
     );
+
+    cy.getByTestId("attachment-file-name-test-attachment.txt").click();
+    cy.url().should("contain", "/attachments/test-attachment.txt");
   });
 });
