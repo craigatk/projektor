@@ -7,6 +7,9 @@ context("test suites in package E2E", () => {
       "/suites/package/projektor.example.spock"
     );
 
-    cy.getByTestId("test-suite-class-name-1").should("contain", "projektor.example.spock.FailingSpec");
+    cy.getByTestId("test-suite-class-name-1").should(
+      "contain",
+      "projektor.example.spock.FailingSpec"
+    );
   });
 });

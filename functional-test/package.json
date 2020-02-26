@@ -6,11 +6,13 @@
   "scripts": {
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "format": "prettier --write cypress/integration/*.js"
+    "format": "prettier --write cypress/integration/*.js",
+    "clean-results": "rimraf test-results/*.xml"
   },
   "devDependencies": {
     "chai-colors": "1.0.1",
     "cypress": "3.8.2",
-    "prettier": "1.18.2"
+    "prettier": "1.18.2",
+    "rimraf": "3.0.2"
   }
 }

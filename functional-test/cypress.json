@@ -1,4 +1,10 @@
 {
   "defaultCommandTimeout": 5000,
-  "videoUploadOnPasses": false
+  "videoUploadOnPasses": false,
+  "reporter": "junit",
+  "reporterOptions": {
+    "mochaFile": "test-results/cypress-[hash].xml",
+    "outputs": "true"
+  },
+  "chromeWebSecurity": false
 }
