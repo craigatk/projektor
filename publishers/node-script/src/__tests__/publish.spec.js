@@ -28,7 +28,7 @@ describe("Projektor publisher", () => {
 
     const resultsBlob = collectResults([fileGlob]);
 
-    sendResults(resultsBlob, serverUrl).then(respData => {
+    sendResults(serverUrl, null, resultsBlob).then(respData => {
       expect(respData.id).toBe("ABC123");
       expect(respData.uri).toBe("/tests/ABC123");
 

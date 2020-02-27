@@ -6,6 +6,13 @@ const fetchTestRunSummary = (testRunId, serverPort) => {
   return axios.get(url);
 };
 
+const fetchAttachment = (attachmentName, testRunId, serverPort) => {
+  const url = `http://localhost:${serverPort}/run/${testRunId}/attachments/${attachmentName}`;
+
+  return axios.get(url);
+};
+
 module.exports = {
-  fetchTestRunSummary
+  fetchTestRunSummary,
+  fetchAttachment
 };

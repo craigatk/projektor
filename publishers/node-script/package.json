@@ -39,10 +39,10 @@
       "/node_modules/",
       "/publish-functional-test/",
       "/test-projects/"
-    ],
-    "includeConsoleOutput": "true"
+    ]
   },
   "jest-junit": {
-    "outputDirectory": "testResults"
+    "outputDirectory": "testResults",
+    "includeConsoleOutput": "true"
   }
 }

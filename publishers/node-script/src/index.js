@@ -5,6 +5,7 @@ function run(args, publishToken, defaultConfigFilePath) {
 
   let serverUrl;
   let resultsFileGlobs;
+  let attachmentFileGlobs;
 
   const configFilePath = argv.configFile || defaultConfigFilePath;
 
@@ -14,12 +15,13 @@ function run(args, publishToken, defaultConfigFilePath) {
 
     serverUrl = config.serverUrl;
     resultsFileGlobs = config.resultsFileGlobs;
+    attachmentFileGlobs = config.attachments;
   } else {
     serverUrl = argv.serverUrl;
     resultsFileGlobs = argv._;
   }
 
-  collectAndSendResults(serverUrl, publishToken, resultsFileGlobs);
+  collectAndSendResults(serverUrl, publishToken, resultsFileGlobs, attachmentFileGlobs);
 }
 
 module.exports = {
