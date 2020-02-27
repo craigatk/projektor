@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import projektor.objectstore.ObjectStoreClient
 import projektor.objectstore.ObjectStoreConfig
+import projektor.server.api.Attachment
 import projektor.server.api.PublicId
 
 @KtorExperimentalAPI

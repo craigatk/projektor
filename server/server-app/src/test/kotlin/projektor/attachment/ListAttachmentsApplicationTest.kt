@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
+import projektor.server.api.Attachments
 import projektor.server.api.TestRun
 import strikt.api.expectThat
 import strikt.assertions.hasSize
@@ -52,7 +53,7 @@ class ListAttachmentsApplicationTest : ApplicationTestCase() {
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
-                val attachmentsResponse = objectMapper.readValue(response.content, GetAttachmentsResponse::class.java)
+                val attachmentsResponse = objectMapper.readValue(response.content, Attachments::class.java)
                 assertNotNull(attachmentsResponse)
 
                 expectThat(attachmentsResponse.attachments).hasSize(2)

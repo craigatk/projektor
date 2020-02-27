@@ -12,10 +12,10 @@ import io.ktor.routing.post
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.getOrFail
 import projektor.attachment.AttachmentService
-import projektor.attachment.CreateAttachmentResponse
-import projektor.attachment.GetAttachmentsResponse
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
+import projektor.server.api.Attachments
+import projektor.server.api.CreateAttachmentResponse
 import projektor.server.api.PublicId
 
 @KtorExperimentalAPI
@@ -64,7 +64,7 @@ fun Route.attachments(
         if (attachmentService != null) {
             val attachments = attachmentService.listAttachments(PublicId(publicId))
 
-            call.respond(HttpStatusCode.OK, GetAttachmentsResponse(attachments))
+            call.respond(HttpStatusCode.OK, Attachments(attachments))
         } else {
             call.respond(HttpStatusCode.BadRequest)
         }

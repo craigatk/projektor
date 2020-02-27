@@ -1,5 +1,6 @@
 package projektor.attachment
 
+import projektor.server.api.Attachment
 import projektor.server.api.PublicId
 
 interface AttachmentRepository {

@@ -6,6 +6,7 @@ import org.jooq.DSLContext
 import org.slf4j.LoggerFactory
 import projektor.database.generated.Tables
 import projektor.database.generated.tables.daos.TestRunAttachmentDao
+import projektor.server.api.Attachment
 import projektor.server.api.PublicId
 
 class AttachmentDatabaseRepository(private val dslContext: DSLContext) : AttachmentRepository {
