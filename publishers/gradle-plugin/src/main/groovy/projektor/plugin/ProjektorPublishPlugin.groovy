@@ -54,6 +54,7 @@ class ProjektorPublishPlugin implements Plugin<Project> {
                 extension.autoPublishOnFailureOnly,
                 project.projectDir,
                 extension.additionalResultsDirs,
+                extension.attachments,
                 projektorTaskFinishedListener
         )
         project.gradle.addBuildListener(projektorBuildFinishedListener)
@@ -67,6 +68,7 @@ class ProjektorPublishPlugin implements Plugin<Project> {
                         task.serverUrl = extension.serverUrl
                         task.publishToken = extension.publishToken
                         task.additionalResultsDirs = extension.additionalResultsDirs
+                        task.attachments = extension.attachments
                     })
                 }
             }

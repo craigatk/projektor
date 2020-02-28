@@ -1,10 +1,14 @@
 package projektor.plugin
 
 import okhttp3.OkHttpClient
+import org.gradle.api.file.FileTree
 import org.gradle.api.internal.AbstractTask
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
+import projektor.plugin.attachments.AttachmentsClient
+import projektor.plugin.attachments.AttachmentsPublisher
 import projektor.plugin.results.ResultsClient
 import projektor.plugin.client.ClientConfig
 import projektor.plugin.results.ResultsLogger
@@ -23,6 +27,10 @@ class ProjektorManualPublishTask extends AbstractTask {
     @Optional
     List<String> additionalResultsDirs = []
 
+    @InputFiles
+    @Optional
+    List<FileTree> attachments = []
+
     @TaskAction
     void publish() {
         File projectDir = project.projectDir
@@ -34,16 +42,23 @@ class ProjektorManualPublishTask extends AbstractTask {
         )
 
         if (projectTestTaskResultsCollector.hasTestGroups()) {
+            OkHttpClient okHttpClient = new OkHttpClient()
+            ClientConfig clientConfig = new ClientConfig(serverUrl, java.util.Optional.ofNullable(publishToken))
             GroupedResults groupedResults = projectTestTaskResultsCollector.createGroupedResults()
 
             ResultsClient resultsClient = new ResultsClient(
-                    new OkHttpClient(),
-                    new ClientConfig(serverUrl, java.util.Optional.ofNullable(publishToken)),
+                    okHttpClient,
+                    clientConfig,
                     logger
             )
             PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
 
             new ResultsLogger(logger).logReportResults(publishResult)
+
+            if (attachments) {
+                AttachmentsClient attachmentsClient = new AttachmentsClient(okHttpClient, clientConfig, logger)
+                new AttachmentsPublisher(attachmentsClient, logger).publishAttachments(publishResult.publicId, attachments)
+            }
         } else {
             logger.info("No test tasks found in project ${project.name}")
         }

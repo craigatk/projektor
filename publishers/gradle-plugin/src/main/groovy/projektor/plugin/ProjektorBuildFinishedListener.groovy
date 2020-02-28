@@ -3,9 +3,12 @@ package projektor.plugin
 import okhttp3.OkHttpClient
 import org.gradle.BuildListener
 import org.gradle.BuildResult
+import org.gradle.api.file.FileTree
 import org.gradle.api.initialization.Settings
 import org.gradle.api.invocation.Gradle
 import org.gradle.api.logging.Logger
+import projektor.plugin.attachments.AttachmentsClient
+import projektor.plugin.attachments.AttachmentsPublisher
 import projektor.plugin.results.ResultsClient
 import projektor.plugin.client.ClientConfig
 import projektor.plugin.results.ResultsLogger
@@ -18,6 +21,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
     private final boolean publishOnFailureOnly
     private final File projectDir
     private final List<String> additionalResultsDirs
+    private final List<FileTree> attachments
     private final ProjektorTaskFinishedListener projektorTaskFinishedListener
     private final OkHttpClient okHttpClient = new OkHttpClient()
 
@@ -27,6 +31,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
             boolean publishOnFailureOnly,
             File projectDir,
             List<String> additionalResultsDirs,
+            List<FileTree> attachments,
             ProjektorTaskFinishedListener projektorTaskFinishedListener
     ) {
         this.clientConfig = clientConfig
@@ -34,6 +39,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
         this.publishOnFailureOnly = publishOnFailureOnly
         this.projectDir = projectDir
         this.additionalResultsDirs = additionalResultsDirs
+        this.attachments = attachments
         this.projektorTaskFinishedListener = projektorTaskFinishedListener
     }
 
@@ -64,6 +70,11 @@ class ProjektorBuildFinishedListener implements BuildListener {
             PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
 
             new ResultsLogger(logger).logReportResults(publishResult)
+
+            if (attachments) {
+                AttachmentsClient attachmentsClient = new AttachmentsClient(okHttpClient, clientConfig, logger)
+                new AttachmentsPublisher(attachmentsClient, logger).publishAttachments(publishResult.publicId, attachments)
+            }
         } else {
             logger.info("Projektor plugin applied but no test results found in this build")
         }
