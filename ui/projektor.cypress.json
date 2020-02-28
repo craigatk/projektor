@@ -1,6 +1,9 @@
 {
   "serverUrl": "https://projektorlive.herokuapp.com",
-  "resultsFileGlobs": [
+  "results": [
     "test-results/*.xml"
+  ],
+  "attachments": [
+    "cypress/screenshots/**/*.png"
   ]
 }
