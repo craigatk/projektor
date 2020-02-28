@@ -1,6 +1,6 @@
 {
   "serverUrl": "https://projektorlive.herokuapp.com",
-  "results": [
+  "resultsFileGlobs": [
     "test-results/*.xml"
   ]
 }
