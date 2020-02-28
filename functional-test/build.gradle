@@ -13,6 +13,7 @@ task projektorPublish(type: projektor.plugin.ProjektorManualPublishTask) {
     serverUrl = "https://projektorlive.herokuapp.com"
     publishToken = System.getenv("PROJEKTOR_TOKEN") ?: project.findProperty('projektor_publish_token') ?: null
     additionalResultsDirs = ["test-results"]
+    attachments = [fileTree(dir: 'cypress/screenshots', include: '**/*')]
 }
 
 task cleanResults(type: YarnTask) {
