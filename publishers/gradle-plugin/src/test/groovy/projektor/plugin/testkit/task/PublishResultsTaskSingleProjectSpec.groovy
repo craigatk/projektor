@@ -21,7 +21,7 @@ class PublishResultsTaskSingleProjectSpec extends SingleProjectSpec {
         specWriter.writeSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def testResult = GradleRunner.create()
@@ -34,7 +34,7 @@ class PublishResultsTaskSingleProjectSpec extends SingleProjectSpec {
         testResult.task(":test").outcome == SUCCESS
 
         and:
-        wireMockStubber.findResultsRequests().size() == 0
+        resultsStubber.findResultsRequests().size() == 0
 
         when:
         def publishResults = GradleRunner.create()
@@ -50,7 +50,7 @@ class PublishResultsTaskSingleProjectSpec extends SingleProjectSpec {
         publishResults.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
         and:

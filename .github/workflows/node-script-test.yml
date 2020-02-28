@@ -21,12 +21,6 @@ jobs:
           yarn test
           yarn projektor-publish
 
-      - name: node-script CLI project test
-        run: |
-          cd publishers/node-script/test-projects/node-script-cli
-          yarn install
-          yarn test
-
   node-script-functional-test:
     runs-on: ubuntu-18.04
     services:

@@ -3,7 +3,7 @@ package projektor.plugin.testkit
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
-import projektor.plugin.WireMockStubber
+import projektor.plugin.ResultsWireMockStubber
 import projektor.plugin.testkit.util.SpecWriter
 import spock.lang.Specification
 
@@ -16,13 +16,13 @@ abstract class ProjectSpec extends Specification {
     @Rule
     WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort().dynamicHttpsPort())
 
-    WireMockStubber wireMockStubber = new WireMockStubber(wireMockRule)
+    ResultsWireMockStubber resultsStubber = new ResultsWireMockStubber(wireMockRule)
 
     SpecWriter specWriter = new SpecWriter()
 
     String serverUrl
 
     def setup() {
-        serverUrl = wireMockStubber.serverUrl
+        serverUrl = resultsStubber.serverUrl
     }
 }

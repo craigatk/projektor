@@ -31,8 +31,6 @@ fun Route.attachments(
         if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
             call.respond(HttpStatusCode.Unauthorized)
         } else if (attachmentService != null) {
-            attachmentService.conditionallyCreateBucketIfNotExists()
-
             attachmentService.addAttachment(PublicId(publicId), attachmentName, attachmentStream)
 
             call.respond(HttpStatusCode.OK, CreateAttachmentResponse(true, true, attachmentName))

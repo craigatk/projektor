@@ -89,6 +89,7 @@ fun Application.main() {
 
     val attachmentRepository: AttachmentRepository by inject()
     val attachmentService = conditionallyCreateAttachmentService(applicationConfig, attachmentRepository)
+    attachmentService?.conditionallyCreateBucketIfNotExists()
 
     routing {
         attachments(attachmentService, authService)

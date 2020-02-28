@@ -37,8 +37,7 @@
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/publish-functional-test/",
-      "/test-projects/"
+      "/publish-functional-test/"
     ]
   },
   "jest-junit": {

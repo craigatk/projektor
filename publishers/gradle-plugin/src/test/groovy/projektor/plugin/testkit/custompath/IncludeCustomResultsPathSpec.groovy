@@ -28,7 +28,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         """.stripIndent()
 
         String resultsId = "JKS192"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def result = GradleRunner.create()
@@ -43,7 +43,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         result.output.contains("View Projektor report at")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
         String resultsBody = resultsRequests[0].bodyAsString
@@ -62,7 +62,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         """.stripIndent()
 
         String resultsId = "IOJ901"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         File testDirectory = specWriter.createTestDirectory(projectRootDir)
         specWriter.writeFailingSpecFile(testDirectory, "SampleFailingSpec")
@@ -78,7 +78,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         result.output.contains("View Projektor report at")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
         String resultsBody = resultsRequests[0].bodyAsString
@@ -101,7 +101,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         """.stripIndent()
 
         String resultsId = "IOJ901"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         File testDirectory = specWriter.createTestDirectory(projectRootDir)
         specWriter.writeSpecFile(testDirectory, "SampleSpec")
@@ -117,7 +117,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         result.output.contains("View Projektor report at")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
         String resultsBody = resultsRequests[0].bodyAsString
@@ -139,7 +139,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         """.stripIndent()
 
         String resultsId = "JKS192"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def result = GradleRunner.create()
@@ -152,7 +152,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         result.output.contains("View Projektor report at")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
         String resultsBody = resultsRequests[0].bodyAsString

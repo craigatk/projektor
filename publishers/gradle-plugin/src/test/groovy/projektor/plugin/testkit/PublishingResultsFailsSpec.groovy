@@ -16,7 +16,7 @@ class PublishingResultsFailsSpec extends SingleProjectSpec {
         File testDirectory = specWriter.createTestDirectory(projectRootDir)
         specWriter.writeSpecFile(testDirectory, "SampleSpec")
 
-        wireMockStubber.stubResultsNetworkingError()
+        resultsStubber.stubResultsNetworkingError()
 
         when:
         def result = GradleRunner.create()
@@ -42,7 +42,7 @@ class PublishingResultsFailsSpec extends SingleProjectSpec {
         File testDirectory = specWriter.createTestDirectory(projectRootDir)
         specWriter.writeSpecFile(testDirectory, "SampleSpec")
 
-        wireMockStubber.stubResultsPostFailure(400)
+        resultsStubber.stubResultsPostFailure(400)
 
         when:
         def result = GradleRunner.create()

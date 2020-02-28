@@ -3,10 +3,10 @@ package projektor.plugin.testkit.task
 import com.github.tomakehurst.wiremock.http.HttpHeader
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
+import projektor.plugin.client.ClientToken
 import projektor.plugin.testkit.SingleProjectSpec
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import static projektor.plugin.results.ProjektorResultsClient.getPUBLISH_TOKEN_NAME
 
 class PublishResultsTaskTokenSpec extends SingleProjectSpec {
 
@@ -24,7 +24,7 @@ class PublishResultsTaskTokenSpec extends SingleProjectSpec {
         specWriter.writeSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def testResult = GradleRunner.create()
@@ -37,7 +37,7 @@ class PublishResultsTaskTokenSpec extends SingleProjectSpec {
         testResult.task(":test").outcome == SUCCESS
 
         and:
-        wireMockStubber.findResultsRequests().size() == 0
+        resultsStubber.findResultsRequests().size() == 0
 
         when:
         def publishResults = GradleRunner.create()
@@ -53,10 +53,10 @@ class PublishResultsTaskTokenSpec extends SingleProjectSpec {
         publishResults.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
-        HttpHeader publishTokenInHeader = resultsRequests[0].header(PUBLISH_TOKEN_NAME)
+        HttpHeader publishTokenInHeader = resultsRequests[0].header(ClientToken.PUBLISH_TOKEN_NAME)
         publishTokenInHeader.firstValue() == "token12345"
     }
 

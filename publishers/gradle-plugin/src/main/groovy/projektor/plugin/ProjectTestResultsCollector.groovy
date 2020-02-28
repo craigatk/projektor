@@ -24,7 +24,7 @@ class ProjectTestResultsCollector {
             List<String> additionalResultsDirs,
             Logger logger
     ) {
-        Collection<Test> allTestTasks = allTasks.findAll { it instanceof Test }
+        Collection<Test> allTestTasks = allTasks.findAll { it instanceof Test } as Collection<Test>
         Collection<TestTaskGroup> testGroups = allTestTasks.collect { TestTaskGroup.fromTask(it) }
         Collection<TestDirectoryGroup> additionalTestGroups = TestDirectoryGroup.listFromDirPaths(
                 projectDir,

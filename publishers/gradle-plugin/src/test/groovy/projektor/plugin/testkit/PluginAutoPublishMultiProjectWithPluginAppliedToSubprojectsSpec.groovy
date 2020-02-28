@@ -21,7 +21,7 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
     def "should send results from multiple subprojects in one blob to server"() {
         given:
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def result = GradleRunner.create()
@@ -38,7 +38,7 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
         result.task(":project3:test").outcome == SUCCESS
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
         and:
@@ -65,7 +65,7 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
         """.stripIndent()
 
         String resultsId = "FEE999"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def result = GradleRunner.create()
@@ -82,7 +82,7 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
         result.task(":project3:test").outcome == SUCCESS
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
         and:
@@ -99,7 +99,7 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
     def "should send results when executing just one subproject build"() {
         given:
         String resultsId = "DEF345"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def result = GradleRunner.create()
@@ -116,7 +116,7 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
         !result.task(":project3:test")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
         and:

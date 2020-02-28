@@ -5,5 +5,5 @@ repositories {
 }
 
 dependencies {
-    implementation 'io.minio:minio:6.0.13'
+    api 'io.minio:minio:6.0.13'
 }

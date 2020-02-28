@@ -1,10 +1,10 @@
-package projektor.plugin.results
+package projektor.plugin.client
 
-class ResultsClientConfig {
+class ClientConfig {
     final String serverUrl
     final Optional<String> maybePublishToken
 
-    ResultsClientConfig(String serverUrl, Optional<String> maybePublishToken) {
+    ClientConfig(String serverUrl, Optional<String> maybePublishToken) {
         this.serverUrl = serverUrl
         this.maybePublishToken = maybePublishToken
     }

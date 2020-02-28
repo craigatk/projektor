@@ -29,7 +29,7 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         """.stripIndent()
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def testResult = GradleRunner.create()
@@ -44,7 +44,7 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         testResult.task(":project3:test").outcome == SUCCESS
 
         and:
-        wireMockStubber.findResultsRequests().size() == 0
+        resultsStubber.findResultsRequests().size() == 0
 
         when:
         def publishResults = GradleRunner.create()
@@ -62,7 +62,7 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         publishResults.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 3
 
         and:
@@ -86,7 +86,7 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         """.stripIndent()
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def testResult = GradleRunner.create()
@@ -101,7 +101,7 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         testResult.task(":project3:test").outcome == SUCCESS
 
         and:
-        wireMockStubber.findResultsRequests().size() == 0
+        resultsStubber.findResultsRequests().size() == 0
 
         when:
         def publishResults = GradleRunner.create()
@@ -117,7 +117,7 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         publishResults.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
         and:

@@ -4,6 +4,7 @@ const {
   fetchTestRunSummary,
   fetchAttachment
 } = require("../util/projektor_client");
+const { verifyOutput } = require("../verify/cli_output_verify");
 
 describe("Publishing from config file with token", () => {
   const serverPort = "8083";
@@ -12,17 +13,7 @@ describe("Publishing from config file with token", () => {
     exec(
       `env-cmd -f .token-env yarn projektor-publish --configFile=src/__tests__/with-token/projektor.json`,
       async (error, stdout, stderr) => {
-        if (error) {
-          console.log(`error: ${error.message}`);
-        }
-        if (stderr) {
-          console.log(`stderr: ${stderr}`);
-        }
-        console.log(`stdout: ${stdout}`);
-
-        expect(stdout).toContain(
-          `View Projektor results at http://localhost:${serverPort}/tests/`
-        );
+        verifyOutput(error, stdout, stderr, serverPort);
 
         const testRunId = extractTestRunId(stdout);
         console.log("Test ID", testRunId);

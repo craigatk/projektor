@@ -3,18 +3,19 @@ package projektor.objectstore
 import io.minio.MinioClient
 import io.minio.errors.ErrorResponseException
 import java.io.InputStream
+import projektor.objectstore.bucket.BucketCreationException
 
 class ObjectStoreClient(private val config: ObjectStoreConfig) {
     private val minioClient = MinioClient(config.url, config.accessKey, config.secretKey)
 
     fun createBucketIfNotExists(bucketName: String) {
         if (!bucketExists(bucketName)) {
-            minioClient.makeBucket(bucketName)
+            try {
+                minioClient.makeBucket(bucketName)
+            } catch (e: ErrorResponseException) {
+                throw BucketCreationException("Error creating bucket", e)
+            }
         }
-    }
-
-    fun deleteBucket(bucketName: String) {
-        minioClient.deleteBucketLifeCycle(bucketName)
     }
 
     fun bucketExists(bucketName: String) = minioClient.bucketExists(bucketName)

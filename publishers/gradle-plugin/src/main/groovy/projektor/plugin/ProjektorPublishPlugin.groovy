@@ -3,7 +3,7 @@ package projektor.plugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.logging.Logger
-import projektor.plugin.results.ResultsClientConfig
+import projektor.plugin.client.ClientConfig
 
 class ProjektorPublishPlugin implements Plugin<Project> {
     private static final String LISTENER_APPLIED_PROPERTY_NAME = "projektorListenerApplied"
@@ -49,7 +49,7 @@ class ProjektorPublishPlugin implements Plugin<Project> {
         project.gradle.taskGraph.addTaskExecutionListener(projektorTaskFinishedListener)
 
         ProjektorBuildFinishedListener projektorBuildFinishedListener = new ProjektorBuildFinishedListener(
-                new ResultsClientConfig(extension.serverUrl, Optional.ofNullable(extension.publishToken)),
+                new ClientConfig(extension.serverUrl, Optional.ofNullable(extension.publishToken)),
                 logger,
                 extension.autoPublishOnFailureOnly,
                 project.projectDir,

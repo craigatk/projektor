@@ -1,6 +1,6 @@
 {
   "serverUrl": "http://localhost:8080",
-  "resultsFileGlobs": [
+  "results": [
     "src/__tests__/resultsDir1/*.xml"
   ]
 }

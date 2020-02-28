@@ -43,7 +43,7 @@ class KotlinDslSpec extends ProjectSpec {
         specWriter.writeSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def result = GradleRunner.create()
@@ -60,7 +60,7 @@ class KotlinDslSpec extends ProjectSpec {
         result.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
     }
 }

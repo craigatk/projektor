@@ -27,7 +27,7 @@ class PluginAutoPublishMultiProjectSpec extends MultiProjectSpec {
         """.stripIndent()
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def result = GradleRunner.create()
@@ -42,7 +42,7 @@ class PluginAutoPublishMultiProjectSpec extends MultiProjectSpec {
         result.task(":project3:test").outcome == SUCCESS
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
         and:
@@ -65,7 +65,7 @@ class PluginAutoPublishMultiProjectSpec extends MultiProjectSpec {
         """.stripIndent()
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def firstResult = GradleRunner.create()
@@ -78,7 +78,7 @@ class PluginAutoPublishMultiProjectSpec extends MultiProjectSpec {
         firstResult.task(":project1:test").outcome == SUCCESS
 
         and:
-        List<LoggedRequest> firstResultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> firstResultsRequests = resultsStubber.findResultsRequests()
         firstResultsRequests.size() == 1
 
         and:
@@ -105,7 +105,7 @@ class PluginAutoPublishMultiProjectSpec extends MultiProjectSpec {
         secondResult.task(":project3:test").outcome == SUCCESS
 
         and:
-        List<LoggedRequest> secondResultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> secondResultsRequests = resultsStubber.findResultsRequests()
         secondResultsRequests.size() == 1
 
         and:

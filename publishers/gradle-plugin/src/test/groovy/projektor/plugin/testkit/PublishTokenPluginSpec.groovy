@@ -3,9 +3,9 @@ package projektor.plugin.testkit
 import com.github.tomakehurst.wiremock.http.HttpHeader
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
+import projektor.plugin.client.ClientToken
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import static projektor.plugin.results.ProjektorResultsClient.PUBLISH_TOKEN_NAME
 
 class PublishTokenPluginSpec extends SingleProjectSpec {
     def "should include publish token as header in publish request"() {
@@ -21,7 +21,7 @@ class PublishTokenPluginSpec extends SingleProjectSpec {
         specWriter.writeSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "DGA423"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def result = GradleRunner.create()
@@ -34,10 +34,10 @@ class PublishTokenPluginSpec extends SingleProjectSpec {
         result.task(":test").outcome == SUCCESS
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
-        HttpHeader publishTokenInHeader = resultsRequests[0].header(PUBLISH_TOKEN_NAME)
+        HttpHeader publishTokenInHeader = resultsRequests[0].header(ClientToken.PUBLISH_TOKEN_NAME)
         publishTokenInHeader.firstValue() == "publish12345"
     }
 }

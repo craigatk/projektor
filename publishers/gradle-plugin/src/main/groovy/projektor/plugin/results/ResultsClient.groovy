@@ -8,18 +8,21 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.gradle.api.logging.Logger
 import projektor.plugin.PublishResult
+import projektor.plugin.client.ClientConfig
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.results.grouped.GroupedResultsSerializer
 
-class ProjektorResultsClient {
-    static final String PUBLISH_TOKEN_NAME = "X-PROJEKTOR-TOKEN"
+import static projektor.plugin.client.ClientToken.conditionallyAddPublishTokenToRequest
 
-    private final ResultsClientConfig config
+class ResultsClient {
+    private final ClientConfig config
     private final Logger logger
     private final GroupedResultsSerializer groupedResultsSerializer = new GroupedResultsSerializer()
+    private final OkHttpClient client
 
-    ProjektorResultsClient(ResultsClientConfig resultsClientConfig, Logger logger) {
-        this.config = resultsClientConfig
+    ResultsClient(OkHttpClient client, ClientConfig clientConfig, Logger logger) {
+        this.client = client
+        this.config = clientConfig
         this.logger = logger
     }
 
@@ -30,15 +33,14 @@ class ProjektorResultsClient {
 
         String groupedResultsJson = groupedResultsSerializer.serializeGroupedResults(groupedResults)
 
-        OkHttpClient client = new OkHttpClient()
-
         RequestBody body = RequestBody.create(mediaType, groupedResultsJson)
 
+        String resultsUrl = "${config.serverUrl}/groupedResults"
         Request.Builder requestBuilder = new Request.Builder()
-                .url("${config.serverUrl}/groupedResults")
+                .url(resultsUrl)
                 .post(body)
 
-        config.maybePublishToken.ifPresent( { publishToken -> requestBuilder.header(PUBLISH_TOKEN_NAME, publishToken)})
+        conditionallyAddPublishTokenToRequest(requestBuilder, config)
 
         Request request = requestBuilder.build()
 
@@ -47,17 +49,19 @@ class ProjektorResultsClient {
         try {
             response = client.newCall(request).execute()
         } catch (Exception e) {
-            logger.error("Error publishing results to Projektor server ${config.serverUrl}", e)
+            logger.error("Error publishing results to Projektor server ${resultsUrl}", e)
         }
 
         if (response?.successful) {
-            String testRunUri = new JsonSlurper().parseText(response.body().string()).uri
+            def parsedResponseJson = new JsonSlurper().parseText(response.body().string())
+            String testRunUri = parsedResponseJson.uri
             String reportUrl = "${config.serverUrl}${testRunUri}"
 
+            publishResult.publicId= parsedResponseJson.id
             publishResult.reportUrl = reportUrl
         } else {
             String responseCode = response ? "- response code ${response.code()}" : ""
-            logger.warn("Failed to upload Projektor report to ${config.serverUrl} ${responseCode}")
+            logger.warn("Failed to upload Projektor report to ${resultsUrl} ${responseCode}")
         }
 
         return publishResult

@@ -21,7 +21,7 @@ class PluginAutoPublishFailureOnlySpec extends SingleProjectSpec {
         specWriter.writeFailingSpecFile(testDirectory, "SampleFailingSpec")
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def result = GradleRunner.create()
@@ -37,7 +37,7 @@ class PluginAutoPublishFailureOnlySpec extends SingleProjectSpec {
         result.output.contains("View Projektor report at")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
         String resultsBody = resultsRequests[0].bodyAsString
@@ -57,7 +57,7 @@ class PluginAutoPublishFailureOnlySpec extends SingleProjectSpec {
         specWriter.writeSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def result = GradleRunner.create()
@@ -73,7 +73,7 @@ class PluginAutoPublishFailureOnlySpec extends SingleProjectSpec {
         !result.output.contains("View Projektor report at")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 0
     }
 

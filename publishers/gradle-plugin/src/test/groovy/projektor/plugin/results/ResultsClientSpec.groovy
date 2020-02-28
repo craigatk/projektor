@@ -3,31 +3,36 @@ package projektor.plugin.results
 import com.github.tomakehurst.wiremock.http.HttpHeader
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
+import okhttp3.OkHttpClient
 import org.gradle.api.logging.Logger
 import org.junit.Rule
-import projektor.plugin.WireMockStubber
+import projektor.plugin.ResultsWireMockStubber
 import projektor.plugin.PublishResult
+import projektor.plugin.client.ClientConfig
+import projektor.plugin.client.ClientToken
 import projektor.plugin.results.grouped.GroupedResults
 import spock.lang.Specification
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
-import static projektor.plugin.results.ProjektorResultsClient.getPUBLISH_TOKEN_NAME
 
-class ProjektorResultsClientSpec extends Specification {
+class ResultsClientSpec extends Specification {
 
     @Rule
-    WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort().dynamicHttpsPort())
+    WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort())
 
-    WireMockStubber wireMockStubber = new WireMockStubber(wireMockRule)
+    ResultsWireMockStubber resultsStubber = new ResultsWireMockStubber(wireMockRule)
 
     Logger logger = Mock()
 
+    OkHttpClient okHttpClient = new OkHttpClient()
+
     void "should send results to server without token in header"() {
         given:
-        String serverUrl = wireMockStubber.serverUrl
+        String serverUrl = resultsStubber.serverUrl
 
-        ProjektorResultsClient resultsClient = new ProjektorResultsClient(
-                new ResultsClientConfig(serverUrl, Optional.empty()),
+        ResultsClient resultsClient = new ResultsClient(
+                okHttpClient,
+                new ClientConfig(serverUrl, Optional.empty()),
                 logger
         )
 
@@ -36,16 +41,17 @@ class ProjektorResultsClientSpec extends Specification {
         )
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
 
         then:
         publishResult.successful
+        publishResult.publicId == "ABC123"
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
         resultsRequests[0].bodyAsString == """{"groupedTestSuites":[]}"""
@@ -53,10 +59,11 @@ class ProjektorResultsClientSpec extends Specification {
 
     void "should send results to server with token in header"() {
         given:
-        String serverUrl = wireMockStubber.serverUrl
+        String serverUrl = resultsStubber.serverUrl
 
-        ProjektorResultsClient resultsClient = new ProjektorResultsClient(
-                new ResultsClientConfig(serverUrl, Optional.of("token12345")),
+        ResultsClient resultsClient = new ResultsClient(
+                okHttpClient,
+                new ClientConfig(serverUrl, Optional.of("token12345")),
                 logger
         )
 
@@ -65,22 +72,23 @@ class ProjektorResultsClientSpec extends Specification {
         )
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
 
         then:
         publishResult.successful
+        publishResult.publicId == "ABC123"
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
         LoggedRequest resultsRequest = resultsRequests[0]
 
         resultsRequest.bodyAsString == """{"groupedTestSuites":[]}"""
 
-        HttpHeader publishTokenInHeader = resultsRequest.header(PUBLISH_TOKEN_NAME)
+        HttpHeader publishTokenInHeader = resultsRequest.header(ClientToken.PUBLISH_TOKEN_NAME)
         publishTokenInHeader.firstValue() == "token12345"
     }
 }

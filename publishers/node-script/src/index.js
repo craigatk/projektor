@@ -14,11 +14,14 @@ function run(args, publishToken, defaultConfigFilePath) {
     const config = JSON.parse(configFileContents);
 
     serverUrl = config.serverUrl;
-    resultsFileGlobs = config.resultsFileGlobs;
+    resultsFileGlobs = config.results;
     attachmentFileGlobs = config.attachments;
   } else {
     serverUrl = argv.serverUrl;
     resultsFileGlobs = argv._;
+    if (argv.attachments) {
+      attachmentFileGlobs = [argv.attachments]
+    }
   }
 
   collectAndSendResults(serverUrl, publishToken, resultsFileGlobs, attachmentFileGlobs);

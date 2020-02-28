@@ -19,7 +19,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
         specWriter.writeSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def result = GradleRunner.create()
@@ -36,7 +36,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
         result.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
     }
 
@@ -53,7 +53,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
         specWriter.writeSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def result = GradleRunner.create()
@@ -71,7 +71,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
         !result.output.contains("View Projektor report at")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 0
     }
 
@@ -87,7 +87,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
         specWriter.writeSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def result = GradleRunner.create()
@@ -104,7 +104,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
         !result.output.contains("View Projektor report at")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 0
     }
 }

@@ -1,6 +1,6 @@
 {
   "serverUrl": "http://localhost:8083",
-  "resultsFileGlobs": [
+  "results": [
     "results/*.xml"
   ],
   "attachments": [

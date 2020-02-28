@@ -19,7 +19,7 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         specWriter.writeSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def result = GradleRunner.create()
@@ -36,7 +36,7 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         !result.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
 
         and:
-        List<LoggedRequest> resultsRequests = wireMockStubber.findResultsRequests()
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 0
     }
 
@@ -52,7 +52,7 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         specWriter.writeSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def executedResult = GradleRunner.create()
@@ -68,7 +68,7 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         executedResult.output.contains("View Projektor report at")
 
         and:
-        wireMockStubber.findResultsRequests().size() == 1
+        resultsStubber.findResultsRequests().size() == 1
 
         when:
         wireMockRule.resetRequests()
@@ -86,7 +86,7 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         !upToDateResult.output.contains("View Projektor report at")
 
         and:
-        wireMockStubber.findResultsRequests().size() == 0
+        resultsStubber.findResultsRequests().size() == 0
     }
 
     def "when test task was skipped should not publish results"() {
@@ -101,7 +101,7 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         specWriter.writeSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "ABC123"
-        wireMockStubber.stubResultsPostSuccess(resultsId)
+        resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
         def executedBuildResult = GradleRunner.create()
@@ -117,7 +117,7 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         executedBuildResult.output.contains("View Projektor report at")
 
         and:
-        wireMockStubber.findResultsRequests().size() == 1
+        resultsStubber.findResultsRequests().size() == 1
 
         when:
         wireMockRule.resetRequests()
@@ -139,6 +139,6 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         !skippedBuildResult.output.contains("View Projektor report at")
 
         and:
-        wireMockStubber.findResultsRequests().size() == 0
+        resultsStubber.findResultsRequests().size() == 0
     }
 }

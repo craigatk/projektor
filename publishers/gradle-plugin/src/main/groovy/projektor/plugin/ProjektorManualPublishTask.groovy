@@ -1,11 +1,12 @@
 package projektor.plugin
 
+import okhttp3.OkHttpClient
 import org.gradle.api.internal.AbstractTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
-import projektor.plugin.results.ProjektorResultsClient
-import projektor.plugin.results.ResultsClientConfig
+import projektor.plugin.results.ResultsClient
+import projektor.plugin.client.ClientConfig
 import projektor.plugin.results.ResultsLogger
 import projektor.plugin.results.grouped.GroupedResults
 
@@ -24,9 +25,10 @@ class ProjektorManualPublishTask extends AbstractTask {
 
     @TaskAction
     void publish() {
+        File projectDir = project.projectDir
         ProjectTestResultsCollector projectTestTaskResultsCollector = ProjectTestResultsCollector.fromAllTasks(
                 project.getAllTasks(false).get(project),
-                project.projectDir,
+                projectDir,
                 additionalResultsDirs,
                 logger
         )
@@ -34,8 +36,9 @@ class ProjektorManualPublishTask extends AbstractTask {
         if (projectTestTaskResultsCollector.hasTestGroups()) {
             GroupedResults groupedResults = projectTestTaskResultsCollector.createGroupedResults()
 
-            ProjektorResultsClient resultsClient = new ProjektorResultsClient(
-                    new ResultsClientConfig(serverUrl, java.util.Optional.ofNullable(publishToken)),
+            ResultsClient resultsClient = new ResultsClient(
+                    new OkHttpClient(),
+                    new ClientConfig(serverUrl, java.util.Optional.ofNullable(publishToken)),
                     logger
             )
             PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
