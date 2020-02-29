@@ -91,10 +91,8 @@ jobs:
         PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
       run: |
         cd ui
-        xvfb-run -s '-screen 0 1024x768x24' yarn cy:test
+        yarn cy:test
         yarn projektor-publish --configFile=projektor.cypress.json
-
-    # xvfb-run is a workaround for Cypress issue https://github.com/cypress-io/cypress/issues/6184
 
   assemble-and-functional-test:
     runs-on: ubuntu-18.04
@@ -159,5 +157,4 @@ jobs:
       env:
         DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
         PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
-      run: xvfb-run -s '-screen 0 1024x768x24' ./gradlew :functional-test:functionalTest
-      # xvfb-run is a workaround for Cypress issue https://github.com/cypress-io/cypress/issues/6184
+      run: ./gradlew :functional-test:functionalTest
