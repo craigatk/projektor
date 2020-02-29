@@ -3,21 +3,29 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 
-const collectResults = resultsFileGlobs => {
-  let resultsBlob = "";
+const isFile = path => fs.lstatSync(path).isFile();
 
-  const resultsFileNames = [];
+const globsToFilePaths = fileGlobs => {
+  const allFilePaths = [];
 
-  resultsFileGlobs.forEach(fileGlob => {
-    const fileNames = glob.sync(fileGlob);
-    if (fileNames && fileNames.length > 0) {
-      resultsFileNames.push(...fileNames);
+  fileGlobs.forEach(fileGlob => {
+    const filePaths = glob.sync(fileGlob);
+    if (filePaths && filePaths.length > 0) {
+      allFilePaths.push(...filePaths);
     }
   });
 
-  if (resultsFileNames.length > 0) {
-    resultsFileNames.forEach(fileName => {
-      const fileContents = fs.readFileSync(fileName);
+  return allFilePaths.filter(filePath => isFile(filePath));
+};
+
+const collectResults = resultsFileGlobs => {
+  let resultsBlob = "";
+
+  const resultsFilePaths = globsToFilePaths(resultsFileGlobs);
+
+  if (resultsFilePaths.length > 0) {
+    resultsFilePaths.forEach(filePath => {
+      const fileContents = fs.readFileSync(filePath);
       resultsBlob = resultsBlob + fileContents + "\n";
     });
   }
@@ -26,23 +34,13 @@ const collectResults = resultsFileGlobs => {
 };
 
 const collectAttachments = attachmentFileGlobs => {
-  const attachmentFilePaths = [];
-  const attachments = [];
+  const attachmentFilePaths = globsToFilePaths(attachmentFileGlobs);
 
-  attachmentFileGlobs.forEach(fileGlob => {
-    const filePaths = glob.sync(fileGlob);
-    if (filePaths && filePaths.length > 0) {
-      attachmentFilePaths.push(...filePaths);
-    }
+  const attachments = attachmentFilePaths.map(filePath => {
+    const fileContents = fs.readFileSync(filePath);
+    const fileName = path.basename(filePath);
+    return { name: fileName, contents: fileContents };
   });
-
-  if (attachmentFilePaths.length > 0) {
-    attachmentFilePaths.forEach(filePath => {
-      const fileContents = fs.readFileSync(filePath);
-      const fileName = path.basename(filePath);
-      attachments.push({ name: fileName, contents: fileContents });
-    });
-  }
 
   return attachments;
 };

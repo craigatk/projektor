@@ -69,4 +69,42 @@ describe("publish with attachments", () => {
       );
     });
   });
+
+  it("should publish results with nested attachments to server", async () => {
+    const fileGlob = "src/__tests__/resultsDir1/*.xml";
+    const attachmentGlob = "src/__tests__/attachmentsNestedDir/**/*";
+    const serverUrl = "http://localhost:8080";
+
+    mockAxios
+      .onPost("http://localhost:8080/results")
+      .reply(200, { id: "DEF567", uri: "/tests/DEF567" });
+
+    mockAxios
+      .onPost(
+        "http://localhost:8080/run/DEF567/attachments/attachmentNested1.txt"
+      )
+      .reply(200);
+
+    mockAxios
+      .onPost(
+        "http://localhost:8080/run/DEF567/attachments/attachmentNested2.txt"
+      )
+      .reply(200);
+
+    collectAndSendResults(serverUrl, null, [fileGlob], [attachmentGlob]);
+
+    await waitForExpect(() => {
+      expect(mockAxios.history.post.length).toBe(3);
+
+      const attachment1PostRequest = mockAxios.history.post.find(postRequest =>
+        postRequest.url.includes("attachments/attachmentNested1.txt")
+      );
+      expect(attachment1PostRequest).not.toBeNull();
+
+      const attachment2PostRequest = mockAxios.history.post.find(postRequest =>
+        postRequest.url.includes("attachments/attachmentNested2.txt")
+      );
+      expect(attachment2PostRequest).not.toBeNull();
+    });
+  });
 });

@@ -20,11 +20,16 @@ function run(args, publishToken, defaultConfigFilePath) {
     serverUrl = argv.serverUrl;
     resultsFileGlobs = argv._;
     if (argv.attachments) {
-      attachmentFileGlobs = [argv.attachments]
+      attachmentFileGlobs = [argv.attachments];
     }
   }
 
-  collectAndSendResults(serverUrl, publishToken, resultsFileGlobs, attachmentFileGlobs);
+  collectAndSendResults(
+    serverUrl,
+    publishToken,
+    resultsFileGlobs,
+    attachmentFileGlobs
+  );
 }
 
 module.exports = {

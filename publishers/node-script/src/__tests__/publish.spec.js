@@ -56,6 +56,17 @@ describe("Projektor publisher", () => {
     expect(resultsBlob).toContain("resultsDir2-results2");
   });
 
+  it("should gather results from glob that matches multiple nested directories", () => {
+    const fileGlob = "src/__tests__/nestedResultsDir/**/*";
+
+    const resultsBlob = collectResults([fileGlob]);
+
+    expect(resultsBlob).toContain("resultsDir1-results1");
+    expect(resultsBlob).toContain("resultsDir1-results2");
+    expect(resultsBlob).toContain("resultsDir1-results1");
+    expect(resultsBlob).toContain("resultsDir2-results2");
+  });
+
   it("should gather results from glob that matches single file", () => {
     const fileGlob = "src/__tests__/resultsDir2/results2.xml";
 
