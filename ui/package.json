@@ -11,7 +11,7 @@
     "test": "jest",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "cy:test": "start-server-and-test start http://localhost:1234 cy:run",
+    "cy:test": "yarn clean-results && start-server-and-test start http://localhost:1234 cy:run",
     "projektor:cypress": "env-cmd -f ~/.env projektor-publish --configFile=projektor.cypress.json",
     "clean-results": "rimraf test-results/*.xml"
   },
