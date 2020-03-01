@@ -14,8 +14,9 @@ import io.ktor.util.getOrFail
 import projektor.attachment.AttachmentService
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
+import projektor.server.api.AddAttachmentError
+import projektor.server.api.AddAttachmentResponse
 import projektor.server.api.Attachments
-import projektor.server.api.CreateAttachmentResponse
 import projektor.server.api.PublicId
 
 @KtorExperimentalAPI
@@ -28,14 +29,20 @@ fun Route.attachments(
         val attachmentName = call.parameters.getOrFail("attachmentName")
         val attachmentStream = call.receiveStream()
 
+        val contentLengthInBytes = call.request.header("content-length")?.toBigDecimal()
+
         if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
             call.respond(HttpStatusCode.Unauthorized)
         } else if (attachmentService != null) {
-            attachmentService.addAttachment(PublicId(publicId), attachmentName, attachmentStream)
+            if (attachmentService.attachmentSizeValid(contentLengthInBytes)) {
+                attachmentService.addAttachment(PublicId(publicId), attachmentName, attachmentStream)
 
-            call.respond(HttpStatusCode.OK, CreateAttachmentResponse(true, true, attachmentName))
+                call.respond(HttpStatusCode.OK, AddAttachmentResponse(true, attachmentName, null))
+            } else {
+                call.respond(HttpStatusCode.BadRequest, AddAttachmentResponse(false, null, AddAttachmentError.ATTACHMENT_TOO_LARGE))
+            }
         } else {
-            call.respond(HttpStatusCode.BadRequest, CreateAttachmentResponse(false, false, null))
+            call.respond(HttpStatusCode.BadRequest, AddAttachmentResponse(false, null, AddAttachmentError.ATTACHMENTS_DISABLED))
         }
     }
 

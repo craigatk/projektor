@@ -1,9 +1,8 @@
 package projektor.objectstore
 
 import io.kotlintest.specs.StringSpec
-import io.minio.errors.ErrorResponseException
+import java.io.File
 import strikt.api.expectThat
-import strikt.assertions.containsIgnoringCase
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
@@ -20,7 +19,7 @@ class ObjectStoreClientObjectSpec : StringSpec() {
 
     init {
         "should store and retrieve object" {
-            client.putObject(bucketName, objectName, "src/test/resources/test_file.txt")
+            client.putObject(bucketName, objectName, File("src/test/resources/test_file.txt").inputStream())
 
             expectThat(client.getObject(bucketName, objectName))
                     .isNotNull()
@@ -33,17 +32,11 @@ class ObjectStoreClientObjectSpec : StringSpec() {
         }
 
         "should delete object"() {
-            client.putObject(bucketName, objectName, "src/test/resources/test_file.txt")
+            client.putObject(bucketName, objectName, File("src/test/resources/test_file.txt").inputStream())
 
             client.removeObject(bucketName, objectName)
 
-            try {
-                client.getObject(bucketName, objectName)
-            } catch (e: ErrorResponseException) {
-                expectThat(e.message).isNotNull().and {
-                    containsIgnoringCase("does not exist")
-                }
-            }
+            expectThat(client.getObject(bucketName, objectName)).isNull()
         }
     }
 }

@@ -24,7 +24,7 @@ class ListAttachmentsApplicationTest : ApplicationTestCase() {
     @Test
     fun `should add attachments to test run then list them`() {
         val publicId = randomPublicId()
-        assetStoreEnabled = true
+        attachmentsEnabled = true
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-attachment.txt") {

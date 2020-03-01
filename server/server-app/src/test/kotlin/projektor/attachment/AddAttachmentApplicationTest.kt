@@ -20,7 +20,7 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
     @Test
     fun `should add attachment to test run then get it`() {
         val publicId = randomPublicId()
-        assetStoreEnabled = true
+        attachmentsEnabled = true
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-attachment.txt") {

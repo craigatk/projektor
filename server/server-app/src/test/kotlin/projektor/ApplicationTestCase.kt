@@ -10,13 +10,11 @@ import com.zaxxer.hikari.HikariDataSource
 import io.ktor.application.Application
 import io.ktor.config.MapApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
+import java.math.BigDecimal
 import kotlin.test.AfterTest
 import org.jooq.DSLContext
 import org.koin.ktor.ext.get
-import projektor.attachment.AttachmentStoreConfig
 import projektor.database.generated.tables.daos.*
-import projektor.objectstore.ObjectStoreClient
-import projektor.objectstore.ObjectStoreConfig
 import projektor.parser.ResultsXmlLoader
 
 @KtorExperimentalAPI
@@ -44,20 +42,8 @@ open class ApplicationTestCase {
 
     protected var publishToken: String? = null
 
-    protected var assetStoreEnabled: Boolean? = null
-    private val attachmentStoreConfig = AttachmentStoreConfig(
-            "http://localhost:9000",
-            "addassettestbucket",
-            true,
-            "minio_access_key",
-            "minio_secret_key"
-    )
-
-    protected val objectStoreClient = ObjectStoreClient(ObjectStoreConfig(
-            attachmentStoreConfig.url,
-            attachmentStoreConfig.accessKey,
-            attachmentStoreConfig.secretKey
-    ))
+    protected var attachmentsEnabled: Boolean? = null
+    protected var attachmentsMaxSizeMB: BigDecimal? = null
 
     fun createTestApplication(application: Application) {
         val schema = databaseSchema
@@ -71,12 +57,13 @@ open class ApplicationTestCase {
 
             publishToken?.let { put("ktor.auth.publishToken", it) }
 
-            assetStoreEnabled?.let {
-                put("ktor.attachment.url", attachmentStoreConfig.url)
-                put("ktor.attachment.bucketName", attachmentStoreConfig.bucketName)
+            attachmentsEnabled?.let {
+                put("ktor.attachment.url", "http://localhost:9000")
+                put("ktor.attachment.bucketName", "attachmentstesting")
                 put("ktor.attachment.autoCreateBucket", "true")
-                put("ktor.attachment.accessKey", attachmentStoreConfig.accessKey)
-                put("ktor.attachment.secretKey", attachmentStoreConfig.secretKey)
+                put("ktor.attachment.accessKey", "minio_access_key")
+                put("ktor.attachment.secretKey", "minio_secret_key")
+                attachmentsMaxSizeMB?.let { put("ktor.attachment.maxSizeMB", it.toString()) }
             }
         }
 

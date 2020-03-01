@@ -7,28 +7,27 @@ import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
 import java.io.File
+import java.math.BigDecimal
 import kotlin.test.*
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
-import projektor.auth.AuthConfig
 import projektor.incomingresults.randomPublicId
+import projektor.server.api.AddAttachmentError
+import projektor.server.api.AddAttachmentResponse
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
 
 @KtorExperimentalAPI
-@ExperimentalStdlibApi
-class AddAttachmentTokenApplicationTest : ApplicationTestCase() {
-
+class AddAttachmentMaxSizeApplicationTest : ApplicationTestCase() {
     @Test
-    fun `when token required and valid token included in header should add attachment`() {
-        val validPublishToken = "publish12345"
-        publishToken = validPublishToken
-
+    fun `when attachment max size configured and attachment size is over max allowed size should return error`() {
         val publicId = randomPublicId()
         attachmentsEnabled = true
+        attachmentsMaxSizeMB = BigDecimal("0.02")
 
         withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-attachment.txt") {
+            handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-run-summary.png") {
                 testRunDBGenerator.createTestRun(
                         publicId,
                         listOf(
@@ -40,31 +39,25 @@ class AddAttachmentTokenApplicationTest : ApplicationTestCase() {
                         )
                 )
 
-                addHeader(AuthConfig.PublishToken, validPublishToken)
-                setBody(File("src/test/resources/test-attachment.txt").readBytes())
+                addHeader("content-length", "23342")
+                setBody(File("src/test/resources/test-run-summary.png").readBytes())
             }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
-            }
+                expectThat(response.status()).isEqualTo(HttpStatusCode.BadRequest)
 
-            handleRequest(HttpMethod.Get, "/run/$publicId/attachments/test-attachment.txt") {
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
-
-                expectThat(response.byteContent?.decodeToString()).isEqualTo("Here is a test attachment file")
+                val errorResponse = objectMapper.readValue(response.content, AddAttachmentResponse::class.java)
+                expectThat(errorResponse.error).isNotNull().and { isEqualTo(AddAttachmentError.ATTACHMENT_TOO_LARGE) }
             }
         }
     }
 
     @Test
-    fun `when token required and invalid token included in header should not add attachment`() {
-        val validPublishToken = "publish12345"
-        publishToken = validPublishToken
-
+    fun `when attachment max size configured and attachment size is under max allowed size should succeed`() {
         val publicId = randomPublicId()
         attachmentsEnabled = true
+        attachmentsMaxSizeMB = BigDecimal("0.04")
 
         withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-attachment.txt") {
+            handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-run-summary.png") {
                 testRunDBGenerator.createTestRun(
                         publicId,
                         listOf(
@@ -76,15 +69,10 @@ class AddAttachmentTokenApplicationTest : ApplicationTestCase() {
                         )
                 )
 
-                addHeader(AuthConfig.PublishToken, "invalidPublishTOken")
-                setBody(File("src/test/resources/test-attachment.txt").readBytes())
+                addHeader("content-length", "23342")
+                setBody(File("src/test/resources/test-run-summary.png").readBytes())
             }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.Unauthorized)
-            }
-
-            handleRequest(HttpMethod.Get, "/run/$publicId/attachments/test-attachment.txt") {
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.NotFound)
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
             }
         }
     }
