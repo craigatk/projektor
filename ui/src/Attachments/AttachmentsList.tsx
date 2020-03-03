@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Attachments } from "../model/TestRunModel";
 import MaterialTable from "material-table";
+import prettyBytes from "pretty-bytes";
 
 interface AttachmentsListProps {
   publicId: string;
@@ -28,10 +29,20 @@ const AttachmentsList = ({ publicId, attachments }: AttachmentsListProps) => {
                 </a>
               </span>
             )
+          },
+          {
+            title: "Size",
+            field: "fileSize",
+            render: rowData => (
+              <span data-testid={`attachment-file-size-${rowData.fileName}`}>
+                {rowData.fileSize ? prettyBytes(rowData.fileSize) : ""}
+              </span>
+            )
           }
         ]}
         data={attachments.attachments.map(attachment => ({
-          fileName: attachment.fileName
+          fileName: attachment.fileName,
+          fileSize: attachment.fileSize
         }))}
       />
     </div>

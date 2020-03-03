@@ -29,13 +29,13 @@ fun Route.attachments(
         val attachmentName = call.parameters.getOrFail("attachmentName")
         val attachmentStream = call.receiveStream()
 
-        val contentLengthInBytes = call.request.header("content-length")?.toBigDecimal()
+        val contentLengthInBytes = call.request.header("content-length")?.toLong()
 
         if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
             call.respond(HttpStatusCode.Unauthorized)
         } else if (attachmentService != null) {
             if (attachmentService.attachmentSizeValid(contentLengthInBytes)) {
-                attachmentService.addAttachment(PublicId(publicId), attachmentName, attachmentStream)
+                attachmentService.addAttachment(PublicId(publicId), attachmentName, attachmentStream, contentLengthInBytes)
 
                 call.respond(HttpStatusCode.OK, AddAttachmentResponse(attachmentName, null))
             } else {

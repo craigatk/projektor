@@ -14,8 +14,10 @@ import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.Attachments
 import strikt.api.expectThat
+import strikt.assertions.any
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
 
 @KtorExperimentalAPI
 class ListAttachmentsApplicationTest : ApplicationTestCase() {
@@ -24,8 +26,14 @@ class ListAttachmentsApplicationTest : ApplicationTestCase() {
         val publicId = randomPublicId()
         attachmentsEnabled = true
 
+        val attachment1FileName = "test-attachment.txt"
+        val attachment1Bytes = File("src/test/resources/$attachment1FileName").readBytes()
+
+        val attachment2FileName = "test-run-summary.png"
+        val attachment2Bytes = File("src/test/resources/$attachment2FileName").readBytes()
+
         withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-attachment.txt") {
+            handleRequest(HttpMethod.Post, "/run/$publicId/attachments/$attachment1FileName") {
                 testRunDBGenerator.createTestRun(
                         publicId,
                         listOf(
@@ -36,13 +44,14 @@ class ListAttachmentsApplicationTest : ApplicationTestCase() {
                                 )
                         )
                 )
-
-                setBody(File("src/test/resources/test-attachment.txt").readBytes())
+                addHeader("content-length", attachment1Bytes.size.toString())
+                setBody(attachment1Bytes)
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
             }
-            handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-run-summary.png") {
-                setBody(File("src/test/resources/test-run-summary.png").readBytes())
+            handleRequest(HttpMethod.Post, "/run/$publicId/attachments/$attachment2FileName") {
+                addHeader("content-length", attachment2Bytes.size.toString())
+                setBody(attachment2Bytes)
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
             }
@@ -54,7 +63,16 @@ class ListAttachmentsApplicationTest : ApplicationTestCase() {
                 val attachmentsResponse = objectMapper.readValue(response.content, Attachments::class.java)
                 assertNotNull(attachmentsResponse)
 
-                expectThat(attachmentsResponse.attachments).hasSize(2)
+                expectThat(attachmentsResponse.attachments).hasSize(2).and {
+                    any {
+                        get { fileName }.isEqualTo(attachment1FileName)
+                        get { fileSize }.isNotNull().and { isEqualTo(attachment1Bytes.size.toLong()) }
+                    }
+                    any {
+                        get { fileName }.isEqualTo(attachment2FileName)
+                        get { fileSize }.isNotNull().and { isEqualTo(attachment2Bytes.size.toLong()) }
+                    }
+                }
             }
         }
     }

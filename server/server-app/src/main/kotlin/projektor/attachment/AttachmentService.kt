@@ -31,20 +31,22 @@ class AttachmentService(
         }
     }
 
-    fun attachmentSizeValid(attachmentSizeInBytes: BigDecimal?): Boolean {
+    fun attachmentSizeValid(attachmentSizeInBytes: Long?): Boolean {
         val maxSizeInBytes = config.maxSizeMB?.let { it * BigDecimal.valueOf(1024) * BigDecimal.valueOf(1024) }
 
-        return maxSizeInBytes == null || attachmentSizeInBytes == null || attachmentSizeInBytes <= maxSizeInBytes
+        return maxSizeInBytes == null ||
+                attachmentSizeInBytes == null ||
+                attachmentSizeInBytes.toBigDecimal() <= maxSizeInBytes
     }
 
-    suspend fun addAttachment(publicId: PublicId, fileName: String, attachmentStream: InputStream) {
+    suspend fun addAttachment(publicId: PublicId, fileName: String, attachmentStream: InputStream, attachmentSize: Long?) {
         val objectName = attachmentObjectName(publicId, fileName)
 
         withContext(Dispatchers.IO) {
             objectStoreClient.putObject(config.bucketName, objectName, attachmentStream)
         }
 
-        attachmentRepository.addAttachment(publicId, Attachment(fileName = fileName, objectName = objectName, fileSize = null))
+        attachmentRepository.addAttachment(publicId, Attachment(fileName = fileName, objectName = objectName, fileSize = attachmentSize))
     }
 
     suspend fun getAttachment(publicId: PublicId, attachmentFileName: String) = withContext(Dispatchers.IO) {
