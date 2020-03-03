@@ -72,7 +72,6 @@ fun Application.main() {
         options { outgoingContent ->
             val oneDayInSeconds = 24 * 60 * 60
             when (outgoingContent.contentType?.withoutParameters()) {
-                ContentType.Application.Json -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = oneDayInSeconds))
                 ContentType.Application.JavaScript -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 7 * oneDayInSeconds))
                 else -> null
             }

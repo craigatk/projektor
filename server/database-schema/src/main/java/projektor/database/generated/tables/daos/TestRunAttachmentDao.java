@@ -65,13 +65,6 @@ public class TestRunAttachmentDao extends DAOImpl<TestRunAttachmentRecord, proje
     }
 
     /**
-     * Fetch records that have <code>test_run_id IN (values)</code>
-     */
-    public List<projektor.database.generated.tables.pojos.TestRunAttachment> fetchByTestRunId(Long... values) {
-        return fetch(TestRunAttachment.TEST_RUN_ATTACHMENT.TEST_RUN_ID, values);
-    }
-
-    /**
      * Fetch records that have <code>file_name IN (values)</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRunAttachment> fetchByFileName(String... values) {
@@ -90,5 +83,12 @@ public class TestRunAttachmentDao extends DAOImpl<TestRunAttachmentRecord, proje
      */
     public List<projektor.database.generated.tables.pojos.TestRunAttachment> fetchByFileSize(Long... values) {
         return fetch(TestRunAttachment.TEST_RUN_ATTACHMENT.FILE_SIZE, values);
+    }
+
+    /**
+     * Fetch records that have <code>test_run_public_id IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestRunAttachment> fetchByTestRunPublicId(String... values) {
+        return fetch(TestRunAttachment.TEST_RUN_ATTACHMENT.TEST_RUN_PUBLIC_ID, values);
     }
 }

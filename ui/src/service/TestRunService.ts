@@ -109,7 +109,7 @@ const fetchAttachments = (
   publicId: string
 ): Promise<AxiosResponse<Attachments>> =>
   // @ts-ignore
-  axiosInstance.get<Attachments>(`/run/${publicId}/attachments`);
+  axiosInstanceWithoutCache.get<Attachments>(`/run/${publicId}/attachments`);
 
 export {
   fetchAttachments,

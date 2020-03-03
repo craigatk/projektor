@@ -46,6 +46,7 @@ public class Indexes {
     public static final Index IDX_TEST_RUN_PUBLIC_ID = Indexes0.IDX_TEST_RUN_PUBLIC_ID;
     public static final Index TEST_RUN_PKEY = Indexes0.TEST_RUN_PKEY;
     public static final Index TEST_RUN_PUBLIC_ID_KEY = Indexes0.TEST_RUN_PUBLIC_ID_KEY;
+    public static final Index IDX_ATTACHMENT_TEST_RUN_ID = Indexes0.IDX_ATTACHMENT_TEST_RUN_ID;
     public static final Index TEST_RUN_ATTACHMENT_PKEY = Indexes0.TEST_RUN_ATTACHMENT_PKEY;
     public static final Index IDX_TEST_SUITE_IDX = Indexes0.IDX_TEST_SUITE_IDX;
     public static final Index TEST_SUITE_PKEY = Indexes0.TEST_SUITE_PKEY;
@@ -66,6 +67,7 @@ public class Indexes {
         public static Index IDX_TEST_RUN_PUBLIC_ID = Internal.createIndex("idx_test_run_public_id", TestRun.TEST_RUN, new OrderField[] { TestRun.TEST_RUN.PUBLIC_ID }, false);
         public static Index TEST_RUN_PKEY = Internal.createIndex("test_run_pkey", TestRun.TEST_RUN, new OrderField[] { TestRun.TEST_RUN.ID }, true);
         public static Index TEST_RUN_PUBLIC_ID_KEY = Internal.createIndex("test_run_public_id_key", TestRun.TEST_RUN, new OrderField[] { TestRun.TEST_RUN.PUBLIC_ID }, true);
+        public static Index IDX_ATTACHMENT_TEST_RUN_ID = Internal.createIndex("idx_attachment_test_run_id", TestRunAttachment.TEST_RUN_ATTACHMENT, new OrderField[] { TestRunAttachment.TEST_RUN_ATTACHMENT.TEST_RUN_PUBLIC_ID }, false);
         public static Index TEST_RUN_ATTACHMENT_PKEY = Internal.createIndex("test_run_attachment_pkey", TestRunAttachment.TEST_RUN_ATTACHMENT, new OrderField[] { TestRunAttachment.TEST_RUN_ATTACHMENT.ID }, true);
         public static Index IDX_TEST_SUITE_IDX = Internal.createIndex("idx_test_suite_idx", TestSuite.TEST_SUITE, new OrderField[] { TestSuite.TEST_SUITE.IDX }, false);
         public static Index TEST_SUITE_PKEY = Internal.createIndex("test_suite_pkey", TestSuite.TEST_SUITE, new OrderField[] { TestSuite.TEST_SUITE.ID }, true);

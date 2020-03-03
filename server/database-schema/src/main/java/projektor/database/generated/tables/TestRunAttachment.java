@@ -41,7 +41,7 @@ import projektor.database.generated.tables.records.TestRunAttachmentRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestRunAttachment extends TableImpl<TestRunAttachmentRecord> {
 
-    private static final long serialVersionUID = -238894226;
+    private static final long serialVersionUID = -931346433;
 
     /**
      * The reference instance of <code>public.test_run_attachment</code>
@@ -62,11 +62,6 @@ public class TestRunAttachment extends TableImpl<TestRunAttachmentRecord> {
     public final TableField<TestRunAttachmentRecord, Long> ID = createField("id", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('test_run_attachment_id_seq'::regclass)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     /**
-     * The column <code>public.test_run_attachment.test_run_id</code>.
-     */
-    public final TableField<TestRunAttachmentRecord, Long> TEST_RUN_ID = createField("test_run_id", org.jooq.impl.SQLDataType.BIGINT, this, "");
-
-    /**
      * The column <code>public.test_run_attachment.file_name</code>.
      */
     public final TableField<TestRunAttachmentRecord, String> FILE_NAME = createField("file_name", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
@@ -80,6 +75,11 @@ public class TestRunAttachment extends TableImpl<TestRunAttachmentRecord> {
      * The column <code>public.test_run_attachment.file_size</code>.
      */
     public final TableField<TestRunAttachmentRecord, Long> FILE_SIZE = createField("file_size", org.jooq.impl.SQLDataType.BIGINT, this, "");
+
+    /**
+     * The column <code>public.test_run_attachment.test_run_public_id</code>.
+     */
+    public final TableField<TestRunAttachmentRecord, String> TEST_RUN_PUBLIC_ID = createField("test_run_public_id", org.jooq.impl.SQLDataType.VARCHAR(12), this, "");
 
     /**
      * Create a <code>public.test_run_attachment</code> table reference
@@ -127,7 +127,7 @@ public class TestRunAttachment extends TableImpl<TestRunAttachmentRecord> {
      */
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.TEST_RUN_ATTACHMENT_PKEY);
+        return Arrays.<Index>asList(Indexes.IDX_ATTACHMENT_TEST_RUN_ID, Indexes.TEST_RUN_ATTACHMENT_PKEY);
     }
 
     /**
@@ -152,18 +152,6 @@ public class TestRunAttachment extends TableImpl<TestRunAttachmentRecord> {
     @Override
     public List<UniqueKey<TestRunAttachmentRecord>> getKeys() {
         return Arrays.<UniqueKey<TestRunAttachmentRecord>>asList(Keys.TEST_RUN_ATTACHMENT_PKEY);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<ForeignKey<TestRunAttachmentRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<TestRunAttachmentRecord, ?>>asList(Keys.TEST_RUN_ATTACHMENT__TEST_RUN_ATTACHMENT_TEST_RUN_ID_FKEY);
-    }
-
-    public TestRun testRun() {
-        return new TestRun(this, Keys.TEST_RUN_ATTACHMENT__TEST_RUN_ATTACHMENT_TEST_RUN_ID_FKEY);
     }
 
     /**

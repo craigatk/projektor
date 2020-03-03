@@ -22,36 +22,36 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestRunAttachment implements Serializable {
 
-    private static final long serialVersionUID = 2122305706;
+    private static final long serialVersionUID = 1292952187;
 
     private Long   id;
-    private Long   testRunId;
     private String fileName;
     private String objectName;
     private Long   fileSize;
+    private String testRunPublicId;
 
     public TestRunAttachment() {}
 
     public TestRunAttachment(TestRunAttachment value) {
         this.id = value.id;
-        this.testRunId = value.testRunId;
         this.fileName = value.fileName;
         this.objectName = value.objectName;
         this.fileSize = value.fileSize;
+        this.testRunPublicId = value.testRunPublicId;
     }
 
     public TestRunAttachment(
         Long   id,
-        Long   testRunId,
         String fileName,
         String objectName,
-        Long   fileSize
+        Long   fileSize,
+        String testRunPublicId
     ) {
         this.id = id;
-        this.testRunId = testRunId;
         this.fileName = fileName;
         this.objectName = objectName;
         this.fileSize = fileSize;
+        this.testRunPublicId = testRunPublicId;
     }
 
     public Long getId() {
@@ -60,15 +60,6 @@ public class TestRunAttachment implements Serializable {
 
     public TestRunAttachment setId(Long id) {
         this.id = id;
-        return this;
-    }
-
-    public Long getTestRunId() {
-        return this.testRunId;
-    }
-
-    public TestRunAttachment setTestRunId(Long testRunId) {
-        this.testRunId = testRunId;
         return this;
     }
 
@@ -99,6 +90,15 @@ public class TestRunAttachment implements Serializable {
         return this;
     }
 
+    public String getTestRunPublicId() {
+        return this.testRunPublicId;
+    }
+
+    public TestRunAttachment setTestRunPublicId(String testRunPublicId) {
+        this.testRunPublicId = testRunPublicId;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -113,12 +113,6 @@ public class TestRunAttachment implements Serializable {
                 return false;
         }
         else if (!id.equals(other.id))
-            return false;
-        if (testRunId == null) {
-            if (other.testRunId != null)
-                return false;
-        }
-        else if (!testRunId.equals(other.testRunId))
             return false;
         if (fileName == null) {
             if (other.fileName != null)
@@ -138,6 +132,12 @@ public class TestRunAttachment implements Serializable {
         }
         else if (!fileSize.equals(other.fileSize))
             return false;
+        if (testRunPublicId == null) {
+            if (other.testRunPublicId != null)
+                return false;
+        }
+        else if (!testRunPublicId.equals(other.testRunPublicId))
+            return false;
         return true;
     }
 
@@ -146,10 +146,10 @@ public class TestRunAttachment implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
-        result = prime * result + ((this.testRunId == null) ? 0 : this.testRunId.hashCode());
         result = prime * result + ((this.fileName == null) ? 0 : this.fileName.hashCode());
         result = prime * result + ((this.objectName == null) ? 0 : this.objectName.hashCode());
         result = prime * result + ((this.fileSize == null) ? 0 : this.fileSize.hashCode());
+        result = prime * result + ((this.testRunPublicId == null) ? 0 : this.testRunPublicId.hashCode());
         return result;
     }
 
@@ -158,10 +158,10 @@ public class TestRunAttachment implements Serializable {
         StringBuilder sb = new StringBuilder("TestRunAttachment (");
 
         sb.append(id);
-        sb.append(", ").append(testRunId);
         sb.append(", ").append(fileName);
         sb.append(", ").append(objectName);
         sb.append(", ").append(fileSize);
+        sb.append(", ").append(testRunPublicId);
 
         sb.append(")");
         return sb.toString();

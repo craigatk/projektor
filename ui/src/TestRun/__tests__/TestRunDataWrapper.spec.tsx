@@ -2,7 +2,7 @@ import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import MockAdapter from "axios-mock-adapter";
 import { render, wait } from "@testing-library/react";
-import { TestRunSummary } from "../../model/TestRunModel";
+import { Attachments, TestRunSummary } from "../../model/TestRunModel";
 import {
   axiosInstance,
   axiosInstanceWithoutCache
@@ -37,9 +37,16 @@ describe("TestRunDataWrapper", () => {
       passed: false,
       cumulativeDuration: 10.0,
       averageDuration: 2.5,
-      slowestTestCaseDuration: 5.0,
-      hasAttachments: false
+      slowestTestCaseDuration: 5.0
     } as TestRunSummary;
+
+    const attachments = {
+      attachments: [
+        {
+          fileName: "attachment1.txt"
+        }
+      ]
+    } as Attachments;
 
     mockAxios
       .onGet(`http://localhost:8080/run/${publicId}/summary`)
@@ -48,6 +55,10 @@ describe("TestRunDataWrapper", () => {
     mockAxios
       .onGet(`http://localhost:8080/run/${publicId}/cases/failed`)
       .reply(200, []);
+
+    mockAxios
+      .onGet(`http://localhost:8080/run/${publicId}/attachments`)
+      .reply(200, attachments);
 
     const { getByTestId, queryByTestId } = render(
       <TestRunDataWrapper publicId={publicId} />

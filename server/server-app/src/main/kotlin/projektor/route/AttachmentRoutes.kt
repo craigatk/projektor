@@ -37,12 +37,12 @@ fun Route.attachments(
             if (attachmentService.attachmentSizeValid(contentLengthInBytes)) {
                 attachmentService.addAttachment(PublicId(publicId), attachmentName, attachmentStream)
 
-                call.respond(HttpStatusCode.OK, AddAttachmentResponse(true, attachmentName, null))
+                call.respond(HttpStatusCode.OK, AddAttachmentResponse(attachmentName, null))
             } else {
-                call.respond(HttpStatusCode.BadRequest, AddAttachmentResponse(false, null, AddAttachmentError.ATTACHMENT_TOO_LARGE))
+                call.respond(HttpStatusCode.BadRequest, AddAttachmentResponse(null, AddAttachmentError.ATTACHMENT_TOO_LARGE))
             }
         } else {
-            call.respond(HttpStatusCode.BadRequest, AddAttachmentResponse(false, null, AddAttachmentError.ATTACHMENTS_DISABLED))
+            call.respond(HttpStatusCode.BadRequest, AddAttachmentResponse(null, AddAttachmentError.ATTACHMENTS_DISABLED))
         }
     }
 

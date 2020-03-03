@@ -15,6 +15,9 @@ chai.use(chaiColors);
 Cypress.Commands.add("getByTestId", testId =>
   cy.get(`[data-testid="${testId}"]`)
 );
+Cypress.Commands.add("testIdShouldNotExist", testId =>
+    cy.getByTestId(testId).should("not.exist")
+);
 
 Cypress.Commands.add("getBreadcrumbPackgeNameLink", () =>
   cy.getByTestId("breadcrumb-link-package-name")

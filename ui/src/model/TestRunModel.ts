@@ -59,7 +59,6 @@ interface TestRunSummary {
   cumulativeDuration: number;
   averageDuration: number;
   slowestTestCaseDuration: number;
-  hasAttachments: boolean;
 }
 
 interface TestRun extends TestRunSummary {

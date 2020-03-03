@@ -38,4 +38,28 @@ context("test run with attachments", () => {
     cy.getByTestId("attachment-file-name-test-attachment.txt").click();
     cy.url().should("contain", "/attachments/test-attachment.txt");
   });
+
+  it("should not show attachments nav link when run has no attachments", () => {
+    const publicId = "12345";
+
+    cy.server();
+
+    cy.route(
+      "GET",
+      `run/${publicId}/summary`,
+      "fixture:attachments/test_run_summary_with_attachments.json"
+    );
+
+    cy.route("GET", `run/${publicId}`, "fixture:test_run.json");
+
+    cy.route(
+      "GET",
+      `run/${publicId}/attachments`,
+      "fixture:attachments/attachments_empty.json"
+    );
+
+    cy.visit(`http://localhost:1234/tests/${publicId}`);
+
+    cy.testIdShouldNotExist("nav-link-attachments");
+  });
 });

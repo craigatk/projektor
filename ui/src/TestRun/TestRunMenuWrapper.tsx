@@ -32,11 +32,13 @@ const useStyles = makeStyles(theme => ({
 interface TestRunMenuWrapperProps {
   publicId: string;
   testRunSummary: TestRunSummary;
+  hasAttachments: boolean;
 }
 
 const TestRunMenuWrapper = ({
   publicId,
-  testRunSummary
+  testRunSummary,
+  hasAttachments
 }: TestRunMenuWrapperProps) => {
   if (testRunSummary == null) {
     return null;
@@ -49,7 +51,11 @@ const TestRunMenuWrapper = ({
       <AppBar className={classes.appBar}>
         <Typography variant="h6">Projektor</Typography>
       </AppBar>
-      <TestRunSideMenu publicId={publicId} testRunSummary={testRunSummary} />
+      <TestRunSideMenu
+        publicId={publicId}
+        testRunSummary={testRunSummary}
+        hasAttachments={hasAttachments}
+      />
       <main className={classes.content}>
         <QueryParamProvider reachHistory={globalHistory}>
           <Router>

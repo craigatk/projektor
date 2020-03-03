@@ -34,8 +34,7 @@ fun toTestRunSummary(publicId: PublicId, testSuites: List<TestSuite>): TestRunSu
             cumulativeDuration,
             averageDuration,
             slowestTestCaseDuration,
-            LocalDateTime.now(),
-            false
+            LocalDateTime.now()
     )
 }
 

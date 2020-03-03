@@ -85,7 +85,7 @@ fun createTestRun(publicId: PublicId, totalTestCount: Int): TestRunDB = TestRunD
         .setTotalFailureCount(0)
         .setTotalSkippedCount(0)
         .setCumulativeDuration(BigDecimal("30.000"))
-        .setAverageDuration(BigDecimal("30.000").divide(totalTestCount.toBigDecimal()))
+        .setAverageDuration(if (totalTestCount > 0) BigDecimal("30.000").divide(totalTestCount.toBigDecimal()) else BigDecimal("30.000"))
         .setSlowestTestCaseDuration(BigDecimal("10.000"))
         .setPassed(true)
 

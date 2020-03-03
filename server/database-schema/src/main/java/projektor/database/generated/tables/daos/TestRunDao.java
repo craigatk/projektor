@@ -142,11 +142,4 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     public List<projektor.database.generated.tables.pojos.TestRun> fetchByCreatedTimestamp(Timestamp... values) {
         return fetch(TestRun.TEST_RUN.CREATED_TIMESTAMP, values);
     }
-
-    /**
-     * Fetch records that have <code>has_attachments IN (values)</code>
-     */
-    public List<projektor.database.generated.tables.pojos.TestRun> fetchByHasAttachments(Boolean... values) {
-        return fetch(TestRun.TEST_RUN.HAS_ATTACHMENTS, values);
-    }
 }

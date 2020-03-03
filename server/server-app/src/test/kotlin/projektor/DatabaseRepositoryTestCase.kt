@@ -24,6 +24,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
     lateinit var testFailureDao: TestFailureDao
     lateinit var testRunDBGenerator: TestRunDBGenerator
     lateinit var resultsProcessingDao: ResultsProcessingDao
+    lateinit var attachmentDao: TestRunAttachmentDao
 
     @BeforeTest
     fun setup() {
@@ -57,6 +58,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
         testCaseDao = TestCaseDao(dslContext.configuration())
         testFailureDao = TestFailureDao(dslContext.configuration())
         resultsProcessingDao = ResultsProcessingDao(dslContext.configuration())
+        attachmentDao = TestRunAttachmentDao(dslContext.configuration())
 
         testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao)
     }

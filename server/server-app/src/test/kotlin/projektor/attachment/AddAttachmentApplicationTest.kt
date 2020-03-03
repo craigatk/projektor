@@ -7,7 +7,7 @@ import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
 import java.io.File
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
@@ -22,6 +22,8 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
         val publicId = randomPublicId()
         attachmentsEnabled = true
 
+        val attachmentBytes = File("src/test/resources/test-attachment.txt").readBytes()
+
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-attachment.txt") {
                 testRunDBGenerator.createTestRun(
@@ -35,7 +37,33 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
                         )
                 )
 
-                setBody(File("src/test/resources/test-attachment.txt").readBytes())
+                addHeader("content-length", attachmentBytes.size.toString())
+                setBody(attachmentBytes)
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+            }
+
+            handleRequest(HttpMethod.Get, "/run/$publicId/attachments/test-attachment.txt") {
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+
+                expectThat(response.byteContent?.decodeToString()).isEqualTo("Here is a test attachment file")
+            }
+        }
+    }
+
+    @Test
+    fun `can add attachment to public ID that has no test run yet`() {
+        val publicId = randomPublicId()
+        attachmentsEnabled = true
+
+        val attachmentBytes = File("src/test/resources/test-attachment.txt").readBytes()
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-attachment.txt") {
+
+                addHeader("content-length", attachmentBytes.size.toString())
+                setBody(attachmentBytes)
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
             }

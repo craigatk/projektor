@@ -1,7 +1,10 @@
 import * as React from "react";
 import LoadingState from "../Loading/LoadingState";
 import { TestRunSummary } from "../model/TestRunModel";
-import { fetchTestRunSummary } from "../service/TestRunService";
+import {
+  fetchAttachments,
+  fetchTestRunSummary
+} from "../service/TestRunService";
 import LoadingSection from "../Loading/LoadingSection";
 import TestRunMenuWrapper from "./TestRunMenuWrapper";
 import { RouteComponentProps } from "@reach/router";
@@ -18,6 +21,7 @@ const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
   const [testRunSummary, setTestRunSummary] = React.useState<TestRunSummary>(
     null
   );
+  const [hasAttachments, setHasAttachments] = React.useState<boolean>(false);
 
   const loadTestRunSummary = () => {
     fetchTestRunSummary(publicId)
@@ -29,6 +33,13 @@ const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
   };
 
   React.useEffect(loadTestRunSummary, [setTestRunSummary, setLoadingState]);
+  React.useEffect(() => {
+    fetchAttachments(publicId)
+      .then(response => {
+        setHasAttachments(response.data.attachments.length > 0);
+      })
+      .catch(() => setHasAttachments(false));
+  }, [setHasAttachments]);
 
   return (
     <LoadingSection
@@ -37,6 +48,7 @@ const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
         <TestRunMenuWrapper
           publicId={publicId}
           testRunSummary={testRunSummary}
+          hasAttachments={hasAttachments}
         />
       }
       errorComponent={

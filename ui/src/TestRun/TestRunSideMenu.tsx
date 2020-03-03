@@ -19,6 +19,7 @@ import AttachmentIcon from "../Icons/AttachmentIcon";
 interface TestRunSideMenuProps {
   publicId: string;
   testRunSummary: TestRunSummary;
+  hasAttachments: boolean;
 }
 
 const sideNavWidth = 180;
@@ -50,7 +51,8 @@ const useStyles = makeStyles(theme => ({
 
 const TestRunSideMenu = ({
   publicId,
-  testRunSummary
+  testRunSummary,
+  hasAttachments
 }: TestRunSideMenuProps) => {
   const classes = useStyles({});
 
@@ -110,7 +112,7 @@ const TestRunSideMenu = ({
             <ListItemText primary="Slow tests" data-testid="nav-link-slow" />
           </ListItem>
         </Link>
-        {testRunSummary.hasAttachments ? (
+        {hasAttachments ? (
           <Link
             to={`/tests/${publicId}/attachments`}
             className={classes.sideNavLink}
