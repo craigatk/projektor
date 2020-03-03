@@ -56,6 +56,8 @@ class ListAttachmentsApplicationTest : ApplicationTestCase() {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
             }
 
+            waitUntilTestRunHasAttachments(publicId, 2)
+
             handleRequest(HttpMethod.Get, "/run/$publicId/attachments") {
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)

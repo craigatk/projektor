@@ -43,6 +43,8 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
             }
 
+            waitUntilTestRunHasAttachments(publicId, 1)
+
             handleRequest(HttpMethod.Get, "/run/$publicId/attachments/test-attachment.txt") {
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -67,6 +69,8 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
             }
+
+            waitUntilTestRunHasAttachments(publicId, 1)
 
             handleRequest(HttpMethod.Get, "/run/$publicId/attachments/test-attachment.txt") {
             }.apply {

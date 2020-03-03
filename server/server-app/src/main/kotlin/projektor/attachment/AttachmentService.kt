@@ -3,8 +3,7 @@ package projektor.attachment
 import io.ktor.util.KtorExperimentalAPI
 import java.io.InputStream
 import java.math.BigDecimal
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import projektor.objectstore.ObjectStoreClient
 import projektor.objectstore.ObjectStoreConfig
@@ -20,6 +19,8 @@ class AttachmentService(
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
     private val objectStoreClient = ObjectStoreClient(ObjectStoreConfig(config.url, config.accessKey, config.secretKey))
+
+    private val asyncAddAttachments = newFixedThreadPoolContext(8, "addAttachments")
 
     fun conditionallyCreateBucketIfNotExists() {
         if (config.autoCreateBucket) {
@@ -42,11 +43,17 @@ class AttachmentService(
     suspend fun addAttachment(publicId: PublicId, fileName: String, attachmentStream: InputStream, attachmentSize: Long?) {
         val objectName = attachmentObjectName(publicId, fileName)
 
-        withContext(Dispatchers.IO) {
-            objectStoreClient.putObject(config.bucketName, objectName, attachmentStream)
-        }
+        GlobalScope.launch(asyncAddAttachments, CoroutineStart.DEFAULT) {
+            try {
+                withContext(Dispatchers.IO) {
+                    objectStoreClient.putObject(config.bucketName, objectName, attachmentStream)
+                }
 
-        attachmentRepository.addAttachment(publicId, Attachment(fileName = fileName, objectName = objectName, fileSize = attachmentSize))
+                attachmentRepository.addAttachment(publicId, Attachment(fileName = fileName, objectName = objectName, fileSize = attachmentSize))
+            } catch (e: Exception) {
+                logger.error("Error saving attachment '$fileName' for test run ${publicId.id}", e)
+            }
+        }
     }
 
     suspend fun getAttachment(publicId: PublicId, attachmentFileName: String) = withContext(Dispatchers.IO) {

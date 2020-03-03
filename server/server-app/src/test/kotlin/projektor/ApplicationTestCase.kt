@@ -12,10 +12,13 @@ import io.ktor.config.MapApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
 import java.math.BigDecimal
 import kotlin.test.AfterTest
+import org.awaitility.kotlin.await
+import org.awaitility.kotlin.until
 import org.jooq.DSLContext
 import org.koin.ktor.ext.get
 import projektor.database.generated.tables.daos.*
 import projektor.parser.ResultsXmlLoader
+import projektor.server.api.PublicId
 
 @KtorExperimentalAPI
 open class ApplicationTestCase {
@@ -35,6 +38,7 @@ open class ApplicationTestCase {
     lateinit var testSuiteDao: TestSuiteDao
     lateinit var testCaseDao: TestCaseDao
     lateinit var testFailureDao: TestFailureDao
+    lateinit var attachmentDao: TestRunAttachmentDao
     lateinit var testRunDBGenerator: TestRunDBGenerator
     lateinit var application: Application
 
@@ -76,9 +80,14 @@ open class ApplicationTestCase {
         testSuiteDao = TestSuiteDao(dslContext.configuration())
         testCaseDao = TestCaseDao(dslContext.configuration())
         testFailureDao = TestFailureDao(dslContext.configuration())
+        attachmentDao = TestRunAttachmentDao(dslContext.configuration())
         testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao)
 
         this.application = application
+    }
+
+    fun waitUntilTestRunHasAttachments(publicId: PublicId, attachmentCount: Int) {
+        await until { attachmentDao.fetchByTestRunPublicId(publicId.id).size == attachmentCount }
     }
 
     @AfterTest
