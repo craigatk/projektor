@@ -87,6 +87,41 @@ const sendAttachment = (
     .catch(err => Promise.reject(err));
 };
 
+const collectAndSendAttachments = (
+  serverUrl,
+  publishToken,
+  attachmentFileGlobs,
+  publicId
+) => {
+  if (attachmentFileGlobs && attachmentFileGlobs.length > 0) {
+    const attachments = collectAttachments(attachmentFileGlobs);
+    const attachmentsCount = attachments.length;
+
+    if (attachmentsCount) {
+      console.log(
+        `Sending ${attachmentsCount} attachments to Projektor server`
+      );
+      attachments.forEach(attachment =>
+        sendAttachment(
+          serverUrl,
+          publicId,
+          publishToken,
+          attachment.contents,
+          attachment.name
+        ).catch(e => {
+          console.error(
+            `Error sending attachment ${attachment.name} to Projektor server ${serverUrl}`,
+            e.message
+          );
+        })
+      );
+      console.log(
+        `Finished sending attachments ${attachmentsCount} to Projektor`
+      );
+    }
+  }
+};
+
 const collectAndSendResults = (
   serverUrl,
   publishToken,
@@ -106,30 +141,14 @@ const collectAndSendResults = (
 
         return Promise.resolve(respData.id);
       })
-      .then(publicId => {
-        if (attachmentFileGlobs && attachmentFileGlobs.length > 0) {
-          const attachments = collectAttachments(attachmentFileGlobs);
-          const attachmentsCount = attachments.length;
-
-          if (attachmentsCount) {
-            console.log(
-              `Sending ${attachmentsCount} attachments to Projektor server`
-            );
-            attachments.forEach(attachment =>
-              sendAttachment(
-                serverUrl,
-                publicId,
-                publishToken,
-                attachment.contents,
-                attachment.name
-              )
-            );
-            console.log(
-              `Finished sending attachments ${attachmentsCount} to Projektor`
-            );
-          }
-        }
-      })
+      .then(publicId =>
+        collectAndSendAttachments(
+          serverUrl,
+          publishToken,
+          attachmentFileGlobs,
+          publicId
+        )
+      )
       .catch(e => {
         console.error(
           `Error publishing results to Projektor server ${serverUrl}`,

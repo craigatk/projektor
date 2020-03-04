@@ -107,4 +107,31 @@ describe("publish with attachments", () => {
       expect(attachment2PostRequest).not.toBeNull();
     });
   });
+
+  it("when publishing attachments fails should not fail build", async () => {
+    const fileGlob = "src/__tests__/resultsDir1/*.xml";
+    const attachmentGlob = "src/__tests__/attachmentsNestedDir/**/*";
+    const serverUrl = "http://localhost:8080";
+
+    mockAxios
+      .onPost("http://localhost:8080/results")
+      .reply(200, { id: "FAIL123", uri: "/tests/FAIL123" });
+
+    mockAxios
+      .onPost(
+        "http://localhost:8080/run/FAIL123/attachments/attachmentNested1.txt"
+      )
+      .reply(400, null);
+
+    collectAndSendResults(serverUrl, null, [fileGlob], [attachmentGlob]);
+
+    await waitForExpect(() => {
+      expect(mockAxios.history.post.length).toBe(3);
+
+      const attachment1PostRequest = mockAxios.history.post.find(postRequest =>
+        postRequest.url.includes("attachments/attachmentNested1.txt")
+      );
+      expect(attachment1PostRequest).not.toBeNull();
+    });
+  });
 });
