@@ -109,15 +109,25 @@ const collectAndSendResults = (
       .then(publicId => {
         if (attachmentFileGlobs && attachmentFileGlobs.length > 0) {
           const attachments = collectAttachments(attachmentFileGlobs);
-          attachments.forEach(attachment =>
-            sendAttachment(
-              serverUrl,
-              publicId,
-              publishToken,
-              attachment.contents,
-              attachment.name
-            )
-          );
+          const attachmentsCount = attachments.length;
+
+          if (attachmentsCount) {
+            console.log(
+              `Sending ${attachmentsCount} attachments to Projektor server`
+            );
+            attachments.forEach(attachment =>
+              sendAttachment(
+                serverUrl,
+                publicId,
+                publishToken,
+                attachment.contents,
+                attachment.name
+              )
+            );
+            console.log(
+              `Finished sending attachments ${attachmentsCount} to Projektor`
+            );
+          }
         }
       })
       .catch(e => {
