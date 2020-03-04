@@ -1,6 +1,11 @@
 const { exec } = require("child_process");
+const waitForExpect = require("wait-for-expect");
 const { extractTestRunId } = require("../util/parse_output");
-const { fetchTestRunSummary, fetchAttachment } = require("../util/projektor_client");
+const {
+  fetchTestRunSummary,
+  fetchAttachment,
+  fetchAttachments
+} = require("../util/projektor_client");
 const { verifyOutput } = require("../verify/cli_output_verify");
 
 describe("Publishing via CLI with token", () => {
@@ -45,24 +50,33 @@ describe("Publishing via CLI with token", () => {
         expect(testRunSummaryResponse.status).toEqual(200);
         expect(testRunSummaryResponse.data.id).toEqual(testRunId);
 
-        const attachment1Response = await fetchAttachment(
-          "attachment1.txt",
-          testRunId,
-          serverPort
-        );
-        expect(attachment1Response.status).toEqual(200);
-        expect(attachment1Response.data).toEqual("Here is attachment 1");
+        await waitForExpect(async () => {
+          const attachments = await fetchAttachments(testRunId, serverPort);
+          expect(attachments.data.attachments.length).toBe(2);
+        });
 
-        const attachment2Response = await fetchAttachment(
-          "attachment2.txt",
-          testRunId,
-          serverPort
-        );
-        expect(attachment2Response.status).toEqual(200);
-        expect(attachment2Response.data).toEqual("Here is attachment 2");
+        await waitForExpect(async () => {
+          const attachment1Response = await fetchAttachment(
+            "attachment1.txt",
+            testRunId,
+            serverPort
+          );
+          expect(attachment1Response.status).toEqual(200);
+          expect(attachment1Response.data).toEqual("Here is attachment 1");
+        });
+
+        await waitForExpect(async () => {
+          const attachment2Response = await fetchAttachment(
+            "attachment2.txt",
+            testRunId,
+            serverPort
+          );
+          expect(attachment2Response.status).toEqual(200);
+          expect(attachment2Response.data).toEqual("Here is attachment 2");
+        });
 
         done();
       }
     );
-  });
+  }, 15000);
 });

@@ -20,8 +20,6 @@ class AttachmentService(
 
     private val objectStoreClient = ObjectStoreClient(ObjectStoreConfig(config.url, config.accessKey, config.secretKey))
 
-    private val asyncAddAttachments = newFixedThreadPoolContext(8, "addAttachments")
-
     fun conditionallyCreateBucketIfNotExists() {
         if (config.autoCreateBucket) {
             try {
@@ -43,16 +41,14 @@ class AttachmentService(
     suspend fun addAttachment(publicId: PublicId, fileName: String, attachmentStream: InputStream, attachmentSize: Long?) {
         val objectName = attachmentObjectName(publicId, fileName)
 
-        GlobalScope.launch(asyncAddAttachments, CoroutineStart.DEFAULT) {
-            try {
-                withContext(Dispatchers.IO) {
-                    objectStoreClient.putObject(config.bucketName, objectName, attachmentStream)
-                }
-
-                attachmentRepository.addAttachment(publicId, Attachment(fileName = fileName, objectName = objectName, fileSize = attachmentSize))
-            } catch (e: Exception) {
-                logger.error("Error saving attachment '$fileName' for test run ${publicId.id}", e)
+        try {
+            withContext(Dispatchers.IO) {
+                objectStoreClient.putObject(config.bucketName, objectName, attachmentStream)
             }
+
+            attachmentRepository.addAttachment(publicId, Attachment(fileName = fileName, objectName = objectName, fileSize = attachmentSize))
+        } catch (e: Exception) {
+            logger.error("Error saving attachment '$fileName' for test run ${publicId.id}", e)
         }
     }
 

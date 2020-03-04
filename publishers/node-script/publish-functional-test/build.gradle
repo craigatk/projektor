@@ -9,14 +9,22 @@ node {
 
 evaluationDependsOn(':server:server-app')
 
+task projektorPublish(type: projektor.plugin.ProjektorManualPublishTask) {
+    serverUrl = "https://projektorlive.herokuapp.com"
+    publishToken = System.getenv("PROJEKTOR_TOKEN") ?: project.findProperty('projektor_publish_token') ?: null
+    additionalResultsDirs = ["testResults"]
+}
+
 task functionalTest(type: YarnTask) {
     dependsOn 'startServerDaemon'
     args = ['test']
+    finalizedBy(projektorPublish)
 }
 
 task functionalTestWithToken(type: YarnTask) {
     dependsOn 'startServerDaemonWithToken'
     args = ['test-with-token']
+    finalizedBy(projektorPublish)
 }
 
 task allFunctionalTests(dependsOn: [functionalTest, functionalTestWithToken])
