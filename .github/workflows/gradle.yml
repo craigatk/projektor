@@ -38,10 +38,10 @@ jobs:
     - name: Cache Gradle dependencies
       uses: actions/cache@v1
       with:
-        path: ~/.gradle
-        key: ${{ runner.os }}-gradle-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties*') }}-${{ hashFiles('**/*gradle*') }}
+        path: ~/.gradle/caches/modules-2
+        key: ${{ runner.os }}-gradle-modules-${{ hashFiles('**/*gradle*') }}
         restore-keys: |
-          ${{ runner.os }}-gradle-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties*') }}
+          ${{ runner.os }}-gradle-modules-
     - name: Build with Gradle
       env:
         DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
