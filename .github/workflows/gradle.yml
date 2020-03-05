@@ -60,10 +60,11 @@ jobs:
       with:
         node-version: 12
 
-    - name: Get yarn cache directory path
+    - name: Get Yarn cache directory path
       id: yarn-cache-dir-path
       run: echo "::set-output name=dir::$(yarn cache dir)"
 
+    - name: Cache Yarn dependencies
     - uses: actions/cache@v1
       id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
       with:
@@ -145,6 +146,14 @@ jobs:
 #        key: ${{ runner.os }}-ui-node-modules-${{ hashFiles('ui/yarn.lock') }}
 #        restore-keys: |
 #          ${{ runner.os }}-ui-node-modules
+
+    - name: Cache Gradle dependencies
+      uses: actions/cache@v1
+      with:
+        path: ~/.gradle/caches/modules-2
+        key: ${{ runner.os }}-gradle-modules-${{ hashFiles('**/*gradle*') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-modules-
 
     - name: ui install
       run: |
