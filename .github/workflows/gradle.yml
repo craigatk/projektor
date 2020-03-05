@@ -147,6 +147,10 @@ jobs:
         key: ${{ runner.os }}-gradle-modules-${{ hashFiles('**/*gradle*') }}
         restore-keys: |
           ${{ runner.os }}-gradle-modules-
+
+    - name: Get Yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
     - name: Cache Yarn dependencies
       uses: actions/cache@v1
       id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
