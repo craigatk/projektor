@@ -1,5 +1,5 @@
 plugins {
-    id 'com.github.psxpaul.execfork' version '0.1.12'
+    id 'com.github.psxpaul.execfork'
     id "com.moowork.node" version "1.3.1"
 }
 

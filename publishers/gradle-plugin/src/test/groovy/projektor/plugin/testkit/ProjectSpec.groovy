@@ -4,7 +4,7 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import projektor.plugin.ResultsWireMockStubber
-import projektor.plugin.testkit.util.SpecWriter
+import projektor.plugin.SpecWriter
 import spock.lang.Specification
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig

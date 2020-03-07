@@ -4,7 +4,7 @@ import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
 import projektor.plugin.AttachmentsWireMockStubber
 import projektor.plugin.testkit.SingleProjectSpec
-import projektor.plugin.testkit.util.AttachmentsWriter
+import projektor.plugin.AttachmentsWriter
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
