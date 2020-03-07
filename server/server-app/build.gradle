@@ -67,11 +67,13 @@ task copyUI(type: Copy, dependsOn: ['cleanStaticResources', ':ui:assemble']){
     into "${projectDir}/src/main/resources/static"
 }
 processResources.mustRunAfter(copyUI)
+shadowJar.mustRunAfter(copyUI)
 
 runShadow.dependsOn(copyUI)
-shadowJar.dependsOn(copyUI)
 
-task stage(dependsOn: 'shadowJar')
+task assembleFull(dependsOn: ['copyUI', 'shadowJar'])
+
+task stage(dependsOn: 'assembleFull')
 
 heroku {
     includes = ["${projectDir}/build/libs/server-app-1.0-all.jar"]
@@ -79,4 +81,4 @@ heroku {
     appName = "projektorlive"
 }
 
-deployHeroku.dependsOn('shadowJar')
+deployHeroku.dependsOn('assembleFull')
