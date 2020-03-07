@@ -25,7 +25,6 @@ task functionalTest(type: YarnTask) {
     args = ['cy:run']
     finalizedBy(projektorPublish)
 }
-task check(dependsOn: 'functionalTest')
 
 // https://github.com/psxpaul/gradle-execfork-plugin
 task startServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {

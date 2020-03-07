@@ -23,7 +23,7 @@ to deploy the UI files are packaged together as part of the server app into a si
 
 To build the package execute:
 
-`./gradlew :server:server-app:shadowJar`
+`./gradlew :server:server-app:assembleFull`
 
 ### Heroku
 

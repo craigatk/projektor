@@ -53,7 +53,7 @@ jobs:
           yarn install
       - name: Build project
         run: |
-          ./gradlew :server:server-app:shadowJar
+          ./gradlew :server:server-app:assembleFull
       - name: cypress-common install
         run: |
           cd cypress-common
