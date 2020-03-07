@@ -7,6 +7,38 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
+
+      - name: Get Yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v1
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-all-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-all-yarn-
+
+      - name: ui install
+        run: |
+          cd ui
+          yarn install
+
+      - name: ui test
+        env:
+          PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
+        run: |
+          cd ui
+          yarn install
+          yarn test
+          yarn projektor-publish --configFile=projektor.jest.json
+
+  ui-cypress-test:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
       - name: Install Cypress dependencies
         run: |
           sudo apt-get install xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
@@ -28,23 +60,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-all-yarn-
 
-      - name: ui test
-        env:
-          PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
+      - name: ui install
         run: |
           cd ui
           yarn install
-          yarn test
-          yarn projektor-publish --configFile=projektor.jest.json
 
       - name: cypress-common install
         run: |
           cd cypress-common
-          yarn install
-
-      - name: ui install
-        run: |
-          cd ui
           yarn install
 
       - name: UI Cypress run
