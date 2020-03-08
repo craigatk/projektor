@@ -3,6 +3,7 @@ package projektor.plugin.functionaltest
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import projektor.server.api.TestRun
+import projektor.server.api.TestSuite
 import retrofit2.Response
 
 class SingleProjectResultsFunctionalSpec extends SingleProjectFunctionalSpecification {
@@ -15,8 +16,14 @@ class SingleProjectResultsFunctionalSpec extends SingleProjectFunctionalSpecific
             }
         """.stripIndent()
 
+        List<String> expectedTestSuiteClassNames = [
+                "FirstSampleSpec",
+                "SecondSampleSpec",
+                "ThirdSampleSpec"
+        ]
+
         File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeSpecFile(testDirectory, "SampleSpec")
+        expectedTestSuiteClassNames.each { specWriter.writeSpecFile(testDirectory, it) }
 
         when:
         def result = GradleRunner.create()
@@ -31,14 +38,30 @@ class SingleProjectResultsFunctionalSpec extends SingleProjectFunctionalSpecific
         when:
         String testId = extractTestId(result.output)
 
-        Response<TestRun> testRunResponse = projektorResultsApi.testRun(testId).execute()
+        Response<TestRun> testRunResponse = projektorTestRunApi.testRun(testId).execute()
 
         then:
         testRunResponse.successful
 
-        and:
         TestRun testRun = testRunResponse.body()
-        testRun.testSuites.size() == 1
+        testRun.testSuites.size() == expectedTestSuiteClassNames.size()
+
+        expectedTestSuiteClassNames.each { expectedClassName ->
+            assert testRun.testSuites.find { it.className == expectedClassName }
+        }
+
+        when:
+        Response<List<TestSuite>> testSuitesResponse = projektorTestRunApi.testSuites(testId).execute()
+
+        then:
+        testSuitesResponse.successful
+
+        List<TestSuite> testSuites = testSuitesResponse.body()
+        testSuites.size() == expectedTestSuiteClassNames.size()
+
+        expectedTestSuiteClassNames.each { expectedClassName ->
+            assert testSuites.find { it.className == expectedClassName }
+        }
     }
 
 }

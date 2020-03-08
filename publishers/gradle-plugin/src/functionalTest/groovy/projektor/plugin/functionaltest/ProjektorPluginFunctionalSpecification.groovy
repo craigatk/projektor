@@ -4,7 +4,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import projektor.plugin.SpecWriter
 import projektor.server.client.ProjektorClientBuilder
-import projektor.server.client.ProjektorResultsApi
+import projektor.server.client.ProjektorTestRunApi
 import spock.lang.Specification
 
 class ProjektorPluginFunctionalSpecification extends Specification {
@@ -16,10 +16,10 @@ class ProjektorPluginFunctionalSpecification extends Specification {
             .addInterceptor(createLoggingInterceptor())
             .build()
 
-    ProjektorResultsApi projektorResultsApi = ProjektorClientBuilder.INSTANCE.createApi(
+    ProjektorTestRunApi projektorTestRunApi = ProjektorClientBuilder.INSTANCE.createApi(
             PROJEKTOR_SERVER_URL,
             okHttpClient,
-            ProjektorResultsApi.class
+            ProjektorTestRunApi.class
     )
 
     static String extractTestId(String output) {
