@@ -64,7 +64,9 @@ dependencies {
 
     functionalTestImplementation('org.spockframework:spock-core:1.3-groovy-2.5')
     functionalTestImplementation gradleTestKit()
-    functionalTestImplementation("com.squareup.okhttp3:okhttp:4.2.1")
+    functionalTestImplementation("com.squareup.okhttp3:okhttp:${okHttpVersion}")
+    functionalTestImplementation("com.squareup.okhttp3:logging-interceptor:${okHttpVersion}")
+    functionalTestImplementation(project(":server:server-client"))
 }
 
 test {

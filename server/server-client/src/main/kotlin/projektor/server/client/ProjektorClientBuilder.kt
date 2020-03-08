@@ -1,0 +1,25 @@
+package projektor.server.client
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.jackson.JacksonConverterFactory
+
+object ProjektorClientBuilder {
+    private val objectMapper = ObjectMapper()
+            .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+            .registerKotlinModule()
+            .registerModule(JavaTimeModule())
+
+    fun <T> createApi(baseUrl: String, okHttpClient: OkHttpClient, apiClass: Class<T>): T {
+        return Retrofit.Builder()
+                .addConverterFactory(JacksonConverterFactory.create(objectMapper))
+                .baseUrl(baseUrl)
+                .client(okHttpClient)
+                .build()
+                .create(apiClass)
+    }
+}
