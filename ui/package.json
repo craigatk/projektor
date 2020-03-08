@@ -4,9 +4,9 @@
   "main": "src/index.tsx",
   "license": "MIT",
   "scripts": {
-    "start": "parcel src/index.html",
+    "start": "parcel --out-dir dev-dist src/index.html",
     "build": "parcel build src/index.html",
-    "build:dev": "NODE_ENV=development parcel build src/index.html",
+    "build:dev": "NODE_ENV=development parcel build --out-dir dev-dist src/index.html",
     "format": "prettier --write \"src/**/*.ts*\" \"src/**/*.spec.ts*\" \"cypress/fixtures/**/*.json\" \"cypress/**/*.js\"",
     "test": "jest",
     "cy:open": "cypress open",
