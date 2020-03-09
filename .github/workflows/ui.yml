@@ -1,6 +1,10 @@
 name: UI test
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'cypress-common/**'
+      - 'ui/**'
 
 jobs:
   ui-test:
