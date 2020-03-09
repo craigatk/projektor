@@ -1,4 +1,4 @@
-name: Server test
+name: Server & Gradle plugin test
 
 on:
   push:
