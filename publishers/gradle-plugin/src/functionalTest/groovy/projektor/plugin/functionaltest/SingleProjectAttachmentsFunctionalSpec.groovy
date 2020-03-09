@@ -1,5 +1,6 @@
 package projektor.plugin.functionaltest
 
+import okhttp3.ResponseBody
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import projektor.plugin.AttachmentsWriter
@@ -54,5 +55,21 @@ class SingleProjectAttachmentsFunctionalSpec extends SingleProjectFunctionalSpec
 
         attachments.attachments.find { it.fileName == "attachment1.txt" }
         attachments.attachments.find { it.fileName == "attachment2.txt" }
+
+        when:
+        Response<ResponseBody> getAttachment1Response = projektorAttachmentsApi.getAttachments(testId, "attachment1.txt").execute()
+
+        then:
+        getAttachment1Response.isSuccessful()
+
+        getAttachment1Response.body().string() == "Here is attachment 1"
+
+        when:
+        Response<ResponseBody> getAttachment2Response = projektorAttachmentsApi.getAttachments(testId, "attachment2.txt").execute()
+
+        then:
+        getAttachment2Response.isSuccessful()
+
+        getAttachment2Response.body().string() == "Here is attachment 2"
     }
 }

@@ -88,7 +88,6 @@ task startServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {
     classpath = tasks.getByPath(':server:server-app:shadowJar').outputs.files
     main = 'io.ktor.server.netty.EngineMain'
     stopAfter = functionalTest
-    waitForPort = 8084
     waitForOutput = 'Application started'
     timeout = 120
     environment = [

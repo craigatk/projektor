@@ -9,6 +9,7 @@ import projektor.server.client.ProjektorTestRunApi
 import spock.lang.Specification
 
 class ProjektorPluginFunctionalSpecification extends Specification {
+
     static final String PROJEKTOR_SERVER_URL = "http://localhost:8084"
 
     SpecWriter specWriter = new SpecWriter()
