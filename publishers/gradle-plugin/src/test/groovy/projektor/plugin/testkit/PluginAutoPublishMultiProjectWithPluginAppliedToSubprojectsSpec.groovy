@@ -33,11 +33,6 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
         then:
         println result.output
 
-        result.task(":project1:test").outcome == FAILED
-        result.task(":project2:test").outcome == FAILED
-        result.task(":project3:test").outcome == FAILED
-
-        and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
@@ -77,11 +72,6 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
         then:
         println result.output
 
-        result.task(":project1:test").outcome == FAILED
-        result.task(":project2:test").outcome == FAILED
-        result.task(":project3:test").outcome == FAILED
-
-        and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 
