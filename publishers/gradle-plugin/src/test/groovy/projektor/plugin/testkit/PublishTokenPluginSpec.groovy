@@ -5,8 +5,6 @@ import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
 import projektor.plugin.client.ClientToken
 
-import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-
 class PublishTokenPluginSpec extends SingleProjectSpec {
     def "should include publish token as header in publish request"() {
         given:
@@ -18,7 +16,7 @@ class PublishTokenPluginSpec extends SingleProjectSpec {
         """.stripIndent()
 
         File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeSpecFile(testDirectory, "SampleSpec")
+        specWriter.writeFailingSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "DGA423"
         resultsStubber.stubResultsPostSuccess(resultsId)
@@ -28,12 +26,9 @@ class PublishTokenPluginSpec extends SingleProjectSpec {
                 .withProjectDir(projectRootDir.root)
                 .withArguments('test')
                 .withPluginClasspath()
-                .build()
+                .buildAndFail()
 
         then:
-        result.task(":test").outcome == SUCCESS
-
-        and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
 

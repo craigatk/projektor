@@ -34,6 +34,7 @@ Note: If you have a multi-project build, please apply the plugin to the root pro
 | -------------- | -------------- |
 | 1.0.0 - 1.0.2  | 1.0.0+         |
 | 1.0.3+         | 1.0.6+         |
+| 2.0.0          | 2.0.0+         |
 
 ## Configuration
 
@@ -70,7 +71,7 @@ There is also the option to not add the `publishResults` task:
 ```
 projektor {
   serverUrl = "https://myserver"
-  manualPublishEnabled = false
+  publishTaskEnabled = false
 ```
 
 You can also include results from arbitrary directories in your build with the `additionalResultsDirs` configuration option:
@@ -81,14 +82,16 @@ projektor {
   additionalResultsDirs = ['build/testResultsDir']
 ```
 
-## Development
+### All configuration options
 
-### Testing
+| Parameter                 | Type             | Default | Description                                |
+| ------------------------- | ---------------- | ------- | ------------------------------------------ |
+| serverUrl*                | `String`         | null    | Projektor server URL to publish results to |
+| autoPublish               | `boolean`        | true    | Whether results are automatically published at the end of the build |
+| autoPublishOnFailureOnly  | `boolean`        | true    | Whether results on automatically published at the end of the build only on failures |
+| publishTaskEnabled        | `boolean`        | true    | Whether the `publishResults` task is added to support easily manually publishing results by running a task |
+| publishToken              | `String`         | null    | Token to include in publish request to server (only needed when server has publish token set) |
+| additionalResultsDirs     | `List<String>`   | []      | Additional directories to include results from. Useful when you want to include results from a task that isn't `Test` type |
+| attachments               | `List<FileTree>` | []      | FileTrees to include as attachments to the test report and make available in the UI |
 
-This project has unit and integration tests as well as 
-full tests of the plugin leveraging [Gradle TestKit](https://docs.gradle.org/current/userguide/test_kit.html)
-
-To run all the tests, run `../../gradlew check`
-
-Some of the tests use [WireMock](http://wiremock.org/) to verify the sending of test results
-to the server.
+* _Required_

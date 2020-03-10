@@ -4,9 +4,9 @@ import org.gradle.api.file.FileTree
 
 class ProjektorPublishPluginExtension {
     boolean autoPublish = true
-    boolean autoPublishOnFailureOnly = false
+    boolean autoPublishOnFailureOnly = true
     String serverUrl
-    boolean manualPublishEnabled = true
+    boolean publishTaskEnabled = true
     String publishToken
     List<String> additionalResultsDirs = []
     List<FileTree> attachments = []

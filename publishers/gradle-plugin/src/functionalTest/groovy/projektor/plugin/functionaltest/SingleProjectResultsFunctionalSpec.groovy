@@ -23,17 +23,17 @@ class SingleProjectResultsFunctionalSpec extends SingleProjectFunctionalSpecific
         ]
 
         File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        expectedTestSuiteClassNames.each { specWriter.writeSpecFile(testDirectory, it) }
+        expectedTestSuiteClassNames.each { specWriter.writeFailingSpecFile(testDirectory, it) }
 
         when:
         def result = GradleRunner.create()
                 .withProjectDir(projectRootDir.root)
                 .withArguments('test')
                 .withPluginClasspath()
-                .build()
+                .buildAndFail()
 
         then:
-        result.task(":test").outcome == TaskOutcome.SUCCESS
+        result.task(":test").outcome == TaskOutcome.FAILED
 
         when:
         String testId = extractTestId(result.output)

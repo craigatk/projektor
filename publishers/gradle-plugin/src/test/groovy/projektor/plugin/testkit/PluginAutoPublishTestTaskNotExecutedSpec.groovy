@@ -12,6 +12,7 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
+                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 
@@ -45,6 +46,7 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
+                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 
@@ -94,6 +96,7 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
+                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 

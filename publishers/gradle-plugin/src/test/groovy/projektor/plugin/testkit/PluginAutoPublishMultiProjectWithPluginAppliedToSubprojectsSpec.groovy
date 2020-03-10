@@ -3,19 +3,19 @@ package projektor.plugin.testkit
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
 
-import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static org.gradle.testkit.runner.TaskOutcome.FAILED
 
 class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends MultiProjectWithPluginAppliedToSubprojectsSpec {
 
     def setup() {
-        specWriter.writeSpecFile(testDirectory1, "Sample1Spec1")
-        specWriter.writeSpecFile(testDirectory1, "Sample1Spec2")
+        specWriter.writeFailingSpecFile(testDirectory1, "Sample1Spec1")
+        specWriter.writeFailingSpecFile(testDirectory1, "Sample1Spec2")
 
-        specWriter.writeSpecFile(testDirectory2, "Sample2Spec1")
-        specWriter.writeSpecFile(testDirectory2, "Sample2Spec2")
+        specWriter.writeFailingSpecFile(testDirectory2, "Sample2Spec1")
+        specWriter.writeFailingSpecFile(testDirectory2, "Sample2Spec2")
 
-        specWriter.writeSpecFile(testDirectory3, "Sample3Spec1")
-        specWriter.writeSpecFile(testDirectory3, "Sample3Spec2")
+        specWriter.writeFailingSpecFile(testDirectory3, "Sample3Spec1")
+        specWriter.writeFailingSpecFile(testDirectory3, "Sample3Spec2")
     }
 
     def "should send results from multiple subprojects in one blob to server"() {
@@ -26,16 +26,16 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
         when:
         def result = GradleRunner.create()
                 .withProjectDir(projectRootDir.root)
-                .withArguments('test')
+                .withArguments('test', '--parallel')
                 .withPluginClasspath()
-                .build()
+                .buildAndFail()
 
         then:
         println result.output
 
-        result.task(":project1:test").outcome == SUCCESS
-        result.task(":project2:test").outcome == SUCCESS
-        result.task(":project3:test").outcome == SUCCESS
+        result.task(":project1:test").outcome == FAILED
+        result.task(":project2:test").outcome == FAILED
+        result.task(":project3:test").outcome == FAILED
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
@@ -70,16 +70,16 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
         when:
         def result = GradleRunner.create()
                 .withProjectDir(projectRootDir.root)
-                .withArguments('test')
+                .withArguments('test', '--parallel')
                 .withPluginClasspath()
-                .build()
+                .buildAndFail()
 
         then:
         println result.output
 
-        result.task(":project1:test").outcome == SUCCESS
-        result.task(":project2:test").outcome == SUCCESS
-        result.task(":project3:test").outcome == SUCCESS
+        result.task(":project1:test").outcome == FAILED
+        result.task(":project2:test").outcome == FAILED
+        result.task(":project3:test").outcome == FAILED
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
@@ -104,14 +104,14 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
         when:
         def result = GradleRunner.create()
                 .withProjectDir(projectRootDir.root)
-                .withArguments('-p', 'project1', 'test')
+                .withArguments('-p', 'project1', 'test', '--parallel')
                 .withPluginClasspath()
-                .build()
+                .buildAndFail()
 
         then:
         println result.output
 
-        result.task(":project1:test").outcome == SUCCESS
+        result.task(":project1:test").outcome == FAILED
         !result.task(":project2:test")
         !result.task(":project3:test")
 

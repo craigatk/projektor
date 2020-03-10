@@ -61,7 +61,7 @@ class ProjektorPublishPlugin implements Plugin<Project> {
     }
 
     static void conditionallyAddPublishTask(Project project, ProjektorPublishPluginExtension extension) {
-        if (extension.manualPublishEnabled && extension.serverUrl) {
+        if (extension.publishTaskEnabled && extension.serverUrl) {
             project.allprojects.each { proj ->
                 if (!proj.tasks.findByPath(PUBLISH_TASK_NAME)) {
                     proj.tasks.create(PUBLISH_TASK_NAME, ProjektorManualPublishTask, { task ->

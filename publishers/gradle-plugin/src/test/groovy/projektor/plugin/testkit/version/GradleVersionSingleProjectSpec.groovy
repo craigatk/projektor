@@ -19,7 +19,7 @@ class GradleVersionSingleProjectSpec extends SingleProjectSpec {
         """.stripIndent()
 
         File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeSpecFile(testDirectory, "SampleSpec")
+        specWriter.writeFailingSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "ABC123"
         resultsStubber.stubResultsPostSuccess(resultsId)
@@ -30,12 +30,9 @@ class GradleVersionSingleProjectSpec extends SingleProjectSpec {
                 .withArguments('test')
                 .withPluginClasspath()
                 .withGradleVersion(gradleVersion)
-                .build()
+                .buildAndFail()
 
         then:
-        result.task(":test").outcome == SUCCESS
-
-        and:
         !result.output.contains("Projektor plugin enabled but no server specified")
         result.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
 

@@ -16,7 +16,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
         """.stripIndent()
 
         File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeSpecFile(testDirectory, "SampleSpec")
+        specWriter.writeFailingSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "ABC123"
         resultsStubber.stubResultsPostSuccess(resultsId)
@@ -26,12 +26,9 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
                 .withProjectDir(projectRootDir.root)
                 .withArguments('test')
                 .withPluginClasspath()
-                .build()
+                .buildAndFail()
 
         then:
-        result.task(":test").outcome == SUCCESS
-
-        and:
         !result.output.contains("Projektor plugin enabled but no server specified")
         result.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
 
@@ -50,7 +47,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
         """.stripIndent()
 
         File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeSpecFile(testDirectory, "SampleSpec")
+        specWriter.writeFailingSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "ABC123"
         resultsStubber.stubResultsPostSuccess(resultsId)
@@ -60,12 +57,9 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
                 .withProjectDir(projectRootDir.root)
                 .withArguments('test', '-i')
                 .withPluginClasspath()
-                .build()
+                .buildAndFail()
 
         then:
-        result.task(":test").outcome == SUCCESS
-
-        and:
         result.output.contains("Projektor plugin auto-publish disabled")
         !result.output.contains("Projektor plugin enabled but no server specified")
         !result.output.contains("View Projektor report at")
@@ -80,6 +74,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = null
+                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 

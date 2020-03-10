@@ -24,6 +24,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
             projektor {
                 serverUrl = '${serverUrl}'
                 additionalResultsDirs = ['build/customResults1', 'build/customResults2']
+                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 
@@ -135,6 +136,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
             projektor {
                 serverUrl = '${serverUrl}'
                 additionalResultsDirs = ['build/doesNotExist', 'build/customResults1', 'build/customResults2']
+                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 

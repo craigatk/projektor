@@ -24,4 +24,10 @@ class AttachmentsWireMockStubber extends WireMockStubber {
                 postRequestedFor(urlMatching("/run/${publicId}/attachments/.*")).build()
         ).requests
     }
+
+    List<LoggedRequest> findAnyAttachmentRequests() {
+        wireMockServer.findRequestsMatching(
+                postRequestedFor(urlMatching("/run/.*/attachments/.*")).build()
+        ).requests
+    }
 }

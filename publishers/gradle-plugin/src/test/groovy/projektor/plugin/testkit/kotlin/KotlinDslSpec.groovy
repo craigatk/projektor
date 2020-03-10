@@ -4,7 +4,7 @@ import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
 import projektor.plugin.testkit.ProjectSpec
 
-import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static org.gradle.testkit.runner.TaskOutcome.FAILED
 
 class KotlinDslSpec extends ProjectSpec {
     File buildFile
@@ -40,7 +40,7 @@ class KotlinDslSpec extends ProjectSpec {
     def "should publish results from test task to server"() {
         given:
         File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeSpecFile(testDirectory, "SampleSpec")
+        specWriter.writeFailingSpecFile(testDirectory, "SampleSpec")
 
         String resultsId = "ABC123"
         resultsStubber.stubResultsPostSuccess(resultsId)
@@ -50,10 +50,10 @@ class KotlinDslSpec extends ProjectSpec {
                 .withProjectDir(projectRootDir.root)
                 .withArguments('test')
                 .withPluginClasspath()
-                .build()
+                .buildAndFail()
 
         then:
-        result.task(":test").outcome == SUCCESS
+        result.task(":test").outcome == FAILED
 
         and:
         !result.output.contains("Projektor plugin enabled but no server specified")
