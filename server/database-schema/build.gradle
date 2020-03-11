@@ -1,6 +1,6 @@
 plugins {
     id "com.avast.gradle.docker-compose" version "0.9.4"
-    id 'nu.studer.jooq' version '3.0.3'
+    id 'nu.studer.jooq' version '4.1'
     id "org.flywaydb.flyway" version "6.0.0"
     id "java-library"
 }
@@ -25,6 +25,7 @@ flyway {
 jooq {
     version = '3.11.11'
     edition = 'OSS'
+    generateSchemaSourceOnCompilation = false
     model(sourceSets.main) {
         jdbc {
             driver = 'org.postgresql.Driver'
@@ -58,9 +59,6 @@ jooq {
         }
     }
 }
-
-// removes the task dependency from compileJava to generateSampleJooqSchemaSource
-project.tasks.getByName('compileJava').dependsOn -= 'generateModelJooqSchemaSource'
 
 generateModelJooqSchemaSource.inputs.dir("${projectDir}/src/main/resources/db/migration")
 generateModelJooqSchemaSource.outputs.cacheIf { true }
