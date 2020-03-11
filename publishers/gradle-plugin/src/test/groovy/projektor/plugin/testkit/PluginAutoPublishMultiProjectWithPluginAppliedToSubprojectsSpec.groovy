@@ -26,7 +26,7 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
         when:
         def result = GradleRunner.create()
                 .withProjectDir(projectRootDir.root)
-                .withArguments('test', '--parallel')
+                .withArguments('test', '--continue')
                 .withPluginClasspath()
                 .buildAndFail()
 
@@ -65,7 +65,7 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
         when:
         def result = GradleRunner.create()
                 .withProjectDir(projectRootDir.root)
-                .withArguments('test', '--parallel')
+                .withArguments('test', '--continue')
                 .withPluginClasspath()
                 .buildAndFail()
 
@@ -94,7 +94,7 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
         when:
         def result = GradleRunner.create()
                 .withProjectDir(projectRootDir.root)
-                .withArguments('-p', 'project1', 'test', '--parallel')
+                .withArguments('-p', 'project1', 'test', '--continue')
                 .withPluginClasspath()
                 .buildAndFail()
 

@@ -32,7 +32,7 @@ class PluginAutoPublishMultiProjectSpec extends MultiProjectSpec {
         when:
         def result = GradleRunner.create()
                 .withProjectDir(projectRootDir.root)
-                .withArguments('test', '--parallel')
+                .withArguments('test', '--continue')
                 .withPluginClasspath()
                 .buildAndFail()
 
@@ -96,7 +96,7 @@ class PluginAutoPublishMultiProjectSpec extends MultiProjectSpec {
 
         def secondResult = GradleRunner.create()
                 .withProjectDir(projectRootDir.root)
-                .withArguments(':project2:test', ':project3:test', '--parallel')
+                .withArguments(':project2:test', ':project3:test', '--continue')
                 .withPluginClasspath()
                 .buildAndFail()
 
