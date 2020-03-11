@@ -13,7 +13,7 @@ To apply this plugin to your project:
 
 ```
 plugins {
-  id "dev.projektor.publish" version "2.0.0"
+  id "dev.projektor.publish" version "3.0.0"
 }
 ```
 
