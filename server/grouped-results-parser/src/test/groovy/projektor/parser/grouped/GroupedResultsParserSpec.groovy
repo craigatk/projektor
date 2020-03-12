@@ -10,7 +10,7 @@ class GroupedResultsParserSpec extends Specification {
     @Subject
     GroupedResultsParser groupedResultsParser = new GroupedResultsParser()
 
-    private final ObjectMapper mapper = new ObjectMapper()
+    private ObjectMapper mapper = new ObjectMapper()
 
     def "should deserialize grouped results that were serialized"() {
         given:

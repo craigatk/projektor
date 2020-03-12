@@ -42,7 +42,6 @@ class GradleVersionSingleProjectSpec extends SingleProjectSpec {
 
         where:
         gradleVersion                   | _
-        "4.0"                           | _
         "5.0"                           | _
         "6.0.1"                         | _
         GradleVersion.current().version | _

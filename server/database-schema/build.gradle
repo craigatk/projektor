@@ -8,7 +8,7 @@ plugins {
 dependencies {
     api "org.flywaydb:flyway-core:6.0.0"
     api "com.zaxxer:HikariCP:3.3.1"
-    api 'org.jooq:jooq:3.11.11'
+    api 'org.jooq:jooq:3.13.1'
 
     // Needs to be 'compile' scope so the Flyway plugin can see it
     compile "org.postgresql:postgresql:$postgresDriverVersion"
@@ -23,7 +23,7 @@ flyway {
 }
 
 jooq {
-    version = '3.11.11'
+    version = '3.13.1'
     edition = 'OSS'
     generateSchemaSourceOnCompilation = false
     model(sourceSets.main) {

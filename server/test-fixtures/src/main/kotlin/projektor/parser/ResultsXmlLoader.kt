@@ -1,7 +1,6 @@
 package projektor.parser
 
-import org.reflections.Reflections
-import org.reflections.scanners.ResourcesScanner
+import io.github.classgraph.ClassGraph
 import projektor.results.processor.ResultsXmlMerger
 
 class ResultsXmlLoader {
@@ -20,10 +19,14 @@ class ResultsXmlLoader {
     fun someIgnoredSomeFailing() = loadTextFromFile("TEST-projektor.example.spock.IgnoreSomeMethodsAndSomeFailingSpec.xml")
 
     fun cypressResults(): List<String> {
-        val reflections = Reflections(null, ResourcesScanner())
-        val resourceList = reflections.getResources { x -> x != null && x.contains("cypress") && x.contains("xml") }
+        val cypressResourceList = ClassGraph()
+                .whitelistPaths("cypress")
+                .scan()
+                .getResourcesWithExtension("xml")
 
-        return resourceList.map(::loadTextFromFile).map(ResultsXmlMerger::removeTestSuitesWrapper)
+        return cypressResourceList
+                .map { String(it.load()) }
+                .map(ResultsXmlMerger::removeTestSuitesWrapper)
     }
 
     private fun loadTextFromFile(filename: String) = javaClass
