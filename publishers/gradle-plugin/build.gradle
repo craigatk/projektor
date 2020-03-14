@@ -44,7 +44,7 @@ repositories {
 }
 
 group = "dev.projektor"
-version = "4.0.0"
+version = "4.0.1"
 
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.2.1")
