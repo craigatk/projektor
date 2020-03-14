@@ -32,11 +32,13 @@ Note: If you have a multi-project build, please apply the plugin to the root pro
 
 ## Compatibility
 
-| Plugin version | Server version |
-| -------------- | -------------- |
-| 1.0.0 - 1.0.2  | 1.0.0+         |
-| 1.0.3+         | 1.0.6+         |
-| 2.0.0          | 2.0.0+         |
+| Plugin version | Server version | Java version |
+| -------------- | -------------- | ------------ |
+| 1.0.0 - 1.0.2  | 1.0.0+         | 8+           |
+| 1.0.3+         | 1.0.6+         | 8+           |
+| 2.0.0          | 2.0.0+         | 8+           |
+| 3.0.0          | 2.0.0+         | 8+           |
+| 4.0.0          | 2.0.0+         | 11+          |
 
 ## Configuration
 
