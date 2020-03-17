@@ -28,6 +28,8 @@ jobs:
       - name: Build
         env:
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
+          CACHE_ACCESS_KEY: ${{ secrets.CACHE_ACCESS_KEY }}
+          CACHE_SECRET_KEY: ${{ secrets.CACHE_SECRET_KEY }}
         run: ./gradlew :publishers:gradle-plugin:build -x :publishers:gradle-plugin:functionalTest
 
       - name: Publish plugin
