@@ -89,4 +89,6 @@ jobs:
         env:
           DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
+          CACHE_ACCESS_KEY: ${{ secrets.CACHE_ACCESS_KEY }}
+          CACHE_SECRET_KEY: ${{ secrets.CACHE_SECRET_KEY }}
         run: ./gradlew :functional-test:functionalTest
