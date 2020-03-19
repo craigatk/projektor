@@ -21,7 +21,7 @@
     "@types/jest": "24.0.18",
     "axios-mock-adapter": "1.17.0",
     "chai-colors": "1.0.1",
-    "cypress": "4.1.0",
+    "cypress": "4.2.0",
     "env-cmd": "10.1.0",
     "jest": "24.9.0",
     "jest-junit": "10.0.0",
