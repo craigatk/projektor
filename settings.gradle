@@ -1,5 +1,5 @@
 plugins {
-    id "com.atkinsondev.object-store-cache" version "0.0.1"
+    id "com.atkinsondev.object-store-cache" version "0.0.4"
 }
 
 include 'server:database-schema',
