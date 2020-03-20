@@ -12,7 +12,7 @@ import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
 import projektor.ApplicationTestCase
 import projektor.parser.GroupedResultsXmlLoader
-import projektor.server.api.SaveResultsResponse
+import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo

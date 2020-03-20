@@ -39,6 +39,7 @@ open class ApplicationTestCase {
     lateinit var testCaseDao: TestCaseDao
     lateinit var testFailureDao: TestFailureDao
     lateinit var attachmentDao: TestRunAttachmentDao
+    lateinit var testRunSystemAttributesDao: TestRunSystemAttributesDao
     lateinit var testRunDBGenerator: TestRunDBGenerator
     lateinit var application: Application
 
@@ -81,6 +82,7 @@ open class ApplicationTestCase {
         testCaseDao = TestCaseDao(dslContext.configuration())
         testFailureDao = TestFailureDao(dslContext.configuration())
         attachmentDao = TestRunAttachmentDao(dslContext.configuration())
+        testRunSystemAttributesDao = TestRunSystemAttributesDao(dslContext.configuration())
         testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao)
 
         this.application = application

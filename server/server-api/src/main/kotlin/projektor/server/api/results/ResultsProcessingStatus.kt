@@ -1,4 +1,4 @@
-package projektor.server.api
+package projektor.server.api.results
 
 enum class ResultsProcessingStatus {
     RECEIVED,

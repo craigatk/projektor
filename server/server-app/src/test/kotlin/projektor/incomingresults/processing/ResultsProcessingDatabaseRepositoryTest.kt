@@ -8,7 +8,7 @@ import org.koin.core.get
 import projektor.DatabaseRepositoryTestCase
 import projektor.database.generated.tables.pojos.ResultsProcessing
 import projektor.incomingresults.randomPublicId
-import projektor.server.api.ResultsProcessingStatus
+import projektor.server.api.results.ResultsProcessingStatus
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull

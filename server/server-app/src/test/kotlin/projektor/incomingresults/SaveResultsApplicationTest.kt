@@ -8,7 +8,7 @@ import kotlin.test.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
 import projektor.ApplicationTestCase
-import projektor.server.api.SaveResultsResponse
+import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
 import strikt.assertions.*
 

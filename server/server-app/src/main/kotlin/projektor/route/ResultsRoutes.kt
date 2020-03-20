@@ -16,7 +16,7 @@ import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
 import projektor.server.api.PublicId
-import projektor.server.api.SaveResultsResponse
+import projektor.server.api.results.SaveResultsResponse
 
 @KtorExperimentalAPI
 fun Route.results(

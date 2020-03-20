@@ -19,6 +19,7 @@ import projektor.database.generated.tables.TestCase;
 import projektor.database.generated.tables.TestFailure;
 import projektor.database.generated.tables.TestRun;
 import projektor.database.generated.tables.TestRunAttachment;
+import projektor.database.generated.tables.TestRunSystemAttributes;
 import projektor.database.generated.tables.TestSuite;
 import projektor.database.generated.tables.TestSuiteGroup;
 
@@ -36,7 +37,7 @@ import projektor.database.generated.tables.TestSuiteGroup;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 1744606721;
+    private static final long serialVersionUID = 1048265432;
 
     /**
      * The reference instance of <code>public</code>
@@ -67,6 +68,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.test_run_attachment</code>.
      */
     public final TestRunAttachment TEST_RUN_ATTACHMENT = TestRunAttachment.TEST_RUN_ATTACHMENT;
+
+    /**
+     * The table <code>public.test_run_system_attributes</code>.
+     */
+    public final TestRunSystemAttributes TEST_RUN_SYSTEM_ATTRIBUTES = TestRunSystemAttributes.TEST_RUN_SYSTEM_ATTRIBUTES;
 
     /**
      * The table <code>public.test_suite</code>.
@@ -113,6 +119,7 @@ public class Public extends SchemaImpl {
             TestFailure.TEST_FAILURE,
             TestRun.TEST_RUN,
             TestRunAttachment.TEST_RUN_ATTACHMENT,
+            TestRunSystemAttributes.TEST_RUN_SYSTEM_ATTRIBUTES,
             TestSuite.TEST_SUITE,
             TestSuiteGroup.TEST_SUITE_GROUP);
     }

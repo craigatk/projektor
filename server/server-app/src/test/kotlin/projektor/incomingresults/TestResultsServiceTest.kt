@@ -9,7 +9,7 @@ import org.koin.core.get
 import projektor.DatabaseRepositoryTestCase
 import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.parser.ResultsXmlLoader
-import projektor.server.api.ResultsProcessingStatus
+import projektor.server.api.results.ResultsProcessingStatus
 import strikt.api.expectCatching
 import strikt.api.expectThat
 import strikt.assertions.*

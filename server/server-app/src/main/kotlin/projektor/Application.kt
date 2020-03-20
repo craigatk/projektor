@@ -34,6 +34,7 @@ import projektor.incomingresults.TestResultsService
 import projektor.route.*
 import projektor.testcase.TestCaseService
 import projektor.testrun.TestRunService
+import projektor.testrun.attributes.TestRunSystemAttributesService
 import projektor.testsuite.TestSuiteService
 
 @ObsoleteCoroutinesApi
@@ -85,6 +86,7 @@ fun Application.main() {
     val testRunService: TestRunService by inject()
     val testCaseService: TestCaseService by inject()
     val testSuiteService: TestSuiteService by inject()
+    val testRunSystemAttributesService: TestRunSystemAttributesService by inject()
 
     val attachmentRepository: AttachmentRepository by inject()
     val attachmentService = conditionallyCreateAttachmentService(applicationConfig, attachmentRepository)
@@ -97,6 +99,7 @@ fun Application.main() {
         testCases(testCaseService)
         testSuites(testSuiteService)
         testRuns(testRunService)
+        testRunSystemAttributes(testRunSystemAttributesService)
         ui()
     }
 }

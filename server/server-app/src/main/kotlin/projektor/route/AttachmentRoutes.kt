@@ -14,10 +14,10 @@ import io.ktor.util.getOrFail
 import projektor.attachment.AttachmentService
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
-import projektor.server.api.AddAttachmentError
-import projektor.server.api.AddAttachmentResponse
-import projektor.server.api.Attachments
 import projektor.server.api.PublicId
+import projektor.server.api.attachments.AddAttachmentError
+import projektor.server.api.attachments.AddAttachmentResponse
+import projektor.server.api.attachments.Attachments
 
 @KtorExperimentalAPI
 fun Route.attachments(

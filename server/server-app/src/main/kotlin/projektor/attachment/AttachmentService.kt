@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory
 import projektor.objectstore.ObjectStoreClient
 import projektor.objectstore.ObjectStoreConfig
 import projektor.objectstore.bucket.BucketCreationException
-import projektor.server.api.Attachment
 import projektor.server.api.PublicId
+import projektor.server.api.attachments.Attachment
 
 @KtorExperimentalAPI
 class AttachmentService(

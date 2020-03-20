@@ -12,8 +12,8 @@ import kotlin.test.*
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
-import projektor.server.api.AddAttachmentError
-import projektor.server.api.AddAttachmentResponse
+import projektor.server.api.attachments.AddAttachmentError
+import projektor.server.api.attachments.AddAttachmentResponse
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull

@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory
 import projektor.parser.model.TestSuite
 import projektor.results.processor.TestResultsProcessor
 import projektor.server.api.PublicId
-import projektor.server.api.ResultsProcessingStatus
 import projektor.server.api.TestRunSummary
+import projektor.server.api.results.ResultsProcessingStatus
 import projektor.testrun.TestRunRepository
 
 @ObsoleteCoroutinesApi

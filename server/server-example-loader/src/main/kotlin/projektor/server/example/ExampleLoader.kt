@@ -8,7 +8,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.ResultsXmlLoader
-import projektor.server.api.SaveResultsResponse
+import projektor.server.api.results.SaveResultsResponse
 
 val serverBaseUrl = System.getenv("SERVER_URL") ?: "http://localhost:8080"
 val uiBaseUrl = System.getenv("SERVER_URL") ?: "http://localhost:1234"

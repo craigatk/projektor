@@ -23,6 +23,9 @@ import projektor.testcase.TestCaseService
 import projektor.testrun.TestRunDatabaseRepository
 import projektor.testrun.TestRunRepository
 import projektor.testrun.TestRunService
+import projektor.testrun.attributes.TestRunSystemAttributesDatabaseRepository
+import projektor.testrun.attributes.TestRunSystemAttributesRepository
+import projektor.testrun.attributes.TestRunSystemAttributesService
 import projektor.testsuite.TestSuiteDatabaseRepository
 import projektor.testsuite.TestSuiteRepository
 import projektor.testsuite.TestSuiteService
@@ -41,6 +44,7 @@ fun createAppModule(
     single<TestCaseRepository> { TestCaseDatabaseRepository(get()) }
     single<TestSuiteRepository> { TestSuiteDatabaseRepository(get()) }
     single<TestRunRepository> { TestRunDatabaseRepository(get()) }
+    single<TestRunSystemAttributesRepository> { TestRunSystemAttributesDatabaseRepository(get()) }
     single<AttachmentRepository> { AttachmentDatabaseRepository(get()) }
     single<ResultsProcessingRepository> { ResultsProcessingDatabaseRepository(get()) }
     single { GroupedResultsParser() }
@@ -51,4 +55,5 @@ fun createAppModule(
     single { TestResultsProcessingService(get()) }
     single { TestResultsService(get(), get(), get()) }
     single { TestRunService(get()) }
+    single { TestRunSystemAttributesService(get()) }
 }

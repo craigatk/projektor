@@ -12,7 +12,7 @@ import kotlin.test.assertNotNull
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
-import projektor.server.api.Attachments
+import projektor.server.api.attachments.Attachments
 import strikt.api.expectThat
 import strikt.assertions.any
 import strikt.assertions.hasSize

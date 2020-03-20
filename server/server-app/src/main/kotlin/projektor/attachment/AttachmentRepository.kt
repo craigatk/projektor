@@ -1,7 +1,7 @@
 package projektor.attachment
 
-import projektor.server.api.Attachment
 import projektor.server.api.PublicId
+import projektor.server.api.attachments.Attachment
 
 interface AttachmentRepository {
     suspend fun addAttachment(publicId: PublicId, attachment: Attachment)

@@ -5,13 +5,15 @@ import io.ktor.http.HttpMethod
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
+import io.ktor.util.KtorExperimentalAPI
 import kotlin.test.assertNotNull
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.Test
 import projektor.ApplicationTestCase
-import projektor.server.api.SaveResultsResponse
+import projektor.server.api.results.SaveResultsResponse
 
+@KtorExperimentalAPI
 class DatabaseSchemaApplicationTest : ApplicationTestCase() {
     @Test
     fun `should support saving results to a different schema`() {

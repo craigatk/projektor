@@ -10,7 +10,7 @@ import org.awaitility.kotlin.untilNotNull
 import org.koin.ktor.ext.get
 import projektor.ApplicationTestCase
 import projektor.server.api.PublicId
-import projektor.server.api.SaveResultsResponse
+import projektor.server.api.results.SaveResultsResponse
 import projektor.testsuite.TestSuiteService
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo

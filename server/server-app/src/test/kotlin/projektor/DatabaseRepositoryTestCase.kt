@@ -2,8 +2,10 @@ package projektor
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import io.ktor.util.KtorExperimentalAPI
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.jooq.DSLContext
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
@@ -25,7 +27,10 @@ open class DatabaseRepositoryTestCase : KoinTest {
     lateinit var testRunDBGenerator: TestRunDBGenerator
     lateinit var resultsProcessingDao: ResultsProcessingDao
     lateinit var attachmentDao: TestRunAttachmentDao
+    lateinit var testRunSystemAttributesDao: TestRunSystemAttributesDao
 
+    @ObsoleteCoroutinesApi
+    @KtorExperimentalAPI
     @BeforeTest
     fun setup() {
         val hikariConfig = HikariConfig()
@@ -59,6 +64,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
         testFailureDao = TestFailureDao(dslContext.configuration())
         resultsProcessingDao = ResultsProcessingDao(dslContext.configuration())
         attachmentDao = TestRunAttachmentDao(dslContext.configuration())
+        testRunSystemAttributesDao = TestRunSystemAttributesDao(dslContext.configuration())
 
         testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao)
     }
