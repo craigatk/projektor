@@ -1,8 +1,8 @@
 package projektor.incomingresults.processing
 
 import projektor.server.api.PublicId
-import projektor.server.api.ResultsProcessing
-import projektor.server.api.ResultsProcessingStatus
+import projektor.server.api.results.ResultsProcessing
+import projektor.server.api.results.ResultsProcessingStatus
 
 interface ResultsProcessingRepository {
     suspend fun createResultsProcessing(publicId: PublicId): ResultsProcessing

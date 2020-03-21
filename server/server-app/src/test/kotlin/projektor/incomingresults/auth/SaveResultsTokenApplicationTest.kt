@@ -6,14 +6,16 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
+import io.ktor.util.KtorExperimentalAPI
 import kotlin.test.*
 import kotlin.test.assertNotNull
 import projektor.ApplicationTestCase
 import projektor.auth.AuthConfig
-import projektor.server.api.SaveResultsResponse
+import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
 import strikt.assertions.*
 
+@KtorExperimentalAPI
 class SaveResultsTokenApplicationTest : ApplicationTestCase() {
     @Test
     fun `when token set and valid token included in header should save results`() {

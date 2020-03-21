@@ -1,4 +1,4 @@
-package projektor.server.api
+package projektor.server.api.results
 
 import java.time.LocalDateTime
 

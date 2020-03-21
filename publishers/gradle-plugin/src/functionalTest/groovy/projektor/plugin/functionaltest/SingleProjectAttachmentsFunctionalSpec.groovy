@@ -4,7 +4,7 @@ import okhttp3.ResponseBody
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import projektor.plugin.AttachmentsWriter
-import projektor.server.api.Attachments
+import projektor.server.api.attachments.Attachments
 import projektor.server.api.TestRun
 import retrofit2.Response
 

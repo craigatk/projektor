@@ -2,8 +2,8 @@ package projektor.incomingresults
 
 import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.server.api.PublicId
-import projektor.server.api.ResultsProcessing
-import projektor.server.api.ResultsProcessingStatus
+import projektor.server.api.results.ResultsProcessing
+import projektor.server.api.results.ResultsProcessingStatus
 
 class TestResultsProcessingService(
     private val resultsProcessingRepository: ResultsProcessingRepository

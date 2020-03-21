@@ -10,8 +10,8 @@ import projektor.database.generated.Tables
 import projektor.database.generated.tables.daos.ResultsProcessingDao
 import projektor.database.generated.tables.pojos.ResultsProcessing as ResultsProcessingDB
 import projektor.server.api.PublicId
-import projektor.server.api.ResultsProcessing
-import projektor.server.api.ResultsProcessingStatus
+import projektor.server.api.results.ResultsProcessing
+import projektor.server.api.results.ResultsProcessingStatus
 
 class ResultsProcessingDatabaseRepository(private val dslContext: DSLContext) : ResultsProcessingRepository {
     private val resultsProcessingDao = ResultsProcessingDao(dslContext.configuration())

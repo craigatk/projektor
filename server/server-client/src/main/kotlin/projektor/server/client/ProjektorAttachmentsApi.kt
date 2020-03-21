@@ -1,7 +1,7 @@
 package projektor.server.client
 
 import okhttp3.ResponseBody
-import projektor.server.api.Attachments
+import projektor.server.api.attachments.Attachments
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

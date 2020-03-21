@@ -1,4 +1,4 @@
-package projektor.server.api
+package projektor.server.api.attachments
 
 data class AddAttachmentResponse(
     val name: String?,

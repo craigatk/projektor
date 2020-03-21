@@ -1,5 +1,5 @@
 plugins {
-    id "com.atkinsondev.object-store-cache" version "0.0.4"
+    id "com.atkinsondev.object-store-cache" version "0.0.5"
 }
 
 include 'server:database-schema',
@@ -29,6 +29,7 @@ buildCache {
         secretKey = System.getenv("CACHE_SECRET_KEY") ?: cache_secret_key
         bucket = 'projektorcache'
         autoCreateBucket = true
+        expirationInDays = 10
         push = isCI
     }
 }

@@ -7,8 +7,8 @@ import kotlinx.coroutines.newFixedThreadPoolContext
 import org.slf4j.LoggerFactory
 import projektor.incomingresults.model.GroupedResults
 import projektor.server.api.PublicId
-import projektor.server.api.ResultsProcessingStatus
 import projektor.server.api.TestRunSummary
+import projektor.server.api.results.ResultsProcessingStatus
 import projektor.testrun.TestRunRepository
 
 class GroupedTestResultsService(
