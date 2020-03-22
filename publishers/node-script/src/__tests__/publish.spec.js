@@ -4,7 +4,7 @@ const MockAdapter = require("axios-mock-adapter");
 const {
   collectResults,
   sendResults,
-  collectAndSendResults
+  collectAndSendResults,
 } = require("../publish");
 
 describe("Projektor publisher", () => {
@@ -18,7 +18,7 @@ describe("Projektor publisher", () => {
     mockAxios.restore();
   });
 
-  it("should gather results from one directory and send it to server", done => {
+  it("should gather results from one directory and send it to server", (done) => {
     const fileGlob = "src/__tests__/resultsDir1/*.xml";
     const serverUrl = "http://localhost:8080";
 
@@ -28,7 +28,7 @@ describe("Projektor publisher", () => {
 
     const resultsBlob = collectResults([fileGlob]);
 
-    sendResults(serverUrl, null, resultsBlob).then(respData => {
+    sendResults(serverUrl, null, resultsBlob).then((respData) => {
       expect(respData.id).toBe("ABC123");
       expect(respData.uri).toBe("/tests/ABC123");
 

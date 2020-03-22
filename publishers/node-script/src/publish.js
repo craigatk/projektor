@@ -3,28 +3,28 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 
-const isFile = path => fs.lstatSync(path).isFile();
+const isFile = (path) => fs.lstatSync(path).isFile();
 
-const globsToFilePaths = fileGlobs => {
+const globsToFilePaths = (fileGlobs) => {
   const allFilePaths = [];
 
-  fileGlobs.forEach(fileGlob => {
+  fileGlobs.forEach((fileGlob) => {
     const filePaths = glob.sync(fileGlob);
     if (filePaths && filePaths.length > 0) {
       allFilePaths.push(...filePaths);
     }
   });
 
-  return allFilePaths.filter(filePath => isFile(filePath));
+  return allFilePaths.filter((filePath) => isFile(filePath));
 };
 
-const collectResults = resultsFileGlobs => {
+const collectResults = (resultsFileGlobs) => {
   let resultsBlob = "";
 
   const resultsFilePaths = globsToFilePaths(resultsFileGlobs);
 
   if (resultsFilePaths.length > 0) {
-    resultsFilePaths.forEach(filePath => {
+    resultsFilePaths.forEach((filePath) => {
       const fileContents = fs.readFileSync(filePath);
       resultsBlob = resultsBlob + fileContents + "\n";
     });
@@ -33,10 +33,10 @@ const collectResults = resultsFileGlobs => {
   return resultsBlob;
 };
 
-const collectAttachments = attachmentFileGlobs => {
+const collectAttachments = (attachmentFileGlobs) => {
   const attachmentFilePaths = globsToFilePaths(attachmentFileGlobs);
 
-  const attachments = attachmentFilePaths.map(filePath => {
+  const attachments = attachmentFilePaths.map((filePath) => {
     const fileContents = fs.readFileSync(filePath);
     const fileName = path.basename(filePath);
     return { name: fileName, contents: fileContents };
@@ -53,13 +53,13 @@ const sendResults = (serverUrl, publishToken, resultsBlob) => {
   }
 
   const axiosInstance = axios.create({
-    headers
+    headers,
   });
 
   return axiosInstance
     .post(`${serverUrl}/results`, resultsBlob)
-    .then(resp => Promise.resolve(resp.data))
-    .catch(err => Promise.reject(err));
+    .then((resp) => Promise.resolve(resp.data))
+    .catch((err) => Promise.reject(err));
 };
 
 const sendAttachment = (
@@ -76,15 +76,15 @@ const sendAttachment = (
   }
 
   const axiosInstance = axios.create({
-    headers
+    headers,
   });
 
   const attachmentPostUrl = `${serverUrl}/run/${publicId}/attachments/${attachmentFileName}`;
 
   return axiosInstance
     .post(attachmentPostUrl, attachmentContents)
-    .then(resp => Promise.resolve(resp.data))
-    .catch(err => Promise.reject(err));
+    .then((resp) => Promise.resolve(resp.data))
+    .catch((err) => Promise.reject(err));
 };
 
 const collectAndSendAttachments = (
@@ -101,14 +101,14 @@ const collectAndSendAttachments = (
       console.log(
         `Sending ${attachmentsCount} attachments to Projektor server`
       );
-      attachments.forEach(attachment =>
+      attachments.forEach((attachment) =>
         sendAttachment(
           serverUrl,
           publicId,
           publishToken,
           attachment.contents,
           attachment.name
-        ).catch(e => {
+        ).catch((e) => {
           console.error(
             `Error sending attachment ${attachment.name} to Projektor server ${serverUrl}`,
             e.message
@@ -136,12 +136,12 @@ const collectAndSendResults = (
 
   if (resultsBlob.length > 0) {
     sendResults(serverUrl, publishToken, resultsBlob)
-      .then(respData => {
+      .then((respData) => {
         console.log(`View Projektor results at ${serverUrl}${respData.uri}`);
 
         return Promise.resolve(respData.id);
       })
-      .then(publicId =>
+      .then((publicId) =>
         collectAndSendAttachments(
           serverUrl,
           publishToken,
@@ -149,7 +149,7 @@ const collectAndSendResults = (
           publicId
         )
       )
-      .catch(e => {
+      .catch((e) => {
         console.error(
           `Error publishing results to Projektor server ${serverUrl}`,
           e.message
@@ -161,5 +161,5 @@ const collectAndSendResults = (
 module.exports = {
   collectResults,
   sendResults,
-  collectAndSendResults
+  collectAndSendResults,
 };

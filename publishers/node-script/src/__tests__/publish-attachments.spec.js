@@ -43,7 +43,7 @@ describe("publish with attachments", () => {
     await waitForExpect(() => {
       expect(mockAxios.history.post.length).toBe(3);
 
-      const resultsPostRequest = mockAxios.history.post.find(postRequest =>
+      const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
         postRequest.url.includes("results")
       );
       expect(resultsPostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(
@@ -54,15 +54,15 @@ describe("publish with attachments", () => {
       expect(postData).toContain("resultsDir1-results1");
       expect(postData).toContain("resultsDir1-results2");
 
-      const attachment1PostRequest = mockAxios.history.post.find(postRequest =>
-        postRequest.url.includes("attachments/attachment1.txt")
+      const attachment1PostRequest = mockAxios.history.post.find(
+        (postRequest) => postRequest.url.includes("attachments/attachment1.txt")
       );
       expect(attachment1PostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(
         publishToken
       );
 
-      const attachment2PostRequest = mockAxios.history.post.find(postRequest =>
-        postRequest.url.includes("attachments/attachment2.txt")
+      const attachment2PostRequest = mockAxios.history.post.find(
+        (postRequest) => postRequest.url.includes("attachments/attachment2.txt")
       );
       expect(attachment2PostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(
         publishToken
@@ -96,13 +96,15 @@ describe("publish with attachments", () => {
     await waitForExpect(() => {
       expect(mockAxios.history.post.length).toBe(3);
 
-      const attachment1PostRequest = mockAxios.history.post.find(postRequest =>
-        postRequest.url.includes("attachments/attachmentNested1.txt")
+      const attachment1PostRequest = mockAxios.history.post.find(
+        (postRequest) =>
+          postRequest.url.includes("attachments/attachmentNested1.txt")
       );
       expect(attachment1PostRequest).not.toBeNull();
 
-      const attachment2PostRequest = mockAxios.history.post.find(postRequest =>
-        postRequest.url.includes("attachments/attachmentNested2.txt")
+      const attachment2PostRequest = mockAxios.history.post.find(
+        (postRequest) =>
+          postRequest.url.includes("attachments/attachmentNested2.txt")
       );
       expect(attachment2PostRequest).not.toBeNull();
     });
@@ -128,8 +130,9 @@ describe("publish with attachments", () => {
     await waitForExpect(() => {
       expect(mockAxios.history.post.length).toBe(3);
 
-      const attachment1PostRequest = mockAxios.history.post.find(postRequest =>
-        postRequest.url.includes("attachments/attachmentNested1.txt")
+      const attachment1PostRequest = mockAxios.history.post.find(
+        (postRequest) =>
+          postRequest.url.includes("attachments/attachmentNested1.txt")
       );
       expect(attachment1PostRequest).not.toBeNull();
     });
