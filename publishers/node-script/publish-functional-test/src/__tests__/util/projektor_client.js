@@ -18,5 +18,5 @@ const fetchAttachment = (attachmentName, testRunId, serverPort) => {
 module.exports = {
   fetchTestRunSummary,
   fetchAttachments,
-  fetchAttachment
+  fetchAttachment,
 };

@@ -4,14 +4,14 @@ const { extractTestRunId } = require("../util/parse_output");
 const {
   fetchTestRunSummary,
   fetchAttachment,
-  fetchAttachments
+  fetchAttachments,
 } = require("../util/projektor_client");
 const { verifyOutput } = require("../verify/cli_output_verify");
 
 describe("Publishing via CLI with token", () => {
   const serverPort = "8083";
 
-  it("should publish to server when executed via CLI with token", async done => {
+  it("should publish to server when executed via CLI with token", async (done) => {
     exec(
       `env-cmd -f .token-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} results/*.xml`,
       async (error, stdout, stderr) => {
@@ -34,7 +34,7 @@ describe("Publishing via CLI with token", () => {
     );
   });
 
-  it("should publish to server with attachments when executed via CLI with token", async done => {
+  it("should publish to server with attachments when executed via CLI with token", async (done) => {
     exec(
       `env-cmd -f .token-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} --attachments="attachments/*" results/*.xml`,
       async (error, stdout, stderr) => {

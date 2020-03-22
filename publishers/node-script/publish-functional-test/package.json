@@ -6,14 +6,14 @@
   "scripts": {
     "test": "jest --config=jest-without-token.config.js --runInBand",
     "test-with-token": "jest --config=jest-with-token.config.js --runInBand",
-    "format": "prettier --write src/*.js src/**/*.js"
+    "format": "prettier --write src/**/*.js"
   },
   "devDependencies": {
     "axios": "0.19.2",
     "env-cmd": "10.1.0",
-    "jest": "24.9.0",
+    "jest": "25.1.0",
     "jest-junit": "10.0.0",
-    "prettier": "1.18.2",
+    "prettier": "2.0.1",
     "projektor-publish": "file:../",
     "wait-for-expect": "3.0.1"
   },
