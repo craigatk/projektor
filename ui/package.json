@@ -23,7 +23,7 @@
     "chai-colors": "1.0.1",
     "cypress": "4.2.0",
     "env-cmd": "10.1.0",
-    "jest": "24.9.0",
+    "jest": "25.1.0",
     "jest-junit": "10.0.0",
     "parcel-bundler": "1.12.4",
     "parcel-plugin-clean-dist": "0.0.6",
@@ -31,7 +31,7 @@
     "projektor-publish": "2.1.0",
     "rimraf": "3.0.2",
     "start-server-and-test": "1.10.11",
-    "ts-jest": "24.1.0",
+    "ts-jest": "25.2.1",
     "typescript": "3.7.4"
   },
   "dependencies": {
