@@ -33,5 +33,5 @@ function run(args, publishToken, defaultConfigFilePath) {
 }
 
 module.exports = {
-  run
+  run,
 };
