@@ -13,5 +13,5 @@ const verifyOutput = (error, stdout, stderr, serverPort) => {
 };
 
 module.exports = {
-  verifyOutput
+  verifyOutput,
 };

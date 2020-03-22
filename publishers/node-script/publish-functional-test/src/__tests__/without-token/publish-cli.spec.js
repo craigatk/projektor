@@ -5,7 +5,7 @@ const { verifyOutput } = require("../verify/cli_output_verify");
 
 describe("Publishing via CLI", () => {
   const serverPort = "8082";
-  it("should publish to server when executed via CLI", async done => {
+  it("should publish to server when executed via CLI", async (done) => {
     exec(
       `yarn projektor-publish --serverUrl=http://localhost:${serverPort} results/*.xml`,
       async (error, stdout, stderr) => {

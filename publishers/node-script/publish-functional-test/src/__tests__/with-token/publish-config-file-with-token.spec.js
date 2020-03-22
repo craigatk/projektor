@@ -4,14 +4,14 @@ const { extractTestRunId } = require("../util/parse_output");
 const {
   fetchTestRunSummary,
   fetchAttachment,
-  fetchAttachments
+  fetchAttachments,
 } = require("../util/projektor_client");
 const { verifyOutput } = require("../verify/cli_output_verify");
 
 describe("Publishing from config file with token", () => {
   const serverPort = "8083";
 
-  it("should publish to server with attachments when configured with config file and using token", async done => {
+  it("should publish to server with attachments when configured with config file and using token", async (done) => {
     exec(
       `env-cmd -f .token-env yarn projektor-publish --configFile=src/__tests__/with-token/projektor.json`,
       async (error, stdout, stderr) => {
