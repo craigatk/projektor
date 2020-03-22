@@ -2012,10 +2012,6 @@ minimist@0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.0.8.tgz#857fcabfc3397d2625b8228262e86aa7a011b05d"
 
-minimist@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
-
 minimist@1.2.2, minimist@^1.1.1, minimist@^1.2.0:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.2.tgz#b00a00230a1108c48c169e69a291aafda3aacd63"
@@ -2400,14 +2396,14 @@ process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
 
-projektor-publish@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/projektor-publish/-/projektor-publish-2.0.1.tgz#4f7a2118a719138bb85a7357ab8f194531399dc5"
-  integrity sha512-IQ1MXnrhCg7oprm1bSWSQOPTibpXkwTEzatIxfZ+ffoRyNEvuUPu+phb77MAaTffTBs9lRuV/sbGmWlanjXpqA==
+projektor-publish@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/projektor-publish/-/projektor-publish-2.1.0.tgz#71e234cb10f79f189487c3d125f571574d6ea11d"
+  integrity sha512-HzhSCnLJJxBVGDR6M06UZqyNmbXpOOGPGF6DhB86Dyp0Z80ilBcDZWbu09Ndq6Yz2hAPPo6535v9uCESPw+orw==
   dependencies:
     axios "0.19.0"
     glob "7.1.4"
-    minimist "1.2.0"
+    minimist "1.2.2"
 
 prompts@^2.0.1:
   version "2.2.1"
