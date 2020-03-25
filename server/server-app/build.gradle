@@ -26,11 +26,11 @@ group 'dev.projektor'
 version '1.0'
 
 dependencies {
-    implementation project(':server:database-schema')
+    implementation project(':server:persistence:database-schema')
     implementation project(':server:server-api')
-    implementation project(':server:test-results-parser')
-    implementation project(':server:grouped-results-parser')
-    implementation project(':server:object-store')
+    implementation project(':server:parsing:test-results-parser')
+    implementation project(':server:parsing:grouped-results-parser')
+    implementation project(':server:persistence:object-store')
 
     implementation "io.ktor:ktor-server-netty:$ktor_version"
     implementation "io.ktor:ktor-jackson:$ktor_version"
@@ -47,7 +47,7 @@ dependencies {
 
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
 
-    testImplementation(project(':server:test-fixtures'))
+    testImplementation(project(':server:test:test-fixtures'))
 
     testImplementation 'org.awaitility:awaitility-kotlin:4.0.0'
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.5.2"

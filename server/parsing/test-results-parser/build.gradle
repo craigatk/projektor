@@ -1,0 +1,7 @@
+apply from: "../../../gradle/kotlin.gradle"
+
+dependencies {
+    api(project(":server:parsing:junit-results-parser"))
+
+    testImplementation(project(':server:test:test-fixtures'))
+}
