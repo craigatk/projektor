@@ -722,13 +722,6 @@ axios-mock-adapter@1.17.0:
   dependencies:
     deep-equal "^1.0.1"
 
-axios@0.19.0:
-  version "0.19.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.0.tgz#8e09bff3d9122e133f7b8101c8fbdd00ed3d2ab8"
-  dependencies:
-    follow-redirects "1.5.10"
-    is-buffer "^2.0.2"
-
 axios@0.19.2:
   version "0.19.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
@@ -1594,10 +1587,6 @@ is-arguments@^1.0.4:
 is-buffer@^1.1.5:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
-
-is-buffer@^2.0.2:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-2.0.4.tgz#3e572f23c8411a5cfd9557c849e3665e0b290623"
 
 is-callable@^1.1.4:
   version "1.1.4"
@@ -2663,12 +2652,12 @@ pretty-format@^25.1.0:
     ansi-styles "^4.0.0"
     react-is "^16.12.0"
 
-projektor-publish@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/projektor-publish/-/projektor-publish-2.1.0.tgz#71e234cb10f79f189487c3d125f571574d6ea11d"
-  integrity sha512-HzhSCnLJJxBVGDR6M06UZqyNmbXpOOGPGF6DhB86Dyp0Z80ilBcDZWbu09Ndq6Yz2hAPPo6535v9uCESPw+orw==
+projektor-publish@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/projektor-publish/-/projektor-publish-2.1.1.tgz#cdfa505628ac6acc992a10dcff338e4be849b05d"
+  integrity sha512-5UhtvwbQSTXXzTQ9krDQlQaOvlxBez8hooEfUzxsX4yJcrpRtc7/H8kakvK67jCE12WrrzWfABWVCXcx3AAT2A==
   dependencies:
-    axios "0.19.0"
+    axios "0.19.2"
     glob "7.1.4"
     minimist "1.2.2"
 
