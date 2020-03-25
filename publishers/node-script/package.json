@@ -17,7 +17,7 @@
     "projektor": "env-cmd -f ~/.env projektor-publish"
   },
   "dependencies": {
-    "axios": "0.19.0",
+    "axios": "0.19.2",
     "glob": "7.1.4",
     "minimist": "1.2.2"
   },
