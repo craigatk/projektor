@@ -1,0 +1,8 @@
+apply from: "../../../gradle/kotlin.gradle"
+
+dependencies {
+    implementation project(":server:parsing:grouped-results-parser")
+    implementation project(":server:parsing:test-results-parser")
+
+    implementation "io.github.classgraph:classgraph:4.8.65"
+}

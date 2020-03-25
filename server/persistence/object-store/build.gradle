@@ -1,4 +1,4 @@
-apply from: '../../gradle/kotlin.gradle'
+apply from: '../../../gradle/kotlin.gradle'
 
 repositories {
     jcenter()
