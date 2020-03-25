@@ -4,6 +4,8 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.KtorExperimentalAPI
 import java.math.BigDecimal
+import java.sql.Timestamp
+import java.time.Instant
 import kotlin.test.*
 import projektor.ApplicationTestCase
 import projektor.database.generated.tables.pojos.TestRun as TestRunDB
@@ -31,6 +33,7 @@ class GetTestRunSummaryApplicationTest : ApplicationTestCase() {
                         .setAverageDuration(BigDecimal("5.000"))
                         .setSlowestTestCaseDuration(BigDecimal("10.000"))
                         .setPassed(false)
+                        .setCreatedTimestamp(Timestamp.from(Instant.now()))
 
                 testRunDao.insert(testRun)
             }.apply {

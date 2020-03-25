@@ -2,6 +2,7 @@ package projektor
 
 import java.math.BigDecimal
 import java.sql.Timestamp
+import java.time.Instant
 import java.time.LocalDateTime
 import projektor.database.generated.tables.daos.*
 import projektor.database.generated.tables.pojos.TestCase as TestCaseDB
@@ -88,6 +89,7 @@ fun createTestRun(publicId: PublicId, totalTestCount: Int): TestRunDB = TestRunD
         .setAverageDuration(if (totalTestCount > 0) BigDecimal("30.000").divide(totalTestCount.toBigDecimal()) else BigDecimal("30.000"))
         .setSlowestTestCaseDuration(BigDecimal("10.000"))
         .setPassed(true)
+        .setCreatedTimestamp(Timestamp.from(Instant.now()))
 
 fun createTestSuite(testRunId: Long, packageAndClassName: String, idx: Int): TestSuiteDB = TestSuiteDB()
         .setTestRunId(testRunId)

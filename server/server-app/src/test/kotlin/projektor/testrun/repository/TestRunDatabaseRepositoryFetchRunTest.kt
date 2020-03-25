@@ -2,6 +2,7 @@ package projektor.testrun.repository
 
 import java.math.BigDecimal
 import java.sql.Timestamp
+import java.time.Instant
 import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertNotNull
@@ -33,6 +34,7 @@ class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
         testRunDB.cumulativeDuration = BigDecimal("9.00")
         testRunDB.averageDuration = BigDecimal("3.00")
         testRunDB.slowestTestCaseDuration = BigDecimal("5.00")
+        testRunDB.createdTimestamp = Timestamp.from(Instant.now())
         testRunDao.insert(testRunDB)
 
         val testSuiteDB = TestSuite()
