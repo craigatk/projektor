@@ -1,6 +1,8 @@
 package projektor.testrun.repository
 
 import java.math.BigDecimal
+import java.sql.Timestamp
+import java.time.Instant
 import kotlin.test.Test
 import kotlinx.coroutines.runBlocking
 import projektor.DatabaseRepositoryTestCase
@@ -27,6 +29,7 @@ class TestRunDatabaseRepositoryFetchSummaryTest : DatabaseRepositoryTestCase() {
         testRunDB.cumulativeDuration = BigDecimal("9.00")
         testRunDB.averageDuration = BigDecimal("3.00")
         testRunDB.slowestTestCaseDuration = BigDecimal("5.00")
+        testRunDB.createdTimestamp = Timestamp.from(Instant.now())
         testRunDao.insert(testRunDB)
 
         val testRunSummary = runBlocking { testRunDatabaseRepository.fetchTestRunSummary(publicId) }

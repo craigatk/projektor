@@ -1,14 +1,14 @@
 package projektor.incomingresults.mapper
 
-import io.kotlintest.data.forall
-import io.kotlintest.specs.StringSpec
-import io.kotlintest.tables.row
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 
 class PackageClassNameParserSpec : StringSpec({
     "should parse package and class name" {
-        forall(row("example.Spec", "example", "Spec"),
+        forAll(row("example.Spec", "example", "Spec"),
                 row("com.example.sub.package.MyTestSpec", "com.example.sub.package", "MyTestSpec"),
                 row("Spec", null, "Spec")
         ) { classAndPackage, expectedPackage, expectedClass ->

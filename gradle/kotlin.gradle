@@ -13,7 +13,7 @@ compileTestKotlin {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    testImplementation "io.kotlintest:kotlintest-runner-junit5:${kotlintest_version}"
+    testImplementation "io.kotest:kotest-runner-junit5-jvm:${kotest_version}"
     testImplementation "io.strikt:strikt-core:${strikt_version}"
 }
 
