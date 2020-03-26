@@ -21,6 +21,7 @@ task cleanResults(type: YarnTask) {
 }
 
 task functionalTest(type: YarnTask) {
+    group = 'verification'
     dependsOn 'startServerDaemon', 'cleanResults'
     args = ['cy:run']
     finalizedBy(projektorPublish)

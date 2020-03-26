@@ -4,6 +4,7 @@ import { Grid, Hidden } from "@material-ui/core";
 import TestCountList from "../TestCount/TestCountList";
 import PageTitle from "../PageTitle";
 import TestRunDuration from "./TestRunDuration";
+import TestRunDate from "./TestRunDate";
 
 interface DashboardSummaryProps {
   publicId: string;
@@ -21,7 +22,8 @@ const DashboardSummary = ({
     totalTestCount,
     averageDuration,
     cumulativeDuration,
-    slowestTestCaseDuration
+    slowestTestCaseDuration,
+    createdTimestamp
   } = testRunSummary;
 
   const hasDurationData =
@@ -44,7 +46,7 @@ const DashboardSummary = ({
           />
         </Grid>
         <Hidden xsDown>
-          <Grid item sm={9}>
+          <Grid item sm={3} xs={12}>
             {hasDurationData && (
               <TestRunDuration
                 publicId={publicId}
@@ -55,6 +57,9 @@ const DashboardSummary = ({
             )}
           </Grid>
         </Hidden>
+        <Grid item sm={4} xs={12}>
+          <TestRunDate createdTimestamp={createdTimestamp} />
+        </Grid>
       </Grid>
     </div>
   );

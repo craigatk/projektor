@@ -46,11 +46,11 @@ interface TestSuite {
 }
 
 interface TestSuiteOutput {
-  value: String;
+  value: string;
 }
 
 interface TestRunSummary {
-  id: String;
+  id: string;
   totalTestCount: number;
   totalPassingCount: number;
   totalSkippedCount: number;
@@ -59,6 +59,7 @@ interface TestRunSummary {
   cumulativeDuration: number;
   averageDuration: number;
   slowestTestCaseDuration: number;
+  createdTimestamp: Date;
 }
 
 interface TestRun extends TestRunSummary {
