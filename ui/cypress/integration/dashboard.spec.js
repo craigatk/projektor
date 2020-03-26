@@ -1,6 +1,32 @@
 /// <reference types="Cypress" />
 
 context("dashboard", () => {
+  it("should show test run summary data on dashboard page", () => {
+    const publicId = "12345";
+
+    cy.server();
+
+    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+
+    cy.route(
+      "GET",
+      `run/${publicId}/cases/failed`,
+      "fixture:failed_test_cases.json"
+    );
+
+    cy.visit(`http://localhost:1234/tests/${publicId}`);
+
+    cy.getByTestId("test-count-list-passed").should("contain", "2");
+    cy.getByTestId("test-count-list-failed").should("contain", "2");
+    cy.getByTestId("test-count-list-skipped").should("contain", "0");
+    cy.getByTestId("test-count-list-total").should("contain", "4");
+
+    cy.getByTestId("test-run-report-created-timestamp").should(
+      "contain",
+      "March 25th 2020, 7:42:32 pm"
+    );
+  });
+
   it("should show failed test case summaries on dashboard page", () => {
     const publicId = "12345";
 

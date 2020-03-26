@@ -1,6 +1,5 @@
 import * as React from "react";
 import { List, ListItem, ListItemText, makeStyles } from "@material-ui/core";
-import { Link } from "@reach/router";
 import CleanLink from "../Link/CleanLink";
 
 interface TestRunDurationProps {

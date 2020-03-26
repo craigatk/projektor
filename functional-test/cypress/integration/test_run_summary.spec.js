@@ -18,6 +18,8 @@ context("test run summary E2E", () => {
       "0.119s"
     );
 
+    cy.testIdShouldExist("test-run-report-created-timestamp");
+
     cy.getByTestId("test-run-slow-test-cases-link").click();
     cy.getByTestId("slow-test-cases-title").should(
       "contain",

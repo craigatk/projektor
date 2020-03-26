@@ -5,5 +5,6 @@
   "total_skipped_count": 0,
   "total_failure_count": 0,
   "passed": true,
-  "total_duration": 0.55
+  "total_duration": 0.55,
+  "created_timestamp": "2020-03-25T19:42:32.312"
 }
