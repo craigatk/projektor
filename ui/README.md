@@ -10,7 +10,7 @@ To start the dev server, run `yarn start`
 This will start the server on `http://localhost:1234`
 
 By default, when running locally the API backend points to `http://localhost:8080`
-which is the default port of the server.
+which is the default port of the server. Start up the server separately using Gradle.
 
 ## Testing
 
