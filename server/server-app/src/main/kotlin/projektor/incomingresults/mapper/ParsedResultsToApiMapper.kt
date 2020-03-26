@@ -3,7 +3,7 @@ package projektor.incomingresults.mapper
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
-import java.time.LocalDateTime
+import java.time.Instant
 import projektor.parser.model.TestSuite
 import projektor.server.api.PublicId
 import projektor.server.api.TestRunSummary
@@ -34,7 +34,7 @@ fun toTestRunSummary(publicId: PublicId, testSuites: List<TestSuite>): TestRunSu
             cumulativeDuration,
             averageDuration,
             slowestTestCaseDuration,
-            LocalDateTime.now()
+            Instant.now()
     )
 }
 

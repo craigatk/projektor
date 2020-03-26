@@ -18,12 +18,17 @@ jobs:
           node-version: 12
 
       - name: node-script test
-        env:
-          PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
         run: |
           cd publishers/node-script
           yarn install
           yarn test
+
+      - name: Projektor publish
+        if: failure()
+        env:
+          PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
+        run: |
+          cd publishers/node-script
           yarn projektor-publish
 
   node-script-functional-test:
@@ -37,6 +42,7 @@ jobs:
           POSTGRES_USER: testuser
           POSTGRES_PASSWORD: testpass
           POSTGRES_DB: projektordb
+          TZ: UTC
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
