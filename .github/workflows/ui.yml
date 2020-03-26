@@ -80,9 +80,14 @@ jobs:
           yarn install
 
       - name: UI Cypress run
+        run: |
+          cd ui
+          yarn cy:test
+
+      - name: Projektor publish
+        if: failure()
         env:
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
         run: |
           cd ui
-          yarn cy:test
           yarn projektor-publish --configFile=projektor.cypress.json

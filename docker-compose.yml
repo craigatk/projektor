@@ -7,6 +7,7 @@ services:
       - POSTGRES_USER=testuser
       - POSTGRES_PASSWORD=testpass
       - POSTGRES_DB=projektordb
+      - TZ=UTC
     ports:
       - "5433:5432"
   objectstorage:

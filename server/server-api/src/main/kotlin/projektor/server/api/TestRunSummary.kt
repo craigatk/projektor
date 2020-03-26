@@ -1,7 +1,7 @@
 package projektor.server.api
 
 import java.math.BigDecimal
-import java.time.LocalDateTime
+import java.time.Instant
 
 data class TestRunSummary(
     val id: String,
@@ -13,5 +13,5 @@ data class TestRunSummary(
     val cumulativeDuration: BigDecimal,
     val averageDuration: BigDecimal,
     val slowestTestCaseDuration: BigDecimal,
-    val createdTimestamp: LocalDateTime
+    val createdTimestamp: Instant
 )

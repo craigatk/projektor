@@ -18,6 +18,7 @@ jobs:
           POSTGRES_USER: testuser
           POSTGRES_PASSWORD: testpass
           POSTGRES_DB: projektordb
+          TZ: UTC
         options: >-
           --health-cmd pg_isready
           --health-interval 10s

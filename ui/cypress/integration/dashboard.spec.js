@@ -23,7 +23,7 @@ context("dashboard", () => {
 
     cy.getByTestId("test-run-report-created-timestamp").should(
       "contain",
-      "March 25th 2020, 7:42:32 pm"
+      "March 25th 2020, 8:32:19 pm"
     );
   });
 
