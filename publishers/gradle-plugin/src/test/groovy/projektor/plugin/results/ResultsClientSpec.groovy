@@ -91,4 +91,22 @@ class ResultsClientSpec extends Specification {
         HttpHeader publishTokenInHeader = resultsRequest.header(ClientToken.PUBLISH_TOKEN_NAME)
         publishTokenInHeader.firstValue() == "token12345"
     }
+
+    void "should not stacktrace when offline"() {
+        given:
+        String serverUrl = "http://resolve.failure.fakedotcom:9999/womp"
+        ResultsClient resultsClient = new ResultsClient(
+                okHttpClient,
+                new ClientConfig(serverUrl, Optional.empty()),
+                logger
+        )
+        GroupedResults groupedResults = new GroupedResults()
+
+        when:
+        PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
+
+        then:
+        !publishResult.successful
+
+    }
 }
