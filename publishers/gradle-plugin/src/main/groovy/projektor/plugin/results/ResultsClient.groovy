@@ -15,6 +15,7 @@ import projektor.plugin.results.grouped.GroupedResultsSerializer
 import static projektor.plugin.client.ClientToken.conditionallyAddPublishTokenToRequest
 
 class ResultsClient {
+
     private final ClientConfig config
     private final Logger logger
     private final GroupedResultsSerializer groupedResultsSerializer = new GroupedResultsSerializer()
@@ -44,24 +45,24 @@ class ResultsClient {
 
         Request request = requestBuilder.build()
 
-        Response response = null
-
         try {
-            response = client.newCall(request).execute()
+            Response response = client.newCall(request).execute()
+
+            if (response?.successful) {
+                def parsedResponseJson = new JsonSlurper().parseText(response.body().string())
+                String testRunUri = parsedResponseJson.uri
+                String reportUrl = "${config.serverUrl}${testRunUri}"
+
+                publishResult.publicId= parsedResponseJson.id
+                publishResult.reportUrl = reportUrl
+            } else {
+                String responseCode = response ? "- response code ${response.code()}" : ""
+                logger.warn("Failed to upload Projektor report to ${resultsUrl} ${responseCode}")
+            }
         } catch (Exception e) {
-            logger.error("Error publishing results to Projektor server ${resultsUrl}", e)
-        }
-
-        if (response?.successful) {
-            def parsedResponseJson = new JsonSlurper().parseText(response.body().string())
-            String testRunUri = parsedResponseJson.uri
-            String reportUrl = "${config.serverUrl}${testRunUri}"
-
-            publishResult.publicId= parsedResponseJson.id
-            publishResult.reportUrl = reportUrl
-        } else {
-            String responseCode = response ? "- response code ${response.code()}" : ""
-            logger.warn("Failed to upload Projektor report to ${resultsUrl} ${responseCode}")
+            logger.error("Unable to publish results to Projektor server ${resultsUrl}")
+            logger.debug("Error details while attempting to publish results to Projektor server ${resultsUrl}:", e)
+            return publishResult
         }
 
         return publishResult
