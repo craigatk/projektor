@@ -12,6 +12,7 @@ import io.ktor.config.MapApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
 import java.math.BigDecimal
 import kotlin.test.AfterTest
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.jooq.DSLContext
@@ -50,6 +51,9 @@ open class ApplicationTestCase {
     protected var attachmentsEnabled: Boolean? = null
     protected var attachmentsMaxSizeMB: BigDecimal? = null
 
+    protected var cleanupMaxAgeDays: Int? = null
+
+    @ObsoleteCoroutinesApi
     fun createTestApplication(application: Application) {
         val schema = databaseSchema
 
@@ -69,6 +73,10 @@ open class ApplicationTestCase {
                 put("ktor.attachment.accessKey", "minio_access_key")
                 put("ktor.attachment.secretKey", "minio_secret_key")
                 attachmentsMaxSizeMB?.let { put("ktor.attachment.maxSizeMB", it.toString()) }
+            }
+
+            cleanupMaxAgeDays?.let {
+                put("ktor.cleanup.maxReportAgeDays", it.toString())
             }
         }
 
