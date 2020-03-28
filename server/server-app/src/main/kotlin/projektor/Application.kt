@@ -22,11 +22,12 @@ import org.koin.Logger.SLF4JLogger
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import org.slf4j.event.Level
+import projektor.attachment.AttachmentConfig
 import projektor.attachment.AttachmentRepository
 import projektor.attachment.AttachmentService
-import projektor.attachment.AttachmentStoreConfig
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
+import projektor.cleanup.CleanupConfig
 import projektor.database.DataSourceConfig
 import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
@@ -48,6 +49,8 @@ fun Application.main() {
     val dataSource = DataSourceConfig.createDataSource(dataSourceConfig)
     DataSourceConfig.flywayMigrate(dataSource, dataSourceConfig)
     val dslContext = DataSourceConfig.createDSLContext(dataSource, dataSourceConfig)
+
+    val cleanupConfig = CleanupConfig.createCleanupConfig(applicationConfig)
 
     val appModule = createAppModule(dataSource, authConfig, dslContext)
 
@@ -94,6 +97,7 @@ fun Application.main() {
 
     routing {
         attachments(attachmentService, authService)
+        config(cleanupConfig)
         health()
         results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService)
         testCases(testCaseService)
@@ -106,7 +110,7 @@ fun Application.main() {
 
 @KtorExperimentalAPI
 private fun conditionallyCreateAttachmentService(applicationConfig: ApplicationConfig, attachmentRepository: AttachmentRepository): AttachmentService? =
-    if (AttachmentStoreConfig.attachmentStoreEnabled(applicationConfig))
-        AttachmentService(AttachmentStoreConfig.createAttachmentStoreConfig(applicationConfig), attachmentRepository)
+    if (AttachmentConfig.attachmentsEnabled(applicationConfig))
+        AttachmentService(AttachmentConfig.createAttachmentConfig(applicationConfig), attachmentRepository)
     else
         null

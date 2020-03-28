@@ -13,7 +13,7 @@ import projektor.server.api.attachments.Attachment
 
 @KtorExperimentalAPI
 class AttachmentService(
-    private val config: AttachmentStoreConfig,
+    private val config: AttachmentConfig,
     private val attachmentRepository: AttachmentRepository
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)

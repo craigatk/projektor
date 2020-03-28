@@ -5,7 +5,7 @@ import io.ktor.util.KtorExperimentalAPI
 import java.math.BigDecimal
 
 @KtorExperimentalAPI
-data class AttachmentStoreConfig(
+data class AttachmentConfig(
     val url: String,
     val bucketName: String,
     val autoCreateBucket: Boolean,
@@ -14,10 +14,10 @@ data class AttachmentStoreConfig(
     val maxSizeMB: BigDecimal?
 ) {
     companion object {
-        fun attachmentStoreEnabled(applicationConfig: ApplicationConfig): Boolean =
+        fun attachmentsEnabled(applicationConfig: ApplicationConfig): Boolean =
                 applicationConfig.propertyOrNull("ktor.attachment.url")?.getString()?.isNotEmpty() ?: false
 
-        fun createAttachmentStoreConfig(applicationConfig: ApplicationConfig) = AttachmentStoreConfig(
+        fun createAttachmentConfig(applicationConfig: ApplicationConfig) = AttachmentConfig(
                 applicationConfig.property("ktor.attachment.url").getString(),
                 applicationConfig.property("ktor.attachment.bucketName").getString(),
                 applicationConfig.propertyOrNull("ktor.attachment.autoCreateBucket")?.getString()?.toBoolean() ?: false,
