@@ -11,6 +11,9 @@ import projektor.ApplicationTestCase
 import projektor.server.api.config.ServerConfig
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import strikt.assertions.isFalse
+import strikt.assertions.isNull
+import strikt.assertions.isTrue
 
 @ObsoleteCoroutinesApi
 @KtorExperimentalAPI
@@ -24,13 +27,14 @@ class ConfigApplicationTest : ApplicationTestCase() {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
                 val serverConfig = objectMapper.readValue(response.content, ServerConfig::class.java)
-                expectThat(serverConfig.cleanupMaxReportAgeDays).isEqualTo(60)
+                expectThat(serverConfig.cleanup.enabled).isTrue()
+                expectThat(serverConfig.cleanup.maxReportAgeInDays).isEqualTo(60)
             }
         }
     }
 
     @Test
-    fun `should return cleanup age of 0 days when it is not configured`() {
+    fun `should return cleanup disabled when it is not configured`() {
         cleanupMaxAgeDays = null
 
         withTestApplication(::createTestApplication) {
@@ -38,7 +42,8 @@ class ConfigApplicationTest : ApplicationTestCase() {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
                 val serverConfig = objectMapper.readValue(response.content, ServerConfig::class.java)
-                expectThat(serverConfig.cleanupMaxReportAgeDays).isEqualTo(0)
+                expectThat(serverConfig.cleanup.enabled).isFalse()
+                expectThat(serverConfig.cleanup.maxReportAgeInDays).isNull()
             }
         }
     }

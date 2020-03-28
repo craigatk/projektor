@@ -1,3 +1,3 @@
 package projektor.server.api.config
 
-data class ServerConfig(val cleanupMaxReportAgeDays: Int)
+data class ServerConfig(val cleanup: ServerCleanupConfig)
