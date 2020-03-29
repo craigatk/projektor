@@ -1,10 +1,10 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import { render } from "@testing-library/react";
-import TestRunSideMenu from "../TestRunSideMenu";
+import SideMenu from "../SideMenu";
 import { TestRunSummary } from "../../model/TestRunModel";
 
-describe("TestRunSideMenu", () => {
+describe("SideMenu", () => {
   it("when attachments should show attachments link", () => {
     const publicId = "34567";
     const testRunSummary = {
@@ -20,7 +20,7 @@ describe("TestRunSideMenu", () => {
     } as TestRunSummary;
 
     const { queryByTestId } = render(
-      <TestRunSideMenu
+      <SideMenu
         publicId={publicId}
         testRunSummary={testRunSummary}
         hasAttachments={true}
@@ -45,7 +45,7 @@ describe("TestRunSideMenu", () => {
     } as TestRunSummary;
 
     const { queryByTestId } = render(
-      <TestRunSideMenu
+      <SideMenu
         publicId={publicId}
         testRunSummary={testRunSummary}
         hasAttachments={false}
