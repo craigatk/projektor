@@ -9,7 +9,7 @@ import TestCasePage from "../TestCase/TestCasePage";
 import FailedTestCases from "../TestCase/FailedTestCases";
 import Dashboard from "../Dashboard/Dashboard";
 import { TestRunSummary } from "../model/TestRunModel";
-import TestRunSideMenu from "./TestRunSideMenu";
+import SideMenu from "../SideMenu/SideMenu";
 import SlowTestCasesPage from "../TestCase/slow/SlowTestCasesPage";
 import { AppBar, Typography } from "@material-ui/core";
 import AttachmentsPage from "../Attachments/AttachmentsPage";
@@ -51,7 +51,7 @@ const TestRunMenuWrapper = ({
       <AppBar className={classes.appBar}>
         <Typography variant="h6">Projektor</Typography>
       </AppBar>
-      <TestRunSideMenu
+      <SideMenu
         publicId={publicId}
         testRunSummary={testRunSummary}
         hasAttachments={hasAttachments}
