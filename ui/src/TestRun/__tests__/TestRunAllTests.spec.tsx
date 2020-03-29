@@ -4,7 +4,7 @@ import MockAdapter from "axios-mock-adapter";
 import { render, wait } from "@testing-library/react";
 import { TestRun, TestSuite } from "../../model/TestRunModel";
 import TestRunAllTests from "../TestRunAllTests";
-import { axiosInstance } from "../../service/TestRunService";
+import { axiosInstance } from "../../service/AxiosService";
 
 describe("TestRunAllTests", () => {
   let mockAxios;

@@ -3,7 +3,7 @@ import React from "react";
 import MockAdapter from "axios-mock-adapter";
 import { render, wait, getNodeText } from "@testing-library/react";
 import { TestSuiteOutput } from "../../model/TestRunModel";
-import { axiosInstance } from "../../service/TestRunService";
+import { axiosInstance } from "../../service/AxiosService";
 import TestSuiteSystemErr from "../TestSuiteSystemErr";
 
 describe("TestSuiteSystemErr", () => {
