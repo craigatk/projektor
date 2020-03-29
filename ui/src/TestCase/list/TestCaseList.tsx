@@ -15,7 +15,7 @@ const TestCaseList = ({
   publicId,
   testCases,
   showFullTestCaseName,
-  showDurationFirst
+  showDurationFirst,
 }: TestCaseListProps) => {
   return (
     <Table size="small">

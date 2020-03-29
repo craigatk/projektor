@@ -19,7 +19,7 @@ const AttachmentsPage = ({ publicId }: AttachmentsPageProps) => {
 
   React.useEffect(() => {
     fetchAttachments(publicId)
-      .then(response => {
+      .then((response) => {
         setAttachments(response.data);
         setLoadingState(LoadingState.Success);
       })

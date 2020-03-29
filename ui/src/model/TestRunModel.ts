@@ -71,7 +71,7 @@ enum TestResultsProcessingStatus {
   RECEIVED = "RECEIVED",
   PROCESSING = "PROCESSING",
   SUCCESS = "SUCCESS",
-  ERROR = "ERROR"
+  ERROR = "ERROR",
 }
 
 interface TestResultsProcessing {
@@ -90,5 +90,5 @@ export {
   TestCase,
   TestFailure,
   TestResultsProcessingStatus,
-  TestResultsProcessing
+  TestResultsProcessing,
 };

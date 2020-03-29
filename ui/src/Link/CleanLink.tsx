@@ -6,11 +6,11 @@ const CleanLink = styled(Link)({
   textDecoration: "none",
   color: "blue",
   "&:hover": {
-    textDecoration: "underline"
+    textDecoration: "underline",
   },
   "&:visited": {
-    color: "blue"
-  }
+    color: "blue",
+  },
 });
 
 export default CleanLink;

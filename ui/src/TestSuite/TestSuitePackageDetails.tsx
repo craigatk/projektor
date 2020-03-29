@@ -11,16 +11,16 @@ interface TestSuitePackageDetailsProps {
   testSuiteSummaries: TestSuite[];
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
-    padding: theme.spacing(1, 2)
-  }
+    padding: theme.spacing(1, 2),
+  },
 }));
 
 const TestSuitePackageDetails = ({
   publicId,
   packageName,
-  testSuiteSummaries
+  testSuiteSummaries,
 }: TestSuitePackageDetailsProps) => {
   const classes = useStyles({});
 

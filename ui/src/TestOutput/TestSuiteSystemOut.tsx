@@ -10,7 +10,7 @@ interface TestSuiteSystemOutProps extends RouteComponentProps {
 
 const TestSuiteSystemOut = ({
   publicId,
-  testSuiteIdx
+  testSuiteIdx,
 }: TestSuiteSystemOutProps) => {
   return (
     <TestSystemOutput

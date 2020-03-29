@@ -10,7 +10,7 @@ interface TestSuiteSystemErrProps extends RouteComponentProps {
 
 const TestSuiteSystemErr = ({
   publicId,
-  testSuiteIdx
+  testSuiteIdx,
 }: TestSuiteSystemErrProps) => {
   return (
     <TestSystemOutput

@@ -50,7 +50,7 @@ const CodeText = ({ text }: CodeTextProps) => {
         duration: 0,
         delay: 0,
         offset: -45,
-        smooth: "easeInOutQuart"
+        smooth: "easeInOutQuart",
       });
     }
     return () => {

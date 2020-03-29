@@ -17,7 +17,7 @@ const SlowTestCasesPage = ({ publicId }: SlowTestCasesPageProps) => {
   const [testCases, setTestCases] = React.useState<TestCase[]>([]);
 
   React.useEffect(() => {
-    fetchSlowTestCases(publicId).then(response => {
+    fetchSlowTestCases(publicId).then((response) => {
       setTestCases(response.data);
       setLoadingState(LoadingState.Success);
     });

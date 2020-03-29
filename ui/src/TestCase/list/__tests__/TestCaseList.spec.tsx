@@ -17,7 +17,7 @@ describe("TestCaseList", () => {
       skipped: false,
       hasSystemOut: false,
       hasSystemErr: false,
-      failure: null
+      failure: null,
     };
 
     const { queryAllByRole } = render(

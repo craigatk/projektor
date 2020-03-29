@@ -4,7 +4,7 @@ import {
   Router,
   Location,
   Redirect,
-  LocationContext
+  LocationContext,
 } from "@reach/router";
 import { makeStyles } from "@material-ui/core/styles";
 import { TestCase } from "../model/TestRunModel";
@@ -18,13 +18,13 @@ import { getTabCurrentValue } from "../Tabs/TabValue";
 import TestCaseSummary from "./TestCaseSummary";
 import CleanLink from "../Link/CleanLink";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
-    padding: theme.spacing(1, 2)
+    padding: theme.spacing(1, 2),
   },
   detailsSection: {
-    paddingTop: "20px"
-  }
+    paddingTop: "20px",
+  },
 }));
 
 interface TestCaseDetailsProps {

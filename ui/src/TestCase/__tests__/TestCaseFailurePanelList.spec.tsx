@@ -9,10 +9,10 @@ describe("TestCaseFailureListPanel", () => {
     const failure: TestFailure = {
       failureMessage: "My failure message",
       failureText: "My longer and more descriptive failure text",
-      failureType: ""
+      failureType: "",
     };
 
-    const testCases = [1, 2, 3, 4].map(idx =>
+    const testCases = [1, 2, 3, 4].map((idx) =>
       createTestCaseWithFailure(idx, failure)
     );
 
@@ -29,10 +29,10 @@ describe("TestCaseFailureListPanel", () => {
     const failure: TestFailure = {
       failureMessage: "My failure message",
       failureText: "My longer and more descriptive failure text",
-      failureType: ""
+      failureType: "",
     };
 
-    const testCases = [1, 2, 3, 4, 5, 6].map(idx =>
+    const testCases = [1, 2, 3, 4, 5, 6].map((idx) =>
       createTestCaseWithFailure(idx, failure)
     );
 
@@ -60,7 +60,7 @@ describe("TestCaseFailureListPanel", () => {
       skipped: false,
       hasSystemOut: true,
       hasSystemErr: true,
-      failure
+      failure,
     };
 
     return testCase;

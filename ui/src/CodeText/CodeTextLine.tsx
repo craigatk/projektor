@@ -18,24 +18,24 @@ const useStyles = makeStyles({
     backgroundColor: highlighted ? "#F9F9F9" : "inherit",
     cursor: "default",
     "&:hover": {
-      backgroundColor: "lightgrey"
+      backgroundColor: "lightgrey",
     },
-    fontSize: ".9em"
+    fontSize: ".9em",
   }),
   lineNumberClass: {
     userSelect: "none",
     minWidth: "40px",
     display: "inline-block",
     textAlign: "right",
-    paddingRight: "15px"
-  }
+    paddingRight: "15px",
+  },
 });
 
 const CodeTextLine = ({
   line,
   idx,
   handleLineClick,
-  highlighted
+  highlighted,
 }: CodeTextLineProps) => {
   const classes = useStyles({ highlighted });
 

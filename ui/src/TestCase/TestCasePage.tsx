@@ -15,7 +15,7 @@ interface TestCasePageProps extends RouteComponentProps {
 const TestCasePage = ({
   publicId,
   testSuiteIdx,
-  testCaseIdx
+  testCaseIdx,
 }: TestCasePageProps) => {
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
     LoadingState.Loading
@@ -24,7 +24,7 @@ const TestCasePage = ({
 
   React.useEffect(() => {
     fetchTestCaseDetails(publicId, testSuiteIdx, testCaseIdx)
-      .then(response => {
+      .then((response) => {
         setTestCase(response.data);
         setLoadingState(LoadingState.Success);
       })

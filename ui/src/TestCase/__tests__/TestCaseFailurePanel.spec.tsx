@@ -17,7 +17,7 @@ describe("TestCaseFailurePanel", () => {
       skipped: false,
       hasSystemOut: false,
       hasSystemErr: false,
-      failure: null
+      failure: null,
     };
 
     const { queryByTestId } = render(
@@ -42,7 +42,7 @@ describe("TestCaseFailurePanel", () => {
       skipped: false,
       hasSystemOut: false,
       hasSystemErr: false,
-      failure: null
+      failure: null,
     };
 
     const { queryByTestId } = render(
@@ -67,7 +67,7 @@ describe("TestCaseFailurePanel", () => {
       skipped: false,
       hasSystemOut: true,
       hasSystemErr: false,
-      failure: null
+      failure: null,
     };
 
     const { queryByTestId } = render(
@@ -92,7 +92,7 @@ describe("TestCaseFailurePanel", () => {
       skipped: false,
       hasSystemOut: false,
       hasSystemErr: true,
-      failure: null
+      failure: null,
     };
 
     const { queryByTestId } = render(
@@ -117,7 +117,7 @@ describe("TestCaseFailurePanel", () => {
       skipped: false,
       hasSystemOut: true,
       hasSystemErr: true,
-      failure: null
+      failure: null,
     };
 
     const { queryByTestId } = render(
@@ -136,7 +136,7 @@ describe("TestCaseFailurePanel", () => {
     const failure: TestFailure = {
       failureMessage: "My failure message",
       failureText: "My failure text",
-      failureType: ""
+      failureType: "",
     };
 
     const testCase = createTestCaseWithFailure(failure);
@@ -154,7 +154,7 @@ describe("TestCaseFailurePanel", () => {
     const failure: TestFailure = {
       failureMessage: "My failure message",
       failureText: "My failure text",
-      failureType: ""
+      failureType: "",
     };
 
     const testCase = createTestCaseWithFailure(failure);
@@ -184,7 +184,7 @@ describe("TestCaseFailurePanel", () => {
       skipped: false,
       hasSystemOut: true,
       hasSystemErr: true,
-      failure
+      failure,
     };
 
     return testCase;

@@ -16,7 +16,7 @@ describe("SideMenu", () => {
       passed: false,
       cumulativeDuration: 10.0,
       averageDuration: 2.5,
-      slowestTestCaseDuration: 5.0
+      slowestTestCaseDuration: 5.0,
     } as TestRunSummary;
 
     const { queryByTestId } = render(
@@ -41,7 +41,7 @@ describe("SideMenu", () => {
       passed: false,
       cumulativeDuration: 10.0,
       averageDuration: 2.5,
-      slowestTestCaseDuration: 5.0
+      slowestTestCaseDuration: 5.0,
     } as TestRunSummary;
 
     const { queryByTestId } = render(

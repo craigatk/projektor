@@ -14,19 +14,19 @@ import SlowTestCasesPage from "../TestCase/slow/SlowTestCasesPage";
 import { AppBar, Typography } from "@material-ui/core";
 import AttachmentsPage from "../Attachments/AttachmentsPage";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex"
+    display: "flex",
   },
   appBar: {
     backgroundColor: "#1c313a",
-    padding: "5px 10px"
+    padding: "5px 10px",
   },
   content: {
     flexGrow: 1,
     marginTop: "42px",
-    maxWidth: "calc(100% - 180px)"
-  }
+    maxWidth: "calc(100% - 180px)",
+  },
 }));
 
 interface TestRunMenuWrapperProps {
@@ -38,7 +38,7 @@ interface TestRunMenuWrapperProps {
 const TestRunMenuWrapper = ({
   publicId,
   testRunSummary,
-  hasAttachments
+  hasAttachments,
 }: TestRunMenuWrapperProps) => {
   if (testRunSummary == null) {
     return null;

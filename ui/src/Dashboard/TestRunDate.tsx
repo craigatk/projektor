@@ -9,8 +9,8 @@ interface TestRunDateProps {
 const useStyles = makeStyles({
   label: {
     minWidth: "105px",
-    display: "inline-block"
-  }
+    display: "inline-block",
+  },
 });
 
 const TestRunDate = ({ createdTimestamp }: TestRunDateProps) => {

@@ -23,13 +23,13 @@ describe("TestRunAllTests", () => {
     // @ts-ignore
     const testSuite = {
       idx: 1,
-      className: "MyClass"
+      className: "MyClass",
     } as TestSuite;
 
     // @ts-ignore
     const testRun = {
       id: publicId,
-      testSuites: [testSuite]
+      testSuites: [testSuite],
     } as TestRun;
 
     mockAxios

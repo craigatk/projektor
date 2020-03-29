@@ -3,7 +3,7 @@ import { TestSuite } from "../model/TestRunModel";
 import CleanLink from "../Link/CleanLink";
 import {
   anyTestSuiteHasGroupName,
-  fullTestSuiteName
+  fullTestSuiteName,
 } from "../model/TestSuiteHelpers";
 import MaterialTable from "material-table";
 
@@ -14,11 +14,11 @@ interface TestSuiteListProps {
 
 const headerStyle = {
   paddingTop: "8px",
-  paddingBottom: "8px"
+  paddingBottom: "8px",
 };
 
 const cellStyle = {
-  padding: "6px 24px 6px 16px"
+  padding: "6px 24px 6px 16px",
 };
 
 const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
@@ -29,13 +29,13 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
         style={{ boxShadow: "none" }}
         options={{
           sorting: true,
-          paging: false
+          paging: false,
         }}
         columns={[
           {
             title: "Test Suite",
             field: "name",
-            render: rowData => (
+            render: (rowData) => (
               <CleanLink
                 to={`/tests/${publicId}/suite/${rowData.idx}/`}
                 data-testid={`test-suite-class-name-${rowData.idx}`}
@@ -44,31 +44,31 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
               </CleanLink>
             ),
             cellStyle,
-            headerStyle
+            headerStyle,
           },
           {
             title: "Group",
             field: "group",
             hidden: !anyTestSuiteHasGroupName(testSuites),
-            render: rowData => (
+            render: (rowData) => (
               <span data-testid={`test-suite-group-name-${rowData.idx}`}>
                 {rowData.group}
               </span>
             ),
             cellStyle,
-            headerStyle
+            headerStyle,
           },
           { title: "Passed", field: "passed", cellStyle, headerStyle },
           { title: "Failed", field: "failed", cellStyle, headerStyle },
-          { title: "Duration", field: "duration", cellStyle, headerStyle }
+          { title: "Duration", field: "duration", cellStyle, headerStyle },
         ]}
-        data={testSuites.map(testSuite => ({
+        data={testSuites.map((testSuite) => ({
           name: fullTestSuiteName(testSuite),
           group: testSuite.groupName || "",
           passed: testSuite.passingCount,
           failed: testSuite.failureCount,
           duration: `${testSuite.duration}s`,
-          idx: testSuite.idx
+          idx: testSuite.idx,
         }))}
       />
     </div>

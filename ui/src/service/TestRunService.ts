@@ -6,7 +6,7 @@ import {
   TestSuiteOutput,
   TestRunSummary,
   TestResultsProcessing,
-  Attachments
+  Attachments,
 } from "../model/TestRunModel";
 import TestSuiteOutputType from "./TestSuiteOutputType";
 import { axiosInstance, axiosInstanceWithoutCache } from "./AxiosService";
@@ -102,5 +102,5 @@ export {
   fetchTestSuitesInPackage,
   fetchTestSuite,
   fetchTestSuiteSystemOutput,
-  fetchTestResultsProcessing
+  fetchTestResultsProcessing,
 };

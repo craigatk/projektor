@@ -24,7 +24,7 @@ describe("TestSuitePage", () => {
     // @ts-ignore
     const testSuite = {
       idx: testSuiteIdx,
-      className: "MyClass"
+      className: "MyClass",
     } as TestSuite;
 
     mockAxios

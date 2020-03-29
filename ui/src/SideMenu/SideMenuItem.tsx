@@ -10,22 +10,22 @@ interface SideMenuItemProps {
   linkTestId: string;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   sideNavIcon: {
     minWidth: "40px",
-    color: "white"
+    color: "white",
   },
   sideNavLink: {
     color: "white",
-    textDecoration: "none"
-  }
+    textDecoration: "none",
+  },
 }));
 
 const SideMenuItem = ({
   linkTo,
   icon,
   linkText,
-  linkTestId
+  linkTestId,
 }: SideMenuItemProps) => {
   const classes = useStyles({});
 

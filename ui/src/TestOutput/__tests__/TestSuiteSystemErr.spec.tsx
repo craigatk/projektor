@@ -23,7 +23,7 @@ describe("TestSuiteSystemErr", () => {
     const testSuiteIdx = 1;
 
     const systemErr = {
-      value: "My system err"
+      value: "My system err",
     } as TestSuiteOutput;
 
     mockAxios

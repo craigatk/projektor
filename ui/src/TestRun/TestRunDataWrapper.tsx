@@ -3,7 +3,7 @@ import LoadingState from "../Loading/LoadingState";
 import { TestRunSummary } from "../model/TestRunModel";
 import {
   fetchAttachments,
-  fetchTestRunSummary
+  fetchTestRunSummary,
 } from "../service/TestRunService";
 import LoadingSection from "../Loading/LoadingSection";
 import TestRunMenuWrapper from "./TestRunMenuWrapper";
@@ -25,7 +25,7 @@ const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
 
   const loadTestRunSummary = () => {
     fetchTestRunSummary(publicId)
-      .then(response => {
+      .then((response) => {
         setTestRunSummary(response.data);
         setLoadingState(LoadingState.Success);
       })
@@ -35,7 +35,7 @@ const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
   React.useEffect(loadTestRunSummary, [setTestRunSummary, setLoadingState]);
   React.useEffect(() => {
     fetchAttachments(publicId)
-      .then(response => {
+      .then((response) => {
         setHasAttachments(response.data.attachments.length > 0);
       })
       .catch(() => setHasAttachments(false));

@@ -1,12 +1,12 @@
 import * as React from "react";
 import { makeStyles, TableCell, TableRow } from "@material-ui/core";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   resultCol: {
     width: "10px",
     marginRight: "8px",
-    marginLeft: "8px"
-  }
+    marginLeft: "8px",
+  },
 }));
 
 interface TestCaseListHeaderRowProps {
@@ -14,7 +14,7 @@ interface TestCaseListHeaderRowProps {
 }
 
 const TestCaseListHeaderRow = ({
-  showDurationFirst
+  showDurationFirst,
 }: TestCaseListHeaderRowProps) => {
   const classes = useStyles({});
 
@@ -54,7 +54,7 @@ const TestCaseListHeaderRow = ({
     headerCells = [resultHeaderCell, testHeaderCell, durationHeaderCell];
   }
 
-  return <TableRow>{headerCells.map(headerCell => headerCell)}</TableRow>;
+  return <TableRow>{headerCells.map((headerCell) => headerCell)}</TableRow>;
 };
 
 export default TestCaseListHeaderRow;

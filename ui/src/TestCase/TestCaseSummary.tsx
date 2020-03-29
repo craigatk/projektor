@@ -10,16 +10,16 @@ interface TestCaseSummaryProps extends RouteComponentProps {
   testCase: TestCase;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   label: {
     fontWeight: "bold",
     minWidth: "200px",
-    display: "inline-block"
+    display: "inline-block",
   },
   resultIcon: {
     height: ".75em",
-    verticalAlign: "text-bottom"
-  }
+    verticalAlign: "text-bottom",
+  },
 }));
 
 const TestCaseSummary = ({ testCase }: TestCaseSummaryProps) => {
