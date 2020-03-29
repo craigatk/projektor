@@ -13,13 +13,13 @@ import CleanLink from "../Link/CleanLink";
 
 const useStyles = makeStyles(() => ({
   panelActions: {
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
   },
   failureMessage: {
     backgroundColor: "#EDEDED",
     overflowX: "auto",
-    fontSize: "0.9em"
-  }
+    fontSize: "0.9em",
+  },
 }));
 
 interface TestCaseFailurePanelProps {
@@ -31,7 +31,7 @@ interface TestCaseFailurePanelProps {
 const TestCaseFailurePanel = ({
   testCase,
   publicId,
-  showFullFailure
+  showFullFailure,
 }: TestCaseFailurePanelProps) => {
   const classes = useStyles({});
   const testCaseIdentifier = `${testCase.testSuiteIdx}-${testCase.idx}`;

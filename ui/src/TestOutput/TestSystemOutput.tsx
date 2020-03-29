@@ -19,14 +19,14 @@ const useStyles = makeStyles({
     paddingBottom: "10px",
     backgroundColor: "#EDEDED",
     borderRadius: "8px",
-    overflowX: "auto"
-  }
+    overflowX: "auto",
+  },
 });
 
 const TestSystemOutput = ({
   publicId,
   testSuiteIdx,
-  outputType
+  outputType,
 }: TestSystemOutputProps) => {
   const classes = useStyles({});
 
@@ -37,7 +37,7 @@ const TestSystemOutput = ({
 
   React.useEffect(() => {
     fetchTestSuiteSystemOutput(publicId, testSuiteIdx, outputType)
-      .then(response => {
+      .then((response) => {
         setOutput(response.data);
         setLoadingState(LoadingState.Success);
       })

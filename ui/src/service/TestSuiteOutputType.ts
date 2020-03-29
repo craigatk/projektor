@@ -1,6 +1,6 @@
 enum TestSuiteOutputType {
   SystemOut,
-  SystemErr
+  SystemErr,
 }
 
 export default TestSuiteOutputType;

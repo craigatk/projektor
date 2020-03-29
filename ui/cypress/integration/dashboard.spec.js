@@ -93,7 +93,7 @@ context("dashboard", () => {
       method: "GET",
       url: `run/${publicId}`,
       status: 404,
-      response: {}
+      response: {},
     });
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);

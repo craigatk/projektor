@@ -17,7 +17,7 @@ describe("TestCaseDetails", () => {
       skipped: false,
       hasSystemOut: false,
       hasSystemErr: false,
-      failure: null
+      failure: null,
     };
 
     const { queryByTestId } = render(
@@ -43,7 +43,7 @@ describe("TestCaseDetails", () => {
       skipped: false,
       hasSystemOut: false,
       hasSystemErr: false,
-      failure: null
+      failure: null,
     };
 
     const { queryByTestId } = render(
@@ -69,7 +69,7 @@ describe("TestCaseDetails", () => {
       skipped: false,
       hasSystemOut: true,
       hasSystemErr: false,
-      failure: null
+      failure: null,
     };
 
     const { queryByTestId } = render(
@@ -92,7 +92,7 @@ describe("TestCaseDetails", () => {
       skipped: false,
       hasSystemOut: false,
       hasSystemErr: true,
-      failure: null
+      failure: null,
     };
 
     const { queryByTestId } = render(

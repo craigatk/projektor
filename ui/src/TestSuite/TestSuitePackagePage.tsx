@@ -13,7 +13,7 @@ interface TestSuitePackagePageProps extends RouteComponentProps {
 
 const TestSuitePackagePage = ({
   publicId,
-  packageName
+  packageName,
 }: TestSuitePackagePageProps) => {
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
     LoadingState.Loading
@@ -22,7 +22,7 @@ const TestSuitePackagePage = ({
 
   React.useEffect(() => {
     fetchTestSuitesInPackage(publicId, packageName)
-      .then(response => {
+      .then((response) => {
         setTestSuites(response.data);
         setLoadingState(LoadingState.Success);
       })

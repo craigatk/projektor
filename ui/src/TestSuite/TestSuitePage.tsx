@@ -19,7 +19,7 @@ const TestSuitePage = ({ publicId, testSuiteIdx }: TestSuitePageProps) => {
 
   React.useEffect(() => {
     fetchTestSuite(publicId, testSuiteIdx)
-      .then(response => {
+      .then((response) => {
         setTestSuite(response.data);
         setLoadingState(LoadingState.Success);
       })

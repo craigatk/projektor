@@ -37,10 +37,7 @@ context("test suite system out and system err", () => {
     cy.codeLineShouldNotBeHighlighted(1);
     cy.codeLineShouldNotBeHighlighted(3);
 
-    cy.holdShift()
-      .getCodeTextLine(5)
-      .click()
-      .releaseShift();
+    cy.holdShift().getCodeTextLine(5).click().releaseShift();
     cy.codeLineShouldBeHighlighted(2);
     cy.codeLineShouldBeHighlighted(3);
     cy.codeLineShouldBeHighlighted(4);
@@ -55,10 +52,7 @@ context("test suite system out and system err", () => {
     cy.codeLineShouldNotBeHighlighted(4);
     cy.codeLineShouldNotBeHighlighted(5);
 
-    cy.holdShift()
-      .getCodeTextLine(7)
-      .click()
-      .releaseShift();
+    cy.holdShift().getCodeTextLine(7).click().releaseShift();
     cy.codeLineShouldBeHighlighted(7);
     cy.codeLineShouldBeHighlighted(8);
     cy.codeLineShouldBeHighlighted(9);

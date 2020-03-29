@@ -4,7 +4,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  makeStyles
+  makeStyles,
 } from "@material-ui/core";
 import PassedIcon from "../Icons/PassedIcon";
 import FailedIcon from "../Icons/FailedIcon";
@@ -30,9 +30,9 @@ const useStyles = makeStyles({
       ? {
           display: "flex",
           flexDirection: "row",
-          padding: 0
+          padding: 0,
         }
-      : {}
+      : {},
 });
 
 const TestCountList = ({
@@ -40,7 +40,7 @@ const TestCountList = ({
   failedCount,
   skippedCount,
   totalCount,
-  horizontal
+  horizontal,
 }: TestCountListProps) => {
   const classes = useStyles({ horizontal });
 

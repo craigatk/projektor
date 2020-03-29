@@ -16,7 +16,7 @@ const TestCaseListRow = ({
   publicId,
   testCase,
   showDurationFirst,
-  showFullTestCaseName
+  showFullTestCaseName,
 }: TestCaseListRowProps) => {
   let rowCells = [];
   const resultRowCell = (
@@ -61,7 +61,7 @@ const TestCaseListRow = ({
     rowCells = [resultRowCell, testRowCell, durationRowCell];
   }
 
-  return <TableRow>{rowCells.map(rowCell => rowCell)}</TableRow>;
+  return <TableRow>{rowCells.map((rowCell) => rowCell)}</TableRow>;
 };
 
 export default TestCaseListRow;

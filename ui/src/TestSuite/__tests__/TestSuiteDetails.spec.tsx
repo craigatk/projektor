@@ -18,7 +18,7 @@ describe("TestSuiteDetails", () => {
       duration: 1.0,
       testCases: [],
       hasSystemOut: true,
-      hasSystemErr: false
+      hasSystemErr: false,
     };
 
     const { queryByTestId } = render(
@@ -42,7 +42,7 @@ describe("TestSuiteDetails", () => {
       duration: 1.0,
       testCases: [],
       hasSystemOut: false,
-      hasSystemErr: true
+      hasSystemErr: true,
     };
 
     const { queryByTestId } = render(

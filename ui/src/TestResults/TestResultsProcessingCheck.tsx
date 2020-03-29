@@ -1,7 +1,7 @@
 import * as React from "react";
 import {
   TestResultsProcessing,
-  TestResultsProcessingStatus
+  TestResultsProcessingStatus,
 } from "../model/TestRunModel";
 import LoadingState from "../Loading/LoadingState";
 import { Paper, Typography } from "@material-ui/core";
@@ -16,23 +16,23 @@ interface TestResultsProcessingCheckProps extends RouteComponentProps {
   refreshInterval: number;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   progress: {
     width: "90%",
-    marginLeft: "5%"
+    marginLeft: "5%",
   },
   paper: {
     padding: "20px 40px",
     textAlign: "center",
     maxWidth: "600px",
-    margin: "auto"
-  }
+    margin: "auto",
+  },
 }));
 
 const TestResultsProcessingCheck = ({
   publicId,
   processingSucceeded,
-  refreshInterval
+  refreshInterval,
 }: TestResultsProcessingCheckProps) => {
   const classes = useStyles({});
 
@@ -48,14 +48,14 @@ const TestResultsProcessingCheck = ({
   ): boolean => {
     return (
       !processing ||
-      (processing.status === TestResultsProcessingStatus.RECEIVED ||
-        processing.status === TestResultsProcessingStatus.PROCESSING)
+      processing.status === TestResultsProcessingStatus.RECEIVED ||
+      processing.status === TestResultsProcessingStatus.PROCESSING
     );
   };
 
   const loadTestResultsProcessing = () => {
     fetchTestResultsProcessing(publicId)
-      .then(response => {
+      .then((response) => {
         setResultsProcessing(response.data);
         setLoadingState(LoadingState.Success);
 
@@ -68,7 +68,7 @@ const TestResultsProcessingCheck = ({
 
   React.useEffect(loadTestResultsProcessing, [
     setResultsProcessing,
-    setLoadingState
+    setLoadingState,
   ]);
 
   const resultsStillProcessing = resultsAreStillProcessing(resultsProcessing);

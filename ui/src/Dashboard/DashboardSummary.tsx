@@ -13,7 +13,7 @@ interface DashboardSummaryProps {
 
 const DashboardSummary = ({
   publicId,
-  testRunSummary
+  testRunSummary,
 }: DashboardSummaryProps) => {
   const {
     totalPassingCount,
@@ -23,7 +23,7 @@ const DashboardSummary = ({
     averageDuration,
     cumulativeDuration,
     slowestTestCaseDuration,
-    createdTimestamp
+    createdTimestamp,
   } = testRunSummary;
 
   const hasDurationData =

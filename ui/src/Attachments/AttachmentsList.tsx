@@ -16,33 +16,33 @@ const AttachmentsList = ({ publicId, attachments }: AttachmentsListProps) => {
         style={{ boxShadow: "none" }}
         options={{
           sorting: true,
-          paging: false
+          paging: false,
         }}
         columns={[
           {
             title: "File name",
             field: "fileName",
-            render: rowData => (
+            render: (rowData) => (
               <span data-testid={`attachment-file-name-${rowData.fileName}`}>
                 <a href={`/run/${publicId}/attachments/${rowData.fileName}`}>
                   {rowData.fileName}
                 </a>
               </span>
-            )
+            ),
           },
           {
             title: "Size",
             field: "fileSize",
-            render: rowData => (
+            render: (rowData) => (
               <span data-testid={`attachment-file-size-${rowData.fileName}`}>
                 {rowData.fileSize ? prettyBytes(rowData.fileSize) : ""}
               </span>
-            )
-          }
+            ),
+          },
         ]}
-        data={attachments.attachments.map(attachment => ({
+        data={attachments.attachments.map((attachment) => ({
           fileName: attachment.fileName,
-          fileSize: attachment.fileSize
+          fileSize: attachment.fileSize,
         }))}
       />
     </div>

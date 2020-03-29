@@ -4,18 +4,18 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import LoadingState from "./LoadingState";
 import { Paper, Typography } from "@material-ui/core";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   progress: {
     width: "90%",
-    marginLeft: "5%"
+    marginLeft: "5%",
   },
   errorPaper: {
     padding: "20px 40px",
     textAlign: "center",
     maxWidth: "600px",
     margin: "auto",
-    border: "2px solid red"
-  }
+    border: "2px solid red",
+  },
 }));
 
 interface LoadingSectionProps {
@@ -27,7 +27,7 @@ interface LoadingSectionProps {
 const LoadingSection = ({
   loadingState,
   successComponent,
-  errorComponent
+  errorComponent,
 }: LoadingSectionProps) => {
   const classes = useStyles({});
 

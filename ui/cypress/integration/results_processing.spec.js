@@ -10,7 +10,7 @@ context("results processing", () => {
       method: "GET",
       url: `run/${publicId}/summary`,
       status: 404,
-      response: {}
+      response: {},
     });
 
     cy.route(
@@ -53,7 +53,7 @@ context("results processing", () => {
       method: "GET",
       url: `run/${publicId}/summary`,
       status: 404,
-      response: {}
+      response: {},
     });
 
     cy.route(

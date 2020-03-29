@@ -7,37 +7,37 @@ describe("test suite sort util", () => {
       name: "failed1",
       failure: { message: "" },
       skipped: false,
-      passed: false
+      passed: false,
     } as unknown) as TestCase;
     const failed2 = ({
       name: "failed2",
       failure: { message: "" },
       skipped: false,
-      passed: false
+      passed: false,
     } as unknown) as TestCase;
     const passed1 = ({
       name: "passed1",
       failure: null,
       skipped: false,
-      passed: true
+      passed: true,
     } as unknown) as TestCase;
     const passed2 = ({
       name: "passed2",
       failure: null,
       skipped: false,
-      passed: true
+      passed: true,
     } as unknown) as TestCase;
     const skipped1 = ({
       name: "skipped1",
       failure: null,
       skipped: true,
-      passed: false
+      passed: false,
     } as unknown) as TestCase;
     const skipped2 = ({
       name: "skipped2",
       failure: null,
       skipped: true,
-      passed: false
+      passed: false,
     } as unknown) as TestCase;
 
     const sortedTestCases = sortTestSuiteTestCases([
@@ -46,7 +46,7 @@ describe("test suite sort util", () => {
       failed1,
       failed2,
       passed2,
-      skipped2
+      skipped2,
     ]);
 
     expect(sortedTestCases[0].name).toContain("failed");

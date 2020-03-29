@@ -12,7 +12,7 @@ interface TestSuiteTestCaseListProps extends RouteComponentProps {
 
 const TestSuiteTestCaseList = ({
   publicId,
-  testSuite
+  testSuite,
 }: TestSuiteTestCaseListProps) => {
   const { testCases } = testSuite;
   const sortedTestCases = sortTestSuiteTestCases(testCases);

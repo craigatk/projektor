@@ -23,7 +23,7 @@ describe("TestSuiteSystemOut", () => {
     const testSuiteIdx = 1;
 
     const systemOut = {
-      value: "My system out"
+      value: "My system out",
     } as TestSuiteOutput;
 
     mockAxios

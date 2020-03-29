@@ -19,7 +19,7 @@ describe("TestSuiteList", () => {
       testCases: [],
       hasSystemOut: true,
       hasSystemErr: false,
-      groupName: "Group1"
+      groupName: "Group1",
     };
 
     const testSuite2: TestSuite = {
@@ -35,7 +35,7 @@ describe("TestSuiteList", () => {
       testCases: [],
       hasSystemOut: true,
       hasSystemErr: false,
-      groupName: "Group2"
+      groupName: "Group2",
     };
 
     const { getByTestId, queryByTestId } = render(
@@ -60,7 +60,7 @@ describe("TestSuiteList", () => {
       testCases: [],
       hasSystemOut: true,
       hasSystemErr: false,
-      groupName: null
+      groupName: null,
     };
 
     const { queryByTestId } = render(

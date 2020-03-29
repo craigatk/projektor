@@ -10,7 +10,7 @@ interface SlowTestCasesDetailsProps {
 
 const SlowTestCasesDetails = ({
   publicId,
-  testCases
+  testCases,
 }: SlowTestCasesDetailsProps) => {
   return (
     <div>

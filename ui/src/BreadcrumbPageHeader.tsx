@@ -4,11 +4,11 @@ import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   wrapper: {
     padding: theme.spacing(1, 2),
-    marginBottom: "10px"
-  }
+    marginBottom: "10px",
+  },
 }));
 
 interface BreadcrumbPageHeaderProps {
@@ -18,7 +18,7 @@ interface BreadcrumbPageHeaderProps {
 
 const BreadcrumbPageHeader = ({
   intermediateLinks,
-  endingText
+  endingText,
 }: BreadcrumbPageHeaderProps) => {
   const classes = useStyles({});
 

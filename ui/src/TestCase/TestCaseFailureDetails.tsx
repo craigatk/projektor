@@ -13,8 +13,8 @@ const useStyles = makeStyles(() => ({
     backgroundColor: "#EDEDED",
     borderRadius: "8px",
     overflowX: "auto",
-    fontSize: "0.9em"
-  }
+    fontSize: "0.9em",
+  },
 }));
 
 const TestCaseFailureDetails = ({ failure }: TestCaseFailureDetailsProps) => {

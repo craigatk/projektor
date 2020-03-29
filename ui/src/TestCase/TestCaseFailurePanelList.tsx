@@ -11,11 +11,11 @@ interface TestCaseFailurePanelListProps {
 
 const TestCaseFailurePanelList = ({
   failedTestCases,
-  publicId
+  publicId,
 }: TestCaseFailurePanelListProps) => {
   return (
     <div>
-      {failedTestCases.map(testCase => (
+      {failedTestCases.map((testCase) => (
         <TestCaseFailurePanel
           testCase={testCase}
           publicId={publicId}

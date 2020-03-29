@@ -5,7 +5,7 @@ import { render, wait } from "@testing-library/react";
 import { Attachments, TestRunSummary } from "../../model/TestRunModel";
 import {
   axiosInstance,
-  axiosInstanceWithoutCache
+  axiosInstanceWithoutCache,
 } from "../../service/AxiosService";
 import TestRunDataWrapper from "../TestRunDataWrapper";
 
@@ -37,15 +37,15 @@ describe("TestRunDataWrapper", () => {
       passed: false,
       cumulativeDuration: 10.0,
       averageDuration: 2.5,
-      slowestTestCaseDuration: 5.0
+      slowestTestCaseDuration: 5.0,
     } as TestRunSummary;
 
     const attachments = {
       attachments: [
         {
-          fileName: "attachment1.txt"
-        }
-      ]
+          fileName: "attachment1.txt",
+        },
+      ],
     } as Attachments;
 
     mockAxios

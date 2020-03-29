@@ -25,7 +25,7 @@ describe("TestSystemOut", () => {
     const outputType = TestSuiteOutputType.SystemOut;
 
     const testSuiteOutput = {
-      value: "My output"
+      value: "My output",
     } as TestSuiteOutput;
 
     mockAxios

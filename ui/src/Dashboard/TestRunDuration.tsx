@@ -12,15 +12,15 @@ interface TestRunDurationProps {
 const useStyles = makeStyles({
   label: {
     minWidth: "135px",
-    display: "inline-block"
-  }
+    display: "inline-block",
+  },
 });
 
 const TestRunDuration = ({
   publicId,
   averageDuration,
   cumulativeDuration,
-  slowestTestCaseDuration
+  slowestTestCaseDuration,
 }: TestRunDurationProps) => {
   const classes = useStyles({});
   return (

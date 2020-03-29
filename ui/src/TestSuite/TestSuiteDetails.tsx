@@ -6,7 +6,7 @@ import {
   Link,
   Router,
   Redirect,
-  LocationContext
+  LocationContext,
 } from "@reach/router";
 import { Tabs, Tab, Paper } from "@material-ui/core";
 import TestSuiteTestCaseList from "./TestSuiteTestCaseList";
@@ -21,13 +21,13 @@ interface TestSuiteDetailsProps {
   testSuite: TestSuite;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   detailsSection: {
-    paddingTop: "20px"
+    paddingTop: "20px",
   },
   paper: {
-    padding: theme.spacing(2, 2)
-  }
+    padding: theme.spacing(2, 2),
+  },
 }));
 
 const buildHeaderIntermediateLinks = (publicId, testSuite) => {

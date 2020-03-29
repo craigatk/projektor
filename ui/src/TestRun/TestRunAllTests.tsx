@@ -19,7 +19,7 @@ const TestRunAllTests = ({ publicId }: TestRunAllTestsProps) => {
 
   React.useEffect(() => {
     fetchTestRun(publicId)
-      .then(response => {
+      .then((response) => {
         setTestRun(response.data);
         setTestRunLoadingState(LoadingState.Success);
       })

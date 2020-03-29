@@ -7,13 +7,13 @@ interface PageTitleProps {
   testid: string;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   title: {
     paddingTop: "10px",
     paddingLeft: "15px",
     paddingBottom: "10px",
-    fontSize: "1.35em"
-  }
+    fontSize: "1.35em",
+  },
 }));
 
 const PageTitle = ({ title, testid }: PageTitleProps) => {

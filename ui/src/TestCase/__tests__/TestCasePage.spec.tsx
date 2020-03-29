@@ -33,7 +33,7 @@ describe("TestCasePage", () => {
       skipped: false,
       failure: null,
       hasSystemOut: false,
-      hasSystemErr: false
+      hasSystemErr: false,
     } as TestCase;
 
     mockAxios

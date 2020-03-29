@@ -3,28 +3,28 @@ import { RouteComponentProps } from "@reach/router";
 import { makeStyles } from "@material-ui/styles";
 import { AppBar, Typography, Paper } from "@material-ui/core";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   appBar: {
     backgroundColor: "#1c313a",
-    padding: "5px 10px"
+    padding: "5px 10px",
   },
   appBarTitle: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   content: {
     flexGrow: 1,
     marginTop: "50px",
-    textAlign: "center"
+    textAlign: "center",
   },
   contentTitle: {
     paddingTop: "15px",
-    paddingBottom: "15px"
+    paddingBottom: "15px",
   },
   paper: {
     maxWidth: "600px",
     margin: "auto",
-    padding: "20px 40px"
-  }
+    padding: "20px 40px",
+  },
 }));
 
 const Welcome = (props: RouteComponentProps) => {

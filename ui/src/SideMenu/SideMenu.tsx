@@ -17,26 +17,26 @@ interface SideMenuProps {
 
 const sideNavWidth = 180;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   drawer: {
     width: sideNavWidth,
-    flexShrink: 0
+    flexShrink: 0,
   },
   drawerPaper: {
     width: sideNavWidth,
     backgroundColor: "#1c313a",
-    color: "white"
+    color: "white",
   },
   sideNavTitle: {
     textAlign: "center",
-    fontSize: "1.5rem"
-  }
+    fontSize: "1.5rem",
+  },
 }));
 
 const SideMenu = ({
   publicId,
   testRunSummary,
-  hasAttachments
+  hasAttachments,
 }: SideMenuProps) => {
   const classes = useStyles({});
 
@@ -45,7 +45,7 @@ const SideMenu = ({
       className={classes.drawer}
       variant="permanent"
       classes={{
-        paper: classes.drawerPaper
+        paper: classes.drawerPaper,
       }}
       anchor="left"
     >
