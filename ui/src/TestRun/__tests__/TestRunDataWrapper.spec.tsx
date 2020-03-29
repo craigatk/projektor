@@ -6,7 +6,7 @@ import { Attachments, TestRunSummary } from "../../model/TestRunModel";
 import {
   axiosInstance,
   axiosInstanceWithoutCache
-} from "../../service/TestRunService";
+} from "../../service/AxiosService";
 import TestRunDataWrapper from "../TestRunDataWrapper";
 
 describe("TestRunDataWrapper", () => {

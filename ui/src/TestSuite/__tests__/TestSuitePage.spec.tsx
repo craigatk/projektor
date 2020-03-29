@@ -3,7 +3,7 @@ import React from "react";
 import MockAdapter from "axios-mock-adapter";
 import { render, wait } from "@testing-library/react";
 import { TestSuite } from "../../model/TestRunModel";
-import { axiosInstance } from "../../service/TestRunService";
+import { axiosInstance } from "../../service/AxiosService";
 import TestSuitePage from "../TestSuitePage";
 
 describe("TestSuitePage", () => {
