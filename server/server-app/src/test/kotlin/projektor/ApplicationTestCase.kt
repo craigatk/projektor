@@ -53,6 +53,9 @@ open class ApplicationTestCase {
 
     protected var cleanupMaxAgeDays: Int? = null
 
+    protected var metricsEnabled: Boolean? = null
+    protected var metricsPort: Int = 0
+
     @ObsoleteCoroutinesApi
     fun createTestApplication(application: Application) {
         val schema = databaseSchema
@@ -77,6 +80,13 @@ open class ApplicationTestCase {
 
             cleanupMaxAgeDays?.let {
                 put("ktor.cleanup.maxReportAgeDays", it.toString())
+            }
+
+            metricsEnabled?.let {
+                put("ktor.metrics.influxdb.enabled", it.toString())
+                put("ktor.metrics.influxdb.uri", "http://localhost:$metricsPort")
+                put("ktor.metrics.influxdb.autoCreateDb", "true")
+                put("ktor.metrics.influxdb.interval", "1")
             }
         }
 

@@ -8,12 +8,14 @@ import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
 import java.io.File
 import kotlin.test.Test
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 
+@ObsoleteCoroutinesApi
 @KtorExperimentalAPI
 @ExperimentalStdlibApi
 class AddAttachmentApplicationTest : ApplicationTestCase() {

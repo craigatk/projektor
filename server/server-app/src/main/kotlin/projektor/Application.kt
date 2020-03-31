@@ -15,6 +15,7 @@ import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
 import io.ktor.http.content.CachingOptions
 import io.ktor.jackson.jackson
+import io.ktor.metrics.micrometer.MicrometerMetrics
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.ObsoleteCoroutinesApi
@@ -32,6 +33,8 @@ import projektor.database.DataSourceConfig
 import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
+import projektor.metrics.InfluxMetricsConfig
+import projektor.metrics.createRegistry
 import projektor.route.*
 import projektor.testcase.TestCaseService
 import projektor.testrun.TestRunService
@@ -51,6 +54,8 @@ fun Application.main() {
     val dslContext = DataSourceConfig.createDSLContext(dataSource, dataSourceConfig)
 
     val cleanupConfig = CleanupConfig.createCleanupConfig(applicationConfig)
+
+    val influxMetricsConfig = InfluxMetricsConfig.createInfluxMetricsConfig(applicationConfig)
 
     val appModule = createAppModule(dataSource, authConfig, dslContext)
 
@@ -79,6 +84,11 @@ fun Application.main() {
                 ContentType.Application.JavaScript -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 7 * oneDayInSeconds))
                 else -> null
             }
+        }
+    }
+    if (influxMetricsConfig.enabled) {
+        install(MicrometerMetrics) {
+            registry = createRegistry(influxMetricsConfig)
         }
     }
 
