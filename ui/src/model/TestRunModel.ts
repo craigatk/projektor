@@ -80,6 +80,10 @@ interface TestResultsProcessing {
   errorMessage?: string;
 }
 
+interface TestRunSystemAttributes {
+  pinned: boolean;
+}
+
 export {
   Attachment,
   Attachments,
@@ -91,4 +95,5 @@ export {
   TestFailure,
   TestResultsProcessingStatus,
   TestResultsProcessing,
+  TestRunSystemAttributes,
 };

@@ -7,6 +7,7 @@ import {
   TestRunSummary,
   TestResultsProcessing,
   Attachments,
+  TestRunSystemAttributes,
 } from "../model/TestRunModel";
 import TestSuiteOutputType from "./TestSuiteOutputType";
 import { axiosInstance, axiosInstanceWithoutCache } from "./AxiosService";
@@ -92,6 +93,20 @@ const fetchAttachments = (
   // @ts-ignore
   axiosInstanceWithoutCache.get<Attachments>(`/run/${publicId}/attachments`);
 
+const fetchTestRunSystemAttributes = (
+  publicId: string
+): Promise<AxiosResponse<TestRunSystemAttributes>> =>
+  // @ts-ignore
+  axiosInstanceWithoutCache.get<TestRunSystemAttributes>(`/run/${publicId}/attributes`);
+
+const pinTestRun = (publicId: string): Promise<AxiosResponse<void>> =>
+  // @ts-ignore
+  axiosInstanceWithoutCache.post(`/run/${publicId}/attributes/pin`);
+
+const unpinTestRun = (publicId: string): Promise<AxiosResponse<void>> =>
+  // @ts-ignore
+  axiosInstanceWithoutCache.post(`/run/${publicId}/attributes/unpin`);
+
 export {
   fetchAttachments,
   fetchTestRun,
@@ -103,4 +118,7 @@ export {
   fetchTestSuite,
   fetchTestSuiteSystemOutput,
   fetchTestResultsProcessing,
+  fetchTestRunSystemAttributes,
+  pinTestRun,
+  unpinTestRun,
 };

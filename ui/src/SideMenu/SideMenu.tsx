@@ -7,7 +7,7 @@ import FailedIcon from "../Icons/FailedIcon";
 import TotalIcon from "../Icons/TotalIcon";
 import SlowIcon from "../Icons/SlowIcon";
 import AttachmentIcon from "../Icons/AttachmentIcon";
-import SideMenuItem from "./SideMenuItem";
+import SideMenuLink from "./SideMenuLink";
 
 interface SideMenuProps {
   publicId: string;
@@ -53,34 +53,34 @@ const SideMenu = ({
         Projektor
       </Typography>
       <List>
-        <SideMenuItem
+        <SideMenuLink
           linkTo={`/tests/${publicId}/`}
           icon={<DashboardIcon />}
           linkText="Dashboard"
           linkTestId="nav-link-dashboard"
         />
         {testRunSummary.passed === false ? (
-          <SideMenuItem
+          <SideMenuLink
             linkTo={`/tests/${publicId}/failed`}
             icon={<FailedIcon />}
             linkText="Failed tests"
             linkTestId="nav-link-failed-test-cases"
           />
         ) : null}
-        <SideMenuItem
+        <SideMenuLink
           linkTo={`/tests/${publicId}/all`}
           icon={<TotalIcon />}
           linkText="All tests"
           linkTestId="nav-link-all"
         />
-        <SideMenuItem
+        <SideMenuLink
           linkTo={`/tests/${publicId}/slow`}
           icon={<SlowIcon />}
           linkText="Slow tests"
           linkTestId="nav-link-slow"
         />
         {hasAttachments ? (
-          <SideMenuItem
+          <SideMenuLink
             linkTo={`/tests/${publicId}/attachments`}
             icon={<AttachmentIcon />}
             linkText="Attachments"
