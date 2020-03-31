@@ -39,6 +39,9 @@ dependencies {
     implementation "org.koin:koin-ktor:${koin_version}"
     implementation "org.koin:koin-logger-slf4j:${koin_version}"
 
+    implementation "io.ktor:ktor-metrics-micrometer:$ktor_version"
+    implementation 'io.micrometer:micrometer-registry-influx:1.4.0'
+
     implementation 'org.simpleflatmapper:sfm-jooq:7.0.3'
 
     implementation "ch.qos.logback:logback-classic:1.2.3"
@@ -54,6 +57,8 @@ dependencies {
     testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.5.2"
 
     testImplementation "org.koin:koin-test:${koin_version}"
+
+    testImplementation "com.github.tomakehurst:wiremock-jre8:2.25.0"
 }
 
 task cleanStaticResources(type: Delete) {
