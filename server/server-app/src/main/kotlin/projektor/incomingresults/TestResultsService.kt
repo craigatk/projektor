@@ -9,7 +9,6 @@ import projektor.server.api.TestRunSummary
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.testrun.TestRunRepository
 
-@ObsoleteCoroutinesApi
 class TestResultsService(
     private val testResultsProcessor: TestResultsProcessor,
     private val testRunRepository: TestRunRepository,
@@ -17,13 +16,13 @@ class TestResultsService(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
-    private val asyncSave = newFixedThreadPoolContext(8, "saveTestResults")
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     suspend fun persistTestResultsAsync(resultsBlob: String): PublicId {
         val publicId = randomPublicId()
         testResultsProcessingService.createResultsProcessing(publicId)
 
-        GlobalScope.launch(asyncSave, CoroutineStart.DEFAULT) {
+        coroutineScope.launch {
             doPersistTestResults(publicId, resultsBlob)
         }
 
@@ -41,17 +40,14 @@ class TestResultsService(
         return testRunSummary
     }
 
-    private suspend fun parseTestSuites(publicId: PublicId, resultsBlob: String): List<TestSuite> {
-        val testSuitesWithTestCases = try {
+    private suspend fun parseTestSuites(publicId: PublicId, resultsBlob: String): List<TestSuite> =
+        try {
             val parsedTestSuites = testResultsProcessor.parseResultsBlob(resultsBlob)
             parsedTestSuites.filter { !it.testCases.isNullOrEmpty() }
         } catch (e: Exception) {
             val errorMessage = "Error parsing test results: ${e.message}"
             handleException(publicId, errorMessage, e)
         }
-
-        return testSuitesWithTestCases
-    }
 
     private suspend fun persistTestSuites(publicId: PublicId, testSuites: List<TestSuite>): TestRunSummary =
         try {

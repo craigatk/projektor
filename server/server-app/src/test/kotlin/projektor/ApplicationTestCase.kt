@@ -12,7 +12,6 @@ import io.ktor.config.MapApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
 import java.math.BigDecimal
 import kotlin.test.AfterTest
-import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.jooq.DSLContext
@@ -56,7 +55,6 @@ open class ApplicationTestCase {
     protected var metricsEnabled: Boolean? = null
     protected var metricsPort: Int = 0
 
-    @ObsoleteCoroutinesApi
     fun createTestApplication(application: Application) {
         val schema = databaseSchema
 

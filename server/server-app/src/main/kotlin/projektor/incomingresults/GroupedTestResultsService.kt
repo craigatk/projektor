@@ -1,9 +1,6 @@
 package projektor.incomingresults
 
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.newFixedThreadPoolContext
+import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import projektor.incomingresults.model.GroupedResults
 import projektor.server.api.PublicId
@@ -18,13 +15,13 @@ class GroupedTestResultsService(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
-    private val asyncSave = newFixedThreadPoolContext(8, "saveGroupedTestResults")
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     suspend fun persistTestResultsAsync(groupedResultsXml: String): PublicId {
         val publicId = randomPublicId()
         testResultsProcessingService.createResultsProcessing(publicId)
 
-        GlobalScope.launch(asyncSave, CoroutineStart.DEFAULT) {
+        coroutineScope.launch {
             doPersistTestResults(publicId, groupedResultsXml)
         }
 
@@ -42,16 +39,13 @@ class GroupedTestResultsService(
         return testRunSummary
     }
 
-    private suspend fun parseGroupedResults(publicId: PublicId, groupedResultsXml: String): GroupedResults {
-        val groupedResults = try {
+    private suspend fun parseGroupedResults(publicId: PublicId, groupedResultsXml: String): GroupedResults =
+        try {
             groupedResultsConverter.parseAndConvertGroupedResults(groupedResultsXml)
         } catch (e: Exception) {
             val errorMessage = "Error parsing test results: ${e.message}"
             handleException(publicId, errorMessage, e)
         }
-
-        return groupedResults
-    }
 
     private suspend fun persistGroupedResults(publicId: PublicId, groupedResults: GroupedResults): TestRunSummary =
             try {

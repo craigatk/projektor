@@ -2,7 +2,6 @@ package projektor.incomingresults
 
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
@@ -15,7 +14,6 @@ import strikt.api.expectCatching
 import strikt.api.expectThat
 import strikt.assertions.*
 
-@ObsoleteCoroutinesApi
 class TestResultsServiceTest : DatabaseRepositoryTestCase() {
     private lateinit var testResultsService: TestResultsService
 

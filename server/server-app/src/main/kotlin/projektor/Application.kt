@@ -18,7 +18,6 @@ import io.ktor.jackson.jackson
 import io.ktor.metrics.micrometer.MicrometerMetrics
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
-import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.koin.Logger.SLF4JLogger
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
@@ -41,7 +40,6 @@ import projektor.testrun.TestRunService
 import projektor.testrun.attributes.TestRunSystemAttributesService
 import projektor.testsuite.TestSuiteService
 
-@ObsoleteCoroutinesApi
 @KtorExperimentalAPI
 fun Application.main() {
     val applicationConfig = environment.config
