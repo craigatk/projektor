@@ -6,7 +6,6 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
 import kotlin.test.Test
-import kotlinx.coroutines.ObsoleteCoroutinesApi
 import projektor.ApplicationTestCase
 import projektor.server.api.config.ServerConfig
 import strikt.api.expectThat
@@ -15,7 +14,6 @@ import strikt.assertions.isFalse
 import strikt.assertions.isNull
 import strikt.assertions.isTrue
 
-@ObsoleteCoroutinesApi
 @KtorExperimentalAPI
 class ConfigApplicationTest : ApplicationTestCase() {
     @Test

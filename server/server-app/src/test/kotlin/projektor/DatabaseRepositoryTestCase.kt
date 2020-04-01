@@ -5,7 +5,6 @@ import com.zaxxer.hikari.HikariDataSource
 import io.ktor.util.KtorExperimentalAPI
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
-import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.jooq.DSLContext
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
@@ -29,7 +28,6 @@ open class DatabaseRepositoryTestCase : KoinTest {
     lateinit var attachmentDao: TestRunAttachmentDao
     lateinit var testRunSystemAttributesDao: TestRunSystemAttributesDao
 
-    @ObsoleteCoroutinesApi
     @KtorExperimentalAPI
     @BeforeTest
     fun setup() {

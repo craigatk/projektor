@@ -2,7 +2,6 @@ package projektor
 
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.util.KtorExperimentalAPI
-import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.jooq.DSLContext
 import org.koin.dsl.module
 import projektor.attachment.AttachmentDatabaseRepository
@@ -30,7 +29,6 @@ import projektor.testsuite.TestSuiteDatabaseRepository
 import projektor.testsuite.TestSuiteRepository
 import projektor.testsuite.TestSuiteService
 
-@ObsoleteCoroutinesApi
 @KtorExperimentalAPI
 fun createAppModule(
     dataSource: HikariDataSource,
