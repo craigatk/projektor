@@ -3,7 +3,7 @@ package projektor.testcase
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.KtorExperimentalAPI
-import kotlin.test.*
+import org.junit.jupiter.api.Test
 import projektor.*
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.TestCase

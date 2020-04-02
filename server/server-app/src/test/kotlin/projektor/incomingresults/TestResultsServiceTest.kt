@@ -1,23 +1,22 @@
 package projektor.incomingresults
 
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import kotlinx.coroutines.runBlocking
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.koin.core.get
 import projektor.DatabaseRepositoryTestCase
 import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.parser.ResultsXmlLoader
 import projektor.server.api.results.ResultsProcessingStatus
-import strikt.api.expectCatching
 import strikt.api.expectThat
 import strikt.assertions.*
 
 class TestResultsServiceTest : DatabaseRepositoryTestCase() {
     private lateinit var testResultsService: TestResultsService
 
-    @BeforeTest
+    @BeforeEach
     fun setUpService() {
         testResultsService = get()
     }
@@ -46,9 +45,7 @@ class TestResultsServiceTest : DatabaseRepositoryTestCase() {
 
         runBlocking { resultsProcessingRepository.createResultsProcessing(publicId) }
 
-        expectCatching { runBlocking { testResultsService.doPersistTestResults(publicId, invalidXml) } }
-                .failed()
-                .isA<PersistTestResultsException>()
+        runBlocking { testResultsService.doPersistTestResults(publicId, invalidXml) }
 
         val resultsProcessing = resultsProcessingDao.fetchOneByPublicId(publicId.id)
 

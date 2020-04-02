@@ -3,11 +3,11 @@ package projektor
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.util.KtorExperimentalAPI
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
 import org.jooq.DSLContext
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
@@ -29,7 +29,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
     lateinit var testRunSystemAttributesDao: TestRunSystemAttributesDao
 
     @KtorExperimentalAPI
-    @BeforeTest
+    @BeforeEach
     fun setup() {
         val hikariConfig = HikariConfig()
 
@@ -67,7 +67,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
         testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao)
     }
 
-    @AfterTest
+    @AfterEach
     fun closeDataSource() {
         stopKoin()
 

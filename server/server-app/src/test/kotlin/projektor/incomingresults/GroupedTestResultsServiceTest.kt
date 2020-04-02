@@ -1,10 +1,10 @@
 package projektor.incomingresults
 
-import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
+import org.junit.jupiter.api.Test
 import org.koin.core.inject
 import projektor.DatabaseRepositoryTestCase
 import projektor.parser.GroupedResultsXmlLoader

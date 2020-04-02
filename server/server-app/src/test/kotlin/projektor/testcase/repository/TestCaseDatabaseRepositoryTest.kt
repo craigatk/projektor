@@ -1,8 +1,8 @@
 package projektor.testcase.repository
 
 import java.math.BigDecimal
-import kotlin.test.Test
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Test
 import projektor.*
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.TestCase

@@ -1,9 +1,9 @@
 package projektor.incomingresults.processing
 
 import java.time.LocalDateTime
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.koin.core.get
 import projektor.DatabaseRepositoryTestCase
 import projektor.database.generated.tables.pojos.ResultsProcessing
@@ -17,7 +17,7 @@ import strikt.assertions.isNull
 class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     private lateinit var resultsProcessingDatabaseRepository: ResultsProcessingRepository
 
-    @BeforeTest
+    @BeforeEach
     fun createRepository() {
         resultsProcessingDatabaseRepository = get()
     }

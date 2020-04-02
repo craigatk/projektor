@@ -4,9 +4,10 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.KtorExperimentalAPI
 import java.math.BigDecimal
-import kotlin.test.*
+import kotlin.test.assertNotNull
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
+import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
