@@ -3,10 +3,11 @@ package projektor.incomingresults
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.KtorExperimentalAPI
-import kotlin.test.*
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
+import org.junit.jupiter.api.Test
 import org.koin.ktor.ext.get
 import projektor.ApplicationTestCase
 import projektor.server.api.PublicId

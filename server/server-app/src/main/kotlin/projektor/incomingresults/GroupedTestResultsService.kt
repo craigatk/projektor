@@ -2,9 +2,7 @@ package projektor.incomingresults
 
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
-import projektor.incomingresults.model.GroupedResults
 import projektor.server.api.PublicId
-import projektor.server.api.TestRunSummary
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.testrun.TestRunRepository
 
@@ -28,36 +26,22 @@ class GroupedTestResultsService(
         return publicId
     }
 
-    suspend fun doPersistTestResults(publicId: PublicId, groupedResultsXml: String): TestRunSummary {
-        testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.PROCESSING)
-
-        val groupedResults = parseGroupedResults(publicId, groupedResultsXml)
-        val testRunSummary = persistGroupedResults(publicId, groupedResults)
-
-        testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.SUCCESS)
-
-        return testRunSummary
-    }
-
-    private suspend fun parseGroupedResults(publicId: PublicId, groupedResultsXml: String): GroupedResults =
+    suspend fun doPersistTestResults(publicId: PublicId, groupedResultsXml: String) {
         try {
-            groupedResultsConverter.parseAndConvertGroupedResults(groupedResultsXml)
+            testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.PROCESSING)
+
+            val groupedResults = groupedResultsConverter.parseAndConvertGroupedResults(groupedResultsXml)
+            testRunRepository.saveGroupedTestRun(publicId, groupedResults)
+
+            testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.SUCCESS)
         } catch (e: Exception) {
-            val errorMessage = "Error parsing test results: ${e.message}"
+            val errorMessage = "Error persisting test results: ${e.message}"
             handleException(publicId, errorMessage, e)
         }
+    }
 
-    private suspend fun persistGroupedResults(publicId: PublicId, groupedResults: GroupedResults): TestRunSummary =
-            try {
-                testRunRepository.saveGroupedTestRun(publicId, groupedResults)
-            } catch (e: Exception) {
-                val errorMessage = "Error saving test results: ${e.message}"
-                handleException(publicId, errorMessage, e)
-            }
-
-    private suspend fun handleException(publicId: PublicId, errorMessage: String, e: Exception): Nothing {
+    private suspend fun handleException(publicId: PublicId, errorMessage: String, e: Exception) {
         logger.error(errorMessage, e)
         testResultsProcessingService.recordResultsProcessingError(publicId, errorMessage)
-        throw PersistTestResultsException(publicId, errorMessage, e)
     }
 }

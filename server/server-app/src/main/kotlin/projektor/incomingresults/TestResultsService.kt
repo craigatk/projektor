@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory
 import projektor.parser.model.TestSuite
 import projektor.results.processor.TestResultsProcessor
 import projektor.server.api.PublicId
-import projektor.server.api.TestRunSummary
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.testrun.TestRunRepository
 
@@ -29,37 +28,27 @@ class TestResultsService(
         return publicId
     }
 
-    suspend fun doPersistTestResults(publicId: PublicId, resultsBlob: String): TestRunSummary {
-        testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.PROCESSING)
+    suspend fun doPersistTestResults(publicId: PublicId, resultsBlob: String) {
+        try {
+            testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.PROCESSING)
 
-        val testSuites = parseTestSuites(publicId, resultsBlob)
-        val testRunSummary = persistTestSuites(publicId, testSuites)
+            val testSuites = parseTestSuites(resultsBlob)
+            testRunRepository.saveTestRun(publicId, testSuites)
 
-        testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.SUCCESS)
-
-        return testRunSummary
+            testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.SUCCESS)
+        } catch (e: Exception) {
+            val errorMessage = "Error persisting test results: ${e.message}"
+            handleException(publicId, errorMessage, e)
+        }
     }
 
-    private suspend fun parseTestSuites(publicId: PublicId, resultsBlob: String): List<TestSuite> =
-        try {
-            val parsedTestSuites = testResultsProcessor.parseResultsBlob(resultsBlob)
-            parsedTestSuites.filter { !it.testCases.isNullOrEmpty() }
-        } catch (e: Exception) {
-            val errorMessage = "Error parsing test results: ${e.message}"
-            handleException(publicId, errorMessage, e)
-        }
+    private fun parseTestSuites(resultsBlob: String): List<TestSuite> {
+        val parsedTestSuites = testResultsProcessor.parseResultsBlob(resultsBlob)
+        return parsedTestSuites.filter { !it.testCases.isNullOrEmpty() }
+    }
 
-    private suspend fun persistTestSuites(publicId: PublicId, testSuites: List<TestSuite>): TestRunSummary =
-        try {
-            testRunRepository.saveTestRun(publicId, testSuites)
-        } catch (e: Exception) {
-            val errorMessage = "Error saving test results: ${e.message}"
-            handleException(publicId, errorMessage, e)
-        }
-
-    private suspend fun handleException(publicId: PublicId, errorMessage: String, e: Exception): Nothing {
+    private suspend fun handleException(publicId: PublicId, errorMessage: String, e: Exception) {
         logger.error(errorMessage, e)
         testResultsProcessingService.recordResultsProcessingError(publicId, errorMessage)
-        throw PersistTestResultsException(publicId, errorMessage, e)
     }
 }

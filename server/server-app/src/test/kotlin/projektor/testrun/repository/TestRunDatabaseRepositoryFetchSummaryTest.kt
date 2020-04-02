@@ -3,8 +3,8 @@ package projektor.testrun.repository
 import java.math.BigDecimal
 import java.sql.Timestamp
 import java.time.Instant
-import kotlin.test.Test
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
 import projektor.database.generated.tables.pojos.TestRun
 import projektor.incomingresults.randomPublicId

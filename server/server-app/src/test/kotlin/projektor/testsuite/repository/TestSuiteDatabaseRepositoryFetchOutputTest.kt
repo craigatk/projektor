@@ -1,7 +1,7 @@
 package projektor.testsuite.repository
 
-import kotlin.test.Test
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
 import projektor.createTestRun
 import projektor.database.generated.tables.pojos.TestSuite

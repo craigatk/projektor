@@ -6,7 +6,8 @@ import io.ktor.util.KtorExperimentalAPI
 import java.math.BigDecimal
 import java.sql.Timestamp
 import java.time.Instant
-import kotlin.test.*
+import kotlin.test.assertNotNull
+import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.database.generated.tables.pojos.TestRun as TestRunDB
 import projektor.incomingresults.randomPublicId

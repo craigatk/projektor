@@ -4,9 +4,9 @@ import java.math.BigDecimal
 import java.sql.Timestamp
 import java.time.Instant
 import java.time.LocalDateTime
-import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
 import projektor.TestSuiteData
 import projektor.database.generated.tables.pojos.TestCase

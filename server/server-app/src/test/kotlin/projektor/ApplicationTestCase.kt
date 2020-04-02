@@ -11,10 +11,10 @@ import io.ktor.application.Application
 import io.ktor.config.MapApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
 import java.math.BigDecimal
-import kotlin.test.AfterTest
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.jooq.DSLContext
+import org.junit.jupiter.api.AfterEach
 import org.koin.ktor.ext.get
 import projektor.database.generated.tables.daos.*
 import projektor.parser.ResultsXmlLoader
@@ -40,6 +40,7 @@ open class ApplicationTestCase {
     lateinit var testFailureDao: TestFailureDao
     lateinit var attachmentDao: TestRunAttachmentDao
     lateinit var testRunSystemAttributesDao: TestRunSystemAttributesDao
+    lateinit var resultsProcessingDao: ResultsProcessingDao
     lateinit var testRunDBGenerator: TestRunDBGenerator
     lateinit var application: Application
 
@@ -99,6 +100,7 @@ open class ApplicationTestCase {
         testFailureDao = TestFailureDao(dslContext.configuration())
         attachmentDao = TestRunAttachmentDao(dslContext.configuration())
         testRunSystemAttributesDao = TestRunSystemAttributesDao(dslContext.configuration())
+        resultsProcessingDao = ResultsProcessingDao(dslContext.configuration())
         testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao)
 
         this.application = application
@@ -108,7 +110,7 @@ open class ApplicationTestCase {
         await until { attachmentDao.fetchByTestRunPublicId(publicId.id).size == attachmentCount }
     }
 
-    @AfterTest
+    @AfterEach
     fun closeDataSource() {
         dataSource.close()
     }

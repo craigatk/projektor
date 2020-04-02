@@ -1,7 +1,7 @@
 package projektor.testrun.attributes
 
-import kotlin.test.Test
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
 import projektor.database.generated.tables.pojos.TestRunSystemAttributes
 import projektor.incomingresults.randomPublicId

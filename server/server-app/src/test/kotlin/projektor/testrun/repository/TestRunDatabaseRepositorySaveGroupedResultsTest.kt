@@ -1,8 +1,8 @@
 package projektor.testrun.repository
 
-import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
 import projektor.incomingresults.model.GroupedResults
 import projektor.incomingresults.model.GroupedTestSuites
