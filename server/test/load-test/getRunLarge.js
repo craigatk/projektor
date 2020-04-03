@@ -1,10 +1,11 @@
 import http from 'k6/http';
-import { check, group } from "k6";
+import { check, group, sleep } from "k6";
 
 export let options = {
     stages: [
         { duration: "120s", target: 50 }
-    ]
+    ],
+    setupTimeout: "30s"
 };
 
 const failingSpecResultsXml = open('../test-fixtures/src/main/resources/TEST-projektor.example.spock.FailingSpec.xml');
@@ -14,11 +15,11 @@ const resultsPayload = JSON.stringify({
     groupedTestSuites: [
         {
             groupName: "group1",
-            testSuitesBlob: failingSpecResultsXml
+            testSuitesBlob: [...Array(1000).keys()].map(() => failingSpecResultsXml).join("\n")
         },
         {
             groupName: "group2",
-            testSuitesBlob: passingSpecResultsXml
+            testSuitesBlob: [...Array(1000).keys()].map(() => passingSpecResultsXml).join("\n")
         }
     ]
 });
@@ -35,6 +36,9 @@ export function setup() {
     const testId = JSON.parse(resultsResponse.body).id
 
     console.log("Test ID: " + testId)
+
+    console.log("Sleeping for a bit while test run is saved")
+    sleep(10)
 
     return { testId: testId }
 }

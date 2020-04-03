@@ -21,7 +21,7 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
     private val testRunMapper = JdbcMapperFactory.newInstance()
-            .addKeys("id", "test_suites_id", "test_suites_test_cases_id")
+            .addKeys("id", "test_suites_id")
             .ignorePropertyNotFound()
             .newMapper(TestRun::class.java)
 
@@ -107,13 +107,10 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
                         .select(TEST_RUN.PUBLIC_ID.`as`("id"))
                         .select(addPrefixToFields("summary", TEST_RUN.fields().toList()))
                         .select(addPrefixToFields("test_suites_", TEST_SUITE.fields().toList()))
-                        .select(TEST_SUITE.IDX.`as`("test_suites_test_cases_test_suite_idx"))
-                        .select(addPrefixToFields("test_suites_test_cases_", TEST_CASE.fields().toList()))
                         .select(TEST_SUITE_GROUP.GROUP_LABEL.`as`("test_suites_group_label"))
                         .select(TEST_SUITE_GROUP.GROUP_NAME.`as`("test_suites_group_name"))
                         .from(TEST_RUN)
                         .leftOuterJoin(TEST_SUITE).on(TEST_SUITE.TEST_RUN_ID.eq(TEST_RUN.ID))
-                        .leftOuterJoin(TEST_CASE).on(TEST_CASE.TEST_SUITE_ID.eq(TEST_SUITE.ID))
                         .leftOuterJoin(TEST_SUITE_GROUP).on(TEST_SUITE.TEST_SUITE_GROUP_ID.eq(TEST_SUITE_GROUP.ID))
                         .where(TEST_RUN.PUBLIC_ID.eq(publicId.id))
                         .fetchResultSet()
