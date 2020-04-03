@@ -31,7 +31,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       objectstorage:
-        image: bitnami/minio:2020.2.20-debian-10-r1
+        image: bitnami/minio:2020.3.25-debian-10-r15
         ports:
           - "9000:9000"
         volumes:
