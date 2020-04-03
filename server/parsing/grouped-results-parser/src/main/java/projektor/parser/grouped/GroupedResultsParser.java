@@ -9,8 +9,8 @@ import java.io.IOException;
 public class GroupedResultsParser {
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public GroupedResults parseGroupedResults(String groupedResultsXml) throws IOException {
-        return mapper.readValue(groupedResultsXml, GroupedResults.class);
+    public GroupedResults parseGroupedResults(String groupedResultsBlob) throws IOException {
+        return mapper.readValue(groupedResultsBlob, GroupedResults.class);
     }
 
     public String serializeGroupedResults(GroupedResults groupedResults) throws JsonProcessingException {

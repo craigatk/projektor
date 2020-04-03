@@ -9,7 +9,7 @@ interface ResultsProcessingRepository {
 
     suspend fun updateResultsProcessingStatus(publicId: PublicId, newStatus: ResultsProcessingStatus): Boolean
 
-    suspend fun recordResultsProcessingError(publicId: PublicId, errorMessage: String?): Boolean
+    suspend fun recordResultsProcessingError(publicId: PublicId, resultsBody: String, errorMessage: String?): Boolean
 
     suspend fun fetchResultsProcessing(publicId: PublicId): ResultsProcessing?
 }

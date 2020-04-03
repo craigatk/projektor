@@ -8,6 +8,7 @@ import org.koin.core.get
 import projektor.DatabaseRepositoryTestCase
 import projektor.database.generated.tables.pojos.ResultsProcessing
 import projektor.incomingresults.randomPublicId
+import projektor.parser.GroupedResultsXmlLoader
 import projektor.server.api.results.ResultsProcessingStatus
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
@@ -71,8 +72,9 @@ class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         resultsProcessingDao.insert(resultsProcessingDB)
 
         val newErrorMessage = "An error occurred"
+        val resultsBody = GroupedResultsXmlLoader().passingGroupedResults()
 
-        runBlocking { resultsProcessingDatabaseRepository.recordResultsProcessingError(publicId, newErrorMessage) }
+        runBlocking { resultsProcessingDatabaseRepository.recordResultsProcessingError(publicId, resultsBody, newErrorMessage) }
 
         val updatedResultsProcessing = resultsProcessingDao.fetchOneByPublicId(publicId.id)
         expectThat(updatedResultsProcessing)
@@ -80,6 +82,13 @@ class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 .and {
                     get { status }.isEqualTo(ResultsProcessingStatus.ERROR.name)
                     get { errorMessage }.isEqualTo(newErrorMessage)
+                }
+
+        val resultsProcessingFailure = resultsProcessingFailureDao.fetchOneByPublicId(publicId.id)
+        expectThat(resultsProcessingFailure)
+                .isNotNull()
+                .and {
+                    get { resultsBody }.isEqualTo(resultsBody)
                 }
     }
 

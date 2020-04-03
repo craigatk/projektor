@@ -27,6 +27,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
     lateinit var testFailureDao: TestFailureDao
     lateinit var testRunDBGenerator: TestRunDBGenerator
     lateinit var resultsProcessingDao: ResultsProcessingDao
+    lateinit var resultsProcessingFailureDao: ResultsProcessingFailureDao
     lateinit var attachmentDao: TestRunAttachmentDao
     lateinit var testRunSystemAttributesDao: TestRunSystemAttributesDao
 
@@ -65,6 +66,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
         testCaseDao = TestCaseDao(dslContext.configuration())
         testFailureDao = TestFailureDao(dslContext.configuration())
         resultsProcessingDao = ResultsProcessingDao(dslContext.configuration())
+        resultsProcessingFailureDao = ResultsProcessingFailureDao(dslContext.configuration())
         attachmentDao = TestRunAttachmentDao(dslContext.configuration())
         testRunSystemAttributesDao = TestRunSystemAttributesDao(dslContext.configuration())
 
