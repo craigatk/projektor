@@ -20,7 +20,7 @@ import strikt.assertions.*
 class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
 
     @Test
-    fun `should fetch all fields in test run, test suite, and test case`() {
+    fun `should fetch all fields in test run and test suite`() {
         val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
         val publicId = randomPublicId()
 
@@ -119,42 +119,6 @@ class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
                     get { hasSystemOut }.isEqualTo(true)
                     get { hasSystemErr }.isEqualTo(false)
                 }
-
-        val testCases = testRun.testSuites?.first()?.testCases
-        assertNotNull(testCases)
-
-        expectThat(testCases)
-                .hasSize(3)
-                .any {
-                    get { idx }.isEqualTo(1)
-                    get { testSuiteIdx }.isEqualTo(1)
-                    get { name }.isEqualTo("should pass")
-                    get { className }.isEqualTo("TestSuiteSpec")
-                    get { packageName }.isNotNull().isEqualTo("projektor")
-                    get { duration }.isEqualTo(BigDecimal("5.000"))
-                    get { passed }.isTrue()
-                    get { skipped }.isFalse()
-                }
-                .any {
-                    get { idx }.isEqualTo(2)
-                    get { testSuiteIdx }.isEqualTo(1)
-                    get { name }.isEqualTo("should fail")
-                    get { className }.isEqualTo("TestSuiteSpec")
-                    get { packageName }.isNotNull().isEqualTo("projektor")
-                    get { duration }.isEqualTo(BigDecimal("4.000"))
-                    get { passed }.isFalse()
-                    get { skipped }.isFalse()
-                }
-                .any {
-                    get { idx }.isEqualTo(3)
-                    get { testSuiteIdx }.isEqualTo(1)
-                    get { name }.isEqualTo("should skip")
-                    get { className }.isEqualTo("TestSuiteSpec")
-                    get { packageName }.isNotNull().isEqualTo("projektor")
-                    get { duration }.isEqualTo(BigDecimal("0.000"))
-                    get { passed }.isFalse()
-                    get { skipped }.isTrue()
-                }
     }
 
     @Test
@@ -204,39 +168,6 @@ class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
             get { passingCount }.isEqualTo(2)
             get { failureCount }.isEqualTo(1)
             get { skippedCount }.isEqualTo(2)
-
-            val testSuite1TestCases = testSuite1.testCases
-            assertNotNull(testSuite1TestCases)
-
-            expectThat(testSuite1TestCases).any {
-                get { name }.isEqualTo("testSuite1PassedTestCase1")
-                get { passed }.isTrue()
-                get { skipped }.isFalse()
-            }
-
-            expectThat(testSuite1TestCases).any {
-                get { name }.isEqualTo("testSuitePassed1TestCase2")
-                get { passed }.isTrue()
-                get { skipped }.isFalse()
-            }
-
-            expectThat(testSuite1TestCases).any {
-                get { name }.isEqualTo("testSuite1FailedTestCase1")
-                get { passed }.isFalse()
-                get { skipped }.isFalse()
-            }
-
-            expectThat(testSuite1TestCases).any {
-                get { name }.isEqualTo("testSuite1SkippedTestCase1")
-                get { passed }.isFalse()
-                get { skipped }.isTrue()
-            }
-
-            expectThat(testSuite1TestCases).any {
-                get { name }.isEqualTo("testSuite1SkippedTestCase2")
-                get { passed }.isFalse()
-                get { skipped }.isTrue()
-            }
         }
     }
 }

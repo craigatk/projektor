@@ -51,16 +51,8 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
                 val testSuite1 = testSuites.find { it.className == "testSuite1" }
                 assertNotNull(testSuite1)
 
-                val testSuite1TestCases = testSuite1.testCases
-                assertNotNull(testSuite1TestCases)
-                expectThat(testSuite1TestCases).hasSize(2)
-
                 val testSuite2 = testSuites.find { it.className == "testSuite2" }
                 assertNotNull(testSuite2)
-
-                val testSuite2TestCases = testSuite2.testCases
-                assertNotNull(testSuite2TestCases)
-                expectThat(testSuite2TestCases).hasSize(3)
             }
         }
     }
