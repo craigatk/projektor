@@ -14,6 +14,8 @@ import org.koin.test.KoinTest
 import projektor.auth.AuthConfig
 import projektor.database.DataSourceConfig
 import projektor.database.generated.tables.daos.*
+import projektor.metrics.InfluxMetricsConfig
+import projektor.metrics.createRegistry
 
 open class DatabaseRepositoryTestCase : KoinTest {
     lateinit var dataSource: HikariDataSource
@@ -51,8 +53,10 @@ open class DatabaseRepositoryTestCase : KoinTest {
 
         dslContext = DSL.using(dataSource, SQLDialect.POSTGRES)
 
+        val metricsConfig = InfluxMetricsConfig(false, "", "", false, 10)
+
         startKoin {
-            modules(createAppModule(dataSource, AuthConfig(null), dslContext))
+            modules(createAppModule(dataSource, AuthConfig(null), dslContext, createRegistry(metricsConfig)))
         }
 
         testRunDao = TestRunDao(dslContext.configuration())

@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.config.ApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
+import io.micrometer.core.instrument.MeterRegistry
 import javax.sql.DataSource
 import org.flywaydb.core.Flyway
 import org.jooq.DSLContext
@@ -23,7 +24,7 @@ data class DataSourceConfig(val jdbcUrl: String, val username: String, val passw
                 applicationConfig.property("ktor.datasource.schema").getString()
         )
 
-        fun createDataSource(dataSourceConfig: DataSourceConfig): HikariDataSource {
+        fun createDataSource(dataSourceConfig: DataSourceConfig, metricRegistry: MeterRegistry): HikariDataSource {
             val hikariConfig = HikariConfig()
             hikariConfig.username = dataSourceConfig.username
             hikariConfig.password = dataSourceConfig.password
@@ -31,7 +32,10 @@ data class DataSourceConfig(val jdbcUrl: String, val username: String, val passw
             hikariConfig.schema = dataSourceConfig.schema
             hikariConfig.maximumPoolSize = 10
 
-            return HikariDataSource(hikariConfig)
+            val dataSource = HikariDataSource(hikariConfig)
+            dataSource.metricRegistry = metricRegistry
+
+            return dataSource
         }
 
         fun flywayMigrate(dataSource: DataSource, dataSourceConfig: DataSourceConfig) {

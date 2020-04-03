@@ -2,6 +2,7 @@ package projektor
 
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.util.KtorExperimentalAPI
+import io.micrometer.core.instrument.MeterRegistry
 import org.jooq.DSLContext
 import org.koin.dsl.module
 import projektor.attachment.AttachmentDatabaseRepository
@@ -33,11 +34,13 @@ import projektor.testsuite.TestSuiteService
 fun createAppModule(
     dataSource: HikariDataSource,
     authConfig: AuthConfig,
-    dslContext: DSLContext
+    dslContext: DSLContext,
+    metricRegistry: MeterRegistry
 ) = module {
     single { dataSource }
     single { TestResultsProcessor() }
     single { dslContext }
+    single { metricRegistry }
     single { AuthService(authConfig) }
     single<TestCaseRepository> { TestCaseDatabaseRepository(get()) }
     single<TestSuiteRepository> { TestSuiteDatabaseRepository(get()) }
@@ -47,7 +50,7 @@ fun createAppModule(
     single<ResultsProcessingRepository> { ResultsProcessingDatabaseRepository(get()) }
     single { GroupedResultsParser() }
     single { GroupedResultsConverter(get(), get()) }
-    single { GroupedTestResultsService(get(), get(), get()) }
+    single { GroupedTestResultsService(get(), get(), get(), get()) }
     single { TestCaseService(get()) }
     single { TestSuiteService(get()) }
     single { TestResultsProcessingService(get()) }
