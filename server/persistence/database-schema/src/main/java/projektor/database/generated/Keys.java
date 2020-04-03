@@ -13,6 +13,7 @@ import org.jooq.UniqueKey;
 import org.jooq.impl.Internal;
 
 import projektor.database.generated.tables.ResultsProcessing;
+import projektor.database.generated.tables.ResultsProcessingFailure;
 import projektor.database.generated.tables.TestCase;
 import projektor.database.generated.tables.TestFailure;
 import projektor.database.generated.tables.TestRun;
@@ -20,6 +21,7 @@ import projektor.database.generated.tables.TestRunAttachment;
 import projektor.database.generated.tables.TestRunSystemAttributes;
 import projektor.database.generated.tables.TestSuite;
 import projektor.database.generated.tables.TestSuiteGroup;
+import projektor.database.generated.tables.records.ResultsProcessingFailureRecord;
 import projektor.database.generated.tables.records.ResultsProcessingRecord;
 import projektor.database.generated.tables.records.TestCaseRecord;
 import projektor.database.generated.tables.records.TestFailureRecord;
@@ -60,6 +62,7 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<ResultsProcessingRecord> RESULTS_PROCESSING_PKEY = UniqueKeys0.RESULTS_PROCESSING_PKEY;
+    public static final UniqueKey<ResultsProcessingFailureRecord> RESULTS_PROCESSING_FAILURE_PKEY = UniqueKeys0.RESULTS_PROCESSING_FAILURE_PKEY;
     public static final UniqueKey<TestCaseRecord> TEST_CASE_PKEY = UniqueKeys0.TEST_CASE_PKEY;
     public static final UniqueKey<TestFailureRecord> TEST_FAILURE_PKEY = UniqueKeys0.TEST_FAILURE_PKEY;
     public static final UniqueKey<TestRunRecord> TEST_RUN_PKEY = UniqueKeys0.TEST_RUN_PKEY;
@@ -73,6 +76,7 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final ForeignKey<ResultsProcessingFailureRecord, ResultsProcessingRecord> RESULTS_PROCESSING_FAILURE__RESULTS_PROCESSING_FAILURE_PUBLIC_ID_FKEY = ForeignKeys0.RESULTS_PROCESSING_FAILURE__RESULTS_PROCESSING_FAILURE_PUBLIC_ID_FKEY;
     public static final ForeignKey<TestCaseRecord, TestSuiteRecord> TEST_CASE__TEST_CASE_TEST_SUITE_ID_FKEY = ForeignKeys0.TEST_CASE__TEST_CASE_TEST_SUITE_ID_FKEY;
     public static final ForeignKey<TestFailureRecord, TestCaseRecord> TEST_FAILURE__TEST_FAILURE_TEST_CASE_ID_FKEY = ForeignKeys0.TEST_FAILURE__TEST_FAILURE_TEST_CASE_ID_FKEY;
     public static final ForeignKey<TestRunSystemAttributesRecord, TestRunRecord> TEST_RUN_SYSTEM_ATTRIBUTES__TEST_RUN_SYSTEM_ATTRIBUTES_TEST_RUN_PUBLIC_ID_FKEY = ForeignKeys0.TEST_RUN_SYSTEM_ATTRIBUTES__TEST_RUN_SYSTEM_ATTRIBUTES_TEST_RUN_PUBLIC_ID_FKEY;
@@ -95,6 +99,7 @@ public class Keys {
 
     private static class UniqueKeys0 {
         public static final UniqueKey<ResultsProcessingRecord> RESULTS_PROCESSING_PKEY = Internal.createUniqueKey(ResultsProcessing.RESULTS_PROCESSING, "results_processing_pkey", new TableField[] { ResultsProcessing.RESULTS_PROCESSING.PUBLIC_ID }, true);
+        public static final UniqueKey<ResultsProcessingFailureRecord> RESULTS_PROCESSING_FAILURE_PKEY = Internal.createUniqueKey(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE, "results_processing_failure_pkey", new TableField[] { ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.PUBLIC_ID }, true);
         public static final UniqueKey<TestCaseRecord> TEST_CASE_PKEY = Internal.createUniqueKey(TestCase.TEST_CASE, "test_case_pkey", new TableField[] { TestCase.TEST_CASE.ID }, true);
         public static final UniqueKey<TestFailureRecord> TEST_FAILURE_PKEY = Internal.createUniqueKey(TestFailure.TEST_FAILURE, "test_failure_pkey", new TableField[] { TestFailure.TEST_FAILURE.ID }, true);
         public static final UniqueKey<TestRunRecord> TEST_RUN_PKEY = Internal.createUniqueKey(TestRun.TEST_RUN, "test_run_pkey", new TableField[] { TestRun.TEST_RUN.ID }, true);
@@ -106,6 +111,7 @@ public class Keys {
     }
 
     private static class ForeignKeys0 {
+        public static final ForeignKey<ResultsProcessingFailureRecord, ResultsProcessingRecord> RESULTS_PROCESSING_FAILURE__RESULTS_PROCESSING_FAILURE_PUBLIC_ID_FKEY = Internal.createForeignKey(Keys.RESULTS_PROCESSING_PKEY, ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE, "results_processing_failure_public_id_fkey", new TableField[] { ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.PUBLIC_ID }, true);
         public static final ForeignKey<TestCaseRecord, TestSuiteRecord> TEST_CASE__TEST_CASE_TEST_SUITE_ID_FKEY = Internal.createForeignKey(Keys.TEST_SUITE_PKEY, TestCase.TEST_CASE, "test_case_test_suite_id_fkey", new TableField[] { TestCase.TEST_CASE.TEST_SUITE_ID }, true);
         public static final ForeignKey<TestFailureRecord, TestCaseRecord> TEST_FAILURE__TEST_FAILURE_TEST_CASE_ID_FKEY = Internal.createForeignKey(Keys.TEST_CASE_PKEY, TestFailure.TEST_FAILURE, "test_failure_test_case_id_fkey", new TableField[] { TestFailure.TEST_FAILURE.TEST_CASE_ID }, true);
         public static final ForeignKey<TestRunSystemAttributesRecord, TestRunRecord> TEST_RUN_SYSTEM_ATTRIBUTES__TEST_RUN_SYSTEM_ATTRIBUTES_TEST_RUN_PUBLIC_ID_FKEY = Internal.createForeignKey(Keys.TEST_RUN_PUBLIC_ID_KEY, TestRunSystemAttributes.TEST_RUN_SYSTEM_ATTRIBUTES, "test_run_system_attributes_test_run_public_id_fkey", new TableField[] { TestRunSystemAttributes.TEST_RUN_SYSTEM_ATTRIBUTES.TEST_RUN_PUBLIC_ID }, true);

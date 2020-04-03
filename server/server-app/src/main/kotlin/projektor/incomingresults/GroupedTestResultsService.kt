@@ -18,14 +18,14 @@ class GroupedTestResultsService(
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    suspend fun persistTestResultsAsync(groupedResultsXml: String): PublicId {
+    suspend fun persistTestResultsAsync(groupedResultsBlob: String): PublicId {
         val publicId = randomPublicId()
         val timer = metricRegistry.timer("persist_grouped_results")
         val sample = Timer.start(metricRegistry)
         testResultsProcessingService.createResultsProcessing(publicId)
 
         coroutineScope.launch {
-            doPersistTestResults(publicId, groupedResultsXml)
+            doPersistTestResults(publicId, groupedResultsBlob)
         }
 
         sample.stop(timer)
@@ -33,22 +33,22 @@ class GroupedTestResultsService(
         return publicId
     }
 
-    suspend fun doPersistTestResults(publicId: PublicId, groupedResultsXml: String) {
+    suspend fun doPersistTestResults(publicId: PublicId, groupedResultsBlob: String) {
         try {
             testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.PROCESSING)
 
-            val groupedResults = groupedResultsConverter.parseAndConvertGroupedResults(groupedResultsXml)
+            val groupedResults = groupedResultsConverter.parseAndConvertGroupedResults(groupedResultsBlob)
             testRunRepository.saveGroupedTestRun(publicId, groupedResults)
 
             testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.SUCCESS)
         } catch (e: Exception) {
             val errorMessage = "Error persisting test results: ${e.message}"
-            handleException(publicId, errorMessage, e)
+            handleException(publicId, groupedResultsBlob, errorMessage, e)
         }
     }
 
-    private suspend fun handleException(publicId: PublicId, errorMessage: String, e: Exception) {
+    private suspend fun handleException(publicId: PublicId, resultsBody: String, errorMessage: String, e: Exception) {
         logger.error(errorMessage, e)
-        testResultsProcessingService.recordResultsProcessingError(publicId, errorMessage)
+        testResultsProcessingService.recordResultsProcessingError(publicId, resultsBody, errorMessage)
     }
 }

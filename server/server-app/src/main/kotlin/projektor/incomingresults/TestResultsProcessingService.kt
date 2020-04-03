@@ -17,6 +17,6 @@ class TestResultsProcessingService(
     suspend fun updateResultsProcessingStatus(publicId: PublicId, newStatus: ResultsProcessingStatus) =
             resultsProcessingRepository.updateResultsProcessingStatus(publicId, newStatus)
 
-    suspend fun recordResultsProcessingError(publicId: PublicId, errorMessage: String?) =
-            resultsProcessingRepository.recordResultsProcessingError(publicId, errorMessage)
+    suspend fun recordResultsProcessingError(publicId: PublicId, resultsBody: String, errorMessage: String?) =
+            resultsProcessingRepository.recordResultsProcessingError(publicId, resultsBody, errorMessage)
 }

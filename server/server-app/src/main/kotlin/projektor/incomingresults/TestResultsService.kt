@@ -38,7 +38,7 @@ class TestResultsService(
             testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.SUCCESS)
         } catch (e: Exception) {
             val errorMessage = "Error persisting test results: ${e.message}"
-            handleException(publicId, errorMessage, e)
+            handleException(publicId, resultsBlob, errorMessage, e)
         }
     }
 
@@ -47,8 +47,8 @@ class TestResultsService(
         return parsedTestSuites.filter { !it.testCases.isNullOrEmpty() }
     }
 
-    private suspend fun handleException(publicId: PublicId, errorMessage: String, e: Exception) {
+    private suspend fun handleException(publicId: PublicId, resultsBody: String, errorMessage: String, e: Exception) {
         logger.error(errorMessage, e)
-        testResultsProcessingService.recordResultsProcessingError(publicId, errorMessage)
+        testResultsProcessingService.recordResultsProcessingError(publicId, resultsBody, errorMessage)
     }
 }

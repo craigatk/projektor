@@ -8,13 +8,16 @@ import org.jooq.DSLContext
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables
 import projektor.database.generated.tables.daos.ResultsProcessingDao
+import projektor.database.generated.tables.daos.ResultsProcessingFailureDao
 import projektor.database.generated.tables.pojos.ResultsProcessing as ResultsProcessingDB
+import projektor.database.generated.tables.pojos.ResultsProcessingFailure
 import projektor.server.api.PublicId
 import projektor.server.api.results.ResultsProcessing
 import projektor.server.api.results.ResultsProcessingStatus
 
 class ResultsProcessingDatabaseRepository(private val dslContext: DSLContext) : ResultsProcessingRepository {
     private val resultsProcessingDao = ResultsProcessingDao(dslContext.configuration())
+    private val resultsProcessingFailureDao = ResultsProcessingFailureDao(dslContext.configuration())
 
     private val resultsProcessingMapper = JdbcMapperFactory.newInstance()
             .addKeys("public_id")
@@ -42,13 +45,20 @@ class ResultsProcessingDatabaseRepository(private val dslContext: DSLContext) : 
                         .execute() > 0
             }
 
-    override suspend fun recordResultsProcessingError(publicId: PublicId, errorMessage: String?): Boolean =
+    override suspend fun recordResultsProcessingError(publicId: PublicId, resultsBody: String, errorMessage: String?): Boolean =
             withContext(Dispatchers.IO) {
-                dslContext.update(Tables.RESULTS_PROCESSING)
+                val updateProcessingStatus = dslContext.update(Tables.RESULTS_PROCESSING)
                         .set(Tables.RESULTS_PROCESSING.STATUS, ResultsProcessingStatus.ERROR.name)
                         .set(Tables.RESULTS_PROCESSING.ERROR_MESSAGE, errorMessage)
                         .where(Tables.RESULTS_PROCESSING.PUBLIC_ID.eq(publicId.id))
                         .execute() > 0
+
+                val resultsProcessingFailure = ResultsProcessingFailure()
+                resultsProcessingFailure.publicId = publicId.id
+                resultsProcessingFailure.body = resultsBody
+                resultsProcessingFailureDao.insert(resultsProcessingFailure)
+
+                updateProcessingStatus
             }
 
     override suspend fun fetchResultsProcessing(publicId: PublicId): ResultsProcessing? =

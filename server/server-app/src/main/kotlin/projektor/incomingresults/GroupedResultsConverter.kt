@@ -9,8 +9,8 @@ class GroupedResultsConverter(
     private val groupedResultsParser: GroupedResultsParser,
     private val testResultsProcessor: TestResultsProcessor
 ) {
-    fun parseAndConvertGroupedResults(groupedResultsXml: String): GroupedResults {
-        val incomingGroupedResults = groupedResultsParser.parseGroupedResults(groupedResultsXml)
+    fun parseAndConvertGroupedResults(groupedResultsBlob: String): GroupedResults {
+        val incomingGroupedResults = groupedResultsParser.parseGroupedResults(groupedResultsBlob)
 
         val groupedTestSuites = incomingGroupedResults.groupedTestSuites.map {
             val nonEmptyTestSuites = testResultsProcessor.parseResultsBlob(it.testSuitesBlob).filter { testSuite -> !testSuite.testCases.isNullOrEmpty() }

@@ -15,6 +15,7 @@ import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
 
 import projektor.database.generated.tables.ResultsProcessing;
+import projektor.database.generated.tables.ResultsProcessingFailure;
 import projektor.database.generated.tables.TestCase;
 import projektor.database.generated.tables.TestFailure;
 import projektor.database.generated.tables.TestRun;
@@ -37,7 +38,7 @@ import projektor.database.generated.tables.TestSuiteGroup;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 1048265432;
+    private static final long serialVersionUID = 1569144139;
 
     /**
      * The reference instance of <code>public</code>
@@ -48,6 +49,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.results_processing</code>.
      */
     public final ResultsProcessing RESULTS_PROCESSING = ResultsProcessing.RESULTS_PROCESSING;
+
+    /**
+     * The table <code>public.results_processing_failure</code>.
+     */
+    public final ResultsProcessingFailure RESULTS_PROCESSING_FAILURE = ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE;
 
     /**
      * The table <code>public.test_case</code>.
@@ -115,6 +121,7 @@ public class Public extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.<Table<?>>asList(
             ResultsProcessing.RESULTS_PROCESSING,
+            ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE,
             TestCase.TEST_CASE,
             TestFailure.TEST_FAILURE,
             TestRun.TEST_RUN,

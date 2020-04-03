@@ -7,6 +7,7 @@ package projektor.database.generated;
 import javax.annotation.processing.Generated;
 
 import projektor.database.generated.tables.ResultsProcessing;
+import projektor.database.generated.tables.ResultsProcessingFailure;
 import projektor.database.generated.tables.TestCase;
 import projektor.database.generated.tables.TestFailure;
 import projektor.database.generated.tables.TestRun;
@@ -33,6 +34,11 @@ public class Tables {
      * The table <code>public.results_processing</code>.
      */
     public static final ResultsProcessing RESULTS_PROCESSING = ResultsProcessing.RESULTS_PROCESSING;
+
+    /**
+     * The table <code>public.results_processing_failure</code>.
+     */
+    public static final ResultsProcessingFailure RESULTS_PROCESSING_FAILURE = ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE;
 
     /**
      * The table <code>public.test_case</code>.
