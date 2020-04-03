@@ -10,6 +10,8 @@ import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.getOrFail
+import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.core.instrument.Timer
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
 import projektor.incomingresults.GroupedTestResultsService
@@ -23,7 +25,8 @@ fun Route.results(
     testResultsService: TestResultsService,
     groupedTestResultsService: GroupedTestResultsService,
     testResultsProcessingService: TestResultsProcessingService,
-    authService: AuthService
+    authService: AuthService,
+    metricRegistry: MeterRegistry
 ) {
     post("/results") {
         val resultsBlob = call.receive<String>()
@@ -39,7 +42,11 @@ fun Route.results(
         }
     }
     post("/groupedResults") {
+
+        val timer = metricRegistry.timer("receive_grouped_results")
+        val sample = Timer.start(metricRegistry)
         val groupedResultsBlob = call.receive<String>()
+        sample.stop(timer)
 
         if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
             call.respond(HttpStatusCode.Unauthorized)

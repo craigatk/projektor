@@ -35,9 +35,9 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
 
                 testRunDao.insert(testRunDB)
 
-                logger.info("Inserted test run $publicId")
-
                 saveTestSuites(testSuites, testRunDB.id, null, 0, configuration)
+
+                logger.info("Finished inserting test run $publicId")
             }
 
             testRunSummary
@@ -49,13 +49,13 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
                 val testRunSummary = toTestRunSummary(publicId, testSuites)
                 val testRunDB = testRunSummary.toDB()
 
+                logger.info("Starting inserting test run $publicId")
+
                 dslContext.transaction { configuration ->
                     val testRunDao = TestRunDao(configuration)
                     val testSuiteGroupDao = TestSuiteGroupDao(configuration)
 
                     testRunDao.insert(testRunDB)
-
-                    logger.info("Inserted test run $publicId")
 
                     var testSuiteStartingIndex = 0
 
@@ -68,6 +68,8 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
                         testSuiteStartingIndex += groupedTestSuites.testSuites.size
                     }
                 }
+
+                logger.info("Finished inserting test run $publicId")
 
                 testRunSummary
             }

@@ -1,5 +1,7 @@
 package projektor.incomingresults
 
+import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.core.instrument.Timer
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import projektor.server.api.PublicId
@@ -9,19 +11,24 @@ import projektor.testrun.TestRunRepository
 class GroupedTestResultsService(
     private val testResultsProcessingService: TestResultsProcessingService,
     private val groupedResultsConverter: GroupedResultsConverter,
-    private val testRunRepository: TestRunRepository
+    private val testRunRepository: TestRunRepository,
+    private val metricRegistry: MeterRegistry
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     suspend fun persistTestResultsAsync(groupedResultsXml: String): PublicId {
         val publicId = randomPublicId()
+        val timer = metricRegistry.timer("persist_grouped_results")
+        val sample = Timer.start(metricRegistry)
         testResultsProcessingService.createResultsProcessing(publicId)
 
         coroutineScope.launch {
             doPersistTestResults(publicId, groupedResultsXml)
         }
+
+        sample.stop(timer)
 
         return publicId
     }

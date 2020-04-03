@@ -46,16 +46,17 @@ fun Application.main() {
 
     val authConfig = AuthConfig.createAuthConfig(applicationConfig)
 
+    val influxMetricsConfig = InfluxMetricsConfig.createInfluxMetricsConfig(applicationConfig)
+    val metricRegistry = createRegistry(influxMetricsConfig)
+
     val dataSourceConfig = DataSourceConfig.createDataSourceConfig(applicationConfig)
-    val dataSource = DataSourceConfig.createDataSource(dataSourceConfig)
+    val dataSource = DataSourceConfig.createDataSource(dataSourceConfig, metricRegistry)
     DataSourceConfig.flywayMigrate(dataSource, dataSourceConfig)
     val dslContext = DataSourceConfig.createDSLContext(dataSource, dataSourceConfig)
 
     val cleanupConfig = CleanupConfig.createCleanupConfig(applicationConfig)
 
-    val influxMetricsConfig = InfluxMetricsConfig.createInfluxMetricsConfig(applicationConfig)
-
-    val appModule = createAppModule(dataSource, authConfig, dslContext)
+    val appModule = createAppModule(dataSource, authConfig, dslContext, metricRegistry)
 
     install(CORS) {
         anyHost()
@@ -86,7 +87,7 @@ fun Application.main() {
     }
     if (influxMetricsConfig.enabled) {
         install(MicrometerMetrics) {
-            registry = createRegistry(influxMetricsConfig)
+            registry = metricRegistry
         }
     }
 
@@ -107,7 +108,7 @@ fun Application.main() {
         attachments(attachmentService, authService)
         config(cleanupConfig)
         health()
-        results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService)
+        results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService, metricRegistry)
         testCases(testCaseService)
         testSuites(testSuiteService)
         testRuns(testRunService)
