@@ -11,12 +11,11 @@ import projektor.plugin.client.ClientConfig
 import static projektor.plugin.client.ClientToken.conditionallyAddPublishTokenToRequest
 
 class AttachmentsClient {
-    private final OkHttpClient client
     private final ClientConfig config
     private final Logger logger
+    private final OkHttpClient client = new OkHttpClient()
 
-    AttachmentsClient(OkHttpClient client, ClientConfig clientConfig, Logger logger) {
-        this.client = client
+    AttachmentsClient(ClientConfig clientConfig, Logger logger) {
         this.config = clientConfig
         this.logger = logger
     }

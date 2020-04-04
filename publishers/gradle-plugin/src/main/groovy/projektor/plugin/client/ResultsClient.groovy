@@ -1,4 +1,4 @@
-package projektor.plugin.results
+package projektor.plugin.client
 
 import groovy.json.JsonSlurper
 import okhttp3.MediaType
@@ -8,7 +8,6 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.gradle.api.logging.Logger
 import projektor.plugin.PublishResult
-import projektor.plugin.client.ClientConfig
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.results.grouped.GroupedResultsSerializer
 
@@ -19,10 +18,9 @@ class ResultsClient {
     private final ClientConfig config
     private final Logger logger
     private final GroupedResultsSerializer groupedResultsSerializer = new GroupedResultsSerializer()
-    private final OkHttpClient client
+    private final OkHttpClient client = new OkHttpClient()
 
-    ResultsClient(OkHttpClient client, ClientConfig clientConfig, Logger logger) {
-        this.client = client
+    ResultsClient(ClientConfig clientConfig, Logger logger) {
         this.config = clientConfig
         this.logger = logger
     }
@@ -34,12 +32,18 @@ class ResultsClient {
 
         String groupedResultsJson = groupedResultsSerializer.serializeGroupedResults(groupedResults)
 
-        RequestBody body = RequestBody.create(mediaType, groupedResultsJson)
+        RequestBody body = config.compressionEnabled
+                ? RequestBody.create(mediaType, CompressionUtil.gzip(groupedResultsJson))
+                : RequestBody.create(mediaType, groupedResultsJson)
 
         String resultsUrl = "${config.serverUrl}/groupedResults"
         Request.Builder requestBuilder = new Request.Builder()
                 .url(resultsUrl)
                 .post(body)
+
+        if (config.compressionEnabled) {
+            requestBuilder.header("Content-Encoding", "gzip")
+        }
 
         conditionallyAddPublishTokenToRequest(requestBuilder, config)
 
@@ -53,7 +57,7 @@ class ResultsClient {
                 String testRunUri = parsedResponseJson.uri
                 String reportUrl = "${config.serverUrl}${testRunUri}"
 
-                publishResult.publicId= parsedResponseJson.id
+                publishResult.publicId = parsedResponseJson.id
                 publishResult.reportUrl = reportUrl
             } else {
                 String responseCode = response ? "- response code ${response.code()}" : ""

@@ -9,7 +9,7 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import projektor.plugin.attachments.AttachmentsClient
 import projektor.plugin.attachments.AttachmentsPublisher
-import projektor.plugin.results.ResultsClient
+import projektor.plugin.client.ResultsClient
 import projektor.plugin.client.ClientConfig
 import projektor.plugin.results.ResultsLogger
 import projektor.plugin.results.grouped.GroupedResults
@@ -31,6 +31,10 @@ class ProjektorManualPublishTask extends AbstractTask {
     @Optional
     List<FileTree> attachments = []
 
+    @Input
+    @Optional
+    Boolean compressionEnabled = true
+
     @TaskAction
     void publish() {
         File projectDir = project.projectDir
@@ -42,12 +46,10 @@ class ProjektorManualPublishTask extends AbstractTask {
         )
 
         if (projectTestTaskResultsCollector.hasTestGroups()) {
-            OkHttpClient okHttpClient = new OkHttpClient()
-            ClientConfig clientConfig = new ClientConfig(serverUrl, java.util.Optional.ofNullable(publishToken))
+            ClientConfig clientConfig = new ClientConfig(serverUrl, compressionEnabled, java.util.Optional.ofNullable(publishToken))
             GroupedResults groupedResults = projectTestTaskResultsCollector.createGroupedResults()
 
             ResultsClient resultsClient = new ResultsClient(
-                    okHttpClient,
                     clientConfig,
                     logger
             )
@@ -56,7 +58,7 @@ class ProjektorManualPublishTask extends AbstractTask {
             new ResultsLogger(logger).logReportResults(publishResult)
 
             if (attachments) {
-                AttachmentsClient attachmentsClient = new AttachmentsClient(okHttpClient, clientConfig, logger)
+                AttachmentsClient attachmentsClient = new AttachmentsClient(clientConfig, logger)
                 new AttachmentsPublisher(attachmentsClient, logger).publishAttachments(publishResult.publicId, attachments)
             }
         } else {

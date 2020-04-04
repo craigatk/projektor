@@ -49,7 +49,7 @@ class ProjektorPublishPlugin implements Plugin<Project> {
         project.gradle.taskGraph.addTaskExecutionListener(projektorTaskFinishedListener)
 
         ProjektorBuildFinishedListener projektorBuildFinishedListener = new ProjektorBuildFinishedListener(
-                new ClientConfig(extension.serverUrl, Optional.ofNullable(extension.publishToken)),
+                new ClientConfig(extension.serverUrl, extension.compressionEnabled, Optional.ofNullable(extension.publishToken)),
                 logger,
                 extension.autoPublishOnFailureOnly,
                 project.projectDir,

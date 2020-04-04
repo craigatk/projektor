@@ -14,6 +14,7 @@ import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.getOrFail
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Timer
+import org.slf4j.LoggerFactory
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
 import projektor.incomingresults.GroupedTestResultsService
@@ -22,6 +23,8 @@ import projektor.incomingresults.TestResultsService
 import projektor.server.api.PublicId
 import projektor.server.api.results.SaveResultsResponse
 import projektor.util.ungzip
+
+private val logger = LoggerFactory.getLogger("ResultsRoutes")
 
 @KtorExperimentalAPI
 fun Route.results(
@@ -78,6 +81,7 @@ fun Route.results(
 
 private suspend fun receiveResults(call: ApplicationCall): String {
     val resultsBlob = if (call.request.header(HttpHeaders.ContentEncoding) == "gzip") {
+        logger.info("Unzipping compressed results")
         ungzip(call.receive<ByteArray>())
     } else {
         call.receive<String>()

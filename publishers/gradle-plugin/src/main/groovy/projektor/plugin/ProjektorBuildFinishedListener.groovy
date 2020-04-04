@@ -9,7 +9,7 @@ import org.gradle.api.invocation.Gradle
 import org.gradle.api.logging.Logger
 import projektor.plugin.attachments.AttachmentsClient
 import projektor.plugin.attachments.AttachmentsPublisher
-import projektor.plugin.results.ResultsClient
+import projektor.plugin.client.ResultsClient
 import projektor.plugin.client.ClientConfig
 import projektor.plugin.results.ResultsLogger
 import projektor.plugin.results.grouped.GroupedResults
@@ -23,7 +23,6 @@ class ProjektorBuildFinishedListener implements BuildListener {
     private final List<String> additionalResultsDirs
     private final List<FileTree> attachments
     private final ProjektorTaskFinishedListener projektorTaskFinishedListener
-    private final OkHttpClient okHttpClient = new OkHttpClient()
 
     ProjektorBuildFinishedListener(
             ClientConfig clientConfig,
@@ -66,13 +65,13 @@ class ProjektorBuildFinishedListener implements BuildListener {
                     "${projectTestResultsCollector.testGroupsCount()} test tasks")
             GroupedResults groupedResults = projectTestResultsCollector.createGroupedResults()
 
-            ResultsClient resultsClient = new ResultsClient(okHttpClient, clientConfig, logger)
+            ResultsClient resultsClient = new ResultsClient(clientConfig, logger)
             PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
 
             new ResultsLogger(logger).logReportResults(publishResult)
 
             if (attachments) {
-                AttachmentsClient attachmentsClient = new AttachmentsClient(okHttpClient, clientConfig, logger)
+                AttachmentsClient attachmentsClient = new AttachmentsClient(clientConfig, logger)
                 new AttachmentsPublisher(attachmentsClient, logger).publishAttachments(publishResult.publicId, attachments)
             }
         } else {
