@@ -12,10 +12,10 @@ import projektor.ApplicationTestCase
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.TestRun
+import projektor.util.ungzip
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
-import ungzip
 
 @KtorExperimentalAPI
 class GetTestRunCompressionApplicationTest : ApplicationTestCase() {

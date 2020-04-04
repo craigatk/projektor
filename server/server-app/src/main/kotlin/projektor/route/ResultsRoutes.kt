@@ -1,6 +1,8 @@
 package projektor.route
 
+import io.ktor.application.ApplicationCall
 import io.ktor.application.call
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.header
 import io.ktor.request.receive
@@ -19,6 +21,7 @@ import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
 import projektor.server.api.PublicId
 import projektor.server.api.results.SaveResultsResponse
+import projektor.util.ungzip
 
 @KtorExperimentalAPI
 fun Route.results(
@@ -29,35 +32,39 @@ fun Route.results(
     metricRegistry: MeterRegistry
 ) {
     post("/results") {
-        val resultsBlob = call.receive<String>()
-
         if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
             call.respond(HttpStatusCode.Unauthorized)
-        } else if (resultsBlob.isNotBlank()) {
-            val publicId = testResultsService.persistTestResultsAsync(resultsBlob)
-
-            call.respond(HttpStatusCode.OK, SaveResultsResponse(publicId.id, "/tests/${publicId.id}"))
         } else {
-            call.respond(HttpStatusCode.BadRequest)
+            val resultsBlob = receiveResults(call)
+
+            if (resultsBlob.isNotBlank()) {
+                val publicId = testResultsService.persistTestResultsAsync(resultsBlob)
+
+                call.respond(HttpStatusCode.OK, SaveResultsResponse(publicId.id, "/tests/${publicId.id}"))
+            } else {
+                call.respond(HttpStatusCode.BadRequest)
+            }
         }
     }
     post("/groupedResults") {
-
-        val timer = metricRegistry.timer("receive_grouped_results")
-        val sample = Timer.start(metricRegistry)
-        val groupedResultsBlob = call.receive<String>()
-        sample.stop(timer)
-
         if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
             call.respond(HttpStatusCode.Unauthorized)
-        } else if (groupedResultsBlob.isNotBlank()) {
-            val publicId = groupedTestResultsService.persistTestResultsAsync(groupedResultsBlob)
-
-            call.respond(HttpStatusCode.OK, SaveResultsResponse(publicId.id, "/tests/${publicId.id}"))
         } else {
-            call.respond(HttpStatusCode.BadRequest)
+            val timer = metricRegistry.timer("receive_grouped_results")
+            val sample = Timer.start(metricRegistry)
+            val groupedResultsBlob = receiveResults(call)
+            sample.stop(timer)
+
+            if (groupedResultsBlob.isNotBlank()) {
+                val publicId = groupedTestResultsService.persistTestResultsAsync(groupedResultsBlob)
+
+                call.respond(HttpStatusCode.OK, SaveResultsResponse(publicId.id, "/tests/${publicId.id}"))
+            } else {
+                call.respond(HttpStatusCode.BadRequest)
+            }
         }
     }
+
     get("/results/{publicId}/status") {
         val publicId = call.parameters.getOrFail("publicId")
 
@@ -67,4 +74,14 @@ fun Route.results(
                 ?.let { call.respond(HttpStatusCode.OK, it) }
                 ?: call.respond(HttpStatusCode.NotFound)
     }
+}
+
+private suspend fun receiveResults(call: ApplicationCall): String {
+    val resultsBlob = if (call.request.header(HttpHeaders.ContentEncoding) == "gzip") {
+        ungzip(call.receive<ByteArray>())
+    } else {
+        call.receive<String>()
+    }
+
+    return resultsBlob
 }
