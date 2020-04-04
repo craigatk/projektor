@@ -7,10 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.config.ApplicationConfig
-import io.ktor.features.CORS
-import io.ktor.features.CachingHeaders
-import io.ktor.features.CallLogging
-import io.ktor.features.ContentNegotiation
+import io.ktor.features.*
 import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
 import io.ktor.http.content.CachingOptions
@@ -88,6 +85,11 @@ fun Application.main() {
     if (influxMetricsConfig.enabled) {
         install(MicrometerMetrics) {
             registry = metricRegistry
+        }
+    }
+    install(Compression) {
+        gzip {
+            matchContentType(ContentType.Application.Json, ContentType.Application.JavaScript)
         }
     }
 

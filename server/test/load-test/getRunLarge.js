@@ -43,6 +43,8 @@ export function setup() {
     return { testId: testId }
 }
 
+const getParams = {headers: {"Accept-Encoding": "gzip"}};
+
 export default function (data) {
     const testId = data.testId;
 
@@ -51,10 +53,10 @@ export default function (data) {
     }
 
     group('fetch test run details', () => {
-        const testRunResponse = http.get(`http://localhost:8080/run/${testId}`);
+        const testRunResponse = http.get(`http://localhost:8080/run/${testId}`, getParams);
         check(testRunResponse, statusCheck200);
 
-        const testRunSummaryResponse = http.get(`http://localhost:8080/run/${testId}/summary`);
+        const testRunSummaryResponse = http.get(`http://localhost:8080/run/${testId}/summary`, getParams);
         check(testRunSummaryResponse, statusCheck200);
     })
 };
