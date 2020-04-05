@@ -13,7 +13,7 @@ team with a simple, shareable URL.
 
 Simply send your JUnit XML results from whichever testing framework you use to the `/results`
 endpoint in your Projektor server. Or use one of the convenient publishing plugins to
-to automatically publish your test results as part of your test executions.
+automatically publish your test results as part of your test executions.
 Then you will get back the URL to view your results.
 
 ## Examples
@@ -105,3 +105,10 @@ Please see the [Node script readme for more details on installation and configur
 
 For information on how Projektor is developed, how to build it from source and deploy it yourself, and other
 development information, please see [the development guide](DEVELOPMENT.md)
+
+## Contributors
+
+A big thank you to the contributors to this project!
+
+* Aaron Zirbes - [aaronzirbes](https://github.com/aaronzirbes)
+* Alex Hatzenbuhler - [ahatzz11](https://github.com/ahatzz11)
