@@ -3,10 +3,9 @@ package projektor.plugin.testkit.version
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.util.GradleVersion
+import projektor.plugin.SpecWriter
 import projektor.plugin.testkit.SingleProjectSpec
 import spock.lang.Unroll
-
-import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class GradleVersionSingleProjectSpec extends SingleProjectSpec {
     @Unroll
@@ -18,8 +17,7 @@ class GradleVersionSingleProjectSpec extends SingleProjectSpec {
             }
         """.stripIndent()
 
-        File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeFailingSpecFile(testDirectory, "SampleSpec")
+        SpecWriter.createTestDirectoryWithFailingTest(projectRootDir, "SampleSpec")
 
         String resultsId = "ABC123"
         resultsStubber.stubResultsPostSuccess(resultsId)

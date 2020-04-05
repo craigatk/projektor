@@ -2,6 +2,8 @@ package projektor.plugin.functionaltest
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import projektor.plugin.SpecWriter
 import projektor.server.client.ProjektorAttachmentsApi
 import projektor.server.client.ProjektorClientBuilder
@@ -11,6 +13,9 @@ import spock.lang.Specification
 class ProjektorPluginFunctionalSpecification extends Specification {
 
     static final String PROJEKTOR_SERVER_URL = "http://localhost:8084"
+
+    @Rule
+    TemporaryFolder projectRootDir = new TemporaryFolder()
 
     SpecWriter specWriter = new SpecWriter()
 

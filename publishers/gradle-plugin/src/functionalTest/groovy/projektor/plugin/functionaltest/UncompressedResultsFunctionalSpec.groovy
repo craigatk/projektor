@@ -8,18 +8,20 @@ import projektor.server.api.TestRun
 import projektor.server.api.TestSuite
 import retrofit2.Response
 
-class SingleProjectResultsFunctionalSpec extends ProjektorPluginFunctionalSpecification {
+class UncompressedResultsFunctionalSpec extends ProjektorPluginFunctionalSpecification {
+
     File buildFile
 
     def setup() {
         buildFile = BuildFileWriter.createProjectBuildFile(projectRootDir)
     }
 
-    def "should send results from single project to server"() {
+    def "should send uncompressed results from single project to server"() {
         given:
         buildFile << """
             projektor {
                 serverUrl = '${PROJEKTOR_SERVER_URL}'
+                compressionEnabled = false
             }
         """.stripIndent()
 

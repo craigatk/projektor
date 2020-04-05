@@ -4,11 +4,19 @@ import okhttp3.ResponseBody
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import projektor.plugin.AttachmentsWriter
+import projektor.plugin.BuildFileWriter
+import projektor.plugin.SpecWriter
 import projektor.server.api.attachments.Attachments
 import projektor.server.api.TestRun
 import retrofit2.Response
 
-class SingleProjectAttachmentsFunctionalSpec extends SingleProjectFunctionalSpecification {
+class SingleProjectAttachmentsFunctionalSpec extends ProjektorPluginFunctionalSpecification {
+    File buildFile
+
+    def setup() {
+        buildFile = BuildFileWriter.createProjectBuildFile(projectRootDir)
+    }
+
     def "should attach files from test run"() {
         given:
         buildFile << """
@@ -18,9 +26,7 @@ class SingleProjectAttachmentsFunctionalSpec extends SingleProjectFunctionalSpec
             }
         """.stripIndent()
 
-
-        File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeFailingSpecFile(testDirectory, "FailingSpec")
+        SpecWriter.createTestDirectoryWithFailingTest(projectRootDir, "FailingSpec")
 
         File attachmentsDir1 = AttachmentsWriter.createAttachmentsDir(projectRootDir, 'attachments1')
         AttachmentsWriter.writeAttachmentFile(attachmentsDir1, "attachment1.txt", "Here is attachment 1")

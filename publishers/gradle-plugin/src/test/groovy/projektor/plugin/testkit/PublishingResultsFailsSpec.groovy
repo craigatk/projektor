@@ -1,6 +1,7 @@
 package projektor.plugin.testkit
 
 import org.gradle.testkit.runner.GradleRunner
+import projektor.plugin.SpecWriter
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
@@ -13,8 +14,7 @@ class PublishingResultsFailsSpec extends SingleProjectSpec {
             }
         """.stripIndent()
 
-        File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeSpecFile(testDirectory, "SampleSpec")
+        SpecWriter.createTestDirectoryWithPassingTest(projectRootDir, "SampleSpec")
 
         resultsStubber.stubResultsNetworkingError()
 
@@ -39,8 +39,7 @@ class PublishingResultsFailsSpec extends SingleProjectSpec {
             }
         """.stripIndent()
 
-        File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeSpecFile(testDirectory, "SampleSpec")
+        SpecWriter.createTestDirectoryWithPassingTest(projectRootDir, "SampleSpec")
 
         resultsStubber.stubResultsPostFailure(400)
 

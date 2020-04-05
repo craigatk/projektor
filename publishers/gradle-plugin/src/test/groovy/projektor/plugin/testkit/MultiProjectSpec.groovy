@@ -1,5 +1,8 @@
 package projektor.plugin.testkit
 
+import projektor.plugin.BuildFileWriter
+import projektor.plugin.SpecWriter
+
 class MultiProjectSpec extends ProjectSpec {
     File projectDir1
     File projectDir2
@@ -30,47 +33,14 @@ include 'project1', 'project2', 'project3'
         buildFileProject2 = new File(projectDir2, "build.gradle")
         buildFileProject3 = new File(projectDir3, "build.gradle")
 
-        rootBuildFile = projectRootDir.newFile('build.gradle')
-        rootBuildFile << """
-            buildscript {
-                repositories {
-                    jcenter()
-                }
-            }
+        rootBuildFile = BuildFileWriter.createRootBuildFile(projectRootDir)
 
-            plugins {
-                id 'dev.projektor.publish'
-            }
-        """.stripIndent()
+        BuildFileWriter.writeBuildFileContents(buildFileProject1, false)
+        BuildFileWriter.writeBuildFileContents(buildFileProject2, false)
+        BuildFileWriter.writeBuildFileContents(buildFileProject3, false)
 
-        writeSubProjectBuildFile(buildFileProject1)
-        writeSubProjectBuildFile(buildFileProject2)
-        writeSubProjectBuildFile(buildFileProject3)
-
-        testDirectory1 = specWriter.createTestDirectory(projectDir1)
-        testDirectory2 = specWriter.createTestDirectory(projectDir2)
-        testDirectory3 = specWriter.createTestDirectory(projectDir3)
-    }
-
-    protected void writeSubProjectBuildFile(File buildFile) {
-        buildFile << """
-            buildscript {
-                repositories {
-                    jcenter()
-                }
-            }
-
-            plugins {
-                id 'groovy'
-            }
-            
-            repositories {
-                jcenter()
-            }
-            
-            dependencies {
-                testImplementation('org.spockframework:spock-core:1.3-groovy-2.5')
-            }
-        """.stripIndent()
+        testDirectory1 = SpecWriter.createTestDirectory(projectDir1)
+        testDirectory2 = SpecWriter.createTestDirectory(projectDir2)
+        testDirectory3 = SpecWriter.createTestDirectory(projectDir3)
     }
 }

@@ -2,6 +2,7 @@ package projektor.plugin.testkit.task
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
+import projektor.plugin.SpecWriter
 import projektor.plugin.testkit.MultiProjectWithPluginAppliedToSubprojectsSpec
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
@@ -9,14 +10,14 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 class PublishResultsTaskMultiProjectWithPluginAppliedToSubprojectsSpec extends MultiProjectWithPluginAppliedToSubprojectsSpec {
 
     def setup() {
-        specWriter.writeSpecFile(testDirectory1, "Sample1Spec1")
-        specWriter.writeSpecFile(testDirectory1, "Sample1Spec2")
+        SpecWriter.writeSpecFile(testDirectory1, "Sample1Spec1")
+        SpecWriter.writeSpecFile(testDirectory1, "Sample1Spec2")
 
-        specWriter.writeSpecFile(testDirectory2, "Sample2Spec1")
-        specWriter.writeSpecFile(testDirectory2, "Sample2Spec2")
+        SpecWriter.writeSpecFile(testDirectory2, "Sample2Spec1")
+        SpecWriter.writeSpecFile(testDirectory2, "Sample2Spec2")
 
-        specWriter.writeSpecFile(testDirectory3, "Sample3Spec1")
-        specWriter.writeSpecFile(testDirectory3, "Sample3Spec2")
+        SpecWriter.writeSpecFile(testDirectory3, "Sample3Spec1")
+        SpecWriter.writeSpecFile(testDirectory3, "Sample3Spec2")
 
         rootBuildFile << """
             plugins {

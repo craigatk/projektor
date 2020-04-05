@@ -3,6 +3,7 @@ package projektor.plugin.testkit
 import com.github.tomakehurst.wiremock.http.HttpHeader
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
+import projektor.plugin.SpecWriter
 import projektor.plugin.client.ClientToken
 
 class PublishTokenPluginSpec extends SingleProjectSpec {
@@ -15,8 +16,7 @@ class PublishTokenPluginSpec extends SingleProjectSpec {
             }
         """.stripIndent()
 
-        File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeFailingSpecFile(testDirectory, "SampleSpec")
+        SpecWriter.createTestDirectoryWithFailingTest(projectRootDir, "SampleSpec")
 
         String resultsId = "DGA423"
         resultsStubber.stubResultsPostSuccess(resultsId)

@@ -1,5 +1,7 @@
 package projektor.plugin.testkit
 
+import projektor.plugin.SpecWriter
+
 class MultiProjectWithPluginAppliedToSubprojectsSpec extends ProjectSpec {
     File projectDir1
     File projectDir2
@@ -47,9 +49,9 @@ include 'project1', 'project2', 'project3'
         writeSubProjectBuildFile(buildFileProject2)
         writeSubProjectBuildFile(buildFileProject3)
 
-        testDirectory1 = specWriter.createTestDirectory(projectDir1)
-        testDirectory2 = specWriter.createTestDirectory(projectDir2)
-        testDirectory3 = specWriter.createTestDirectory(projectDir3)
+        testDirectory1 = SpecWriter.createTestDirectory(projectDir1)
+        testDirectory2 = SpecWriter.createTestDirectory(projectDir2)
+        testDirectory3 = SpecWriter.createTestDirectory(projectDir3)
     }
 
     protected void writeSubProjectBuildFile(File buildFile) {
