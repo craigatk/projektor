@@ -1,23 +1,18 @@
 package projektor.plugin.testkit.task
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
-import org.gradle.testkit.runner.GradleRunner
 import projektor.plugin.SpecWriter
 import projektor.plugin.testkit.MultiProjectSpec
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static projektor.plugin.PluginOutput.verifyOutputContainsReportLink
 
 class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
 
     def setup() {
-        SpecWriter.writeSpecFile(testDirectory1, "Sample1Spec1")
-        SpecWriter.writeSpecFile(testDirectory1, "Sample1Spec2")
-
-        SpecWriter.writeSpecFile(testDirectory2, "Sample2Spec1")
-        SpecWriter.writeSpecFile(testDirectory2, "Sample2Spec2")
-
-        SpecWriter.writeSpecFile(testDirectory3, "Sample3Spec1")
-        SpecWriter.writeSpecFile(testDirectory3, "Sample3Spec2")
+        SpecWriter.writePassingSpecFiles(testDirectory1, ["Sample1Spec1", "Sample1Spec2"])
+        SpecWriter.writePassingSpecFiles(testDirectory2, ["Sample2Spec1", "Sample2Spec2"])
+        SpecWriter.writePassingSpecFiles(testDirectory3, ["Sample3Spec1", "Sample3Spec2"])
     }
 
     def "when running publish task from root project should send results from each subproject"() {
@@ -33,11 +28,7 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def testResult = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .build()
+        def testResult = runSuccessfulBuild('test')
 
         then:
         testResult.task(":project1:test").outcome == SUCCESS
@@ -48,11 +39,7 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         resultsStubber.findResultsRequests().size() == 0
 
         when:
-        def publishResults = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('publishResults')
-                .withPluginClasspath()
-                .build()
+        def publishResults = runSuccessfulBuild('publishResults')
 
         then:
         publishResults.task(":project1:publishResults").outcome == SUCCESS
@@ -60,7 +47,7 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         publishResults.task(":project3:publishResults").outcome == SUCCESS
 
         and:
-        publishResults.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
+        verifyOutputContainsReportLink(publishResults.output, serverUrl, resultsId)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
@@ -90,11 +77,7 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def testResult = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .build()
+        def testResult = runSuccessfulBuild('test')
 
         then:
         testResult.task(":project1:test").outcome == SUCCESS
@@ -105,17 +88,13 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         resultsStubber.findResultsRequests().size() == 0
 
         when:
-        def publishResults = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments(':project1:publishResults')
-                .withPluginClasspath()
-                .build()
+        def publishResults = runSuccessfulBuild(':project1:publishResults')
 
         then:
         publishResults.task(":project1:publishResults").outcome == SUCCESS
 
         and:
-        publishResults.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
+        verifyOutputContainsReportLink(publishResults.output, serverUrl, resultsId)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()

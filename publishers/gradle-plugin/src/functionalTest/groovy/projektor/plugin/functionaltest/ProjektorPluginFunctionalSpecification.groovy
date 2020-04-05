@@ -4,6 +4,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
+import projektor.plugin.PluginOutput
 import projektor.plugin.SpecWriter
 import projektor.server.client.ProjektorAttachmentsApi
 import projektor.server.client.ProjektorClientBuilder
@@ -36,11 +37,7 @@ class ProjektorPluginFunctionalSpecification extends Specification {
     )
 
     static String extractTestId(String output) {
-        String reportMessage = "View Projektor report at: ${PROJEKTOR_SERVER_URL}/tests/"
-        assert output.contains(reportMessage)
-        int startingIndex = output.indexOf(reportMessage) + reportMessage.size()
-
-        return output.substring(startingIndex, startingIndex + 12)
+        return PluginOutput.extractTestId(output, PROJEKTOR_SERVER_URL)
     }
 
     private static HttpLoggingInterceptor createLoggingInterceptor() {

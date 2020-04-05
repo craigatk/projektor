@@ -10,6 +10,8 @@ import projektor.plugin.AttachmentsWriter
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static projektor.plugin.PluginOutput.verifyOutputContainsReportLink
+import static projektor.plugin.PluginOutput.verifyOutputDoesNotContainReportLink
 
 class AttachmentsSingleProjectSpec extends ProjectSpec {
     AttachmentsWireMockStubber attachmentsStubber = new AttachmentsWireMockStubber(wireMockRule)
@@ -55,7 +57,7 @@ class AttachmentsSingleProjectSpec extends ProjectSpec {
 
         and:
         !result.output.contains("Projektor plugin enabled but no server specified")
-        result.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
+        verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
@@ -100,7 +102,7 @@ class AttachmentsSingleProjectSpec extends ProjectSpec {
         result.task(":test").outcome == SUCCESS
 
         and:
-        !result.output.contains("View Projektor report")
+        verifyOutputDoesNotContainReportLink(result.output)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
@@ -133,11 +135,7 @@ class AttachmentsSingleProjectSpec extends ProjectSpec {
         attachmentsStubber.stubAttachmentPostSuccess(resultsId, "attachment2.txt")
 
         when:
-        def testResult = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .buildAndFail()
+        def testResult = runFailedBuild('test')
 
         then:
         testResult.task(":test").outcome == FAILED
@@ -146,19 +144,13 @@ class AttachmentsSingleProjectSpec extends ProjectSpec {
         resultsStubber.findResultsRequests().size() == 0
 
         when:
-        def publishResults = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('publishResults', '--info')
-                .withPluginClasspath()
-                .build()
-
-        println publishResults.output
+        def publishResults = runSuccessfulBuild('publishResults', '--info')
 
         then:
         publishResults.task(":publishResults").outcome == SUCCESS
 
         and:
-        publishResults.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
+        verifyOutputContainsReportLink(publishResults.output, serverUrl, resultsId)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()

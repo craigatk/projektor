@@ -5,6 +5,8 @@ import org.gradle.testkit.runner.GradleRunner
 import projektor.plugin.SpecWriter
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static projektor.plugin.PluginOutput.verifyOutputContainsReportLink
+import static projektor.plugin.PluginOutput.verifyOutputDoesNotContainReportLink
 
 class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
 
@@ -30,7 +32,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
 
         then:
         !result.output.contains("Projektor plugin enabled but no server specified")
-        result.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
+        verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
@@ -61,7 +63,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
         then:
         result.output.contains("Projektor plugin auto-publish disabled")
         !result.output.contains("Projektor plugin enabled but no server specified")
-        !result.output.contains("View Projektor report at")
+        verifyOutputDoesNotContainReportLink(result.output)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
@@ -94,7 +96,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
 
         and:
         result.output.contains("Projektor plugin enabled but no server specified")
-        !result.output.contains("View Projektor report at")
+        verifyOutputDoesNotContainReportLink(result.output)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()

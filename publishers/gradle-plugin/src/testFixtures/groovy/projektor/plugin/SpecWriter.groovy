@@ -17,18 +17,30 @@ class SpecWriter {
         return dir
     }
 
-    static File writeFailingSpecFile(File testDirectory, String specClass) {
-        writeSpecFile(testDirectory, specClass, false)
+    static void writeFailingSpecFile(File testDirectory, String specClassName) {
+        writeFailingSpecFiles(testDirectory, [specClassName])
     }
 
-    static File writeSpecFile(File testDirectory, String specClass, boolean passing = true) {
-        File specFile = new File(testDirectory, "${specClass}.groovy")
+    static void writeFailingSpecFiles(File testDirectory, List<String> specClassNames) {
+        specClassNames.each { writeSpecFile(testDirectory, it, false) }
+    }
+
+    static void writePassingSpecFiles(File testDirectory, List<String> specClassNames) {
+        specClassNames.each { writePassingSpecFile(testDirectory, it) }
+    }
+
+    static void writePassingSpecFile(File testDirectory, String specClassName) {
+        writeSpecFile(testDirectory, specClassName, true)
+    }
+
+    private static void writeSpecFile(File testDirectory, String specClassName, boolean passing) {
+        File specFile = new File(testDirectory, "${specClassName}.groovy")
 
         specFile << """package projektor
 
 import spock.lang.Specification
 
-class ${specClass} extends Specification {
+class ${specClassName} extends Specification {
     void "sample test"() {
         expect:
         ${passing}
@@ -49,6 +61,6 @@ class ${specClass} extends Specification {
 
     static File createTestDirectoryWithPassingTest(TemporaryFolder projectDir,  String specClassName) {
         File testDirectory = createTestDirectory(projectDir)
-        return writeSpecFile(testDirectory, specClassName)
+        return writePassingSpecFile(testDirectory, specClassName)
     }
 }

@@ -1,11 +1,11 @@
 package projektor.plugin.testkit.task
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
-import org.gradle.testkit.runner.GradleRunner
 import projektor.plugin.SpecWriter
 import projektor.plugin.testkit.SingleProjectSpec
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static projektor.plugin.PluginOutput.verifyOutputContainsReportLink
 
 class PublishResultsTaskSingleProjectSpec extends SingleProjectSpec {
 
@@ -24,11 +24,7 @@ class PublishResultsTaskSingleProjectSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def testResult = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .build()
+        def testResult = runSuccessfulBuild('test')
 
         then:
         testResult.task(":test").outcome == SUCCESS
@@ -37,17 +33,13 @@ class PublishResultsTaskSingleProjectSpec extends SingleProjectSpec {
         resultsStubber.findResultsRequests().size() == 0
 
         when:
-        def publishResults = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('publishResults')
-                .withPluginClasspath()
-                .build()
+        def publishResults = runSuccessfulBuild('publishResults')
 
         then:
         publishResults.task(":publishResults").outcome == SUCCESS
 
         and:
-        publishResults.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
+        verifyOutputContainsReportLink(publishResults.output, serverUrl, resultsId)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()

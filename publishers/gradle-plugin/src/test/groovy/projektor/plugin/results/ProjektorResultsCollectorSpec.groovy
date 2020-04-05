@@ -3,7 +3,6 @@ package projektor.plugin.results
 import org.gradle.api.logging.Logger
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
-import projektor.plugin.results.ProjektorResultsCollector
 import spock.lang.Specification
 
 class ProjektorResultsCollectorSpec extends Specification {
@@ -11,7 +10,7 @@ class ProjektorResultsCollectorSpec extends Specification {
     @Rule TemporaryFolder tempFolder2
 
     Logger logger = Mock()
-    ProjektorResultsCollector debugifyResultsCollector = new ProjektorResultsCollector(logger)
+    ProjektorResultsCollector resultsCollector = new ProjektorResultsCollector(logger)
 
     void "should find only XML files from a single directory"() {
         given:
@@ -33,7 +32,7 @@ In another file"""
         otherFile.text = otherFileContent
 
         when:
-        String resultsBlob = debugifyResultsCollector.createResultsBlobFromJunitXmlResultsInDirectory(tempFolder1.root)
+        String resultsBlob = resultsCollector.createResultsBlobFromJunitXmlResultsInDirectory(tempFolder1.root)
 
         then:
         resultsBlob.contains(resultsXmlFile1Content)

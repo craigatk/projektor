@@ -7,6 +7,8 @@ import projektor.plugin.SpecWriter
 import projektor.plugin.testkit.SingleProjectSpec
 import spock.lang.Unroll
 
+import static projektor.plugin.PluginOutput.verifyOutputContainsReportLink
+
 class GradleVersionSingleProjectSpec extends SingleProjectSpec {
     @Unroll
     def "should publish results from test task to server with Gradle version #gradleVersion"() {
@@ -31,8 +33,7 @@ class GradleVersionSingleProjectSpec extends SingleProjectSpec {
                 .buildAndFail()
 
         then:
-        !result.output.contains("Projektor plugin enabled but no server specified")
-        result.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
+        verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()

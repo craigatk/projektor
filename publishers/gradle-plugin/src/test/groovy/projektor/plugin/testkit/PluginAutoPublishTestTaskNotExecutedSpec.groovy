@@ -5,6 +5,8 @@ import org.gradle.testkit.runner.GradleRunner
 import projektor.plugin.SpecWriter
 
 import static org.gradle.testkit.runner.TaskOutcome.*
+import static projektor.plugin.PluginOutput.verifyOutputContainsReportLink
+import static projektor.plugin.PluginOutput.verifyOutputDoesNotContainReportLink
 
 class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
 
@@ -23,11 +25,7 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('compileTestGroovy')
-                .withPluginClasspath()
-                .build()
+        def result = runSuccessfulBuild('compileTestGroovy')
 
         then:
         result.task(":compileTestGroovy").outcome == SUCCESS
@@ -56,17 +54,13 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def executedResult = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .build()
+        def executedResult = runSuccessfulBuild('test')
 
         then:
         executedResult.task(":test").outcome == SUCCESS
 
         and:
-        executedResult.output.contains("View Projektor report at")
+        verifyOutputContainsReportLink(executedResult.output, serverUrl, resultsId)
 
         and:
         resultsStubber.findResultsRequests().size() == 1
@@ -74,17 +68,13 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         when:
         wireMockRule.resetRequests()
 
-        def upToDateResult = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .build()
+        def upToDateResult = runSuccessfulBuild('test')
 
         then:
         upToDateResult.task(":test").outcome == UP_TO_DATE
 
         and:
-        !upToDateResult.output.contains("View Projektor report at")
+        verifyOutputDoesNotContainReportLink(upToDateResult.output)
 
         and:
         resultsStubber.findResultsRequests().size() == 0
@@ -115,7 +105,7 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         executedBuildResult.task(":test").outcome == SUCCESS
 
         and:
-        executedBuildResult.output.contains("View Projektor report at")
+        verifyOutputContainsReportLink(executedBuildResult.output, serverUrl, resultsId)
 
         and:
         resultsStubber.findResultsRequests().size() == 1
@@ -137,7 +127,7 @@ class PluginAutoPublishTestTaskNotExecutedSpec extends SingleProjectSpec {
         skippedBuildResult.task(":test").outcome == SKIPPED
 
         and:
-        !skippedBuildResult.output.contains("View Projektor report at")
+        verifyOutputDoesNotContainReportLink(skippedBuildResult.output)
 
         and:
         resultsStubber.findResultsRequests().size() == 0
