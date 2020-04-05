@@ -19,6 +19,7 @@ plugins {
 projektor {
     serverUrl = "https://projektorlive.herokuapp.com"
     publishToken = System.getenv("PROJEKTOR_TOKEN") ?: project.findProperty('projektor_publish_token') ?: null
+    autoPublishOnFailureOnly = false
 }
 
 allprojects {
