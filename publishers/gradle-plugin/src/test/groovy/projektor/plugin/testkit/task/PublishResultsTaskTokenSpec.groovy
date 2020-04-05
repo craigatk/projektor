@@ -3,6 +3,7 @@ package projektor.plugin.testkit.task
 import com.github.tomakehurst.wiremock.http.HttpHeader
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
+import projektor.plugin.SpecWriter
 import projektor.plugin.client.ClientToken
 import projektor.plugin.testkit.SingleProjectSpec
 
@@ -20,8 +21,7 @@ class PublishResultsTaskTokenSpec extends SingleProjectSpec {
             }
         """.stripIndent()
 
-        File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeSpecFile(testDirectory, "SampleSpec")
+        SpecWriter.createTestDirectoryWithPassingTest(projectRootDir, "SampleSpec")
 
         String resultsId = "ABC123"
         resultsStubber.stubResultsPostSuccess(resultsId)

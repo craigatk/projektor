@@ -2,20 +2,21 @@ package projektor.plugin.testkit
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
+import projektor.plugin.SpecWriter
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 
 class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends MultiProjectWithPluginAppliedToSubprojectsSpec {
 
     def setup() {
-        specWriter.writeFailingSpecFile(testDirectory1, "Sample1Spec1")
-        specWriter.writeFailingSpecFile(testDirectory1, "Sample1Spec2")
+        SpecWriter.writeFailingSpecFile(testDirectory1, "Sample1Spec1")
+        SpecWriter.writeFailingSpecFile(testDirectory1, "Sample1Spec2")
 
-        specWriter.writeFailingSpecFile(testDirectory2, "Sample2Spec1")
-        specWriter.writeFailingSpecFile(testDirectory2, "Sample2Spec2")
+        SpecWriter.writeFailingSpecFile(testDirectory2, "Sample2Spec1")
+        SpecWriter.writeFailingSpecFile(testDirectory2, "Sample2Spec2")
 
-        specWriter.writeFailingSpecFile(testDirectory3, "Sample3Spec1")
-        specWriter.writeFailingSpecFile(testDirectory3, "Sample3Spec2")
+        SpecWriter.writeFailingSpecFile(testDirectory3, "Sample3Spec1")
+        SpecWriter.writeFailingSpecFile(testDirectory3, "Sample3Spec2")
     }
 
     def "should send results from multiple subprojects in one blob to server"() {

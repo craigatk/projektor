@@ -3,6 +3,7 @@ package projektor.plugin.testkit.custompath
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
 import projektor.parser.ResultsXmlLoader
+import projektor.plugin.SpecWriter
 import projektor.plugin.testkit.SingleProjectSpec
 import projektor.plugin.testkit.util.ResultsWriter
 
@@ -65,8 +66,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         String resultsId = "IOJ901"
         resultsStubber.stubResultsPostSuccess(resultsId)
 
-        File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeFailingSpecFile(testDirectory, "SampleFailingSpec")
+        SpecWriter.createTestDirectoryWithFailingTest(projectRootDir, "SampleFailingSpec")
 
         when:
         def result = GradleRunner.create()
@@ -104,8 +104,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         String resultsId = "IOJ901"
         resultsStubber.stubResultsPostSuccess(resultsId)
 
-        File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeSpecFile(testDirectory, "SampleSpec")
+        SpecWriter.createTestDirectoryWithPassingTest(projectRootDir, "SampleSpec")
 
         when:
         def result = GradleRunner.create()

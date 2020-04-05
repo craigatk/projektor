@@ -3,25 +3,25 @@ package projektor.plugin
 import org.junit.rules.TemporaryFolder
 
 class SpecWriter {
-    File createTestDirectory(TemporaryFolder projectDir) {
+    static File createTestDirectory(TemporaryFolder projectDir) {
         projectDir.newFolder("src", "test", "groovy", "projektor")
     }
 
-    File createTestDirectory(File projectDir) {
+    static File createTestDirectory(File projectDir) {
         return createProjectDir(projectDir, "src/test/groovy/projektor")
     }
 
-    private File createProjectDir(File projectDir, String dirPath) {
+    private static File createProjectDir(File projectDir, String dirPath) {
         File dir = new File(projectDir, dirPath)
         dir.mkdirs()
         return dir
     }
 
-    File writeFailingSpecFile(File testDirectory, String specClass) {
+    static File writeFailingSpecFile(File testDirectory, String specClass) {
         writeSpecFile(testDirectory, specClass, false)
     }
 
-    File writeSpecFile(File testDirectory, String specClass, boolean passing = true) {
+    static File writeSpecFile(File testDirectory, String specClass, boolean passing = true) {
         File specFile = new File(testDirectory, "${specClass}.groovy")
 
         specFile << """package projektor
@@ -35,5 +35,20 @@ class ${specClass} extends Specification {
     }
 }
 """
+    }
+
+    static File createTestDirectoryWithFailingTest(TemporaryFolder projectDir,  String specClassName) {
+        return createTestDirectoryWithFailingTests(projectDir, [specClassName])
+    }
+
+    static File createTestDirectoryWithFailingTests(TemporaryFolder projectDir,  List<String> specClassNames) {
+        File testDirectory = createTestDirectory(projectDir)
+        specClassNames.each { writeFailingSpecFile(testDirectory, it) }
+        return testDirectory
+    }
+
+    static File createTestDirectoryWithPassingTest(TemporaryFolder projectDir,  String specClassName) {
+        File testDirectory = createTestDirectory(projectDir)
+        return writeSpecFile(testDirectory, specClassName)
     }
 }

@@ -2,6 +2,7 @@ package projektor.plugin.testkit
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
+import projektor.plugin.SpecWriter
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
@@ -15,8 +16,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
             }
         """.stripIndent()
 
-        File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeFailingSpecFile(testDirectory, "SampleSpec")
+        SpecWriter.createTestDirectoryWithFailingTest(projectRootDir, "SampleSpec")
 
         String resultsId = "ABC123"
         resultsStubber.stubResultsPostSuccess(resultsId)
@@ -46,8 +46,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
             }
         """.stripIndent()
 
-        File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeFailingSpecFile(testDirectory, "SampleSpec")
+        SpecWriter.createTestDirectoryWithFailingTest(projectRootDir, "SampleSpec")
 
         String resultsId = "ABC123"
         resultsStubber.stubResultsPostSuccess(resultsId)
@@ -78,8 +77,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
             }
         """.stripIndent()
 
-        File testDirectory = specWriter.createTestDirectory(projectRootDir)
-        specWriter.writeSpecFile(testDirectory, "SampleSpec")
+        SpecWriter.createTestDirectoryWithPassingTest(projectRootDir, "SampleSpec")
 
         String resultsId = "ABC123"
         resultsStubber.stubResultsPostSuccess(resultsId)
