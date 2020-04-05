@@ -1,0 +1,1 @@
+{ "cleanup": { "enabled": true, "max_report_age_in_days": 30 } }

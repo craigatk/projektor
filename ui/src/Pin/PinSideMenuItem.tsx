@@ -21,7 +21,7 @@ const PinSideMenuItem = ({ publicId }: PinSideMenuItem) => {
   const [pinned, setPinned] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    fetchServerConfig(publicId)
+    fetchServerConfig()
       .then((response) => {
         setCleanupConfig(response.data.cleanup);
         return Promise.resolve(response.data.cleanup.enabled);

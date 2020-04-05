@@ -14,7 +14,10 @@ import projektor.server.api.config.ServerConfig
 fun Route.config(cleanupConfig: CleanupConfig) {
     get("/config") {
         call.respond(HttpStatusCode.OK, ServerConfig(
-                ServerCleanupConfig(cleanupConfig.maxReportAgeDays != null, cleanupConfig.maxReportAgeDays)
+                ServerCleanupConfig(
+                        cleanupConfig.maxReportAgeDays != null && cleanupConfig.maxReportAgeDays > 0,
+                        cleanupConfig.maxReportAgeDays
+                )
         ))
     }
 }
