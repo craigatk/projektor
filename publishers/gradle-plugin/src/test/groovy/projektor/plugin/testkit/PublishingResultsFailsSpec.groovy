@@ -1,6 +1,6 @@
 package projektor.plugin.testkit
 
-import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.BuildResult
 import projektor.plugin.SpecWriter
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
@@ -19,13 +19,7 @@ class PublishingResultsFailsSpec extends SingleProjectSpec {
         resultsStubber.stubResultsNetworkingError()
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .build()
-
-        println result.output
+        BuildResult result = runSuccessfulBuild('test')
 
         then:
         result.task(":test").outcome == SUCCESS
@@ -44,13 +38,7 @@ class PublishingResultsFailsSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostFailure(400)
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .build()
-
-        println result.output
+        BuildResult result = runSuccessfulBuild('test')
 
         then:
         result.task(":test").outcome == SUCCESS

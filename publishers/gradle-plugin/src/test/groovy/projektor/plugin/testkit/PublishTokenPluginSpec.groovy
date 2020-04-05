@@ -22,11 +22,7 @@ class PublishTokenPluginSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .buildAndFail()
+        runFailedBuild('test')
 
         then:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()

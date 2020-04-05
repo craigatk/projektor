@@ -1,11 +1,12 @@
 package projektor.plugin.testkit.custompath
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
-import org.gradle.testkit.runner.GradleRunner
 import projektor.parser.ResultsXmlLoader
 import projektor.plugin.SpecWriter
 import projektor.plugin.testkit.SingleProjectSpec
 import projektor.plugin.testkit.util.ResultsWriter
+
+import static projektor.plugin.PluginOutput.verifyOutputContainsReportLink
 
 class IncludeCustomResultsPathSpec extends SingleProjectSpec {
     def setup() {
@@ -33,16 +34,10 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test', '--info')
-                .withPluginClasspath()
-                .build()
+        def result = runSuccessfulBuild('test')
 
         then:
-        println result.output
-
-        result.output.contains("View Projektor report at")
+        verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
@@ -69,14 +64,10 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         SpecWriter.createTestDirectoryWithFailingTest(projectRootDir, "SampleFailingSpec")
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test', '--info')
-                .withPluginClasspath()
-                .buildAndFail()
+        def result = runFailedBuild('test')
 
         then:
-        result.output.contains("View Projektor report at")
+        verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
@@ -107,14 +98,10 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         SpecWriter.createTestDirectoryWithPassingTest(projectRootDir, "SampleSpec")
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test', 'publishResults', '--info')
-                .withPluginClasspath()
-                .build()
+        def result = runSuccessfulBuild('test', 'publishResults', '--info')
 
         then:
-        result.output.contains("View Projektor report at")
+        verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
@@ -143,14 +130,10 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .build()
+        def result = runSuccessfulBuild('test')
 
         then:
-        result.output.contains("View Projektor report at")
+        verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()

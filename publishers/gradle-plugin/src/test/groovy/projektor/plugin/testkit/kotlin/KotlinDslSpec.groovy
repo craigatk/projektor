@@ -1,11 +1,11 @@
 package projektor.plugin.testkit.kotlin
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
-import org.gradle.testkit.runner.GradleRunner
 import projektor.plugin.SpecWriter
 import projektor.plugin.testkit.ProjectSpec
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
+import static projektor.plugin.PluginOutput.verifyOutputContainsReportLink
 
 class KotlinDslSpec extends ProjectSpec {
     File buildFile
@@ -46,18 +46,13 @@ class KotlinDslSpec extends ProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .buildAndFail()
+        def result = runFailedBuild('test')
 
         then:
         result.task(":test").outcome == FAILED
 
         and:
-        !result.output.contains("Projektor plugin enabled but no server specified")
-        result.output.contains("View Projektor report at: ${serverUrl}/tests/${resultsId}")
+        verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()

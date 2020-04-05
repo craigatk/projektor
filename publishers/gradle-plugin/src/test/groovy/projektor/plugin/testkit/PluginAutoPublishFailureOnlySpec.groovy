@@ -1,11 +1,12 @@
 package projektor.plugin.testkit
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
-import org.gradle.testkit.runner.GradleRunner
 import projektor.plugin.SpecWriter
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static projektor.plugin.PluginOutput.verifyOutputContainsReportLink
+import static projektor.plugin.PluginOutput.verifyOutputDoesNotContainReportLink
 
 class PluginAutoPublishFailureOnlySpec extends SingleProjectSpec {
 
@@ -24,17 +25,13 @@ class PluginAutoPublishFailureOnlySpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .buildAndFail()
+        def result = runFailedBuild('test')
 
         then:
         result.task(":test").outcome == FAILED
 
         and:
-        result.output.contains("View Projektor report at")
+        verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
@@ -59,17 +56,13 @@ class PluginAutoPublishFailureOnlySpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .build()
+        def result = runSuccessfulBuild('test')
 
         then:
         result.task(":test").outcome == SUCCESS
 
         and:
-        !result.output.contains("View Projektor report at")
+        verifyOutputDoesNotContainReportLink(result.output)
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
