@@ -22,8 +22,6 @@ class AttachmentsClientSpec extends Specification {
 
     Logger logger = Mock()
 
-    OkHttpClient okHttpClient = new OkHttpClient()
-
     @Unroll
     void "should send attachment to server token in header #expectedTokenPresent"() {
         given:
@@ -32,8 +30,7 @@ class AttachmentsClientSpec extends Specification {
         String publicId = "ATT123"
 
         AttachmentsClient attachmentsClient = new AttachmentsClient(
-                okHttpClient,
-                new ClientConfig(serverUrl, maybePublishToken),
+                new ClientConfig(serverUrl, false, maybePublishToken),
                 logger
         )
 

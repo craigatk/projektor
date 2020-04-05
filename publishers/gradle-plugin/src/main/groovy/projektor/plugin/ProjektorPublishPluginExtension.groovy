@@ -10,4 +10,5 @@ class ProjektorPublishPluginExtension {
     String publishToken
     List<String> additionalResultsDirs = []
     List<FileTree> attachments = []
+    boolean compressionEnabled = true
 }
