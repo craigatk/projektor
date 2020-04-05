@@ -97,7 +97,9 @@ const fetchTestRunSystemAttributes = (
   publicId: string
 ): Promise<AxiosResponse<TestRunSystemAttributes>> =>
   // @ts-ignore
-  axiosInstanceWithoutCache.get<TestRunSystemAttributes>(`/run/${publicId}/attributes`);
+  axiosInstanceWithoutCache.get<TestRunSystemAttributes>(
+    `/run/${publicId}/attributes`
+  );
 
 const pinTestRun = (publicId: string): Promise<AxiosResponse<void>> =>
   // @ts-ignore

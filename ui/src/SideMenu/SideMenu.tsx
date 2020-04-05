@@ -8,6 +8,7 @@ import TotalIcon from "../Icons/TotalIcon";
 import SlowIcon from "../Icons/SlowIcon";
 import AttachmentIcon from "../Icons/AttachmentIcon";
 import SideMenuLink from "./SideMenuLink";
+import PinSideMenuItem from "../Pin/PinSideMenuItem";
 
 interface SideMenuProps {
   publicId: string;
@@ -87,6 +88,7 @@ const SideMenu = ({
             linkTestId="nav-link-attachments"
           />
         ) : null}
+        <PinSideMenuItem publicId={publicId} />
       </List>
     </Drawer>
   );

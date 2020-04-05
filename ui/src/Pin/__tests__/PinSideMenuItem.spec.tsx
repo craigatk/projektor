@@ -34,9 +34,7 @@ describe("PinSideMenuItem", () => {
       cleanup: cleanupConfig,
     } as ServerConfig;
 
-    mockAxios
-      .onGet(`http://localhost:8080/run/${publicId}/config`)
-      .reply(200, serverConfig);
+    mockAxios.onGet(`http://localhost:8080/config`).reply(200, serverConfig);
 
     const attributes = {
       pinned: false,
@@ -68,9 +66,7 @@ describe("PinSideMenuItem", () => {
       cleanup: cleanupConfig,
     } as ServerConfig;
 
-    mockAxios
-      .onGet(`http://localhost:8080/run/${publicId}/config`)
-      .reply(200, serverConfig);
+    mockAxios.onGet(`http://localhost:8080/config`).reply(200, serverConfig);
 
     const attributes = {
       pinned: true,
@@ -102,9 +98,7 @@ describe("PinSideMenuItem", () => {
       cleanup: cleanupConfig,
     } as ServerConfig;
 
-    mockAxios
-      .onGet(`http://localhost:8080/run/${publicId}/config`)
-      .reply(200, serverConfig);
+    mockAxios.onGet(`http://localhost:8080/config`).reply(200, serverConfig);
 
     const { queryByTestId } = render(<PinSideMenuItem publicId={publicId} />);
 
