@@ -1,7 +1,6 @@
 package projektor.plugin.testkit
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
-import org.gradle.testkit.runner.GradleRunner
 import projektor.plugin.SpecWriter
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
@@ -9,14 +8,9 @@ import static org.gradle.testkit.runner.TaskOutcome.FAILED
 class PluginAutoPublishMultiProjectSpec extends MultiProjectSpec {
 
     def setup() {
-        SpecWriter.writeFailingSpecFile(testDirectory1, "Sample1Spec1")
-        SpecWriter.writeFailingSpecFile(testDirectory1, "Sample1Spec2")
-
-        SpecWriter.writeFailingSpecFile(testDirectory2, "Sample2Spec1")
-        SpecWriter.writeFailingSpecFile(testDirectory2, "Sample2Spec2")
-
-        SpecWriter.writeFailingSpecFile(testDirectory3, "Sample3Spec1")
-        SpecWriter.writeFailingSpecFile(testDirectory3, "Sample3Spec2")
+        SpecWriter.writeFailingSpecFiles(testDirectory1, ["Sample1Spec1", "Sample1Spec2"])
+        SpecWriter.writeFailingSpecFiles(testDirectory2, ["Sample2Spec1", "Sample2Spec2"])
+        SpecWriter.writeFailingSpecFiles(testDirectory3, ["Sample3Spec1", "Sample3Spec2"])
     }
 
     def "should send results from multiple subprojects in one blob to server"() {
@@ -31,11 +25,7 @@ class PluginAutoPublishMultiProjectSpec extends MultiProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test', '--continue')
-                .withPluginClasspath()
-                .buildAndFail()
+        def result = runFailedBuild('test', '--continue')
 
         then:
         result.task(":project1:test").outcome == FAILED
@@ -69,11 +59,7 @@ class PluginAutoPublishMultiProjectSpec extends MultiProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def firstResult = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments(':project1:test')
-                .withPluginClasspath()
-                .buildAndFail()
+        def firstResult = runFailedBuild(':project1:test')
 
         then:
         firstResult.task(":project1:test").outcome == FAILED
@@ -95,12 +81,7 @@ class PluginAutoPublishMultiProjectSpec extends MultiProjectSpec {
         when:
         wireMockRule.resetRequests()
 
-        def secondResult = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments(':project2:test', ':project3:test', '--continue')
-                .withPluginClasspath()
-                .buildAndFail()
-
+        def secondResult = runFailedBuild(':project2:test', ':project3:test', '--continue')
         then:
         secondResult.task(":project2:test").outcome == FAILED
         secondResult.task(":project3:test").outcome == FAILED

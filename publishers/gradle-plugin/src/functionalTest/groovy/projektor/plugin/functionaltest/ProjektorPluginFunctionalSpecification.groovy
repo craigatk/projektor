@@ -18,8 +18,6 @@ class ProjektorPluginFunctionalSpecification extends Specification {
     @Rule
     TemporaryFolder projectRootDir = new TemporaryFolder()
 
-    SpecWriter specWriter = new SpecWriter()
-
     OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .addInterceptor(createLoggingInterceptor())
             .build()

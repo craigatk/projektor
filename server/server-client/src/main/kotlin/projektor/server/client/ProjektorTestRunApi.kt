@@ -2,6 +2,7 @@ package projektor.server.client
 
 import projektor.server.api.TestRun
 import projektor.server.api.TestSuite
+import projektor.server.api.TestSuiteOutput
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -14,5 +15,11 @@ interface ProjektorTestRunApi {
     fun testSuites(@Path("publicId") publicId: String): Call<List<TestSuite>>
 
     @GET("/run/{publicId}/suite/{testSuiteIdx}")
-    fun testSuite(@Path("publicId") publicId: String, @Path("testSuiteIdx") testRunIndex: Int): Call<TestSuite>
+    fun testSuite(@Path("publicId") publicId: String, @Path("testSuiteIdx") testSuiteIdx: Int): Call<TestSuite>
+
+    @GET("/run/{publicId}/suite/{testSuiteIdx}/systemOut")
+    fun testSuiteSystemOut(@Path("publicId") publicId: String, @Path("testSuiteIdx") testSuiteIdx: Int): Call<TestSuiteOutput>
+
+    @GET("/run/{publicId}/suite/{testSuiteIdx}/systemErr")
+    fun testSuiteSystemErr(@Path("publicId") publicId: String, @Path("testSuiteIdx") testSuiteIdx: Int): Call<TestSuiteOutput>
 }
