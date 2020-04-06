@@ -22,7 +22,7 @@ class SpecWriter {
     }
 
     static void writeFailingSpecFiles(File testDirectory, List<String> specClassNames) {
-        specClassNames.each { writeSpecFile(testDirectory, it, false) }
+        specClassNames.each { writeSpecFile(testDirectory, it, new SpecFileConfig(passing: false)) }
     }
 
     static void writePassingSpecFiles(File testDirectory, List<String> specClassNames) {
@@ -30,10 +30,10 @@ class SpecWriter {
     }
 
     static void writePassingSpecFile(File testDirectory, String specClassName) {
-        writeSpecFile(testDirectory, specClassName, true)
+        writeSpecFile(testDirectory, specClassName, new SpecFileConfig(passing: true))
     }
 
-    private static void writeSpecFile(File testDirectory, String specClassName, boolean passing) {
+    static void writeSpecFile(File testDirectory, String specClassName, SpecFileConfig config) {
         File specFile = new File(testDirectory, "${specClassName}.groovy")
 
         specFile << """package projektor
@@ -43,7 +43,8 @@ import spock.lang.Specification
 class ${specClassName} extends Specification {
     void "sample test"() {
         expect:
-        ${passing}
+        ${config.additionalCodeLines.join("\n")}
+        ${config.passing}
     }
 }
 """
@@ -63,4 +64,9 @@ class ${specClassName} extends Specification {
         File testDirectory = createTestDirectory(projectDir)
         return writePassingSpecFile(testDirectory, specClassName)
     }
+}
+
+class SpecFileConfig {
+    boolean passing
+    List<String> additionalCodeLines = []
 }
