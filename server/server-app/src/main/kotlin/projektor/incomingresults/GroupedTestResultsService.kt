@@ -18,6 +18,9 @@ class GroupedTestResultsService(
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
+    private val resultsProcessSuccessCounter = metricRegistry.counter("grouped_results_process_success")
+    private val resultsProcessFailureCounter = metricRegistry.counter("grouped_results_process_failure")
+
     suspend fun persistTestResultsAsync(groupedResultsBlob: String): PublicId {
         val publicId = randomPublicId()
         val timer = metricRegistry.timer("persist_grouped_results")
@@ -41,9 +44,12 @@ class GroupedTestResultsService(
             testRunRepository.saveGroupedTestRun(publicId, groupedResults)
 
             testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.SUCCESS)
+
+            resultsProcessSuccessCounter.increment()
         } catch (e: Exception) {
             val errorMessage = "Error persisting test results: ${e.message}"
             handleException(publicId, groupedResultsBlob, errorMessage, e)
+            resultsProcessFailureCounter.increment()
         }
     }
 
