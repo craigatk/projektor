@@ -11,8 +11,8 @@
   },
   "devDependencies": {
     "chai-colors": "1.0.1",
-    "cypress": "4.2.0",
-    "prettier": "1.18.2",
+    "cypress": "4.3.0",
+    "prettier": "2.0.4",
     "rimraf": "3.0.2"
   }
 }
