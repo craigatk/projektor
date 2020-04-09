@@ -1,10 +1,11 @@
 import http from 'k6/http';
-import { check, group, sleep } from "k6";
+import { check, sleep } from "k6";
 
 export let options = {
     stages: [
         { duration: "60s", target: 50 }
-    ]
+    ],
+    setupTimeout: "30s"
 };
 
 const failingSpecResultsXml = open('../test-fixtures/src/main/resources/TEST-projektor.example.spock.FailingSpec.xml');
@@ -14,11 +15,11 @@ const resultsPayload = JSON.stringify({
     groupedTestSuites: [
         {
             groupName: "group1",
-            testSuitesBlob: failingSpecResultsXml
+            testSuitesBlob: [...Array(100).keys()].map(() => failingSpecResultsXml).join("\n")
         },
         {
             groupName: "group2",
-            testSuitesBlob: passingSpecResultsXml
+            testSuitesBlob: [...Array(100).keys()].map(() => passingSpecResultsXml).join("\n")
         }
     ]
 });
@@ -37,10 +38,12 @@ export function setup() {
     console.log("Test ID: " + testId)
 
     console.log("Sleeping for a bit while test run is saved")
-    sleep(5)
+    sleep(10)
 
     return { testId: testId }
 }
+
+const getParams = {headers: {"Accept-Encoding": "gzip"}};
 
 export default function (data) {
     const testId = data.testId;
@@ -49,11 +52,6 @@ export default function (data) {
         "status is 200": (r) => r.status === 200
     }
 
-    group('fetch test run details', () => {
-        const testRunResponse = http.get(`http://localhost:8080/run/${testId}`);
-        check(testRunResponse, statusCheck200);
-
-        const testRunSummaryResponse = http.get(`http://localhost:8080/run/${testId}/summary`);
-        check(testRunSummaryResponse, statusCheck200);
-    })
+    const testRunResponse = http.get(`http://localhost:8080/run/${testId}/cases/failed`, getParams);
+    check(testRunResponse, statusCheck200);
 };

@@ -32,6 +32,7 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
                         .leftOuterJoin(Tables.TEST_FAILURE).on(Tables.TEST_FAILURE.TEST_CASE_ID.eq(Tables.TEST_CASE.ID))
                         .leftOuterJoin(Tables.TEST_SUITE_GROUP).on(Tables.TEST_SUITE_GROUP.ID.eq(Tables.TEST_SUITE.TEST_SUITE_GROUP_ID))
                         .where(Tables.TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id).and(Tables.TEST_SUITE.IDX.eq(testSuiteIdx)))
+                        .orderBy(Tables.TEST_SUITE.ID)
                         .fetchResultSet()
 
                 val testSuite: TestSuite? = resultSet.use {
