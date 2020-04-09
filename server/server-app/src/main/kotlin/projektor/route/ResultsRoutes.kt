@@ -34,8 +34,6 @@ fun Route.results(
     authService: AuthService,
     metricRegistry: MeterRegistry
 ) {
-    val groupedResultsSuccessCounter = metricRegistry.counter("routes_grouped_results_success")
-
     post("/results") {
         if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
             call.respond(HttpStatusCode.Unauthorized)
@@ -62,7 +60,6 @@ fun Route.results(
 
             if (groupedResultsBlob.isNotBlank()) {
                 val publicId = groupedTestResultsService.persistTestResultsAsync(groupedResultsBlob)
-                groupedResultsSuccessCounter.increment()
 
                 call.respond(HttpStatusCode.OK, SaveResultsResponse(publicId.id, "/tests/${publicId.id}"))
             } else {
