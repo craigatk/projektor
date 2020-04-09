@@ -21,6 +21,7 @@ class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseR
                 val resultSet = selectTestCase()
                         .where(Tables.TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
                                 .and(Tables.TEST_CASE.PASSED.eq(false)))
+                        .orderBy(Tables.TEST_CASE.ID)
                         .fetchResultSet()
 
                 resultSet.use { testCaseMapper.stream(it).toList() }
@@ -43,6 +44,7 @@ class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseR
                         .where(Tables.TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
                                 .and(Tables.TEST_SUITE.IDX.eq(testSuiteIdx))
                                 .and(Tables.TEST_CASE.IDX.eq(testCaseIdx)))
+                        .orderBy(Tables.TEST_CASE.ID)
                         .fetchResultSet()
 
                 val testCase: TestCase? = resultSet.use {

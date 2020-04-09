@@ -113,6 +113,7 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
                         .leftOuterJoin(TEST_SUITE).on(TEST_SUITE.TEST_RUN_ID.eq(TEST_RUN.ID))
                         .leftOuterJoin(TEST_SUITE_GROUP).on(TEST_SUITE.TEST_SUITE_GROUP_ID.eq(TEST_SUITE_GROUP.ID))
                         .where(TEST_RUN.PUBLIC_ID.eq(publicId.id))
+                        .orderBy(TEST_RUN.ID)
                         .fetchResultSet()
 
                 val testRun: TestRun? = resultSet.use {

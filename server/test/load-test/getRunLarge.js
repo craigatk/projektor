@@ -3,7 +3,7 @@ import { check, group, sleep } from "k6";
 
 export let options = {
     stages: [
-        { duration: "120s", target: 50 }
+        { duration: "60s", target: 50 }
     ],
     setupTimeout: "30s"
 };
