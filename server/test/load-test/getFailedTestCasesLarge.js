@@ -1,5 +1,7 @@
 import http from 'k6/http';
-import { check, sleep } from "k6";
+import { check } from "k6";
+import { createGroupedResultsPayload } from './resultsPayload.js'
+import { createSetup } from './groupedResultsSetup.js'
 
 export let options = {
     stages: [
@@ -8,40 +10,9 @@ export let options = {
     setupTimeout: "30s"
 };
 
-const failingSpecResultsXml = open('../test-fixtures/src/main/resources/TEST-projektor.example.spock.FailingSpec.xml');
-const passingSpecResultsXml = open('../test-fixtures/src/main/resources/TEST-projektor.example.spock.PassingSpec.xml');
+const resultsPayload = createGroupedResultsPayload(100)
 
-const resultsPayload = JSON.stringify({
-    groupedTestSuites: [
-        {
-            groupName: "group1",
-            testSuitesBlob: [...Array(100).keys()].map(() => failingSpecResultsXml).join("\n")
-        },
-        {
-            groupName: "group2",
-            testSuitesBlob: [...Array(100).keys()].map(() => passingSpecResultsXml).join("\n")
-        }
-    ]
-});
-
-const resultsParams = {headers: {"Content-Type": "application/json"}};
-
-export function setup() {
-    const resultsResponse = http.post(
-        `http://localhost:8080/groupedResults/`,
-        resultsPayload,
-        resultsParams
-    );
-
-    const testId = JSON.parse(resultsResponse.body).id
-
-    console.log("Test ID: " + testId)
-
-    console.log("Sleeping for a bit while test run is saved")
-    sleep(10)
-
-    return { testId: testId }
-}
+export const setup = createSetup(resultsPayload, 10)
 
 const getParams = {headers: {"Accept-Encoding": "gzip"}};
 

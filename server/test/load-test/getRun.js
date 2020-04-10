@@ -1,5 +1,7 @@
 import http from 'k6/http';
-import { check, group, sleep } from "k6";
+import { check, group } from "k6";
+import { createGroupedResultsPayload } from './resultsPayload.js'
+import {createSetup} from "./groupedResultsSetup.js";
 
 export let options = {
     stages: [
@@ -7,40 +9,9 @@ export let options = {
     ]
 };
 
-const failingSpecResultsXml = open('../test-fixtures/src/main/resources/TEST-projektor.example.spock.FailingSpec.xml');
-const passingSpecResultsXml = open('../test-fixtures/src/main/resources/TEST-projektor.example.spock.PassingSpec.xml');
+const resultsPayload = createGroupedResultsPayload(1)
 
-const resultsPayload = JSON.stringify({
-    groupedTestSuites: [
-        {
-            groupName: "group1",
-            testSuitesBlob: failingSpecResultsXml
-        },
-        {
-            groupName: "group2",
-            testSuitesBlob: passingSpecResultsXml
-        }
-    ]
-});
-
-const resultsParams = {headers: {"Content-Type": "application/json"}};
-
-export function setup() {
-    const resultsResponse = http.post(
-        `http://localhost:8080/groupedResults/`,
-        resultsPayload,
-        resultsParams
-    );
-
-    const testId = JSON.parse(resultsResponse.body).id
-
-    console.log("Test ID: " + testId)
-
-    console.log("Sleeping for a bit while test run is saved")
-    sleep(5)
-
-    return { testId: testId }
-}
+export const setup = createSetup(resultsPayload, 5)
 
 export default function (data) {
     const testId = data.testId;
