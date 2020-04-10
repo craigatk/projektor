@@ -1,6 +1,7 @@
 import http from 'k6/http';
 import {check} from "k6";
 import { createGroupedResultsPayload, resultsParams } from './resultsPayload.js'
+import { statusCheck200 } from "./statusCheck.js";
 
 export let options = {
     stages: [
@@ -17,7 +18,5 @@ export default function () {
         resultsParams
     );
 
-    check(response, {
-        "status is 200": (r) => r.status === 200
-    });
+    check(response, statusCheck200);
 };
