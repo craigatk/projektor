@@ -19,7 +19,7 @@
   "dependencies": {
     "axios": "0.19.2",
     "glob": "7.1.4",
-    "minimist": "1.2.2"
+    "minimist": "1.2.5"
   },
   "devDependencies": {
     "axios-mock-adapter": "1.17.0",
