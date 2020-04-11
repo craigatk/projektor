@@ -5,13 +5,16 @@ const { run } = require("../index");
 
 describe("node script index", () => {
   let mockAxios;
+  let consoleError;
 
   beforeEach(() => {
     mockAxios = new MockAdapter(axios);
+    consoleError = jest.spyOn(console, "error").mockImplementation();
   });
 
   afterEach(() => {
     mockAxios.restore();
+    consoleError.mockRestore();
   });
 
   it("should use settings from projektor.json if there is one", async () => {
@@ -52,5 +55,17 @@ describe("node script index", () => {
       expect(postData).toContain("resultsDir1-results1");
       expect(postData).toContain("resultsDir1-results2");
     });
+  });
+
+  it("should log error when no results dirs specified", () => {
+    run(
+      ["--configFile=src/__tests__/projektor.missing.results.json"],
+      null,
+      "projektor.fake.json"
+    );
+
+    expect(consoleError).toHaveBeenLastCalledWith(
+      expect.stringContaining("Results files not configured")
+    );
   });
 });

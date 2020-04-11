@@ -24,12 +24,18 @@ function run(args, publishToken, defaultConfigFilePath) {
     }
   }
 
-  collectAndSendResults(
-    serverUrl,
-    publishToken,
-    resultsFileGlobs,
-    attachmentFileGlobs
-  );
+  if (resultsFileGlobs) {
+    collectAndSendResults(
+      serverUrl,
+      publishToken,
+      resultsFileGlobs,
+      attachmentFileGlobs
+    );
+  } else {
+    console.error(
+      `Results files not configured, please specify them either on the command line or in the ${configFilePath} config file`
+    );
+  }
 }
 
 module.exports = {
