@@ -1,19 +1,19 @@
 import http from 'k6/http';
 import { check } from "k6";
-import { createGroupedResultsPayload } from './resultsPayload.js'
-import { createSetup } from './groupedResultsSetup.js'
-import { statusCheck200 } from "./statusCheck.js";
+import { createGroupedResultsPayload } from './util/resultsPayload.js'
+import { createSetup } from './util/groupedResultsSetup.js'
+import { statusCheck200 } from "./util/statusCheck.js";
 
 export let options = {
     stages: [
-        { duration: "60s", target: 50 }
+        { duration: "180s", target: 50 }
     ],
     setupTimeout: "30s"
 };
 
-const resultsPayload = createGroupedResultsPayload(100)
+const resultsPayload = createGroupedResultsPayload(20)
 
-export const setup = createSetup(resultsPayload, 10)
+export const setup = createSetup(resultsPayload, 5)
 
 const getParams = {headers: {"Accept-Encoding": "gzip"}};
 

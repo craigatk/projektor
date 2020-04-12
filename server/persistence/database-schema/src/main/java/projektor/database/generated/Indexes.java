@@ -12,6 +12,7 @@ import org.jooq.impl.Internal;
 
 import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.TestCase;
+import projektor.database.generated.tables.TestFailure;
 import projektor.database.generated.tables.TestRun;
 import projektor.database.generated.tables.TestRunAttachment;
 import projektor.database.generated.tables.TestSuite;
@@ -38,9 +39,12 @@ public class Indexes {
     public static final Index IDX_TEST_CASE_DURATION = Indexes0.IDX_TEST_CASE_DURATION;
     public static final Index IDX_TEST_CASE_IDX = Indexes0.IDX_TEST_CASE_IDX;
     public static final Index IDX_TEST_CASE_PASSED = Indexes0.IDX_TEST_CASE_PASSED;
+    public static final Index IDX_TEST_CASE_TEST_SUITE_ID = Indexes0.IDX_TEST_CASE_TEST_SUITE_ID;
+    public static final Index IDX_TEST_FAILURE_TEST_CASE_ID = Indexes0.IDX_TEST_FAILURE_TEST_CASE_ID;
     public static final Index IDX_TEST_RUN_PUBLIC_ID = Indexes0.IDX_TEST_RUN_PUBLIC_ID;
     public static final Index IDX_ATTACHMENT_TEST_RUN_ID = Indexes0.IDX_ATTACHMENT_TEST_RUN_ID;
     public static final Index IDX_TEST_SUITE_IDX = Indexes0.IDX_TEST_SUITE_IDX;
+    public static final Index IDX_TEST_SUITE_TEST_RUN_ID = Indexes0.IDX_TEST_SUITE_TEST_RUN_ID;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -51,8 +55,11 @@ public class Indexes {
         public static Index IDX_TEST_CASE_DURATION = Internal.createIndex("idx_test_case_duration", TestCase.TEST_CASE, new OrderField[] { TestCase.TEST_CASE.DURATION }, false);
         public static Index IDX_TEST_CASE_IDX = Internal.createIndex("idx_test_case_idx", TestCase.TEST_CASE, new OrderField[] { TestCase.TEST_CASE.IDX }, false);
         public static Index IDX_TEST_CASE_PASSED = Internal.createIndex("idx_test_case_passed", TestCase.TEST_CASE, new OrderField[] { TestCase.TEST_CASE.PASSED }, false);
+        public static Index IDX_TEST_CASE_TEST_SUITE_ID = Internal.createIndex("idx_test_case_test_suite_id", TestCase.TEST_CASE, new OrderField[] { TestCase.TEST_CASE.TEST_SUITE_ID }, false);
+        public static Index IDX_TEST_FAILURE_TEST_CASE_ID = Internal.createIndex("idx_test_failure_test_case_id", TestFailure.TEST_FAILURE, new OrderField[] { TestFailure.TEST_FAILURE.TEST_CASE_ID }, false);
         public static Index IDX_TEST_RUN_PUBLIC_ID = Internal.createIndex("idx_test_run_public_id", TestRun.TEST_RUN, new OrderField[] { TestRun.TEST_RUN.PUBLIC_ID }, false);
         public static Index IDX_ATTACHMENT_TEST_RUN_ID = Internal.createIndex("idx_attachment_test_run_id", TestRunAttachment.TEST_RUN_ATTACHMENT, new OrderField[] { TestRunAttachment.TEST_RUN_ATTACHMENT.TEST_RUN_PUBLIC_ID }, false);
         public static Index IDX_TEST_SUITE_IDX = Internal.createIndex("idx_test_suite_idx", TestSuite.TEST_SUITE, new OrderField[] { TestSuite.TEST_SUITE.IDX }, false);
+        public static Index IDX_TEST_SUITE_TEST_RUN_ID = Internal.createIndex("idx_test_suite_test_run_id", TestSuite.TEST_SUITE, new OrderField[] { TestSuite.TEST_SUITE.TEST_RUN_ID }, false);
     }
 }

@@ -1,8 +1,8 @@
 import http from 'k6/http';
 import { check, group } from "k6";
-import { createGroupedResultsPayload } from './resultsPayload.js'
-import { createSetup } from "./groupedResultsSetup.js";
-import { statusCheck200 } from "./statusCheck.js";
+import { createGroupedResultsPayload } from './util/resultsPayload.js'
+import { createSetup } from "./util/groupedResultsSetup.js";
+import { statusCheck200 } from "./util/statusCheck.js";
 
 export let options = {
     stages: [
