@@ -12,6 +12,7 @@ import javax.annotation.processing.Generated;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Identity;
+import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row5;
@@ -23,6 +24,7 @@ import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
+import projektor.database.generated.Indexes;
 import projektor.database.generated.Keys;
 import projektor.database.generated.Public;
 import projektor.database.generated.tables.records.TestFailureRecord;
@@ -41,7 +43,7 @@ import projektor.database.generated.tables.records.TestFailureRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestFailure extends TableImpl<TestFailureRecord> {
 
-    private static final long serialVersionUID = -396928462;
+    private static final long serialVersionUID = -1850154028;
 
     /**
      * The reference instance of <code>public.test_failure</code>
@@ -117,6 +119,11 @@ public class TestFailure extends TableImpl<TestFailureRecord> {
     @Override
     public Schema getSchema() {
         return Public.PUBLIC;
+    }
+
+    @Override
+    public List<Index> getIndexes() {
+        return Arrays.<Index>asList(Indexes.IDX_TEST_FAILURE_TEST_CASE_ID);
     }
 
     @Override

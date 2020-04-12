@@ -44,7 +44,7 @@ import projektor.database.generated.tables.records.TestCaseRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestCase extends TableImpl<TestCaseRecord> {
 
-    private static final long serialVersionUID = -540716367;
+    private static final long serialVersionUID = -1039994236;
 
     /**
      * The reference instance of <code>public.test_case</code>
@@ -144,7 +144,7 @@ public class TestCase extends TableImpl<TestCaseRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_TEST_CASE_DURATION, Indexes.IDX_TEST_CASE_IDX, Indexes.IDX_TEST_CASE_PASSED);
+        return Arrays.<Index>asList(Indexes.IDX_TEST_CASE_DURATION, Indexes.IDX_TEST_CASE_IDX, Indexes.IDX_TEST_CASE_PASSED, Indexes.IDX_TEST_CASE_TEST_SUITE_ID);
     }
 
     @Override

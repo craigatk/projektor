@@ -5,6 +5,10 @@
         </encoder>
     </appender>
 
+    <Logger name="org.jooq" level="info">
+        <AppenderRef ref="Console"/>
+    </Logger>
+
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>

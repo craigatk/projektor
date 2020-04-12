@@ -1,6 +1,6 @@
 import http from 'k6/http';
 import { check } from "k6";
-import { statusCheck200 } from "./statusCheck.js";
+import { statusCheck200 } from "./util/statusCheck.js";
 
 export let options = {
     stages: [
