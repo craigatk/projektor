@@ -19,12 +19,16 @@ fun createRegistry(config: InfluxMetricsConfig): InfluxMeterRegistry {
         }
 
         override fun get(k: String): String? {
-            return when (k) {
+            val value = when (k) {
                 "influx.autoCreateDb" -> config.autoCreateDb.toString()
                 "influx.enabled" -> config.enabled.toString()
                 "influx.uri" -> config.uri
+                "influx.userName" -> config.username
+                "influx.password" -> config.password
                 else -> null
             }
+
+            return value
         }
     }
 

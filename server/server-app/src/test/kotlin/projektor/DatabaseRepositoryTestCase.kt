@@ -54,7 +54,15 @@ open class DatabaseRepositoryTestCase : KoinTest {
 
         dslContext = DSL.using(dataSource, SQLDialect.POSTGRES)
 
-        val metricsConfig = InfluxMetricsConfig(false, "", "", false, 10)
+        val metricsConfig = InfluxMetricsConfig(
+                false,
+                "",
+                "",
+                null,
+                null,
+                false,
+                10
+        )
 
         startKoin {
             modules(createAppModule(dataSource, AuthConfig(null), dslContext, createRegistry(metricsConfig)))
