@@ -22,6 +22,10 @@ class MetricsApplicationTest : ApplicationTestCase() {
     @BeforeEach
     fun start() {
         wireMockServer.start()
+        wireMockServer.resetAll()
+
+        wireMockServer.stubFor(post(urlMatching("/query.*")).willReturn(aResponse().withStatus(200)))
+        wireMockServer.stubFor(post(urlMatching("/write.*")).willReturn(aResponse().withStatus(200)))
     }
 
     @AfterEach
@@ -36,8 +40,27 @@ class MetricsApplicationTest : ApplicationTestCase() {
 
         val publicId = randomPublicId()
 
-        wireMockServer.stubFor(post(urlMatching("/query.*")).willReturn(aResponse().withStatus(200)))
-        wireMockServer.stubFor(post(urlMatching("/write.*")).willReturn(aResponse().withStatus(200)))
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Get, "/run/$publicId") {
+                testRunDBGenerator.createTestRun(
+                        publicId,
+                        listOf()
+                )
+            }.apply {
+                await until { findCreateMetricsDatabaseRequests().size > 0 }
+                await until { findWriteMetricsRequests().size > 0 }
+            }
+        }
+    }
+
+    @Test
+    fun `when metrics enabled with auth should publish to InfluxDB`() {
+        metricsEnabled = true
+        metricsUsername = "metricsuser"
+        metricsPassword = "metricspass"
+        metricsPort = 8095
+
+        val publicId = randomPublicId()
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId") {
@@ -46,13 +69,15 @@ class MetricsApplicationTest : ApplicationTestCase() {
                         listOf()
                 )
             }.apply {
-
-                await until {
-                    val createMetricsDatabaseRequests = wireMockServer.findAll(postRequestedFor(urlMatching("/query.*")))
-
-                    createMetricsDatabaseRequests.size > 0
-                }
+                await until { findCreateMetricsDatabaseRequests().size > 0 }
+                await until { findWriteMetricsRequests().size > 0 }
             }
         }
     }
+
+    private fun findCreateMetricsDatabaseRequests() =
+            wireMockServer.findAll(postRequestedFor(urlMatching("/query.*")))
+
+    private fun findWriteMetricsRequests() =
+            wireMockServer.findAll(postRequestedFor(urlMatching("/write.*")))
 }

@@ -56,6 +56,8 @@ open class ApplicationTestCase {
 
     protected var metricsEnabled: Boolean? = null
     protected var metricsPort: Int = 0
+    protected var metricsUsername: String? = null
+    protected var metricsPassword: String? = null
 
     fun createTestApplication(application: Application) {
         val schema = databaseSchema
@@ -87,6 +89,9 @@ open class ApplicationTestCase {
                 put("ktor.metrics.influxdb.uri", "http://localhost:$metricsPort")
                 put("ktor.metrics.influxdb.autoCreateDb", "true")
                 put("ktor.metrics.influxdb.interval", "1")
+
+                metricsUsername?.let { username -> put("ktor.metrics.influxdb.username", username) }
+                metricsPassword?.let { password -> put("ktor.metrics.influxdb.password", password) }
             }
         }
 
