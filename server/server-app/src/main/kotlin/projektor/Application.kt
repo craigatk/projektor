@@ -90,6 +90,7 @@ fun Application.main() {
     install(Compression) {
         gzip {
             matchContentType(ContentType.Application.Json, ContentType.Application.JavaScript)
+            minimumSize(1024)
         }
     }
 
