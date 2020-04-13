@@ -85,6 +85,12 @@ fun Application.main() {
     if (influxMetricsConfig.enabled) {
         install(MicrometerMetrics) {
             registry = metricRegistry
+
+            influxMetricsConfig.environment?.let { metricsEnv ->
+                timers { _, _ ->
+                    this.tag("env", metricsEnv)
+                }
+            }
         }
     }
     install(Compression) {

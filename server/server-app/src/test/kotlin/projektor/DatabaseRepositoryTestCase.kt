@@ -61,7 +61,8 @@ open class DatabaseRepositoryTestCase : KoinTest {
                 null,
                 null,
                 false,
-                10
+                10,
+                "test"
         )
 
         startKoin {
