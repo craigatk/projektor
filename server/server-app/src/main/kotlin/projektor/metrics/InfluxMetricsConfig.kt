@@ -11,7 +11,8 @@ data class InfluxMetricsConfig(
     val username: String?,
     val password: String?,
     val autoCreateDb: Boolean,
-    val interval: Long
+    val interval: Long,
+    val environment: String?
 ) {
     companion object {
         fun createInfluxMetricsConfig(applicationConfig: ApplicationConfig) = InfluxMetricsConfig(
@@ -21,7 +22,8 @@ data class InfluxMetricsConfig(
                 applicationConfig.propertyOrNull("ktor.metrics.influxdb.username")?.getString(),
                 applicationConfig.propertyOrNull("ktor.metrics.influxdb.password")?.getString(),
                 applicationConfig.propertyOrNull("ktor.metrics.influxdb.autoCreateDb")?.getString()?.toBoolean() ?: false,
-                applicationConfig.propertyOrNull("ktor.metrics.influxdb.interval")?.getString()?.toLong() ?: 10
+                applicationConfig.propertyOrNull("ktor.metrics.influxdb.interval")?.getString()?.toLong() ?: 10,
+                applicationConfig.propertyOrNull("ktor.metrics.influxdb.environment")?.getString()
         )
     }
 }
