@@ -23,22 +23,19 @@ class GetTestRunCompressionApplicationTest : ApplicationTestCase() {
     fun `when gzip accept header included should compress test run response`() {
         val publicId = randomPublicId()
 
+        val testSuiteCount = 200
+
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId") {
                 testRunDBGenerator.createTestRun(
                         publicId,
-                        listOf(
-                                TestSuiteData("testSuite1",
-                                        listOf("testSuite1TestCase1", "testSuite1TestCase2"),
-                                        listOf(),
-                                        listOf()
-                                ),
-                                TestSuiteData("testSuite2",
-                                        listOf("testSuite2TestCase1", "testSuite2TestCase2", "testSuite2TestCase3"),
-                                        listOf(),
-                                        listOf()
-                                )
-                        )
+                        (1..testSuiteCount).map {
+                            TestSuiteData("reallyLongNameForTestSuite$it",
+                                    listOf("testSuite${it}TestCase1", "testSuite${it}TestCase2"),
+                                    listOf(),
+                                    listOf()
+                            )
+                        }
                 )
 
                 addHeader(HttpHeaders.AcceptEncoding, "gzip")
@@ -57,7 +54,42 @@ class GetTestRunCompressionApplicationTest : ApplicationTestCase() {
 
                 val testSuites = responseRun.testSuites
                 assertNotNull(testSuites)
-                expectThat(testSuites).hasSize(2)
+                expectThat(testSuites).hasSize(testSuiteCount)
+            }
+        }
+    }
+
+    @Test
+    fun `when gzip accept header included but request tiny should not compress test run response`() {
+        val publicId = randomPublicId()
+
+        val testSuiteCount = 2
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Get, "/run/$publicId") {
+                testRunDBGenerator.createTestRun(
+                        publicId,
+                        (1..testSuiteCount).map {
+                            TestSuiteData("shortTestSuite$it",
+                                    listOf("testSuite${it}TestCase1", "testSuite${it}TestCase2"),
+                                    listOf(),
+                                    listOf()
+                            )
+                        }
+                )
+
+                addHeader(HttpHeaders.AcceptEncoding, "gzip")
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+
+                val responseRun = objectMapper.readValue(response.content, TestRun::class.java)
+                assertNotNull(responseRun)
+
+                expectThat(responseRun.id).isEqualTo(publicId.id)
+
+                val testSuites = responseRun.testSuites
+                assertNotNull(testSuites)
+                expectThat(testSuites).hasSize(testSuiteCount)
             }
         }
     }
