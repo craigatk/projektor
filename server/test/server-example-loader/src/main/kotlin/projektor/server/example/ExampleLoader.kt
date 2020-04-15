@@ -31,6 +31,7 @@ fun loadAllExamples() {
             resultsXmlLoader.failingLongFailureMessage(),
             resultsXmlLoader.longOutput(),
             resultsXmlLoader.output(),
+            resultsXmlLoader.reallyLongOutput(),
             resultsXmlLoader.someIgnored(),
             resultsXmlLoader.someIgnoredSomeFailing()
     )
