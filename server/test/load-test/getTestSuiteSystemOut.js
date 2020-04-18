@@ -18,6 +18,6 @@ export const setup = createSetup(resultsPayload, 5)
 export default function (data) {
     const testId = data.testId;
 
-    const testSuiteResponse = http.get(`http://localhost:8080/run/${testId}/suite/1`);
-    check(testSuiteResponse, statusCheck200);
+    const testSuiteSystemOutResponse = http.get(`http://localhost:8080/run/${testId}/suite/1/systemOut`);
+    check(testSuiteSystemOutResponse, statusCheck200);
 };
