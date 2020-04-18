@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "600px",
     margin: "auto",
   },
+  errorMessage: {
+    whiteSpace: "pre-wrap",
+  },
 }));
 
 const TestResultsProcessingCheck = ({
@@ -104,7 +107,9 @@ const TestResultsProcessingCheck = ({
         data-testid="results-processing-failed"
       >
         <Typography>Error processing test results</Typography>
-        <pre>{resultsProcessing.errorMessage}</pre>
+        <pre className={classes.errorMessage}>
+          {resultsProcessing.errorMessage}
+        </pre>
       </Paper>
     );
   } else {

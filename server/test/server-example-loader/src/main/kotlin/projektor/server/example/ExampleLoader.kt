@@ -60,6 +60,11 @@ fun loadPassingGroupedExampleWithAttachments() {
     println("View run with passing grouped tests and attachments at at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
+fun loadInvalidExample() {
+    val resultsResponse = sendResultsToServer(ResultsXmlLoader().invalid())
+    println("View run with invalid results at at $uiBaseUrl${resultsResponse.uri}")
+}
+
 fun sendResultsToServer(resultXmlList: List<String>): SaveResultsResponse =
         resultXmlList.joinToString("\n").let(::sendResultsToServer)
 

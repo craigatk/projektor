@@ -6,4 +6,5 @@ fun main(args: Array<String>) {
     loadCypressExamples()
     loadPassingGroupedExample()
     loadPassingGroupedExampleWithAttachments()
+    loadInvalidExample()
 }
