@@ -13,6 +13,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.content.CachingOptions
 import io.ktor.jackson.jackson
 import io.ktor.metrics.micrometer.MicrometerMetrics
+import io.ktor.request.path
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
 import org.koin.Logger.SLF4JLogger
@@ -68,6 +69,8 @@ fun Application.main() {
     }
     install(CallLogging) {
         level = Level.INFO
+
+        filter { call -> !call.request.path().startsWith("/health") }
     }
     install(Koin) {
         SLF4JLogger()

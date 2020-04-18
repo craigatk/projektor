@@ -1,5 +1,6 @@
 package projektor
 
+import ch.qos.logback.classic.Logger
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
@@ -16,6 +17,7 @@ import org.awaitility.kotlin.until
 import org.jooq.DSLContext
 import org.junit.jupiter.api.AfterEach
 import org.koin.ktor.ext.get
+import org.slf4j.LoggerFactory
 import projektor.database.generated.tables.daos.*
 import projektor.parser.ResultsXmlLoader
 import projektor.server.api.PublicId
@@ -115,6 +117,13 @@ open class ApplicationTestCase {
 
     fun waitUntilTestRunHasAttachments(publicId: PublicId, attachmentCount: Int) {
         await until { attachmentDao.fetchByTestRunPublicId(publicId.id).size == attachmentCount }
+    }
+
+    fun getLogContents(): String {
+        val appLogger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as Logger
+        val testAppender = appLogger.getAppender("test-appender") as TestLogAppender
+
+        return testAppender.getLogContents()
     }
 
     @AfterEach
