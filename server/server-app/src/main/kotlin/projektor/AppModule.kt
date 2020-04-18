@@ -15,6 +15,7 @@ import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
 import projektor.incomingresults.processing.ResultsProcessingDatabaseRepository
 import projektor.incomingresults.processing.ResultsProcessingRepository
+import projektor.metrics.MetricsService
 import projektor.parser.grouped.GroupedResultsParser
 import projektor.results.processor.TestResultsProcessor
 import projektor.testcase.TestCaseDatabaseRepository
@@ -41,6 +42,7 @@ fun createAppModule(
     single { TestResultsProcessor() }
     single { dslContext }
     single { metricRegistry }
+    single { MetricsService(metricRegistry) }
     single { AuthService(authConfig) }
     single<TestCaseRepository> { TestCaseDatabaseRepository(get()) }
     single<TestSuiteRepository> { TestSuiteDatabaseRepository(get()) }
@@ -50,11 +52,11 @@ fun createAppModule(
     single<ResultsProcessingRepository> { ResultsProcessingDatabaseRepository(get()) }
     single { GroupedResultsParser() }
     single { GroupedResultsConverter(get(), get()) }
-    single { GroupedTestResultsService(get(), get(), get(), get()) }
+    single { GroupedTestResultsService(get(), get(), get(), get(), get()) }
     single { TestCaseService(get()) }
     single { TestSuiteService(get()) }
     single { TestResultsProcessingService(get()) }
-    single { TestResultsService(get(), get(), get()) }
+    single { TestResultsService(get(), get(), get(), get()) }
     single { TestRunService(get()) }
     single { TestRunSystemAttributesService(get()) }
 }
