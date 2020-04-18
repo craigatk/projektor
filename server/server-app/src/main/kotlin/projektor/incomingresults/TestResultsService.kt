@@ -2,6 +2,7 @@ package projektor.incomingresults
 
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
+import projektor.metrics.MetricsService
 import projektor.parser.model.TestSuite
 import projektor.results.processor.TestResultsProcessor
 import projektor.server.api.PublicId
@@ -11,7 +12,8 @@ import projektor.testrun.TestRunRepository
 class TestResultsService(
     private val testResultsProcessor: TestResultsProcessor,
     private val testRunRepository: TestRunRepository,
-    private val testResultsProcessingService: TestResultsProcessingService
+    private val testResultsProcessingService: TestResultsProcessingService,
+    private val metricsService: MetricsService
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
@@ -36,19 +38,18 @@ class TestResultsService(
             testRunRepository.saveTestRun(publicId, testSuites)
 
             testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.SUCCESS)
+
+            metricsService.incrementResultsProcessSuccessCounter()
         } catch (e: Exception) {
             val errorMessage = "Error persisting test results: ${e.message}"
-            handleException(publicId, resultsBlob, errorMessage, e)
+            logger.error(errorMessage, e)
+            testResultsProcessingService.recordResultsProcessingError(publicId, resultsBlob, errorMessage)
+            metricsService.incrementResultsProcessFailureCounter()
         }
     }
 
     private fun parseTestSuites(resultsBlob: String): List<TestSuite> {
         val parsedTestSuites = testResultsProcessor.parseResultsBlob(resultsBlob)
         return parsedTestSuites.filter { !it.testCases.isNullOrEmpty() }
-    }
-
-    private suspend fun handleException(publicId: PublicId, resultsBody: String, errorMessage: String, e: Exception) {
-        logger.error(errorMessage, e)
-        testResultsProcessingService.recordResultsProcessingError(publicId, resultsBody, errorMessage)
     }
 }
