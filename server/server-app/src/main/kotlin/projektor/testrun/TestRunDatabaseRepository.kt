@@ -1,5 +1,9 @@
 package projektor.testrun
 
+import java.sql.Timestamp
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.Configuration
@@ -146,4 +150,20 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
             }
         }
     }
+
+    override suspend fun findTestRunsToDelete(createdBefore: LocalDate): List<PublicId> =
+        withContext(Dispatchers.IO) {
+            val createdBeforeTimestamp = Timestamp.valueOf(LocalDateTime.of(createdBefore, LocalTime.MIDNIGHT))
+
+            dslContext
+                    .select(TEST_RUN.PUBLIC_ID)
+                    .from(TEST_RUN)
+                    .leftOuterJoin(TEST_RUN_SYSTEM_ATTRIBUTES).on(TEST_RUN_SYSTEM_ATTRIBUTES.TEST_RUN_PUBLIC_ID.eq(TEST_RUN.PUBLIC_ID))
+                    .where(TEST_RUN_SYSTEM_ATTRIBUTES.PINNED.isNull
+                            .or(TEST_RUN_SYSTEM_ATTRIBUTES.PINNED.isFalse)
+                            .and(TEST_RUN.CREATED_TIMESTAMP.lessOrEqual(createdBeforeTimestamp))
+                    )
+                    .fetchInto(String::class.java)
+                    .map { PublicId(it) }
+        }
 }

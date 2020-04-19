@@ -1,5 +1,6 @@
 package projektor.testrun
 
+import java.time.LocalDate
 import projektor.incomingresults.model.GroupedResults
 import projektor.parser.model.TestSuite
 import projektor.server.api.PublicId
@@ -16,4 +17,6 @@ interface TestRunRepository {
     suspend fun fetchTestRunSummary(publicId: PublicId): TestRunSummary?
 
     suspend fun deleteTestRun(publicId: PublicId)
+
+    suspend fun findTestRunsToDelete(createdBefore: LocalDate): List<PublicId>
 }
