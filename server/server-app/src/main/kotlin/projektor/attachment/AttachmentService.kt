@@ -58,6 +58,16 @@ class AttachmentService(
 
     suspend fun listAttachments(publicId: PublicId): List<Attachment> = attachmentRepository.listAttachments(publicId)
 
+    suspend fun deleteAttachments(publicId: PublicId) {
+        val attachments = listAttachments(publicId)
+
+        attachments.forEach { attachment ->
+            objectStoreClient.removeObject(config.bucketName, attachment.objectName)
+
+            attachmentRepository.deleteAttachment(publicId, attachment.objectName)
+        }
+    }
+
     companion object {
         fun attachmentObjectName(publicId: PublicId, attachmentFileName: String) = "${publicId.id}-$attachmentFileName"
     }

@@ -7,4 +7,6 @@ interface AttachmentRepository {
     suspend fun addAttachment(publicId: PublicId, attachment: Attachment)
 
     suspend fun listAttachments(publicId: PublicId): List<Attachment>
+
+    suspend fun deleteAttachment(publicId: PublicId, objectName: String)
 }
