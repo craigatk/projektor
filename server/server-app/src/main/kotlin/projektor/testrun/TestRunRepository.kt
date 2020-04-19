@@ -14,4 +14,6 @@ interface TestRunRepository {
     suspend fun fetchTestRun(publicId: PublicId): TestRun?
 
     suspend fun fetchTestRunSummary(publicId: PublicId): TestRunSummary?
+
+    suspend fun deleteTestRun(publicId: PublicId)
 }

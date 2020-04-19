@@ -70,6 +70,17 @@ class TestRunDBGenerator(
             testSuiteDao.update(testSuiteDB)
         }
     }
+
+    fun addTestSuiteGroupToTestRun(groupName: String, testRun: TestRunDB, testSuiteClassNames: List<String>): TestSuiteGroupDB {
+        val testSuiteGroup = TestSuiteGroupDB()
+        testSuiteGroup.testRunId = testRun.id
+        testSuiteGroup.groupName = "MyGroup2"
+        testSuiteGroupDao.insert(testSuiteGroup)
+
+        addTestSuiteGroupToTestRun(testSuiteGroup, testRun, testSuiteClassNames)
+
+        return testSuiteGroup
+    }
 }
 
 data class TestSuiteData(

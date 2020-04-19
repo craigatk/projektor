@@ -29,4 +29,14 @@ class AttachmentDatabaseRepository(private val dslContext: DSLContext) : Attachm
                         .where(Tables.TEST_RUN_ATTACHMENT.TEST_RUN_PUBLIC_ID.eq(publicId.id))
                         .fetchInto(Attachment::class.java)
             }
+
+    override suspend fun deleteAttachment(publicId: PublicId, objectName: String) {
+        withContext(Dispatchers.IO) {
+            dslContext
+                    .deleteFrom(Tables.TEST_RUN_ATTACHMENT)
+                    .where(Tables.TEST_RUN_ATTACHMENT.TEST_RUN_PUBLIC_ID.eq(publicId.id)
+                            .and(Tables.TEST_RUN_ATTACHMENT.OBJECT_NAME.eq(objectName)))
+                    .execute()
+        }
+    }
 }

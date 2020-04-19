@@ -7,6 +7,7 @@ import projektor.database.generated.tables.pojos.TestRunAttachment
 import projektor.incomingresults.randomPublicId
 import strikt.api.expectThat
 import strikt.assertions.any
+import strikt.assertions.get
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
@@ -54,5 +55,44 @@ class AttachmentDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val somePublicId = randomPublicId()
         val attachments = runBlocking { attachmentDatabaseRepository.listAttachments(somePublicId) }
         expectThat(attachments).hasSize(0)
+    }
+
+    @Test
+    fun `when test run has attachments should delete them`() {
+        val publicId = randomPublicId()
+        val attachmentDatabaseRepository = AttachmentDatabaseRepository(dslContext)
+
+        val attachment1 = TestRunAttachment()
+        attachment1.testRunPublicId = publicId.id
+        attachment1.objectName = "shouldNotDelete"
+        attachment1.fileName = "file1.txt"
+        attachmentDao.insert(attachment1)
+
+        val attachment2 = TestRunAttachment()
+        attachment2.testRunPublicId = publicId.id
+        attachment2.objectName = "shouldDelete"
+        attachment2.fileName = "file2.txt"
+        attachmentDao.insert(attachment2)
+
+        val anotherPublicId = randomPublicId()
+        val attachmentForAnotherTestRun = TestRunAttachment()
+        attachmentForAnotherTestRun.testRunPublicId = anotherPublicId.id
+        attachmentForAnotherTestRun.objectName = "shouldDelete"
+        attachmentForAnotherTestRun.fileName = "other.txt"
+        attachmentDao.insert(attachmentForAnotherTestRun)
+
+        runBlocking { attachmentDatabaseRepository.deleteAttachment(publicId, "shouldDelete") }
+
+        expectThat(attachmentDao.fetchByTestRunPublicId(publicId.id))
+                .hasSize(1)
+                .and {
+                    get(0).get { objectName }.isEqualTo("shouldNotDelete")
+                }
+
+        expectThat(attachmentDao.fetchByTestRunPublicId(anotherPublicId.id))
+                .hasSize(1)
+                .and {
+                    get(0).get { objectName }.isEqualTo("shouldDelete")
+                }
     }
 }

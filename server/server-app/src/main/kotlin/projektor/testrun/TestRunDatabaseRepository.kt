@@ -132,4 +132,18 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
                         .where(TEST_RUN.PUBLIC_ID.eq(publicId.id))
                         .fetchOneInto(TestRunSummary::class.java)
             }
+
+    override suspend fun deleteTestRun(publicId: PublicId) {
+        withContext(Dispatchers.IO) {
+            dslContext.transaction { configuration ->
+                val testRunDao = TestRunDao(configuration)
+
+                val testRun = testRunDao.fetchOneByPublicId(publicId.id)
+
+                testRun?.let {
+                    testRunDao.deleteById(testRun.id)
+                }
+            }
+        }
+    }
 }
