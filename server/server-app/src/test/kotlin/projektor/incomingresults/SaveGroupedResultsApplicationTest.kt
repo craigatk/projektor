@@ -8,9 +8,13 @@ import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
 import kotlin.test.assertNotNull
 import org.awaitility.kotlin.await
+import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
+import projektor.metrics.MetricsStubber
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
@@ -20,8 +24,23 @@ import strikt.assertions.isNotNull
 
 @KtorExperimentalAPI
 class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
+    private val metricsStubber = MetricsStubber()
+
+    @BeforeEach
+    fun start() {
+        metricsStubber.start()
+    }
+
+    @AfterEach
+    fun stop() {
+        metricsStubber.stop()
+    }
+
     @Test
     fun `should save grouped test results`() {
+        metricsEnabled = true
+        metricsPort = metricsStubber.port()
+
         val requestBody = GroupedResultsXmlLoader().passingGroupedResults()
 
         withTestApplication(::createTestApplication) {
@@ -56,6 +75,12 @@ class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
                 val testSuiteGroup2 = testSuiteGroups.find { it.groupName == "Group2" }
                 assertNotNull(testSuiteGroup2)
                 expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2.id)).hasSize(1)
+
+                await until { metricsStubber.findWriteMetricsRequestForCounterMetric("grouped_results_process_success", 1).isNotEmpty() }
+                await until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_success", 1).isNotEmpty() }
+
+                await until { metricsStubber.findWriteMetricsRequestForCounterMetric("grouped_results_process_failure", 0).isNotEmpty() }
+                await until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_failure", 0).isNotEmpty() }
             }
         }
     }

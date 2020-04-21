@@ -45,11 +45,11 @@ class GroupedTestResultsService(
 
             testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.SUCCESS)
 
-            recordFailedProcessMetrics()
+            recordSuccessfulProcessMetrics()
         } catch (e: Exception) {
             val errorMessage = "Error persisting test results: ${e.message}"
             handleException(publicId, groupedResultsBlob, errorMessage, e)
-            recordSuccessfulProcessMetrics()
+            recordFailedProcessMetrics()
         }
     }
 

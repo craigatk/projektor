@@ -74,7 +74,7 @@ class TestRunDBGenerator(
     fun addTestSuiteGroupToTestRun(groupName: String, testRun: TestRunDB, testSuiteClassNames: List<String>): TestSuiteGroupDB {
         val testSuiteGroup = TestSuiteGroupDB()
         testSuiteGroup.testRunId = testRun.id
-        testSuiteGroup.groupName = "MyGroup2"
+        testSuiteGroup.groupName = groupName
         testSuiteGroupDao.insert(testSuiteGroup)
 
         addTestSuiteGroupToTestRun(testSuiteGroup, testRun, testSuiteClassNames)
