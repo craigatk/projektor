@@ -6,17 +6,36 @@ import io.ktor.util.KtorExperimentalAPI
 import java.math.BigDecimal
 import kotlin.test.assertNotNull
 import org.awaitility.kotlin.await
+import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
+import projektor.metrics.MetricsStubber
 import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
 import strikt.assertions.*
 
 @KtorExperimentalAPI
 class SaveResultsApplicationTest : ApplicationTestCase() {
+    private val metricsStubber = MetricsStubber()
+
+    @BeforeEach
+    fun start() {
+        metricsStubber.start()
+    }
+
+    @AfterEach
+    fun stop() {
+        metricsStubber.stop()
+    }
+
     @Test
-    fun shouldParseRequestAndSaveResultsForPassingTest() {
+    fun `should parse request and save results for passing test`() {
+        metricsEnabled = true
+        metricsPort = metricsStubber.port()
+
         val requestBody = resultsXmlLoader.passing()
 
         withTestApplication(::createTestApplication) {
@@ -50,12 +69,15 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
 
                 val testFailures = testFailureDao.fetchByTestCaseId(testCases[0].id)
                 expectThat(testFailures).isEmpty()
+
+                await until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_success", 1).isNotEmpty() }
+                await until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_failure", 0).isNotEmpty() }
             }
         }
     }
 
     @Test
-    fun shouldParseRequestAndSaveResultsForFailingTest() {
+    fun `should parse request and save results for failing test`() {
         val requestBody = resultsXmlLoader.failing()
 
         withTestApplication(::createTestApplication) {
@@ -105,7 +127,7 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
     }
 
     @Test
-    fun shouldParseRequestAndSaveResultsForBothPassingAndFailingTests() {
+    fun `should parse request and save results for both passing and failing tests`() {
         val requestBody = listOf(resultsXmlLoader.passing(), resultsXmlLoader.failing()).joinToString("\n")
 
         withTestApplication(::createTestApplication) {
@@ -150,7 +172,7 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
     }
 
     @Test
-    fun shouldParseAndSaveResultsWithSystemOutAndSystemErr() {
+    fun `should parse and save results with system out and system err`() {
         val requestBody = resultsXmlLoader.output()
 
         withTestApplication(::createTestApplication) {
@@ -184,7 +206,7 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
     }
 
     @Test
-    fun shouldParseAndSaveResultsWithSomeSkippedTestCases() {
+    fun `should parse and save results with some skipped test cases`() {
         val requestBody = resultsXmlLoader.someIgnored()
 
         withTestApplication(::createTestApplication) {
@@ -221,7 +243,7 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
     }
 
     @Test
-    fun shouldFilterOutTestSuitesThatHaveNoTestCases() {
+    fun `should filter out test suites that have no test cases`() {
         val requestBody = resultsXmlLoader.cypressResults().joinToString("\n")
 
         withTestApplication(::createTestApplication) {
@@ -251,7 +273,7 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
     }
 
     @Test
-    fun whenMissingResultsShouldReturn400() {
+    fun `when missing results should return 400`() {
         val requestBody = ""
 
         withTestApplication(::createTestApplication) {
