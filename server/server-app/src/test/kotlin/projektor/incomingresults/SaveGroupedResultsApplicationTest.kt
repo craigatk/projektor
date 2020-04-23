@@ -6,7 +6,9 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
+import java.time.Duration
 import kotlin.test.assertNotNull
+import org.awaitility.Awaitility.waitAtMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
@@ -76,7 +78,7 @@ class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
                 assertNotNull(testSuiteGroup2)
                 expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2.id)).hasSize(1)
 
-                await until { metricsStubber.findWriteMetricsRequestForCounterMetric("grouped_results_process_success", 1).isNotEmpty() }
+                waitAtMost(Duration.ofSeconds(20)) until { metricsStubber.findWriteMetricsRequestForCounterMetric("grouped_results_process_success", 1).isNotEmpty() }
                 await until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_success", 1).isNotEmpty() }
 
                 await until { metricsStubber.findWriteMetricsRequestForCounterMetric("grouped_results_process_failure", 0).isNotEmpty() }

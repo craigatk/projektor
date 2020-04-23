@@ -15,7 +15,7 @@ fun Route.config(cleanupConfig: CleanupConfig) {
     get("/config") {
         call.respond(HttpStatusCode.OK, ServerConfig(
                 ServerCleanupConfig(
-                        cleanupConfig.maxReportAgeDays != null && cleanupConfig.maxReportAgeDays > 0,
+                        cleanupConfig.enabled,
                         cleanupConfig.maxReportAgeDays
                 )
         ))

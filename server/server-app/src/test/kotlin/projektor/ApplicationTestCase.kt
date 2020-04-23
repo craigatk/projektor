@@ -110,7 +110,7 @@ open class ApplicationTestCase {
         testRunSystemAttributesDao = TestRunSystemAttributesDao(dslContext.configuration())
         resultsProcessingDao = ResultsProcessingDao(dslContext.configuration())
         resultsProcessingFailureDao = ResultsProcessingFailureDao(dslContext.configuration())
-        testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao)
+        testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao, testRunSystemAttributesDao)
 
         this.application = application
     }

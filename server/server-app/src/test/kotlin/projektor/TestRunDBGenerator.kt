@@ -3,11 +3,14 @@ package projektor
 import java.math.BigDecimal
 import java.sql.Timestamp
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
 import projektor.database.generated.tables.daos.*
 import projektor.database.generated.tables.pojos.TestCase as TestCaseDB
 import projektor.database.generated.tables.pojos.TestFailure as TestFailureDB
 import projektor.database.generated.tables.pojos.TestRun as TestRunDB
+import projektor.database.generated.tables.pojos.TestRunSystemAttributes
 import projektor.database.generated.tables.pojos.TestSuite as TestSuiteDB
 import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 import projektor.incomingresults.mapper.parsePackageAndClassName
@@ -18,7 +21,8 @@ class TestRunDBGenerator(
     private val testSuiteGroupDao: TestSuiteGroupDao,
     private val testSuiteDao: TestSuiteDao,
     private val testCaseDao: TestCaseDao,
-    private val testFailureDao: TestFailureDao
+    private val testFailureDao: TestFailureDao,
+    private val testRunSystemAttributesDao: TestRunSystemAttributesDao
 ) {
     fun createTestRun(publicId: PublicId, testSuiteDataList: List<TestSuiteData>): TestRunDB {
         val testRun = createTestRun(publicId, testSuiteDataList.size)
@@ -58,6 +62,17 @@ class TestRunDBGenerator(
                 testCaseIdx += 1
             }
         }
+
+        return testRun
+    }
+
+    fun createTestRun(publicId: PublicId, createdOn: LocalDate, pinned: Boolean): TestRunDB {
+        val testRun = createTestRun(publicId, listOf())
+        testRun.createdTimestamp = Timestamp.from(createdOn.atStartOfDay(ZoneId.of("UTC")).toInstant())
+        testRunDao.update(testRun)
+
+        val testRunSystemAttributes = TestRunSystemAttributes(publicId.id, pinned)
+        testRunSystemAttributesDao.insert(testRunSystemAttributes)
 
         return testRun
     }

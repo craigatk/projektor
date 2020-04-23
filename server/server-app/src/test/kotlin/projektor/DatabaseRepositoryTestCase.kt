@@ -66,7 +66,12 @@ open class DatabaseRepositoryTestCase : KoinTest {
         )
 
         startKoin {
-            modules(createAppModule(dataSource, AuthConfig(null), dslContext, createRegistry(metricsConfig)))
+            modules(createAppModule(
+                    dataSource,
+                    AuthConfig(null),
+                    dslContext,
+                    createRegistry(metricsConfig)
+            ))
         }
 
         testRunDao = TestRunDao(dslContext.configuration())
@@ -79,7 +84,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
         attachmentDao = TestRunAttachmentDao(dslContext.configuration())
         testRunSystemAttributesDao = TestRunSystemAttributesDao(dslContext.configuration())
 
-        testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao)
+        testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao, testRunSystemAttributesDao)
     }
 
     @AfterEach

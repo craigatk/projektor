@@ -2,6 +2,7 @@ package projektor.cleanup
 
 import io.ktor.util.KtorExperimentalAPI
 import java.io.File
+import java.time.LocalDate
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.test.get
@@ -12,15 +13,18 @@ import projektor.attachment.AttachmentDatabaseRepository
 import projektor.attachment.AttachmentService
 import projektor.incomingresults.randomPublicId
 import strikt.api.expectThat
-import strikt.assertions.hasSize
-import strikt.assertions.isNull
+import strikt.assertions.*
 
 @KtorExperimentalAPI
 class CleanupServiceTest : DatabaseRepositoryTestCase() {
 
     @Test
     fun `should delete non-grouped test run without attachments`() {
-        val cleanupService = CleanupService(get(), null)
+        val cleanupService = CleanupService(
+                CleanupConfig(true, 30, false),
+                get(),
+                null
+        )
 
         val publicId = randomPublicId()
 
@@ -59,7 +63,11 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
 
     @Test
     fun `should delete grouped test run without attachments`() {
-        val cleanupService = CleanupService(get(), null)
+        val cleanupService = CleanupService(
+                CleanupConfig(true, 30, false),
+                get(),
+                null
+        )
 
         val publicId = randomPublicId()
 
@@ -116,7 +124,11 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
         val attachmentService = AttachmentService(attachmentsConfig, AttachmentDatabaseRepository(dslContext))
         attachmentService.conditionallyCreateBucketIfNotExists()
 
-        val cleanupService = CleanupService(get(), attachmentService)
+        val cleanupService = CleanupService(
+                CleanupConfig(true, 30, false),
+                get(),
+                attachmentService
+        )
 
         val publicId = randomPublicId()
 
@@ -162,5 +174,71 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
             val attachmentAfterCleanup = runBlocking { attachmentService.getAttachment(publicId, attachmentFileName) }
             expectThat(attachmentAfterCleanup).isNull()
         }
+    }
+
+    @Test
+    fun `should not delete any test runs when cleanup config not enabled`() {
+        val publicId = randomPublicId()
+        testRunDBGenerator.createTestRun(publicId, LocalDate.now().minusDays(10), false)
+
+        val cleanupConfig = CleanupConfig(false, null, false)
+
+        val cleanupService = CleanupService(cleanupConfig, get(), null)
+
+        val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
+
+        expectThat(cleanedUpTestRuns).hasSize(0)
+
+        expectThat(testRunDao.fetchOneByPublicId(publicId.id)).isNotNull()
+    }
+
+    @Test
+    fun `when cleanup enabled should delete test runs older than configured max age`() {
+        val testRunIdToDelete1 = randomPublicId()
+        testRunDBGenerator.createTestRun(testRunIdToDelete1, LocalDate.now().minusDays(31), false)
+
+        val testRunIdToDelete2 = randomPublicId()
+        testRunDBGenerator.createTestRun(testRunIdToDelete2, LocalDate.now().minusDays(45), false)
+
+        val tooNewTestRunId = randomPublicId()
+        testRunDBGenerator.createTestRun(tooNewTestRunId, LocalDate.now().minusDays(29), false)
+
+        val pinnedTestRunId = randomPublicId()
+        testRunDBGenerator.createTestRun(pinnedTestRunId, LocalDate.now().minusDays(31), true)
+
+        val cleanupConfig = CleanupConfig(true, 30, false)
+        val cleanupService = CleanupService(cleanupConfig, get(), null)
+
+        val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
+
+        expectThat(cleanedUpTestRuns)
+                .contains(testRunIdToDelete1, testRunIdToDelete2)
+                .doesNotContain(tooNewTestRunId, pinnedTestRunId)
+
+        expectThat(testRunDao.fetchOneByPublicId(testRunIdToDelete1.id)).isNull()
+        expectThat(testRunDao.fetchOneByPublicId(testRunIdToDelete2.id)).isNull()
+
+        expectThat(testRunDao.fetchOneByPublicId(tooNewTestRunId.id)).isNotNull()
+        expectThat(testRunDao.fetchOneByPublicId(pinnedTestRunId.id)).isNotNull()
+    }
+
+    @Test
+    fun `when cleanup dry run enabled should not actually delete anything`() {
+        val testRunIdTooOld1 = randomPublicId()
+        testRunDBGenerator.createTestRun(testRunIdTooOld1, LocalDate.now().minusDays(31), false)
+
+        val testRunIdTooOld2 = randomPublicId()
+        testRunDBGenerator.createTestRun(testRunIdTooOld2, LocalDate.now().minusDays(45), false)
+
+        val cleanupConfig = CleanupConfig(true, 30, true)
+        val cleanupService = CleanupService(cleanupConfig, get(), null)
+
+        val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
+
+        expectThat(cleanedUpTestRuns)
+                .contains(testRunIdTooOld1, testRunIdTooOld2)
+
+        expectThat(testRunDao.fetchOneByPublicId(testRunIdTooOld1.id)).isNotNull()
+        expectThat(testRunDao.fetchOneByPublicId(testRunIdTooOld2.id)).isNotNull()
     }
 }
