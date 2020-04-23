@@ -18,6 +18,8 @@ import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.metrics.MetricsService
 import projektor.parser.grouped.GroupedResultsParser
 import projektor.results.processor.TestResultsProcessor
+import projektor.schedule.Scheduler
+import projektor.schedule.SchedulerLock
 import projektor.testcase.TestCaseDatabaseRepository
 import projektor.testcase.TestCaseRepository
 import projektor.testcase.TestCaseService
@@ -59,4 +61,6 @@ fun createAppModule(
     single { TestResultsService(get(), get(), get(), get()) }
     single { TestRunService(get()) }
     single { TestRunSystemAttributesService(get()) }
+    single { SchedulerLock(dataSource) }
+    single { Scheduler(get()) }
 }

@@ -1,15 +1,11 @@
 package projektor.testrun.repository
 
-import java.sql.Timestamp
 import java.time.LocalDate
-import java.time.ZoneId
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
 import projektor.TestSuiteData
-import projektor.database.generated.tables.pojos.TestRunSystemAttributes
 import projektor.incomingresults.randomPublicId
-import projektor.server.api.PublicId
 import projektor.testrun.TestRunDatabaseRepository
 import strikt.api.expectThat
 import strikt.assertions.contains
@@ -61,30 +57,21 @@ class TestRunDatabaseRepositoryDeleteTest : DatabaseRepositoryTestCase() {
         val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
 
         val tooNewPublicId = randomPublicId()
-        createTestRun(tooNewPublicId, LocalDate.of(2020, 4, 1), false)
+        testRunDBGenerator.createTestRun(tooNewPublicId, LocalDate.of(2020, 4, 1), false)
 
         val pinnedPublicId = randomPublicId()
-        createTestRun(pinnedPublicId, LocalDate.of(2020, 2, 1), true)
+        testRunDBGenerator.createTestRun(pinnedPublicId, LocalDate.of(2020, 2, 1), true)
 
         val shouldDelete1PublicId = randomPublicId()
-        createTestRun(shouldDelete1PublicId, LocalDate.of(2020, 2, 1), false)
+        testRunDBGenerator.createTestRun(shouldDelete1PublicId, LocalDate.of(2020, 2, 1), false)
 
         val shouldDelete2PublicId = randomPublicId()
-        createTestRun(shouldDelete2PublicId, LocalDate.of(2020, 2, 1), false)
+        testRunDBGenerator.createTestRun(shouldDelete2PublicId, LocalDate.of(2020, 2, 1), false)
 
         val testRunsToDelete = runBlocking { testRunDatabaseRepository.findTestRunsToDelete(LocalDate.of(2020, 2, 2)) }
 
         expectThat(testRunsToDelete)
                 .contains(shouldDelete1PublicId, shouldDelete2PublicId)
                 .doesNotContain(tooNewPublicId, pinnedPublicId)
-    }
-
-    private fun createTestRun(publicId: PublicId, createdOn: LocalDate, pinned: Boolean) {
-        val testRun = testRunDBGenerator.createTestRun(publicId, listOf())
-        testRun.createdTimestamp = Timestamp.from(createdOn.atStartOfDay(ZoneId.of("UTC")).toInstant())
-        testRunDao.update(testRun)
-
-        val testRunSystemAttributes = TestRunSystemAttributes(publicId.id, pinned)
-        testRunSystemAttributesDao.insert(testRunSystemAttributes)
     }
 }

@@ -26,6 +26,8 @@ import projektor.attachment.AttachmentService
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
 import projektor.cleanup.CleanupConfig
+import projektor.cleanup.CleanupScheduledJob
+import projektor.cleanup.CleanupService
 import projektor.database.DataSourceConfig
 import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
@@ -33,7 +35,9 @@ import projektor.incomingresults.TestResultsService
 import projektor.metrics.InfluxMetricsConfig
 import projektor.metrics.createRegistry
 import projektor.route.*
+import projektor.schedule.Scheduler
 import projektor.testcase.TestCaseService
+import projektor.testrun.TestRunRepository
 import projektor.testrun.TestRunService
 import projektor.testrun.attributes.TestRunSystemAttributesService
 import projektor.testsuite.TestSuiteService
@@ -111,10 +115,15 @@ fun Application.main() {
     val testCaseService: TestCaseService by inject()
     val testSuiteService: TestSuiteService by inject()
     val testRunSystemAttributesService: TestRunSystemAttributesService by inject()
+    val testRunRepository: TestRunRepository by inject()
 
     val attachmentRepository: AttachmentRepository by inject()
     val attachmentService = conditionallyCreateAttachmentService(applicationConfig, attachmentRepository)
     attachmentService?.conditionallyCreateBucketIfNotExists()
+
+    val cleanupService = CleanupService(cleanupConfig, testRunRepository, attachmentService)
+    val scheduler: Scheduler by inject()
+    CleanupScheduledJob.conditionallyStartCleanupScheduledJob(cleanupConfig, cleanupService, scheduler)
 
     routing {
         attachments(attachmentService, authService)

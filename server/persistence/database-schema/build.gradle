@@ -40,7 +40,7 @@ jooq {
             }
             database {
                 name = 'org.jooq.meta.postgres.PostgresDatabase'
-                excludes = "flyway_schema_history"
+                excludes = "flyway_schema_history | shedlock"
                 inputSchema = "public"
             }
             generate {
