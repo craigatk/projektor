@@ -42,6 +42,7 @@ task startServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {
             "ATTACHMENT_BUCKET_NAME": "functionaltest",
             "ATTACHMENT_AUTO_CREATE_BUCKET": "true",
             "ATTACHMENT_ACCESS_KEY": "minio_access_key",
-            "ATTACHMENT_SECRET_KEY": "minio_secret_key"
+            "ATTACHMENT_SECRET_KEY": "minio_secret_key",
+            "MAX_REPORT_AGE_DAYS": "30"
     ]
 }

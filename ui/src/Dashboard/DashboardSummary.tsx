@@ -1,10 +1,11 @@
 import * as React from "react";
 import { TestRunSummary } from "../model/TestRunModel";
-import { Grid, Hidden } from "@material-ui/core";
+import { Grid, Hidden, List } from "@material-ui/core";
 import TestCountList from "../TestCount/TestCountList";
 import PageTitle from "../PageTitle";
 import TestRunDuration from "./TestRunDuration";
 import TestRunDate from "./TestRunDate";
+import TestRunCleanupDate from "./TestRunCleanupDate";
 
 interface DashboardSummaryProps {
   publicId: string;
@@ -58,7 +59,11 @@ const DashboardSummary = ({
           </Grid>
         </Hidden>
         <Grid item sm={4} xs={12}>
-          <TestRunDate createdTimestamp={createdTimestamp} />
+          <List dense={true}>
+            <TestRunDate createdTimestamp={createdTimestamp} />
+
+            <TestRunCleanupDate createdTimestamp={createdTimestamp} />
+          </List>
         </Grid>
       </Grid>
     </div>
