@@ -3,6 +3,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import SideMenu from "../SideMenu";
 import { TestRunSummary } from "../../model/TestRunModel";
+import { PinState } from "../../Pin/PinState";
 
 describe("SideMenu", () => {
   it("when attachments should show attachments link", () => {
@@ -20,11 +21,13 @@ describe("SideMenu", () => {
     } as TestRunSummary;
 
     const { queryByTestId } = render(
-      <SideMenu
-        publicId={publicId}
-        testRunSummary={testRunSummary}
-        hasAttachments={true}
-      />
+      <PinState publicId={publicId}>
+        <SideMenu
+          publicId={publicId}
+          testRunSummary={testRunSummary}
+          hasAttachments={true}
+        />
+      </PinState>
     );
 
     expect(queryByTestId("nav-link-attachments")).not.toBeNull();
@@ -45,11 +48,13 @@ describe("SideMenu", () => {
     } as TestRunSummary;
 
     const { queryByTestId } = render(
-      <SideMenu
-        publicId={publicId}
-        testRunSummary={testRunSummary}
-        hasAttachments={false}
-      />
+      <PinState publicId={publicId}>
+        <SideMenu
+          publicId={publicId}
+          testRunSummary={testRunSummary}
+          hasAttachments={false}
+        />
+      </PinState>
     );
 
     expect(queryByTestId("nav-link-attachments")).toBeNull();

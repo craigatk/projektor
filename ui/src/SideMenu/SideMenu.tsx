@@ -88,7 +88,7 @@ const SideMenu = ({
             linkTestId="nav-link-attachments"
           />
         ) : null}
-        <PinSideMenuItem publicId={publicId} />
+        <PinSideMenuItem />
       </List>
     </Drawer>
   );

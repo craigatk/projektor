@@ -13,6 +13,7 @@ import SideMenu from "../SideMenu/SideMenu";
 import SlowTestCasesPage from "../TestCase/slow/SlowTestCasesPage";
 import { AppBar, Typography } from "@material-ui/core";
 import AttachmentsPage from "../Attachments/AttachmentsPage";
+import { PinState } from "../Pin/PinState";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,45 +49,47 @@ const TestRunMenuWrapper = ({
 
   return (
     <div className={classes.root} data-testid="test-run-menu-wrapper">
-      <AppBar className={classes.appBar}>
-        <Typography variant="h6">Projektor</Typography>
-      </AppBar>
-      <SideMenu
-        publicId={publicId}
-        testRunSummary={testRunSummary}
-        hasAttachments={hasAttachments}
-      />
-      <main className={classes.content}>
-        <QueryParamProvider reachHistory={globalHistory}>
-          <Router>
-            <Dashboard
-              path="/"
-              publicId={publicId}
-              testRunSummary={testRunSummary}
-            />
-            <TestRunAllTests path="/all" publicId={publicId} />
-            <FailedTestCases path="/failed" publicId={publicId} />
-            <SlowTestCasesPage path="/slow" publicId={publicId} />
-            <TestSuitePage
-              path="/suite/:testSuiteIdx/*"
-              publicId={publicId}
-              testSuiteIdx={0}
-            />
-            <TestSuitePackagePage
-              path="/suites/package/:packageName"
-              publicId={publicId}
-              packageName="default"
-            />
-            <TestCasePage
-              path="/suite/:testSuiteIdx/case/:testCaseIdx/*"
-              publicId={publicId}
-              testSuiteIdx={0}
-              testCaseIdx={0}
-            />
-            <AttachmentsPage path="/attachments" publicId={publicId} />
-          </Router>
-        </QueryParamProvider>
-      </main>
+      <PinState publicId={publicId}>
+        <AppBar className={classes.appBar}>
+          <Typography variant="h6">Projektor</Typography>
+        </AppBar>
+        <SideMenu
+          publicId={publicId}
+          testRunSummary={testRunSummary}
+          hasAttachments={hasAttachments}
+        />
+        <main className={classes.content}>
+          <QueryParamProvider reachHistory={globalHistory}>
+            <Router>
+              <Dashboard
+                path="/"
+                publicId={publicId}
+                testRunSummary={testRunSummary}
+              />
+              <TestRunAllTests path="/all" publicId={publicId} />
+              <FailedTestCases path="/failed" publicId={publicId} />
+              <SlowTestCasesPage path="/slow" publicId={publicId} />
+              <TestSuitePage
+                path="/suite/:testSuiteIdx/*"
+                publicId={publicId}
+                testSuiteIdx={0}
+              />
+              <TestSuitePackagePage
+                path="/suites/package/:packageName"
+                publicId={publicId}
+                packageName="default"
+              />
+              <TestCasePage
+                path="/suite/:testSuiteIdx/case/:testCaseIdx/*"
+                publicId={publicId}
+                testSuiteIdx={0}
+                testCaseIdx={0}
+              />
+              <AttachmentsPage path="/attachments" publicId={publicId} />
+            </Router>
+          </QueryParamProvider>
+        </main>
+      </PinState>
     </div>
   );
 };
