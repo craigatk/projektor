@@ -76,6 +76,21 @@ task copyUI(type: Copy, dependsOn: ['cleanStaticResources', ':ui:assemble']) {
 processResources.mustRunAfter(copyUI)
 shadowJar.mustRunAfter(copyUI)
 
+task writeVersion() {
+    String projectVersion = findProperty("releaseVersion") ?: version
+
+    inputs.property("projectVersion", projectVersion)
+    outputs.file("src/main/resources/version.json")
+    outputs.cacheIf { true }
+
+    doLast {
+        new File("$projectDir/src/main/resources/version.json").text = """{
+  "version": "$projectVersion"
+}"""
+    }
+}
+processResources.dependsOn(writeVersion)
+
 runShadow.dependsOn(copyUI)
 
 task assembleFull(dependsOn: ['copyUI', 'shadowJar'])

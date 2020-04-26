@@ -1,3 +1,4 @@
 src/main/resources/static
+src/main/resources/version.json
 
 .kotlintest
