@@ -135,6 +135,7 @@ fun Application.main() {
         testRuns(testRunService)
         testRunSystemAttributes(testRunSystemAttributesService)
         ui()
+        version()
     }
 }
 
