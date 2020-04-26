@@ -38,17 +38,20 @@ class AttachmentService(
                 attachmentSizeInBytes.toBigDecimal() <= maxSizeInBytes
     }
 
-    suspend fun addAttachment(publicId: PublicId, fileName: String, attachmentStream: InputStream, attachmentSize: Long?) {
+    suspend fun addAttachment(publicId: PublicId, fileName: String, attachmentStream: InputStream, attachmentSize: Long?): AddAttachmentResult {
         val objectName = attachmentObjectName(publicId, fileName)
 
-        try {
+        return try {
             withContext(Dispatchers.IO) {
                 objectStoreClient.putObject(config.bucketName, objectName, attachmentStream)
             }
 
             attachmentRepository.addAttachment(publicId, Attachment(fileName = fileName, objectName = objectName, fileSize = attachmentSize))
+
+            AddAttachmentResult.Success
         } catch (e: Exception) {
             logger.error("Error saving attachment '$fileName' for test run ${publicId.id}", e)
+            AddAttachmentResult.Failure(e.message)
         }
     }
 

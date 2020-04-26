@@ -11,6 +11,7 @@ import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.getOrFail
+import projektor.attachment.AddAttachmentResult
 import projektor.attachment.AttachmentService
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
@@ -35,9 +36,12 @@ fun Route.attachments(
             call.respond(HttpStatusCode.Unauthorized)
         } else if (attachmentService != null) {
             if (attachmentService.attachmentSizeValid(contentLengthInBytes)) {
-                attachmentService.addAttachment(PublicId(publicId), attachmentName, attachmentStream, contentLengthInBytes)
+                val addAttachmentResult = attachmentService.addAttachment(PublicId(publicId), attachmentName, attachmentStream, contentLengthInBytes)
 
-                call.respond(HttpStatusCode.OK, AddAttachmentResponse(attachmentName, null))
+                when (addAttachmentResult) {
+                    AddAttachmentResult.Success -> call.respond(HttpStatusCode.OK, AddAttachmentResponse(attachmentName, null))
+                    is AddAttachmentResult.Failure -> call.respond(HttpStatusCode.BadRequest, AddAttachmentResponse(attachmentName, AddAttachmentError.ATTACHMENT_FAILED))
+                }
             } else {
                 call.respond(HttpStatusCode.BadRequest, AddAttachmentResponse(null, AddAttachmentError.ATTACHMENT_TOO_LARGE))
             }
