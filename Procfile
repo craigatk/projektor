@@ -1,1 +1,0 @@
-web: java -jar $JAVA_TOOL_OPTIONS server/server-app/build/libs/server-app-1.0-all.jar
