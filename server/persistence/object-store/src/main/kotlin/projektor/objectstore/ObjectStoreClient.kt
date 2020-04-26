@@ -9,12 +9,12 @@ class ObjectStoreClient(private val config: ObjectStoreConfig) {
     private val minioClient = MinioClient(config.url, config.accessKey, config.secretKey)
 
     fun createBucketIfNotExists(bucketName: String) {
-        if (!bucketExists(bucketName)) {
-            try {
+        try {
+            if (!bucketExists(bucketName)) {
                 minioClient.makeBucket(bucketName)
-            } catch (e: ErrorResponseException) {
-                throw BucketCreationException("Error creating bucket", e)
             }
+        } catch (e: ErrorResponseException) {
+            throw BucketCreationException("Error creating bucket", e)
         }
     }
 

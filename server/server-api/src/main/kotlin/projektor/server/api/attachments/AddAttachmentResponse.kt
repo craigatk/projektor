@@ -7,5 +7,6 @@ data class AddAttachmentResponse(
 
 enum class AddAttachmentError {
     ATTACHMENTS_DISABLED,
-    ATTACHMENT_TOO_LARGE
+    ATTACHMENT_TOO_LARGE,
+    ATTACHMENT_FAILED
 }

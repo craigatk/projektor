@@ -80,4 +80,25 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
             }
         }
     }
+
+    @Test
+    fun `when attachment access key wrong should return error when trying to add attachment`() {
+        val publicId = randomPublicId()
+        attachmentsEnabled = true
+        attachmentsAccessKey = "wrong_access_key"
+        attachmentsBucketName = "failtocreate"
+        attachemntsAutoCreateBucket = true
+
+        val attachmentBytes = File("src/test/resources/test-attachment.txt").readBytes()
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-attachment.txt") {
+
+                addHeader("content-length", attachmentBytes.size.toString())
+                setBody(attachmentBytes)
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.BadRequest)
+            }
+        }
+    }
 }
