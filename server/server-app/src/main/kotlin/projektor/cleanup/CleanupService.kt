@@ -5,13 +5,16 @@ import java.lang.Exception
 import java.time.LocalDate
 import org.slf4j.LoggerFactory
 import projektor.attachment.AttachmentService
+import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.server.api.PublicId
+import projektor.server.api.results.ResultsProcessingStatus
 import projektor.testrun.TestRunRepository
 
 @KtorExperimentalAPI
 class CleanupService(
     private val cleanupConfig: CleanupConfig,
     private val testRunRepository: TestRunRepository,
+    private val resultsProcessingRepository: ResultsProcessingRepository,
     private val attachmentService: AttachmentService?
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
@@ -40,6 +43,8 @@ class CleanupService(
         testRunRepository.deleteTestRun(publicId)
 
         attachmentService?.deleteAttachments(publicId)
+
+        resultsProcessingRepository.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.DELETED)
     }
 
     private suspend fun conditionallyCleanupTestRun(publicId: PublicId, cleanupConfig: CleanupConfig): PublicId? =

@@ -2,6 +2,8 @@ package projektor.cleanup
 
 import io.ktor.util.KtorExperimentalAPI
 import java.io.File
+import java.sql.Timestamp
+import java.time.Instant
 import java.time.LocalDate
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
@@ -11,7 +13,9 @@ import projektor.TestSuiteData
 import projektor.attachment.AttachmentConfig
 import projektor.attachment.AttachmentDatabaseRepository
 import projektor.attachment.AttachmentService
+import projektor.database.generated.tables.pojos.ResultsProcessing
 import projektor.incomingresults.randomPublicId
+import projektor.server.api.results.ResultsProcessingStatus
 import strikt.api.expectThat
 import strikt.assertions.*
 
@@ -22,6 +26,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
     fun `should delete non-grouped test run without attachments`() {
         val cleanupService = CleanupService(
                 CleanupConfig(true, 30, false),
+                get(),
                 get(),
                 null
         )
@@ -65,6 +70,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
     fun `should delete grouped test run without attachments`() {
         val cleanupService = CleanupService(
                 CleanupConfig(true, 30, false),
+                get(),
                 get(),
                 null
         )
@@ -111,6 +117,43 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
     }
 
     @Test
+    fun `should update processing status to 'deleted'`() {
+        val cleanupService = CleanupService(
+                CleanupConfig(true, 30, false),
+                get(),
+                get(),
+                null
+        )
+
+        val publicId = randomPublicId()
+
+        resultsProcessingDao.insert(ResultsProcessing()
+                .setPublicId(publicId.id)
+                .setCreatedTimestamp(Timestamp.from(Instant.now()))
+                .setStatus(ResultsProcessingStatus.SUCCESS.name)
+        )
+
+        testRunDBGenerator.createTestRun(publicId,
+                listOf(
+                        TestSuiteData(
+                                "testSuite1",
+                                listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
+                                listOf(),
+                                listOf()
+                        )
+                )
+        )
+
+        runBlocking { cleanupService.cleanupTestRun(publicId) }
+
+        expectThat(resultsProcessingDao.fetchOneByPublicId(publicId.id))
+                .isNotNull()
+                .and {
+                    get { status }.isEqualTo(ResultsProcessingStatus.DELETED.name)
+                }
+    }
+
+    @Test
     fun `should delete test run with attachments`() {
         val attachmentsConfig = AttachmentConfig(
                 "http://localhost:9000",
@@ -126,6 +169,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
 
         val cleanupService = CleanupService(
                 CleanupConfig(true, 30, false),
+                get(),
                 get(),
                 attachmentService
         )
@@ -183,7 +227,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
 
         val cleanupConfig = CleanupConfig(false, null, false)
 
-        val cleanupService = CleanupService(cleanupConfig, get(), null)
+        val cleanupService = CleanupService(cleanupConfig, get(), get(), null)
 
         val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
 
@@ -207,7 +251,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
         testRunDBGenerator.createTestRun(pinnedTestRunId, LocalDate.now().minusDays(31), true)
 
         val cleanupConfig = CleanupConfig(true, 30, false)
-        val cleanupService = CleanupService(cleanupConfig, get(), null)
+        val cleanupService = CleanupService(cleanupConfig, get(), get(), null)
 
         val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
 
@@ -231,7 +275,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
         testRunDBGenerator.createTestRun(testRunIdTooOld2, LocalDate.now().minusDays(45), false)
 
         val cleanupConfig = CleanupConfig(true, 30, true)
-        val cleanupService = CleanupService(cleanupConfig, get(), null)
+        val cleanupService = CleanupService(cleanupConfig, get(), get(), null)
 
         val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
 
