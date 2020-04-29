@@ -32,6 +32,7 @@ import projektor.database.DataSourceConfig
 import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
+import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.metrics.InfluxMetricsConfig
 import projektor.metrics.createRegistry
 import projektor.route.*
@@ -116,12 +117,13 @@ fun Application.main() {
     val testSuiteService: TestSuiteService by inject()
     val testRunSystemAttributesService: TestRunSystemAttributesService by inject()
     val testRunRepository: TestRunRepository by inject()
+    val resultsProcessingRepository: ResultsProcessingRepository by inject()
 
     val attachmentRepository: AttachmentRepository by inject()
     val attachmentService = conditionallyCreateAttachmentService(applicationConfig, attachmentRepository)
     attachmentService?.conditionallyCreateBucketIfNotExists()
 
-    val cleanupService = CleanupService(cleanupConfig, testRunRepository, attachmentService)
+    val cleanupService = CleanupService(cleanupConfig, testRunRepository, resultsProcessingRepository, attachmentService)
     val scheduler: Scheduler by inject()
     CleanupScheduledJob.conditionallyStartCleanupScheduledJob(cleanupConfig, cleanupService, scheduler)
 

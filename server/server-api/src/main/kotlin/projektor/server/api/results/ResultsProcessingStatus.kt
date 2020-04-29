@@ -4,5 +4,6 @@ enum class ResultsProcessingStatus {
     RECEIVED,
     PROCESSING,
     SUCCESS,
+    DELETED,
     ERROR
 }
