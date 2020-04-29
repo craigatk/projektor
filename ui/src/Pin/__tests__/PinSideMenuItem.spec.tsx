@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import MockAdapter from "axios-mock-adapter";
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import { axiosInstanceWithoutCache } from "../../service/AxiosService";
 import PinSideMenuItem from "../PinSideMenuItem";
 import {
@@ -98,7 +98,7 @@ describe("PinSideMenuItem", () => {
     await findByTestId("nav-link-pin");
   });
 
-  it("when cleanup not enabled should not display anything", () => {
+  it("when cleanup not enabled should not display anything", async () => {
     const cleanupConfig = {
       enabled: false,
     } as ServerCleanupConfig;
@@ -115,7 +115,7 @@ describe("PinSideMenuItem", () => {
       </PinState>
     );
 
-    expect(queryByTestId("nav-link-unpin")).toBeNull();
-    expect(queryByTestId("nav-link-pin")).toBeNull();
+    await waitFor(() => expect(queryByTestId("nav-link-unpin")).toBeNull());
+    await waitFor(() => expect(queryByTestId("nav-link-pin")).toBeNull());
   });
 });

@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import LoadingState from "./LoadingState";
 import { Paper, Typography } from "@material-ui/core";
+import CleanLink from "../Link/CleanLink";
 
 const useStyles = makeStyles((theme) => ({
   progress: {
@@ -24,6 +25,10 @@ interface LoadingSectionProps {
   errorComponent?: any;
 }
 
+const reloadPage = () => {
+  window.location.reload();
+};
+
 const LoadingSection = ({
   loadingState,
   successComponent,
@@ -40,7 +45,9 @@ const LoadingSection = ({
           <Paper elevation={1} className={classes.errorPaper}>
             <Typography>
               Error loading data from server. Please{" "}
-              <a href="javascript:window.location.reload()">refresh the page</a>{" "}
+              <CleanLink to="" onClick={reloadPage}>
+                refresh the page
+              </CleanLink>{" "}
               and try again.
             </Typography>
           </Paper>

@@ -71,6 +71,7 @@ enum TestResultsProcessingStatus {
   RECEIVED = "RECEIVED",
   PROCESSING = "PROCESSING",
   SUCCESS = "SUCCESS",
+  DELETED = "DELETED",
   ERROR = "ERROR",
 }
 

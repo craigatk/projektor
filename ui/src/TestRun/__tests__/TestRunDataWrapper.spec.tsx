@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import MockAdapter from "axios-mock-adapter";
-import { render, wait } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import { Attachments, TestRunSummary } from "../../model/TestRunModel";
 import {
   axiosInstance,
@@ -64,7 +64,7 @@ describe("TestRunDataWrapper", () => {
       <TestRunDataWrapper publicId={publicId} />
     );
 
-    await wait(() => getByTestId("test-run-menu-wrapper"));
+    await waitFor(() => getByTestId("test-run-menu-wrapper"));
 
     expect(queryByTestId("test-run-menu-wrapper")).not.toBeNull();
     expect(queryByTestId("loading-section-error")).toBeNull();
@@ -85,7 +85,7 @@ describe("TestRunDataWrapper", () => {
       <TestRunDataWrapper publicId={publicId} />
     );
 
-    await wait(() => getByTestId("results-still-processing"));
+    await waitFor(() => getByTestId("results-still-processing"));
 
     expect(queryByTestId("results-still-processing")).not.toBeNull();
     expect(queryByTestId("test-run-menu-wrapper")).toBeNull();
