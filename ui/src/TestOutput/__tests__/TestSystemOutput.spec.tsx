@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import MockAdapter from "axios-mock-adapter";
-import { render, wait } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import { TestSuiteOutput } from "../../model/TestRunModel";
 import { axiosInstance } from "../../service/AxiosService";
 import TestSuiteOutputType from "../../service/TestSuiteOutputType";
@@ -42,7 +42,7 @@ describe("TestSystemOut", () => {
       />
     );
 
-    await wait(() => getByTestId("code-text"));
+    await waitFor(() => getByTestId("code-text"));
 
     expect(queryByTestId("code-text")).not.toBeNull();
     expect(queryByTestId("loading-section-error")).toBeNull();
@@ -67,7 +67,7 @@ describe("TestSystemOut", () => {
       />
     );
 
-    await wait(() => getByTestId("loading-section-error"));
+    await waitFor(() => getByTestId("loading-section-error"));
 
     expect(queryByTestId("loading-section-error")).not.toBeNull();
     expect(queryByTestId("code-text")).toBeNull();

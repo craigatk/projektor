@@ -32,6 +32,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const resultsAreStillProcessing = (
+  processing: TestResultsProcessing
+): boolean => {
+  return (
+    !processing ||
+    processing.status === TestResultsProcessingStatus.RECEIVED ||
+    processing.status === TestResultsProcessingStatus.PROCESSING
+  );
+};
+
 const TestResultsProcessingCheck = ({
   publicId,
   processingSucceeded,
@@ -45,16 +55,6 @@ const TestResultsProcessingCheck = ({
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
     LoadingState.Loading
   );
-
-  const resultsAreStillProcessing = (
-    processing: TestResultsProcessing
-  ): boolean => {
-    return (
-      !processing ||
-      processing.status === TestResultsProcessingStatus.RECEIVED ||
-      processing.status === TestResultsProcessingStatus.PROCESSING
-    );
-  };
 
   const loadTestResultsProcessing = () => {
     fetchTestResultsProcessing(publicId)
@@ -82,6 +82,9 @@ const TestResultsProcessingCheck = ({
   const resultsProcessingFailed =
     resultsProcessing &&
     resultsProcessing.status === TestResultsProcessingStatus.ERROR;
+  const resultsDeleted =
+    resultsProcessing &&
+    resultsProcessing.status === TestResultsProcessingStatus.DELETED;
 
   if (resultsProcessingSuccessful) {
     processingSucceeded();
@@ -110,6 +113,16 @@ const TestResultsProcessingCheck = ({
         <pre className={classes.errorMessage}>
           {resultsProcessing.errorMessage}
         </pre>
+      </Paper>
+    );
+  } else if (resultsDeleted) {
+    return (
+      <Paper
+        elevation={2}
+        className={classes.paper}
+        data-testid="results-deleted"
+      >
+        <Typography>Test results cleaned up to save disk space</Typography>
       </Paper>
     );
   } else {

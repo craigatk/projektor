@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import MockAdapter from "axios-mock-adapter";
-import { render, getNodeText } from "@testing-library/react";
+import { render, getNodeText, waitFor } from "@testing-library/react";
 import { axiosInstanceWithoutCache } from "../../service/AxiosService";
 import TestRunCleanupDate from "../TestRunCleanupDate";
 import {
@@ -107,7 +107,7 @@ describe("TestRunCleanupDate", () => {
     await findByTestId("test-run-header-pin-link");
   });
 
-  it("when cleanup not enabled should not display anything", () => {
+  it("when cleanup not enabled should not display anything", async () => {
     const cleanupConfig = {
       enabled: false,
     } as ServerCleanupConfig;
@@ -126,7 +126,11 @@ describe("TestRunCleanupDate", () => {
       </PinState>
     );
 
-    expect(queryByTestId("test-run-header-unpin-link")).toBeNull();
-    expect(queryByTestId("test-run-header-pin-link")).toBeNull();
+    await waitFor(() =>
+      expect(queryByTestId("test-run-header-unpin-link")).toBeNull()
+    );
+    await waitFor(() =>
+      expect(queryByTestId("test-run-header-pin-link")).toBeNull()
+    );
   });
 });
