@@ -9,11 +9,11 @@
     "build:dev": "NODE_ENV=development parcel build --out-dir dev-dist src/index.html",
     "format": "prettier --write \"src/**/*.ts*\" \"src/**/*.spec.ts*\" \"cypress/fixtures/**/*.json\" \"cypress/**/*.js\"",
     "test": "jest",
-    "test:projektor": "yarn test || yarn projektor:jest",
+    "test:projektor:ci": "yarn test || yarn projektor-publish --configFile=projektor.jest.json",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "cy:test": "yarn clean-results && start-server-and-test start http://localhost:1234 cy:run",
-    "cy:test:projektor": "yarn cy:test || yarn projektor:cypress",
+    "cy:test:projektor:ci": "yarn cy:test || yarn projektor-publish --configFile=projektor.cypress.json",
     "projektor:cypress": "env-cmd -f ~/.env projektor-publish --configFile=projektor.cypress.json",
     "projektor:jest": "env-cmd -f ~/.env projektor-publish --configFile=projektor.jest.json",
     "clean-results": "rimraf test-results/*.xml"

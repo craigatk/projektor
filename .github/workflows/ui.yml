@@ -41,7 +41,7 @@ jobs:
         run: |
           cd ui
           yarn install
-          yarn test:projektor
+          yarn test:projektor:ci
 
   ui-cypress-test:
     runs-on: ubuntu-18.04
@@ -83,4 +83,4 @@ jobs:
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
         run: |
           cd ui
-          yarn cy:test:projektor
+          yarn cy:test:projektor:ci
