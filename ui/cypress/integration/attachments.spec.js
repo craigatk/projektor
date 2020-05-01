@@ -28,7 +28,7 @@ context("test run with attachments", () => {
 
     cy.getByTestId("attachment-file-name-test-attachment.txt").should(
       "contain",
-      "test-attachment.txt"
+      "test-attachment.txt1"
     );
     cy.getByTestId("attachment-file-size-test-attachment.txt").should(
       "contain",

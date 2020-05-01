@@ -25,7 +25,7 @@ describe("TestCaseDetails", () => {
     );
 
     expect(queryByTestId("test-case-tab-summary")).not.toBeNull();
-    expect(queryByTestId("test-case-tab-failure")).not.toBeNull();
+    expect(queryByTestId("test-case-tab-failure1")).not.toBeNull();
 
     expect(queryByTestId("test-case-tab-system-out")).toBeNull();
     expect(queryByTestId("test-case-tab-system-err")).toBeNull();
