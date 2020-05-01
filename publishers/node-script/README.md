@@ -58,3 +58,35 @@ For example, from the config file:
 Or from the command line: 
 
 `yarn projektor-publish --serverUrl=<projektor_url> --attachments="ui/cypress/screenshots/*.png" ui/cypress/*.xml`
+
+## Exit code when there is a test failure
+
+When running in CI systems it can be handy to combine the execution of tests like Cypress with
+the publishing of results to Projektor by using the "or" `||` operator.
+Then the results will be published even when the tests fail if the CI system would normally stop the build execution when the tests fail.
+
+For example, `yarn cy:run || yarn projektor-publish`
+
+A downside of this approach is that due to the `||` the exit code is `0` and the CI build won't stop after publishing the test results,
+as you'd probably want it to when tests fail.
+
+To support using this approach but stopping the CI build from proceeding if there is a test failure, you can use the `exitWithFailure` configuration flag.
+
+For example, if configuring Projektor via the command line: `yarn cy:run || yarn projektor-publish --serverUrl=<projektor_url> --exitWithFailure <file_globs>`
+
+Or in the configuration file:
+
+```
+{
+  "serverUrl": "<url>",
+  "results": [
+    "ui/test-results/*.xml"
+  ],
+  "exitWithFailure": true
+}
+```
+
+## Changelog
+
+* 2.2.0
+  * Added `exitWithFailure` configuration option

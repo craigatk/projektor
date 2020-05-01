@@ -10,6 +10,7 @@ describe("Publishing via CLI", () => {
       `yarn projektor-publish --serverUrl=http://localhost:${serverPort} results/*.xml`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
+        expect(error).toBeNull();
 
         const testRunId = extractTestRunId(stdout);
         console.log("Test ID", testRunId);
@@ -22,6 +23,19 @@ describe("Publishing via CLI", () => {
 
         expect(testRunSummaryResponse.data.id).toEqual(testRunId);
         expect(testRunSummaryResponse.data.total_test_count).toEqual(4);
+
+        done();
+      }
+    );
+  });
+
+  it("should exit with non-zero exit code when configured via CLI and there are failing tests", async (done) => {
+    exec(
+      `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --exitWithFailure results-failure/*.xml`,
+      async (error, stdout, stderr) => {
+        verifyOutput(error, stdout, stderr, serverPort);
+
+        expect(error.code).toBe(1);
 
         done();
       }

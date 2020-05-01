@@ -156,6 +156,8 @@ const collectAndSendResults = (
         );
       });
   }
+
+  return resultsBlob;
 };
 
 module.exports = {
