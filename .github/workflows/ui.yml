@@ -41,8 +41,7 @@ jobs:
         run: |
           cd ui
           yarn install
-          yarn test
-          yarn projektor-publish --configFile=projektor.jest.json
+          yarn test:projektor
 
   ui-cypress-test:
     runs-on: ubuntu-18.04
@@ -80,14 +79,8 @@ jobs:
           yarn install
 
       - name: UI Cypress run
-        run: |
-          cd ui
-          yarn cy:test
-
-      - name: Projektor publish
-        if: failure()
         env:
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
         run: |
           cd ui
-          yarn projektor-publish --configFile=projektor.cypress.json
+          yarn cy:test:projektor
