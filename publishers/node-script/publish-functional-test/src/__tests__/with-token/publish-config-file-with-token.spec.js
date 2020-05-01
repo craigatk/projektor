@@ -16,6 +16,7 @@ describe("Publishing from config file with token", () => {
       `env-cmd -f .token-env yarn projektor-publish --configFile=src/__tests__/with-token/projektor.json`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
+        expect(error).toBeNull();
 
         const testRunId = extractTestRunId(stdout);
         console.log("Test ID", testRunId);

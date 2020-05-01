@@ -16,6 +16,7 @@ describe("Publishing via CLI with token", () => {
       `env-cmd -f .token-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} results/*.xml`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
+        expect(error).toBeNull();
 
         const testRunId = extractTestRunId(stdout);
         console.log("Test ID", testRunId);
@@ -39,6 +40,7 @@ describe("Publishing via CLI with token", () => {
       `env-cmd -f .token-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} --attachments="attachments/*" results/*.xml`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
+        expect(error).toBeNull();
 
         const testRunId = extractTestRunId(stdout);
         console.log("Test ID", testRunId);

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="0" tests="1" failures="1">
+  <testsuite name="Root Suite" timestamp="2020-04-30T20:47:13" tests="0" file="cypress\integration\nav.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="side nav" timestamp="2020-04-30T20:47:13" tests="1" failures="1" time="0">
+    <testcase name="side nav should link to failed test cases" time="0" classname="should link to failed test cases">
+      <failure message="Timed out retrying: Not enough elements found. Found &apos;2&apos;, expected &apos;3&apos;." type="AssertionError"><![CDATA[AssertionError: Timed out retrying: Not enough elements found. Found '2', expected '3'.
+    at applyChainer (http://localhost:1234/__cypress/runner/cypress_runner.js:131707:32)
+    at http://localhost:1234/__cypress/runner/cypress_runner.js:131748:16
+    at arrayReduce (http://localhost:1234/__cypress/runner/cypress_runner.js:18403:21)
+    at Function.reduce (http://localhost:1234/__cypress/runner/cypress_runner.js:27401:14)
+    at applyChainers (http://localhost:1234/__cypress/runner/cypress_runner.js:131738:18)
+    at tryCatcher (http://localhost:1234/__cypress/runner/cypress_runner.js:9059:23)
+    at Function.Promise.attempt.Promise.try (http://localhost:1234/__cypress/runner/cypress_runner.js:6333:29)
+    at Context.shouldFn (http://localhost:1234/__cypress/runner/cypress_runner.js:131752:23)
+    at Context.should (http://localhost:1234/__cypress/runner/cypress_runner.js:131767:23)
+    at http://localhost:1234/__cypress/runner/cypress_runner.js:127819:39
+    at assertions (http://localhost:1234/__cypress/runner/cypress_runner.js:128079:14)
+    at tryCatcher (http://localhost:1234/__cypress/runner/cypress_runner.js:9059:23)
+    at Object.gotValue (http://localhost:1234/__cypress/runner/cypress_runner.js:8203:18)
+    at Object.gotAccum (http://localhost:1234/__cypress/runner/cypress_runner.js:8190:25)
+    at Object.tryCatcher (http://localhost:1234/__cypress/runner/cypress_runner.js:9059:23)
+    at Promise._settlePromiseFromHandler (http://localhost:1234/__cypress/runner/cypress_runner.js:6994:31)]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

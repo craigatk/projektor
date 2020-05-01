@@ -1,0 +1,7 @@
+{
+  "serverUrl": "http://localhost:8082",
+  "results": [
+    "results-failure/*.xml"
+  ],
+  "exitWithFailure": true
+}
