@@ -44,12 +44,39 @@ describe("TestResultsProcessingCheck", () => {
         publicId={publicId}
         processingSucceeded={succeededFunc}
         refreshInterval={5000}
+        autoRefreshTimeout={60000}
       />
     );
 
     await findByTestId("results-still-processing");
 
     expect(succeededFunc).not.toHaveBeenCalled();
+  });
+
+  it("should refresh status when still processing up to max timeout", async (done) => {
+    const succeededFunc = jest.fn();
+
+    mockProcessingStatus(TestResultsProcessingStatus.PROCESSING);
+
+    const { findByTestId } = render(
+      <TestResultsProcessingCheck
+        publicId={publicId}
+        processingSucceeded={succeededFunc}
+        refreshInterval={100}
+        autoRefreshTimeout={400}
+      />
+    );
+
+    await findByTestId("results-still-processing");
+
+    await waitFor(() =>
+      expect(mockAxios.history.get.length).toBeGreaterThan(1)
+    );
+
+    setTimeout(() => {
+      expect(mockAxios.history.get.length).toBeLessThanOrEqual(5);
+      done();
+    }, 1000);
   });
 
   it("should display failure message when results processing failed", async () => {
@@ -62,6 +89,7 @@ describe("TestResultsProcessingCheck", () => {
         publicId={publicId}
         processingSucceeded={succeededFunc}
         refreshInterval={5000}
+        autoRefreshTimeout={60000}
       />
     );
 
@@ -80,6 +108,7 @@ describe("TestResultsProcessingCheck", () => {
         publicId={publicId}
         processingSucceeded={succeededFunc}
         refreshInterval={5000}
+        autoRefreshTimeout={60000}
       />
     );
 
@@ -98,6 +127,7 @@ describe("TestResultsProcessingCheck", () => {
         publicId={publicId}
         processingSucceeded={succeededFunc}
         refreshInterval={5000}
+        autoRefreshTimeout={60000}
       />
     );
 
