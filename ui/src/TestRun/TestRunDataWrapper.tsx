@@ -56,6 +56,7 @@ const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
           publicId={publicId}
           processingSucceeded={loadTestRunSummary}
           refreshInterval={3000}
+          autoRefreshTimeout={300000}
         />
       }
     />

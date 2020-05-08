@@ -14,6 +14,7 @@ interface TestResultsProcessingCheckProps extends RouteComponentProps {
   publicId: string;
   processingSucceeded: () => void;
   refreshInterval: number;
+  autoRefreshTimeout: number;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -46,8 +47,10 @@ const TestResultsProcessingCheck = ({
   publicId,
   processingSucceeded,
   refreshInterval,
+  autoRefreshTimeout,
 }: TestResultsProcessingCheckProps) => {
   const classes = useStyles({});
+  let totalWaitTime = 0;
 
   const [resultsProcessing, setResultsProcessing] = React.useState<
     TestResultsProcessing
@@ -62,8 +65,12 @@ const TestResultsProcessingCheck = ({
         setResultsProcessing(response.data);
         setLoadingState(LoadingState.Success);
 
-        if (resultsAreStillProcessing(response.data)) {
+        if (
+          resultsAreStillProcessing(response.data) &&
+          totalWaitTime < autoRefreshTimeout
+        ) {
           setTimeout(loadTestResultsProcessing, refreshInterval);
+          totalWaitTime += refreshInterval;
         }
       })
       .catch(() => setLoadingState(LoadingState.Error));
