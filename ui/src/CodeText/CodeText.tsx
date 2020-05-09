@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useQueryParam, NumberParam } from "use-query-params";
-import CodeTextLine from "./CodeTextLine";
-import { Element, scroller } from "react-scroll";
+import { scroller } from "react-scroll";
+import CodeTextProgressiveRender from "./CodeTextProgressiveRender";
 
 interface CodeTextProps {
   text: String;
@@ -17,6 +17,7 @@ const CodeText = ({ text }: CodeTextProps) => {
     "le",
     NumberParam
   );
+  const [alreadyScrolled, setAlreadyScrolled] = React.useState(false);
 
   const textLines = text.split(/\r?\n/g);
   const lastLine = textLines.pop();
@@ -45,19 +46,24 @@ const CodeText = ({ text }: CodeTextProps) => {
   }
 
   React.useEffect(() => {
-    if (highlightedLine != null) {
-      scroller.scrollTo(`line-${highlightedLine}`, {
-        duration: 0,
-        delay: 0,
-        offset: -45,
-        smooth: "easeInOutQuart",
-      });
-    }
     return () => {
       setHighlightedLine(null);
       setHighlightedRangeEnd(null);
     };
-  }, [setHighlightedLine, scroller]);
+  }, [setHighlightedLine, setHighlightedRangeEnd]);
+
+  const renderComplete = () => {
+    if (highlightedLine != null && !alreadyScrolled) {
+      scroller.scrollTo(`line-${highlightedLine}`, {
+        duration: 0,
+        delay: 0,
+        offset: -55,
+        smooth: "easeInOutQuart",
+      });
+
+      setAlreadyScrolled(true);
+    }
+  };
 
   function isLineHighlighted(lineIdx: number) {
     if (highlightedRangeEnd != null) {
@@ -69,21 +75,15 @@ const CodeText = ({ text }: CodeTextProps) => {
 
   return (
     <pre data-testid="code-text">
-      {textLines.map((line, idx) => {
-        const lineIdx = idx + 1;
-
-        return (
-          <Element name={`line-${lineIdx}`} key={`line-element-${lineIdx}`}>
-            <CodeTextLine
-              key={`code-line-${lineIdx}`}
-              line={line}
-              idx={lineIdx}
-              highlighted={isLineHighlighted(lineIdx)}
-              handleLineClick={handleLineClick}
-            />
-          </Element>
-        );
-      })}
+      <CodeTextProgressiveRender
+        lines={textLines}
+        isLineHighlighted={isLineHighlighted}
+        handleLineClick={handleLineClick}
+        highlightedLine={highlightedLine}
+        highlightedRangeEnd={highlightedRangeEnd}
+        renderComplete={renderComplete}
+        pageSize={300}
+      />
     </pre>
   );
 };

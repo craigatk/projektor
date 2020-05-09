@@ -4,16 +4,24 @@ import { render, getNodeText } from "@testing-library/react";
 import CodeText from "../CodeText";
 
 describe("CodeText", () => {
-  it("should split output into lines", () => {
+  it("should split output into lines", async () => {
     const text = "line 1\nline 2";
 
-    const { getByTestId, queryByTestId } = render(<CodeText text={text} />);
+    const { findByTestId, queryByTestId } = render(<CodeText text={text} />);
 
-    expect(getNodeText(getByTestId("code-text-line-content-1"))).toBe("line 1");
-    expect(getNodeText(getByTestId("code-text-line-number-1"))).toBe("1");
+    expect(getNodeText(await findByTestId("code-text-line-content-1"))).toBe(
+      "line 1"
+    );
+    expect(getNodeText(await findByTestId("code-text-line-number-1"))).toBe(
+      "1"
+    );
 
-    expect(getNodeText(getByTestId("code-text-line-content-2"))).toBe("line 2");
-    expect(getNodeText(getByTestId("code-text-line-number-2"))).toBe("2");
+    expect(getNodeText(await findByTestId("code-text-line-content-2"))).toBe(
+      "line 2"
+    );
+    expect(getNodeText(await findByTestId("code-text-line-number-2"))).toBe(
+      "2"
+    );
 
     expect(queryByTestId("code-text-line-number-3")).toBeNull();
   });
