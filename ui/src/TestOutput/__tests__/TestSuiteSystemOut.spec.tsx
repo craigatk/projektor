@@ -32,17 +32,16 @@ describe("TestSuiteSystemOut", () => {
       )
       .reply(200, systemOut);
 
-    const { getByTestId, queryByTestId } = render(
+    const { findByTestId, queryByTestId } = render(
       <TestSuiteSystemOut publicId={publicId} testSuiteIdx={testSuiteIdx} />
     );
 
-    await waitFor(() => getByTestId("code-text"));
+    await findByTestId("code-text");
 
-    expect(queryByTestId("code-text")).not.toBeNull();
+    expect(
+      getNodeText(await findByTestId("code-text-line-content-1"))
+    ).toContain("My system out");
+
     expect(queryByTestId("loading-section-error")).toBeNull();
-
-    expect(getNodeText(getByTestId("code-text-line-content-1"))).toContain(
-      "My system out"
-    );
   });
 });
