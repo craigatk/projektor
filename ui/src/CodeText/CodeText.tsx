@@ -28,7 +28,7 @@ const CodeText = ({ text }: CodeTextProps) => {
   function handleLineClick(event: React.MouseEvent, clickedIdx: number) {
     if (highlightedLine == null) {
       setHighlightedLine(clickedIdx);
-    } else if (event.shiftKey && highlightedLine != null) {
+    } else if (event.shiftKey) {
       if (clickedIdx > highlightedLine) {
         setHighlightedRangeEnd(clickedIdx);
       } else {
@@ -57,12 +57,12 @@ const CodeText = ({ text }: CodeTextProps) => {
       scroller.scrollTo(`line-${highlightedLine}`, {
         duration: 0,
         delay: 0,
-        offset: -55,
+        offset: -45,
         smooth: "easeInOutQuart",
       });
-
-      setAlreadyScrolled(true);
     }
+
+    setAlreadyScrolled(true);
   };
 
   function isLineHighlighted(lineIdx: number) {

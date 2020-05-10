@@ -9,6 +9,8 @@ describe("CodeText", () => {
 
     const { findByTestId, queryByTestId } = render(<CodeText text={text} />);
 
+    await findByTestId("code-text");
+
     expect(getNodeText(await findByTestId("code-text-line-content-1"))).toBe(
       "line 1"
     );
@@ -26,10 +28,12 @@ describe("CodeText", () => {
     expect(queryByTestId("code-text-line-number-3")).toBeNull();
   });
 
-  it("when output is blank should not show any lines", () => {
+  it("when output is blank should not show any lines", async () => {
     const text = "";
 
-    const { queryByTestId } = render(<CodeText text={text} />);
+    const { findByTestId, queryByTestId } = render(<CodeText text={text} />);
+
+    await findByTestId("code-text");
 
     expect(queryByTestId("code-text-line-number-1")).toBeNull();
   });
