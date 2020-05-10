@@ -84,6 +84,7 @@ task writeVersion() {
     outputs.cacheIf { true }
 
     doLast {
+        println "Writing server version $projectVersion"
         new File("$projectDir/src/main/resources/version.json").text = """{
   "version": "$projectVersion"
 }"""
