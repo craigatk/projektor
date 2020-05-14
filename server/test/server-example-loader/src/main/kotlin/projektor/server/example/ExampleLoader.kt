@@ -32,6 +32,8 @@ fun loadAllExamples() {
             resultsXmlLoader.longOutput(),
             resultsXmlLoader.output(),
             resultsXmlLoader.reallyLongOutput(),
+            resultsXmlLoader.reallyLongOutput5000(),
+            resultsXmlLoader.reallyLongOutput10000(),
             resultsXmlLoader.someIgnored(),
             resultsXmlLoader.someIgnoredSomeFailing()
     )

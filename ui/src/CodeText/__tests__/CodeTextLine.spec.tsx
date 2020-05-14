@@ -18,7 +18,7 @@ describe("Code text line", () => {
       />
     );
 
-    fireEvent.click(getByTestId("code-text-line-2"));
+    fireEvent.click(getByTestId("code-text-line-2-false"));
 
     expect(handleLineClick).toHaveBeenCalled();
   });

@@ -37,18 +37,18 @@ Cypress.Commands.add("getTestCaseLinkInList", (testSuiteIdx, testCaseIdx) =>
 );
 
 Cypress.Commands.add("getCodeText", () => cy.getByTestId("code-text"));
-Cypress.Commands.add("getCodeTextLine", lineIdx =>
-  cy.getByTestId(`code-text-line-${lineIdx}`)
+Cypress.Commands.add("getCodeTextLine", (lineIdx, highlighted) =>
+  cy.getByTestId(`code-text-line-${lineIdx}-${highlighted}`)
 );
 Cypress.Commands.add("codeLineShouldBeHighlighted", lineIdx =>
   cy
-    .getCodeTextLine(lineIdx)
+    .getCodeTextLine(lineIdx, true)
     .should("have.css", "background-color")
     .and("be.colored", "#F9F9F9")
 );
 Cypress.Commands.add("codeLineShouldNotBeHighlighted", lineIdx =>
   cy
-    .getCodeTextLine(lineIdx)
+    .getCodeTextLine(lineIdx, false)
     .should("have.css", "background-color")
     .and("not.be.colored", "#F5F5F5")
 );

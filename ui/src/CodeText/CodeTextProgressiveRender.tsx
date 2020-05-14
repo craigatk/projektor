@@ -1,16 +1,12 @@
 import * as React from "react";
-import CodeTextLine from "./CodeTextLine";
-import { Element } from "react-scroll";
 import { makeStyles } from "@material-ui/core/styles";
 
 interface CodeTextProgressiveRenderProps {
-  lines: string[];
-  isLineHighlighted: (index: number) => boolean;
-  handleLineClick: (event: React.MouseEvent, clickedIdx: number) => void;
-  highlightedLine: number;
-  highlightedRangeEnd: number;
+  listElements: any[];
+  renderProgress: (number) => void;
   renderComplete: () => void;
   pageSize: number;
+  lineHeight: number;
 }
 
 interface CodeTextProgressiveRenderStyleProps {
@@ -19,61 +15,55 @@ interface CodeTextProgressiveRenderStyleProps {
 }
 
 const useStyles = makeStyles({
-  // style rule
   wrapper: ({
     lineCount,
     lineHeight,
   }: CodeTextProgressiveRenderStyleProps) => ({
     height: lineCount * lineHeight,
     display: "inline-block",
-    width: "100%",
+    width: "fit-content",
+    minWidth: "100%",
   }),
 });
 
 const CodeTextProgressiveRender = ({
-  lines,
-  highlightedLine,
-  highlightedRangeEnd,
-  isLineHighlighted,
-  handleLineClick,
+  listElements,
+  renderProgress,
   renderComplete,
   pageSize,
+  lineHeight,
 }: CodeTextProgressiveRenderProps) => {
-  const classes = useStyles({ lineCount: lines.length, lineHeight: 13.333 });
-
   const [currentRenderLimit, setCurrentRenderLimit] = React.useState(pageSize);
-  const maxRenderSize = lines.length - 1;
+  const maxRenderSize = listElements.length - 1;
 
-  setTimeout(() => {
+  const classes = useStyles({
+    lineCount: listElements.length,
+    lineHeight,
+  });
+
+  const renderNextPage = () => {
     if (currentRenderLimit < maxRenderSize) {
       setCurrentRenderLimit(currentRenderLimit + pageSize);
+
+      const renderProgressPercentage = Math.floor(
+        (currentRenderLimit / maxRenderSize) * 100
+      );
+      renderProgress(renderProgressPercentage);
     } else {
       renderComplete();
     }
-  });
+  };
 
-  const allLines = lines.map((line, idx) => {
-    const lineIdx = idx + 1;
-
-    return React.useMemo(
-      () => (
-        <Element name={`line-${lineIdx}`} key={`line-element-${lineIdx}`}>
-          <CodeTextLine
-            key={`code-line-${lineIdx}`}
-            line={line}
-            idx={lineIdx}
-            highlighted={isLineHighlighted(lineIdx)}
-            handleLineClick={handleLineClick}
-          />
-        </Element>
-      ),
-      [line, lineIdx, highlightedLine, highlightedRangeEnd]
-    );
-  });
+  if ("requestIdleCallback" in window) {
+    // @ts-ignore
+    window.requestIdleCallback(renderNextPage);
+  } else {
+    setTimeout(renderNextPage);
+  }
 
   return (
     <div className={classes.wrapper}>
-      {allLines.slice(0, currentRenderLimit)}
+      {listElements.slice(0, currentRenderLimit)}
     </div>
   );
 };
