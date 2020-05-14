@@ -40,15 +40,21 @@ Cypress.Commands.add("getCodeText", () => cy.getByTestId("code-text"));
 Cypress.Commands.add("getCodeTextLine", (lineIdx, highlighted) =>
   cy.getByTestId(`code-text-line-${lineIdx}-${highlighted}`)
 );
+Cypress.Commands.add("getCodeTextLineNotHighlighted", (lineIdx) =>
+    cy.getCodeTextLine(lineIdx, false)
+);
+Cypress.Commands.add("getCodeTextLineHighlighted", (lineIdx) =>
+    cy.getCodeTextLine(lineIdx, true)
+);
 Cypress.Commands.add("codeLineShouldBeHighlighted", lineIdx =>
   cy
-    .getCodeTextLine(lineIdx, true)
+    .getCodeTextLineHighlighted(lineIdx)
     .should("have.css", "background-color")
     .and("be.colored", "#F9F9F9")
 );
 Cypress.Commands.add("codeLineShouldNotBeHighlighted", lineIdx =>
   cy
-    .getCodeTextLine(lineIdx, false)
+    .getCodeTextLineNotHighlighted(lineIdx)
     .should("have.css", "background-color")
     .and("not.be.colored", "#F5F5F5")
 );
