@@ -14,6 +14,10 @@ class ResultsXmlLoader {
 
     fun reallyLongOutput() = loadTextFromFile("TEST-projektor.example.spock.ReallyLongOutputSpec.xml")
 
+    fun reallyLongOutput5000() = loadTextFromFile("TEST-projektor.example.spock.ReallyLongOutput5000Spec.xml")
+
+    fun reallyLongOutput10000() = loadTextFromFile("TEST-projektor.example.spock.ReallyLongOutput10000Spec.xml")
+
     fun output() = loadTextFromFile("TEST-projektor.example.spock.OutputSpec.xml")
 
     fun someIgnored() = loadTextFromFile("TEST-projektor.example.spock.IgnoreSomeMethodsSpec.xml")

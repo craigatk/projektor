@@ -13,7 +13,6 @@ interface CodeTextLineStyleProps {
 }
 
 const useStyles = makeStyles({
-  // style rule
   lineClass: ({ highlighted }: CodeTextLineStyleProps) => ({
     backgroundColor: highlighted ? "#F9F9F9" : "inherit",
     cursor: "default",
@@ -21,6 +20,9 @@ const useStyles = makeStyles({
       backgroundColor: "lightgrey",
     },
     fontSize: ".9em",
+    display: "inline-block",
+    width: "100%",
+    paddingRight: "10px",
   }),
   lineNumberClass: {
     userSelect: "none",
@@ -47,7 +49,7 @@ const CodeTextLine = ({
     <div
       onClick={handleClick}
       className={classes.lineClass}
-      data-testid={`code-text-line-${idx}`}
+      data-testid={`code-text-line-${idx}-${highlighted}`}
     >
       <span
         className={classes.lineNumberClass}

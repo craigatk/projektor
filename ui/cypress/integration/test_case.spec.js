@@ -42,7 +42,7 @@ context("test case", () => {
     cy.getCodeText().should("contain", "System out line 1");
     cy.url().should("contain", "/systemOut");
 
-    cy.getCodeTextLine(2).click();
+    cy.getCodeTextLineNotHighlighted(2).click();
     cy.url().should("contain", "l=2");
 
     cy.getByTestId("test-case-tab-system-err").click();
@@ -50,7 +50,7 @@ context("test case", () => {
     cy.url().should("contain", "/systemErr");
     cy.url().should("not.contain", "l=2");
 
-    cy.getCodeTextLine(3).click();
+    cy.getCodeTextLineNotHighlighted(3).click();
     cy.url().should("contain", "l=3");
 
     cy.getByTestId("test-case-tab-failure").click();

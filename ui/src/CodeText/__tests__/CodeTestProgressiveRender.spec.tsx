@@ -7,73 +7,53 @@ import { act } from "react-dom/test-utils";
 describe("CodeTextProgressiveRender", () => {
   it("should render lines progressively", async () => {
     const lines = ["line1", "line2", "line3", "line4", "line5", "line6"];
+    const listElements = lines.map((line, idx) => (
+      <div data-testid={`line-${idx + 1}`} key={`line-${idx + 1}`}>
+        {line}
+      </div>
+    ));
 
-    const isLineHighlighted = jest.fn();
-    const handleLineClick = jest.fn();
+    const renderProgress = jest.fn();
     const renderComplete = jest.fn();
 
     jest.useFakeTimers();
 
     const { findByTestId, queryByTestId } = render(
       <CodeTextProgressiveRender
-        lines={lines}
-        isLineHighlighted={isLineHighlighted}
-        handleLineClick={handleLineClick}
-        highlightedLine={null}
-        highlightedRangeEnd={null}
+        listElements={listElements}
+        renderProgress={renderProgress}
         renderComplete={renderComplete}
         pageSize={2}
+        lineHeight={14}
       />
     );
 
-    expect(getNodeText(await findByTestId("code-text-line-content-1"))).toBe(
-      "line1"
-    );
-    expect(getNodeText(await findByTestId("code-text-line-content-2"))).toBe(
-      "line2"
-    );
-    expect(queryByTestId("code-text-line-content-3")).toBeNull();
-    expect(queryByTestId("code-text-line-content-4")).toBeNull();
-    expect(queryByTestId("code-text-line-content-5")).toBeNull();
-    expect(queryByTestId("code-text-line-content-6")).toBeNull();
+    expect(getNodeText(await findByTestId("line-1"))).toBe("line1");
+    expect(getNodeText(await findByTestId("line-2"))).toBe("line2");
+    expect(queryByTestId("line-3")).toBeNull();
+    expect(queryByTestId("line-4")).toBeNull();
+    expect(queryByTestId("line-5")).toBeNull();
+    expect(queryByTestId("line-6")).toBeNull();
 
     act(() => jest.runOnlyPendingTimers());
 
-    expect(getNodeText(await findByTestId("code-text-line-content-1"))).toBe(
-      "line1"
-    );
-    expect(getNodeText(await findByTestId("code-text-line-content-2"))).toBe(
-      "line2"
-    );
-    expect(getNodeText(await findByTestId("code-text-line-content-3"))).toBe(
-      "line3"
-    );
-    expect(getNodeText(await findByTestId("code-text-line-content-4"))).toBe(
-      "line4"
-    );
-    expect(queryByTestId("code-text-line-content-5")).toBeNull();
-    expect(queryByTestId("code-text-line-content-6")).toBeNull();
+    expect(getNodeText(await findByTestId("line-1"))).toBe("line1");
+    expect(getNodeText(await findByTestId("line-2"))).toBe("line2");
+    expect(getNodeText(await findByTestId("line-3"))).toBe("line3");
+    expect(getNodeText(await findByTestId("line-4"))).toBe("line4");
+    expect(queryByTestId("line-5")).toBeNull();
+    expect(queryByTestId("line-6")).toBeNull();
+
+    expect(renderProgress).toHaveBeenCalled();
 
     act(() => jest.runOnlyPendingTimers());
 
-    expect(getNodeText(await findByTestId("code-text-line-content-1"))).toBe(
-      "line1"
-    );
-    expect(getNodeText(await findByTestId("code-text-line-content-2"))).toBe(
-      "line2"
-    );
-    expect(getNodeText(await findByTestId("code-text-line-content-3"))).toBe(
-      "line3"
-    );
-    expect(getNodeText(await findByTestId("code-text-line-content-4"))).toBe(
-      "line4"
-    );
-    expect(getNodeText(await findByTestId("code-text-line-content-5"))).toBe(
-      "line5"
-    );
-    expect(getNodeText(await findByTestId("code-text-line-content-6"))).toBe(
-      "line6"
-    );
+    expect(getNodeText(await findByTestId("line-1"))).toBe("line1");
+    expect(getNodeText(await findByTestId("line-2"))).toBe("line2");
+    expect(getNodeText(await findByTestId("line-3"))).toBe("line3");
+    expect(getNodeText(await findByTestId("line-4"))).toBe("line4");
+    expect(getNodeText(await findByTestId("line-5"))).toBe("line5");
+    expect(getNodeText(await findByTestId("line-6"))).toBe("line6");
 
     act(() => jest.runOnlyPendingTimers());
 
