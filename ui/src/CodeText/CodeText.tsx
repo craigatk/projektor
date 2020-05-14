@@ -52,7 +52,7 @@ const CodeText = ({ text }: CodeTextProps) => {
   }, [setHighlightedLine]);
 
   const renderComplete = () => {
-    if (highlightedLine != null && rendered) {
+    if (highlightedLine != null && !rendered) {
       scroller.scrollTo(`line-${highlightedLine}-true`, {
         duration: 0,
         delay: 0,
