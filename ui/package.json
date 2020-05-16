@@ -46,6 +46,7 @@
     "@types/reach__router": "1.2.6",
     "@types/react": "16.9.17",
     "@types/react-dom": "16.9.4",
+    "@types/styled-components": "5.1.0",
     "axios": "0.19.2",
     "axios-cache-adapter": "2.5.0",
     "axios-case-converter": "0.3.0",
@@ -55,6 +56,7 @@
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-scroll": "1.7.14",
+    "styled-components": "5.1.0",
     "use-query-params": "0.4.1"
   },
   "jest-junit": {
