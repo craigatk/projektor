@@ -1,5 +1,5 @@
 import * as React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import styled from 'styled-components'
 
 interface CodeTextLineProps {
   line: String;
@@ -12,26 +12,25 @@ interface CodeTextLineStyleProps {
   highlighted: boolean;
 }
 
-const useStyles = makeStyles({
-  lineClass: ({ highlighted }: CodeTextLineStyleProps) => ({
-    backgroundColor: highlighted ? "#F9F9F9" : "inherit",
-    cursor: "default",
-    "&:hover": {
-      backgroundColor: "lightgrey",
-    },
-    fontSize: ".9em",
-    display: "inline-block",
-    width: "100%",
-    paddingRight: "10px",
-  }),
-  lineNumberClass: {
-    userSelect: "none",
-    minWidth: "40px",
-    display: "inline-block",
-    textAlign: "right",
-    paddingRight: "15px",
-  },
-});
+const Line = styled.div<CodeTextLineStyleProps>`
+  cursor: default;
+  background-color: ${({highlighted}) => (highlighted ? "#F9F9F9": "inherit")};
+  &:hover {
+    background-color: lightgrey;
+  }
+  font-size: .9em;
+  display: inline-block;
+  width: 100%;
+  padding-right: 10px;
+`;
+
+const LineNumber = styled.span`
+  user-select: none;
+  min-width: 40px;
+  display: inline-block;
+  text-align: right;
+  padding-Right: 15px;
+`
 
 const CodeTextLine = ({
   line,
@@ -39,26 +38,23 @@ const CodeTextLine = ({
   handleLineClick,
   highlighted,
 }: CodeTextLineProps) => {
-  const classes = useStyles({ highlighted });
-
   function handleClick(e: React.MouseEvent) {
     handleLineClick(e, idx);
   }
 
   return (
-    <div
+    <Line
       onClick={handleClick}
-      className={classes.lineClass}
       data-testid={`code-text-line-${idx}-${highlighted}`}
+      highlighted={highlighted}
     >
-      <span
-        className={classes.lineNumberClass}
+      <LineNumber
         data-testid={`code-text-line-number-${idx}`}
       >
         {idx}
-      </span>
+      </LineNumber>
       <span data-testid={`code-text-line-content-${idx}`}>{line}</span>
-    </div>
+    </Line>
   );
 };
 

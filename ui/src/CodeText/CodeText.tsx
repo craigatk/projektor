@@ -78,7 +78,7 @@ const CodeText = ({ text }: CodeTextProps) => {
           key={`line-element-${lineIdx}-${highlighted}`}
         >
           <CodeTextLine
-            key={`code-line-${lineIdx}`}
+            key={`code-line-${lineIdx}-${highlighted}`}
             line={line}
             idx={lineIdx}
             highlighted={highlighted}
@@ -86,7 +86,7 @@ const CodeText = ({ text }: CodeTextProps) => {
           />
         </Element>
       ),
-      [line, lineIdx, highlighted]
+      [lineIdx, highlighted]
     );
   });
 
