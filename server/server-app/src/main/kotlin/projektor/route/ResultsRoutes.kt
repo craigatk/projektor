@@ -18,9 +18,11 @@ import org.slf4j.LoggerFactory
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
 import projektor.incomingresults.GroupedTestResultsService
+import projektor.incomingresults.PersistTestResultsException
 import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
 import projektor.server.api.PublicId
+import projektor.server.api.results.SaveResultsErrorResponse
 import projektor.server.api.results.SaveResultsResponse
 import projektor.util.ungzip
 
@@ -59,9 +61,13 @@ fun Route.results(
             sample.stop(timer)
 
             if (groupedResultsBlob.isNotBlank()) {
-                val publicId = groupedTestResultsService.persistTestResultsAsync(groupedResultsBlob)
+                try {
+                    val publicId = groupedTestResultsService.persistTestResultsAsync(groupedResultsBlob)
 
-                call.respond(HttpStatusCode.OK, SaveResultsResponse(publicId.id, "/tests/${publicId.id}"))
+                    call.respond(HttpStatusCode.OK, SaveResultsResponse(publicId.id, "/tests/${publicId.id}"))
+                } catch (e: PersistTestResultsException) {
+                    call.respond(HttpStatusCode.BadRequest, SaveResultsErrorResponse(e.publicId.id, e.errorMessage))
+                }
             } else {
                 call.respond(HttpStatusCode.BadRequest)
             }

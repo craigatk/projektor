@@ -15,7 +15,7 @@ abstract class ProjectSpec extends Specification {
     TemporaryFolder projectRootDir = new TemporaryFolder()
 
     @Rule
-    WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort().dynamicHttpsPort())
+    WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort())
 
     ResultsWireMockStubber resultsStubber = new ResultsWireMockStubber(wireMockRule)
 

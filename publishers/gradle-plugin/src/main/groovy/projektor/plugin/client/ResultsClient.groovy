@@ -1,6 +1,9 @@
 package projektor.plugin.client
 
 import groovy.json.JsonSlurper
+import io.github.resilience4j.retry.Retry
+import io.github.resilience4j.retry.RetryConfig
+import io.github.resilience4j.retry.RetryRegistry
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -11,6 +14,9 @@ import projektor.plugin.PublishResult
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.results.grouped.GroupedResultsSerializer
 
+import java.time.Duration
+import java.util.concurrent.TimeUnit
+
 import static projektor.plugin.client.ClientToken.conditionallyAddPublishTokenToRequest
 
 class ResultsClient {
@@ -18,11 +24,31 @@ class ResultsClient {
     private final ClientConfig config
     private final Logger logger
     private final GroupedResultsSerializer groupedResultsSerializer = new GroupedResultsSerializer()
-    private final OkHttpClient client = new OkHttpClient()
+    private final OkHttpClient client
+
+    private final Retry publishRetry
 
     ResultsClient(ClientConfig clientConfig, Logger logger) {
         this.config = clientConfig
         this.logger = logger
+
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
+        okHttpClientBuilder.retryOnConnectionFailure = false
+        okHttpClientBuilder.callTimeout(clientConfig.timeout, TimeUnit.MILLISECONDS)
+        okHttpClientBuilder.readTimeout(clientConfig.timeout, TimeUnit.MILLISECONDS)
+        okHttpClientBuilder.connectTimeout(clientConfig.timeout, TimeUnit.MILLISECONDS)
+        this.client = okHttpClientBuilder.build()
+
+        RetryConfig retryConfig = RetryConfig.custom()
+                .maxAttempts(clientConfig.retryMaxAttempts)
+                .waitDuration(Duration.ofMillis(clientConfig.retryInterval))
+                .retryOnResult({ Response response -> !response.successful && response.code() != 401 })
+                .retryOnException({ Throwable e -> true })
+                .build()
+
+        RetryRegistry registry = RetryRegistry.of(retryConfig)
+
+        this.publishRetry = registry.retry("publish")
     }
 
     PublishResult sendResultsToServer(GroupedResults groupedResults) {
@@ -50,7 +76,7 @@ class ResultsClient {
         Request request = requestBuilder.build()
 
         try {
-            Response response = client.newCall(request).execute()
+            Response response = publishRetry.executeSupplier({ -> client.newCall(request).execute() })
 
             if (response?.successful) {
                 def parsedResponseJson = new JsonSlurper().parseText(response.body().string())

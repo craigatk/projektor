@@ -6,6 +6,7 @@ import io.ktor.util.KtorExperimentalAPI
 import java.time.LocalDateTime
 import kotlin.test.assertNotNull
 import org.awaitility.kotlin.await
+import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
@@ -35,6 +36,8 @@ class GetProcessingResultsApplicationTest : ApplicationTestCase() {
             }
 
             await untilNotNull { testRunDao.fetchOneByPublicId(publicId) }
+
+            await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.SUCCESS.name }
 
             handleRequest(HttpMethod.Get, "/results/$publicId/status")
                     .apply {

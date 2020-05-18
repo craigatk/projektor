@@ -30,7 +30,7 @@ class AttachmentsClientSpec extends Specification {
         String publicId = "ATT123"
 
         AttachmentsClient attachmentsClient = new AttachmentsClient(
-                new ClientConfig(serverUrl, false, maybePublishToken),
+                new ClientConfig(serverUrl, false, maybePublishToken, 1, 0, 10_000),
                 logger
         )
 

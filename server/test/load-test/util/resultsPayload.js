@@ -18,6 +18,22 @@ export function createGroupedResultsPayload(numTestSuites) {
     return resultsPayload
 }
 
+export function createGroupedResultsPayloadFromFile(numTestSuites, fileName) {
+    const resultsXml = open(`../test-fixtures/src/main/resources/${fileName}`);
+
+    const resultsPayload = JSON.stringify({
+        groupedTestSuites: [
+            {
+                groupName: "group",
+                testSuitesBlob: [...Array(numTestSuites).keys()].map(() => resultsXml).join("\n")
+            }
+        ]
+    });
+
+    return resultsPayload
+}
+
+
 export const createLongOutputGroupedResultsPayload = (numTestSuites) => {
     const longOutputSpecResultsXml = open('../test-fixtures/src/main/resources/TEST-projektor.example.spock.LongOutputSpec.xml');
 

@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.metrics.MetricsStubber
 import projektor.parser.GroupedResultsXmlLoader
+import projektor.server.api.results.ResultsProcessingStatus
 import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
 import strikt.assertions.hasSize
@@ -40,9 +41,6 @@ class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should save grouped test results`() {
-        metricsEnabled = true
-        metricsPort = metricsStubber.port()
-
         val requestBody = GroupedResultsXmlLoader().passingGroupedResults()
 
         withTestApplication(::createTestApplication) {
@@ -78,7 +76,33 @@ class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
                 assertNotNull(testSuiteGroup2)
                 expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2.id)).hasSize(1)
 
-                waitAtMost(Duration.ofSeconds(20)) until { metricsStubber.findWriteMetricsRequestForCounterMetric("grouped_results_process_success", 1).isNotEmpty() }
+                await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.SUCCESS.name }
+            }
+        }
+    }
+
+    @Test
+    fun `should record metrics when saving grouped test results`() {
+        metricsEnabled = true
+        metricsPort = metricsStubber.port()
+
+        val requestBody = GroupedResultsXmlLoader().passingGroupedResults()
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/groupedResults") {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(requestBody)
+            }.apply {
+                val resultsResponse = objectMapper.readValue(response.content, SaveResultsResponse::class.java)
+
+                val publicId = resultsResponse.id
+                assertNotNull(publicId)
+
+                await untilNotNull { testRunDao.fetchOneByPublicId(publicId) }
+
+                await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.SUCCESS.name }
+
+                waitAtMost(Duration.ofSeconds(30)) until { metricsStubber.findWriteMetricsRequestForCounterMetric("grouped_results_process_success", 1).isNotEmpty() }
                 await until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_success", 1).isNotEmpty() }
 
                 await until { metricsStubber.findWriteMetricsRequestForCounterMetric("grouped_results_process_failure", 0).isNotEmpty() }
