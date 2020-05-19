@@ -72,6 +72,7 @@ jobs:
           DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
           CACHE_ACCESS_KEY: ${{ secrets.CACHE_ACCESS_KEY }}
           CACHE_SECRET_KEY: ${{ secrets.CACHE_SECRET_KEY }}
+          PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
         run: ./gradlew :functional-test:functionalTest -PreleaseVersion=${{ env.RELEASE_VERSION }}
 
       - name: Create Release
