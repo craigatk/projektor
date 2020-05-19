@@ -27,7 +27,7 @@ gradlePlugin {
 }
 
 pluginBundle {
-    website = 'https://github.com/craigatk/projektor'
+    website = 'https://projektor.dev/docs/gradle-plugin/'
     vcsUrl = 'https://github.com/craigatk/projektor'
     description = 'Automatically publish test reports to a Projektor report server'
     tags = ['testing', 'report']
@@ -44,7 +44,7 @@ repositories {
 }
 
 group = "dev.projektor"
-version = "5.0.0"
+version = "5.0.1"
 
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.2.1")
