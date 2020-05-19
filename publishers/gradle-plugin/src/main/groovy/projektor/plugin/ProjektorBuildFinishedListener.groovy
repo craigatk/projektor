@@ -1,6 +1,5 @@
 package projektor.plugin
 
-import okhttp3.OkHttpClient
 import org.gradle.BuildListener
 import org.gradle.BuildResult
 import org.gradle.api.file.FileTree

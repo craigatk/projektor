@@ -1,8 +1,11 @@
 package projektor.incomingresults
 
 import io.micrometer.core.instrument.MeterRegistry
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
+import projektor.incomingresults.model.GroupedResults
 import projektor.metrics.MetricsService
 import projektor.server.api.PublicId
 import projektor.server.api.results.ResultsProcessingStatus
@@ -27,8 +30,17 @@ class GroupedTestResultsService(
         val timer = metricsService.createTimer("persist_grouped_results")
         testResultsProcessingService.createResultsProcessing(publicId)
 
+        val groupedResults = try {
+            groupedResultsConverter.parseAndConvertGroupedResults(groupedResultsBlob)
+        } catch (e: Exception) {
+            val errorMessage = "Error parsing test results: ${e.message}"
+            handleException(publicId, groupedResultsBlob, errorMessage, e)
+            recordFailedProcessMetrics()
+            throw PersistTestResultsException(publicId, errorMessage, e)
+        }
+
         coroutineScope.launch {
-            doPersistTestResults(publicId, groupedResultsBlob)
+            doPersistTestResults(publicId, groupedResults, groupedResultsBlob)
         }
 
         metricsService.stopTimer(timer)
@@ -36,11 +48,8 @@ class GroupedTestResultsService(
         return publicId
     }
 
-    suspend fun doPersistTestResults(publicId: PublicId, groupedResultsBlob: String) {
+    suspend fun doPersistTestResults(publicId: PublicId, groupedResults: GroupedResults, groupedResultsBlob: String) {
         try {
-            testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.PROCESSING)
-
-            val groupedResults = groupedResultsConverter.parseAndConvertGroupedResults(groupedResultsBlob)
             testRunRepository.saveGroupedTestRun(publicId, groupedResults)
 
             testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.SUCCESS)

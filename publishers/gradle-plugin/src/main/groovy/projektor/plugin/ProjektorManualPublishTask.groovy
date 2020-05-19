@@ -35,6 +35,18 @@ class ProjektorManualPublishTask extends AbstractTask {
     @Optional
     Boolean compressionEnabled = true
 
+    @Input
+    @Optional
+    Integer publishRetryMaxAttempts = 3
+
+    @Input
+    @Optional
+    Long publishRetryInterval = 100
+
+    @Input
+    @Optional
+    Long publishTimeout = 10_000
+
     @TaskAction
     void publish() {
         File projectDir = project.projectDir
@@ -46,7 +58,14 @@ class ProjektorManualPublishTask extends AbstractTask {
         )
 
         if (projectTestTaskResultsCollector.hasTestGroups()) {
-            ClientConfig clientConfig = new ClientConfig(serverUrl, compressionEnabled, java.util.Optional.ofNullable(publishToken))
+            ClientConfig clientConfig = new ClientConfig(
+                    serverUrl,
+                    compressionEnabled,
+                    java.util.Optional.ofNullable(publishToken),
+                    publishRetryMaxAttempts,
+                    publishRetryInterval,
+                    publishTimeout
+            )
             GroupedResults groupedResults = projectTestTaskResultsCollector.createGroupedResults()
 
             ResultsClient resultsClient = new ResultsClient(

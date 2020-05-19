@@ -17,13 +17,15 @@ class GroupedTestResultsServiceTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should filter out test suites that have no test cases`() {
         val groupedTestResultsService: GroupedTestResultsService by inject()
+        val groupedResultsConverter: GroupedResultsConverter by inject()
 
         val publicId = randomPublicId()
 
         val resultXml = ResultsXmlLoader().cypressResults().joinToString("\n")
         val groupedResultsJson = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultXml)
+        val groupedResults = runBlocking { groupedResultsConverter.parseAndConvertGroupedResults(groupedResultsJson) }
 
-        runBlocking { groupedTestResultsService.doPersistTestResults(publicId, groupedResultsJson) }
+        runBlocking { groupedTestResultsService.doPersistTestResults(publicId, groupedResults, groupedResultsJson) }
 
         val testRun = await untilNotNull { testRunDao.fetchOneByPublicId(publicId.id) }
         assertNotNull(testRun)

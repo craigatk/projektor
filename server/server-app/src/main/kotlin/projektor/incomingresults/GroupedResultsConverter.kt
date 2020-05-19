@@ -1,5 +1,7 @@
 package projektor.incomingresults
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import projektor.incomingresults.model.GroupedResults
 import projektor.incomingresults.model.GroupedTestSuites
 import projektor.parser.grouped.GroupedResultsParser
@@ -9,11 +11,13 @@ class GroupedResultsConverter(
     private val groupedResultsParser: GroupedResultsParser,
     private val testResultsProcessor: TestResultsProcessor
 ) {
-    fun parseAndConvertGroupedResults(groupedResultsBlob: String): GroupedResults {
+    suspend fun parseAndConvertGroupedResults(groupedResultsBlob: String): GroupedResults = withContext(Dispatchers.IO) {
         val incomingGroupedResults = groupedResultsParser.parseGroupedResults(groupedResultsBlob)
 
         val groupedTestSuites = incomingGroupedResults.groupedTestSuites.map {
-            val nonEmptyTestSuites = testResultsProcessor.parseResultsBlob(it.testSuitesBlob).filter { testSuite -> !testSuite.testCases.isNullOrEmpty() }
+            val nonEmptyTestSuites = testResultsProcessor.parseResultsBlob(it.testSuitesBlob)
+                    .filter { testSuite -> !testSuite.testCases.isNullOrEmpty() }
+
             GroupedTestSuites(
                     groupName = it.groupName,
                     groupLabel = it.groupLabel,
@@ -22,6 +26,6 @@ class GroupedResultsConverter(
             )
         }
 
-        return GroupedResults(groupedTestSuites)
+        GroupedResults(groupedTestSuites)
     }
 }

@@ -11,4 +11,7 @@ class ProjektorPublishPluginExtension {
     List<String> additionalResultsDirs = []
     List<FileTree> attachments = []
     boolean compressionEnabled = true
+    int publishRetryMaxAttempts = 3
+    long publishRetryInterval = 100
+    long publishTimeout = 10_000
 }

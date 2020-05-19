@@ -5,36 +5,15 @@ import projektor.plugin.SpecWriter
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
-class PublishingResultsFailsSpec extends SingleProjectSpec {
-    def "when publishing fails with networking error to server should not fail build"() {
+class PublishResultsRetrySpec extends SingleProjectSpec {
+    def "can configure retry max attempts and interval"() {
         given:
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
                 autoPublishOnFailureOnly = false
-            }
-        """.stripIndent()
-
-        SpecWriter.createTestDirectoryWithPassingTest(projectRootDir, "SampleSpec")
-
-        resultsStubber.stubResultsNetworkingError()
-
-        when:
-        BuildResult result = runSuccessfulBuild('test')
-
-        then:
-        result.task(":test").outcome == SUCCESS
-
-        and:
-        resultsStubber.findResultsRequests().size() == 3
-    }
-
-    def "when publishing fails with non-200 response should not fail build"() {
-        given:
-        buildFile << """
-            projektor {
-                serverUrl = '${serverUrl}'
-                autoPublishOnFailureOnly = false
+                publishRetryMaxAttempts = 2
+                publishRetryInterval = 50
             }
         """.stripIndent()
 
@@ -49,6 +28,32 @@ class PublishingResultsFailsSpec extends SingleProjectSpec {
         result.task(":test").outcome == SUCCESS
 
         and:
-        resultsStubber.findResultsRequests().size() == 3
+        resultsStubber.findResultsRequests().size() == 2
+    }
+
+    def "can configure timeout"() {
+        given:
+        buildFile << """
+            projektor {
+                serverUrl = '${serverUrl}'
+                autoPublishOnFailureOnly = false
+                publishRetryMaxAttempts = 2
+                publishRetryInterval = 0
+                publishTimeout = 500
+            }
+        """.stripIndent()
+
+        SpecWriter.createTestDirectoryWithPassingTest(projectRootDir, "SampleSpec")
+
+        resultsStubber.stubResultsPostWithDelay(600)
+
+        when:
+        BuildResult result = runSuccessfulBuild('test')
+
+        then:
+        result.task(":test").outcome == SUCCESS
+
+        and:
+        resultsStubber.findResultsRequests().size() == 2
     }
 }

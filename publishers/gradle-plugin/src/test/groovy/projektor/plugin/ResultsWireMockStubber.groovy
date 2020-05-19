@@ -31,6 +31,12 @@ class ResultsWireMockStubber extends WireMockStubber {
         ))
     }
 
+    void stubResultsPostWithDelay(int delay) {
+        wireMockServer.stubFor(post(urlEqualTo("/groupedResults")).willReturn(aResponse()
+                .withFixedDelay(delay)
+                .withStatus(200)))
+    }
+
     List<LoggedRequest> findResultsRequests() {
         wireMockServer.findRequestsMatching(
                 postRequestedFor(urlEqualTo("/groupedResults")).build()

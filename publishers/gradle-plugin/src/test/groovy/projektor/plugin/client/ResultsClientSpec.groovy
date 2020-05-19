@@ -9,6 +9,7 @@ import projektor.plugin.ResultsWireMockStubber
 import projektor.plugin.PublishResult
 import projektor.plugin.results.grouped.GroupedResults
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 
@@ -26,7 +27,7 @@ class ResultsClientSpec extends Specification {
         String serverUrl = resultsStubber.serverUrl
 
         ResultsClient resultsClient = new ResultsClient(
-                new ClientConfig(serverUrl, true, Optional.empty()),
+                new ClientConfig(serverUrl, true, Optional.empty(), 1, 0, 10_000),
                 logger
         )
 
@@ -58,7 +59,7 @@ class ResultsClientSpec extends Specification {
         String serverUrl = resultsStubber.serverUrl
 
         ResultsClient resultsClient = new ResultsClient(
-                new ClientConfig(serverUrl, true, Optional.of("token12345")),
+                new ClientConfig(serverUrl, true, Optional.of("token12345"), 1, 0, 10_000),
                 logger
         )
 
@@ -91,7 +92,7 @@ class ResultsClientSpec extends Specification {
         given:
         String serverUrl = "http://resolve.failure.fakedotcom:9999/womp"
         ResultsClient resultsClient = new ResultsClient(
-                new ClientConfig(serverUrl, true, Optional.empty()),
+                new ClientConfig(serverUrl, true, Optional.empty(), 1, 0, 10_000),
                 logger
         )
         GroupedResults groupedResults = new GroupedResults()
@@ -103,12 +104,43 @@ class ResultsClientSpec extends Specification {
         !publishResult.successful
     }
 
+    @Unroll
+    void "when sending results returns response code #responseCode should retry #expectedRetries"() {
+        given:
+        String serverUrl = resultsStubber.serverUrl
+
+        ResultsClient resultsClient = new ResultsClient(
+                new ClientConfig(serverUrl, true, Optional.empty(), retryMaxAttempts, 0, 1000),
+                logger
+        )
+
+        GroupedResults groupedResults = new GroupedResults(
+                groupedTestSuites: []
+        )
+
+        resultsStubber.stubResultsPostFailure(responseCode)
+
+        when:
+        resultsClient.sendResultsToServer(groupedResults)
+
+        then:
+        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
+        resultsRequests.size() == expectedRetries
+
+        where:
+        responseCode | retryMaxAttempts || expectedRetries
+        400          | 3                || 3
+        500          | 2                || 2
+        401          | 3                || 1
+        200          | 3                || 1
+    }
+
     void "when compression enabled should include gzip header"() {
         given:
         String serverUrl = resultsStubber.serverUrl
 
         ResultsClient resultsClient = new ResultsClient(
-                new ClientConfig(serverUrl, true, Optional.empty()),
+                new ClientConfig(serverUrl, true, Optional.empty(), 1, 0, 10_000),
                 logger
         )
 
@@ -120,7 +152,7 @@ class ResultsClientSpec extends Specification {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
+        resultsClient.sendResultsToServer(groupedResults)
 
         then:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
@@ -133,7 +165,7 @@ class ResultsClientSpec extends Specification {
         String serverUrl = resultsStubber.serverUrl
 
         ResultsClient resultsClient = new ResultsClient(
-                new ClientConfig(serverUrl, false, Optional.empty()),
+                new ClientConfig(serverUrl, false, Optional.empty(), 1, 0, 10_000),
                 logger
         )
 
@@ -145,7 +177,7 @@ class ResultsClientSpec extends Specification {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
+        resultsClient.sendResultsToServer(groupedResults)
 
         then:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()

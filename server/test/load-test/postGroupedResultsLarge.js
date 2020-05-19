@@ -1,6 +1,6 @@
 import http from 'k6/http';
 import {check} from "k6";
-import { createGroupedResultsPayload, resultsParams } from './util/resultsPayload.js'
+import { createLongOutputGroupedResultsPayload, resultsParams } from './util/resultsPayload.js'
 import { statusCheck200 } from "./util/statusCheck.js";
 
 export let options = {
@@ -9,7 +9,7 @@ export let options = {
     ]
 };
 
-const payload = createGroupedResultsPayload(1)
+const payload = createLongOutputGroupedResultsPayload(100)
 
 export default function () {
     const response = http.post(

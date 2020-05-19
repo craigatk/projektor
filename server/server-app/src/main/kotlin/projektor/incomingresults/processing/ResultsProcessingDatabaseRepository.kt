@@ -38,7 +38,7 @@ class ResultsProcessingDatabaseRepository(private val dslContext: DSLContext) : 
             }
 
     override suspend fun updateResultsProcessingStatus(publicId: PublicId, newStatus: ResultsProcessingStatus): Boolean =
-            withContext(Dispatchers.Default) {
+            withContext(Dispatchers.IO) {
                 dslContext.update(Tables.RESULTS_PROCESSING)
                         .set(Tables.RESULTS_PROCESSING.STATUS, newStatus.name)
                         .where(Tables.RESULTS_PROCESSING.PUBLIC_ID.eq(publicId.id))
