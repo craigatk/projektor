@@ -64,6 +64,8 @@ open class ApplicationTestCase {
     protected var metricsUsername: String? = null
     protected var metricsPassword: String? = null
 
+    protected var globalMessages: String? = null
+
     fun createTestApplication(application: Application) {
         val schema = databaseSchema
 
@@ -98,6 +100,8 @@ open class ApplicationTestCase {
                 metricsUsername?.let { username -> put("ktor.metrics.influxdb.username", username) }
                 metricsPassword?.let { password -> put("ktor.metrics.influxdb.password", password) }
             }
+
+            globalMessages?.let { put("ktor.message.global", it) }
         }
 
         application.main()

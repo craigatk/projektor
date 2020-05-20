@@ -15,6 +15,8 @@ import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
 import projektor.incomingresults.processing.ResultsProcessingDatabaseRepository
 import projektor.incomingresults.processing.ResultsProcessingRepository
+import projektor.message.MessageConfig
+import projektor.message.MessageService
 import projektor.metrics.MetricsService
 import projektor.parser.grouped.GroupedResultsParser
 import projektor.results.processor.TestResultsProcessor
@@ -38,7 +40,8 @@ fun createAppModule(
     dataSource: HikariDataSource,
     authConfig: AuthConfig,
     dslContext: DSLContext,
-    metricRegistry: MeterRegistry
+    metricRegistry: MeterRegistry,
+    messageConfig: MessageConfig
 ) = module {
     single { dataSource }
     single { TestResultsProcessor() }
@@ -55,6 +58,7 @@ fun createAppModule(
     single { GroupedResultsParser() }
     single { GroupedResultsConverter(get(), get()) }
     single { GroupedTestResultsService(get(), get(), get(), get(), get()) }
+    single { MessageService(messageConfig) }
     single { TestCaseService(get()) }
     single { TestSuiteService(get()) }
     single { TestResultsProcessingService(get()) }
