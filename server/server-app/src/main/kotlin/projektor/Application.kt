@@ -33,6 +33,8 @@ import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
 import projektor.incomingresults.processing.ResultsProcessingRepository
+import projektor.message.MessageConfig
+import projektor.message.MessageService
 import projektor.metrics.InfluxMetricsConfig
 import projektor.metrics.createRegistry
 import projektor.route.*
@@ -59,7 +61,9 @@ fun Application.main() {
 
     val cleanupConfig = CleanupConfig.createCleanupConfig(applicationConfig)
 
-    val appModule = createAppModule(dataSource, authConfig, dslContext, metricRegistry)
+    val messageConfig = MessageConfig.createMessageConfig(applicationConfig)
+
+    val appModule = createAppModule(dataSource, authConfig, dslContext, metricRegistry, messageConfig)
 
     install(CORS) {
         anyHost()
@@ -109,6 +113,7 @@ fun Application.main() {
     }
 
     val authService: AuthService by inject()
+    val messageService: MessageService by inject()
     val testResultsService: TestResultsService by inject()
     val groupedTestResultsService: GroupedTestResultsService by inject()
     val testResultsProcessingService: TestResultsProcessingService by inject()
@@ -131,6 +136,7 @@ fun Application.main() {
         attachments(attachmentService, authService)
         config(cleanupConfig)
         health()
+        messages(messageService)
         results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService, metricRegistry)
         testCases(testCaseService)
         testSuites(testSuiteService)

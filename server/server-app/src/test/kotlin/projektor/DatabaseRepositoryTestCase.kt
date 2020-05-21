@@ -14,6 +14,7 @@ import org.koin.test.KoinTest
 import projektor.auth.AuthConfig
 import projektor.database.DataSourceConfig
 import projektor.database.generated.tables.daos.*
+import projektor.message.MessageConfig
 import projektor.metrics.InfluxMetricsConfig
 import projektor.metrics.createRegistry
 
@@ -70,7 +71,8 @@ open class DatabaseRepositoryTestCase : KoinTest {
                     dataSource,
                     AuthConfig(null),
                     dslContext,
-                    createRegistry(metricsConfig)
+                    createRegistry(metricsConfig),
+                    MessageConfig(listOf())
             ))
         }
 

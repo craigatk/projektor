@@ -6,6 +6,7 @@ import PageTitle from "../PageTitle";
 import TestRunDuration from "./TestRunDuration";
 import TestRunDate from "./TestRunDate";
 import TestRunCleanupDate from "./TestRunCleanupDate";
+import TestRunMessages from "../TestRunMessages/TestRunMessages";
 
 interface DashboardSummaryProps {
   publicId: string;
@@ -36,6 +37,7 @@ const DashboardSummary = ({
   return (
     <div>
       <PageTitle title="Tests" testid="dashboard-summary-title" />
+      <TestRunMessages publicId={publicId} />
       <Grid container>
         <Grid item sm={3} xs={12}>
           <TestCountList
