@@ -8,6 +8,7 @@ import {
   TestResultsProcessing,
   Attachments,
   TestRunSystemAttributes,
+  Messages,
 } from "../model/TestRunModel";
 import TestSuiteOutputType from "./TestSuiteOutputType";
 import { axiosInstance, axiosInstanceWithoutCache } from "./AxiosService";
@@ -109,8 +110,13 @@ const unpinTestRun = (publicId: string): Promise<AxiosResponse<void>> =>
   // @ts-ignore
   axiosInstanceWithoutCache.post(`/run/${publicId}/attributes/unpin`);
 
+const fetchMessages = (publicId: string): Promise<AxiosResponse<Messages>> =>
+  // @ts-ignore
+  axiosInstanceWithoutCache.get(`/run/${publicId}/messages`);
+
 export {
   fetchAttachments,
+  fetchMessages,
   fetchTestRun,
   fetchTestRunSummary,
   fetchFailedTestCases,

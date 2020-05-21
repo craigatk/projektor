@@ -1,5 +1,5 @@
 import * as React from "react";
-import styled from 'styled-components'
+import styled from "styled-components";
 
 interface CodeTextLineProps {
   line: String;
@@ -14,11 +14,12 @@ interface CodeTextLineStyleProps {
 
 const Line = styled.div<CodeTextLineStyleProps>`
   cursor: default;
-  background-color: ${({highlighted}) => (highlighted ? "#F9F9F9": "inherit")};
+  background-color: ${({ highlighted }) =>
+    highlighted ? "#F9F9F9" : "inherit"};
   &:hover {
     background-color: lightgrey;
   }
-  font-size: .9em;
+  font-size: 0.9em;
   display: inline-block;
   width: 100%;
   padding-right: 10px;
@@ -29,8 +30,8 @@ const LineNumber = styled.span`
   min-width: 40px;
   display: inline-block;
   text-align: right;
-  padding-Right: 15px;
-`
+  padding-right: 15px;
+`;
 
 const CodeTextLine = ({
   line,
@@ -48,9 +49,7 @@ const CodeTextLine = ({
       data-testid={`code-text-line-${idx}-${highlighted}`}
       highlighted={highlighted}
     >
-      <LineNumber
-        data-testid={`code-text-line-number-${idx}`}
-      >
+      <LineNumber data-testid={`code-text-line-number-${idx}`}>
         {idx}
       </LineNumber>
       <span data-testid={`code-text-line-content-${idx}`}>{line}</span>

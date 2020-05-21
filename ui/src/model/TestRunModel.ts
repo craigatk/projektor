@@ -8,6 +8,10 @@ interface Attachments {
   attachments: Attachment[];
 }
 
+interface Messages {
+  messages: string[];
+}
+
 interface TestFailure {
   failureMessage: string;
   failureType: string;
@@ -88,6 +92,7 @@ interface TestRunSystemAttributes {
 export {
   Attachment,
   Attachments,
+  Messages,
   TestRunSummary,
   TestRun,
   TestSuite,

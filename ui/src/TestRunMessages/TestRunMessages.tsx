@@ -1,20 +1,37 @@
 import * as React from "react";
-import {Alert} from "@material-ui/lab";
+import { Alert } from "@material-ui/lab";
+import { fetchMessages } from "../service/TestRunService";
 
 interface TestRunMessagesProps {
-    publicId: string;
+  publicId: string;
 }
 
-const TestRunMessages = ({publicId}: TestRunMessagesProps) => {
-    const [messages, setMessages] = React.useState([])
+const TestRunMessages = ({ publicId }: TestRunMessagesProps) => {
+  const [messages, setMessages] = React.useState([]);
 
-    React.useEffect(() => {
-        setMessages(["Starting on 6/14 reports older than 60 days will be cleaned up to save space. You can also 'pin' an important test report to keep it forever."])
-    }, [setMessages])
+  React.useEffect(() => {
+    fetchMessages(publicId)
+      .then((response) => {
+        if (response.data) {
+          setMessages(response.data.messages);
+        }
+      })
+      .catch(() => {});
+  }, [setMessages]);
 
-    return (
-        <div>{messages.map(message => <Alert severity="info">{message}</Alert>)}</div>
-    )
-}
+  return (
+    <div data-testid="test-run-messages">
+      {messages.map((message, idx) => (
+        <Alert
+          severity="info"
+          data-testid={`test-run-message-${idx + 1}`}
+          key={`test-run0message-${idx + 1}`}
+        >
+          {message}
+        </Alert>
+      ))}
+    </div>
+  );
+};
 
 export default TestRunMessages;
