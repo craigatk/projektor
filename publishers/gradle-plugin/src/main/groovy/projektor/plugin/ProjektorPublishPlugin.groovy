@@ -4,6 +4,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.logging.Logger
 import projektor.plugin.client.ClientConfig
+import projektor.plugin.notification.NotificationConfig
 
 class ProjektorPublishPlugin implements Plugin<Project> {
     private static final String LISTENER_APPLIED_PROPERTY_NAME = "projektorListenerApplied"
@@ -56,6 +57,10 @@ class ProjektorPublishPlugin implements Plugin<Project> {
                         extension.publishRetryMaxAttempts,
                         extension.publishRetryInterval,
                         extension.publishTimeout
+                ),
+                new NotificationConfig(
+                        extension.writeSlackMessageFile,
+                        extension.slackMessageFileName
                 ),
                 logger,
                 extension.autoPublishOnFailureOnly,

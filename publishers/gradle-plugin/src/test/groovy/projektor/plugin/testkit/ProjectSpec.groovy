@@ -38,7 +38,7 @@ abstract class ProjectSpec extends Specification {
     }
 
     BuildResult runFailedBuild(String... buildArgs) {
-        BuildResult result =  GradleRunner.create()
+        BuildResult result = GradleRunner.create()
                 .withProjectDir(projectRootDir.root)
                 .withArguments(buildArgs)
                 .withPluginClasspath()
