@@ -27,7 +27,7 @@
     "jest": "25.1.0",
     "jest-junit": "10.0.0",
     "prettier": "2.0.1",
-    "projektor-publish": "2.2.0",
+    "projektor-publish": "2.2.1",
     "wait-for-expect": "3.0.1"
   },
   "jest": {
