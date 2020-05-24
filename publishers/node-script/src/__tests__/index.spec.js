@@ -1,6 +1,6 @@
 const axios = require("axios");
 const MockAdapter = require("axios-mock-adapter");
-const { run } = require("../index");
+const { run, runCLI } = require("../index");
 
 describe("node script index", () => {
   let mockAxios;
@@ -23,7 +23,7 @@ describe("node script index", () => {
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
     const { reportUrl, publicId } = await run(
-      [],
+      {},
       null,
       "src/__tests__/projektor.test.json"
     );
@@ -47,7 +47,7 @@ describe("node script index", () => {
       .onPost("http://localhost:8080/results")
       .reply(200, { id: "DEF345", uri: "/tests/DEF345" });
 
-    const { reportUrl, publicId } = await run(
+    const { reportUrl, publicId } = await runCLI(
       ["--configFile=src/__tests__/projektor.test.json"],
       null,
       "projektor.fake.json"
@@ -68,7 +68,7 @@ describe("node script index", () => {
   });
 
   it("should log error when no results dirs specified", async () => {
-    await run(
+    await runCLI(
       ["--configFile=src/__tests__/projektor.missing.results.json"],
       null,
       "projektor.fake.json"
@@ -84,7 +84,7 @@ describe("node script index", () => {
       .onPost("http://localhost:8080/results")
       .reply(200, { id: "FOO123", uri: "/tests/FOO123" });
 
-    await run(
+    await runCLI(
       [
         "--serverUrl=http://localhost:8080/results",
         "--exitWithFailure",
@@ -108,7 +108,7 @@ describe("node script index", () => {
       .onPost("http://localhost:8080/results")
       .reply(200, { id: "FOO345", uri: "/tests/FOO345" });
 
-    await run(
+    await runCLI(
       [
         "--serverUrl=http://localhost:8080/results",
         "--exitWithFailure",
