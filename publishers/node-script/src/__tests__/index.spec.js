@@ -1,4 +1,3 @@
-const waitForExpect = require("wait-for-expect");
 const axios = require("axios");
 const MockAdapter = require("axios-mock-adapter");
 const { run } = require("../index");
@@ -23,17 +22,22 @@ describe("node script index", () => {
       .onPost("http://localhost:8080/results")
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
-    run([], null, "src/__tests__/projektor.test.json");
+    const { reportUrl, publicId } = await run(
+      [],
+      null,
+      "src/__tests__/projektor.test.json"
+    );
 
-    await waitForExpect(() => {
-      expect(mockAxios.history.post.length).toBe(1);
+    expect(reportUrl).toEqual("http://localhost:8080/tests/ABC123");
+    expect(publicId).toEqual("ABC123");
 
-      const postRequest = mockAxios.history.post[0];
-      const postData = postRequest.data;
+    expect(mockAxios.history.post.length).toBe(1);
 
-      expect(postData).toContain("resultsDir1-results1");
-      expect(postData).toContain("resultsDir1-results2");
-    });
+    const postRequest = mockAxios.history.post[0];
+    const postData = postRequest.data;
+
+    expect(postData).toContain("resultsDir1-results1");
+    expect(postData).toContain("resultsDir1-results2");
 
     expect(process.exitCode).not.toBe(1);
   });
@@ -43,27 +47,28 @@ describe("node script index", () => {
       .onPost("http://localhost:8080/results")
       .reply(200, { id: "DEF345", uri: "/tests/DEF345" });
 
-    run(
+    const { reportUrl, publicId } = await run(
       ["--configFile=src/__tests__/projektor.test.json"],
       null,
       "projektor.fake.json"
     );
 
-    await waitForExpect(() => {
-      expect(mockAxios.history.post.length).toBe(1);
+    expect(reportUrl).toEqual("http://localhost:8080/tests/DEF345");
+    expect(publicId).toEqual("DEF345");
 
-      const postRequest = mockAxios.history.post[0];
-      const postData = postRequest.data;
+    expect(mockAxios.history.post.length).toBe(1);
 
-      expect(postData).toContain("resultsDir1-results1");
-      expect(postData).toContain("resultsDir1-results2");
-    });
+    const postRequest = mockAxios.history.post[0];
+    const postData = postRequest.data;
+
+    expect(postData).toContain("resultsDir1-results1");
+    expect(postData).toContain("resultsDir1-results2");
 
     expect(process.exitCode).not.toBe(1);
   });
 
-  it("should log error when no results dirs specified", () => {
-    run(
+  it("should log error when no results dirs specified", async () => {
+    await run(
       ["--configFile=src/__tests__/projektor.missing.results.json"],
       null,
       "projektor.fake.json"
@@ -79,7 +84,7 @@ describe("node script index", () => {
       .onPost("http://localhost:8080/results")
       .reply(200, { id: "FOO123", uri: "/tests/FOO123" });
 
-    run(
+    await run(
       [
         "--serverUrl=http://localhost:8080/results",
         "--exitWithFailure",
@@ -91,13 +96,11 @@ describe("node script index", () => {
 
     expect(process.exitCode).toBe(1);
 
-    await waitForExpect(() => {
-      expect(mockAxios.history.post.length).toBe(1);
+    expect(mockAxios.history.post.length).toBe(1);
 
-      const postRequest = mockAxios.history.post[0];
-      const postData = postRequest.data;
-      expect(postData).toContain("side nav");
-    });
+    const postRequest = mockAxios.history.post[0];
+    const postData = postRequest.data;
+    expect(postData).toContain("side nav");
   });
 
   it("should not exit with non-zero exit code when all tests passed and configured via CLI", async () => {
@@ -105,7 +108,7 @@ describe("node script index", () => {
       .onPost("http://localhost:8080/results")
       .reply(200, { id: "FOO345", uri: "/tests/FOO345" });
 
-    run(
+    await run(
       [
         "--serverUrl=http://localhost:8080/results",
         "--exitWithFailure",
@@ -117,12 +120,10 @@ describe("node script index", () => {
 
     expect(process.exitCode).not.toBe(1);
 
-    await waitForExpect(() => {
-      expect(mockAxios.history.post.length).toBe(1);
+    expect(mockAxios.history.post.length).toBe(1);
 
-      const postRequest = mockAxios.history.post[0];
-      const postData = postRequest.data;
-      expect(postData).toContain("resultsDir1-results1");
-    });
+    const postRequest = mockAxios.history.post[0];
+    const postData = postRequest.data;
+    expect(postData).toContain("resultsDir1-results1");
   });
 });

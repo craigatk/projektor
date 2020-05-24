@@ -45,7 +45,7 @@ const collectAttachments = (attachmentFileGlobs) => {
   return attachments;
 };
 
-const sendResults = (serverUrl, publishToken, resultsBlob) => {
+const sendResults = async (serverUrl, publishToken, resultsBlob) => {
   const headers = {};
 
   if (publishToken) {
@@ -56,10 +56,9 @@ const sendResults = (serverUrl, publishToken, resultsBlob) => {
     headers,
   });
 
-  return axiosInstance
-    .post(`${serverUrl}/results`, resultsBlob)
-    .then((resp) => Promise.resolve(resp.data))
-    .catch((err) => Promise.reject(err));
+  const resp = await axiosInstance.post(`${serverUrl}/results`, resultsBlob);
+
+  return resp.data;
 };
 
 const sendAttachment = (
@@ -122,7 +121,7 @@ const collectAndSendAttachments = (
   }
 };
 
-const collectAndSendResults = (
+const collectAndSendResults = async (
   serverUrl,
   publishToken,
   resultsFileGlobs,
@@ -135,29 +134,35 @@ const collectAndSendResults = (
   const resultsBlob = collectResults(resultsFileGlobs);
 
   if (resultsBlob.length > 0) {
-    sendResults(serverUrl, publishToken, resultsBlob)
-      .then((respData) => {
-        console.log(`View Projektor results at ${serverUrl}${respData.uri}`);
+    try {
+      const resultsResponseData = await sendResults(
+        serverUrl,
+        publishToken,
+        resultsBlob
+      );
 
-        return Promise.resolve(respData.id);
-      })
-      .then((publicId) =>
-        collectAndSendAttachments(
-          serverUrl,
-          publishToken,
-          attachmentFileGlobs,
-          publicId
-        )
-      )
-      .catch((e) => {
-        console.error(
-          `Error publishing results to Projektor server ${serverUrl}`,
-          e.message
-        );
-      });
+      const publicId = resultsResponseData.id;
+      const reportUrl = `${serverUrl}${resultsResponseData.uri}`;
+      console.log(`View Projektor results at ${reportUrl}`);
+
+      await collectAndSendAttachments(
+        serverUrl,
+        publishToken,
+        attachmentFileGlobs,
+        publicId
+      );
+
+      return { resultsBlob, publicId, reportUrl };
+    } catch (e) {
+      console.error(
+        `Error publishing results to Projektor server ${serverUrl}`,
+        e.message
+      );
+      return { resultsBlob, publicId: null, reportUrl: null };
+    }
+  } else {
+    return { resultsBlob, publicId: null, reportUrl: null };
   }
-
-  return resultsBlob;
 };
 
 module.exports = {
