@@ -1,4 +1,4 @@
-function run(args, publishToken, defaultConfigFilePath) {
+async function run(args, publishToken, defaultConfigFilePath) {
   const argv = require("minimist")(args, { boolean: "exitWithFailure" });
   const fs = require("fs");
   const { collectAndSendResults } = require("./publish");
@@ -28,7 +28,7 @@ function run(args, publishToken, defaultConfigFilePath) {
   }
 
   if (resultsFileGlobs) {
-    const resultsBlob = collectAndSendResults(
+    const { resultsBlob, reportUrl, publicId } = await collectAndSendResults(
       serverUrl,
       publishToken,
       resultsFileGlobs,
@@ -41,10 +41,14 @@ function run(args, publishToken, defaultConfigFilePath) {
       );
       process.exitCode = 1;
     }
+
+    return { reportUrl, publicId };
   } else {
     console.error(
       `Results files not configured, please specify them either on the command line or in the ${configFilePath} config file`
     );
+
+    return { reportUrl: null, publicId: null };
   }
 }
 
