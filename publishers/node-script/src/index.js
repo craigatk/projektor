@@ -1,5 +1,14 @@
+async function runCLI(cliArgs, publishToken, defaultConfigFilePath) {
+  const parsedArgs = require("minimist")(cliArgs, {
+    boolean: "exitWithFailure",
+  });
+
+  parsedArgs.resultsFileGlobs = parsedArgs._;
+
+  return run(parsedArgs, publishToken, defaultConfigFilePath);
+}
+
 async function run(args, publishToken, defaultConfigFilePath) {
-  const argv = require("minimist")(args, { boolean: "exitWithFailure" });
   const fs = require("fs");
   const { collectAndSendResults } = require("./publish");
 
@@ -8,7 +17,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
   let attachmentFileGlobs;
   let exitWithFailure;
 
-  const configFilePath = argv.configFile || defaultConfigFilePath;
+  const configFilePath = args.configFile || defaultConfigFilePath;
 
   if (fs.existsSync(configFilePath)) {
     const configFileContents = fs.readFileSync(configFilePath);
@@ -19,12 +28,13 @@ async function run(args, publishToken, defaultConfigFilePath) {
     attachmentFileGlobs = config.attachments;
     exitWithFailure = config.exitWithFailure;
   } else {
-    serverUrl = argv.serverUrl;
-    resultsFileGlobs = argv._;
-    if (argv.attachments) {
-      attachmentFileGlobs = [argv.attachments];
+    serverUrl = args.serverUrl;
+    resultsFileGlobs = args.resultsFileGlobs;
+
+    if (args.attachments) {
+      attachmentFileGlobs = [args.attachments];
     }
-    exitWithFailure = argv.exitWithFailure;
+    exitWithFailure = args.exitWithFailure;
   }
 
   if (resultsFileGlobs) {
@@ -57,5 +67,6 @@ function containsTestFailure(resultsBlob) {
 }
 
 module.exports = {
+  runCLI,
   run,
 };
