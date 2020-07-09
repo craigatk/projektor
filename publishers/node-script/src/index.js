@@ -32,7 +32,9 @@ async function run(args, publishToken, defaultConfigFilePath) {
     resultsFileGlobs = args.resultsFileGlobs;
 
     if (args.attachments) {
-      attachmentFileGlobs = [args.attachments];
+      attachmentFileGlobs = Array.isArray(args.attachments)
+        ? args.attachments
+        : [args.attachments];
     }
     exitWithFailure = args.exitWithFailure;
   }

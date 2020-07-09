@@ -126,4 +126,80 @@ describe("node script index", () => {
     const postData = postRequest.data;
     expect(postData).toContain("resultsDir1-results1");
   });
+
+  it("should send results and single attachment directory", async () => {
+    const resultsFileGlobs = ["src/__tests__/resultsDir1/*.xml"];
+    const attachments = "src/__tests__/attachmentsDir1/*.txt";
+    const serverUrl = "http://localhost:8080";
+
+    mockAxios
+      .onPost("http://localhost:8080/results")
+      .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
+
+    mockAxios
+      .onPost("http://localhost:8080/run/ABC123/attachments/attachment1.txt")
+      .reply(200);
+
+    mockAxios
+      .onPost("http://localhost:8080/run/ABC123/attachments/attachment2.txt")
+      .reply(200);
+
+    await run(
+      { resultsFileGlobs, attachments, serverUrl },
+      null,
+      "projektor.none.json"
+    );
+
+    expect(mockAxios.history.post.length).toBe(3);
+
+    const postUrls = mockAxios.history.post.map((post) => post.url);
+    expect(postUrls).toContain("http://localhost:8080/results");
+    expect(postUrls).toContain(
+      "http://localhost:8080/run/ABC123/attachments/attachment1.txt"
+    );
+    expect(postUrls).toContain(
+      "http://localhost:8080/run/ABC123/attachments/attachment2.txt"
+    );
+  });
+
+  it("should send results and multiple attachment directories", async () => {
+    const resultsFileGlobs = ["src/__tests__/resultsDir1/*.xml"];
+    const attachments = [
+      "src/__tests__/attachmentsDir1/*.txt",
+      "src/__tests__/attachmentsNestedDir/*.txt",
+    ];
+    const serverUrl = "http://localhost:8080";
+
+    mockAxios
+      .onPost("http://localhost:8080/results")
+      .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
+
+    mockAxios
+      .onPost("http://localhost:8080/run/ABC123/attachments/attachment1.txt")
+      .reply(200);
+
+    mockAxios
+      .onPost("http://localhost:8080/run/ABC123/attachments/attachment2.txt")
+      .reply(200);
+
+    await run(
+      { resultsFileGlobs, attachments, serverUrl },
+      null,
+      "projektor.none.json"
+    );
+
+    expect(mockAxios.history.post.length).toBe(4);
+
+    const postUrls = mockAxios.history.post.map((post) => post.url);
+    expect(postUrls).toContain("http://localhost:8080/results");
+    expect(postUrls).toContain(
+      "http://localhost:8080/run/ABC123/attachments/attachment1.txt"
+    );
+    expect(postUrls).toContain(
+      "http://localhost:8080/run/ABC123/attachments/attachment2.txt"
+    );
+    expect(postUrls).toContain(
+      "http://localhost:8080/run/ABC123/attachments/attachmentNested1.txt"
+    );
+  });
 });
