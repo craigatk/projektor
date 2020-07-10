@@ -90,8 +90,8 @@ class ResultsClient {
                 logger.warn("Failed to upload Projektor report to ${resultsUrl} ${responseCode}")
             }
         } catch (Exception e) {
-            logger.error("Unable to publish results to Projektor server ${resultsUrl}")
-            logger.debug("Error details while attempting to publish results to Projektor server ${resultsUrl}:", e)
+            logger.error("Error publishing results to Projektor server ${config.serverUrl} - run with --info to get full stacktrace of the error.")
+            logger.info("Error details while attempting to publish results to Projektor server ${config.serverUrl}:", e)
             return publishResult
         }
 

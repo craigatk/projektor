@@ -88,22 +88,6 @@ class ResultsClientSpec extends Specification {
         publishTokenInHeader.firstValue() == "token12345"
     }
 
-    void "should not stacktrace when offline"() {
-        given:
-        String serverUrl = "http://resolve.failure.fakedotcom:9999/womp"
-        ResultsClient resultsClient = new ResultsClient(
-                new ClientConfig(serverUrl, true, Optional.empty(), 1, 0, 10_000),
-                logger
-        )
-        GroupedResults groupedResults = new GroupedResults()
-
-        when:
-        PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
-
-        then:
-        !publishResult.successful
-    }
-
     @Unroll
     void "when sending results returns response code #responseCode should retry #expectedRetries"() {
         given:
