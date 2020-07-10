@@ -25,6 +25,32 @@ class PublishingResultsFailsSpec extends SingleProjectSpec {
         then:
         result.task(":test").outcome == SUCCESS
 
+        and: 'should not print stacktrace since info logging level not specified'
+        !result.output.contains("Caused by: java.net.SocketException")
+
+        and:
+        resultsStubber.findResultsRequests().size() == 3
+    }
+
+    def "when publishing fails with info logging enabled should display stacktrace"() {
+        given:
+        buildFile << """
+            projektor {
+                serverUrl = '${serverUrl}'
+                autoPublishOnFailureOnly = false
+            }
+        """.stripIndent()
+
+        SpecWriter.createTestDirectoryWithPassingTest(projectRootDir, "SampleSpec")
+
+        resultsStubber.stubResultsNetworkingError()
+
+        when:
+        BuildResult result = runSuccessfulBuild('test', '--info')
+
+        then:
+        result.output.contains("Caused by: java.net.SocketException")
+
         and:
         resultsStubber.findResultsRequests().size() == 3
     }
