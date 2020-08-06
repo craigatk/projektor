@@ -57,6 +57,12 @@ async function run(args, publishToken, defaultConfigFilePath) {
       attachmentFileGlobs
     );
 
+    if (!resultsBlob) {
+      console.log(
+        `No test results files found in locations ${resultsFileGlobs}`
+      );
+    }
+
     if (writeSlackMessageFile) {
       writeSlackMessageFileToDisk(
         reportUrl,
