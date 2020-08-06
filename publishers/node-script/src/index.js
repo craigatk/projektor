@@ -11,11 +11,15 @@ async function runCLI(cliArgs, publishToken, defaultConfigFilePath) {
 async function run(args, publishToken, defaultConfigFilePath) {
   const fs = require("fs");
   const { collectAndSendResults } = require("./publish");
+  const { writeSlackMessageFileToDisk } = require("./slack");
 
   let serverUrl;
   let resultsFileGlobs;
   let attachmentFileGlobs;
   let exitWithFailure;
+  let writeSlackMessageFile;
+  let slackMessageFileName;
+  let projectName;
 
   const configFilePath = args.configFile || defaultConfigFilePath;
 
@@ -27,6 +31,9 @@ async function run(args, publishToken, defaultConfigFilePath) {
     resultsFileGlobs = config.results;
     attachmentFileGlobs = config.attachments;
     exitWithFailure = config.exitWithFailure;
+    writeSlackMessageFile = config.writeSlackMessageFile;
+    slackMessageFileName = config.slackMessageFileName;
+    projectName = config.projectName;
   } else {
     serverUrl = args.serverUrl;
     resultsFileGlobs = args.resultsFileGlobs;
@@ -37,6 +44,9 @@ async function run(args, publishToken, defaultConfigFilePath) {
         : [args.attachments];
     }
     exitWithFailure = args.exitWithFailure;
+    writeSlackMessageFile = args.writeSlackMessageFile;
+    slackMessageFileName = args.slackMessageFileName;
+    projectName = args.projectName;
   }
 
   if (resultsFileGlobs) {
@@ -46,6 +56,14 @@ async function run(args, publishToken, defaultConfigFilePath) {
       resultsFileGlobs,
       attachmentFileGlobs
     );
+
+    if (writeSlackMessageFile) {
+      writeSlackMessageFileToDisk(
+        reportUrl,
+        slackMessageFileName || "projektor_failure_message.json",
+        projectName
+      );
+    }
 
     if (exitWithFailure && containsTestFailure(resultsBlob)) {
       console.log(
