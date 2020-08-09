@@ -2,6 +2,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "5.2.0"
     id "com.heroku.sdk.heroku-gradle" version "1.0.4"
     id "application"
+    id 'jacoco'
 }
 
 apply from: '../../gradle/kotlin.gradle'
@@ -106,3 +107,19 @@ heroku {
 }
 
 deployHeroku.dependsOn('assembleFull')
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
