@@ -87,7 +87,7 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
         attachmentsEnabled = true
         attachmentsAccessKey = "wrong_access_key"
         attachmentsBucketName = "failtocreate"
-        attachemntsAutoCreateBucket = true
+        attachmentsAutoCreateBucket = true
 
         val attachmentBytes = File("src/test/resources/test-attachment.txt").readBytes()
 

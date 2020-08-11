@@ -5,6 +5,7 @@ plugins {
 include 'functional-test',
         'publishers:gradle-plugin',
         'publishers:node-script:publish-functional-test',
+        'server:parsing:coverage-parser',
         'server:parsing:grouped-results-parser',
         'server:parsing:jacoco-xml-parser',
         'server:parsing:junit-results-parser',

@@ -9,6 +9,10 @@ import java.io.IOException;
 public class JacocoXmlReportParser {
     private final ObjectMapper mapper = new XmlMapper();
 
+    public static boolean isJacocoReport(String reportXml) {
+        return reportXml.contains("JACOCO//DTD");
+    }
+
     public Report parseReport(String reportXml) throws IOException {
         Report report = mapper.readValue(reportXml, Report.class);
 

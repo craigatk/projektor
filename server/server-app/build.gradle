@@ -29,6 +29,7 @@ version '1.0'
 dependencies {
     implementation project(':server:persistence:database-schema')
     implementation project(':server:server-api')
+    implementation project(':server:parsing:coverage-parser')
     implementation project(':server:parsing:test-results-parser')
     implementation project(':server:parsing:grouped-results-parser')
     implementation project(':server:persistence:object-store')
@@ -53,6 +54,7 @@ dependencies {
 
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
 
+    testImplementation(project(':server:test:jacoco-fixtures'))
     testImplementation(project(':server:test:test-fixtures'))
 
     testImplementation 'org.awaitility:awaitility-kotlin:4.0.0'

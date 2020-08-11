@@ -6,6 +6,9 @@ package projektor.database.generated;
 
 import javax.annotation.processing.Generated;
 
+import projektor.database.generated.tables.CodeCoverageGroup;
+import projektor.database.generated.tables.CodeCoverageRun;
+import projektor.database.generated.tables.CodeCoverageStats;
 import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.ResultsProcessingFailure;
 import projektor.database.generated.tables.TestCase;
@@ -29,6 +32,21 @@ import projektor.database.generated.tables.TestSuiteGroup;
 )
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
+
+    /**
+     * The table <code>public.code_coverage_group</code>.
+     */
+    public static final CodeCoverageGroup CODE_COVERAGE_GROUP = CodeCoverageGroup.CODE_COVERAGE_GROUP;
+
+    /**
+     * The table <code>public.code_coverage_run</code>.
+     */
+    public static final CodeCoverageRun CODE_COVERAGE_RUN = CodeCoverageRun.CODE_COVERAGE_RUN;
+
+    /**
+     * The table <code>public.code_coverage_stats</code>.
+     */
+    public static final CodeCoverageStats CODE_COVERAGE_STATS = CodeCoverageStats.CODE_COVERAGE_STATS;
 
     /**
      * The table <code>public.results_processing</code>.

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 public class Counter {
     @JacksonXmlProperty(isAttribute = true)
-    public String type;
+    public CounterType type;
 
     @JacksonXmlProperty(isAttribute = true)
     public Integer missed;
