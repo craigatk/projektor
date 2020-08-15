@@ -1,5 +1,7 @@
 package projektor.coverage
 
+import java.math.BigDecimal
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -9,8 +11,6 @@ import projektor.parser.coverage.model.CoverageReportStat
 import projektor.parser.coverage.model.CoverageReportStats
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
-import java.math.BigDecimal
-import kotlin.test.assertNotNull
 
 class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     @Test
