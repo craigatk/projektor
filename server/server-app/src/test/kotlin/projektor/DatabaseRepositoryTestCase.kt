@@ -32,6 +32,10 @@ open class DatabaseRepositoryTestCase : KoinTest {
     lateinit var attachmentDao: TestRunAttachmentDao
     lateinit var testRunSystemAttributesDao: TestRunSystemAttributesDao
 
+    lateinit var coverageRunDao: CodeCoverageRunDao
+    lateinit var coverageGroupDao: CodeCoverageGroupDao
+    lateinit var coverageStatsDao: CodeCoverageStatsDao
+
     @KtorExperimentalAPI
     @BeforeEach
     fun setup() {
@@ -85,6 +89,10 @@ open class DatabaseRepositoryTestCase : KoinTest {
         resultsProcessingFailureDao = ResultsProcessingFailureDao(dslContext.configuration())
         attachmentDao = TestRunAttachmentDao(dslContext.configuration())
         testRunSystemAttributesDao = TestRunSystemAttributesDao(dslContext.configuration())
+
+        coverageRunDao = CodeCoverageRunDao(dslContext.configuration())
+        coverageGroupDao = CodeCoverageGroupDao(dslContext.configuration())
+        coverageStatsDao = CodeCoverageStatsDao(dslContext.configuration())
 
         testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao, testRunSystemAttributesDao)
     }

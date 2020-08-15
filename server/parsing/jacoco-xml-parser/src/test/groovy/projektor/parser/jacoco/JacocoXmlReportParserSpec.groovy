@@ -1,6 +1,7 @@
 package projektor.parser.jacoco
 
 import projektor.parser.jacoco.model.Counter
+import projektor.parser.jacoco.model.CounterType
 import projektor.parser.jacoco.model.Report
 import projektor.server.example.coverage.JacocoXmlLoader
 import spock.lang.Specification
@@ -26,15 +27,15 @@ class JacocoXmlReportParserSpec extends Specification {
         */
 
         report.counters.size() == 6
-        verifyCounter(report.counters, "INSTRUCTION", 335, 8816)
-        verifyCounter(report.counters, "BRANCH", 57, 191)
-        verifyCounter(report.counters, "LINE", 25, 953)
-        verifyCounter(report.counters, "COMPLEXITY", 60, 373)
-        verifyCounter(report.counters, "METHOD", 6, 301)
-        verifyCounter(report.counters, "CLASS", 2, 173)
+        verifyCounter(report.counters, CounterType.INSTRUCTION, 335, 8816)
+        verifyCounter(report.counters, CounterType.BRANCH, 57, 191)
+        verifyCounter(report.counters, CounterType.LINE, 25, 953)
+        verifyCounter(report.counters, CounterType.COMPLEXITY, 60, 373)
+        verifyCounter(report.counters, CounterType.METHOD, 6, 301)
+        verifyCounter(report.counters, CounterType.CLASS, 2, 173)
     }
 
-    private static void verifyCounter(List<Counter> counters, String type, int expectedMissed, int expectedCovered) {
+    private static void verifyCounter(List<Counter> counters, CounterType type, int expectedMissed, int expectedCovered) {
         assert counters.find { it.type == type }
 
         Counter counter = counters.find { it.type == type }

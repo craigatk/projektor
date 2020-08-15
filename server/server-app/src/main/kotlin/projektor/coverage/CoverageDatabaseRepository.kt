@@ -3,6 +3,9 @@ package projektor.coverage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
+import org.jooq.impl.DSL.sum
+import org.simpleflatmapper.jdbc.JdbcMapperFactory
+import projektor.database.generated.Tables.*
 import projektor.database.generated.tables.daos.CodeCoverageGroupDao
 import projektor.database.generated.tables.daos.CodeCoverageRunDao
 import projektor.database.generated.tables.daos.CodeCoverageStatsDao
@@ -11,11 +14,17 @@ import projektor.database.generated.tables.pojos.CodeCoverageGroup
 import projektor.database.generated.tables.pojos.CodeCoverageRun
 import projektor.database.generated.tables.pojos.CodeCoverageStats
 import projektor.parser.coverage.model.CoverageReport
+import projektor.parser.coverage.model.CoverageReportStats
 import projektor.server.api.PublicId
 
 class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageRepository {
     private val codeCoverageRunDao = CodeCoverageRunDao(dslContext.configuration())
     private val testRunDao = TestRunDao(dslContext.configuration())
+
+    private val overallStatsMapper = JdbcMapperFactory.newInstance()
+            .addKeys("id")
+            .ignorePropertyNotFound()
+            .newMapper(CoverageReportStats::class.java)
 
     override suspend fun createOrGetCoverageRun(publicId: PublicId): CodeCoverageRun =
             withContext(Dispatchers.IO) {
@@ -59,5 +68,28 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
                 }
 
                 codeCoverageGroup
+            }
+
+    override suspend fun fetchOverallStats(publicId: PublicId): CoverageReportStats? =
+            withContext(Dispatchers.IO) {
+                val resultSet = dslContext.select(
+                                sum(CODE_COVERAGE_STATS.BRANCH_COVERED).`as`("branch_stat_covered"),
+                                sum(CODE_COVERAGE_STATS.BRANCH_MISSED).`as`("branch_stat_missed"),
+                                sum(CODE_COVERAGE_STATS.STATEMENT_COVERED).`as`("statement_stat_covered"),
+                                sum(CODE_COVERAGE_STATS.STATEMENT_MISSED).`as`("statement_stat_missed"),
+                                sum(CODE_COVERAGE_STATS.LINE_COVERED).`as`("line_stat_covered"),
+                                sum(CODE_COVERAGE_STATS.LINE_MISSED).`as`("line_stat_missed")
+                        )
+                        .from(CODE_COVERAGE_STATS)
+                        .innerJoin(CODE_COVERAGE_GROUP).on(CODE_COVERAGE_STATS.ID.eq(CODE_COVERAGE_GROUP.STATS_ID))
+                        .innerJoin(CODE_COVERAGE_RUN).on(CODE_COVERAGE_RUN.ID.eq(CODE_COVERAGE_GROUP.CODE_COVERAGE_RUN_ID))
+                        .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id).and(CODE_COVERAGE_STATS.SCOPE.eq("GROUP")))
+                        .fetchResultSet()
+
+                val overallStatus: CoverageReportStats? = resultSet.use {
+                    overallStatsMapper.stream(resultSet).findFirst().orElse(null)
+                }
+
+                overallStatus
             }
 }

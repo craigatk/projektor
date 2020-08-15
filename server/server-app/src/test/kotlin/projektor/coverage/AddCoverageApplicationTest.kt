@@ -25,7 +25,7 @@ class AddCoverageApplicationTest : ApplicationTestCase() {
         val reportXmlBytes = JacocoXmlLoader().serverApp().toByteArray()
 
         withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/run/$publicId/coverage/jacoco") {
+            handleRequest(HttpMethod.Post, "/run/$publicId/coverage") {
                 testRunDBGenerator.createTestRun(
                         publicId,
                         listOf(

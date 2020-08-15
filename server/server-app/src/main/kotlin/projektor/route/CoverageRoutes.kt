@@ -17,7 +17,7 @@ import projektor.server.api.PublicId
 
 @KtorExperimentalAPI
 fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
-    post("/run/{publicId}/coverage/jacoco") {
+    post("/run/{publicId}/coverage") {
         val publicId = call.parameters.getOrFail("publicId")
 
         if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
