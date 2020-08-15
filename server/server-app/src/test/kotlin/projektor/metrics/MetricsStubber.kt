@@ -6,7 +6,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 
 class MetricsStubber {
-    private val wireMockServer = WireMockServer(wireMockConfig().dynamicPort().dynamicPort())
+    private val wireMockServer = WireMockServer(wireMockConfig().dynamicPort())
 
     fun port() = wireMockServer.port()
 

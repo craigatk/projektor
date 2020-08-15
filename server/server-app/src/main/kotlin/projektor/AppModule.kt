@@ -9,6 +9,8 @@ import projektor.attachment.AttachmentDatabaseRepository
 import projektor.attachment.AttachmentRepository
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
+import projektor.coverage.CoverageDatabaseRepository
+import projektor.coverage.CoverageRepository
 import projektor.incomingresults.GroupedResultsConverter
 import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
@@ -49,12 +51,16 @@ fun createAppModule(
     single { metricRegistry }
     single { MetricsService(metricRegistry) }
     single { AuthService(authConfig) }
+
     single<TestCaseRepository> { TestCaseDatabaseRepository(get()) }
     single<TestSuiteRepository> { TestSuiteDatabaseRepository(get()) }
     single<TestRunRepository> { TestRunDatabaseRepository(get()) }
     single<TestRunSystemAttributesRepository> { TestRunSystemAttributesDatabaseRepository(get()) }
     single<AttachmentRepository> { AttachmentDatabaseRepository(get()) }
     single<ResultsProcessingRepository> { ResultsProcessingDatabaseRepository(get()) }
+
+    single<CoverageRepository> { CoverageDatabaseRepository(get()) }
+
     single { GroupedResultsParser() }
     single { GroupedResultsConverter(get(), get()) }
     single { GroupedTestResultsService(get(), get(), get(), get(), get()) }

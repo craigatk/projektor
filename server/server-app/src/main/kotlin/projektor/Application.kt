@@ -28,6 +28,8 @@ import projektor.auth.AuthService
 import projektor.cleanup.CleanupConfig
 import projektor.cleanup.CleanupScheduledJob
 import projektor.cleanup.CleanupService
+import projektor.coverage.CoverageRepository
+import projektor.coverage.CoverageService
 import projektor.database.DataSourceConfig
 import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
@@ -132,9 +134,13 @@ fun Application.main() {
     val scheduler: Scheduler by inject()
     CleanupScheduledJob.conditionallyStartCleanupScheduledJob(cleanupConfig, cleanupService, scheduler)
 
+    val coverageRepository: CoverageRepository by inject()
+    val coverageService = CoverageService(coverageRepository)
+
     routing {
         attachments(attachmentService, authService)
         config(cleanupConfig)
+        coverage(authService, coverageService)
         health()
         messages(messageService)
         results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService, metricRegistry)

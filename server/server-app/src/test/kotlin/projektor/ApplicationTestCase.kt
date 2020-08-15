@@ -45,6 +45,11 @@ open class ApplicationTestCase {
     lateinit var resultsProcessingDao: ResultsProcessingDao
     lateinit var resultsProcessingFailureDao: ResultsProcessingFailureDao
     lateinit var testRunDBGenerator: TestRunDBGenerator
+
+    lateinit var coverageRunDao: CodeCoverageRunDao
+    lateinit var coverageGroupDao: CodeCoverageGroupDao
+    lateinit var coverageStatsDao: CodeCoverageStatsDao
+
     lateinit var application: Application
 
     protected var databaseSchema: String = "public"
@@ -55,7 +60,7 @@ open class ApplicationTestCase {
     protected var attachmentsMaxSizeMB: BigDecimal? = null
     protected var attachmentsAccessKey = "minio_access_key"
     protected var attachmentsBucketName = "attachmentstesting"
-    protected var attachemntsAutoCreateBucket = true
+    protected var attachmentsAutoCreateBucket = true
 
     protected var cleanupMaxAgeDays: Int? = null
 
@@ -81,7 +86,7 @@ open class ApplicationTestCase {
             attachmentsEnabled?.let {
                 put("ktor.attachment.url", "http://localhost:9000")
                 put("ktor.attachment.bucketName", attachmentsBucketName)
-                put("ktor.attachment.autoCreateBucket", attachemntsAutoCreateBucket.toString())
+                put("ktor.attachment.autoCreateBucket", attachmentsAutoCreateBucket.toString())
                 put("ktor.attachment.accessKey", attachmentsAccessKey)
                 put("ktor.attachment.secretKey", "minio_secret_key")
                 attachmentsMaxSizeMB?.let { put("ktor.attachment.maxSizeMB", it.toString()) }
@@ -118,6 +123,10 @@ open class ApplicationTestCase {
         resultsProcessingDao = ResultsProcessingDao(dslContext.configuration())
         resultsProcessingFailureDao = ResultsProcessingFailureDao(dslContext.configuration())
         testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao, testRunSystemAttributesDao)
+
+        coverageRunDao = CodeCoverageRunDao(dslContext.configuration())
+        coverageGroupDao = CodeCoverageGroupDao(dslContext.configuration())
+        coverageStatsDao = CodeCoverageStatsDao(dslContext.configuration())
 
         this.application = application
     }

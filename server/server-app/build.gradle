@@ -2,6 +2,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "5.2.0"
     id "com.heroku.sdk.heroku-gradle" version "1.0.4"
     id "application"
+    id 'jacoco'
 }
 
 apply from: '../../gradle/kotlin.gradle'
@@ -28,6 +29,7 @@ version '1.0'
 dependencies {
     implementation project(':server:persistence:database-schema')
     implementation project(':server:server-api')
+    implementation project(':server:parsing:coverage-parser')
     implementation project(':server:parsing:test-results-parser')
     implementation project(':server:parsing:grouped-results-parser')
     implementation project(':server:persistence:object-store')
@@ -52,6 +54,7 @@ dependencies {
 
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
 
+    testImplementation(project(':server:test:jacoco-fixtures'))
     testImplementation(project(':server:test:test-fixtures'))
 
     testImplementation 'org.awaitility:awaitility-kotlin:4.0.0'
@@ -106,3 +109,19 @@ heroku {
 }
 
 deployHeroku.dependsOn('assembleFull')
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
