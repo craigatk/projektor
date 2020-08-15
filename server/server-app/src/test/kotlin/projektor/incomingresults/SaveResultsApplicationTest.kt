@@ -4,6 +4,7 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.KtorExperimentalAPI
 import java.math.BigDecimal
+import java.time.Duration
 import kotlin.test.assertNotNull
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
@@ -70,8 +71,8 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
                 val testFailures = testFailureDao.fetchByTestCaseId(testCases[0].id)
                 expectThat(testFailures).isEmpty()
 
-                await until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_success", 1).isNotEmpty() }
-                await until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_failure", 0).isNotEmpty() }
+                await.atMost(Duration.ofSeconds(20)) until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_success", 1).isNotEmpty() }
+                await.atMost(Duration.ofSeconds(20)) until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_failure", 0).isNotEmpty() }
             }
         }
     }

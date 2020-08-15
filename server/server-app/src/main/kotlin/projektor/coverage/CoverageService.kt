@@ -12,7 +12,9 @@ class CoverageService(private val coverageRepository: CoverageRepository) {
         coverageReport?.let { coverageRepository.addCoverageReport(coverageRun, it) }
     }
 
-    fun getOverallStats(publicId: PublicId): CoverageStats? {
-        return null
+    suspend fun getOverallStats(publicId: PublicId): CoverageStats? {
+        val overallReportStats = coverageRepository.fetchOverallStats(publicId)
+
+        return overallReportStats?.toCoverageStats()
     }
 }
