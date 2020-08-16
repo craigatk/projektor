@@ -28,7 +28,6 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
         rootBuildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                codeCoveragePublish = true
                 autoPublishOnFailureOnly = false
             }
         """.stripIndent()

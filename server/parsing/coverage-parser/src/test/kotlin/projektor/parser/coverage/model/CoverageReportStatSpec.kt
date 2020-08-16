@@ -12,7 +12,8 @@ class CoverageReportStatSpec : StringSpec({
         forAll(
                 row(50, 50, 100, BigDecimal("50.00")),
                 row(33, 66, 99, BigDecimal("33.33")),
-                row(60, 0, 60, BigDecimal("100.00"))
+                row(60, 0, 60, BigDecimal("100.00")),
+                row(0, 0, 0, BigDecimal.ZERO)
         ) { covered, missed, expectedTotal, expectedPercentCovered ->
             val coverageStat = CoverageReportStat(covered = covered, missed = missed)
 

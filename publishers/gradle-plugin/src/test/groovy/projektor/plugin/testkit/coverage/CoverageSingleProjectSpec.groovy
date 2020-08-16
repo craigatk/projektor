@@ -20,7 +20,6 @@ class CoverageSingleProjectSpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                codeCoveragePublish = true
                 autoPublishOnFailureOnly = false
             }
         """.stripIndent()

@@ -11,23 +11,29 @@ class JacocoCoverageReportParser {
     fun parseReport(reportXml: String): CoverageReport {
         val parsedReport = JacocoXmlReportParser().parseReport(reportXml)
 
-        val statementCounter = findCounter(parsedReport, CounterType.INSTRUCTION)
-        val lineCounter = findCounter(parsedReport, CounterType.LINE)
-        val branchCounter = findCounter(parsedReport, CounterType.BRANCH)
+        val statementStat = createStat(parsedReport, CounterType.INSTRUCTION)
+        val lineStat = createStat(parsedReport, CounterType.LINE)
+        val branchStat = createStat(parsedReport, CounterType.BRANCH)
 
         return CoverageReport(
                 parsedReport.name,
                 CoverageReportStats(
-                        statementStat = CoverageReportStat(statementCounter.covered, statementCounter.missed),
-                        lineStat = CoverageReportStat(lineCounter.covered, lineCounter.missed),
-                        branchStat = CoverageReportStat(branchCounter.covered, branchCounter.missed)
+                        statementStat = statementStat,
+                        lineStat = lineStat,
+                        branchStat = branchStat
                 )
         )
     }
 
     companion object {
-        private fun findCounter(parsedReport: Report, counterType: CounterType) =
-                parsedReport.counters.find { it.type == counterType }
-                        ?: throw IllegalStateException("Missing $counterType counter in Jacoco report ${parsedReport.name}")
+        private fun createStat(parsedReport: Report, counterType: CounterType): CoverageReportStat {
+            val counter = parsedReport.counters.find { it.type == counterType }
+
+            return if (counter != null) {
+                CoverageReportStat(covered = counter.covered, missed = counter.missed)
+            } else {
+                CoverageReportStat(0, 0)
+            }
+        }
     }
 }

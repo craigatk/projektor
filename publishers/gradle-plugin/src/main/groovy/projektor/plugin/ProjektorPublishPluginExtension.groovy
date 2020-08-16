@@ -19,5 +19,5 @@ class ProjektorPublishPluginExtension {
     boolean writeSlackMessageFile = false
     String slackMessageFileName = "projektor_failure_message.json"
 
-    boolean codeCoveragePublish = false
+    boolean codeCoveragePublish = true
 }
