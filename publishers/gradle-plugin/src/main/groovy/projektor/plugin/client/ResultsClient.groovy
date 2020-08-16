@@ -2,8 +2,6 @@ package projektor.plugin.client
 
 import groovy.json.JsonSlurper
 import io.github.resilience4j.retry.Retry
-import io.github.resilience4j.retry.RetryConfig
-import io.github.resilience4j.retry.RetryRegistry
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -13,9 +11,6 @@ import org.gradle.api.logging.Logger
 import projektor.plugin.PublishResult
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.results.grouped.GroupedResultsSerializer
-
-import java.time.Duration
-import java.util.concurrent.TimeUnit
 
 import static projektor.plugin.client.ClientToken.conditionallyAddPublishTokenToRequest
 
@@ -32,23 +27,8 @@ class ResultsClient {
         this.config = clientConfig
         this.logger = logger
 
-        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
-        okHttpClientBuilder.retryOnConnectionFailure = false
-        okHttpClientBuilder.callTimeout(clientConfig.timeout, TimeUnit.MILLISECONDS)
-        okHttpClientBuilder.readTimeout(clientConfig.timeout, TimeUnit.MILLISECONDS)
-        okHttpClientBuilder.connectTimeout(clientConfig.timeout, TimeUnit.MILLISECONDS)
-        this.client = okHttpClientBuilder.build()
-
-        RetryConfig retryConfig = RetryConfig.custom()
-                .maxAttempts(clientConfig.retryMaxAttempts)
-                .waitDuration(Duration.ofMillis(clientConfig.retryInterval))
-                .retryOnResult({ Response response -> !response.successful && response.code() != 401 })
-                .retryOnException({ Throwable e -> true })
-                .build()
-
-        RetryRegistry registry = RetryRegistry.of(retryConfig)
-
-        this.publishRetry = registry.retry("publish")
+        this.client = ClientFactory.createClient(clientConfig)
+        this.publishRetry = ClientFactory.createClientRetry(clientConfig, "publish")
     }
 
     PublishResult sendResultsToServer(GroupedResults groupedResults) {

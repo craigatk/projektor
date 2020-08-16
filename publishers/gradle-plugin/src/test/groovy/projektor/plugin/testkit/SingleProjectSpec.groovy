@@ -6,6 +6,10 @@ abstract class SingleProjectSpec extends ProjectSpec {
     File buildFile
 
     def setup() {
-        buildFile = BuildFileWriter.createProjectBuildFile(projectRootDir)
+        buildFile = BuildFileWriter.createProjectBuildFile(
+                projectRootDir,
+                true,
+                includeJacocoPlugin()
+        )
     }
 }

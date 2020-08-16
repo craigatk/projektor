@@ -8,8 +8,11 @@ import org.gradle.api.invocation.Gradle
 import org.gradle.api.logging.Logger
 import projektor.plugin.attachments.AttachmentsClient
 import projektor.plugin.attachments.AttachmentsPublisher
+import projektor.plugin.client.CoverageClient
 import projektor.plugin.client.ResultsClient
 import projektor.plugin.client.ClientConfig
+import projektor.plugin.coverage.CodeCoverageGroup
+import projektor.plugin.coverage.CodeCoverageTaskFinishedListener
 import projektor.plugin.notification.NotificationConfig
 import projektor.plugin.notification.slack.SlackMessageBuilder
 import projektor.plugin.notification.slack.SlackMessageWriter
@@ -27,25 +30,28 @@ class ProjektorBuildFinishedListener implements BuildListener {
     private final List<String> additionalResultsDirs
     private final List<FileTree> attachments
     private final ProjektorTaskFinishedListener projektorTaskFinishedListener
+    private final CodeCoverageTaskFinishedListener codeCoverageTaskFinishedListener
+    private final boolean coverageEnabled
 
     ProjektorBuildFinishedListener(
             ClientConfig clientConfig,
             NotificationConfig notificationConfig,
             Logger logger,
-            boolean publishOnFailureOnly,
             File projectDir,
-            List<String> additionalResultsDirs,
-            List<FileTree> attachments,
-            ProjektorTaskFinishedListener projektorTaskFinishedListener
+            ProjektorPublishPluginExtension extension,
+            ProjektorTaskFinishedListener projektorTaskFinishedListener,
+            CodeCoverageTaskFinishedListener codeCoverageTaskFinishedListener
     ) {
         this.clientConfig = clientConfig
         this.notificationConfig = notificationConfig
         this.logger = logger
-        this.publishOnFailureOnly = publishOnFailureOnly
+        this.publishOnFailureOnly = extension.autoPublishOnFailureOnly
         this.projectDir = projectDir
-        this.additionalResultsDirs = additionalResultsDirs
-        this.attachments = attachments
+        this.additionalResultsDirs = extension.additionalResultsDirs
+        this.attachments = extension.attachments
         this.projektorTaskFinishedListener = projektorTaskFinishedListener
+        this.codeCoverageTaskFinishedListener = codeCoverageTaskFinishedListener
+        this.coverageEnabled = extension.codeCoveragePublish
     }
 
     @Override
@@ -81,6 +87,18 @@ class ProjektorBuildFinishedListener implements BuildListener {
             if (attachments) {
                 AttachmentsClient attachmentsClient = new AttachmentsClient(clientConfig, logger)
                 new AttachmentsPublisher(attachmentsClient, logger).publishAttachments(publishResult.publicId, attachments)
+            }
+
+            if (coverageEnabled) {
+                CoverageClient coverageClient = new CoverageClient(clientConfig, logger)
+
+                List<CodeCoverageGroup> codeCoverageGroups = codeCoverageTaskFinishedListener.codeCoverageGroups
+
+                logger.info("Publishing ${codeCoverageGroups.size()} code coverage reports to Projektor server")
+
+                codeCoverageGroups.forEach { CodeCoverageGroup coverageGroup ->
+                    coverageClient.sendCoverageToServer(coverageGroup.reportFile, publishResult.publicId)
+                }
             }
         } else {
             logger.info("Projektor plugin applied but no test results found in this build")

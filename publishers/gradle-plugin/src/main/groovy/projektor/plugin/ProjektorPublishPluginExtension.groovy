@@ -11,9 +11,13 @@ class ProjektorPublishPluginExtension {
     List<String> additionalResultsDirs = []
     List<FileTree> attachments = []
     boolean compressionEnabled = true
+
     int publishRetryMaxAttempts = 3
     long publishRetryInterval = 100
     long publishTimeout = 10_000
+
     boolean writeSlackMessageFile = false
     String slackMessageFileName = "projektor_failure_message.json"
+
+    boolean codeCoveragePublish = true
 }

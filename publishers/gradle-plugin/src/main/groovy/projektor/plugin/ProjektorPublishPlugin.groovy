@@ -2,87 +2,21 @@ package projektor.plugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.logging.Logger
-import projektor.plugin.client.ClientConfig
-import projektor.plugin.notification.NotificationConfig
+import projektor.plugin.coverage.CodeCoverageTaskConfigurator
 
 class ProjektorPublishPlugin implements Plugin<Project> {
-    private static final String LISTENER_APPLIED_PROPERTY_NAME = "projektorListenerApplied"
-
-    private static final String PUBLISH_TASK_NAME = "publishResults"
-
     void apply(Project project) {
         ProjektorPublishPluginExtension extension = project.extensions.create('projektor', ProjektorPublishPluginExtension.class) as ProjektorPublishPluginExtension
 
         project.afterEvaluate {
-            conditionallyAddBuildListener(project, extension)
-
-            conditionallyAddPublishTask(project, extension)
-        }
-    }
-
-    private static void conditionallyAddBuildListener(Project project, ProjektorPublishPluginExtension extension) {
-        Logger logger = project.logger
-
-        if (extension.autoPublish) {
             if (extension.serverUrl) {
-                if (!project.gradle.ext.has(LISTENER_APPLIED_PROPERTY_NAME)) {
-                    addBuildListener(project, extension)
+                ApplyTestResultsBuildListener.conditionallyAddBuildListener(project, extension)
 
-                    project.gradle.ext.set(LISTENER_APPLIED_PROPERTY_NAME, true)
-                } else {
-                    logger.info("Projektor build listener already applied, skipping")
-                }
+                ApplyTestResultsPublishTask.conditionallyAddPublishTask(project, extension)
+
+                CodeCoverageTaskConfigurator.conditionallyConfigureCodeCoverageReportTask(project, extension)
             } else {
-                logger.warn("Projektor plugin enabled but no server specified")
-            }
-        } else {
-            logger.info("Projektor plugin auto-publish disabled")
-        }
-    }
-
-    static void addBuildListener(Project project, ProjektorPublishPluginExtension extension) {
-        Logger logger = project.logger
-
-        ProjektorTaskFinishedListener projektorTaskFinishedListener = new ProjektorTaskFinishedListener(
-                logger
-        )
-        project.gradle.taskGraph.addTaskExecutionListener(projektorTaskFinishedListener)
-
-        ProjektorBuildFinishedListener projektorBuildFinishedListener = new ProjektorBuildFinishedListener(
-                new ClientConfig(
-                        extension.serverUrl,
-                        extension.compressionEnabled,
-                        Optional.ofNullable(extension.publishToken),
-                        extension.publishRetryMaxAttempts,
-                        extension.publishRetryInterval,
-                        extension.publishTimeout
-                ),
-                new NotificationConfig(
-                        extension.writeSlackMessageFile,
-                        extension.slackMessageFileName
-                ),
-                logger,
-                extension.autoPublishOnFailureOnly,
-                project.projectDir,
-                extension.additionalResultsDirs,
-                extension.attachments,
-                projektorTaskFinishedListener
-        )
-        project.gradle.addBuildListener(projektorBuildFinishedListener)
-    }
-
-    static void conditionallyAddPublishTask(Project project, ProjektorPublishPluginExtension extension) {
-        if (extension.publishTaskEnabled && extension.serverUrl) {
-            project.allprojects.each { proj ->
-                if (!proj.tasks.findByPath(PUBLISH_TASK_NAME)) {
-                    proj.tasks.create(PUBLISH_TASK_NAME, ProjektorManualPublishTask, { task ->
-                        task.serverUrl = extension.serverUrl
-                        task.publishToken = extension.publishToken
-                        task.additionalResultsDirs = extension.additionalResultsDirs
-                        task.attachments = extension.attachments
-                    })
-                }
+                project.logger.warn("Projektor plugin enabled but no server specified")
             }
         }
     }

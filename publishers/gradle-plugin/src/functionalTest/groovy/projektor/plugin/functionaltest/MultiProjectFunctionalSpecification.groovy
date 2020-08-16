@@ -1,7 +1,8 @@
 package projektor.plugin.functionaltest
 
 import projektor.plugin.BuildFileWriter
-import projektor.plugin.SpecWriter
+
+import static projektor.plugin.ProjectDirectoryWriter.createTestDirectory
 
 class MultiProjectFunctionalSpecification extends ProjektorPluginFunctionalSpecification {
     File projectDir1
@@ -35,12 +36,16 @@ include 'project1', 'project2', 'project3'
 
         rootBuildFile = BuildFileWriter.createRootBuildFile(projectRootDir)
 
-        BuildFileWriter.writeBuildFileContents(buildFileProject1, false)
-        BuildFileWriter.writeBuildFileContents(buildFileProject2, false)
-        BuildFileWriter.writeBuildFileContents(buildFileProject3, false)
+        BuildFileWriter.writeBuildFileContents(buildFileProject1, false, includeJacocoPlugin())
+        BuildFileWriter.writeBuildFileContents(buildFileProject2, false, includeJacocoPlugin())
+        BuildFileWriter.writeBuildFileContents(buildFileProject3, false, includeJacocoPlugin())
 
-        testDirectory1 = SpecWriter.createTestDirectory(projectDir1)
-        testDirectory2 = SpecWriter.createTestDirectory(projectDir2)
-        testDirectory3 = SpecWriter.createTestDirectory(projectDir3)
+        testDirectory1 = createTestDirectory(projectDir1)
+        testDirectory2 = createTestDirectory(projectDir2)
+        testDirectory3 = createTestDirectory(projectDir3)
+    }
+
+    boolean includeJacocoPlugin() {
+        return false
     }
 }

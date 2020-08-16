@@ -9,7 +9,14 @@ data class CoverageReportStat(val covered: Int, val missed: Int) {
         get() = this.covered + this.missed
 
     val percentCovered: BigDecimal
-        get() = (this.covered.toBigDecimal())
-                    .divide(this.total.toBigDecimal(), MathContext(4, RoundingMode.HALF_DOWN))
-                .times(BigDecimal(100.00)).setScale(2, RoundingMode.HALF_DOWN)
+        get() {
+            return if (total > 0) {
+                val fraction = this.covered.toBigDecimal()
+                        .divide(this.total.toBigDecimal(), MathContext(4, RoundingMode.HALF_DOWN))
+
+                fraction.times(BigDecimal(100.00)).setScale(2, RoundingMode.HALF_DOWN)
+            } else {
+                BigDecimal.ZERO
+            }
+        }
 }
