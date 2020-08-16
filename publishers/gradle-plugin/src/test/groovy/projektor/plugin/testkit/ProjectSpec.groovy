@@ -50,4 +50,8 @@ abstract class ProjectSpec extends Specification {
 
         return result
     }
+
+    boolean includeJacocoPlugin() {
+        return false
+    }
 }

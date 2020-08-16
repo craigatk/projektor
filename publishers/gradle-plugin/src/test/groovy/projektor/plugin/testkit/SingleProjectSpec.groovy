@@ -12,8 +12,4 @@ abstract class SingleProjectSpec extends ProjectSpec {
                 includeJacocoPlugin()
         )
     }
-
-    boolean includeJacocoPlugin() {
-        return false
-    }
 }
