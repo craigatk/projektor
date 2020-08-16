@@ -2,21 +2,9 @@ package projektor.plugin
 
 import org.junit.rules.TemporaryFolder
 
+import static projektor.plugin.ProjectDirectoryWriter.createTestDirectory
+
 class SpecWriter {
-    static File createTestDirectory(TemporaryFolder projectDir) {
-        projectDir.newFolder("src", "test", "groovy", "projektor")
-    }
-
-    static File createTestDirectory(File projectDir) {
-        return createProjectDir(projectDir, "src/test/groovy/projektor")
-    }
-
-    private static File createProjectDir(File projectDir, String dirPath) {
-        File dir = new File(projectDir, dirPath)
-        dir.mkdirs()
-        return dir
-    }
-
     static void writeFailingSpecFile(File testDirectory, String specClassName) {
         writeFailingSpecFiles(testDirectory, [specClassName])
     }
