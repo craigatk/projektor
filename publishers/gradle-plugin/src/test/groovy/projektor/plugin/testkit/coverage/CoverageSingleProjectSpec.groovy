@@ -21,16 +21,14 @@ class CoverageSingleProjectSpec extends SingleProjectSpec {
             projektor {
                 serverUrl = '${serverUrl}'
                 codeCoveragePublish = true
+                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 
-        buildFile << """
-            jacocoTestReport {
-                reports {
-                    xml.enabled true
-                }
-            }
-        """.stripIndent()
+        String publicId = "COV123"
+        resultsStubber.stubResultsPostSuccess(publicId)
+
+        coverageStubber.stubCoveragePostSuccess(publicId)
 
         File sourceDir = createSourceDirectory(projectRootDir)
         File testDir = createTestDirectory(projectRootDir)
@@ -44,5 +42,8 @@ class CoverageSingleProjectSpec extends SingleProjectSpec {
         then:
         result.task(":test").outcome == SUCCESS
         result.task(":jacocoTestReport").outcome == SUCCESS
+
+        and:
+        coverageStubber.findCoverageRequests(publicId).size() == 1
     }
 }

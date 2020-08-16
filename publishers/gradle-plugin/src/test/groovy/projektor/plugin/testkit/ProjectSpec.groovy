@@ -5,6 +5,7 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
+import projektor.plugin.CoverageWireMockStubber
 import projektor.plugin.ResultsWireMockStubber
 import spock.lang.Specification
 
@@ -17,6 +18,7 @@ abstract class ProjectSpec extends Specification {
     @Rule
     WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort())
 
+    CoverageWireMockStubber coverageStubber = new CoverageWireMockStubber(wireMockRule)
     ResultsWireMockStubber resultsStubber = new ResultsWireMockStubber(wireMockRule)
 
     String serverUrl

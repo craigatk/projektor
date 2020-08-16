@@ -3,6 +3,7 @@ package projektor.plugin
 import org.gradle.api.Project
 import org.gradle.api.logging.Logger
 import projektor.plugin.client.ClientConfig
+import projektor.plugin.coverage.CodeCoverageTaskFinishedListener
 import projektor.plugin.notification.NotificationConfig
 
 class ApplyTestResultsBuildListener {
@@ -32,6 +33,12 @@ class ApplyTestResultsBuildListener {
         )
         project.gradle.taskGraph.addTaskExecutionListener(projektorTaskFinishedListener)
 
+        CodeCoverageTaskFinishedListener codeCoverageTaskFinishedListener = new CodeCoverageTaskFinishedListener(logger)
+
+        if (extension.codeCoveragePublish) {
+            project.gradle.taskGraph.addTaskExecutionListener(codeCoverageTaskFinishedListener)
+        }
+
         ProjektorBuildFinishedListener projektorBuildFinishedListener = new ProjektorBuildFinishedListener(
                 new ClientConfig(
                         extension.serverUrl,
@@ -46,11 +53,10 @@ class ApplyTestResultsBuildListener {
                         extension.slackMessageFileName
                 ),
                 logger,
-                extension.autoPublishOnFailureOnly,
                 project.projectDir,
-                extension.additionalResultsDirs,
-                extension.attachments,
-                projektorTaskFinishedListener
+                extension,
+                projektorTaskFinishedListener,
+                codeCoverageTaskFinishedListener
         )
         project.gradle.addBuildListener(projektorBuildFinishedListener)
     }

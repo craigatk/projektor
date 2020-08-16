@@ -1,7 +1,7 @@
 package projektor.plugin.coverage
 
 class CodeCoverageGroup {
-    private final File reportFile
+    final File reportFile
 
     CodeCoverageGroup(File reportFile) {
         this.reportFile = reportFile
