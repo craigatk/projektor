@@ -11,5 +11,7 @@ interface CoverageRepository {
 
     suspend fun addCoverageReport(coverageRun: CodeCoverageRun, coverageReport: CoverageReport): CodeCoverageGroup
 
-    suspend fun fetchOverallStats(publicId: PublicId): CoverageReportStats?
+    suspend fun hasCoverageData(publicId: PublicId): Boolean
+
+    suspend fun fetchOverallStats(publicId: PublicId): CoverageReportStats
 }

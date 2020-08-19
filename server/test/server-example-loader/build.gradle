@@ -5,6 +5,8 @@ mainClassName = "projektor.server.example.MainKt"
 
 dependencies {
     implementation project(":server:server-api")
+    implementation project(":server:server-client")
+    implementation project(":server:test:jacoco-fixtures")
     implementation project(":server:test:test-fixtures")
 
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"

@@ -3,6 +3,7 @@ package projektor.coverage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
+import org.jooq.impl.DSL.count
 import org.jooq.impl.DSL.sum
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables.*
@@ -70,7 +71,15 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
                 codeCoverageGroup
             }
 
-    override suspend fun fetchOverallStats(publicId: PublicId): CoverageReportStats? =
+    override suspend fun hasCoverageData(publicId: PublicId): Boolean =
+            withContext(Dispatchers.IO) {
+                dslContext.select(count(CODE_COVERAGE_RUN.ID))
+                        .from(CODE_COVERAGE_RUN)
+                        .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id))
+                        .fetchSingle(0, Int::class.java) > 0
+            }
+
+    override suspend fun fetchOverallStats(publicId: PublicId): CoverageReportStats =
             withContext(Dispatchers.IO) {
                 val resultSet = dslContext.select(
                                 sum(CODE_COVERAGE_STATS.BRANCH_COVERED).`as`("branch_stat_covered"),
@@ -86,7 +95,7 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
                         .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id).and(CODE_COVERAGE_STATS.SCOPE.eq("GROUP")))
                         .fetchResultSet()
 
-                val overallStatus: CoverageReportStats? = resultSet.use {
+                val overallStatus: CoverageReportStats = resultSet.use {
                     overallStatsMapper.stream(resultSet).findFirst().orElse(null)
                 }
 
