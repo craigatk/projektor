@@ -10,7 +10,6 @@ import projektor.database.generated.Tables.*
 import projektor.database.generated.tables.daos.CodeCoverageGroupDao
 import projektor.database.generated.tables.daos.CodeCoverageRunDao
 import projektor.database.generated.tables.daos.CodeCoverageStatsDao
-import projektor.database.generated.tables.daos.TestRunDao
 import projektor.database.generated.tables.pojos.CodeCoverageGroup
 import projektor.database.generated.tables.pojos.CodeCoverageRun
 import projektor.database.generated.tables.pojos.CodeCoverageStats
@@ -20,7 +19,6 @@ import projektor.server.api.PublicId
 
 class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageRepository {
     private val codeCoverageRunDao = CodeCoverageRunDao(dslContext.configuration())
-    private val testRunDao = TestRunDao(dslContext.configuration())
 
     private val overallStatsMapper = JdbcMapperFactory.newInstance()
             .addKeys("id")
@@ -35,7 +33,6 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
                     codeCoverageRuns[0]
                 } else {
                     val codeCoverageRun = CodeCoverageRun()
-                    codeCoverageRun.testRunId = testRunDao.fetchOneByPublicId(publicId.id).id
                     codeCoverageRun.testRunPublicId = publicId.id
                     codeCoverageRunDao.insert(codeCoverageRun)
 

@@ -15,7 +15,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row3;
+import org.jooq.Row2;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -43,7 +43,7 @@ import projektor.database.generated.tables.records.CodeCoverageRunRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CodeCoverageRun extends TableImpl<CodeCoverageRunRecord> {
 
-    private static final long serialVersionUID = -1494614722;
+    private static final long serialVersionUID = -830205267;
 
     /**
      * The reference instance of <code>public.code_coverage_run</code>
@@ -62,11 +62,6 @@ public class CodeCoverageRun extends TableImpl<CodeCoverageRunRecord> {
      * The column <code>public.code_coverage_run.id</code>.
      */
     public final TableField<CodeCoverageRunRecord, Long> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('code_coverage_run_id_seq'::regclass)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
-
-    /**
-     * The column <code>public.code_coverage_run.test_run_id</code>.
-     */
-    public final TableField<CodeCoverageRunRecord, Long> TEST_RUN_ID = createField(DSL.name("test_run_id"), org.jooq.impl.SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>public.code_coverage_run.test_run_public_id</code>.
@@ -113,7 +108,7 @@ public class CodeCoverageRun extends TableImpl<CodeCoverageRunRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.CODE_COVERAGE_RUN_TEST_RUN_ID_IDX, Indexes.CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX);
+        return Arrays.<Index>asList(Indexes.CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX);
     }
 
     @Override
@@ -129,15 +124,6 @@ public class CodeCoverageRun extends TableImpl<CodeCoverageRunRecord> {
     @Override
     public List<UniqueKey<CodeCoverageRunRecord>> getKeys() {
         return Arrays.<UniqueKey<CodeCoverageRunRecord>>asList(Keys.CODE_COVERAGE_RUN_PKEY);
-    }
-
-    @Override
-    public List<ForeignKey<CodeCoverageRunRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<CodeCoverageRunRecord, ?>>asList(Keys.CODE_COVERAGE_RUN__CODE_COVERAGE_RUN_TEST_RUN_ID_FKEY);
-    }
-
-    public TestRun testRun() {
-        return new TestRun(this, Keys.CODE_COVERAGE_RUN__CODE_COVERAGE_RUN_TEST_RUN_ID_FKEY);
     }
 
     @Override
@@ -167,11 +153,11 @@ public class CodeCoverageRun extends TableImpl<CodeCoverageRunRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row3 type methods
+    // Row2 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<Long, Long, String> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row2<Long, String> fieldsRow() {
+        return (Row2) super.fieldsRow();
     }
 }
