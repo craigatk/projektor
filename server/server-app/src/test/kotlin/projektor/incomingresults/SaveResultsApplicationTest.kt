@@ -72,7 +72,7 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
                 val testFailures = testFailureDao.fetchByTestCaseId(testCases[0].id)
                 expectThat(testFailures).isEmpty()
 
-                waitAtMost(Duration.ofSeconds(30)) until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_success", 1).isNotEmpty() }
+                waitAtMost(Duration.ofSeconds(60)) until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_success", 1).isNotEmpty() }
                 waitAtMost(Duration.ofSeconds(30)) until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_failure", 0).isNotEmpty() }
             }
         }

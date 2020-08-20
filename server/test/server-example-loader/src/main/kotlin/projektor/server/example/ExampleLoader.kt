@@ -74,6 +74,13 @@ fun loadSingleCoverageExample() {
     println("View run with single coverage results at at $uiBaseUrl${resultsResponse.uri}")
 }
 
+fun loadDoubleCoverageExample() {
+    val resultsResponse = sendResultsToServer(ResultsXmlLoader().passing())
+    sendCoverageToServer(resultsResponse.id, JacocoXmlLoader().jacocoXmlParser())
+    sendCoverageToServer(resultsResponse.id, JacocoXmlLoader().junitResultsParser())
+    println("View run with two coverage results at at $uiBaseUrl${resultsResponse.uri}")
+}
+
 fun sendResultsToServer(resultXmlList: List<String>): SaveResultsResponse =
         resultXmlList.joinToString("\n").let(::sendResultsToServer)
 
