@@ -22,6 +22,8 @@ context("test run with coverage data", () => {
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
+    cy.testIdShouldExist("coverage-summary-title");
+
     cy.getByTestId("coverage-graph-title-line").should(
       "contain",
       "Line 97.44%"
@@ -57,6 +59,8 @@ context("test run with coverage data", () => {
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
+    cy.testIdShouldExist("coverage-summary-title");
+
     cy.getByTestId("coverage-graph-title-line").should(
       "contain",
       "Line 92.31%"
@@ -66,5 +70,30 @@ context("test run with coverage data", () => {
       "Statement 79.31%"
     );
     cy.testIdShouldNotExist("coverage-graph-title-branch");
+  });
+
+  it("should not show coverage section when no coverage data available", () => {
+    const publicId = "12345";
+
+    cy.server();
+
+    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+
+    cy.route(
+      "GET",
+      `run/${publicId}/cases/failed`,
+      "fixture:failed_test_cases.json"
+    );
+
+    cy.route({
+      method: "GET",
+      url: `run/${publicId}/coverage/overall`,
+      status: 404,
+      response: {},
+    });
+
+    cy.visit(`http://localhost:1234/tests/${publicId}`);
+
+    cy.testIdShouldNotExist("coverage-summary-title");
   });
 });

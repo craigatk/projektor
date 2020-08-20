@@ -6,6 +6,7 @@ import { TestSuiteOutput } from "../../model/TestRunModel";
 import { axiosInstance } from "../../service/AxiosService";
 import TestSuiteOutputType from "../../service/TestSuiteOutputType";
 import TestSystemOutput from "../TestSystemOutput";
+import { act } from "react-dom/test-utils";
 
 describe("TestSystemOut", () => {
   let mockAxios;
@@ -34,18 +35,20 @@ describe("TestSystemOut", () => {
       )
       .reply(200, testSuiteOutput);
 
-    const { getByTestId, queryByTestId } = render(
-      <TestSystemOutput
-        publicId={publicId}
-        testSuiteIdx={testSuiteIdx}
-        outputType={outputType}
-      />
-    );
+    await act(async () => {
+      const { getByTestId, queryByTestId } = render(
+        <TestSystemOutput
+          publicId={publicId}
+          testSuiteIdx={testSuiteIdx}
+          outputType={outputType}
+        />
+      );
 
-    await waitFor(() => getByTestId("code-text"));
+      await waitFor(() => getByTestId("code-text"));
 
-    expect(queryByTestId("code-text")).not.toBeNull();
-    expect(queryByTestId("loading-section-error")).toBeNull();
+      expect(queryByTestId("code-text")).not.toBeNull();
+      expect(queryByTestId("loading-section-error")).toBeNull();
+    });
   });
 
   it("should render error when fetching output fails", async () => {
