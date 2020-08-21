@@ -17,9 +17,3 @@ dependencies {
 
     testImplementation(project(':server:test:jacoco-fixtures'))
 }
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
-}

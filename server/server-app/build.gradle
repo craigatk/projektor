@@ -109,9 +109,3 @@ heroku {
 }
 
 deployHeroku.dependsOn('assembleFull')
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
-}
