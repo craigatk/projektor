@@ -1,10 +1,8 @@
 CREATE TABLE code_coverage_run(
   id                 bigserial primary key,
-  test_run_id        bigint references test_run ON DELETE CASCADE,
   test_run_public_id varchar(12)
 );
 
-CREATE INDEX code_coverage_run_test_run_id_idx on code_coverage_run(test_run_id);
 CREATE INDEX code_coverage_run_test_run_public_id_idx on code_coverage_run(test_run_public_id);
 
 CREATE TABLE code_coverage_stats(

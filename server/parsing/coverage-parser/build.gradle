@@ -1,7 +1,17 @@
+plugins {
+    id 'jacoco'
+}
+
 apply from: "../../../gradle/kotlin.gradle"
 
 dependencies {
     implementation project(':server:parsing:jacoco-xml-parser')
 
     testImplementation(project(':server:test:jacoco-fixtures'))
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
 }

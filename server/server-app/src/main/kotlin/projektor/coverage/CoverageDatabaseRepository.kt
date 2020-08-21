@@ -3,13 +3,13 @@ package projektor.coverage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
+import org.jooq.impl.DSL.count
 import org.jooq.impl.DSL.sum
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables.*
 import projektor.database.generated.tables.daos.CodeCoverageGroupDao
 import projektor.database.generated.tables.daos.CodeCoverageRunDao
 import projektor.database.generated.tables.daos.CodeCoverageStatsDao
-import projektor.database.generated.tables.daos.TestRunDao
 import projektor.database.generated.tables.pojos.CodeCoverageGroup
 import projektor.database.generated.tables.pojos.CodeCoverageRun
 import projektor.database.generated.tables.pojos.CodeCoverageStats
@@ -19,7 +19,6 @@ import projektor.server.api.PublicId
 
 class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageRepository {
     private val codeCoverageRunDao = CodeCoverageRunDao(dslContext.configuration())
-    private val testRunDao = TestRunDao(dslContext.configuration())
 
     private val overallStatsMapper = JdbcMapperFactory.newInstance()
             .addKeys("id")
@@ -34,7 +33,6 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
                     codeCoverageRuns[0]
                 } else {
                     val codeCoverageRun = CodeCoverageRun()
-                    codeCoverageRun.testRunId = testRunDao.fetchOneByPublicId(publicId.id).id
                     codeCoverageRun.testRunPublicId = publicId.id
                     codeCoverageRunDao.insert(codeCoverageRun)
 
@@ -70,7 +68,15 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
                 codeCoverageGroup
             }
 
-    override suspend fun fetchOverallStats(publicId: PublicId): CoverageReportStats? =
+    override suspend fun hasCoverageData(publicId: PublicId): Boolean =
+            withContext(Dispatchers.IO) {
+                dslContext.select(count(CODE_COVERAGE_RUN.ID))
+                        .from(CODE_COVERAGE_RUN)
+                        .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id))
+                        .fetchSingle(0, Int::class.java) > 0
+            }
+
+    override suspend fun fetchOverallStats(publicId: PublicId): CoverageReportStats =
             withContext(Dispatchers.IO) {
                 val resultSet = dslContext.select(
                                 sum(CODE_COVERAGE_STATS.BRANCH_COVERED).`as`("branch_stat_covered"),
@@ -86,7 +92,7 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
                         .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id).and(CODE_COVERAGE_STATS.SCOPE.eq("GROUP")))
                         .fetchResultSet()
 
-                val overallStatus: CoverageReportStats? = resultSet.use {
+                val overallStatus: CoverageReportStats = resultSet.use {
                     overallStatsMapper.stream(resultSet).findFirst().orElse(null)
                 }
 

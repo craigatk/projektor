@@ -8,6 +8,19 @@ interface Attachments {
   attachments: Attachment[];
 }
 
+interface CoverageStat {
+  covered: number;
+  missed: number;
+  total: number;
+  coveredPercentage: number;
+}
+
+interface CoverageStats {
+  branchStat: CoverageStat;
+  lineStat: CoverageStat;
+  statementStat: CoverageStat;
+}
+
 interface Messages {
   messages: string[];
 }
@@ -92,6 +105,8 @@ interface TestRunSystemAttributes {
 export {
   Attachment,
   Attachments,
+  CoverageStat,
+  CoverageStats,
   Messages,
   TestRunSummary,
   TestRun,

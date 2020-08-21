@@ -2,7 +2,7 @@ import * as React from "react";
 import { RouteComponentProps } from "@reach/router";
 import LoadingState from "../Loading/LoadingState";
 import LoadingSection from "../Loading/LoadingSection";
-import { fetchAttachments, fetchTestSuite } from "../service/TestRunService";
+import { fetchAttachments } from "../service/TestRunService";
 import AttachmentsList from "./AttachmentsList";
 import { Attachments } from "../model/TestRunModel";
 import PageTitle from "../PageTitle";

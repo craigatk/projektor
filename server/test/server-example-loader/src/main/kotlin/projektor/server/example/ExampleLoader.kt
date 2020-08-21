@@ -9,6 +9,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.ResultsXmlLoader
 import projektor.server.api.results.SaveResultsResponse
+import projektor.server.example.coverage.JacocoXmlLoader
 
 val serverBaseUrl = System.getenv("SERVER_URL") ?: "http://localhost:8080"
 val uiBaseUrl = System.getenv("SERVER_URL") ?: "http://localhost:1234"
@@ -67,6 +68,19 @@ fun loadInvalidExample() {
     println("View run with invalid results at at $uiBaseUrl${resultsResponse.uri}")
 }
 
+fun loadSingleCoverageExample() {
+    val resultsResponse = sendResultsToServer(ResultsXmlLoader().passing())
+    sendCoverageToServer(resultsResponse.id, JacocoXmlLoader().serverApp())
+    println("View run with single coverage results at at $uiBaseUrl${resultsResponse.uri}")
+}
+
+fun loadDoubleCoverageExample() {
+    val resultsResponse = sendResultsToServer(ResultsXmlLoader().passing())
+    sendCoverageToServer(resultsResponse.id, JacocoXmlLoader().jacocoXmlParser())
+    sendCoverageToServer(resultsResponse.id, JacocoXmlLoader().junitResultsParser())
+    println("View run with two coverage results at at $uiBaseUrl${resultsResponse.uri}")
+}
+
 fun sendResultsToServer(resultXmlList: List<String>): SaveResultsResponse =
         resultXmlList.joinToString("\n").let(::sendResultsToServer)
 
@@ -116,4 +130,19 @@ fun sendGroupedResultsToServer(groupedResultsJson: String): SaveResultsResponse 
     val response = client.newCall(request).execute()
     val responseString = response.body?.string()
     return Gson().fromJson(responseString, SaveResultsResponse::class.java)
+}
+
+fun sendCoverageToServer(publicId: String, reportXml: String) {
+    val client = OkHttpClient()
+
+    val mediaType = "text/plain".toMediaType()
+    val url = "$serverBaseUrl/run/$publicId/coverage"
+    val requestBody = reportXml.toRequestBody(mediaType)
+
+    val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
+
+    client.newCall(request).execute()
 }

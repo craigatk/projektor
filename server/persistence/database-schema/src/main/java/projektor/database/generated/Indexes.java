@@ -39,7 +39,6 @@ public class Indexes {
     // -------------------------------------------------------------------------
 
     public static final Index CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_IDX = Indexes0.CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_IDX;
-    public static final Index CODE_COVERAGE_RUN_TEST_RUN_ID_IDX = Indexes0.CODE_COVERAGE_RUN_TEST_RUN_ID_IDX;
     public static final Index CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX = Indexes0.CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX;
     public static final Index CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_IDX = Indexes0.CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_IDX;
     public static final Index IDX_RESULTS_PROCESSING_STATUS = Indexes0.IDX_RESULTS_PROCESSING_STATUS;
@@ -59,7 +58,6 @@ public class Indexes {
 
     private static class Indexes0 {
         public static Index CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_IDX = Internal.createIndex("code_coverage_group_code_coverage_run_id_idx", CodeCoverageGroup.CODE_COVERAGE_GROUP, new OrderField[] { CodeCoverageGroup.CODE_COVERAGE_GROUP.CODE_COVERAGE_RUN_ID }, false);
-        public static Index CODE_COVERAGE_RUN_TEST_RUN_ID_IDX = Internal.createIndex("code_coverage_run_test_run_id_idx", CodeCoverageRun.CODE_COVERAGE_RUN, new OrderField[] { CodeCoverageRun.CODE_COVERAGE_RUN.TEST_RUN_ID }, false);
         public static Index CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX = Internal.createIndex("code_coverage_run_test_run_public_id_idx", CodeCoverageRun.CODE_COVERAGE_RUN, new OrderField[] { CodeCoverageRun.CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID }, false);
         public static Index CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_IDX = Internal.createIndex("code_coverage_stats_code_coverage_run_id_idx", CodeCoverageStats.CODE_COVERAGE_STATS, new OrderField[] { CodeCoverageStats.CODE_COVERAGE_STATS.CODE_COVERAGE_RUN_ID }, false);
         public static Index IDX_RESULTS_PROCESSING_STATUS = Internal.createIndex("idx_results_processing_status", ResultsProcessing.RESULTS_PROCESSING, new OrderField[] { ResultsProcessing.RESULTS_PROCESSING.STATUS }, false);

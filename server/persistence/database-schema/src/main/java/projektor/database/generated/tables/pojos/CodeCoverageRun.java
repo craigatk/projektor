@@ -22,27 +22,23 @@ import javax.annotation.processing.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CodeCoverageRun implements Serializable {
 
-    private static final long serialVersionUID = 349007146;
+    private static final long serialVersionUID = 2029490295;
 
     private Long   id;
-    private Long   testRunId;
     private String testRunPublicId;
 
     public CodeCoverageRun() {}
 
     public CodeCoverageRun(CodeCoverageRun value) {
         this.id = value.id;
-        this.testRunId = value.testRunId;
         this.testRunPublicId = value.testRunPublicId;
     }
 
     public CodeCoverageRun(
         Long   id,
-        Long   testRunId,
         String testRunPublicId
     ) {
         this.id = id;
-        this.testRunId = testRunId;
         this.testRunPublicId = testRunPublicId;
     }
 
@@ -52,15 +48,6 @@ public class CodeCoverageRun implements Serializable {
 
     public CodeCoverageRun setId(Long id) {
         this.id = id;
-        return this;
-    }
-
-    public Long getTestRunId() {
-        return this.testRunId;
-    }
-
-    public CodeCoverageRun setTestRunId(Long testRunId) {
-        this.testRunId = testRunId;
         return this;
     }
 
@@ -88,12 +75,6 @@ public class CodeCoverageRun implements Serializable {
         }
         else if (!id.equals(other.id))
             return false;
-        if (testRunId == null) {
-            if (other.testRunId != null)
-                return false;
-        }
-        else if (!testRunId.equals(other.testRunId))
-            return false;
         if (testRunPublicId == null) {
             if (other.testRunPublicId != null)
                 return false;
@@ -108,7 +89,6 @@ public class CodeCoverageRun implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
-        result = prime * result + ((this.testRunId == null) ? 0 : this.testRunId.hashCode());
         result = prime * result + ((this.testRunPublicId == null) ? 0 : this.testRunPublicId.hashCode());
         return result;
     }
@@ -118,7 +98,6 @@ public class CodeCoverageRun implements Serializable {
         StringBuilder sb = new StringBuilder("CodeCoverageRun (");
 
         sb.append(id);
-        sb.append(", ").append(testRunId);
         sb.append(", ").append(testRunPublicId);
 
         sb.append(")");

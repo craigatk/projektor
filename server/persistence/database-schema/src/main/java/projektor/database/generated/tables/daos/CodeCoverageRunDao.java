@@ -69,20 +69,6 @@ public class CodeCoverageRunDao extends DAOImpl<CodeCoverageRunRecord, projektor
     }
 
     /**
-     * Fetch records that have <code>test_run_id BETWEEN lowerInclusive AND upperInclusive</code>
-     */
-    public List<projektor.database.generated.tables.pojos.CodeCoverageRun> fetchRangeOfTestRunId(Long lowerInclusive, Long upperInclusive) {
-        return fetchRange(CodeCoverageRun.CODE_COVERAGE_RUN.TEST_RUN_ID, lowerInclusive, upperInclusive);
-    }
-
-    /**
-     * Fetch records that have <code>test_run_id IN (values)</code>
-     */
-    public List<projektor.database.generated.tables.pojos.CodeCoverageRun> fetchByTestRunId(Long... values) {
-        return fetch(CodeCoverageRun.CODE_COVERAGE_RUN.TEST_RUN_ID, values);
-    }
-
-    /**
      * Fetch records that have <code>test_run_public_id BETWEEN lowerInclusive AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageRun> fetchRangeOfTestRunPublicId(String lowerInclusive, String upperInclusive) {

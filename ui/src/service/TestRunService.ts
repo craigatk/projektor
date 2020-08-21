@@ -9,6 +9,7 @@ import {
   Attachments,
   TestRunSystemAttributes,
   Messages,
+  CoverageStats,
 } from "../model/TestRunModel";
 import TestSuiteOutputType from "./TestSuiteOutputType";
 import { axiosInstance, axiosInstanceWithoutCache } from "./AxiosService";
@@ -114,12 +115,19 @@ const fetchMessages = (publicId: string): Promise<AxiosResponse<Messages>> =>
   // @ts-ignore
   axiosInstanceWithoutCache.get(`/run/${publicId}/messages`);
 
+const fetchOverallCoverage = (
+  publicId: string
+): Promise<AxiosResponse<CoverageStats>> =>
+  // @ts-ignore
+  axiosInstanceWithoutCache.get(`/run/${publicId}/coverage/overall`);
+
 export {
   fetchAttachments,
   fetchMessages,
   fetchTestRun,
   fetchTestRunSummary,
   fetchFailedTestCases,
+  fetchOverallCoverage,
   fetchSlowTestCases,
   fetchTestCaseDetails,
   fetchTestSuitesInPackage,

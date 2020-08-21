@@ -11,6 +11,8 @@ import projektor.parser.coverage.model.CoverageReportStat
 import projektor.parser.coverage.model.CoverageReportStats
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import strikt.assertions.isFalse
+import strikt.assertions.isTrue
 
 class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     @Test
@@ -50,5 +52,40 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
             get { branchStat.total }.isEqualTo(99)
             get { branchStat.percentCovered }.isEqualTo(BigDecimal("33.33"))
         }
+    }
+
+    @Test
+    fun `when coverage data should return true`() {
+        val coverageDatabaseRepository = CoverageDatabaseRepository(dslContext)
+
+        val publicId = randomPublicId()
+        testRunDBGenerator.createTestRun(publicId, listOf())
+
+        val coverageRun = runBlocking { coverageDatabaseRepository.createOrGetCoverageRun(publicId) }
+
+        val coverageReport = CoverageReport("my-report",
+                CoverageReportStats(
+                        statementStat = CoverageReportStat(75, 25),
+                        lineStat = CoverageReportStat(60, 0),
+                        branchStat = CoverageReportStat(33, 66)
+                )
+        )
+        runBlocking { coverageDatabaseRepository.addCoverageReport(coverageRun, coverageReport) }
+
+        val hasCoverageData = runBlocking { coverageDatabaseRepository.hasCoverageData(publicId) }
+
+        expectThat(hasCoverageData).isTrue()
+    }
+
+    @Test
+    fun `when no coverage data should return false`() {
+        val coverageDatabaseRepository = CoverageDatabaseRepository(dslContext)
+
+        val publicId = randomPublicId()
+        testRunDBGenerator.createTestRun(publicId, listOf())
+
+        val hasCoverageData = runBlocking { coverageDatabaseRepository.hasCoverageData(publicId) }
+
+        expectThat(hasCoverageData).isFalse()
     }
 }

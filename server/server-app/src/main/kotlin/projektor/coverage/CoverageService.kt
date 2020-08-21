@@ -13,8 +13,14 @@ class CoverageService(private val coverageRepository: CoverageRepository) {
     }
 
     suspend fun getOverallStats(publicId: PublicId): CoverageStats? {
-        val overallReportStats = coverageRepository.fetchOverallStats(publicId)
+        val hasCoverageData = coverageRepository.hasCoverageData(publicId)
 
-        return overallReportStats?.toCoverageStats()
+        return if (hasCoverageData) {
+            val overallReportStats = coverageRepository.fetchOverallStats(publicId)
+
+            overallReportStats.toCoverageStats()
+        } else {
+            null
+        }
     }
 }
