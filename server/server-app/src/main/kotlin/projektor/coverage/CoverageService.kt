@@ -23,4 +23,7 @@ class CoverageService(private val coverageRepository: CoverageRepository) {
             null
         }
     }
+
+    suspend fun coverageExists(publicId: PublicId): Boolean =
+            coverageRepository.coverageExists(publicId)
 }

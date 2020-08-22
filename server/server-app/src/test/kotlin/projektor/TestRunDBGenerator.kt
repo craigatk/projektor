@@ -66,6 +66,18 @@ class TestRunDBGenerator(
         return testRun
     }
 
+    fun createSimpleTestRun(publicId: PublicId): TestRunDB =
+            createTestRun(
+                    publicId,
+                    listOf(
+                            TestSuiteData("testSuite1",
+                                    listOf("testSuite1TestCase1"),
+                                    listOf(),
+                                    listOf()
+                            )
+                    )
+            )
+
     fun createTestRun(publicId: PublicId, createdOn: LocalDate, pinned: Boolean): TestRunDB {
         val testRun = createTestRun(publicId, listOf())
         testRun.createdTimestamp = Timestamp.from(createdOn.atStartOfDay(ZoneId.of("UTC")).toInstant())

@@ -14,4 +14,6 @@ interface CoverageRepository {
     suspend fun hasCoverageData(publicId: PublicId): Boolean
 
     suspend fun fetchOverallStats(publicId: PublicId): CoverageReportStats
+
+    suspend fun coverageExists(publicId: PublicId): Boolean
 }

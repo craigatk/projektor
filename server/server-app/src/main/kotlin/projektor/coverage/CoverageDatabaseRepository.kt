@@ -98,4 +98,11 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
 
                 overallStatus
             }
+
+    override suspend fun coverageExists(publicId: PublicId): Boolean =
+            withContext(Dispatchers.IO) {
+                dslContext.fetchExists(
+                        dslContext.selectFrom(CODE_COVERAGE_RUN)
+                                .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id)))
+            }
 }
