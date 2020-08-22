@@ -25,6 +25,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
     private final ClientConfig clientConfig
     private final NotificationConfig notificationConfig
     private final Logger logger
+    private final ProjektorPublishPluginExtension extension
     private final boolean publishOnFailureOnly
     private final File projectDir
     private final List<String> additionalResultsDirs
@@ -45,6 +46,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
         this.clientConfig = clientConfig
         this.notificationConfig = notificationConfig
         this.logger = logger
+        this.extension = extension
         this.publishOnFailureOnly = extension.autoPublishOnFailureOnly
         this.projectDir = projectDir
         this.additionalResultsDirs = extension.additionalResultsDirs
@@ -56,7 +58,12 @@ class ProjektorBuildFinishedListener implements BuildListener {
 
     @Override
     void buildFinished(BuildResult buildResult) {
-        boolean shouldPublish = !this.publishOnFailureOnly || buildResult.failure != null
+        boolean shouldPublish = ShouldPublishCalculator.shouldPublishResults(
+                extension,
+                buildResult,
+                codeCoverageTaskFinishedListener.hasCodeCoverageData(),
+                System.getenv()
+        )
 
         if (shouldPublish) {
             collectAndPublishResults(buildResult)

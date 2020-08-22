@@ -20,4 +20,5 @@ class ProjektorPublishPluginExtension {
     String slackMessageFileName = "projektor_failure_message.json"
 
     boolean codeCoveragePublish = true
+    boolean autoPublishWhenCoverageInCI = true
 }

@@ -16,6 +16,10 @@ class CodeCoverageTaskFinishedListener implements TaskExecutionListener {
         this.logger = logger
     }
 
+    boolean hasCodeCoverageData() {
+        return !codeCoverageGroups.empty
+    }
+
     @Override
     void beforeExecute(Task task) { }
 
