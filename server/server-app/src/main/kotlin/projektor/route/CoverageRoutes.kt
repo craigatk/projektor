@@ -32,6 +32,16 @@ fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
         }
     }
 
+    get("/run/{publicId}/coverage") {
+        val publicId = call.parameters.getOrFail("publicId")
+
+        val coverage = coverageService.getCoverage(PublicId(publicId))
+
+        coverage
+                ?.let { call.respond(HttpStatusCode.OK, it) }
+                ?: call.respond(HttpStatusCode.NoContent)
+    }
+
     get("/run/{publicId}/coverage/overall") {
         val publicId = call.parameters.getOrFail("publicId")
 

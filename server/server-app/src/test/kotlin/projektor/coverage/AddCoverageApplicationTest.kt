@@ -10,7 +10,6 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
-import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.coverage.CoverageStats
 import projektor.server.example.coverage.JacocoXmlLoader
@@ -29,16 +28,7 @@ class AddCoverageApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/coverage") {
-                testRunDBGenerator.createTestRun(
-                        publicId,
-                        listOf(
-                                TestSuiteData("testSuite1",
-                                        listOf("testSuite1TestCase1"),
-                                        listOf(),
-                                        listOf()
-                                )
-                        )
-                )
+                testRunDBGenerator.createSimpleTestRun(publicId)
 
                 setBody(reportXmlBytes)
             }.apply {
