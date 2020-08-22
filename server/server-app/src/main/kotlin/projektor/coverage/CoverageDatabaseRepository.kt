@@ -1,9 +1,9 @@
 package projektor.coverage
 
+import kotlin.streams.toList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
-import org.jooq.impl.DSL.count
 import org.jooq.impl.DSL.sum
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables.*
@@ -19,6 +19,11 @@ import projektor.server.api.PublicId
 
 class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageRepository {
     private val codeCoverageRunDao = CodeCoverageRunDao(dslContext.configuration())
+
+    private val coverageReportMapper = JdbcMapperFactory.newInstance()
+            .addKeys("id")
+            .ignorePropertyNotFound()
+            .newMapper(CoverageReport::class.java)
 
     private val overallStatsMapper = JdbcMapperFactory.newInstance()
             .addKeys("id")
@@ -68,14 +73,6 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
                 codeCoverageGroup
             }
 
-    override suspend fun hasCoverageData(publicId: PublicId): Boolean =
-            withContext(Dispatchers.IO) {
-                dslContext.select(count(CODE_COVERAGE_RUN.ID))
-                        .from(CODE_COVERAGE_RUN)
-                        .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id))
-                        .fetchSingle(0, Int::class.java) > 0
-            }
-
     override suspend fun fetchOverallStats(publicId: PublicId): CoverageReportStats =
             withContext(Dispatchers.IO) {
                 val resultSet = dslContext.select(
@@ -97,5 +94,36 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
                 }
 
                 overallStatus
+            }
+
+    override suspend fun coverageExists(publicId: PublicId): Boolean =
+            withContext(Dispatchers.IO) {
+                dslContext.fetchExists(
+                        dslContext.selectFrom(CODE_COVERAGE_RUN)
+                                .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id)))
+            }
+
+    override suspend fun fetchCoverageList(publicId: PublicId): List<CoverageReport> =
+            withContext(Dispatchers.IO) {
+                val resultSet = dslContext.select(
+                                CODE_COVERAGE_GROUP.NAME.`as`("name"),
+                                CODE_COVERAGE_STATS.BRANCH_COVERED.`as`("total_stats_branch_stat_covered"),
+                                CODE_COVERAGE_STATS.BRANCH_MISSED.`as`("total_stats_branch_stat_missed"),
+                                CODE_COVERAGE_STATS.STATEMENT_COVERED.`as`("total_stats_statement_stat_covered"),
+                                CODE_COVERAGE_STATS.STATEMENT_MISSED.`as`("total_stats_statement_stat_missed"),
+                                CODE_COVERAGE_STATS.LINE_COVERED.`as`("total_stats_line_stat_covered"),
+                                CODE_COVERAGE_STATS.LINE_MISSED.`as`("total_stats_line_stat_missed")
+                        )
+                        .from(CODE_COVERAGE_RUN)
+                        .innerJoin(CODE_COVERAGE_GROUP).on(CODE_COVERAGE_RUN.ID.eq(CODE_COVERAGE_GROUP.CODE_COVERAGE_RUN_ID))
+                        .innerJoin(CODE_COVERAGE_STATS).on(CODE_COVERAGE_GROUP.STATS_ID.eq(CODE_COVERAGE_STATS.ID))
+                        .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id).and(CODE_COVERAGE_STATS.SCOPE.eq("GROUP")))
+                        .fetchResultSet()
+
+                val coverageReports: List<CoverageReport> = resultSet.use {
+                    coverageReportMapper.stream(resultSet).toList()
+                }
+
+                coverageReports
             }
 }

@@ -14,6 +14,7 @@ import projektor.auth.AuthConfig
 import projektor.auth.AuthService
 import projektor.coverage.CoverageService
 import projektor.server.api.PublicId
+import projektor.server.api.coverage.CoverageExists
 
 @KtorExperimentalAPI
 fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
@@ -31,6 +32,16 @@ fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
         }
     }
 
+    get("/run/{publicId}/coverage") {
+        val publicId = call.parameters.getOrFail("publicId")
+
+        val coverage = coverageService.getCoverage(PublicId(publicId))
+
+        coverage
+                ?.let { call.respond(HttpStatusCode.OK, it) }
+                ?: call.respond(HttpStatusCode.NoContent)
+    }
+
     get("/run/{publicId}/coverage/overall") {
         val publicId = call.parameters.getOrFail("publicId")
 
@@ -39,5 +50,13 @@ fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
         overallCoverageStats
                 ?.let { call.respond(HttpStatusCode.OK, it) }
                 ?: call.respond(HttpStatusCode.NoContent)
+    }
+
+    get("/run/{publicId}/coverage/exists") {
+        val publicId = call.parameters.getOrFail("publicId")
+
+        val coverageExists = coverageService.coverageExists(PublicId(publicId))
+
+        call.respond(HttpStatusCode.OK, CoverageExists(coverageExists))
     }
 }

@@ -1,7 +1,9 @@
 package projektor.coverage
 
+import projektor.parser.coverage.model.CoverageReport
 import projektor.parser.coverage.model.CoverageReportStat
 import projektor.parser.coverage.model.CoverageReportStats
+import projektor.server.api.coverage.CoverageGroup
 import projektor.server.api.coverage.CoverageStat
 import projektor.server.api.coverage.CoverageStats
 
@@ -18,4 +20,10 @@ fun CoverageReportStats.toCoverageStats(): CoverageStats =
                 statementStat = this.statementStat.toCoverageStat(),
                 lineStat = this.lineStat.toCoverageStat(),
                 branchStat = this.branchStat.toCoverageStat()
+        )
+
+fun CoverageReport.toCoverageGroup(): CoverageGroup =
+        CoverageGroup(
+                name = name,
+                stats = totalStats.toCoverageStats()
         )

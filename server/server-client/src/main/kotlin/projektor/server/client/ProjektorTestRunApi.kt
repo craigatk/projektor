@@ -3,6 +3,7 @@ package projektor.server.client
 import projektor.server.api.TestRun
 import projektor.server.api.TestSuite
 import projektor.server.api.TestSuiteOutput
+import projektor.server.api.coverage.CoverageExists
 import projektor.server.api.coverage.CoverageStats
 import retrofit2.Call
 import retrofit2.http.GET
@@ -26,4 +27,7 @@ interface ProjektorTestRunApi {
 
     @GET("/run/{publicId}/coverage/overall")
     fun coverageOverallStats(@Path("publicId") publicId: String): Call<CoverageStats>
+
+    @GET("/run/{publicId}/coverage/exists")
+    fun coverageExists(@Path("publicId") publicId: String): Call<CoverageExists>
 }

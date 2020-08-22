@@ -72,7 +72,7 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         )
         runBlocking { coverageDatabaseRepository.addCoverageReport(coverageRun, coverageReport) }
 
-        val hasCoverageData = runBlocking { coverageDatabaseRepository.hasCoverageData(publicId) }
+        val hasCoverageData = runBlocking { coverageDatabaseRepository.coverageExists(publicId) }
 
         expectThat(hasCoverageData).isTrue()
     }
@@ -84,7 +84,7 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val publicId = randomPublicId()
         testRunDBGenerator.createTestRun(publicId, listOf())
 
-        val hasCoverageData = runBlocking { coverageDatabaseRepository.hasCoverageData(publicId) }
+        val hasCoverageData = runBlocking { coverageDatabaseRepository.coverageExists(publicId) }
 
         expectThat(hasCoverageData).isFalse()
     }
