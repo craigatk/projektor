@@ -7,6 +7,6 @@ fun main(args: Array<String>) {
     loadPassingGroupedExample()
     loadPassingGroupedExampleWithAttachments()
     loadSingleCoverageExample()
-    loadDoubleCoverageExample()
+    loadMultipleCoverageExample()
     loadInvalidExample()
 }

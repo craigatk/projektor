@@ -21,6 +21,20 @@ interface CoverageStats {
   statementStat: CoverageStat;
 }
 
+interface CoverageGroup {
+  name: string;
+  stats: CoverageStats;
+}
+
+interface Coverage {
+  groups: CoverageGroup[];
+  overallStats: CoverageStats;
+}
+
+interface CoverageExists {
+  exists: boolean;
+}
+
 interface Messages {
   messages: string[];
 }
@@ -105,6 +119,9 @@ interface TestRunSystemAttributes {
 export {
   Attachment,
   Attachments,
+  Coverage,
+  CoverageExists,
+  CoverageGroup,
   CoverageStat,
   CoverageStats,
   Messages,

@@ -14,6 +14,7 @@ import SlowTestCasesPage from "../TestCase/slow/SlowTestCasesPage";
 import { AppBar, Typography } from "@material-ui/core";
 import AttachmentsPage from "../Attachments/AttachmentsPage";
 import { PinState } from "../Pin/PinState";
+import CoveragePage from "../Coverage/CoveragePage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,12 +35,14 @@ interface TestRunMenuWrapperProps {
   publicId: string;
   testRunSummary: TestRunSummary;
   hasAttachments: boolean;
+  hasCoverage: boolean;
 }
 
 const TestRunMenuWrapper = ({
   publicId,
   testRunSummary,
   hasAttachments,
+  hasCoverage,
 }: TestRunMenuWrapperProps) => {
   if (testRunSummary == null) {
     return null;
@@ -57,6 +60,7 @@ const TestRunMenuWrapper = ({
           publicId={publicId}
           testRunSummary={testRunSummary}
           hasAttachments={hasAttachments}
+          hasCoverage={hasCoverage}
         />
         <main className={classes.content}>
           <QueryParamProvider reachHistory={globalHistory}>
@@ -86,6 +90,7 @@ const TestRunMenuWrapper = ({
                 testCaseIdx={0}
               />
               <AttachmentsPage path="/attachments" publicId={publicId} />
+              <CoveragePage path="/coverage" publicId={publicId} />
             </Router>
           </QueryParamProvider>
         </main>
