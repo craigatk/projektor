@@ -1,0 +1,93 @@
+{
+  "groups": [
+    {
+      "name": "server-app",
+      "stats": {
+        "statement_stat": {
+          "covered": 8816,
+          "missed": 335,
+          "total": 9151,
+          "covered_percentage": 96.34
+        },
+        "line_stat": {
+          "covered": 953,
+          "missed": 25,
+          "total": 978,
+          "covered_percentage": 97.44
+        },
+        "branch_stat": {
+          "covered": 191,
+          "missed": 57,
+          "total": 248,
+          "covered_percentage": 77.02
+        }
+      }
+    },
+    {
+      "name": "junit-results-parser",
+      "stats": {
+        "statement_stat": {
+          "covered": 46,
+          "missed": 12,
+          "total": 58,
+          "covered_percentage": 79.31
+        },
+        "line_stat": {
+          "covered": 12,
+          "missed": 1,
+          "total": 13,
+          "covered_percentage": 92.31
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "name": "jacoco-xml-parser",
+      "stats": {
+        "statement_stat": {
+          "covered": 87,
+          "missed": 4,
+          "total": 91,
+          "covered_percentage": 95.6
+        },
+        "line_stat": {
+          "covered": 13,
+          "missed": 1,
+          "total": 14,
+          "covered_percentage": 92.86
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    }
+  ],
+  "overall_stats": {
+    "statement_stat": {
+      "covered": 8949,
+      "missed": 351,
+      "total": 9300,
+      "covered_percentage": 96.23
+    },
+    "line_stat": {
+      "covered": 978,
+      "missed": 27,
+      "total": 1005,
+      "covered_percentage": 97.31
+    },
+    "branch_stat": {
+      "covered": 191,
+      "missed": 57,
+      "total": 248,
+      "covered_percentage": 77.02
+    }
+  }
+}

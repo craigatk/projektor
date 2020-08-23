@@ -10,6 +10,8 @@ import {
   TestRunSystemAttributes,
   Messages,
   CoverageStats,
+  Coverage,
+  CoverageExists,
 } from "../model/TestRunModel";
 import TestSuiteOutputType from "./TestSuiteOutputType";
 import { axiosInstance, axiosInstanceWithoutCache } from "./AxiosService";
@@ -115,7 +117,17 @@ const fetchMessages = (publicId: string): Promise<AxiosResponse<Messages>> =>
   // @ts-ignore
   axiosInstanceWithoutCache.get(`/run/${publicId}/messages`);
 
-const fetchOverallCoverage = (
+const fetchCoverage = (publicId: string): Promise<AxiosResponse<Coverage>> =>
+  // @ts-ignore
+  axiosInstanceWithoutCache.get(`/run/${publicId}/coverage`);
+
+const fetchCoverageExists = (
+  publicId: string
+): Promise<AxiosResponse<CoverageExists>> =>
+  // @ts-ignore
+  axiosInstanceWithoutCache.get(`/run/${publicId}/coverage/exists`);
+
+const fetchOverallCoverageStats = (
   publicId: string
 ): Promise<AxiosResponse<CoverageStats>> =>
   // @ts-ignore
@@ -127,7 +139,9 @@ export {
   fetchTestRun,
   fetchTestRunSummary,
   fetchFailedTestCases,
-  fetchOverallCoverage,
+  fetchCoverage,
+  fetchCoverageExists,
+  fetchOverallCoverageStats,
   fetchSlowTestCases,
   fetchTestCaseDetails,
   fetchTestSuitesInPackage,

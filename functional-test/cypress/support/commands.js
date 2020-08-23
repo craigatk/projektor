@@ -57,3 +57,14 @@ Cypress.Commands.add(
       );
     })
 );
+
+Cypress.Commands.add("loadCoverageReport", (fileName, publicId) => {
+  cy.readFile(`cypress/fixtures/${fileName}`).then((coverageFileContents) =>
+    cy.request({
+      method: "POST",
+      url: `http://localhost:8080/run/${publicId}/coverage`,
+      body: coverageFileContents,
+      retryOnStatusCodeFailure: true,
+    })
+  );
+});

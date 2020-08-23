@@ -3,6 +3,7 @@ import LoadingState from "../Loading/LoadingState";
 import { TestRunSummary } from "../model/TestRunModel";
 import {
   fetchAttachments,
+  fetchCoverageExists,
   fetchTestRunSummary,
 } from "../service/TestRunService";
 import LoadingSection from "../Loading/LoadingSection";
@@ -22,6 +23,7 @@ const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
     null
   );
   const [hasAttachments, setHasAttachments] = React.useState<boolean>(false);
+  const [hasCoverage, setHasCoverage] = React.useState<boolean>(false);
 
   const loadTestRunSummary = () => {
     fetchTestRunSummary(publicId)
@@ -41,6 +43,14 @@ const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
       .catch(() => setHasAttachments(false));
   }, [setHasAttachments]);
 
+  React.useEffect(() => {
+    fetchCoverageExists(publicId)
+      .then((response) => {
+        setHasCoverage(response.data.exists);
+      })
+      .catch(() => setHasCoverage(false));
+  }, [setHasCoverage]);
+
   return (
     <LoadingSection
       loadingState={loadingState}
@@ -49,6 +59,7 @@ const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
           publicId={publicId}
           testRunSummary={testRunSummary}
           hasAttachments={hasAttachments}
+          hasCoverage={hasCoverage}
         />
       }
       errorComponent={

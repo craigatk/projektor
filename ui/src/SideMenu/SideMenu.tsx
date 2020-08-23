@@ -9,11 +9,13 @@ import SlowIcon from "../Icons/SlowIcon";
 import AttachmentIcon from "../Icons/AttachmentIcon";
 import SideMenuLink from "./SideMenuLink";
 import PinSideMenuItem from "../Pin/PinSideMenuItem";
+import CoverageIcon from "../Icons/CoverageIcon";
 
 interface SideMenuProps {
   publicId: string;
   testRunSummary: TestRunSummary;
   hasAttachments: boolean;
+  hasCoverage: boolean;
 }
 
 const sideNavWidth = 180;
@@ -38,6 +40,7 @@ const SideMenu = ({
   publicId,
   testRunSummary,
   hasAttachments,
+  hasCoverage,
 }: SideMenuProps) => {
   const classes = useStyles({});
 
@@ -74,6 +77,14 @@ const SideMenu = ({
           linkText="All tests"
           linkTestId="nav-link-all"
         />
+        {hasCoverage ? (
+          <SideMenuLink
+            linkTo={`/tests/${publicId}/coverage`}
+            icon={<CoverageIcon />}
+            linkText="Coverage"
+            linkTestId="nav-link-coverage"
+          />
+        ) : null}
         <SideMenuLink
           linkTo={`/tests/${publicId}/slow`}
           icon={<SlowIcon />}
