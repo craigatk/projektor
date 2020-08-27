@@ -22,6 +22,7 @@ class JUnitResultsParserSpec extends Specification {
         then:
         testSuite.name == 'projektor.example.spock.PassingSpec'
         testSuite.tests == 1
+        testSuite.passingCount == 1
 
         and:
         testSuite.testCases.size() == 1
@@ -40,6 +41,7 @@ class JUnitResultsParserSpec extends Specification {
         then:
         testSuite.name == 'projektor.example.spock.FailingSpec'
         testSuite.tests == 2
+        testSuite.passingCount == 0
 
         and:
         testSuite.testCases.size() == 2
@@ -93,6 +95,7 @@ A line in the then block
         then:
         List<TestCase> testCases = testSuite.testCases
         testCases.size() == 10
+        testSuite.passingCount == 7
 
         !testCases.find { it.name == 'should run test case 1' }.skipped
         !testCases.find { it.name == 'should run test case 2' }.skipped

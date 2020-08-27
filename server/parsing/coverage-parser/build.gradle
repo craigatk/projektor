@@ -7,5 +7,5 @@ apply from: "../../../gradle/kotlin.gradle"
 dependencies {
     implementation project(':server:parsing:jacoco-xml-parser')
 
-    testImplementation(project(':server:test:jacoco-fixtures'))
+    testImplementation(project(':server:test:coverage-fixtures'))
 }

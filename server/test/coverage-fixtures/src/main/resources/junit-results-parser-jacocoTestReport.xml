@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE report PUBLIC "-//JACOCO//DTD Report 1.1//EN"
+        "report.dtd">
+<report name="junit-results-parser">
+    <sessioninfo id="DESKTOP-F2BATC0-bc47120" start="1597920506065" dump="1597920519118"/>
+    <package name="projektor/parser">
+        <class name="projektor/parser/JUnitResultsParser" sourcefilename="JUnitResultsParser.java">
+            <method name="&lt;init&gt;" desc="()V" line="12">
+                <counter type="INSTRUCTION" missed="0" covered="12"/>
+                <counter type="LINE" missed="0" covered="3"/>
+                <counter type="COMPLEXITY" missed="0" covered="1"/>
+                <counter type="METHOD" missed="0" covered="1"/>
+            </method>
+            <method name="parseTestSuite" desc="(Ljava/lang/String;)Lprojektor/parser/model/TestSuite;" line="28">
+                <counter type="INSTRUCTION" missed="0" covered="9"/>
+                <counter type="LINE" missed="0" covered="2"/>
+                <counter type="COMPLEXITY" missed="0" covered="1"/>
+                <counter type="METHOD" missed="0" covered="1"/>
+            </method>
+            <method name="parseTestSuites" desc="(Ljava/lang/String;)Ljava/util/List;" line="47">
+                <counter type="INSTRUCTION" missed="0" covered="10"/>
+                <counter type="LINE" missed="0" covered="2"/>
+                <counter type="COMPLEXITY" missed="0" covered="1"/>
+                <counter type="METHOD" missed="0" covered="1"/>
+            </method>
+            <counter type="INSTRUCTION" missed="0" covered="31"/>
+            <counter type="LINE" missed="0" covered="7"/>
+            <counter type="COMPLEXITY" missed="0" covered="3"/>
+            <counter type="METHOD" missed="0" covered="3"/>
+            <counter type="CLASS" missed="0" covered="1"/>
+        </class>
+        <sourcefile name="JUnitResultsParser.java">
+            <line nr="12" mi="0" ci="2" mb="0" cb="0"/>
+            <line nr="13" mi="0" ci="8" mb="0" cb="0"/>
+            <line nr="14" mi="0" ci="2" mb="0" cb="0"/>
+            <line nr="28" mi="0" ci="7" mb="0" cb="0"/>
+            <line nr="30" mi="0" ci="2" mb="0" cb="0"/>
+            <line nr="47" mi="0" ci="7" mb="0" cb="0"/>
+            <line nr="49" mi="0" ci="3" mb="0" cb="0"/>
+            <counter type="INSTRUCTION" missed="0" covered="31"/>
+            <counter type="LINE" missed="0" covered="7"/>
+            <counter type="COMPLEXITY" missed="0" covered="3"/>
+            <counter type="METHOD" missed="0" covered="3"/>
+            <counter type="CLASS" missed="0" covered="1"/>
+        </sourcefile>
+        <counter type="INSTRUCTION" missed="0" covered="31"/>
+        <counter type="LINE" missed="0" covered="7"/>
+        <counter type="COMPLEXITY" missed="0" covered="3"/>
+        <counter type="METHOD" missed="0" covered="3"/>
+        <counter type="CLASS" missed="0" covered="1"/>
+    </package>
+    <package name="projektor/parser/model">
+        <class name="projektor/parser/model/Failure" sourcefilename="Failure.java">
+            <method name="&lt;init&gt;" desc="()V" line="8">
+                <counter type="INSTRUCTION" missed="0" covered="3"/>
+                <counter type="LINE" missed="0" covered="1"/>
+                <counter type="COMPLEXITY" missed="0" covered="1"/>
+                <counter type="METHOD" missed="0" covered="1"/>
+            </method>
+            <counter type="INSTRUCTION" missed="0" covered="3"/>
+            <counter type="LINE" missed="0" covered="1"/>
+            <counter type="COMPLEXITY" missed="0" covered="1"/>
+            <counter type="METHOD" missed="0" covered="1"/>
+            <counter type="CLASS" missed="0" covered="1"/>
+        </class>
+        <class name="projektor/parser/model/TestSuite" sourcefilename="TestSuite.java">
+            <method name="&lt;init&gt;" desc="()V" line="13">
+                <counter type="INSTRUCTION" missed="0" covered="3"/>
+                <counter type="LINE" missed="0" covered="1"/>
+                <counter type="COMPLEXITY" missed="0" covered="1"/>
+                <counter type="METHOD" missed="0" covered="1"/>
+            </method>
+            <method name="getPassingCount" desc="()I" line="35">
+                <counter type="INSTRUCTION" missed="12" covered="0"/>
+                <counter type="LINE" missed="1" covered="0"/>
+                <counter type="COMPLEXITY" missed="1" covered="0"/>
+                <counter type="METHOD" missed="1" covered="0"/>
+            </method>
+            <counter type="INSTRUCTION" missed="12" covered="3"/>
+            <counter type="LINE" missed="1" covered="1"/>
+            <counter type="COMPLEXITY" missed="1" covered="1"/>
+            <counter type="METHOD" missed="1" covered="1"/>
+            <counter type="CLASS" missed="0" covered="1"/>
+        </class>
+        <class name="projektor/parser/model/TestSuites" sourcefilename="TestSuites.java">
+            <method name="&lt;init&gt;" desc="()V" line="10">
+                <counter type="INSTRUCTION" missed="0" covered="3"/>
+                <counter type="LINE" missed="0" covered="1"/>
+                <counter type="COMPLEXITY" missed="0" covered="1"/>
+                <counter type="METHOD" missed="0" covered="1"/>
+            </method>
+            <counter type="INSTRUCTION" missed="0" covered="3"/>
+            <counter type="LINE" missed="0" covered="1"/>
+            <counter type="COMPLEXITY" missed="0" covered="1"/>
+            <counter type="METHOD" missed="0" covered="1"/>
+            <counter type="CLASS" missed="0" covered="1"/>
+        </class>
+        <class name="projektor/parser/model/TestCase" sourcefilename="TestCase.java">
+            <method name="&lt;init&gt;" desc="()V" line="11">
+                <counter type="INSTRUCTION" missed="0" covered="3"/>
+                <counter type="LINE" missed="0" covered="1"/>
+                <counter type="COMPLEXITY" missed="0" covered="1"/>
+                <counter type="METHOD" missed="0" covered="1"/>
+            </method>
+            <counter type="INSTRUCTION" missed="0" covered="3"/>
+            <counter type="LINE" missed="0" covered="1"/>
+            <counter type="COMPLEXITY" missed="0" covered="1"/>
+            <counter type="METHOD" missed="0" covered="1"/>
+            <counter type="CLASS" missed="0" covered="1"/>
+        </class>
+        <class name="projektor/parser/model/Skipped" sourcefilename="Skipped.java">
+            <method name="&lt;init&gt;" desc="()V" line="3">
+                <counter type="INSTRUCTION" missed="0" covered="3"/>
+                <counter type="LINE" missed="0" covered="1"/>
+                <counter type="COMPLEXITY" missed="0" covered="1"/>
+                <counter type="METHOD" missed="0" covered="1"/>
+            </method>
+            <counter type="INSTRUCTION" missed="0" covered="3"/>
+            <counter type="LINE" missed="0" covered="1"/>
+            <counter type="COMPLEXITY" missed="0" covered="1"/>
+            <counter type="METHOD" missed="0" covered="1"/>
+            <counter type="CLASS" missed="0" covered="1"/>
+        </class>
+        <sourcefile name="TestCase.java">
+            <line nr="11" mi="0" ci="3" mb="0" cb="0"/>
+            <counter type="INSTRUCTION" missed="0" covered="3"/>
+            <counter type="LINE" missed="0" covered="1"/>
+            <counter type="COMPLEXITY" missed="0" covered="1"/>
+            <counter type="METHOD" missed="0" covered="1"/>
+            <counter type="CLASS" missed="0" covered="1"/>
+        </sourcefile>
+        <sourcefile name="Failure.java">
+            <line nr="8" mi="0" ci="3" mb="0" cb="0"/>
+            <counter type="INSTRUCTION" missed="0" covered="3"/>
+            <counter type="LINE" missed="0" covered="1"/>
+            <counter type="COMPLEXITY" missed="0" covered="1"/>
+            <counter type="METHOD" missed="0" covered="1"/>
+            <counter type="CLASS" missed="0" covered="1"/>
+        </sourcefile>
+        <sourcefile name="TestSuites.java">
+            <line nr="10" mi="0" ci="3" mb="0" cb="0"/>
+            <counter type="INSTRUCTION" missed="0" covered="3"/>
+            <counter type="LINE" missed="0" covered="1"/>
+            <counter type="COMPLEXITY" missed="0" covered="1"/>
+            <counter type="METHOD" missed="0" covered="1"/>
+            <counter type="CLASS" missed="0" covered="1"/>
+        </sourcefile>
+        <sourcefile name="TestSuite.java">
+            <line nr="13" mi="0" ci="3" mb="0" cb="0"/>
+            <line nr="35" mi="12" ci="0" mb="0" cb="0"/>
+            <counter type="INSTRUCTION" missed="12" covered="3"/>
+            <counter type="LINE" missed="1" covered="1"/>
+            <counter type="COMPLEXITY" missed="1" covered="1"/>
+            <counter type="METHOD" missed="1" covered="1"/>
+            <counter type="CLASS" missed="0" covered="1"/>
+        </sourcefile>
+        <sourcefile name="Skipped.java">
+            <line nr="3" mi="0" ci="3" mb="0" cb="0"/>
+            <counter type="INSTRUCTION" missed="0" covered="3"/>
+            <counter type="LINE" missed="0" covered="1"/>
+            <counter type="COMPLEXITY" missed="0" covered="1"/>
+            <counter type="METHOD" missed="0" covered="1"/>
+            <counter type="CLASS" missed="0" covered="1"/>
+        </sourcefile>
+        <counter type="INSTRUCTION" missed="12" covered="15"/>
+        <counter type="LINE" missed="1" covered="5"/>
+        <counter type="COMPLEXITY" missed="1" covered="5"/>
+        <counter type="METHOD" missed="1" covered="5"/>
+        <counter type="CLASS" missed="0" covered="5"/>
+    </package>
+    <counter type="INSTRUCTION" missed="12" covered="46"/>
+    <counter type="LINE" missed="1" covered="12"/>
+    <counter type="COMPLEXITY" missed="1" covered="8"/>
+    <counter type="METHOD" missed="1" covered="8"/>
+    <counter type="CLASS" missed="0" covered="6"/>
+</report>
