@@ -8,3 +8,5 @@ dev-dist/
 jestResults/
 
 test-results/
+
+coverage/

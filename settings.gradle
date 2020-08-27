@@ -15,7 +15,7 @@ include 'functional-test',
         'server:server-app',
         'server:server-api',
         'server:server-client',
-        'server:test:jacoco-fixtures',
+        'server:test:coverage-fixtures',
         'server:test:server-example-loader',
         'server:test:test-fixtures',
         'ui'

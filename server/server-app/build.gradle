@@ -54,7 +54,7 @@ dependencies {
 
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
 
-    testImplementation(project(':server:test:jacoco-fixtures'))
+    testImplementation(project(':server:test:coverage-fixtures'))
     testImplementation(project(':server:test:test-fixtures'))
 
     testImplementation 'org.awaitility:awaitility-kotlin:4.0.0'
