@@ -51,7 +51,7 @@ fun loadCypressExamples() {
 
 fun loadPassingGroupedExample() {
     val groupedResultsXmlLoader = GroupedResultsXmlLoader()
-    val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults())
+    val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(null))
     println("View run with passing grouped tests at at $uiBaseUrl${saveResultsResponse.uri}")
 }
 

@@ -6,25 +6,16 @@ import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
 
 @KtorExperimentalAPI
 class MetricsApplicationTest : ApplicationTestCase() {
 
-    private val metricsStubber = MetricsStubber()
-
     @BeforeEach
-    fun start() {
-        metricsStubber.start()
-    }
-
-    @AfterEach
-    fun stop() {
-        metricsStubber.stop()
+    fun reset() {
+        metricsStubber.reset()
     }
 
     @Test
@@ -66,6 +57,22 @@ class MetricsApplicationTest : ApplicationTestCase() {
                 await until { metricsStubber.findCreateMetricsDatabaseRequests().isNotEmpty() }
                 await until { metricsStubber.findWriteMetricsRequests().isNotEmpty() }
             }
+        }
+    }
+
+    companion object {
+        private val metricsStubber = MetricsStubber()
+
+        @BeforeAll
+        @JvmStatic
+        fun start() {
+            metricsStubber.start()
+        }
+
+        @AfterAll
+        @JvmStatic
+        fun stop() {
+            metricsStubber.stop()
         }
     }
 }

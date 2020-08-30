@@ -12,9 +12,7 @@ import org.awaitility.Awaitility.waitAtMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 import projektor.ApplicationTestCase
 import projektor.metrics.MetricsStubber
 import projektor.parser.GroupedResultsXmlLoader
@@ -27,16 +25,9 @@ import strikt.assertions.isNotNull
 
 @KtorExperimentalAPI
 class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
-    private val metricsStubber = MetricsStubber()
-
     @BeforeEach
-    fun start() {
-        metricsStubber.start()
-    }
-
-    @AfterEach
-    fun stop() {
-        metricsStubber.stop()
+    fun reset() {
+        metricsStubber.reset()
     }
 
     @Test
@@ -108,6 +99,22 @@ class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
                 await until { metricsStubber.findWriteMetricsRequestForCounterMetric("grouped_results_process_failure", 0).isNotEmpty() }
                 await until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_failure", 0).isNotEmpty() }
             }
+        }
+    }
+
+    companion object {
+        private val metricsStubber = MetricsStubber()
+
+        @BeforeAll
+        @JvmStatic
+        fun start() {
+            metricsStubber.start()
+        }
+
+        @AfterAll
+        @JvmStatic
+        fun stop() {
+            metricsStubber.stop()
         }
     }
 }
