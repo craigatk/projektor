@@ -124,7 +124,15 @@ open class ApplicationTestCase {
         resultsProcessingDao = ResultsProcessingDao(dslContext.configuration())
         resultsProcessingFailureDao = ResultsProcessingFailureDao(dslContext.configuration())
         gitMetadataDao = GitMetadataDao(dslContext.configuration())
-        testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao, testRunSystemAttributesDao)
+        testRunDBGenerator = TestRunDBGenerator(
+                testRunDao,
+                testSuiteGroupDao,
+                testSuiteDao,
+                testCaseDao,
+                testFailureDao,
+                testRunSystemAttributesDao,
+                gitMetadataDao
+        )
 
         coverageRunDao = CodeCoverageRunDao(dslContext.configuration())
         coverageGroupDao = CodeCoverageGroupDao(dslContext.configuration())

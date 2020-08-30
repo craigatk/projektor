@@ -30,6 +30,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
     lateinit var resultsProcessingDao: ResultsProcessingDao
     lateinit var resultsProcessingFailureDao: ResultsProcessingFailureDao
     lateinit var attachmentDao: TestRunAttachmentDao
+    lateinit var gitMetadataDao: GitMetadataDao
     lateinit var testRunSystemAttributesDao: TestRunSystemAttributesDao
 
     lateinit var coverageRunDao: CodeCoverageRunDao
@@ -88,13 +89,22 @@ open class DatabaseRepositoryTestCase : KoinTest {
         resultsProcessingDao = ResultsProcessingDao(dslContext.configuration())
         resultsProcessingFailureDao = ResultsProcessingFailureDao(dslContext.configuration())
         attachmentDao = TestRunAttachmentDao(dslContext.configuration())
+        gitMetadataDao = GitMetadataDao(dslContext.configuration())
         testRunSystemAttributesDao = TestRunSystemAttributesDao(dslContext.configuration())
 
         coverageRunDao = CodeCoverageRunDao(dslContext.configuration())
         coverageGroupDao = CodeCoverageGroupDao(dslContext.configuration())
         coverageStatsDao = CodeCoverageStatsDao(dslContext.configuration())
 
-        testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao, testRunSystemAttributesDao)
+        testRunDBGenerator = TestRunDBGenerator(
+                testRunDao,
+                testSuiteGroupDao,
+                testSuiteDao,
+                testCaseDao,
+                testFailureDao,
+                testRunSystemAttributesDao,
+                gitMetadataDao
+        )
     }
 
     @AfterEach

@@ -28,6 +28,7 @@ import projektor.auth.AuthService
 import projektor.cleanup.CleanupConfig
 import projektor.cleanup.CleanupScheduledJob
 import projektor.cleanup.CleanupService
+import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageRepository
 import projektor.coverage.CoverageService
 import projektor.database.DataSourceConfig
@@ -118,6 +119,7 @@ fun Application.main() {
     val messageService: MessageService by inject()
     val testResultsService: TestResultsService by inject()
     val groupedTestResultsService: GroupedTestResultsService by inject()
+    val previousTestRunService: PreviousTestRunService by inject()
     val testResultsProcessingService: TestResultsProcessingService by inject()
     val testRunService: TestRunService by inject()
     val testCaseService: TestCaseService by inject()
@@ -143,6 +145,7 @@ fun Application.main() {
         coverage(authService, coverageService)
         health()
         messages(messageService)
+        previousRuns(previousTestRunService)
         results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService, metricRegistry)
         testCases(testCaseService)
         testSuites(testSuiteService)
