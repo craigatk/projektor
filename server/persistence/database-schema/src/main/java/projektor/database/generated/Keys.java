@@ -15,6 +15,7 @@ import org.jooq.impl.Internal;
 import projektor.database.generated.tables.CodeCoverageGroup;
 import projektor.database.generated.tables.CodeCoverageRun;
 import projektor.database.generated.tables.CodeCoverageStats;
+import projektor.database.generated.tables.GitMetadata;
 import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.ResultsProcessingFailure;
 import projektor.database.generated.tables.TestCase;
@@ -27,6 +28,7 @@ import projektor.database.generated.tables.TestSuiteGroup;
 import projektor.database.generated.tables.records.CodeCoverageGroupRecord;
 import projektor.database.generated.tables.records.CodeCoverageRunRecord;
 import projektor.database.generated.tables.records.CodeCoverageStatsRecord;
+import projektor.database.generated.tables.records.GitMetadataRecord;
 import projektor.database.generated.tables.records.ResultsProcessingFailureRecord;
 import projektor.database.generated.tables.records.ResultsProcessingRecord;
 import projektor.database.generated.tables.records.TestCaseRecord;
@@ -59,6 +61,7 @@ public class Keys {
     public static final Identity<CodeCoverageGroupRecord, Long> IDENTITY_CODE_COVERAGE_GROUP = Identities0.IDENTITY_CODE_COVERAGE_GROUP;
     public static final Identity<CodeCoverageRunRecord, Long> IDENTITY_CODE_COVERAGE_RUN = Identities0.IDENTITY_CODE_COVERAGE_RUN;
     public static final Identity<CodeCoverageStatsRecord, Long> IDENTITY_CODE_COVERAGE_STATS = Identities0.IDENTITY_CODE_COVERAGE_STATS;
+    public static final Identity<GitMetadataRecord, Long> IDENTITY_GIT_METADATA = Identities0.IDENTITY_GIT_METADATA;
     public static final Identity<TestCaseRecord, Long> IDENTITY_TEST_CASE = Identities0.IDENTITY_TEST_CASE;
     public static final Identity<TestFailureRecord, Long> IDENTITY_TEST_FAILURE = Identities0.IDENTITY_TEST_FAILURE;
     public static final Identity<TestRunRecord, Long> IDENTITY_TEST_RUN = Identities0.IDENTITY_TEST_RUN;
@@ -73,6 +76,7 @@ public class Keys {
     public static final UniqueKey<CodeCoverageGroupRecord> CODE_COVERAGE_GROUP_PKEY = UniqueKeys0.CODE_COVERAGE_GROUP_PKEY;
     public static final UniqueKey<CodeCoverageRunRecord> CODE_COVERAGE_RUN_PKEY = UniqueKeys0.CODE_COVERAGE_RUN_PKEY;
     public static final UniqueKey<CodeCoverageStatsRecord> CODE_COVERAGE_STATS_PKEY = UniqueKeys0.CODE_COVERAGE_STATS_PKEY;
+    public static final UniqueKey<GitMetadataRecord> GIT_METADATA_PKEY = UniqueKeys0.GIT_METADATA_PKEY;
     public static final UniqueKey<ResultsProcessingRecord> RESULTS_PROCESSING_PKEY = UniqueKeys0.RESULTS_PROCESSING_PKEY;
     public static final UniqueKey<ResultsProcessingFailureRecord> RESULTS_PROCESSING_FAILURE_PKEY = UniqueKeys0.RESULTS_PROCESSING_FAILURE_PKEY;
     public static final UniqueKey<TestCaseRecord> TEST_CASE_PKEY = UniqueKeys0.TEST_CASE_PKEY;
@@ -91,6 +95,7 @@ public class Keys {
     public static final ForeignKey<CodeCoverageGroupRecord, CodeCoverageRunRecord> CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_FKEY = ForeignKeys0.CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_FKEY;
     public static final ForeignKey<CodeCoverageGroupRecord, CodeCoverageStatsRecord> CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_STATS_ID_FKEY = ForeignKeys0.CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_STATS_ID_FKEY;
     public static final ForeignKey<CodeCoverageStatsRecord, CodeCoverageRunRecord> CODE_COVERAGE_STATS__CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_FKEY = ForeignKeys0.CODE_COVERAGE_STATS__CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_FKEY;
+    public static final ForeignKey<GitMetadataRecord, TestRunRecord> GIT_METADATA__GIT_METADATA_TEST_RUN_ID_FKEY = ForeignKeys0.GIT_METADATA__GIT_METADATA_TEST_RUN_ID_FKEY;
     public static final ForeignKey<ResultsProcessingFailureRecord, ResultsProcessingRecord> RESULTS_PROCESSING_FAILURE__RESULTS_PROCESSING_FAILURE_PUBLIC_ID_FKEY = ForeignKeys0.RESULTS_PROCESSING_FAILURE__RESULTS_PROCESSING_FAILURE_PUBLIC_ID_FKEY;
     public static final ForeignKey<TestCaseRecord, TestSuiteRecord> TEST_CASE__TEST_CASE_TEST_SUITE_ID_FKEY = ForeignKeys0.TEST_CASE__TEST_CASE_TEST_SUITE_ID_FKEY;
     public static final ForeignKey<TestFailureRecord, TestCaseRecord> TEST_FAILURE__TEST_FAILURE_TEST_CASE_ID_FKEY = ForeignKeys0.TEST_FAILURE__TEST_FAILURE_TEST_CASE_ID_FKEY;
@@ -107,6 +112,7 @@ public class Keys {
         public static Identity<CodeCoverageGroupRecord, Long> IDENTITY_CODE_COVERAGE_GROUP = Internal.createIdentity(CodeCoverageGroup.CODE_COVERAGE_GROUP, CodeCoverageGroup.CODE_COVERAGE_GROUP.ID);
         public static Identity<CodeCoverageRunRecord, Long> IDENTITY_CODE_COVERAGE_RUN = Internal.createIdentity(CodeCoverageRun.CODE_COVERAGE_RUN, CodeCoverageRun.CODE_COVERAGE_RUN.ID);
         public static Identity<CodeCoverageStatsRecord, Long> IDENTITY_CODE_COVERAGE_STATS = Internal.createIdentity(CodeCoverageStats.CODE_COVERAGE_STATS, CodeCoverageStats.CODE_COVERAGE_STATS.ID);
+        public static Identity<GitMetadataRecord, Long> IDENTITY_GIT_METADATA = Internal.createIdentity(GitMetadata.GIT_METADATA, GitMetadata.GIT_METADATA.ID);
         public static Identity<TestCaseRecord, Long> IDENTITY_TEST_CASE = Internal.createIdentity(TestCase.TEST_CASE, TestCase.TEST_CASE.ID);
         public static Identity<TestFailureRecord, Long> IDENTITY_TEST_FAILURE = Internal.createIdentity(TestFailure.TEST_FAILURE, TestFailure.TEST_FAILURE.ID);
         public static Identity<TestRunRecord, Long> IDENTITY_TEST_RUN = Internal.createIdentity(TestRun.TEST_RUN, TestRun.TEST_RUN.ID);
@@ -119,6 +125,7 @@ public class Keys {
         public static final UniqueKey<CodeCoverageGroupRecord> CODE_COVERAGE_GROUP_PKEY = Internal.createUniqueKey(CodeCoverageGroup.CODE_COVERAGE_GROUP, "code_coverage_group_pkey", new TableField[] { CodeCoverageGroup.CODE_COVERAGE_GROUP.ID }, true);
         public static final UniqueKey<CodeCoverageRunRecord> CODE_COVERAGE_RUN_PKEY = Internal.createUniqueKey(CodeCoverageRun.CODE_COVERAGE_RUN, "code_coverage_run_pkey", new TableField[] { CodeCoverageRun.CODE_COVERAGE_RUN.ID }, true);
         public static final UniqueKey<CodeCoverageStatsRecord> CODE_COVERAGE_STATS_PKEY = Internal.createUniqueKey(CodeCoverageStats.CODE_COVERAGE_STATS, "code_coverage_stats_pkey", new TableField[] { CodeCoverageStats.CODE_COVERAGE_STATS.ID }, true);
+        public static final UniqueKey<GitMetadataRecord> GIT_METADATA_PKEY = Internal.createUniqueKey(GitMetadata.GIT_METADATA, "git_metadata_pkey", new TableField[] { GitMetadata.GIT_METADATA.ID }, true);
         public static final UniqueKey<ResultsProcessingRecord> RESULTS_PROCESSING_PKEY = Internal.createUniqueKey(ResultsProcessing.RESULTS_PROCESSING, "results_processing_pkey", new TableField[] { ResultsProcessing.RESULTS_PROCESSING.PUBLIC_ID }, true);
         public static final UniqueKey<ResultsProcessingFailureRecord> RESULTS_PROCESSING_FAILURE_PKEY = Internal.createUniqueKey(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE, "results_processing_failure_pkey", new TableField[] { ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.PUBLIC_ID }, true);
         public static final UniqueKey<TestCaseRecord> TEST_CASE_PKEY = Internal.createUniqueKey(TestCase.TEST_CASE, "test_case_pkey", new TableField[] { TestCase.TEST_CASE.ID }, true);
@@ -135,6 +142,7 @@ public class Keys {
         public static final ForeignKey<CodeCoverageGroupRecord, CodeCoverageRunRecord> CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_FKEY = Internal.createForeignKey(Keys.CODE_COVERAGE_RUN_PKEY, CodeCoverageGroup.CODE_COVERAGE_GROUP, "code_coverage_group_code_coverage_run_id_fkey", new TableField[] { CodeCoverageGroup.CODE_COVERAGE_GROUP.CODE_COVERAGE_RUN_ID }, true);
         public static final ForeignKey<CodeCoverageGroupRecord, CodeCoverageStatsRecord> CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_STATS_ID_FKEY = Internal.createForeignKey(Keys.CODE_COVERAGE_STATS_PKEY, CodeCoverageGroup.CODE_COVERAGE_GROUP, "code_coverage_group_stats_id_fkey", new TableField[] { CodeCoverageGroup.CODE_COVERAGE_GROUP.STATS_ID }, true);
         public static final ForeignKey<CodeCoverageStatsRecord, CodeCoverageRunRecord> CODE_COVERAGE_STATS__CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_FKEY = Internal.createForeignKey(Keys.CODE_COVERAGE_RUN_PKEY, CodeCoverageStats.CODE_COVERAGE_STATS, "code_coverage_stats_code_coverage_run_id_fkey", new TableField[] { CodeCoverageStats.CODE_COVERAGE_STATS.CODE_COVERAGE_RUN_ID }, true);
+        public static final ForeignKey<GitMetadataRecord, TestRunRecord> GIT_METADATA__GIT_METADATA_TEST_RUN_ID_FKEY = Internal.createForeignKey(Keys.TEST_RUN_PKEY, GitMetadata.GIT_METADATA, "git_metadata_test_run_id_fkey", new TableField[] { GitMetadata.GIT_METADATA.TEST_RUN_ID }, true);
         public static final ForeignKey<ResultsProcessingFailureRecord, ResultsProcessingRecord> RESULTS_PROCESSING_FAILURE__RESULTS_PROCESSING_FAILURE_PUBLIC_ID_FKEY = Internal.createForeignKey(Keys.RESULTS_PROCESSING_PKEY, ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE, "results_processing_failure_public_id_fkey", new TableField[] { ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.PUBLIC_ID }, true);
         public static final ForeignKey<TestCaseRecord, TestSuiteRecord> TEST_CASE__TEST_CASE_TEST_SUITE_ID_FKEY = Internal.createForeignKey(Keys.TEST_SUITE_PKEY, TestCase.TEST_CASE, "test_case_test_suite_id_fkey", new TableField[] { TestCase.TEST_CASE.TEST_SUITE_ID }, true);
         public static final ForeignKey<TestFailureRecord, TestCaseRecord> TEST_FAILURE__TEST_FAILURE_TEST_CASE_ID_FKEY = Internal.createForeignKey(Keys.TEST_CASE_PKEY, TestFailure.TEST_FAILURE, "test_failure_test_case_id_fkey", new TableField[] { TestFailure.TEST_FAILURE.TEST_CASE_ID }, true);

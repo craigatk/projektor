@@ -2,8 +2,10 @@ package projektor.incomingresults
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedResults
 import projektor.incomingresults.model.GroupedTestSuites
+import projektor.incomingresults.model.ResultsMetadata
 import projektor.parser.grouped.GroupedResultsParser
 import projektor.results.processor.TestResultsProcessor
 
@@ -26,6 +28,18 @@ class GroupedResultsConverter(
             )
         }
 
-        GroupedResults(groupedTestSuites)
+        val metadata = incomingGroupedResults.metadata?.let { metadata ->
+            ResultsMetadata(
+                    git = metadata.git?.let { gitMetadata ->
+                        GitMetadata(
+                                repoName = gitMetadata.repoName,
+                                branchName = gitMetadata.branchName,
+                                isMainBranch = gitMetadata.isMainBranch
+                        )
+                    }
+            )
+        }
+
+        GroupedResults(groupedTestSuites, metadata)
     }
 }

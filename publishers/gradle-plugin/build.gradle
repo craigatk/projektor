@@ -5,6 +5,7 @@ plugins {
     id "com.gradle.plugin-publish" version "0.11.0"
     id 'com.github.psxpaul.execfork'
     id 'groovy'
+    id 'jacoco'
 }
 
 sourceSets {
@@ -52,6 +53,8 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:2.9.8"
 
     implementation "io.github.resilience4j:resilience4j-retry:1.4.0"
+
+    implementation "org.eclipse.jgit:org.eclipse.jgit:5.8.1.202007141445-r"
 
     testImplementation('org.spockframework:spock-core:1.3-groovy-2.5') {
         exclude group: 'org.codehaus.groovy'

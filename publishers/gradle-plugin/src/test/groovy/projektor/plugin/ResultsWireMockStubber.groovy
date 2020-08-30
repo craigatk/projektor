@@ -3,6 +3,7 @@ package projektor.plugin
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.http.Fault
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
+import projektor.plugin.results.grouped.GroupedResults
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.post
@@ -41,5 +42,9 @@ class ResultsWireMockStubber extends WireMockStubber {
         wireMockServer.findRequestsMatching(
                 postRequestedFor(urlEqualTo("/groupedResults")).build()
         ).requests
+    }
+
+    List<GroupedResults> findResultsRequestBodies() {
+        findResultsRequests().collect { objectMapper.readValue(it.bodyAsString, GroupedResults) }
     }
 }

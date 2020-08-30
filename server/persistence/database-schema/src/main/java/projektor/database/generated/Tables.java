@@ -9,6 +9,7 @@ import javax.annotation.processing.Generated;
 import projektor.database.generated.tables.CodeCoverageGroup;
 import projektor.database.generated.tables.CodeCoverageRun;
 import projektor.database.generated.tables.CodeCoverageStats;
+import projektor.database.generated.tables.GitMetadata;
 import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.ResultsProcessingFailure;
 import projektor.database.generated.tables.TestCase;
@@ -47,6 +48,11 @@ public class Tables {
      * The table <code>public.code_coverage_stats</code>.
      */
     public static final CodeCoverageStats CODE_COVERAGE_STATS = CodeCoverageStats.CODE_COVERAGE_STATS;
+
+    /**
+     * The table <code>public.git_metadata</code>.
+     */
+    public static final GitMetadata GIT_METADATA = GitMetadata.GIT_METADATA;
 
     /**
      * The table <code>public.results_processing</code>.

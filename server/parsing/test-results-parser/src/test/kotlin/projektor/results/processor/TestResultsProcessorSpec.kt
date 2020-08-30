@@ -1,6 +1,6 @@
 package projektor.results.processor
 
-import io.kotlintest.specs.StringSpec
+import io.kotest.core.spec.style.StringSpec
 import projektor.parser.ResultsXmlLoader
 import projektor.parser.model.TestSuite
 import strikt.api.expectThat
