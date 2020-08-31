@@ -1,5 +1,6 @@
 package projektor.server.client
 
+import projektor.server.api.PublicId
 import projektor.server.api.TestRun
 import projektor.server.api.TestSuite
 import projektor.server.api.TestSuiteOutput
@@ -30,4 +31,7 @@ interface ProjektorTestRunApi {
 
     @GET("/run/{publicId}/coverage/exists")
     fun coverageExists(@Path("publicId") publicId: String): Call<CoverageExists>
+
+    @GET("/run/{publicId}/previous")
+    fun previousTestRun(@Path("publicId") publicId: String): Call<PublicId>
 }

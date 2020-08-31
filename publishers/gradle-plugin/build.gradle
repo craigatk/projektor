@@ -73,6 +73,7 @@ dependencies {
     functionalTestImplementation gradleTestKit()
     functionalTestImplementation("com.squareup.okhttp3:okhttp:${okHttpVersion}")
     functionalTestImplementation("com.squareup.okhttp3:logging-interceptor:${okHttpVersion}")
+    functionalTestImplementation("org.apache.commons:commons-lang3:3.8.1")
     functionalTestImplementation(project(":server:server-client"))
 }
 

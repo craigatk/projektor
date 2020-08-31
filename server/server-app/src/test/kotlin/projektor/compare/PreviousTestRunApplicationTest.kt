@@ -47,4 +47,19 @@ class PreviousTestRunApplicationTest : ApplicationTestCase() {
             }
         }
     }
+
+    @Test
+    fun `when no previous test run in same repo should return 204`() {
+        val publicId = randomPublicId()
+        val repoName = "${RandomStringUtils.randomAlphabetic(8)}/${RandomStringUtils.randomAlphabetic(8)}"
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Get, "/run/$publicId/previous") {
+                val differentTestRun = testRunDBGenerator.createSimpleTestRun(publicId)
+                testRunDBGenerator.addGitMetadata(differentTestRun, repoName, true, "main")
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.NoContent)
+            }
+        }
+    }
 }
