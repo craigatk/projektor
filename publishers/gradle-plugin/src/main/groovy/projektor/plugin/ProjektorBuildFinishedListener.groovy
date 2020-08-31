@@ -13,12 +13,17 @@ import projektor.plugin.client.ResultsClient
 import projektor.plugin.client.ClientConfig
 import projektor.plugin.coverage.CodeCoverageGroup
 import projektor.plugin.coverage.CodeCoverageTaskFinishedListener
+import projektor.plugin.git.EnvironmentResolver
+import projektor.plugin.git.GitMetadataFinder
+import projektor.plugin.git.GitResolutionConfig
+import projektor.plugin.git.EnvironmentGitResolver
 import projektor.plugin.notification.NotificationConfig
 import projektor.plugin.notification.slack.SlackMessageBuilder
 import projektor.plugin.notification.slack.SlackMessageWriter
 import projektor.plugin.notification.slack.message.SlackAttachmentsMessage
 import projektor.plugin.results.ResultsLogger
 import projektor.plugin.results.grouped.GroupedResults
+import projektor.plugin.results.grouped.ResultsMetadata
 
 class ProjektorBuildFinishedListener implements BuildListener {
 
@@ -33,6 +38,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
     private final ProjektorTaskFinishedListener projektorTaskFinishedListener
     private final CodeCoverageTaskFinishedListener codeCoverageTaskFinishedListener
     private final boolean coverageEnabled
+    private final GitResolutionConfig gitResolutionConfig
 
     ProjektorBuildFinishedListener(
             ClientConfig clientConfig,
@@ -54,6 +60,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
         this.projektorTaskFinishedListener = projektorTaskFinishedListener
         this.codeCoverageTaskFinishedListener = codeCoverageTaskFinishedListener
         this.coverageEnabled = extension.codeCoveragePublish
+        this.gitResolutionConfig = GitResolutionConfig.fromExtension(extension)
     }
 
     @Override
@@ -83,6 +90,9 @@ class ProjektorBuildFinishedListener implements BuildListener {
             logger.info("Build finished, gathering and publishing Projektor test reports from " +
                     "${projectTestResultsCollector.testGroupsCount()} test tasks")
             GroupedResults groupedResults = projectTestResultsCollector.createGroupedResults()
+            groupedResults.metadata = new ResultsMetadata(
+                    git: GitMetadataFinder.findGitMetadata(gitResolutionConfig, logger)
+            )
 
             ResultsClient resultsClient = new ResultsClient(clientConfig, logger)
             PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)

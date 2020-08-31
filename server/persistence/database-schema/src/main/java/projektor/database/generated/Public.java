@@ -17,6 +17,7 @@ import org.jooq.impl.SchemaImpl;
 import projektor.database.generated.tables.CodeCoverageGroup;
 import projektor.database.generated.tables.CodeCoverageRun;
 import projektor.database.generated.tables.CodeCoverageStats;
+import projektor.database.generated.tables.GitMetadata;
 import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.ResultsProcessingFailure;
 import projektor.database.generated.tables.TestCase;
@@ -41,7 +42,7 @@ import projektor.database.generated.tables.TestSuiteGroup;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = -987100684;
+    private static final long serialVersionUID = 702109669;
 
     /**
      * The reference instance of <code>public</code>
@@ -62,6 +63,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.code_coverage_stats</code>.
      */
     public final CodeCoverageStats CODE_COVERAGE_STATS = CodeCoverageStats.CODE_COVERAGE_STATS;
+
+    /**
+     * The table <code>public.git_metadata</code>.
+     */
+    public final GitMetadata GIT_METADATA = GitMetadata.GIT_METADATA;
 
     /**
      * The table <code>public.results_processing</code>.
@@ -127,6 +133,7 @@ public class Public extends SchemaImpl {
             Sequences.CODE_COVERAGE_GROUP_ID_SEQ,
             Sequences.CODE_COVERAGE_RUN_ID_SEQ,
             Sequences.CODE_COVERAGE_STATS_ID_SEQ,
+            Sequences.GIT_METADATA_ID_SEQ,
             Sequences.TEST_CASE_ID_SEQ,
             Sequences.TEST_CASE_TEST_SUITE_ID_SEQ,
             Sequences.TEST_FAILURE_ID_SEQ,
@@ -144,6 +151,7 @@ public class Public extends SchemaImpl {
             CodeCoverageGroup.CODE_COVERAGE_GROUP,
             CodeCoverageRun.CODE_COVERAGE_RUN,
             CodeCoverageStats.CODE_COVERAGE_STATS,
+            GitMetadata.GIT_METADATA,
             ResultsProcessing.RESULTS_PROCESSING,
             ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE,
             TestCase.TEST_CASE,

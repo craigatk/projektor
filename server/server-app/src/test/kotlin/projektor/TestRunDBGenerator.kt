@@ -7,6 +7,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import projektor.database.generated.tables.daos.*
+import projektor.database.generated.tables.pojos.GitMetadata as GitMetadataDB
 import projektor.database.generated.tables.pojos.TestCase as TestCaseDB
 import projektor.database.generated.tables.pojos.TestFailure as TestFailureDB
 import projektor.database.generated.tables.pojos.TestRun as TestRunDB
@@ -22,11 +23,13 @@ class TestRunDBGenerator(
     private val testSuiteDao: TestSuiteDao,
     private val testCaseDao: TestCaseDao,
     private val testFailureDao: TestFailureDao,
-    private val testRunSystemAttributesDao: TestRunSystemAttributesDao
+    private val testRunSystemAttributesDao: TestRunSystemAttributesDao,
+    private val gitMetadataDao: GitMetadataDao
 ) {
     fun createTestRun(publicId: PublicId, testSuiteDataList: List<TestSuiteData>): TestRunDB {
         val testRun = createTestRun(publicId, testSuiteDataList.size)
         testRunDao.insert(testRun)
+        println("Inserted test run ${testRun.publicId}")
 
         testSuiteDataList.forEachIndexed { testSuiteIdx, testSuiteData ->
             var testCaseIdx = 1
@@ -64,6 +67,17 @@ class TestRunDBGenerator(
         }
 
         return testRun
+    }
+
+    fun addGitMetadata(testRunDB: TestRunDB, repoName: String, isMainBranch: Boolean, branchName: String): GitMetadataDB {
+        val gitMetadata = GitMetadataDB()
+        gitMetadata.testRunId = testRunDB.id
+        gitMetadata.repoName = repoName
+        gitMetadata.isMainBranch = isMainBranch
+        gitMetadata.branchName = branchName
+        gitMetadataDao.insert(gitMetadata)
+
+        return gitMetadata
     }
 
     fun createSimpleTestRun(publicId: PublicId): TestRunDB =

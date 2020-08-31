@@ -12,6 +12,9 @@ class MetricsStubber {
 
     fun start() {
         wireMockServer.start()
+    }
+
+    fun reset() {
         wireMockServer.resetAll()
 
         wireMockServer.stubFor(WireMock.post(WireMock.urlMatching("/query.*")).willReturn(WireMock.aResponse().withStatus(200)))

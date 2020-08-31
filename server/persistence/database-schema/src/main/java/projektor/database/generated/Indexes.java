@@ -13,6 +13,7 @@ import org.jooq.impl.Internal;
 import projektor.database.generated.tables.CodeCoverageGroup;
 import projektor.database.generated.tables.CodeCoverageRun;
 import projektor.database.generated.tables.CodeCoverageStats;
+import projektor.database.generated.tables.GitMetadata;
 import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.TestCase;
 import projektor.database.generated.tables.TestFailure;
@@ -41,6 +42,9 @@ public class Indexes {
     public static final Index CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_IDX = Indexes0.CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_IDX;
     public static final Index CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX = Indexes0.CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX;
     public static final Index CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_IDX = Indexes0.CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_IDX;
+    public static final Index GIT_METADATA_IS_MAIN_BRANCH_IDX = Indexes0.GIT_METADATA_IS_MAIN_BRANCH_IDX;
+    public static final Index GIT_METADATA_REPO_NAME_IDX = Indexes0.GIT_METADATA_REPO_NAME_IDX;
+    public static final Index GIT_METADATA_TEST_RUN_ID_IDX = Indexes0.GIT_METADATA_TEST_RUN_ID_IDX;
     public static final Index IDX_RESULTS_PROCESSING_STATUS = Indexes0.IDX_RESULTS_PROCESSING_STATUS;
     public static final Index IDX_TEST_CASE_DURATION = Indexes0.IDX_TEST_CASE_DURATION;
     public static final Index IDX_TEST_CASE_IDX = Indexes0.IDX_TEST_CASE_IDX;
@@ -60,6 +64,9 @@ public class Indexes {
         public static Index CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_IDX = Internal.createIndex("code_coverage_group_code_coverage_run_id_idx", CodeCoverageGroup.CODE_COVERAGE_GROUP, new OrderField[] { CodeCoverageGroup.CODE_COVERAGE_GROUP.CODE_COVERAGE_RUN_ID }, false);
         public static Index CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX = Internal.createIndex("code_coverage_run_test_run_public_id_idx", CodeCoverageRun.CODE_COVERAGE_RUN, new OrderField[] { CodeCoverageRun.CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID }, false);
         public static Index CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_IDX = Internal.createIndex("code_coverage_stats_code_coverage_run_id_idx", CodeCoverageStats.CODE_COVERAGE_STATS, new OrderField[] { CodeCoverageStats.CODE_COVERAGE_STATS.CODE_COVERAGE_RUN_ID }, false);
+        public static Index GIT_METADATA_IS_MAIN_BRANCH_IDX = Internal.createIndex("git_metadata_is_main_branch_idx", GitMetadata.GIT_METADATA, new OrderField[] { GitMetadata.GIT_METADATA.IS_MAIN_BRANCH }, false);
+        public static Index GIT_METADATA_REPO_NAME_IDX = Internal.createIndex("git_metadata_repo_name_idx", GitMetadata.GIT_METADATA, new OrderField[] { GitMetadata.GIT_METADATA.REPO_NAME }, false);
+        public static Index GIT_METADATA_TEST_RUN_ID_IDX = Internal.createIndex("git_metadata_test_run_id_idx", GitMetadata.GIT_METADATA, new OrderField[] { GitMetadata.GIT_METADATA.TEST_RUN_ID }, false);
         public static Index IDX_RESULTS_PROCESSING_STATUS = Internal.createIndex("idx_results_processing_status", ResultsProcessing.RESULTS_PROCESSING, new OrderField[] { ResultsProcessing.RESULTS_PROCESSING.STATUS }, false);
         public static Index IDX_TEST_CASE_DURATION = Internal.createIndex("idx_test_case_duration", TestCase.TEST_CASE, new OrderField[] { TestCase.TEST_CASE.DURATION }, false);
         public static Index IDX_TEST_CASE_IDX = Internal.createIndex("idx_test_case_idx", TestCase.TEST_CASE, new OrderField[] { TestCase.TEST_CASE.IDX }, false);

@@ -48,10 +48,11 @@ class ResultsClientSpec extends Specification {
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
         resultsRequests.size() == 1
-
-        resultsRequests[0].bodyAsString == """{"groupedTestSuites":[]}"""
-
         !resultsRequests[0].containsHeader(ClientToken.PUBLISH_TOKEN_NAME)
+
+        List<GroupedResults> resultsBodies = resultsStubber.findResultsRequestBodies()
+        resultsBodies.size() == 1
+        resultsBodies[0].groupedTestSuites == []
     }
 
     void "should send results to server with token in header"() {
@@ -82,10 +83,13 @@ class ResultsClientSpec extends Specification {
         resultsRequests.size() == 1
         LoggedRequest resultsRequest = resultsRequests[0]
 
-        resultsRequest.bodyAsString == """{"groupedTestSuites":[]}"""
-
         HttpHeader publishTokenInHeader = resultsRequest.header(ClientToken.PUBLISH_TOKEN_NAME)
         publishTokenInHeader.firstValue() == "token12345"
+
+        and:
+        List<GroupedResults> resultsBodies = resultsStubber.findResultsRequestBodies()
+        resultsBodies.size() == 1
+        resultsBodies[0].groupedTestSuites == []
     }
 
     @Unroll

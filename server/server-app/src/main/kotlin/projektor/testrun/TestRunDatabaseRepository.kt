@@ -58,6 +58,7 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
                 dslContext.transaction { configuration ->
                     val testRunDao = TestRunDao(configuration)
                     val testSuiteGroupDao = TestSuiteGroupDao(configuration)
+                    val gitMetadataDao = GitMetadataDao(configuration)
 
                     testRunDao.insert(testRunDB)
 
@@ -71,6 +72,9 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
 
                         testSuiteStartingIndex += groupedTestSuites.testSuites.size
                     }
+
+                    val gitMetadataDB = groupedResults.metadata?.git?.toDB(testRunDB.id)
+                    gitMetadataDB?.let { gitMetadataDao.insert(it) }
                 }
 
                 logger.info("Finished inserting test run $publicId")

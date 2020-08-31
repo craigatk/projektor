@@ -21,4 +21,9 @@ class ProjektorPublishPluginExtension {
 
     boolean codeCoveragePublish = true
     boolean autoPublishWhenCoverageInCI = true
+
+    boolean gitInfoEnabled = true
+    List<String> gitMainBranchNames = ["main", "master"]
+    List<String> gitRepoEnvironmentVariables = ["VELA_REPO_FULL_NAME", "GITHUB_REPOSITORY"]
+    List<String> gitRefEnvironmentVariables = ["VELA_BUILD_REF", "GITHUB_REF"]
 }

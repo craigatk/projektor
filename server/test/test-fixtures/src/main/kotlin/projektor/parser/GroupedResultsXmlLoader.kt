@@ -3,12 +3,13 @@ package projektor.parser
 import projektor.parser.grouped.GroupedResultsParser
 import projektor.parser.grouped.model.GroupedResults
 import projektor.parser.grouped.model.GroupedTestSuites
+import projektor.parser.grouped.model.ResultsMetadata
 
 class GroupedResultsXmlLoader {
     private val groupedResultsParser = GroupedResultsParser()
     private val resultsXmlLoader = ResultsXmlLoader()
 
-    fun passingGroupedResults(): String {
+    fun passingGroupedResults(metadata: ResultsMetadata? = null): String {
         val groupedTestSuites1 = GroupedTestSuites()
         groupedTestSuites1.groupName = "Group1"
         groupedTestSuites1.groupLabel = "unitTest"
@@ -23,6 +24,7 @@ class GroupedResultsXmlLoader {
 
         val groupedResults = GroupedResults()
         groupedResults.groupedTestSuites = listOf(groupedTestSuites1, groupedTestSuites2)
+        groupedResults.metadata = metadata
 
         return groupedResultsParser.serializeGroupedResults(groupedResults)
     }

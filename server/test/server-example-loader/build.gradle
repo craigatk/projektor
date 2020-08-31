@@ -8,6 +8,7 @@ dependencies {
     implementation project(":server:server-client")
     implementation project(":server:test:coverage-fixtures")
     implementation project(":server:test:test-fixtures")
+    implementation project(":server:parsing:grouped-results-parser")
 
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     implementation 'com.google.code.gson:gson:2.8.5'

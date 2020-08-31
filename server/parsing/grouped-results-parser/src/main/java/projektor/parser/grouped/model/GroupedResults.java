@@ -4,4 +4,5 @@ import java.util.List;
 
 public class GroupedResults {
     public List<GroupedTestSuites> groupedTestSuites;
+    public ResultsMetadata metadata;
 }

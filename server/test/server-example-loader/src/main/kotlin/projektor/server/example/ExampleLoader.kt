@@ -51,13 +51,13 @@ fun loadCypressExamples() {
 
 fun loadPassingGroupedExample() {
     val groupedResultsXmlLoader = GroupedResultsXmlLoader()
-    val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults())
+    val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(null))
     println("View run with passing grouped tests at at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
 fun loadPassingGroupedExampleWithAttachments() {
     val groupedResultsXmlLoader = GroupedResultsXmlLoader()
-    val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults())
+    val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(null))
     sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/attachment-1.txt")
     sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/test-run-summary.png")
     println("View run with passing grouped tests and attachments at at $uiBaseUrl${saveResultsResponse.uri}")

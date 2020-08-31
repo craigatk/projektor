@@ -44,6 +44,7 @@ open class ApplicationTestCase {
     lateinit var testRunSystemAttributesDao: TestRunSystemAttributesDao
     lateinit var resultsProcessingDao: ResultsProcessingDao
     lateinit var resultsProcessingFailureDao: ResultsProcessingFailureDao
+    lateinit var gitMetadataDao: GitMetadataDao
     lateinit var testRunDBGenerator: TestRunDBGenerator
 
     lateinit var coverageRunDao: CodeCoverageRunDao
@@ -122,7 +123,16 @@ open class ApplicationTestCase {
         testRunSystemAttributesDao = TestRunSystemAttributesDao(dslContext.configuration())
         resultsProcessingDao = ResultsProcessingDao(dslContext.configuration())
         resultsProcessingFailureDao = ResultsProcessingFailureDao(dslContext.configuration())
-        testRunDBGenerator = TestRunDBGenerator(testRunDao, testSuiteGroupDao, testSuiteDao, testCaseDao, testFailureDao, testRunSystemAttributesDao)
+        gitMetadataDao = GitMetadataDao(dslContext.configuration())
+        testRunDBGenerator = TestRunDBGenerator(
+                testRunDao,
+                testSuiteGroupDao,
+                testSuiteDao,
+                testCaseDao,
+                testFailureDao,
+                testRunSystemAttributesDao,
+                gitMetadataDao
+        )
 
         coverageRunDao = CodeCoverageRunDao(dslContext.configuration())
         coverageGroupDao = CodeCoverageGroupDao(dslContext.configuration())
