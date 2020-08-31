@@ -8,6 +8,8 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.ResultsXmlLoader
+import projektor.parser.grouped.model.GitMetadata
+import projektor.parser.grouped.model.ResultsMetadata
 import projektor.server.api.results.SaveResultsResponse
 import projektor.server.example.coverage.JacocoXmlLoader
 
@@ -80,6 +82,29 @@ fun loadMultipleCoverageExample() {
     sendCoverageToServer(resultsResponse.id, JacocoXmlLoader().junitResultsParser())
     sendCoverageToServer(resultsResponse.id, JacocoXmlLoader().jacocoXmlParser())
     println("View run with multiple coverage results at at $uiBaseUrl${resultsResponse.uri}")
+}
+
+fun loadMultipleCoverageWithPreviousRunExample() {
+    val repoName = "projektor/projektor"
+    val branchName = "main"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+
+    val previousResultsResponse = sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata))
+    sendCoverageToServer(previousResultsResponse.id, JacocoXmlLoader().serverAppReduced())
+    sendCoverageToServer(previousResultsResponse.id, JacocoXmlLoader().junitResultsParser())
+    sendCoverageToServer(previousResultsResponse.id, JacocoXmlLoader().jacocoXmlParser())
+
+    val currentResultsResponse = sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata))
+    sendCoverageToServer(currentResultsResponse.id, JacocoXmlLoader().serverApp())
+    sendCoverageToServer(currentResultsResponse.id, JacocoXmlLoader().junitResultsParserReduced())
+    sendCoverageToServer(currentResultsResponse.id, JacocoXmlLoader().jacocoXmlParserReduced())
+
+    println("View run with multiple coverage results and previous results at $uiBaseUrl${currentResultsResponse.uri}")
 }
 
 fun sendResultsToServer(resultXmlList: List<String>): SaveResultsResponse =

@@ -8,5 +8,6 @@ fun main(args: Array<String>) {
     loadPassingGroupedExampleWithAttachments()
     loadSingleCoverageExample()
     loadMultipleCoverageExample()
+    loadMultipleCoverageWithPreviousRunExample()
     loadInvalidExample()
 }

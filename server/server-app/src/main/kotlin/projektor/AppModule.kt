@@ -14,6 +14,7 @@ import projektor.compare.PreviousTestRunRepository
 import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageDatabaseRepository
 import projektor.coverage.CoverageRepository
+import projektor.coverage.CoverageService
 import projektor.incomingresults.GroupedResultsConverter
 import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
@@ -65,6 +66,7 @@ fun createAppModule(
 
     single<CoverageRepository> { CoverageDatabaseRepository(get()) }
 
+    single { CoverageService(get(), get()) }
     single { GroupedResultsParser() }
     single { GroupedResultsConverter(get(), get()) }
     single { GroupedTestResultsService(get(), get(), get(), get(), get()) }

@@ -6,5 +6,6 @@ data class CoverageStat(
     val covered: Int,
     val missed: Int,
     val total: Int,
-    val coveredPercentage: BigDecimal
+    val coveredPercentage: BigDecimal,
+    val coveredPercentageDelta: BigDecimal?
 )

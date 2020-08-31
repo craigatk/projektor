@@ -29,7 +29,6 @@ import projektor.cleanup.CleanupConfig
 import projektor.cleanup.CleanupScheduledJob
 import projektor.cleanup.CleanupService
 import projektor.compare.PreviousTestRunService
-import projektor.coverage.CoverageRepository
 import projektor.coverage.CoverageService
 import projektor.database.DataSourceConfig
 import projektor.incomingresults.GroupedTestResultsService
@@ -136,8 +135,7 @@ fun Application.main() {
     val scheduler: Scheduler by inject()
     CleanupScheduledJob.conditionallyStartCleanupScheduledJob(cleanupConfig, cleanupService, scheduler)
 
-    val coverageRepository: CoverageRepository by inject()
-    val coverageService = CoverageService(coverageRepository)
+    val coverageService: CoverageService by inject()
 
     routing {
         attachments(attachmentService, authService)

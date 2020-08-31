@@ -24,8 +24,58 @@ describe("CoverageGraph", () => {
       />
     );
 
-    expect(getNodeText(queryByTestId("coverage-graph-title-line"))).toBe(
+    expect(queryByTestId("coverage-graph-title-line")).toHaveTextContent(
       "Line 98.89%"
+    );
+  });
+
+  it("should display positive previous coverage", () => {
+    const coverageStat = {
+      covered: 10,
+      missed: 1,
+      total: 11,
+      coveredPercentage: 98.89,
+      coveredPercentageDelta: 1.25,
+    } as CoverageStat;
+
+    const type = "Line";
+
+    const { queryByTestId } = render(
+      <CoverageGraph
+        coverageStat={coverageStat}
+        type={type}
+        height={25}
+        inline={false}
+      />
+    );
+
+    expect(queryByTestId("coverage-graph-title-line")).toHaveTextContent(
+      "Line 98.89% +1.25%"
+    );
+  });
+
+  it("should display negative previous coverage", () => {
+    const coverageStat = {
+      covered: 10,
+      missed: 1,
+      total: 11,
+      coveredPercentage: 98.89,
+      coveredPercentageDelta: -2.25,
+    } as CoverageStat;
+
+    const type = "Line";
+
+    const { queryByTestId } = render(
+      <CoverageGraph
+        coverageStat={coverageStat}
+        type={type}
+        height={25}
+        inline={false}
+      />
+    );
+
+    expect(queryByTestId("coverage-graph-title-line")).toHaveTextContent(
+      "Line 98.89% -2.25%"
     );
   });
 
