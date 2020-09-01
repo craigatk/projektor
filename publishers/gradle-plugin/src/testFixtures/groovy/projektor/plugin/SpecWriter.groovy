@@ -50,7 +50,8 @@ class ${specClassName} extends Specification {
 
     static File createTestDirectoryWithPassingTest(TemporaryFolder projectDir,  String specClassName) {
         File testDirectory = createTestDirectory(projectDir)
-        return writePassingSpecFile(testDirectory, specClassName)
+        writePassingSpecFile(testDirectory, specClassName)
+        return testDirectory
     }
 }
 
