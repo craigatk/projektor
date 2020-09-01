@@ -24,9 +24,15 @@ const CoverageDetails = ({ coverage }: CoverageDetailsProps) => {
         <Typography className={classes.title} variant="h6">
           Total
         </Typography>
-        <OverallCoverageGraphs overallStats={coverage.overallStats} />
+        <OverallCoverageGraphs
+          overallStats={coverage.overallStats}
+          previousTestRunId={coverage.previousTestRunId}
+        />
       </div>
-      <CoverageGroups coverageGroups={coverage.groups} />
+      <CoverageGroups
+        coverageGroups={coverage.groups}
+        previousTestRunId={coverage.previousTestRunId}
+      />
     </div>
   );
 };

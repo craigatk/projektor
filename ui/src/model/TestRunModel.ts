@@ -25,12 +25,12 @@ interface CoverageStats {
 interface CoverageGroup {
   name: string;
   stats: CoverageStats;
-  previousTestRunId?: string;
 }
 
 interface Coverage {
   groups: CoverageGroup[];
   overallStats: CoverageStats;
+  previousTestRunId?: string;
 }
 
 interface CoverageExists {

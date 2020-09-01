@@ -1,0 +1,54 @@
+{
+  "groups": [
+    {
+      "name": "server-app",
+      "stats": {
+        "statement_stat": {
+          "covered": 10813,
+          "missed": 367,
+          "total": 11180,
+          "covered_percentage": 96.72,
+          "covered_percentage_delta": 0.06
+        },
+        "line_stat": {
+          "covered": 1173,
+          "missed": 30,
+          "total": 1203,
+          "covered_percentage": 97.51,
+          "covered_percentage_delta": -0.08
+        },
+        "branch_stat": {
+          "covered": 236,
+          "missed": 64,
+          "total": 300,
+          "covered_percentage": 78.67,
+          "covered_percentage_delta": 0.34
+        }
+      }
+    }
+  ],
+  "overall_stats": {
+    "statement_stat": {
+      "covered": 10813,
+      "missed": 367,
+      "total": 11180,
+      "covered_percentage": 96.72,
+      "covered_percentage_delta": 0.06
+    },
+    "line_stat": {
+      "covered": 1173,
+      "missed": 30,
+      "total": 1203,
+      "covered_percentage": 97.51,
+      "covered_percentage_delta": -0.08
+    },
+    "branch_stat": {
+      "covered": 236,
+      "missed": 64,
+      "total": 300,
+      "covered_percentage": 78.67,
+      "covered_percentage_delta": 0.34
+    }
+  },
+  "previous_test_run_id": "E4STJNV5R3AS"
+}

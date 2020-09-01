@@ -26,7 +26,10 @@ const CoverageSummary = ({ publicId }: CoverageSummaryProps) => {
     return (
       <div>
         <PageTitle title="Coverage" testid="coverage-summary-title" />
-        <OverallCoverageGraphs overallStats={coverage.overallStats} />
+        <OverallCoverageGraphs
+          overallStats={coverage.overallStats}
+          previousTestRunId={coverage.previousTestRunId}
+        />
       </div>
     );
   } else {
