@@ -101,4 +101,23 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
             }
         }
     }
+
+    @Test
+    fun `when attachments not enabled should return 400 when trying to add attachment`() {
+        val publicId = randomPublicId()
+        attachmentsEnabled = false
+
+        val attachmentBytes = File("src/test/resources/test-attachment.txt").readBytes()
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-attachment.txt") {
+                testRunDBGenerator.createSimpleTestRun(publicId)
+
+                addHeader("content-length", attachmentBytes.size.toString())
+                setBody(attachmentBytes)
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.BadRequest)
+            }
+        }
+    }
 }
