@@ -12,6 +12,7 @@ const useStyles = makeStyles({
     marginLeft: "10px",
     paddingLeft: "5px",
     paddingRight: "20px",
+    marginBottom: "15px",
   },
 });
 

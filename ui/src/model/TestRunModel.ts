@@ -13,6 +13,7 @@ interface CoverageStat {
   missed: number;
   total: number;
   coveredPercentage: number;
+  coveredPercentageDelta?: number;
 }
 
 interface CoverageStats {
@@ -24,6 +25,7 @@ interface CoverageStats {
 interface CoverageGroup {
   name: string;
   stats: CoverageStats;
+  previousTestRunId?: string;
 }
 
 interface Coverage {

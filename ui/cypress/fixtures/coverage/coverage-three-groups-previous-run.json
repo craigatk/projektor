@@ -1,0 +1,106 @@
+{
+  "groups": [
+    {
+      "name": "server-app",
+      "stats": {
+        "statement_stat": {
+          "covered": 8816,
+          "missed": 335,
+          "total": 9151,
+          "covered_percentage": 96.34,
+          "covered_percentage_delta": 0.22
+        },
+        "line_stat": {
+          "covered": 953,
+          "missed": 25,
+          "total": 978,
+          "covered_percentage": 97.44,
+          "covered_percentage_delta": 2.04
+        },
+        "branch_stat": {
+          "covered": 191,
+          "missed": 57,
+          "total": 248,
+          "covered_percentage": 77.02,
+          "covered_percentage_delta": 8.07
+        }
+      }
+    },
+    {
+      "name": "junit-results-parser",
+      "stats": {
+        "statement_stat": {
+          "covered": 41,
+          "missed": 17,
+          "total": 58,
+          "covered_percentage": 70.69,
+          "covered_percentage_delta": -8.62
+        },
+        "line_stat": {
+          "covered": 7,
+          "missed": 6,
+          "total": 13,
+          "covered_percentage": 53.85,
+          "covered_percentage_delta": -38.46
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "total": 0,
+          "covered_percentage": 0,
+          "covered_percentage_delta": 0
+        }
+      }
+    },
+    {
+      "name": "jacoco-xml-parser",
+      "stats": {
+        "statement_stat": {
+          "covered": 77,
+          "missed": 14,
+          "total": 91,
+          "covered_percentage": 84.62,
+          "covered_percentage_delta": -10.98
+        },
+        "line_stat": {
+          "covered": 3,
+          "missed": 11,
+          "total": 14,
+          "covered_percentage": 21.43,
+          "covered_percentage_delta": -71.43
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "total": 0,
+          "covered_percentage": 0,
+          "covered_percentage_delta": 0
+        }
+      }
+    }
+  ],
+  "overall_stats": {
+    "statement_stat": {
+      "covered": 8934,
+      "missed": 366,
+      "total": 9300,
+      "covered_percentage": 96.06,
+      "covered_percentage_delta": 0.05
+    },
+    "line_stat": {
+      "covered": 963,
+      "missed": 42,
+      "total": 1005,
+      "covered_percentage": 95.82,
+      "covered_percentage_delta": 0.5
+    },
+    "branch_stat": {
+      "covered": 191,
+      "missed": 57,
+      "total": 248,
+      "covered_percentage": 77.02,
+      "covered_percentage_delta": 8.07
+    }
+  },
+  "previous_test_run_id": "SE19C9IXPFHI"
+}

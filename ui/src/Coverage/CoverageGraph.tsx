@@ -2,6 +2,7 @@ import * as React from "react";
 import { CoverageStat } from "../model/TestRunModel";
 import HSBar from "react-horizontal-stacked-bar-chart";
 import { makeStyles, Typography } from "@material-ui/core";
+import CoveragePercentage from "./CoveragePercentage";
 
 interface CoverageGraphProps {
   coverageStat: CoverageStat;
@@ -30,9 +31,14 @@ const CoverageGraph = ({
 }: CoverageGraphProps) => {
   const classes = useStyles({ inline });
 
-  const coveredDescription = inline
-    ? `${coverageStat.covered} Covered (${coverageStat.coveredPercentage}%)`
-    : `${coverageStat.covered} Covered`;
+  const coveredDescription = inline ? (
+    <span>
+      {coverageStat.covered} Covered (
+      <CoveragePercentage coverageStat={coverageStat} />)
+    </span>
+  ) : (
+    <span>{coverageStat.covered} Covered</span>
+  );
 
   if (coverageStat.total > 0) {
     return (
@@ -42,7 +48,7 @@ const CoverageGraph = ({
             className={classes.label}
             data-testid={`coverage-graph-title-${type.toLowerCase()}`}
           >
-            {type} {coverageStat.coveredPercentage}%
+            {type} <CoveragePercentage coverageStat={coverageStat} />
           </Typography>
         )}
         <HSBar // https://www.npmjs.com/package/react-horizontal-stacked-bar-chart

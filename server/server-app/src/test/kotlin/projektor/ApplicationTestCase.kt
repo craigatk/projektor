@@ -18,6 +18,10 @@ import org.jooq.DSLContext
 import org.junit.jupiter.api.AfterEach
 import org.koin.ktor.ext.get
 import org.slf4j.LoggerFactory
+import projektor.compare.PreviousTestRunDatabaseRepository
+import projektor.compare.PreviousTestRunService
+import projektor.coverage.CoverageDatabaseRepository
+import projektor.coverage.CoverageService
 import projektor.database.generated.tables.daos.*
 import projektor.parser.ResultsXmlLoader
 import projektor.server.api.PublicId
@@ -50,6 +54,7 @@ open class ApplicationTestCase {
     lateinit var coverageRunDao: CodeCoverageRunDao
     lateinit var coverageGroupDao: CodeCoverageGroupDao
     lateinit var coverageStatsDao: CodeCoverageStatsDao
+    lateinit var coverageService: CoverageService
 
     lateinit var application: Application
 
@@ -137,6 +142,10 @@ open class ApplicationTestCase {
         coverageRunDao = CodeCoverageRunDao(dslContext.configuration())
         coverageGroupDao = CodeCoverageGroupDao(dslContext.configuration())
         coverageStatsDao = CodeCoverageStatsDao(dslContext.configuration())
+
+        val coverageRepository = CoverageDatabaseRepository(dslContext)
+        val previousTestRunService = PreviousTestRunService(PreviousTestRunDatabaseRepository(dslContext))
+        coverageService = CoverageService(coverageRepository, previousTestRunService)
 
         this.application = application
     }

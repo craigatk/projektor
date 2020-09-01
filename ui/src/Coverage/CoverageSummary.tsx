@@ -1,8 +1,8 @@
 import * as React from "react";
 import PageTitle from "../PageTitle";
 import LoadingState from "../Loading/LoadingState";
-import { CoverageStats } from "../model/TestRunModel";
-import { fetchOverallCoverageStats } from "../service/TestRunService";
+import { Coverage } from "../model/TestRunModel";
+import { fetchCoverage } from "../service/TestRunService";
 import OverallCoverageGraphs from "./OverallCoverageGraphs";
 
 interface CoverageSummaryProps {
@@ -10,23 +10,23 @@ interface CoverageSummaryProps {
 }
 
 const CoverageSummary = ({ publicId }: CoverageSummaryProps) => {
-  const [overallStats, setOverallStats] = React.useState<CoverageStats>(null);
+  const [coverage, setCoverage] = React.useState<Coverage>(null);
   const [loadingState, setLoadingState] = React.useState(LoadingState.Loading);
 
   React.useEffect(() => {
-    fetchOverallCoverageStats(publicId)
+    fetchCoverage(publicId)
       .then((response) => {
-        setOverallStats(response.data);
+        setCoverage(response.data);
         setLoadingState(LoadingState.Success);
       })
       .catch(() => setLoadingState(LoadingState.Error));
-  }, [setOverallStats, setLoadingState]);
+  }, [setCoverage, setLoadingState]);
 
-  if (overallStats) {
+  if (coverage) {
     return (
       <div>
         <PageTitle title="Coverage" testid="coverage-summary-title" />
-        <OverallCoverageGraphs overallStats={overallStats} />
+        <OverallCoverageGraphs overallStats={coverage.overallStats} />
       </div>
     );
   } else {
