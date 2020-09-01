@@ -62,7 +62,7 @@ open class ApplicationTestCase {
 
     protected var publishToken: String? = null
 
-    protected var attachmentsEnabled: Boolean? = null
+    protected var attachmentsEnabled: Boolean = false
     protected var attachmentsMaxSizeMB: BigDecimal? = null
     protected var attachmentsAccessKey = "minio_access_key"
     protected var attachmentsBucketName = "attachmentstesting"
@@ -89,7 +89,7 @@ open class ApplicationTestCase {
 
             publishToken?.let { put("ktor.auth.publishToken", it) }
 
-            attachmentsEnabled?.let {
+            if (attachmentsEnabled) {
                 put("ktor.attachment.url", "http://localhost:9000")
                 put("ktor.attachment.bucketName", attachmentsBucketName)
                 put("ktor.attachment.autoCreateBucket", attachmentsAutoCreateBucket.toString())
