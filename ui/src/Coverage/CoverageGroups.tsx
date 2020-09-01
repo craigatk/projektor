@@ -6,6 +6,7 @@ import { makeStyles, Typography } from "@material-ui/core";
 
 interface CoverageGroupsProps {
   coverageGroups: CoverageGroup[];
+  previousTestRunId?: string;
 }
 
 const headerStyle = {
@@ -23,7 +24,10 @@ const useStyles = makeStyles({
   },
 });
 
-const CoverageGroups = ({ coverageGroups }: CoverageGroupsProps) => {
+const CoverageGroups = ({
+  coverageGroups,
+  previousTestRunId,
+}: CoverageGroupsProps) => {
   const classes = useStyles({});
 
   return (
@@ -57,6 +61,7 @@ const CoverageGroups = ({ coverageGroups }: CoverageGroupsProps) => {
                 type="Line"
                 height={15}
                 inline={true}
+                previousTestRunId={previousTestRunId}
               />
             ),
             cellStyle,
@@ -71,6 +76,7 @@ const CoverageGroups = ({ coverageGroups }: CoverageGroupsProps) => {
                 type="Statement"
                 height={15}
                 inline={true}
+                previousTestRunId={previousTestRunId}
               />
             ),
             cellStyle,
@@ -85,6 +91,7 @@ const CoverageGroups = ({ coverageGroups }: CoverageGroupsProps) => {
                 type="Branch"
                 height={15}
                 inline={true}
+                previousTestRunId={previousTestRunId}
               />
             ),
             cellStyle,

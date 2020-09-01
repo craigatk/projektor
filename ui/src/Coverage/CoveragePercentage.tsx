@@ -4,31 +4,54 @@ import { makeStyles, Tooltip } from "@material-ui/core";
 
 interface CoveragePercentageProps {
   coverageStat: CoverageStat;
+  previousTestRunId?: string;
 }
 
 const useStyles = makeStyles({
   positive: {
     color: "green",
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+    "&:visited": {
+      color: "green",
+    },
   },
   negative: {
     color: "red",
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+    "&:visited": {
+      color: "red",
+    },
   },
 });
 
-const CoveragePercentage = ({ coverageStat }: CoveragePercentageProps) => {
+const CoveragePercentage = ({
+  coverageStat,
+  previousTestRunId,
+}: CoveragePercentageProps) => {
   const classes = useStyles({});
+
   if (coverageStat.coveredPercentageDelta) {
     if (coverageStat.coveredPercentageDelta > 0) {
       return (
         <span>
           {coverageStat.coveredPercentage}%{" "}
           <Tooltip
-            title="Coverage percentage increased between this run and the previous main branch run in this repo"
+            title="Coverage percentage increased between this run and the previous main branch run in this repo. Click to see the previous run's coverage data."
             placement="top"
           >
-            <span className={classes.positive}>
+            <a
+              href={`/tests/${previousTestRunId}/coverage`}
+              className={classes.positive}
+              target="_blank"
+            >
               +{coverageStat.coveredPercentageDelta}%
-            </span>
+            </a>
           </Tooltip>
         </span>
       );
@@ -37,12 +60,16 @@ const CoveragePercentage = ({ coverageStat }: CoveragePercentageProps) => {
         <span>
           {coverageStat.coveredPercentage}%{" "}
           <Tooltip
-            title="Coverage percentage decreased between this run and the previous main branch run in this repo"
+            title="Coverage percentage decreased between this run and the previous main branch run in this repo. Click to see the previous run's coverage data."
             placement="top"
           >
-            <span className={classes.negative}>
+            <a
+              href={`/tests/${previousTestRunId}/coverage`}
+              className={classes.negative}
+              target="_blank"
+            >
               {coverageStat.coveredPercentageDelta}%
-            </span>
+            </a>
           </Tooltip>
         </span>
       );

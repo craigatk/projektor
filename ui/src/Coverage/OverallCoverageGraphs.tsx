@@ -5,6 +5,7 @@ import CoverageGraph from "./CoverageGraph";
 
 interface OverallCoverageGraphsProps {
   overallStats: CoverageStats;
+  previousTestRunId?: string;
 }
 
 const useStyles = makeStyles({
@@ -18,6 +19,7 @@ const useStyles = makeStyles({
 
 const OverallCoverageGraphs = ({
   overallStats,
+  previousTestRunId,
 }: OverallCoverageGraphsProps) => {
   const classes = useStyles({});
 
@@ -29,6 +31,7 @@ const OverallCoverageGraphs = ({
           coverageStat={overallStats.lineStat}
           height={25}
           inline={false}
+          previousTestRunId={previousTestRunId}
         />
       </Grid>
       <Grid
@@ -42,6 +45,7 @@ const OverallCoverageGraphs = ({
           coverageStat={overallStats.statementStat}
           height={25}
           inline={false}
+          previousTestRunId={previousTestRunId}
         />
       </Grid>
       <Grid item sm={4} xs={12} data-testid="overall-coverage-section-branch">
@@ -50,6 +54,7 @@ const OverallCoverageGraphs = ({
           coverageStat={overallStats.branchStat}
           height={25}
           inline={false}
+          previousTestRunId={previousTestRunId}
         />
       </Grid>
     </Grid>

@@ -9,6 +9,7 @@ interface CoverageGraphProps {
   type: string;
   height: number;
   inline: boolean;
+  previousTestRunId?: string;
 }
 
 const useStyles = makeStyles({
@@ -28,13 +29,18 @@ const CoverageGraph = ({
   type,
   height,
   inline,
+  previousTestRunId,
 }: CoverageGraphProps) => {
   const classes = useStyles({ inline });
 
   const coveredDescription = inline ? (
     <span>
       {coverageStat.covered} Covered (
-      <CoveragePercentage coverageStat={coverageStat} />)
+      <CoveragePercentage
+        coverageStat={coverageStat}
+        previousTestRunId={previousTestRunId}
+      />
+      )
     </span>
   ) : (
     <span>{coverageStat.covered} Covered</span>
@@ -48,7 +54,11 @@ const CoverageGraph = ({
             className={classes.label}
             data-testid={`coverage-graph-title-${type.toLowerCase()}`}
           >
-            {type} <CoveragePercentage coverageStat={coverageStat} />
+            {type}{" "}
+            <CoveragePercentage
+              coverageStat={coverageStat}
+              previousTestRunId={previousTestRunId}
+            />
           </Typography>
         )}
         <HSBar // https://www.npmjs.com/package/react-horizontal-stacked-bar-chart
