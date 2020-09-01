@@ -4,11 +4,13 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.*
 import kotlin.test.assertNotNull
+import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.PublicId
+import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 
@@ -28,15 +30,19 @@ class PreviousTestRunApplicationTest : ApplicationTestCase() {
             handleRequest(HttpMethod.Get, "/run/$thisPublicId/previous") {
                 val differentTestRun = testRunDBGenerator.createSimpleTestRun(differentRepoPublicId)
                 testRunDBGenerator.addGitMetadata(differentTestRun, "projektor/different", true, "main")
+                runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), differentRepoPublicId) }
 
                 val oldestTestRun = testRunDBGenerator.createSimpleTestRun(oldestPublicId)
                 testRunDBGenerator.addGitMetadata(oldestTestRun, repoName, true, "main")
+                runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), oldestPublicId) }
 
                 val newerTestRun = testRunDBGenerator.createSimpleTestRun(newerPublicId)
                 testRunDBGenerator.addGitMetadata(newerTestRun, repoName, true, "main")
+                runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), newerPublicId) }
 
                 val thisPublicTestRun = testRunDBGenerator.createSimpleTestRun(thisPublicId)
                 testRunDBGenerator.addGitMetadata(thisPublicTestRun, repoName, true, "main")
+                runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), thisPublicId) }
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 

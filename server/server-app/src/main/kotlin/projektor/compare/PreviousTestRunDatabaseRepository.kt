@@ -3,12 +3,12 @@ package projektor.compare
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
-import projektor.database.generated.Tables.GIT_METADATA
-import projektor.database.generated.Tables.TEST_RUN
+import projektor.database.generated.Tables
+import projektor.database.generated.Tables.*
 import projektor.server.api.PublicId
 
 class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : PreviousTestRunRepository {
-    override suspend fun findPreviousMainBranchRun(publicId: PublicId): PublicId? =
+    override suspend fun findPreviousMainBranchRunWithCoverage(publicId: PublicId): PublicId? =
             withContext(Dispatchers.IO) {
                 val repoName = dslContext.select(GIT_METADATA.REPO_NAME)
                         .from(GIT_METADATA)
@@ -18,9 +18,10 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
                         .fetchOne(GIT_METADATA.REPO_NAME)
 
                 if (repoName != null) {
-                    val publicId = dslContext.select(TEST_RUN.PUBLIC_ID)
+                    val previousPublicId = dslContext.select(TEST_RUN.PUBLIC_ID)
                             .from(TEST_RUN)
                             .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                            .innerJoin(CODE_COVERAGE_RUN).on(Tables.TEST_RUN.PUBLIC_ID.eq(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID))
                             .where(GIT_METADATA.IS_MAIN_BRANCH.eq(true)
                                     .and(TEST_RUN.PUBLIC_ID.ne(publicId.id))
                                     .and(GIT_METADATA.REPO_NAME.eq(repoName)))
@@ -28,7 +29,7 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
                             .limit(1)
                             .fetchOne(TEST_RUN.PUBLIC_ID)
 
-                    publicId?.let { PublicId(it) }
+                    previousPublicId?.let { PublicId(it) }
                 } else {
                     null
                 }

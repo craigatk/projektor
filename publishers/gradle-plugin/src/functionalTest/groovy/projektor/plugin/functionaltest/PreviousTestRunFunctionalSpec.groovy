@@ -12,10 +12,10 @@ class PreviousTestRunFunctionalSpec extends ProjektorPluginFunctionalSpecificati
     File buildFile
 
     def setup() {
-        buildFile = BuildFileWriter.createProjectBuildFile(projectRootDir, true, false)
+        buildFile = BuildFileWriter.createProjectBuildFile(projectRootDir, true, true)
     }
 
-    def "should publish the Git metadata and find the previous test fun"() {
+    def "should publish the Git metadata and find the previous test fun with coverage"() {
         given:
         String repoName = "${RandomStringUtils.randomAlphabetic(8)}/${RandomStringUtils.randomAlphabetic(8)}"
         String branchName = "main"
@@ -23,16 +23,11 @@ class PreviousTestRunFunctionalSpec extends ProjektorPluginFunctionalSpecificati
         buildFile << """
             projektor {
                 serverUrl = '${PROJEKTOR_SERVER_URL}'
+                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 
-        List<String> expectedTestSuiteClassNames = [
-                "FirstSampleSpec",
-                "SecondSampleSpec",
-                "ThirdSampleSpec"
-        ]
-
-        SpecWriter.createTestDirectoryWithFailingTests(projectRootDir, expectedTestSuiteClassNames)
+        File testDirectory = SpecWriter.createTestDirectoryWithPassingTest(projectRootDir, "SampleSpec")
 
         Map<String, String> currentEnv = System.getenv()
         Map<String, String> augmentedEnv = new HashMap<>(currentEnv)
@@ -41,10 +36,10 @@ class PreviousTestRunFunctionalSpec extends ProjektorPluginFunctionalSpecificati
         when:
         def result1 = GradleRunner.create()
                 .withProjectDir(projectRootDir.root)
-                .withArguments('test')
+                .withArguments('test', 'jTR')
                 .withEnvironment(augmentedEnv)
                 .withPluginClasspath()
-                .buildAndFail()
+                .build()
         String testId1 = extractTestId(result1.output)
 
         then:
@@ -53,12 +48,14 @@ class PreviousTestRunFunctionalSpec extends ProjektorPluginFunctionalSpecificati
         }
 
         when:
+        SpecWriter.writePassingSpecFile(testDirectory, "SecondSampleSpec")
+
         def result2 = GradleRunner.create()
                 .withProjectDir(projectRootDir.root)
-                .withArguments('test')
+                .withArguments('test', 'jTR')
                 .withEnvironment(augmentedEnv)
                 .withPluginClasspath()
-                .buildAndFail()
+                .build()
         String testId2 = extractTestId(result2.output)
 
         then:
@@ -102,7 +99,7 @@ class PreviousTestRunFunctionalSpec extends ProjektorPluginFunctionalSpecificati
         when:
         def result = GradleRunner.create()
                 .withProjectDir(projectRootDir.root)
-                .withArguments('test')
+                .withArguments('test', 'jTR')
                 .withEnvironment(augmentedEnv)
                 .withPluginClasspath()
                 .buildAndFail()
