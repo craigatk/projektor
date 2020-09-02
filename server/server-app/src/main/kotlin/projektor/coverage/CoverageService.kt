@@ -41,7 +41,7 @@ class CoverageService(
             val coverageReports = coverageRepository.fetchCoverageList(publicId)
             val overallStats = coverageRepository.fetchOverallStats(publicId)
 
-            val previousTestRun = previousTestRunService.findPreviousMainBranchRun(publicId)
+            val previousTestRun = previousTestRunService.findPreviousMainBranchRunWithCoverage(publicId)
             val previousCoverage: Coverage? = previousTestRun?.let { getCoverage(it) }
 
             Coverage(

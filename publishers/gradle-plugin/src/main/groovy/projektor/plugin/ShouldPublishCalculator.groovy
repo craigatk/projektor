@@ -13,6 +13,10 @@ class ShouldPublishCalculator {
                 shouldPublishBasedOnCoverage(extension, coverageTasksExecuted, environment)
     }
 
+    static boolean isCI(Map<String, String> environment) {
+        return Boolean.valueOf(environment.get("CI"))
+    }
+
     private static boolean shouldPublishBasedOnBuildResult(
             ProjektorPublishPluginExtension extension,
             BuildResult buildResult
@@ -28,6 +32,6 @@ class ShouldPublishCalculator {
         return extension.codeCoveragePublish &&
                 extension.autoPublishWhenCoverageInCI &&
                 coverageTasksExecuted &&
-                environment.containsKey("CI")
+                isCI(environment)
     }
 }

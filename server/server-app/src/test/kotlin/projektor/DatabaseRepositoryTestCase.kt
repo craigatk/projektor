@@ -12,6 +12,10 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
 import projektor.auth.AuthConfig
+import projektor.compare.PreviousTestRunDatabaseRepository
+import projektor.compare.PreviousTestRunService
+import projektor.coverage.CoverageDatabaseRepository
+import projektor.coverage.CoverageService
 import projektor.database.DataSourceConfig
 import projektor.database.generated.tables.daos.*
 import projektor.message.MessageConfig
@@ -36,6 +40,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
     lateinit var coverageRunDao: CodeCoverageRunDao
     lateinit var coverageGroupDao: CodeCoverageGroupDao
     lateinit var coverageStatsDao: CodeCoverageStatsDao
+    lateinit var coverageService: CoverageService
 
     @KtorExperimentalAPI
     @BeforeEach
@@ -95,6 +100,10 @@ open class DatabaseRepositoryTestCase : KoinTest {
         coverageRunDao = CodeCoverageRunDao(dslContext.configuration())
         coverageGroupDao = CodeCoverageGroupDao(dslContext.configuration())
         coverageStatsDao = CodeCoverageStatsDao(dslContext.configuration())
+
+        val coverageRepository = CoverageDatabaseRepository(dslContext)
+        val previousTestRunService = PreviousTestRunService(PreviousTestRunDatabaseRepository(dslContext))
+        coverageService = CoverageService(coverageRepository, previousTestRunService)
 
         testRunDBGenerator = TestRunDBGenerator(
                 testRunDao,

@@ -18,12 +18,15 @@ import projektor.plugin.git.GitMetadataFinder
 import projektor.plugin.git.GitResolutionConfig
 import projektor.plugin.git.EnvironmentGitResolver
 import projektor.plugin.notification.NotificationConfig
+import projektor.plugin.notification.link.LinkMessageWriter
 import projektor.plugin.notification.slack.SlackMessageBuilder
 import projektor.plugin.notification.slack.SlackMessageWriter
 import projektor.plugin.notification.slack.message.SlackAttachmentsMessage
 import projektor.plugin.results.ResultsLogger
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.results.grouped.ResultsMetadata
+
+import static projektor.plugin.ShouldPublishCalculator.isCI
 
 class ProjektorBuildFinishedListener implements BuildListener {
 
@@ -132,6 +135,14 @@ class ProjektorBuildFinishedListener implements BuildListener {
 
             new SlackMessageWriter().writeSlackMessage(
                     slackAttachmentsMessage,
+                    notificationConfig,
+                    projectDir
+            )
+        }
+
+        if (notificationConfig.writeLinkFile && isCI(System.getenv())) {
+            new LinkMessageWriter().writeLinkFile(
+                    publishResult.reportUrl,
                     notificationConfig,
                     projectDir
             )
