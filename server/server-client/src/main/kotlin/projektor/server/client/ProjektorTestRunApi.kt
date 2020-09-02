@@ -4,6 +4,7 @@ import projektor.server.api.PublicId
 import projektor.server.api.TestRun
 import projektor.server.api.TestSuite
 import projektor.server.api.TestSuiteOutput
+import projektor.server.api.coverage.Coverage
 import projektor.server.api.coverage.CoverageExists
 import projektor.server.api.coverage.CoverageStats
 import retrofit2.Call
@@ -25,6 +26,9 @@ interface ProjektorTestRunApi {
 
     @GET("/run/{publicId}/suite/{testSuiteIdx}/systemErr")
     fun testSuiteSystemErr(@Path("publicId") publicId: String, @Path("testSuiteIdx") testSuiteIdx: Int): Call<TestSuiteOutput>
+
+    @GET("/run/{publicId}/coverage")
+    fun coverage(@Path("publicId") publicId: String): Call<Coverage>
 
     @GET("/run/{publicId}/coverage/overall")
     fun coverageOverallStats(@Path("publicId") publicId: String): Call<CoverageStats>

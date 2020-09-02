@@ -86,39 +86,35 @@ class ProjektorBuildFinishedListener implements BuildListener {
                 logger
         )
 
-        if (projectTestResultsCollector.hasTestGroups()) {
-            logger.info("Build finished, gathering and publishing Projektor test reports from " +
-                    "${projectTestResultsCollector.testGroupsCount()} test tasks")
-            GroupedResults groupedResults = projectTestResultsCollector.createGroupedResults()
-            groupedResults.metadata = new ResultsMetadata(
-                    git: GitMetadataFinder.findGitMetadata(gitResolutionConfig, logger)
-            )
+        logger.info("Build finished, gathering and publishing Projektor test reports from " +
+                "${projectTestResultsCollector.testGroupsCount()} test tasks")
+        GroupedResults groupedResults = projectTestResultsCollector.createGroupedResults()
+        groupedResults.metadata = new ResultsMetadata(
+                git: GitMetadataFinder.findGitMetadata(gitResolutionConfig, logger)
+        )
 
-            ResultsClient resultsClient = new ResultsClient(clientConfig, logger)
-            PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
+        ResultsClient resultsClient = new ResultsClient(clientConfig, logger)
+        PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
 
-            new ResultsLogger(logger).logReportResults(publishResult)
+        new ResultsLogger(logger).logReportResults(publishResult)
 
-            writeNotifications(buildResult, publishResult)
+        writeNotifications(buildResult, publishResult)
 
-            if (attachments) {
-                AttachmentsClient attachmentsClient = new AttachmentsClient(clientConfig, logger)
-                new AttachmentsPublisher(attachmentsClient, logger).publishAttachments(publishResult.publicId, attachments)
+        if (attachments) {
+            AttachmentsClient attachmentsClient = new AttachmentsClient(clientConfig, logger)
+            new AttachmentsPublisher(attachmentsClient, logger).publishAttachments(publishResult.publicId, attachments)
+        }
+
+        if (coverageEnabled) {
+            CoverageClient coverageClient = new CoverageClient(clientConfig, logger)
+
+            List<CodeCoverageGroup> codeCoverageGroups = codeCoverageTaskCollector.codeCoverageGroups
+
+            logger.info("Publishing ${codeCoverageGroups.size()} code coverage reports to Projektor server")
+
+            codeCoverageGroups.forEach { CodeCoverageGroup coverageGroup ->
+                coverageClient.sendCoverageToServer(coverageGroup.reportFile, publishResult.publicId)
             }
-
-            if (coverageEnabled) {
-                CoverageClient coverageClient = new CoverageClient(clientConfig, logger)
-
-                List<CodeCoverageGroup> codeCoverageGroups = codeCoverageTaskCollector.codeCoverageGroups
-
-                logger.info("Publishing ${codeCoverageGroups.size()} code coverage reports to Projektor server")
-
-                codeCoverageGroups.forEach { CodeCoverageGroup coverageGroup ->
-                    coverageClient.sendCoverageToServer(coverageGroup.reportFile, publishResult.publicId)
-                }
-            }
-        } else {
-            logger.info("Projektor plugin applied but no test results found in this build")
         }
     }
 
