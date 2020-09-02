@@ -12,11 +12,9 @@ import projektor.plugin.client.CoverageClient
 import projektor.plugin.client.ResultsClient
 import projektor.plugin.client.ClientConfig
 import projektor.plugin.coverage.CodeCoverageGroup
-import projektor.plugin.coverage.CodeCoverageTaskFinishedListener
-import projektor.plugin.git.EnvironmentResolver
+import projektor.plugin.coverage.CodeCoverageTaskCollector
 import projektor.plugin.git.GitMetadataFinder
 import projektor.plugin.git.GitResolutionConfig
-import projektor.plugin.git.EnvironmentGitResolver
 import projektor.plugin.notification.NotificationConfig
 import projektor.plugin.notification.link.LinkMessageWriter
 import projektor.plugin.notification.slack.SlackMessageBuilder
@@ -39,7 +37,6 @@ class ProjektorBuildFinishedListener implements BuildListener {
     private final List<String> additionalResultsDirs
     private final List<FileTree> attachments
     private final ProjektorTaskFinishedListener projektorTaskFinishedListener
-    private final CodeCoverageTaskFinishedListener codeCoverageTaskFinishedListener
     private final boolean coverageEnabled
     private final GitResolutionConfig gitResolutionConfig
 
@@ -49,8 +46,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
             Logger logger,
             File projectDir,
             ProjektorPublishPluginExtension extension,
-            ProjektorTaskFinishedListener projektorTaskFinishedListener,
-            CodeCoverageTaskFinishedListener codeCoverageTaskFinishedListener
+            ProjektorTaskFinishedListener projektorTaskFinishedListener
     ) {
         this.clientConfig = clientConfig
         this.notificationConfig = notificationConfig
@@ -61,28 +57,29 @@ class ProjektorBuildFinishedListener implements BuildListener {
         this.additionalResultsDirs = extension.additionalResultsDirs
         this.attachments = extension.attachments
         this.projektorTaskFinishedListener = projektorTaskFinishedListener
-        this.codeCoverageTaskFinishedListener = codeCoverageTaskFinishedListener
         this.coverageEnabled = extension.codeCoveragePublish
         this.gitResolutionConfig = GitResolutionConfig.fromExtension(extension)
     }
 
     @Override
     void buildFinished(BuildResult buildResult) {
+        CodeCoverageTaskCollector codeCoverageTaskCollector = new CodeCoverageTaskCollector(buildResult, logger)
+
         boolean shouldPublish = ShouldPublishCalculator.shouldPublishResults(
                 extension,
                 buildResult,
-                codeCoverageTaskFinishedListener.hasCodeCoverageData(),
+                codeCoverageTaskCollector.hasCodeCoverageData(),
                 System.getenv()
         )
 
         if (shouldPublish) {
-            collectAndPublishResults(buildResult)
+            collectAndPublishResults(buildResult, codeCoverageTaskCollector)
         } else {
             logger.info("Projektor set to auto-publish only on failure and tests passed")
         }
     }
 
-    private void collectAndPublishResults(BuildResult buildResult) {
+    private void collectAndPublishResults(BuildResult buildResult, CodeCoverageTaskCollector codeCoverageTaskCollector) {
         List<TestGroup> testGroupsFromAdditionalDirs = TestDirectoryGroup.listFromDirPaths(projectDir, additionalResultsDirs)
         ProjectTestResultsCollector projectTestResultsCollector = new ProjectTestResultsCollector(
                 this.projektorTaskFinishedListener.testGroups + testGroupsFromAdditionalDirs,
@@ -112,7 +109,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
             if (coverageEnabled) {
                 CoverageClient coverageClient = new CoverageClient(clientConfig, logger)
 
-                List<CodeCoverageGroup> codeCoverageGroups = codeCoverageTaskFinishedListener.codeCoverageGroups
+                List<CodeCoverageGroup> codeCoverageGroups = codeCoverageTaskCollector.codeCoverageGroups
 
                 logger.info("Publishing ${codeCoverageGroups.size()} code coverage reports to Projektor server")
 

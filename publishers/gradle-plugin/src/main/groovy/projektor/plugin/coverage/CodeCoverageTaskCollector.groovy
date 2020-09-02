@@ -1,37 +1,27 @@
 package projektor.plugin.coverage
 
-import org.gradle.api.Task
-import org.gradle.api.execution.TaskExecutionListener
+import org.gradle.BuildResult
 import org.gradle.api.logging.Logger
 import org.gradle.api.reporting.SingleFileReport
-import org.gradle.api.tasks.TaskState
 import org.gradle.testing.jacoco.tasks.JacocoReport
 
-class CodeCoverageTaskFinishedListener implements TaskExecutionListener {
-    List<CodeCoverageGroup> codeCoverageGroups = []
+class CodeCoverageTaskCollector {
+    final List<CodeCoverageGroup> codeCoverageGroups
 
     private final Logger logger
+    private final BuildResult buildResult
 
-    CodeCoverageTaskFinishedListener(Logger logger) {
+    CodeCoverageTaskCollector(BuildResult buildResult, Logger logger) {
+        this.buildResult = buildResult
         this.logger = logger
+
+        List<JacocoReport> jacocoTasks = buildResult.gradle.taskGraph.allTasks.findAll { it instanceof JacocoReport }
+
+        this.codeCoverageGroups = jacocoTasks.collect {coverageGroupOrNull(it) }.findAll { it != null}
     }
 
     boolean hasCodeCoverageData() {
         return !codeCoverageGroups.empty
-    }
-
-    @Override
-    void beforeExecute(Task task) { }
-
-    @Override
-    void afterExecute(Task task, TaskState taskState) {
-        if (!taskState.skipped && !taskState.upToDate && task instanceof JacocoReport) {
-            CodeCoverageGroup codeCoverageGroup = coverageGroupOrNull(task)
-
-            if (codeCoverageGroup != null) {
-                codeCoverageGroups.add(codeCoverageGroup)
-            }
-        }
     }
 
     private CodeCoverageGroup coverageGroupOrNull(JacocoReport reportTask) {
