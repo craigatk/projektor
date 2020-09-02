@@ -14,7 +14,7 @@ class ShouldPublishCalculator {
     }
 
     static boolean isCI(Map<String, String> environment) {
-        return Boolean.valueOf(environment.get("CI"))
+        return environment.get("CI") != null && environment.get("CI") != "false"
     }
 
     private static boolean shouldPublishBasedOnBuildResult(
