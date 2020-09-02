@@ -1,6 +1,6 @@
 package projektor.objectstore
 
-import io.kotlintest.specs.StringSpec
+import io.kotest.core.spec.style.StringSpec
 import java.io.File
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
