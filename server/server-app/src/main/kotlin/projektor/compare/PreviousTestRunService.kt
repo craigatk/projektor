@@ -3,6 +3,6 @@ package projektor.compare
 import projektor.server.api.PublicId
 
 class PreviousTestRunService(private val previousTestRunRepository: PreviousTestRunRepository) {
-    suspend fun findPreviousMainBranchRun(publicId: PublicId): PublicId? =
+    suspend fun findPreviousMainBranchRunWithCoverage(publicId: PublicId): PublicId? =
             previousTestRunRepository.findPreviousMainBranchRunWithCoverage(publicId)
 }

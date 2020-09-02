@@ -13,7 +13,7 @@ fun Route.previousRuns(previousTestRunService: PreviousTestRunService) {
     get("/run/{publicId}/previous") {
         val publicId = call.parameters.getOrFail("publicId")
 
-        val previousPublicId = previousTestRunService.findPreviousMainBranchRun(PublicId(publicId))
+        val previousPublicId = previousTestRunService.findPreviousMainBranchRunWithCoverage(PublicId(publicId))
 
         previousPublicId?.let { call.respond(HttpStatusCode.OK, previousPublicId) }
                 ?: call.respond(HttpStatusCode.NoContent)

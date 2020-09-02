@@ -50,7 +50,9 @@ class ApplyTestResultsBuildListener {
                 ),
                 new NotificationConfig(
                         extension.writeSlackMessageFile,
-                        extension.slackMessageFileName
+                        extension.slackMessageFileName,
+                        extension.writeLinkFile,
+                        extension.linkFileName
                 ),
                 logger,
                 project.projectDir,
