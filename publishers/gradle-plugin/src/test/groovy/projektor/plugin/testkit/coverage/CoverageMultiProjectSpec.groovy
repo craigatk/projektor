@@ -128,4 +128,67 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
         and:
         coverageStubber.findCoverageRequests(publicId2).size() == 3
     }
+
+    def "when no subprojects change and in CI should publish coverage from all subprojects"() {
+        given:
+        rootBuildFile << """
+            projektor {
+                serverUrl = '${serverUrl}'
+                autoPublishOnFailureOnly = false
+            }
+        """.stripIndent()
+
+        String publicId1 = "COVER1"
+        resultsStubber.stubResultsPostSuccess(publicId1)
+
+        coverageStubber.stubCoveragePostSuccess(publicId1)
+
+        writeSourceCodeFile(sourceDirectory1)
+        writePartialCoverageSpecFile(testDirectory1, "PartialSpec1")
+
+        writeSourceCodeFile(sourceDirectory2)
+        writePartialCoverageSpecFile(testDirectory2, "PartialSpec2")
+
+        writeSourceCodeFile(sourceDirectory3)
+        writePartialCoverageSpecFile(testDirectory3, "PartialSpec3")
+
+        when:
+        def result1 = runSuccessfulBuildWithEnvironment(["CI": "true"], 'test', 'jacocoTestReport')
+
+        then:
+        result1.task(":project1:test").outcome == SUCCESS
+        result1.task(":project1:jacocoTestReport").outcome == SUCCESS
+
+        result1.task(":project2:test").outcome == SUCCESS
+        result1.task(":project2:jacocoTestReport").outcome == SUCCESS
+
+        result1.task(":project3:test").outcome == SUCCESS
+        result1.task(":project3:jacocoTestReport").outcome == SUCCESS
+
+        and:
+        coverageStubber.findCoverageRequests(publicId1).size() == 3
+
+        when:
+        wireMockRule.resetAll()
+
+        String publicId2 = "COVER2"
+        resultsStubber.stubResultsPostSuccess(publicId2)
+
+        coverageStubber.stubCoveragePostSuccess(publicId2)
+
+        def result2 = runSuccessfulBuildWithEnvironment(["CI": "true"], 'test', 'jacocoTestReport', '-i')
+
+        then:
+        result2.task(":project1:test").outcome == UP_TO_DATE
+        result2.task(":project1:jacocoTestReport").outcome == UP_TO_DATE
+
+        result2.task(":project2:test").outcome == UP_TO_DATE
+        result2.task(":project2:jacocoTestReport").outcome == UP_TO_DATE
+
+        result2.task(":project3:test").outcome == UP_TO_DATE
+        result2.task(":project3:jacocoTestReport").outcome == UP_TO_DATE
+
+        and:
+        coverageStubber.findCoverageRequests(publicId2).size() == 3
+    }
 }
