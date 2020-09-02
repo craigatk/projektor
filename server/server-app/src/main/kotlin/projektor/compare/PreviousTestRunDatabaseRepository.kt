@@ -28,7 +28,7 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
                                     .and(GIT_METADATA.REPO_NAME.eq(currentRunInfo.repoName))
                                     .and(TEST_RUN.CREATED_TIMESTAMP.lessThan(Timestamp.valueOf(currentRunInfo.createdTimestamp)))
                             )
-                            .orderBy(TEST_RUN.CREATED_TIMESTAMP.asc().nullsLast())
+                            .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
                             .limit(1)
                             .fetchOne(TEST_RUN.PUBLIC_ID)
 

@@ -21,7 +21,7 @@ class PreviousTestRunApplicationTest : ApplicationTestCase() {
     fun `should find previous test run`() {
         val differentRepoPublicId = randomPublicId()
         val oldestPublicId = randomPublicId()
-        val newerPublicId = randomPublicId()
+        val previousPublicId = randomPublicId()
         val thisPublicId = randomPublicId()
 
         val repoName = "${RandomStringUtils.randomAlphabetic(8)}/${RandomStringUtils.randomAlphabetic(8)}"
@@ -36,9 +36,9 @@ class PreviousTestRunApplicationTest : ApplicationTestCase() {
                 testRunDBGenerator.addGitMetadata(oldestTestRun, repoName, true, "main")
                 runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), oldestPublicId) }
 
-                val newerTestRun = testRunDBGenerator.createSimpleTestRun(newerPublicId)
+                val newerTestRun = testRunDBGenerator.createSimpleTestRun(previousPublicId)
                 testRunDBGenerator.addGitMetadata(newerTestRun, repoName, true, "main")
-                runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), newerPublicId) }
+                runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), previousPublicId) }
 
                 val thisPublicTestRun = testRunDBGenerator.createSimpleTestRun(thisPublicId)
                 testRunDBGenerator.addGitMetadata(thisPublicTestRun, repoName, true, "main")
@@ -49,7 +49,7 @@ class PreviousTestRunApplicationTest : ApplicationTestCase() {
                 val previousId = objectMapper.readValue(response.content, PublicId::class.java)
                 assertNotNull(previousId)
 
-                expectThat(previousId).isEqualTo(oldestPublicId)
+                expectThat(previousId).isEqualTo(previousPublicId)
             }
         }
     }
