@@ -131,11 +131,11 @@ fun Application.main() {
     val attachmentService = conditionallyCreateAttachmentService(applicationConfig, attachmentRepository)
     attachmentService?.conditionallyCreateBucketIfNotExists()
 
-    val cleanupService = CleanupService(cleanupConfig, testRunRepository, resultsProcessingRepository, attachmentService)
+    val coverageService: CoverageService by inject()
+
+    val cleanupService = CleanupService(cleanupConfig, testRunRepository, resultsProcessingRepository, coverageService, attachmentService)
     val scheduler: Scheduler by inject()
     CleanupScheduledJob.conditionallyStartCleanupScheduledJob(cleanupConfig, cleanupService, scheduler)
-
-    val coverageService: CoverageService by inject()
 
     routing {
         attachments(attachmentService, authService)

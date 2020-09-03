@@ -126,4 +126,11 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
 
                 coverageReports
             }
+
+    override suspend fun deleteCoverage(publicId: PublicId): Boolean =
+            withContext(Dispatchers.IO) {
+                dslContext.deleteFrom(CODE_COVERAGE_RUN)
+                        .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id))
+                        .execute() > 0
+            }
 }
