@@ -8,14 +8,17 @@ import java.time.LocalDate
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.test.get
+import org.koin.test.inject
 import projektor.DatabaseRepositoryTestCase
 import projektor.TestSuiteData
 import projektor.attachment.AttachmentConfig
 import projektor.attachment.AttachmentDatabaseRepository
 import projektor.attachment.AttachmentService
+import projektor.coverage.CoverageService
 import projektor.database.generated.tables.pojos.ResultsProcessing
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.results.ResultsProcessingStatus
+import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.*
 
@@ -26,6 +29,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
     fun `should delete non-grouped test run without attachments`() {
         val cleanupService = CleanupService(
                 CleanupConfig(true, 30, false),
+                get(),
                 get(),
                 get(),
                 null
@@ -70,6 +74,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
     fun `should delete grouped test run without attachments`() {
         val cleanupService = CleanupService(
                 CleanupConfig(true, 30, false),
+                get(),
                 get(),
                 get(),
                 null
@@ -122,6 +127,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
                 CleanupConfig(true, 30, false),
                 get(),
                 get(),
+                get(),
                 null
         )
 
@@ -169,6 +175,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
 
         val cleanupService = CleanupService(
                 CleanupConfig(true, 30, false),
+                get(),
                 get(),
                 get(),
                 attachmentService
@@ -227,7 +234,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
 
         val cleanupConfig = CleanupConfig(false, null, false)
 
-        val cleanupService = CleanupService(cleanupConfig, get(), get(), null)
+        val cleanupService = CleanupService(cleanupConfig, get(), get(), get(), null)
 
         val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
 
@@ -251,7 +258,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
         testRunDBGenerator.createTestRun(pinnedTestRunId, LocalDate.now().minusDays(31), true)
 
         val cleanupConfig = CleanupConfig(true, 30, false)
-        val cleanupService = CleanupService(cleanupConfig, get(), get(), null)
+        val cleanupService = CleanupService(cleanupConfig, get(), get(), get(), null)
 
         val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
 
@@ -275,7 +282,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
         testRunDBGenerator.createTestRun(testRunIdTooOld2, LocalDate.now().minusDays(45), false)
 
         val cleanupConfig = CleanupConfig(true, 30, true)
-        val cleanupService = CleanupService(cleanupConfig, get(), get(), null)
+        val cleanupService = CleanupService(cleanupConfig, get(), get(), get(), null)
 
         val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
 
@@ -284,5 +291,41 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
 
         expectThat(testRunDao.fetchOneByPublicId(testRunIdTooOld1.id)).isNotNull()
         expectThat(testRunDao.fetchOneByPublicId(testRunIdTooOld2.id)).isNotNull()
+    }
+
+    @Test
+    fun `should delete coverage along with test run`() {
+        val coverageService: CoverageService by inject()
+        val cleanupConfig = CleanupConfig(true, 30, false)
+        val cleanupService = CleanupService(cleanupConfig, get(), get(), get(), null)
+
+        val publicIdToRemove = randomPublicId()
+        testRunDBGenerator.createTestRun(publicIdToRemove, LocalDate.now().minusDays(31), false)
+
+        runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), publicIdToRemove) }
+        runBlocking { coverageService.saveReport(JacocoXmlLoader().jacocoXmlParser(), publicIdToRemove) }
+
+        val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicIdToRemove.id)
+        expectThat(coverageRuns).hasSize(1)
+        val coverageRun = coverageRuns[0]
+
+        val coverageGroups = coverageGroupDao.fetchByCodeCoverageRunId(coverageRun.id)
+        expectThat(coverageGroups).hasSize(2)
+
+        val coverageStats = coverageStatsDao.fetchByCodeCoverageRunId(coverageRun.id)
+        expectThat(coverageStats).isNotEmpty()
+
+        val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
+        expectThat(cleanedUpTestRuns).contains(cleanedUpTestRuns)
+
+        expectThat(coverageRunDao.fetchOneById(coverageRun.id)).isNull()
+
+        coverageGroups.forEach { coverageGroup ->
+            expectThat(coverageGroupDao.fetchOneById(coverageGroup.id)).isNull()
+        }
+
+        coverageStats.forEach { coverageStat ->
+            expectThat(coverageStatsDao.fetchOneById(coverageStat.id)).isNull()
+        }
     }
 }

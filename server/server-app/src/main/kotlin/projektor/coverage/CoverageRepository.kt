@@ -16,4 +16,6 @@ interface CoverageRepository {
     suspend fun fetchCoverageList(publicId: PublicId): List<CoverageReport>
 
     suspend fun coverageExists(publicId: PublicId): Boolean
+
+    suspend fun deleteCoverage(publicId: PublicId): Boolean
 }
