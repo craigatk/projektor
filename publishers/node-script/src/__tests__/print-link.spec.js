@@ -25,7 +25,9 @@ describe("print link", () => {
 
     writeResultsFileToDisk(publicId, reportUrl, resultsFileName);
 
-    printLinkFromFile();
+    const returnedReportUrl = printLinkFromFile();
+
+    expect(returnedReportUrl).toBe(reportUrl);
 
     expect(consoleLog).toHaveBeenLastCalledWith(
       "View Projektor results at http://localhost:8080/tests/REPORT123"
@@ -33,7 +35,9 @@ describe("print link", () => {
   });
 
   it("should not log link to Projektor test report when results file does not exist", () => {
-    printLinkFromFile();
+    const returnedReportUrl = printLinkFromFile();
+
+    expect(returnedReportUrl).toBeNull();
 
     expect(consoleLog).toHaveBeenLastCalledWith(
       `No Projektor results file found with name ${resultsFileName}`
