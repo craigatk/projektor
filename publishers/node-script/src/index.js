@@ -94,6 +94,21 @@ async function run(args, publishToken, defaultConfigFilePath) {
   }
 }
 
+function printLinkFromFile(resultsFileName) {
+  const fs = require("fs");
+
+  const fileName = resultsFileName || "projektor_report.json";
+
+  if (fs.existsSync(fileName)) {
+    const resultsFileContents = fs.readFileSync(fileName);
+    const results = JSON.parse(resultsFileContents);
+
+    console.log(`View Projektor results at ${results.reportUrl}`);
+  } else {
+    console.log(`No Projektor results file found with name ${fileName}`);
+  }
+}
+
 function containsTestFailure(resultsBlob) {
   return resultsBlob.indexOf("<failure") != -1;
 }
@@ -101,4 +116,5 @@ function containsTestFailure(resultsBlob) {
 module.exports = {
   runCLI,
   run,
+  printLinkFromFile,
 };
