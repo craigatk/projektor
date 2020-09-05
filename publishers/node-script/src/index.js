@@ -12,6 +12,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
   const fs = require("fs");
   const { collectAndSendResults } = require("./publish");
   const { writeSlackMessageFileToDisk } = require("./slack");
+  const { writeResultsFileToDisk } = require("./results-file");
 
   let serverUrl;
   let resultsFileGlobs;
@@ -61,6 +62,11 @@ async function run(args, publishToken, defaultConfigFilePath) {
       console.log(
         `No test results files found in locations ${resultsFileGlobs}`
       );
+    }
+
+    const writeResultsFile = process.env.CI && process.env.CI !== "false";
+    if (writeResultsFile) {
+      writeResultsFileToDisk(publicId, reportUrl, "projektor_report.json");
     }
 
     if (writeSlackMessageFile) {
