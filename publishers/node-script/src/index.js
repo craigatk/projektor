@@ -104,8 +104,11 @@ function printLinkFromFile(resultsFileName) {
     const results = JSON.parse(resultsFileContents);
 
     console.log(`View Projektor results at ${results.reportUrl}`);
+
+    return results.reportUrl;
   } else {
     console.log(`No Projektor results file found with name ${fileName}`);
+    return null;
   }
 }
 
