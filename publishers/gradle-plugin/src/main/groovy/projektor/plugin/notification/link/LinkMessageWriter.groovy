@@ -9,11 +9,11 @@ class LinkMessageWriter {
             .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
 
     File writeLinkFile(
-            String reportUrl,
+            LinkModel linkModel,
             NotificationConfig notificationConfig,
             File destinationDirectory
     ) {
-        String fileText = objectMapper.writeValueAsString(new LinkModel(reportUrl: reportUrl))
+        String fileText = objectMapper.writeValueAsString(linkModel)
 
         File linkFile = new File(destinationDirectory, notificationConfig.linkFileName)
         linkFile.text = fileText

@@ -17,6 +17,7 @@ import projektor.plugin.git.GitMetadataFinder
 import projektor.plugin.git.GitResolutionConfig
 import projektor.plugin.notification.NotificationConfig
 import projektor.plugin.notification.link.LinkMessageWriter
+import projektor.plugin.notification.link.LinkModel
 import projektor.plugin.notification.slack.SlackMessageBuilder
 import projektor.plugin.notification.slack.SlackMessageWriter
 import projektor.plugin.notification.slack.message.SlackAttachmentsMessage
@@ -135,7 +136,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
 
         if (notificationConfig.writeLinkFile && isCI(System.getenv())) {
             new LinkMessageWriter().writeLinkFile(
-                    publishResult.reportUrl,
+                    new LinkModel(reportUrl: publishResult.reportUrl, id: publishResult.publicId),
                     notificationConfig,
                     projectDir
             )

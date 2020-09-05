@@ -38,6 +38,7 @@ class LinkFileSingleProjectSpec extends SingleProjectSpec {
 
         LinkModel linkModel = objectMapper.readValue(linkFile, LinkModel)
         linkModel.reportUrl == "${serverUrl}/tests/ABC123"
+        linkModel.id == "ABC123"
     }
 
     def "when link file enabled but not in CI should not write link file"() {
