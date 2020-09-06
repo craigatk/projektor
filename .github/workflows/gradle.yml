@@ -54,3 +54,8 @@ jobs:
         CACHE_ACCESS_KEY: ${{ secrets.CACHE_ACCESS_KEY }}
         CACHE_SECRET_KEY: ${{ secrets.CACHE_SECRET_KEY }}
       run: ./gradlew check jTR
+
+    - name: Projektor report URL
+      uses: craigatk/projektor-action@v7
+      with:
+        print-link: true
