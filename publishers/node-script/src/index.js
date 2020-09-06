@@ -96,12 +96,15 @@ async function run(args, publishToken, defaultConfigFilePath) {
 
 function printLinkFromFile(resultsFileName) {
   const fs = require("fs");
+  const {
+    defaultResultsFileName,
+    readResultsFileFromDisk,
+  } = require("./results-file");
 
-  const fileName = resultsFileName || "projektor_report.json";
+  const fileName = resultsFileName || defaultResultsFileName;
 
   if (fs.existsSync(fileName)) {
-    const resultsFileContents = fs.readFileSync(fileName);
-    const results = JSON.parse(resultsFileContents);
+    const results = readResultsFileFromDisk(fileName);
 
     console.log(`View Projektor results at ${results.reportUrl}`);
 

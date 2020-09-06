@@ -32,7 +32,7 @@ describe("results file functional spec", () => {
         const resultsFileJson = JSON.parse(resultsFileContents);
 
         expect(resultsFileJson.id).toBe(testRunId);
-        expect(resultsFileJson.reportUrl).toBe(
+        expect(resultsFileJson.report_url).toBe(
           `http://localhost:${serverPort}/tests/${testRunId}`
         );
 
