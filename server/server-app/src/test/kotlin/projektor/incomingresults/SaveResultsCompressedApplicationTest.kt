@@ -4,12 +4,8 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.KtorExperimentalAPI
 import java.math.BigDecimal
-import kotlin.test.assertNotNull
-import org.awaitility.kotlin.await
-import org.awaitility.kotlin.untilNotNull
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
-import projektor.server.api.results.SaveResultsResponse
 import projektor.util.gzip
 import strikt.api.expectThat
 import strikt.assertions.*
@@ -27,14 +23,7 @@ class SaveResultsCompressedApplicationTest : ApplicationTestCase() {
                 addHeader(HttpHeaders.ContentEncoding, "gzip")
                 setBody(compressedBody)
             }.apply {
-                val resultsResponse = objectMapper.readValue(response.content, SaveResultsResponse::class.java)
-
-                val publicId = resultsResponse.id
-                assertNotNull(publicId)
-                expectThat(resultsResponse.uri).isEqualTo("/tests/$publicId")
-
-                val testRun = await untilNotNull { testRunDao.fetchOneByPublicId(publicId) }
-                assertNotNull(testRun)
+                val (_, testRun) = waitForTestRunSaveToComplete(response)
 
                 expectThat(testRun.createdTimestamp).isNotNull()
                 expectThat(testRun.totalTestCount).isEqualTo(1)

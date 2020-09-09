@@ -18,6 +18,7 @@ import projektor.database.generated.tables.CodeCoverageGroup;
 import projektor.database.generated.tables.CodeCoverageRun;
 import projektor.database.generated.tables.CodeCoverageStats;
 import projektor.database.generated.tables.GitMetadata;
+import projektor.database.generated.tables.GitRepository;
 import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.ResultsProcessingFailure;
 import projektor.database.generated.tables.TestCase;
@@ -42,7 +43,7 @@ import projektor.database.generated.tables.TestSuiteGroup;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 702109669;
+    private static final long serialVersionUID = -946531946;
 
     /**
      * The reference instance of <code>public</code>
@@ -68,6 +69,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.git_metadata</code>.
      */
     public final GitMetadata GIT_METADATA = GitMetadata.GIT_METADATA;
+
+    /**
+     * The table <code>public.git_repository</code>.
+     */
+    public final GitRepository GIT_REPOSITORY = GitRepository.GIT_REPOSITORY;
 
     /**
      * The table <code>public.results_processing</code>.
@@ -152,6 +158,7 @@ public class Public extends SchemaImpl {
             CodeCoverageRun.CODE_COVERAGE_RUN,
             CodeCoverageStats.CODE_COVERAGE_STATS,
             GitMetadata.GIT_METADATA,
+            GitRepository.GIT_REPOSITORY,
             ResultsProcessing.RESULTS_PROCESSING,
             ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE,
             TestCase.TEST_CASE,

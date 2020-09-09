@@ -15,7 +15,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Row6;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -43,7 +43,7 @@ import projektor.database.generated.tables.records.GitMetadataRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class GitMetadata extends TableImpl<GitMetadataRecord> {
 
-    private static final long serialVersionUID = 769574958;
+    private static final long serialVersionUID = 2027597125;
 
     /**
      * The reference instance of <code>public.git_metadata</code>
@@ -82,6 +82,11 @@ public class GitMetadata extends TableImpl<GitMetadataRecord> {
      * The column <code>public.git_metadata.branch_name</code>.
      */
     public final TableField<GitMetadataRecord, String> BRANCH_NAME = createField(DSL.name("branch_name"), org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>public.git_metadata.org_name</code>.
+     */
+    public final TableField<GitMetadataRecord, String> ORG_NAME = createField(DSL.name("org_name"), org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * Create a <code>public.git_metadata</code> table reference
@@ -177,11 +182,11 @@ public class GitMetadata extends TableImpl<GitMetadataRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row6 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Long, Long, String, Boolean, String> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row6<Long, Long, String, Boolean, String, String> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 }

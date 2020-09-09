@@ -3,17 +3,11 @@ package projektor.incomingresults
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.*
-import kotlin.test.assertNotNull
-import org.awaitility.kotlin.await
-import org.awaitility.kotlin.until
-import org.awaitility.kotlin.untilNotNull
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.grouped.model.GitMetadata
 import projektor.parser.grouped.model.ResultsMetadata
-import projektor.server.api.results.ResultsProcessingStatus
-import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
@@ -36,23 +30,15 @@ class SaveGroupedResultsWithMetadataApplicationTest : ApplicationTestCase() {
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(requestBody)
             }.apply {
-                val resultsResponse = objectMapper.readValue(response.content, SaveResultsResponse::class.java)
-
-                val publicId = resultsResponse.id
-                assertNotNull(publicId)
-                expectThat(resultsResponse.uri).isEqualTo("/tests/$publicId")
-
-                await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.SUCCESS.name }
-
-                val testRun = await untilNotNull { testRunDao.fetchOneByPublicId(publicId) }
-                assertNotNull(testRun)
+                val (_, testRun) = waitForTestRunSaveToComplete(response)
 
                 val gitMetadatas = gitMetadataDao.fetchByTestRunId(testRun.id)
                 expectThat(gitMetadatas).hasSize(1)
 
-                val gitMetadata = gitMetadatas[0]
-                expectThat(gitMetadata) {
+                val gitMetadataDB = gitMetadatas[0]
+                expectThat(gitMetadataDB) {
                     get { repoName }.isEqualTo("craigatk/projektor")
+                    get { orgName }.isEqualTo("craigatk")
                     get { branchName }.isEqualTo("main")
                     get { isMainBranch }.isTrue()
                 }
