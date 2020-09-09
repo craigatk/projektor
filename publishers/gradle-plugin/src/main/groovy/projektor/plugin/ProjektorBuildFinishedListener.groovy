@@ -64,7 +64,11 @@ class ProjektorBuildFinishedListener implements BuildListener {
 
     @Override
     void buildFinished(BuildResult buildResult) {
-        CodeCoverageTaskCollector codeCoverageTaskCollector = new CodeCoverageTaskCollector(buildResult, logger)
+        CodeCoverageTaskCollector codeCoverageTaskCollector = new CodeCoverageTaskCollector(
+                buildResult,
+                coverageEnabled,
+                logger
+        )
 
         boolean shouldPublish = ShouldPublishCalculator.shouldPublishResults(
                 extension,
