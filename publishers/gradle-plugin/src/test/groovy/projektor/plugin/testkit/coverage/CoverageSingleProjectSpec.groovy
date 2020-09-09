@@ -45,4 +45,36 @@ class CoverageSingleProjectSpec extends SingleProjectSpec {
         and:
         coverageStubber.findCoverageRequests(publicId).size() == 1
     }
+
+    def "when coverage disabled should bit publish coverage results to server"() {
+        given:
+        buildFile << """
+            projektor {
+                serverUrl = '${serverUrl}'
+                autoPublishOnFailureOnly = false
+                codeCoveragePublish = false
+            }
+        """.stripIndent()
+
+        String publicId = "COV123"
+        resultsStubber.stubResultsPostSuccess(publicId)
+
+        coverageStubber.stubCoveragePostSuccess(publicId)
+
+        File sourceDir = createSourceDirectory(projectRootDir)
+        File testDir = createTestDirectory(projectRootDir)
+
+        writeSourceCodeFile(sourceDir)
+        writePartialCoverageSpecFile(testDir, "PartialSpec")
+
+        when:
+        def result = runSuccessfulBuild('test', 'jacocoTestReport', '-i')
+
+        then:
+        result.task(":test").outcome == SUCCESS
+        result.task(":jacocoTestReport").outcome == SUCCESS
+
+        and:
+        coverageStubber.findCoverageRequests(publicId).size() == 0
+    }
 }

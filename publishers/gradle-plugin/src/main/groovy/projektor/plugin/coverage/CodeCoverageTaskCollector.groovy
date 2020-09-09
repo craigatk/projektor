@@ -11,13 +11,17 @@ class CodeCoverageTaskCollector {
     private final Logger logger
     private final BuildResult buildResult
 
-    CodeCoverageTaskCollector(BuildResult buildResult, Logger logger) {
+    CodeCoverageTaskCollector(BuildResult buildResult, boolean coverageEnabled, Logger logger) {
         this.buildResult = buildResult
         this.logger = logger
 
-        List<JacocoReport> jacocoTasks = buildResult.gradle.taskGraph.allTasks.findAll { it instanceof JacocoReport }
+        if (coverageEnabled) {
+            List<JacocoReport> jacocoTasks = buildResult.gradle.taskGraph.allTasks.findAll { it instanceof JacocoReport }
 
-        this.codeCoverageGroups = jacocoTasks.collect {coverageGroupOrNull(it) }.findAll { it != null}
+            this.codeCoverageGroups = jacocoTasks.collect { coverageGroupOrNull(it) }.findAll { it != null }
+        } else {
+            this.codeCoverageGroups = []
+        }
     }
 
     boolean hasCodeCoverageData() {
@@ -27,7 +31,7 @@ class CodeCoverageTaskCollector {
     private CodeCoverageGroup coverageGroupOrNull(JacocoReport reportTask) {
         SingleFileReport xmlReport = reportTask.reports.xml
 
-        File xmlReportFile = xmlReport.outputLocation.getAsFile().get()
+        File xmlReportFile = xmlReport.destination
 
         if (xmlReportFile.exists()) {
             logger.info("Projektor found XML code coverage report from task ${reportTask.name} in project ${reportTask.project.name}")

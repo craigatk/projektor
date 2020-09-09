@@ -1,7 +1,7 @@
 package projektor.plugin
 
 class CodeUnderTestWriter {
-    static void writeSourceCodeFile(File sourceDirectory) {
+    static File writeSourceCodeFile(File sourceDirectory) {
         File sourceFile = new File(sourceDirectory, "MyClass.groovy")
 
         sourceFile << """package projektor
@@ -16,6 +16,8 @@ class MyClass {
     }
 }
 """
+
+        return sourceFile
     }
 
     static void writePartialCoverageSpecFile(File testDirectory, String specClassName) {
