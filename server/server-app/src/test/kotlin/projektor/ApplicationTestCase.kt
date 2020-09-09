@@ -10,10 +10,13 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.application.Application
 import io.ktor.config.MapApplicationConfig
+import io.ktor.server.testing.*
 import io.ktor.util.KtorExperimentalAPI
 import java.math.BigDecimal
+import kotlin.test.assertNotNull
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
+import org.awaitility.kotlin.untilNotNull
 import org.jooq.DSLContext
 import org.junit.jupiter.api.AfterEach
 import org.koin.ktor.ext.get
@@ -23,8 +26,13 @@ import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageDatabaseRepository
 import projektor.coverage.CoverageService
 import projektor.database.generated.tables.daos.*
+import projektor.database.generated.tables.pojos.TestRun
 import projektor.parser.ResultsXmlLoader
 import projektor.server.api.PublicId
+import projektor.server.api.results.ResultsProcessingStatus
+import projektor.server.api.results.SaveResultsResponse
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 
 @KtorExperimentalAPI
 open class ApplicationTestCase {
@@ -55,6 +63,8 @@ open class ApplicationTestCase {
     lateinit var coverageGroupDao: CodeCoverageGroupDao
     lateinit var coverageStatsDao: CodeCoverageStatsDao
     lateinit var coverageService: CoverageService
+
+    lateinit var gitRepositoryDao: GitRepositoryDao
 
     lateinit var application: Application
 
@@ -147,6 +157,8 @@ open class ApplicationTestCase {
         val previousTestRunService = PreviousTestRunService(PreviousTestRunDatabaseRepository(dslContext))
         coverageService = CoverageService(coverageRepository, previousTestRunService)
 
+        gitRepositoryDao = GitRepositoryDao(dslContext.configuration())
+
         this.application = application
     }
 
@@ -159,6 +171,21 @@ open class ApplicationTestCase {
         val testAppender = appLogger.getAppender("test-appender") as TestLogAppender
 
         return testAppender.getLogContents()
+    }
+
+    fun waitForTestRunSaveToComplete(response: TestApplicationResponse): Pair<PublicId, TestRun> {
+        val resultsResponse = objectMapper.readValue(response.content, SaveResultsResponse::class.java)
+
+        val publicId = resultsResponse.id
+        assertNotNull(publicId)
+        expectThat(resultsResponse.uri).isEqualTo("/tests/$publicId")
+
+        await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.SUCCESS.name }
+
+        val testRun = await untilNotNull { testRunDao.fetchOneByPublicId(publicId) }
+        assertNotNull(testRun)
+
+        return Pair(PublicId(publicId), testRun)
     }
 
     @AfterEach

@@ -11,16 +11,13 @@ import kotlin.test.assertNotNull
 import org.awaitility.Awaitility.waitAtMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
-import org.awaitility.kotlin.untilNotNull
 import org.junit.jupiter.api.*
 import projektor.ApplicationTestCase
 import projektor.metrics.MetricsStubber
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.server.api.results.ResultsProcessingStatus
-import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
 import strikt.assertions.hasSize
-import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
 @KtorExperimentalAPI
@@ -39,14 +36,7 @@ class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(requestBody)
             }.apply {
-                val resultsResponse = objectMapper.readValue(response.content, SaveResultsResponse::class.java)
-
-                val publicId = resultsResponse.id
-                assertNotNull(publicId)
-                expectThat(resultsResponse.uri).isEqualTo("/tests/$publicId")
-
-                val testRun = await untilNotNull { testRunDao.fetchOneByPublicId(publicId) }
-                assertNotNull(testRun)
+                val (publicId, testRun) = waitForTestRunSaveToComplete(response)
 
                 val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
                 expectThat(testSuites).hasSize(3)
@@ -67,7 +57,7 @@ class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
                 assertNotNull(testSuiteGroup2)
                 expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2.id)).hasSize(1)
 
-                await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.SUCCESS.name }
+                await until { resultsProcessingDao.fetchOneByPublicId(publicId.id).status == ResultsProcessingStatus.SUCCESS.name }
             }
         }
     }
@@ -84,14 +74,7 @@ class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(requestBody)
             }.apply {
-                val resultsResponse = objectMapper.readValue(response.content, SaveResultsResponse::class.java)
-
-                val publicId = resultsResponse.id
-                assertNotNull(publicId)
-
-                await untilNotNull { testRunDao.fetchOneByPublicId(publicId) }
-
-                await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.SUCCESS.name }
+                waitForTestRunSaveToComplete(response)
 
                 waitAtMost(Duration.ofSeconds(30)) until { metricsStubber.findWriteMetricsRequestForCounterMetric("grouped_results_process_success", 1).isNotEmpty() }
                 await until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_success", 1).isNotEmpty() }

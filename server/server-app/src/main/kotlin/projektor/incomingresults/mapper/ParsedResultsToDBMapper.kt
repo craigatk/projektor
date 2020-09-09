@@ -89,6 +89,7 @@ fun GitMetadata.toDB(testRunId: Long): GitMetadataDB {
     val gitMetadataDB = GitMetadataDB()
     gitMetadataDB.testRunId = testRunId
     gitMetadataDB.repoName = repoName
+    gitMetadataDB.orgName = repoName?.split("/")?.firstOrNull()
     gitMetadataDB.branchName = branchName
     gitMetadataDB.isMainBranch = isMainBranch
 

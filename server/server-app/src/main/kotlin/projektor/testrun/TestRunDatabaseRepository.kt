@@ -14,6 +14,7 @@ import projektor.database.generated.Tables.*
 import projektor.database.generated.tables.daos.*
 import projektor.incomingresults.mapper.toDB
 import projektor.incomingresults.mapper.toTestRunSummary
+import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedResults
 import projektor.parser.model.TestSuite as ParsedTestSuite
 import projektor.server.api.PublicId
@@ -58,7 +59,6 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
                 dslContext.transaction { configuration ->
                     val testRunDao = TestRunDao(configuration)
                     val testSuiteGroupDao = TestSuiteGroupDao(configuration)
-                    val gitMetadataDao = GitMetadataDao(configuration)
 
                     testRunDao.insert(testRunDB)
 
@@ -73,9 +73,10 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
                         testSuiteStartingIndex += groupedTestSuites.testSuites.size
                     }
 
-                    val gitMetadataDB = groupedResults.metadata?.git?.toDB(testRunDB.id)
-                    gitMetadataDB?.let { gitMetadataDao.insert(it) }
+                    saveGitMetadata(testRunDB.id, groupedResults.metadata?.git, configuration)
                 }
+
+                saveGitRepository(groupedResults.metadata?.git)
 
                 logger.info("Finished inserting test run $publicId")
 
@@ -106,6 +107,37 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
                     testFailureDao.insert(testFailureDB)
                 }
             }
+        }
+    }
+
+    private fun saveGitMetadata(
+        testRunId: Long,
+        git: GitMetadata?,
+        configuration: Configuration
+    ) {
+        val gitMetadataDao = GitMetadataDao(configuration)
+
+        val gitMetadataDB = git?.toDB(testRunId)
+        gitMetadataDB?.let { gitMetadataDao.insert(it) }
+    }
+
+    private fun saveGitRepository(gitMetadata: GitMetadata?) {
+        try {
+            gitMetadata?.let { git ->
+                val repoName = git.repoName
+
+                if (repoName != null) {
+                    val orgName = repoName.split("/").first()
+
+                    dslContext.insertInto(GIT_REPOSITORY, GIT_REPOSITORY.REPO_NAME, GIT_REPOSITORY.ORG_NAME)
+                            .values(repoName, orgName)
+                            .onDuplicateKeyUpdate()
+                            .set(GIT_REPOSITORY.ORG_NAME, orgName)
+                            .execute()
+                }
+            }
+        } catch (e: Exception) {
+            logger.error("Error saving Git Repository data $gitMetadata", e)
         }
     }
 

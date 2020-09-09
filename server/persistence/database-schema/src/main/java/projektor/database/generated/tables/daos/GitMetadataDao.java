@@ -123,4 +123,18 @@ public class GitMetadataDao extends DAOImpl<GitMetadataRecord, projektor.databas
     public List<projektor.database.generated.tables.pojos.GitMetadata> fetchByBranchName(String... values) {
         return fetch(GitMetadata.GIT_METADATA.BRANCH_NAME, values);
     }
+
+    /**
+     * Fetch records that have <code>org_name BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.GitMetadata> fetchRangeOfOrgName(String lowerInclusive, String upperInclusive) {
+        return fetchRange(GitMetadata.GIT_METADATA.ORG_NAME, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>org_name IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.GitMetadata> fetchByOrgName(String... values) {
+        return fetch(GitMetadata.GIT_METADATA.ORG_NAME, values);
+    }
 }
