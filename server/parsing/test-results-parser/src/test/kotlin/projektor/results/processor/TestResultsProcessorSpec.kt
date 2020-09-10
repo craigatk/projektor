@@ -56,4 +56,19 @@ class TestResultsProcessorSpec : StringSpec({
                         "projektor.example.spock.PassingSpec"
                 )
     }
+
+    "should parse pytest results with lower-case utf-8 encoding in xml header" {
+        val testResultsProcessor = TestResultsProcessor()
+        val resultsXmlLoader = ResultsXmlLoader()
+        val blob = resultsXmlLoader.pytestPassing()
+
+        val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
+
+        expectThat(testSuiteList)
+                .hasSize(1)
+                .map(TestSuite::name)
+                .contains(
+                        "pytest"
+                )
+    }
 })
