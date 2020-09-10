@@ -6,6 +6,8 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import kotlinx.coroutines.runBlocking
+import projektor.coverage.CoverageService
 import projektor.database.generated.tables.daos.*
 import projektor.database.generated.tables.pojos.GitMetadata as GitMetadataDB
 import projektor.database.generated.tables.pojos.TestCase as TestCaseDB
@@ -24,7 +26,8 @@ class TestRunDBGenerator(
     private val testCaseDao: TestCaseDao,
     private val testFailureDao: TestFailureDao,
     private val testRunSystemAttributesDao: TestRunSystemAttributesDao,
-    private val gitMetadataDao: GitMetadataDao
+    private val gitMetadataDao: GitMetadataDao,
+    private val coverageService: CoverageService
 ) {
     fun createTestRun(publicId: PublicId, testSuiteDataList: List<TestSuiteData>): TestRunDB {
         val testRun = createTestRun(publicId, testSuiteDataList.size)
@@ -73,6 +76,7 @@ class TestRunDBGenerator(
         val gitMetadata = GitMetadataDB()
         gitMetadata.testRunId = testRunDB.id
         gitMetadata.repoName = repoName
+        gitMetadata.orgName = repoName.split("/").first()
         gitMetadata.isMainBranch = isMainBranch
         gitMetadata.branchName = branchName
         gitMetadataDao.insert(gitMetadata)
@@ -101,6 +105,12 @@ class TestRunDBGenerator(
         testRunSystemAttributesDao.insert(testRunSystemAttributes)
 
         return testRun
+    }
+
+    fun createTestRunWithCoverageAndGitMetadata(publicId: PublicId, coverageText: String, repoName: String, branchName: String = "main") {
+        val previousTestRun = createSimpleTestRun(publicId)
+        addGitMetadata(previousTestRun, repoName, branchName == "main", branchName)
+        runBlocking { coverageService.saveReport(coverageText, publicId) }
     }
 
     fun addTestSuiteGroupToTestRun(testSuiteGroup: TestSuiteGroupDB, testRun: TestRunDB, testSuiteClassNames: List<String>) {

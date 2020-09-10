@@ -24,6 +24,9 @@ import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.message.MessageConfig
 import projektor.message.MessageService
 import projektor.metrics.MetricsService
+import projektor.organization.coverage.OrganizationCoverageDatabaseRepository
+import projektor.organization.coverage.OrganizationCoverageRepository
+import projektor.organization.coverage.OrganizationCoverageService
 import projektor.parser.grouped.GroupedResultsParser
 import projektor.results.processor.TestResultsProcessor
 import projektor.schedule.Scheduler
@@ -66,6 +69,8 @@ fun createAppModule(
 
     single<CoverageRepository> { CoverageDatabaseRepository(get()) }
 
+    single<OrganizationCoverageRepository> { OrganizationCoverageDatabaseRepository(get()) }
+
     single { CoverageService(get(), get()) }
     single { GroupedResultsParser() }
     single { GroupedResultsConverter(get(), get()) }
@@ -78,6 +83,9 @@ fun createAppModule(
     single { TestResultsService(get(), get(), get(), get()) }
     single { TestRunService(get()) }
     single { TestRunSystemAttributesService(get()) }
+
     single { SchedulerLock(dataSource) }
     single { Scheduler(get()) }
+
+    single { OrganizationCoverageService(get(), get()) }
 }

@@ -16,9 +16,9 @@ import io.ktor.metrics.micrometer.MicrometerMetrics
 import io.ktor.request.path
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
-import org.koin.Logger.SLF4JLogger
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
+import org.koin.logger.SLF4JLogger
 import org.slf4j.event.Level
 import projektor.attachment.AttachmentConfig
 import projektor.attachment.AttachmentRepository
@@ -39,6 +39,7 @@ import projektor.message.MessageConfig
 import projektor.message.MessageService
 import projektor.metrics.InfluxMetricsConfig
 import projektor.metrics.createRegistry
+import projektor.organization.coverage.OrganizationCoverageService
 import projektor.route.*
 import projektor.schedule.Scheduler
 import projektor.testcase.TestCaseService
@@ -137,12 +138,15 @@ fun Application.main() {
     val scheduler: Scheduler by inject()
     CleanupScheduledJob.conditionallyStartCleanupScheduledJob(cleanupConfig, cleanupService, scheduler)
 
+    val organizationCoverageService: OrganizationCoverageService by inject()
+
     routing {
         attachments(attachmentService, authService)
         config(cleanupConfig)
         coverage(authService, coverageService)
         health()
         messages(messageService)
+        organization(organizationCoverageService)
         previousRuns(previousTestRunService)
         results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService, metricRegistry)
         testCases(testCaseService)
