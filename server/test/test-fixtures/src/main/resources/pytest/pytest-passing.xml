@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite errors="0" failures="0" hostname="DESKTOP-F2BATC0" name="pytest" skipped="0" tests="1" time="0.030" timestamp="2020-09-09T12:15:20.876000"><testcase classname="test_sample1" file="test_sample1.py" line="4" name="test_answer" time="0.000"></testcase></testsuite></testsuites>

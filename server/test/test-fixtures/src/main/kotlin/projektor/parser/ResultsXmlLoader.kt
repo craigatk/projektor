@@ -38,6 +38,10 @@ class ResultsXmlLoader {
                 .map(ResultsXmlMerger::removeTestSuitesWrapper)
     }
 
+    fun pytestFailing() = loadTextFromFile("pytest/pytest-failing.xml")
+
+    fun pytestPassing() = loadTextFromFile("pytest/pytest-passing.xml")
+
     private fun loadTextFromFile(filename: String) = javaClass
             .getResourceAsStream("/$filename")
             .bufferedReader()

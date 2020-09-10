@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite errors="0" failures="1" hostname="DESKTOP-F2BATC0" name="pytest" skipped="0" tests="1" time="0.048" timestamp="2020-09-09T12:14:31.535000"><testcase classname="test_sample1" file="test_sample1.py" line="4" name="test_answer" time="0.003"><failure message="assert 4 == 5
+ +  where 4 = inc(3)">def test_answer():
+&gt;       assert inc(3) == 5
+E       assert 4 == 5
+E        +  where 4 = inc(3)
+
+test_sample1.py:6: AssertionError</failure></testcase></testsuite></testsuites>
