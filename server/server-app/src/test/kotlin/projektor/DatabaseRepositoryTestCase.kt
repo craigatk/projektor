@@ -112,7 +112,8 @@ open class DatabaseRepositoryTestCase : KoinTest {
                 testCaseDao,
                 testFailureDao,
                 testRunSystemAttributesDao,
-                gitMetadataDao
+                gitMetadataDao,
+                coverageService
         )
     }
 

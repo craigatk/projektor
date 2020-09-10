@@ -21,7 +21,7 @@ fun toTestRunSummary(publicId: PublicId, testSuites: List<TestSuite>): TestRunSu
     val averageDuration = calculateAverageDuration(cumulativeDuration, totalTestCount)
     val slowestTestCaseDuration = allTestCases
             .mapNotNull { it.time }
-            .max()
+            .maxOrNull()
             ?: BigDecimal.ZERO
 
     return TestRunSummary(
