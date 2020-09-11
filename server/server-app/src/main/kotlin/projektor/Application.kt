@@ -37,6 +37,7 @@ import projektor.incomingresults.TestResultsService
 import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.message.MessageConfig
 import projektor.message.MessageService
+import projektor.metadata.TestRunMetadataService
 import projektor.metrics.InfluxMetricsConfig
 import projektor.metrics.createRegistry
 import projektor.organization.coverage.OrganizationCoverageService
@@ -138,6 +139,8 @@ fun Application.main() {
     val scheduler: Scheduler by inject()
     CleanupScheduledJob.conditionallyStartCleanupScheduledJob(cleanupConfig, cleanupService, scheduler)
 
+    val testRunMetadataService: TestRunMetadataService by inject()
+
     val organizationCoverageService: OrganizationCoverageService by inject()
 
     routing {
@@ -146,6 +149,7 @@ fun Application.main() {
         coverage(authService, coverageService)
         health()
         messages(messageService)
+        metadata(testRunMetadataService)
         organization(organizationCoverageService)
         previousRuns(previousTestRunService)
         results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService, metricRegistry)

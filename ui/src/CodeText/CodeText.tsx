@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 interface CodeTextProps {
-  text: String;
+  text: string;
 }
 
 const useStyles = makeStyles((theme) => ({

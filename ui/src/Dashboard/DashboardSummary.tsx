@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TestRunSummary } from "../model/TestRunModel";
+import { TestRunGitMetadata, TestRunSummary } from "../model/TestRunModel";
 import { Grid, Hidden, List } from "@material-ui/core";
 import TestCountList from "../TestCount/TestCountList";
 import PageTitle from "../PageTitle";
@@ -7,15 +7,18 @@ import TestRunDuration from "./TestRunDuration";
 import TestRunDate from "./TestRunDate";
 import TestRunCleanupDate from "./TestRunCleanupDate";
 import TestRunMessages from "../TestRunMessages/TestRunMessages";
+import GitRepoListItem from "./GitRepoListItem";
 
 interface DashboardSummaryProps {
   publicId: string;
   testRunSummary: TestRunSummary;
+  gitMetadata?: TestRunGitMetadata;
 }
 
 const DashboardSummary = ({
   publicId,
   testRunSummary,
+  gitMetadata,
 }: DashboardSummaryProps) => {
   const {
     totalPassingCount,
@@ -62,6 +65,9 @@ const DashboardSummary = ({
         </Hidden>
         <Grid item sm={4} xs={12}>
           <List dense={true}>
+            {gitMetadata && gitMetadata.repoName && (
+              <GitRepoListItem gitMetadata={gitMetadata} />
+            )}
             <TestRunDate createdTimestamp={createdTimestamp} />
 
             <TestRunCleanupDate createdTimestamp={createdTimestamp} />

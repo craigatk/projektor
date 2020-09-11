@@ -35,6 +35,7 @@ const OrganizationCoveragePage = ({
       successComponent={
         <OrganizationCoverageDetails
           organizationCoverage={organizationCoverage}
+          orgName={orgName}
         />
       }
     />

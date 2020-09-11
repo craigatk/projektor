@@ -12,20 +12,27 @@ import {
   CoverageStats,
   Coverage,
   CoverageExists,
+  TestRunGitMetadata,
 } from "../model/TestRunModel";
 import TestSuiteOutputType from "./TestSuiteOutputType";
 import { axiosInstance, axiosInstanceWithoutCache } from "./AxiosService";
 
-const fetchTestRun = (publicId: String): Promise<AxiosResponse<TestRun>> => {
+const fetchTestRun = (publicId: string): Promise<AxiosResponse<TestRun>> => {
   // @ts-ignore
   return axiosInstance.get<TestRun>(`run/${publicId}`);
 };
 
 const fetchTestRunSummary = (
-  publicId: String
+  publicId: string
 ): Promise<AxiosResponse<TestRunSummary>> =>
   // @ts-ignore
   axiosInstance.get<TestRunSummary>(`run/${publicId}/summary`);
+
+const fetchTestRunGitMetadata = (
+  publicId: string
+): Promise<AxiosResponse<TestRunGitMetadata>> =>
+  // @ts-ignore
+  axiosInstance.get<TestRunGitMetadata>(`run/${publicId}/metadata/git`);
 
 const fetchFailedTestCases = (
   publicId: String
@@ -35,14 +42,14 @@ const fetchFailedTestCases = (
 };
 
 const fetchSlowTestCases = (
-  publicId: String
+  publicId: string
 ): Promise<AxiosResponse<TestCase[]>> => {
   // @ts-ignore
   return axiosInstance.get<TestCase[]>(`run/${publicId}/cases/slow`);
 };
 
 const fetchTestCaseDetails = (
-  publicId: String,
+  publicId: string,
   testSuiteIdx: number,
   testCaseIdx: number
 ): Promise<AxiosResponse<TestCase>> => {
@@ -53,8 +60,8 @@ const fetchTestCaseDetails = (
 };
 
 const fetchTestSuitesInPackage = (
-  publicId: String,
-  packageName: String
+  publicId: string,
+  packageName: string
 ): Promise<AxiosResponse<TestSuite[]>> => {
   // @ts-ignore
   return axiosInstance.get<TestSuite[]>(
@@ -63,14 +70,14 @@ const fetchTestSuitesInPackage = (
 };
 
 const fetchTestSuite = (
-  publicId: String,
+  publicId: string,
   testSuiteIdx: number
 ): Promise<AxiosResponse<TestSuite>> =>
   // @ts-ignore
   axiosInstance.get<TestSuite>(`/run/${publicId}/suite/${testSuiteIdx}`);
 
 const fetchTestSuiteSystemOutput = (
-  publicId: String,
+  publicId: string,
   testSuiteIdx: number,
   outputType: TestSuiteOutputType
 ): Promise<AxiosResponse<TestSuiteOutput>> => {
@@ -138,6 +145,7 @@ export {
   fetchMessages,
   fetchTestRun,
   fetchTestRunSummary,
+  fetchTestRunGitMetadata,
   fetchFailedTestCases,
   fetchCoverage,
   fetchCoverageExists,

@@ -11,27 +11,35 @@ Cypress.Commands.add("loadFixture", (fixturePath, visitUri = "") =>
 );
 
 Cypress.Commands.add(
-  "loadGroupedFixture",
-  (fixturePath, visitUri = "", loadingFunc = null) =>
-    cy.readFile(fixturePath).then((resultsBlob) =>
-      cy
-        .request("POST", `http://localhost:8080/groupedResults`, resultsBlob)
-        .then((resp) => {
-          const publicId = resp.body.id;
+  "loadGroupedFixtureData",
+  (fixtureData, visitUri = "", loadingFunc = null) =>
+    cy
+      .request("POST", `http://localhost:8080/groupedResults`, fixtureData)
+      .then((resp) => {
+        const publicId = resp.body.id;
 
-          if (loadingFunc) {
-            loadingFunc(publicId).then(() => {
-              cy.visit(`http://localhost:8080/tests/${publicId}${visitUri}`, {
-                retryOnStatusCodeFailure: true,
-              });
-            });
-          } else {
+        if (loadingFunc) {
+          loadingFunc(publicId).then(() => {
             cy.visit(`http://localhost:8080/tests/${publicId}${visitUri}`, {
               retryOnStatusCodeFailure: true,
             });
-          }
-        })
-    )
+          });
+        } else {
+          cy.visit(`http://localhost:8080/tests/${publicId}${visitUri}`, {
+            retryOnStatusCodeFailure: true,
+          });
+        }
+      })
+);
+
+Cypress.Commands.add(
+  "loadGroupedFixture",
+  (fixturePath, visitUri = "", loadingFunc = null) =>
+    cy
+      .readFile(fixturePath)
+      .then((resultsBlob) =>
+        cy.loadGroupedFixtureData(resultsBlob, visitUri, loadingFunc)
+      )
 );
 
 Cypress.Commands.add(

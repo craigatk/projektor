@@ -8,7 +8,7 @@ import CodeText from "../CodeText/CodeText";
 import { makeStyles } from "@material-ui/core/styles";
 
 interface TestSystemOutputProps {
-  publicId: String;
+  publicId: string;
   testSuiteIdx: number;
   outputType: TestSuiteOutputType;
 }

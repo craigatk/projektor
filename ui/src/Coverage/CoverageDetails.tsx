@@ -2,7 +2,7 @@ import * as React from "react";
 import { Coverage } from "../model/TestRunModel";
 import { makeStyles, Typography } from "@material-ui/core";
 import OverallCoverageGraphs from "./OverallCoverageGraphs";
-import CoverageGroups from "./CoverageGroups";
+import CoverageTable, { CoverageTableRow } from "./CoverageTable";
 
 interface CoverageDetailsProps {
   coverage: Coverage;
@@ -18,6 +18,15 @@ const useStyles = makeStyles({
 const CoverageDetails = ({ coverage }: CoverageDetailsProps) => {
   const classes = useStyles({});
 
+  const coverageTableRows = coverage.groups.map(
+    (group) =>
+      ({
+        name: group.name,
+        stats: group.stats,
+        previousTestRunId: coverage.previousTestRunId,
+      } as CoverageTableRow)
+  );
+
   return (
     <div data-testid="coverage-details">
       <div>
@@ -29,9 +38,8 @@ const CoverageDetails = ({ coverage }: CoverageDetailsProps) => {
           previousTestRunId={coverage.previousTestRunId}
         />
       </div>
-      <CoverageGroups
-        coverageGroups={coverage.groups}
-        previousTestRunId={coverage.previousTestRunId}
+      <CoverageTable
+        rows={coverageTableRows}
         pageTitle="Groups"
         groupHeader="Group"
       />

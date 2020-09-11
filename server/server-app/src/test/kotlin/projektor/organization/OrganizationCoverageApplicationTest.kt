@@ -24,12 +24,15 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
 
         val publicId1 = randomPublicId()
         val repo1 = "$orgName/repo1"
+        val olderRunRepo1 = randomPublicId()
 
         val publicId2 = randomPublicId()
         val repo2 = "$orgName/repo2"
+        val olderRunRepo2 = randomPublicId()
 
         val publicId3 = randomPublicId()
         val repo3 = "$orgName/repo3"
+        val olderRunRepo3 = randomPublicId()
 
         val anotherPublicId = randomPublicId()
         val anotherRepo = "another-org/repo"
@@ -38,17 +41,32 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
             handleRequest(HttpMethod.Get, "/org/$orgName/coverage") {
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                        publicId = olderRunRepo1,
+                        coverageText = JacocoXmlLoader().serverApp(),
+                        repoName = repo1
+                )
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                         publicId = publicId1,
                         coverageText = JacocoXmlLoader().serverApp(),
                         repoName = repo1
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                        publicId = olderRunRepo2,
+                        coverageText = JacocoXmlLoader().jacocoXmlParser(),
+                        repoName = repo2
+                )
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                         publicId = publicId2,
                         coverageText = JacocoXmlLoader().jacocoXmlParser(),
                         repoName = repo2
                 )
 
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                        publicId = olderRunRepo3,
+                        coverageText = JacocoXmlLoader().junitResultsParser(),
+                        repoName = repo3
+                )
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                         publicId = publicId3,
                         coverageText = JacocoXmlLoader().junitResultsParser(),

@@ -23,6 +23,9 @@ import projektor.incomingresults.processing.ResultsProcessingDatabaseRepository
 import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.message.MessageConfig
 import projektor.message.MessageService
+import projektor.metadata.TestRunMetadataDatabaseRepository
+import projektor.metadata.TestRunMetadataRepository
+import projektor.metadata.TestRunMetadataService
 import projektor.metrics.MetricsService
 import projektor.organization.coverage.OrganizationCoverageDatabaseRepository
 import projektor.organization.coverage.OrganizationCoverageRepository
@@ -66,6 +69,7 @@ fun createAppModule(
     single<AttachmentRepository> { AttachmentDatabaseRepository(get()) }
     single<ResultsProcessingRepository> { ResultsProcessingDatabaseRepository(get()) }
     single<PreviousTestRunRepository> { PreviousTestRunDatabaseRepository(get()) }
+    single<TestRunMetadataRepository> { TestRunMetadataDatabaseRepository(get()) }
 
     single<CoverageRepository> { CoverageDatabaseRepository(get()) }
 
@@ -83,6 +87,7 @@ fun createAppModule(
     single { TestResultsService(get(), get(), get(), get()) }
     single { TestRunService(get()) }
     single { TestRunSystemAttributesService(get()) }
+    single { TestRunMetadataService(get()) }
 
     single { SchedulerLock(dataSource) }
     single { Scheduler(get()) }

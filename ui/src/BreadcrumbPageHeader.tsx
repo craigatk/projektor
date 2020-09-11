@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface BreadcrumbPageHeaderProps {
   intermediateLinks?: React.ReactNode[];
-  endingText: String;
+  endingText: string;
 }
 
 const BreadcrumbPageHeader = ({

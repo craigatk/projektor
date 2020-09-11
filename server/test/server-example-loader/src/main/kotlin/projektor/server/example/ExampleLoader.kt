@@ -107,6 +107,21 @@ fun loadMultipleCoverageWithPreviousRunExample() {
     println("View run with multiple coverage results and previous results at $uiBaseUrl${currentResultsResponse.uri}")
 }
 
+fun loadResultsWithGitButWithoutCoverage() {
+    val repoName = "no-coverage/projektor"
+    val branchName = "main"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+
+    val resultsResponse = sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata))
+
+    println("View run with Git metadata and no test coverage at $uiBaseUrl${resultsResponse.uri}")
+}
+
 fun sendResultsToServer(resultXmlList: List<String>): SaveResultsResponse =
         resultXmlList.joinToString("\n").let(::sendResultsToServer)
 

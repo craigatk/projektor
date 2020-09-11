@@ -8,7 +8,7 @@ import TestSuitePackagePage from "../TestSuite/TestSuitePackagePage";
 import TestCasePage from "../TestCase/TestCasePage";
 import FailedTestCases from "../TestCase/FailedTestCases";
 import Dashboard from "../Dashboard/Dashboard";
-import { TestRunSummary } from "../model/TestRunModel";
+import { TestRunGitMetadata, TestRunSummary } from "../model/TestRunModel";
 import SideMenu from "../SideMenu/SideMenu";
 import SlowTestCasesPage from "../TestCase/slow/SlowTestCasesPage";
 import { AppBar, Typography } from "@material-ui/core";
@@ -23,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     backgroundColor: "#1c313a",
     padding: "5px 10px",
+    height: "42px",
+  },
+  appBarLabel: {
+    marginLeft: "192px",
   },
   content: {
     flexGrow: 1,
@@ -36,6 +40,7 @@ interface TestRunMenuWrapperProps {
   testRunSummary: TestRunSummary;
   hasAttachments: boolean;
   hasCoverage: boolean;
+  gitMetadata?: TestRunGitMetadata;
 }
 
 const TestRunMenuWrapper = ({
@@ -43,6 +48,7 @@ const TestRunMenuWrapper = ({
   testRunSummary,
   hasAttachments,
   hasCoverage,
+  gitMetadata,
 }: TestRunMenuWrapperProps) => {
   if (testRunSummary == null) {
     return null;
@@ -54,13 +60,18 @@ const TestRunMenuWrapper = ({
     <div className={classes.root} data-testid="test-run-menu-wrapper">
       <PinState publicId={publicId}>
         <AppBar className={classes.appBar}>
-          <Typography variant="h6">Projektor</Typography>
+          {gitMetadata && gitMetadata.repoName && (
+            <Typography variant="subtitle1" className={classes.appBarLabel}>
+              {gitMetadata.repoName}
+            </Typography>
+          )}
         </AppBar>
         <SideMenu
           publicId={publicId}
           testRunSummary={testRunSummary}
           hasAttachments={hasAttachments}
           hasCoverage={hasCoverage}
+          gitMetadata={gitMetadata}
         />
         <main className={classes.content}>
           <QueryParamProvider reachHistory={globalHistory}>
@@ -69,6 +80,7 @@ const TestRunMenuWrapper = ({
                 path="/"
                 publicId={publicId}
                 testRunSummary={testRunSummary}
+                gitMetadata={gitMetadata}
               />
               <TestRunAllTests path="/all" publicId={publicId} />
               <FailedTestCases path="/failed" publicId={publicId} />

@@ -35,12 +35,13 @@ const OrganizationWrapper = ({ orgName }: OrganizationWrapperProps) => {
     <div className={classes.root} data-testid="organization-wrapper">
       <AppBar className={classes.appBar}>
         <Typography variant="subtitle1" className={classes.appBarLabel}>
-          Organization: {orgName}
+          {orgName}
         </Typography>
       </AppBar>
       <OrganizationSideMenu orgName={orgName} />
       <main className={classes.content}>
         <Router>
+          <OrganizationCoveragePage path="/" orgName={orgName} />
           <OrganizationCoveragePage path="/coverage" orgName={orgName} />
         </Router>
       </main>
