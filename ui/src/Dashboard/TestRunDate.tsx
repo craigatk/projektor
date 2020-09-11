@@ -1,6 +1,6 @@
 import * as React from "react";
 import moment from "moment";
-import TestRunDateItem from "./TestRunDateItem";
+import DashboardSummaryItem from "./DashboardSummaryItem";
 
 interface TestRunDateProps {
   createdTimestamp: Date;
@@ -8,7 +8,7 @@ interface TestRunDateProps {
 
 const TestRunDate = ({ createdTimestamp }: TestRunDateProps) => {
   return (
-    <TestRunDateItem
+    <DashboardSummaryItem
       label="Report created"
       testId="test-run-report-created-timestamp"
       value={moment(createdTimestamp).format("MMMM Do YYYY, h:mm:ss a")}

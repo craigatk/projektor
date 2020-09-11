@@ -82,6 +82,13 @@ interface TestSuiteOutput {
   value: string;
 }
 
+interface TestRunGitMetadata {
+  repoName?: string;
+  orgName?: string;
+  branchName?: string;
+  isMainBranch: boolean;
+}
+
 interface TestRunSummary {
   id: string;
   totalTestCount: number;
@@ -133,6 +140,7 @@ export {
   TestSuiteOutput,
   TestCase,
   TestFailure,
+  TestRunGitMetadata,
   TestResultsProcessingStatus,
   TestResultsProcessing,
   TestRunSystemAttributes,

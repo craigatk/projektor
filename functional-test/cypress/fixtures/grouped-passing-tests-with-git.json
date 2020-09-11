@@ -1,4 +1,11 @@
 {
+  "metadata": {
+    "git": {
+      "repoName": "theorg/therepo",
+      "branchName": "main",
+      "isMainBranch": true
+    }
+  },
   "groupedTestSuites": [
     {
       "groupName": "Group1",

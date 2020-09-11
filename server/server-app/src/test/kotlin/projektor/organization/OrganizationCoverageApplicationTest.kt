@@ -24,12 +24,15 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
 
         val publicId1 = randomPublicId()
         val repo1 = "$orgName/repo1"
+        val olderRunRepo1 = randomPublicId()
 
         val publicId2 = randomPublicId()
         val repo2 = "$orgName/repo2"
+        val olderRunRepo2 = randomPublicId()
 
         val publicId3 = randomPublicId()
         val repo3 = "$orgName/repo3"
+        val olderRunRepo3 = randomPublicId()
 
         val anotherPublicId = randomPublicId()
         val anotherRepo = "another-org/repo"
@@ -38,17 +41,32 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
             handleRequest(HttpMethod.Get, "/org/$orgName/coverage") {
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                        publicId = olderRunRepo1,
+                        coverageText = JacocoXmlLoader().serverApp(),
+                        repoName = repo1
+                )
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                         publicId = publicId1,
                         coverageText = JacocoXmlLoader().serverApp(),
                         repoName = repo1
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                        publicId = olderRunRepo2,
+                        coverageText = JacocoXmlLoader().jacocoXmlParser(),
+                        repoName = repo2
+                )
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                         publicId = publicId2,
                         coverageText = JacocoXmlLoader().jacocoXmlParser(),
                         repoName = repo2
                 )
 
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                        publicId = olderRunRepo3,
+                        coverageText = JacocoXmlLoader().junitResultsParser(),
+                        repoName = repo3
+                )
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                         publicId = publicId3,
                         coverageText = JacocoXmlLoader().junitResultsParser(),
@@ -71,7 +89,7 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
                 val repositoryData1 = organizationCoverage.repositories.find { it.repoName == repo1 }
                 assertNotNull(repositoryData1)
 
-                expectThat(repositoryData1.publicId).isEqualTo(publicId1)
+                expectThat(repositoryData1.publicId).isEqualTo(publicId1.id)
 
                 expectThat(repositoryData1.coverage).isNotNull().and {
                     get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(BigDecimal("97.44"))
@@ -80,7 +98,7 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
                 val repositoryData2 = organizationCoverage.repositories.find { it.repoName == repo2 }
                 assertNotNull(repositoryData2)
 
-                expectThat(repositoryData2.publicId).isEqualTo(publicId2)
+                expectThat(repositoryData2.publicId).isEqualTo(publicId2.id)
 
                 expectThat(repositoryData2.coverage).isNotNull().and {
                     get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(BigDecimal("92.86"))
@@ -89,7 +107,7 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
                 val repositoryData3 = organizationCoverage.repositories.find { it.repoName == repo3 }
                 assertNotNull(repositoryData3)
 
-                expectThat(repositoryData3.publicId).isEqualTo(publicId3)
+                expectThat(repositoryData3.publicId).isEqualTo(publicId3.id)
 
                 expectThat(repositoryData3.coverage).isNotNull().and {
                     get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(BigDecimal("92.31"))

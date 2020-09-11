@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 
 interface CodeTextLineProps {
-  line: String;
+  line: string;
   idx: number;
   highlighted: boolean;
   handleLineClick(e: React.MouseEvent, lineIdx: number): void;

@@ -190,7 +190,7 @@
                 <line num="67" count="1" type="stmt"/>
                 <line num="71" count="2" type="stmt"/>
             </file>
-            <file name="CoverageGroups.tsx" path="C:\Users\atkcr\projects\projektor\ui\src\Coverage\CoverageGroups.tsx">
+            <file name="CoverageTable.tsx" path="C:\Users\atkcr\projects\projektor\ui\src\Coverage\CoverageTable.tsx">
                 <metrics statements="16" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="0"/>
                 <line num="1" count="1" type="stmt"/>
                 <line num="3" count="1" type="stmt"/>
@@ -331,7 +331,7 @@
                 <line num="10" count="1" type="stmt"/>
                 <line num="19" count="1" type="stmt"/>
             </file>
-            <file name="TestRunDateItem.tsx" path="C:\Users\atkcr\projects\projektor\ui\src\Dashboard\TestRunDateItem.tsx">
+            <file name="DashboardSummaryItem.tsx" path="C:\Users\atkcr\projects\projektor\ui\src\Dashboard\DashboardSummaryItem.tsx">
                 <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
                 <line num="1" count="2" type="stmt"/>
                 <line num="2" count="2" type="stmt"/>

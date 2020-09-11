@@ -8,7 +8,7 @@ import {
 import MaterialTable from "material-table";
 
 interface TestSuiteListProps {
-  publicId: String;
+  publicId: string;
   testSuites: TestSuite[];
 }
 

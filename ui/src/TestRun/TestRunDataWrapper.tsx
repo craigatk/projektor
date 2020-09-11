@@ -1,9 +1,10 @@
 import * as React from "react";
 import LoadingState from "../Loading/LoadingState";
-import { TestRunSummary } from "../model/TestRunModel";
+import { TestRunGitMetadata, TestRunSummary } from "../model/TestRunModel";
 import {
   fetchAttachments,
   fetchCoverageExists,
+  fetchTestRunGitMetadata,
   fetchTestRunSummary,
 } from "../service/TestRunService";
 import LoadingSection from "../Loading/LoadingSection";
@@ -24,6 +25,9 @@ const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
   );
   const [hasAttachments, setHasAttachments] = React.useState<boolean>(false);
   const [hasCoverage, setHasCoverage] = React.useState<boolean>(false);
+  const [gitMetadata, setGitMetadata] = React.useState<TestRunGitMetadata>(
+    null
+  );
 
   const loadTestRunSummary = () => {
     fetchTestRunSummary(publicId)
@@ -51,6 +55,12 @@ const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
       .catch(() => setHasCoverage(false));
   }, [setHasCoverage]);
 
+  React.useEffect(() => {
+    fetchTestRunGitMetadata(publicId)
+      .then((response) => setGitMetadata(response.data))
+      .catch(() => {});
+  }, [setGitMetadata]);
+
   return (
     <LoadingSection
       loadingState={loadingState}
@@ -60,6 +70,7 @@ const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
           testRunSummary={testRunSummary}
           hasAttachments={hasAttachments}
           hasCoverage={hasCoverage}
+          gitMetadata={gitMetadata}
         />
       }
       errorComponent={

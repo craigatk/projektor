@@ -1,12 +1,21 @@
 import * as React from "react";
-import { CoverageGroup } from "../model/TestRunModel";
+import { CoverageStats } from "../model/TestRunModel";
 import MaterialTable from "material-table";
 import CoverageGraph from "./CoverageGraph";
 import { makeStyles, Typography } from "@material-ui/core";
+import CleanLink from "../Link/CleanLink";
 
-interface CoverageGroupsProps {
-  coverageGroups: CoverageGroup[];
+interface CoverageTableRow {
+  name: string;
+  stats: CoverageStats;
   previousTestRunId?: string;
+  nameLinkUrl?: string;
+}
+
+interface CoverageTableProps {
+  rows: CoverageTableRow[];
+  pageTitle: string;
+  groupHeader: string;
 }
 
 const headerStyle = {
@@ -24,16 +33,22 @@ const useStyles = makeStyles({
   },
 });
 
-const CoverageGroups = ({
-  coverageGroups,
-  previousTestRunId,
-}: CoverageGroupsProps) => {
+const CoverageTable = ({
+  rows,
+  pageTitle,
+  groupHeader,
+}: CoverageTableProps) => {
   const classes = useStyles({});
+
+  const sortedRows = rows.sort(
+    (a, b) =>
+      a.stats.lineStat.coveredPercentage - b.stats.lineStat.coveredPercentage
+  );
 
   return (
     <div>
       <Typography className={classes.title} variant="h6">
-        Groups
+        {pageTitle}
       </Typography>
       <MaterialTable
         title=""
@@ -44,11 +59,21 @@ const CoverageGroups = ({
         }}
         columns={[
           {
-            title: "Test Group",
+            title: groupHeader,
             field: "name",
-            render: (rowData) => (
-              <span data-testid={`name-${rowData.name}`}>{rowData.name}</span>
-            ),
+            render: (rowData) =>
+              rowData.nameLinkUrl ? (
+                <CleanLink
+                  to={rowData.nameLinkUrl}
+                  data-testid={`coverage-name-${rowData.idx}`}
+                >
+                  {rowData.name}
+                </CleanLink>
+              ) : (
+                <span data-testid={`coverage-name-${rowData.idx}`}>
+                  {rowData.name}
+                </span>
+              ),
             cellStyle,
             headerStyle,
           },
@@ -61,7 +86,8 @@ const CoverageGroups = ({
                 type="Line"
                 height={15}
                 inline={true}
-                previousTestRunId={previousTestRunId}
+                previousTestRunId={rowData.previousTestRunId}
+                testIdPrefix={`line-coverage-row-${rowData.idx}`}
               />
             ),
             cellStyle,
@@ -76,7 +102,8 @@ const CoverageGroups = ({
                 type="Statement"
                 height={15}
                 inline={true}
-                previousTestRunId={previousTestRunId}
+                previousTestRunId={rowData.previousTestRunId}
+                testIdPrefix={`statement-coverage-row-${rowData.idx}`}
               />
             ),
             cellStyle,
@@ -91,27 +118,31 @@ const CoverageGroups = ({
                 type="Branch"
                 height={15}
                 inline={true}
-                previousTestRunId={previousTestRunId}
+                previousTestRunId={rowData.previousTestRunId}
+                testIdPrefix={`branch-coverage-row-${rowData.idx}`}
               />
             ),
             cellStyle,
             headerStyle,
           },
         ]}
-        data={coverageGroups.map((coverageGroup) => ({
-          name: coverageGroup.name,
-          lineStat: coverageGroup.stats.lineStat,
-          lineCoveredPercentage: coverageGroup.stats.lineStat.coveredPercentage,
-          statementStat: coverageGroup.stats.statementStat,
-          statementCoveredPercentage:
-            coverageGroup.stats.lineStat.coveredPercentage,
-          branchStat: coverageGroup.stats.branchStat,
-          branchCoveredPercentage:
-            coverageGroup.stats.lineStat.coveredPercentage,
+        data={sortedRows.map((row, idx) => ({
+          name: row.name,
+          lineStat: row.stats.lineStat,
+          lineCoveredPercentage: row.stats.lineStat.coveredPercentage,
+          statementStat: row.stats.statementStat,
+          statementCoveredPercentage: row.stats.lineStat.coveredPercentage,
+          branchStat: row.stats.branchStat,
+          branchCoveredPercentage: row.stats.lineStat.coveredPercentage,
+          previousTestRunId: row.previousTestRunId,
+          nameLinkUrl: row.nameLinkUrl,
+          idx: idx + 1,
         }))}
       />
     </div>
   );
 };
 
-export default CoverageGroups;
+export default CoverageTable;
+
+export { CoverageTableRow };

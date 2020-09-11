@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ListItem, ListItemText, makeStyles } from "@material-ui/core";
 
-interface TestRunDateItemProps {
+interface DashboardSummaryItemProps {
   label: string;
   testId: string;
   value: any;
@@ -14,7 +14,11 @@ const useStyles = makeStyles({
   },
 });
 
-const TestRunDateItem = ({ label, testId, value }: TestRunDateItemProps) => {
+const DashboardSummaryItem = ({
+  label,
+  testId,
+  value,
+}: DashboardSummaryItemProps) => {
   const classes = useStyles({});
   return (
     <ListItem>
@@ -30,4 +34,4 @@ const TestRunDateItem = ({ label, testId, value }: TestRunDateItemProps) => {
   );
 };
 
-export default TestRunDateItem;
+export default DashboardSummaryItem;

@@ -5,6 +5,7 @@ import { makeStyles, Tooltip } from "@material-ui/core";
 interface CoveragePercentageProps {
   coverageStat: CoverageStat;
   previousTestRunId?: string;
+  testId?: string;
 }
 
 const useStyles = makeStyles({
@@ -33,6 +34,7 @@ const useStyles = makeStyles({
 const CoveragePercentage = ({
   coverageStat,
   previousTestRunId,
+  testId,
 }: CoveragePercentageProps) => {
   const classes = useStyles({});
 
@@ -48,7 +50,7 @@ const CoveragePercentage = ({
             <a
               href={`/tests/${previousTestRunId}/coverage`}
               className={classes.positive}
-              target="_blank"
+              data-testid={testId}
             >
               +{coverageStat.coveredPercentageDelta}%
             </a>
@@ -66,7 +68,7 @@ const CoveragePercentage = ({
             <a
               href={`/tests/${previousTestRunId}/coverage`}
               className={classes.negative}
-              target="_blank"
+              data-testid={testId}
             >
               {coverageStat.coveredPercentageDelta}%
             </a>
@@ -75,7 +77,7 @@ const CoveragePercentage = ({
       );
     }
   } else {
-    return <span>{coverageStat.coveredPercentage}%</span>;
+    return <span data-testid={testId}>{coverageStat.coveredPercentage}%</span>;
   }
 };
 

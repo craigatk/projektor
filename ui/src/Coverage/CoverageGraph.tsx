@@ -10,6 +10,7 @@ interface CoverageGraphProps {
   height: number;
   inline: boolean;
   previousTestRunId?: string;
+  testIdPrefix?: string;
 }
 
 const useStyles = makeStyles({
@@ -30,6 +31,7 @@ const CoverageGraph = ({
   height,
   inline,
   previousTestRunId,
+  testIdPrefix,
 }: CoverageGraphProps) => {
   const classes = useStyles({ inline });
 
@@ -39,6 +41,7 @@ const CoverageGraph = ({
       <CoveragePercentage
         coverageStat={coverageStat}
         previousTestRunId={previousTestRunId}
+        testId={`${testIdPrefix}-covered-percentage`}
       />
       )
     </span>

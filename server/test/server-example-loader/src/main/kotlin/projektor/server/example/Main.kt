@@ -1,6 +1,6 @@
 package projektor.server.example
 
-fun main(args: Array<String>) {
+fun main() {
     loadPassingExample()
     loadAllExamples()
     loadCypressExamples()
@@ -9,5 +9,6 @@ fun main(args: Array<String>) {
     loadSingleCoverageExample()
     loadMultipleCoverageExample()
     loadMultipleCoverageWithPreviousRunExample()
+    loadResultsWithGitButWithoutCoverage()
     loadInvalidExample()
 }

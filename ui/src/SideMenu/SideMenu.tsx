@@ -1,7 +1,7 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/styles";
 import { Drawer, List, Typography } from "@material-ui/core";
-import { TestRunSummary } from "../model/TestRunModel";
+import { TestRunGitMetadata, TestRunSummary } from "../model/TestRunModel";
 import DashboardIcon from "../Icons/DashboardIcon";
 import FailedIcon from "../Icons/FailedIcon";
 import TotalIcon from "../Icons/TotalIcon";
@@ -10,12 +10,14 @@ import AttachmentIcon from "../Icons/AttachmentIcon";
 import SideMenuLink from "./SideMenuLink";
 import PinSideMenuItem from "../Pin/PinSideMenuItem";
 import CoverageIcon from "../Icons/CoverageIcon";
+import OrganizationIcon from "../Icons/OrganizationIcon";
 
 interface SideMenuProps {
   publicId: string;
   testRunSummary: TestRunSummary;
   hasAttachments: boolean;
   hasCoverage: boolean;
+  gitMetadata?: TestRunGitMetadata;
 }
 
 const sideNavWidth = 180;
@@ -41,6 +43,7 @@ const SideMenu = ({
   testRunSummary,
   hasAttachments,
   hasCoverage,
+  gitMetadata,
 }: SideMenuProps) => {
   const classes = useStyles({});
 
@@ -99,6 +102,14 @@ const SideMenu = ({
             linkTestId="nav-link-attachments"
           />
         ) : null}
+        {gitMetadata && gitMetadata.orgName && (
+          <SideMenuLink
+            linkTo={`/organization/${gitMetadata.orgName}`}
+            icon={<OrganizationIcon />}
+            linkText="Organization"
+            linkTestId="nav-link-organization"
+          />
+        )}
         <PinSideMenuItem />
       </List>
     </Drawer>

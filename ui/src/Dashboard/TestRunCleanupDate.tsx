@@ -1,6 +1,6 @@
 import * as React from "react";
 import { PinContext } from "../Pin/PinState";
-import TestRunDateItem from "./TestRunDateItem";
+import DashboardSummaryItem from "./DashboardSummaryItem";
 import moment from "moment";
 import CleanLink from "../Link/CleanLink";
 
@@ -53,7 +53,7 @@ const TestRunCleanupDate = ({ createdTimestamp }: TestRunCleanupDateProps) => {
       );
     }
     return (
-      <TestRunDateItem
+      <DashboardSummaryItem
         label="Report cleanup"
         testId="test-run-report-cleanup"
         value={displayValue}

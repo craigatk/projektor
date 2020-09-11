@@ -4,6 +4,7 @@ import kotlin.streams.toList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
+import org.jooq.impl.DSL.firstValue
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables.*
 
@@ -16,10 +17,10 @@ class OrganizationCoverageDatabaseRepository(private val dslContext: DSLContext)
 
     override suspend fun findReposWithCoverage(orgName: String): List<RepositoryTestRun> =
             withContext(Dispatchers.IO) {
-                val resultSet = dslContext.select(
-                                TEST_RUN.PUBLIC_ID,
-                                GIT_METADATA.REPO_NAME
-                        )
+                val resultSet = dslContext.selectDistinct(
+                        firstValue(TEST_RUN.PUBLIC_ID).over().partitionBy(GIT_METADATA.REPO_NAME).orderBy(TEST_RUN.CREATED_TIMESTAMP.desc()).`as`("public_id"),
+                        GIT_METADATA.REPO_NAME
+                )
                         .from(GIT_METADATA)
                         .innerJoin(TEST_RUN).on(GIT_METADATA.TEST_RUN_ID.eq(TEST_RUN.ID))
                         .innerJoin(CODE_COVERAGE_RUN).on(TEST_RUN.PUBLIC_ID.eq(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID))

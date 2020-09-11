@@ -10,6 +10,10 @@ fun Route.ui() {
         resources("static/")
         defaultResource("static/index.html")
     }
+    static("/organization/{path...}") {
+        resources("static/")
+        defaultResource("static/index.html")
+    }
     static("/tests/{path...}") {
         resources("static/")
         defaultResource("static/index.html")
