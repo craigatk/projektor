@@ -1,7 +1,7 @@
 import * as React from "react";
 import { RouteComponentProps, Router } from "@reach/router";
 import { makeStyles } from "@material-ui/styles";
-import { AppBar } from "@material-ui/core";
+import { AppBar, Typography } from "@material-ui/core";
 import OrganizationSideMenu from "./OrganizationSideMenu";
 import OrganizationCoveragePage from "./Coverage/OrganizationCoveragePage";
 
@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
     padding: "5px 10px",
     height: "42px",
   },
+  appBarLabel: {
+    marginLeft: "192px",
+  },
   content: {
     flexGrow: 1,
     marginTop: "42px",
@@ -30,7 +33,11 @@ const OrganizationWrapper = ({ orgName }: OrganizationWrapperProps) => {
 
   return (
     <div className={classes.root} data-testid="organization-wrapper">
-      <AppBar className={classes.appBar}></AppBar>
+      <AppBar className={classes.appBar}>
+        <Typography variant="subtitle1" className={classes.appBarLabel}>
+          Organization: {orgName}
+        </Typography>
+      </AppBar>
       <OrganizationSideMenu orgName={orgName} />
       <main className={classes.content}>
         <Router>
