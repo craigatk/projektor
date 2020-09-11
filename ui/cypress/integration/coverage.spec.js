@@ -113,15 +113,9 @@ context("test run with coverage data", () => {
     );
     cy.getByTestId("coverage-graph-title-branch").should("contain", "Branch");
 
-    cy.getByTestId("coverage-name-1").should("contain", "server-app");
-    cy.getByTestId("name-junit-results-parser").should(
-      "contain",
-      "junit-results-parser"
-    );
-    cy.getByTestId("name-jacoco-xml-parser").should(
-      "contain",
-      "jacoco-xml-parser"
-    );
+    cy.getByTestId("coverage-name-1").should("contain", "junit-results-parser");
+    cy.getByTestId("coverage-name-2").should("contain", "jacoco-xml-parser");
+    cy.getByTestId("coverage-name-3").should("contain", "server-app");
   });
 
   it("should not show coverage section when no coverage data available", () => {
