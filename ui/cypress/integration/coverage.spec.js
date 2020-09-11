@@ -113,7 +113,7 @@ context("test run with coverage data", () => {
     );
     cy.getByTestId("coverage-graph-title-branch").should("contain", "Branch");
 
-    cy.getByTestId("name-server-app").should("contain", "server-app");
+    cy.getByTestId("coverage-name-1").should("contain", "server-app");
     cy.getByTestId("name-junit-results-parser").should(
       "contain",
       "junit-results-parser"
