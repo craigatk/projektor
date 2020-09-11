@@ -15,7 +15,7 @@ class OrganizationCoverageService(
             val coverage = coverageService.getCoverage(repositoryTestRun.publicId)
 
             RepositoryCoverage(
-                    publicId = repositoryTestRun.publicId,
+                    publicId = repositoryTestRun.publicId.id,
                     repoName = repositoryTestRun.repoName,
                     coverage = coverage
             )

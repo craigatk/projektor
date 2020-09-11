@@ -7,6 +7,8 @@ import { makeStyles, Typography } from "@material-ui/core";
 interface CoverageGroupsProps {
   coverageGroups: CoverageGroup[];
   previousTestRunId?: string;
+  pageTitle: string;
+  groupHeader: string;
 }
 
 const headerStyle = {
@@ -27,13 +29,15 @@ const useStyles = makeStyles({
 const CoverageGroups = ({
   coverageGroups,
   previousTestRunId,
+  pageTitle,
+  groupHeader,
 }: CoverageGroupsProps) => {
   const classes = useStyles({});
 
   return (
     <div>
       <Typography className={classes.title} variant="h6">
-        Groups
+        {pageTitle}
       </Typography>
       <MaterialTable
         title=""
@@ -44,7 +48,7 @@ const CoverageGroups = ({
         }}
         columns={[
           {
-            title: "Test Group",
+            title: groupHeader,
             field: "name",
             render: (rowData) => (
               <span data-testid={`name-${rowData.name}`}>{rowData.name}</span>

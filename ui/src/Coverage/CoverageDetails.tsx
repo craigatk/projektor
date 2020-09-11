@@ -32,6 +32,8 @@ const CoverageDetails = ({ coverage }: CoverageDetailsProps) => {
       <CoverageGroups
         coverageGroups={coverage.groups}
         previousTestRunId={coverage.previousTestRunId}
+        pageTitle="Groups"
+        groupHeader="Group"
       />
     </div>
   );
