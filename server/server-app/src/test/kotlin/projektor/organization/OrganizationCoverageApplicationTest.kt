@@ -71,7 +71,7 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
                 val repositoryData1 = organizationCoverage.repositories.find { it.repoName == repo1 }
                 assertNotNull(repositoryData1)
 
-                expectThat(repositoryData1.publicId).isEqualTo(publicId1)
+                expectThat(repositoryData1.publicId).isEqualTo(publicId1.id)
 
                 expectThat(repositoryData1.coverage).isNotNull().and {
                     get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(BigDecimal("97.44"))
@@ -80,7 +80,7 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
                 val repositoryData2 = organizationCoverage.repositories.find { it.repoName == repo2 }
                 assertNotNull(repositoryData2)
 
-                expectThat(repositoryData2.publicId).isEqualTo(publicId2)
+                expectThat(repositoryData2.publicId).isEqualTo(publicId2.id)
 
                 expectThat(repositoryData2.coverage).isNotNull().and {
                     get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(BigDecimal("92.86"))
@@ -89,7 +89,7 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
                 val repositoryData3 = organizationCoverage.repositories.find { it.repoName == repo3 }
                 assertNotNull(repositoryData3)
 
-                expectThat(repositoryData3.publicId).isEqualTo(publicId3)
+                expectThat(repositoryData3.publicId).isEqualTo(publicId3.id)
 
                 expectThat(repositoryData3.coverage).isNotNull().and {
                     get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(BigDecimal("92.31"))
