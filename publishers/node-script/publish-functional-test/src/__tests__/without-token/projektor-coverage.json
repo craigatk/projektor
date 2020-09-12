@@ -1,0 +1,9 @@
+{
+  "serverUrl": "http://localhost:8082",
+  "results": [
+    "results/*.xml"
+  ],
+  "coverage": [
+    "coverage/*.xml"
+  ]
+}
