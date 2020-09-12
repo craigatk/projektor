@@ -33,16 +33,14 @@ const collectResults = (resultsFileGlobs) => {
   return resultsBlob;
 };
 
-const collectAttachments = (attachmentFileGlobs) => {
-  const attachmentFilePaths = globsToFilePaths(attachmentFileGlobs);
+const collectFileContents = (fileGlobs) => {
+  const filePaths = globsToFilePaths(fileGlobs);
 
-  const attachments = attachmentFilePaths.map((filePath) => {
-    const fileContents = fs.readFileSync(filePath);
-    const fileName = path.basename(filePath);
-    return { name: fileName, contents: fileContents };
+  return filePaths.map((filePath) => {
+    const contents = fs.readFileSync(filePath);
+    const name = path.basename(filePath);
+    return { name, contents };
   });
-
-  return attachments;
 };
 
 const sendResults = async (serverUrl, publishToken, resultsBlob) => {
@@ -86,6 +84,30 @@ const sendAttachment = (
     .catch((err) => Promise.reject(err));
 };
 
+const sendCoverage = (
+  serverUrl,
+  publicId,
+  publishToken,
+  coverageFileContents
+) => {
+  const headers = {};
+
+  if (publishToken) {
+    headers["X-PROJEKTOR-TOKEN"] = publishToken;
+  }
+
+  const axiosInstance = axios.create({
+    headers,
+  });
+
+  const postUrl = `${serverUrl}/run/${publicId}/coverage`;
+
+  return axiosInstance
+    .post(postUrl, coverageFileContents)
+    .then((resp) => Promise.resolve(resp.data))
+    .catch((err) => Promise.reject(err));
+};
+
 const collectAndSendAttachments = (
   serverUrl,
   publishToken,
@@ -93,7 +115,7 @@ const collectAndSendAttachments = (
   publicId
 ) => {
   if (attachmentFileGlobs && attachmentFileGlobs.length > 0) {
-    const attachments = collectAttachments(attachmentFileGlobs);
+    const attachments = collectFileContents(attachmentFileGlobs);
     const attachmentsCount = attachments.length;
 
     if (attachmentsCount) {
@@ -121,11 +143,46 @@ const collectAndSendAttachments = (
   }
 };
 
+const collectAndSendCoverage = (
+  serverUrl,
+  publishToken,
+  coverageFileGlobs,
+  publicId
+) => {
+  if (coverageFileGlobs && coverageFileGlobs.length > 0) {
+    const coverageFiles = collectFileContents(coverageFileGlobs);
+    const coverageCount = coverageFiles.length;
+
+    if (coverageCount) {
+      console.log(
+        `Sending ${coverageCount} coverage result(s) to Projektor server`
+      );
+      coverageFiles.forEach((coverageFile) =>
+        sendCoverage(
+          serverUrl,
+          publicId,
+          publishToken,
+          coverageFile.contents
+        ).catch((e) => {
+          console.error(
+            `Error sending coverage result ${coverageFile} to Projektor server ${serverUrl}`,
+            e.message
+          );
+        })
+      );
+      console.log(
+        `Finished sending coverage ${coverageCount} results to Projektor`
+      );
+    }
+  }
+};
+
 const collectAndSendResults = async (
   serverUrl,
   publishToken,
   resultsFileGlobs,
-  attachmentFileGlobs
+  attachmentFileGlobs,
+  coverageFileGlobs
 ) => {
   console.log(
     `Gathering results from ${resultsFileGlobs} to send to Projektor server ${serverUrl}`
@@ -149,6 +206,13 @@ const collectAndSendResults = async (
         serverUrl,
         publishToken,
         attachmentFileGlobs,
+        publicId
+      );
+
+      await collectAndSendCoverage(
+        serverUrl,
+        publishToken,
+        coverageFileGlobs,
         publicId
       );
 

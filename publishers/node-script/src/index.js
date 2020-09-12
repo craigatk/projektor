@@ -17,6 +17,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
   let serverUrl;
   let resultsFileGlobs;
   let attachmentFileGlobs;
+  let coverageFileGlobs;
   let exitWithFailure;
   let writeSlackMessageFile;
   let slackMessageFileName;
@@ -25,12 +26,13 @@ async function run(args, publishToken, defaultConfigFilePath) {
   const configFilePath = args.configFile || defaultConfigFilePath;
 
   if (fs.existsSync(configFilePath)) {
-    const configFileContents = fs.readFileSync(configFilePath);
+    const configFileContents = fs.readFileSync(configFilePath).toString();
     const config = JSON.parse(configFileContents);
 
     serverUrl = config.serverUrl;
     resultsFileGlobs = config.results;
     attachmentFileGlobs = config.attachments;
+    coverageFileGlobs = config.coverage;
     exitWithFailure = config.exitWithFailure;
     writeSlackMessageFile = config.writeSlackMessageFile;
     slackMessageFileName = config.slackMessageFileName;
@@ -44,6 +46,11 @@ async function run(args, publishToken, defaultConfigFilePath) {
         ? args.attachments
         : [args.attachments];
     }
+    if (args.coverage) {
+      coverageFileGlobs = Array.isArray(args.coverage)
+        ? args.coverage
+        : [args.coverage];
+    }
     exitWithFailure = args.exitWithFailure;
     writeSlackMessageFile = args.writeSlackMessageFile;
     slackMessageFileName = args.slackMessageFileName;
@@ -55,7 +62,8 @@ async function run(args, publishToken, defaultConfigFilePath) {
       serverUrl,
       publishToken,
       resultsFileGlobs,
-      attachmentFileGlobs
+      attachmentFileGlobs,
+      coverageFileGlobs
     );
 
     if (!resultsBlob) {

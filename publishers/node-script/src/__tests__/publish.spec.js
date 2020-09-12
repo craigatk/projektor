@@ -1,4 +1,3 @@
-const waitForExpect = require("wait-for-expect");
 const axios = require("axios");
 const MockAdapter = require("axios-mock-adapter");
 const {
@@ -86,16 +85,14 @@ describe("Projektor publisher", () => {
       .onPost("http://localhost:8080/results")
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
-    collectAndSendResults(serverUrl, null, [fileGlob]);
+    await collectAndSendResults(serverUrl, null, [fileGlob]);
 
-    await waitForExpect(() => {
-      expect(mockAxios.history.post.length).toBe(1);
+    expect(mockAxios.history.post.length).toBe(1);
 
-      const postData = mockAxios.history.post[0].data;
+    const postData = mockAxios.history.post[0].data;
 
-      expect(postData).toContain("resultsDir1-results1");
-      expect(postData).toContain("resultsDir1-results2");
-    });
+    expect(postData).toContain("resultsDir1-results1");
+    expect(postData).toContain("resultsDir1-results2");
   });
 
   it("should include publish token in header when specified", async () => {
@@ -108,18 +105,16 @@ describe("Projektor publisher", () => {
 
     const publishToken = "myPublishToken";
 
-    collectAndSendResults(serverUrl, publishToken, [fileGlob]);
+    await collectAndSendResults(serverUrl, publishToken, [fileGlob]);
 
-    await waitForExpect(() => {
-      expect(mockAxios.history.post.length).toBe(1);
+    expect(mockAxios.history.post.length).toBe(1);
 
-      const postRequest = mockAxios.history.post[0];
-      expect(postRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(publishToken);
+    const postRequest = mockAxios.history.post[0];
+    expect(postRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(publishToken);
 
-      const postData = postRequest.data;
-      expect(postData).toContain("resultsDir1-results1");
-      expect(postData).toContain("resultsDir1-results2");
-    });
+    const postData = postRequest.data;
+    expect(postData).toContain("resultsDir1-results1");
+    expect(postData).toContain("resultsDir1-results2");
   });
 
   it("should handle error when posting to server", async () => {
@@ -128,15 +123,13 @@ describe("Projektor publisher", () => {
 
     mockAxios.onPost("http://localhost:8080/results").reply(400, null);
 
-    collectAndSendResults(serverUrl, null, [fileGlob]);
+    await collectAndSendResults(serverUrl, null, [fileGlob]);
 
-    await waitForExpect(() => {
-      expect(mockAxios.history.post.length).toBe(1);
+    expect(mockAxios.history.post.length).toBe(1);
 
-      const postData = mockAxios.history.post[0].data;
+    const postData = mockAxios.history.post[0].data;
 
-      expect(postData).toContain("resultsDir1-results1");
-      expect(postData).toContain("resultsDir1-results2");
-    });
+    expect(postData).toContain("resultsDir1-results1");
+    expect(postData).toContain("resultsDir1-results2");
   });
 });

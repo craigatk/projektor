@@ -3,5 +3,6 @@
   "results": [
     "jestResults/*.xml"
   ],
-  "exitWithFailure": true
+  "exitWithFailure": true,
+  "projectName": "ui-jest"
 }

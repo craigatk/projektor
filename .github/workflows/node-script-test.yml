@@ -97,10 +97,17 @@ jobs:
         run: |
           cd publishers/node-script/publish-functional-test
           yarn install
-      - name: Run functional tests
+      - name: Run functional tests with token
         env:
           DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
           CACHE_ACCESS_KEY: ${{ secrets.CACHE_ACCESS_KEY }}
           CACHE_SECRET_KEY: ${{ secrets.CACHE_SECRET_KEY }}
-        run: ./gradlew :publishers:node-script:publish-functional-test:allFunctionalTests
+        run: ./gradlew :publishers:node-script:publish-functional-test:functionalTestWithToken
+      - name: Run functional tests without token
+        env:
+          DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
+          PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
+          CACHE_ACCESS_KEY: ${{ secrets.CACHE_ACCESS_KEY }}
+          CACHE_SECRET_KEY: ${{ secrets.CACHE_SECRET_KEY }}
+        run: ./gradlew :publishers:node-script:publish-functional-test:functionalTest

@@ -6,5 +6,6 @@
   "attachments": [
     "cypress/screenshots/**/*.png"
   ],
-  "exitWithFailure": true
+  "exitWithFailure": true,
+  "projectName": "ui-cypress"
 }

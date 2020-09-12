@@ -15,8 +15,12 @@ const fetchAttachment = (attachmentName, testRunId, serverPort) => {
   return axios.get(url);
 };
 
+const fetchCoverage = (testRunId, serverPort) =>
+  axios.get(`http://localhost:${serverPort}/run/${testRunId}/coverage`);
+
 module.exports = {
   fetchTestRunSummary,
   fetchAttachments,
   fetchAttachment,
+  fetchCoverage,
 };
