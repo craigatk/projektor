@@ -4,7 +4,9 @@ import projektor.parser.jacoco.model.Counter
 import projektor.parser.jacoco.model.CounterType
 import projektor.parser.jacoco.model.Report
 import projektor.server.example.coverage.JacocoXmlLoader
+import projektor.server.example.coverage.JestXmlLoader
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class JacocoXmlReportParserSpec extends Specification {
     def "should parse top-level coverage stats"() {
@@ -33,6 +35,18 @@ class JacocoXmlReportParserSpec extends Specification {
         verifyCounter(report.counters, CounterType.COMPLEXITY, 60, 373)
         verifyCounter(report.counters, CounterType.METHOD, 6, 301)
         verifyCounter(report.counters, CounterType.CLASS, 2, 173)
+    }
+
+    @Unroll
+    def "should determine if report is Jacoco or not #shouldBeJacoco"() {
+        expect:
+        JacocoXmlReportParser.isJacocoReport(reportXml) == shouldBeJacoco
+
+        where:
+        reportXml                               || shouldBeJacoco
+        new JacocoXmlLoader().serverApp()       || true
+        new JacocoXmlLoader().jacocoXmlParser() || true
+        new JestXmlLoader().ui()                || false
     }
 
     private static void verifyCounter(List<Counter> counters, CounterType type, int expectedMissed, int expectedCovered) {

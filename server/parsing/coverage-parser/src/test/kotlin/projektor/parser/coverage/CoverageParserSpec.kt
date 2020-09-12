@@ -3,13 +3,14 @@ package projektor.parser.coverage
 import io.kotest.core.spec.style.StringSpec
 import java.math.BigDecimal
 import projektor.server.example.coverage.JacocoXmlLoader
+import projektor.server.example.coverage.JestXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 
 class CoverageParserSpec : StringSpec({
-    "should parse Jacoco test report"() {
+    "should parse Jacoco test report" {
         val jacocoReportXml = JacocoXmlLoader().serverApp()
 
         val coverageReport = CoverageParser.parseReport(jacocoReportXml)
@@ -34,7 +35,31 @@ class CoverageParserSpec : StringSpec({
         }
     }
 
-    "when report does not have any branch coverage should parse it"() {
+    "should parse Jest test report" {
+        val jestReportXml = JestXmlLoader().ui()
+
+        val coverageReport = CoverageParser.parseReport(jestReportXml)
+
+        expectThat(coverageReport).isNotNull().and {
+            get { name }.isEqualTo("All files")
+
+            get { totalStats.lineStat.covered }.isEqualTo(924)
+            get { totalStats.lineStat.missed }.isEqualTo(97)
+            get { totalStats.lineStat.total }.isEqualTo(1021)
+            get { totalStats.lineStat.percentCovered }.isEqualTo(BigDecimal("90.50"))
+
+            get { totalStats.branchStat.covered }.isEqualTo(158)
+            get { totalStats.branchStat.missed }.isEqualTo(37)
+            get { totalStats.branchStat.total }.isEqualTo(195)
+            get { totalStats.branchStat.percentCovered }.isEqualTo(BigDecimal("81.03"))
+
+            get { totalStats.statementStat.covered }.isEqualTo(0)
+            get { totalStats.statementStat.missed }.isEqualTo(0)
+            get { totalStats.statementStat.total }.isEqualTo(0)
+        }
+    }
+
+    "when report does not have any branch coverage should parse it" {
         val reportXmlWithoutBranchCoverage = JacocoXmlLoader().junitResultsParser()
 
         val coverageReport = CoverageParser.parseReport(reportXmlWithoutBranchCoverage)

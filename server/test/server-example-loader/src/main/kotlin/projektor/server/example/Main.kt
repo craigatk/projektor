@@ -10,5 +10,6 @@ fun main() {
     loadMultipleCoverageExample()
     loadMultipleCoverageWithPreviousRunExample()
     loadResultsWithGitButWithoutCoverage()
+    loadJestWithCoverage()
     loadInvalidExample()
 }
