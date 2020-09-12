@@ -4,5 +4,8 @@
     "jestResults/*.xml"
   ],
   "exitWithFailure": true,
-  "projectName": "ui-jest"
+  "projectName": "ui-jest",
+  "coverage": [
+    "coverage/*.xml"
+  ]
 }
