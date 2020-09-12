@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="63" failures="0" time="29.683">
+    <testsuite name="CoverageGraph" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:04" time="17.376" tests="5">
+        <testcase classname="CoverageGraph should display coverage data when not inline" name="CoverageGraph should display coverage data when not inline" time="0.142">
+        </testcase>
+        <testcase classname="CoverageGraph should display positive previous coverage" name="CoverageGraph should display positive previous coverage" time="0.075">
+        </testcase>
+        <testcase classname="CoverageGraph should display negative previous coverage" name="CoverageGraph should display negative previous coverage" time="0.057">
+        </testcase>
+        <testcase classname="CoverageGraph should not display title when inline" name="CoverageGraph should not display title when inline" time="0.026">
+        </testcase>
+        <testcase classname="CoverageGraph should not display coverage data when there isn&apos;t any" name="CoverageGraph should not display coverage data when there isn&apos;t any" time="0.008">
+        </testcase>
+    </testsuite>
+    <testsuite name="PinSideMenuItem" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:04" time="18.02" tests="3">
+        <testcase classname="PinSideMenuItem when cleanup enabled and not pinned should toggle to pinned" name="PinSideMenuItem when cleanup enabled and not pinned should toggle to pinned" time="0.226">
+        </testcase>
+        <testcase classname="PinSideMenuItem when cleanup enabled and pinned should toggle to unpinned" name="PinSideMenuItem when cleanup enabled and pinned should toggle to unpinned" time="0.087">
+        </testcase>
+        <testcase classname="PinSideMenuItem when cleanup not enabled should not display anything" name="PinSideMenuItem when cleanup not enabled should not display anything" time="0.008">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestRunCleanupDate" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:04" time="18.087" tests="3">
+        <testcase classname="TestRunCleanupDate when cleanup enabled and not pinned should toggle to pinned" name="TestRunCleanupDate when cleanup enabled and not pinned should toggle to pinned" time="0.207">
+        </testcase>
+        <testcase classname="TestRunCleanupDate when cleanup enabled and pinned should toggle to unpinned" name="TestRunCleanupDate when cleanup enabled and pinned should toggle to unpinned" time="0.075">
+        </testcase>
+        <testcase classname="TestRunCleanupDate when cleanup not enabled should not display anything" name="TestRunCleanupDate when cleanup not enabled should not display anything" time="0.009">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestRunAllTests" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:04" time="18.209" tests="2">
+        <testcase classname="TestRunAllTests should render all tests when fetch completes successfully" name="TestRunAllTests should render all tests when fetch completes successfully" time="0.531">
+        </testcase>
+        <testcase classname="TestRunAllTests should render error when fetching all tests fails" name="TestRunAllTests should render error when fetching all tests fails" time="0.057">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestResultsProcessingCheck" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:04" time="18.649" tests="5">
+        <system-out><![CDATA[[
+  {
+    "message": "Warning: An update to TestResultsProcessingCheck inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act\n    in TestResultsProcessingCheck",
+    "origin": "    at warningWithoutStack (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:530:32)\n    at warnIfNotCurrentlyActingUpdatesInDEV (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:25848:7)\n    at dispatchAction (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:17072:9)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\src\\TestResults\\TestResultsProcessingCheck.tsx:65:9",
+    "type": "error"
+  },
+  {
+    "message": "Warning: An update to TestResultsProcessingCheck inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act\n    in TestResultsProcessingCheck",
+    "origin": "    at warningWithoutStack (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:530:32)\n    at warnIfNotCurrentlyActingUpdatesInDEV (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:25848:7)\n    at dispatchAction (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:17072:9)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\src\\TestResults\\TestResultsProcessingCheck.tsx:66:9",
+    "type": "error"
+  },
+  {
+    "message": "Warning: An update to TestResultsProcessingCheck inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act\n    in TestResultsProcessingCheck",
+    "origin": "    at warningWithoutStack (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:530:32)\n    at warnIfNotCurrentlyActingUpdatesInDEV (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:25848:7)\n    at dispatchAction (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:17072:9)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\src\\TestResults\\TestResultsProcessingCheck.tsx:65:9",
+    "type": "error"
+  },
+  {
+    "message": "Warning: An update to TestResultsProcessingCheck inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act\n    in TestResultsProcessingCheck",
+    "origin": "    at warningWithoutStack (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:530:32)\n    at warnIfNotCurrentlyActingUpdatesInDEV (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:25848:7)\n    at dispatchAction (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:17072:9)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\src\\TestResults\\TestResultsProcessingCheck.tsx:66:9",
+    "type": "error"
+  },
+  {
+    "message": "Warning: An update to TestResultsProcessingCheck inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act\n    in TestResultsProcessingCheck",
+    "origin": "    at warningWithoutStack (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:530:32)\n    at warnIfNotCurrentlyActingUpdatesInDEV (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:25848:7)\n    at dispatchAction (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:17072:9)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\src\\TestResults\\TestResultsProcessingCheck.tsx:65:9",
+    "type": "error"
+  },
+  {
+    "message": "Warning: An update to TestResultsProcessingCheck inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act\n    in TestResultsProcessingCheck",
+    "origin": "    at warningWithoutStack (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:530:32)\n    at warnIfNotCurrentlyActingUpdatesInDEV (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:25848:7)\n    at dispatchAction (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:17072:9)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\src\\TestResults\\TestResultsProcessingCheck.tsx:66:9",
+    "type": "error"
+  }
+]]]></system-out>
+        <testcase classname="TestResultsProcessingCheck should display message when results still processing" name="TestResultsProcessingCheck should display message when results still processing" time="0.157">
+        </testcase>
+        <testcase classname="TestResultsProcessingCheck should refresh status when still processing up to max timeout" name="TestResultsProcessingCheck should refresh status when still processing up to max timeout" time="1.17">
+        </testcase>
+        <testcase classname="TestResultsProcessingCheck should display failure message when results processing failed" name="TestResultsProcessingCheck should display failure message when results processing failed" time="0.06">
+        </testcase>
+        <testcase classname="TestResultsProcessingCheck should display message when results were deleted" name="TestResultsProcessingCheck should display message when results were deleted" time="0.039">
+        </testcase>
+        <testcase classname="TestResultsProcessingCheck should call success function when results successfully processed" name="TestResultsProcessingCheck should call success function when results successfully processed" time="0.038">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestSuitePackagePage" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:04" time="19.362" tests="2">
+        <testcase classname="TestSuitePackagePage should render test suites when fetch completes successfully" name="TestSuitePackagePage should render test suites when fetch completes successfully" time="0.681">
+        </testcase>
+        <testcase classname="TestSuitePackagePage should render error when fetching test suites fails" name="TestSuitePackagePage should render error when fetching test suites fails" time="0.064">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestCaseFailurePanel" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:04" time="19.57" tests="7">
+        <testcase classname="TestCaseFailurePanel should render failure details link when the test case failed" name="TestCaseFailurePanel should render failure details link when the test case failed" time="0.326">
+        </testcase>
+        <testcase classname="TestCaseFailurePanel should not render failure details link when the test case passed" name="TestCaseFailurePanel should not render failure details link when the test case passed" time="0.141">
+        </testcase>
+        <testcase classname="TestCaseFailurePanel should render system out link when the test case has system out" name="TestCaseFailurePanel should render system out link when the test case has system out" time="0.16">
+        </testcase>
+        <testcase classname="TestCaseFailurePanel should render system err link when the test case has system err" name="TestCaseFailurePanel should render system err link when the test case has system err" time="0.097">
+        </testcase>
+        <testcase classname="TestCaseFailurePanel should render both system out and err links when the test case has both" name="TestCaseFailurePanel should render both system out and err links when the test case has both" time="0.126">
+        </testcase>
+        <testcase classname="TestCaseFailurePanel should render failure message when flag to show full failure is false" name="TestCaseFailurePanel should render failure message when flag to show full failure is false" time="0.127">
+        </testcase>
+        <testcase classname="TestCaseFailurePanel should render failure text when flag to show full failure is true" name="TestCaseFailurePanel should render failure text when flag to show full failure is true" time="0.128">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestSuitePage" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:22" time="4.79" tests="2">
+        <testcase classname="TestSuitePage should render test suite when fetch completes successfully" name="TestSuitePage should render test suite when fetch completes successfully" time="0.186">
+        </testcase>
+        <testcase classname="TestSuitePage should render error when fetching test suite fails" name="TestSuitePage should render error when fetching test suite fails" time="0.071">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestSystemOut" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:23" time="3.788" tests="2">
+        <testcase classname="TestSystemOut should render output when fetch completes successfully" name="TestSystemOut should render output when fetch completes successfully" time="0.12">
+        </testcase>
+        <testcase classname="TestSystemOut should render error when fetching output fails" name="TestSystemOut should render error when fetching output fails" time="0.099">
+        </testcase>
+    </testsuite>
+    <testsuite name="OrganizationCoveragePage" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:21" time="5.762" tests="2">
+        <testcase classname="OrganizationCoveragePage when three repos in org should display their coverage" name="OrganizationCoveragePage when three repos in org should display their coverage" time="0.752">
+        </testcase>
+        <testcase classname="OrganizationCoveragePage should not display coverage data when the organization doesn&apos;t have any repos with coverage" name="OrganizationCoveragePage should not display coverage data when the organization doesn&apos;t have any repos with coverage" time="0.034">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestSuiteDetails" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:22" time="5.051" tests="2">
+        <testcase classname="TestSuiteDetails should display system out tab if test suite has it" name="TestSuiteDetails should display system out tab if test suite has it" time="0.175">
+        </testcase>
+        <testcase classname="TestSuiteDetails should display system err tab if test suite has it" name="TestSuiteDetails should display system err tab if test suite has it" time="0.093">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestSuiteSystemOut" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:23" time="4.275" tests="1">
+        <testcase classname="TestSuiteSystemOut should fetch and render system out" name="TestSuiteSystemOut should fetch and render system out" time="0.125">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestCaseDetails" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:23" time="5.564" tests="4">
+        <system-out><![CDATA[[
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary.",
+    "origin": "    at getTabsMeta (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:221:21)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:238:24\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\utils\\useEventCallback.js:25:29\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:398:5\n    at commitHookEffectList (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:336:14)\n    at innerInvokeEventListeners (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\jest-environment-jsdom\\node_modules\\jsdom\\lib\\jsdom\\living\\events\\EventTarget-impl.js:316:27)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary.",
+    "origin": "    at getTabsMeta (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:221:21)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:326:25\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\utils\\useEventCallback.js:25:29\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:402:5\n    at commitHookEffectList (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:336:14)\n    at innerInvokeEventListeners (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\jest-environment-jsdom\\node_modules\\jsdom\\lib\\jsdom\\living\\events\\EventTarget-impl.js:316:27)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary.",
+    "origin": "    at getTabsMeta (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:221:21)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:238:24\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\utils\\useEventCallback.js:25:29\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:398:5\n    at commitHookEffectList (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:336:14)\n    at innerInvokeEventListeners (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\jest-environment-jsdom\\node_modules\\jsdom\\lib\\jsdom\\living\\events\\EventTarget-impl.js:316:27)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary.",
+    "origin": "    at getTabsMeta (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:221:21)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:326:25\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\utils\\useEventCallback.js:25:29\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:402:5\n    at commitHookEffectList (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:336:14)\n    at innerInvokeEventListeners (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\jest-environment-jsdom\\node_modules\\jsdom\\lib\\jsdom\\living\\events\\EventTarget-impl.js:316:27)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemOut.",
+    "origin": "    at getTabsMeta (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:221:21)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:238:24\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\utils\\useEventCallback.js:25:29\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:398:5\n    at commitHookEffectList (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:336:14)\n    at innerInvokeEventListeners (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\jest-environment-jsdom\\node_modules\\jsdom\\lib\\jsdom\\living\\events\\EventTarget-impl.js:316:27)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemOut.",
+    "origin": "    at getTabsMeta (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:221:21)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:326:25\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\utils\\useEventCallback.js:25:29\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:402:5\n    at commitHookEffectList (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:336:14)\n    at innerInvokeEventListeners (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\jest-environment-jsdom\\node_modules\\jsdom\\lib\\jsdom\\living\\events\\EventTarget-impl.js:316:27)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemOut.",
+    "origin": "    at getTabsMeta (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:221:21)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:238:24\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\utils\\useEventCallback.js:25:29\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:398:5\n    at commitHookEffectList (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:336:14)\n    at innerInvokeEventListeners (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\jest-environment-jsdom\\node_modules\\jsdom\\lib\\jsdom\\living\\events\\EventTarget-impl.js:316:27)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemOut.",
+    "origin": "    at getTabsMeta (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:221:21)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:326:25\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\utils\\useEventCallback.js:25:29\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:402:5\n    at commitHookEffectList (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:336:14)\n    at innerInvokeEventListeners (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\jest-environment-jsdom\\node_modules\\jsdom\\lib\\jsdom\\living\\events\\EventTarget-impl.js:316:27)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemErr.",
+    "origin": "    at getTabsMeta (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:221:21)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:238:24\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\utils\\useEventCallback.js:25:29\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:398:5\n    at commitHookEffectList (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:336:14)\n    at innerInvokeEventListeners (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\jest-environment-jsdom\\node_modules\\jsdom\\lib\\jsdom\\living\\events\\EventTarget-impl.js:316:27)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemErr.",
+    "origin": "    at getTabsMeta (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:221:21)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:326:25\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\utils\\useEventCallback.js:25:29\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:402:5\n    at commitHookEffectList (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:336:14)\n    at innerInvokeEventListeners (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\jest-environment-jsdom\\node_modules\\jsdom\\lib\\jsdom\\living\\events\\EventTarget-impl.js:316:27)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemErr.",
+    "origin": "    at getTabsMeta (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:221:21)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:238:24\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\utils\\useEventCallback.js:25:29\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:398:5\n    at commitHookEffectList (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:336:14)\n    at innerInvokeEventListeners (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\jest-environment-jsdom\\node_modules\\jsdom\\lib\\jsdom\\living\\events\\EventTarget-impl.js:316:27)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemErr.",
+    "origin": "    at getTabsMeta (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:221:21)\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:326:25\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\utils\\useEventCallback.js:25:29\n    at C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\@material-ui\\core\\Tabs\\Tabs.js:402:5\n    at commitHookEffectList (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:336:14)\n    at innerInvokeEventListeners (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\jest-environment-jsdom\\node_modules\\jsdom\\lib\\jsdom\\living\\events\\EventTarget-impl.js:316:27)",
+    "type": "error"
+  }
+]]]></system-out>
+        <testcase classname="TestCaseDetails should render failure tab when the test case failed" name="TestCaseDetails should render failure tab when the test case failed" time="0.165">
+        </testcase>
+        <testcase classname="TestCaseDetails should not render failure tab when the test case passed" name="TestCaseDetails should not render failure tab when the test case passed" time="0.085">
+        </testcase>
+        <testcase classname="TestCaseDetails should system out tab when test case has system out" name="TestCaseDetails should system out tab when test case has system out" time="0.079">
+        </testcase>
+        <testcase classname="TestCaseDetails should system err tab when test case has system err" name="TestCaseDetails should system err tab when test case has system err" time="0.078">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestCaseList" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:28" time="1.703" tests="1">
+        <testcase classname="TestCaseList should render duration column first when specified" name="TestCaseList should render duration column first when specified" time="0.407">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestSuiteSystemErr" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:28" time="1.091" tests="1">
+        <testcase classname="TestSuiteSystemErr should fetch and render system err" name="TestSuiteSystemErr should fetch and render system err" time="0.102">
+        </testcase>
+    </testsuite>
+    <testsuite name="SideMenu" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:27" time="2.538" tests="4">
+        <testcase classname="SideMenu when attachments should show attachments link" name="SideMenu when attachments should show attachments link" time="0.326">
+        </testcase>
+        <testcase classname="SideMenu when no attachments should not show attachments link" name="SideMenu when no attachments should not show attachments link" time="0.17">
+        </testcase>
+        <testcase classname="SideMenu when coverage should show coverage link" name="SideMenu when coverage should show coverage link" time="0.143">
+        </testcase>
+        <testcase classname="SideMenu when no coverage should not show coverage link" name="SideMenu when no coverage should not show coverage link" time="0.144">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestSuiteList" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:27" time="2.613" tests="2">
+        <testcase classname="TestSuiteList should render group name when a test suite is grouped" name="TestSuiteList should render group name when a test suite is grouped" time="0.422">
+        </testcase>
+        <testcase classname="TestSuiteList should not display group name when test suite has no groups" name="TestSuiteList should not display group name when test suite has no groups" time="0.294">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestCaseFailureListPanel" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:27" time="2.906" tests="2">
+        <testcase classname="TestCaseFailureListPanel should render longer failure text when less than 5 failures" name="TestCaseFailureListPanel should render longer failure text when less than 5 failures" time="0.404">
+        </testcase>
+        <testcase classname="TestCaseFailureListPanel should render shorter failure message when more than 5 failures" name="TestCaseFailureListPanel should render shorter failure message when more than 5 failures" time="0.494">
+        </testcase>
+    </testsuite>
+    <testsuite name="test suite sort util" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:30" time="0.198" tests="1">
+        <testcase classname="test suite sort util should sort failed test cases first, then passed, then skipped" name="test suite sort util should sort failed test cases first, then passed, then skipped" time="0.003">
+        </testcase>
+    </testsuite>
+    <testsuite name="Code text line" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:30" time="0.546" tests="1">
+        <testcase classname="Code text line should call line click handler when line is clicked" name="Code text line should call line click handler when line is clicked" time="0.019">
+        </testcase>
+    </testsuite>
+    <testsuite name="CodeText" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:29" time="0.865" tests="2">
+        <system-out><![CDATA[[
+  {
+    "message": "Warning: An update to CodeText inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act\n    in CodeText",
+    "origin": "    at warningWithoutStack (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:530:32)\n    at warnIfNotCurrentlyActingUpdatesInDEV (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:25848:7)\n    at dispatchAction (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\react-dom\\cjs\\react-dom.development.js:17072:9)\n    at renderComplete (C:\\Users\\atkcr\\projects\\projektor\\ui\\src\\CodeText\\CodeText.tsx:64:5)\n    at renderNextPage (C:\\Users\\atkcr\\projects\\projektor\\ui\\src\\CodeText\\CodeTextProgressiveRender.tsx:53:7)\n    at Timeout.callback [as _onTimeout] (C:\\Users\\atkcr\\projects\\projektor\\ui\\node_modules\\jest-environment-jsdom\\node_modules\\jsdom\\lib\\jsdom\\browser\\Window.js:643:19)\n    at listOnTimeout (internal/timers.js:531:17)\n    at processTimers (internal/timers.js:475:7)",
+    "type": "error"
+  }
+]]]></system-out>
+        <testcase classname="CodeText should split output into lines" name="CodeText should split output into lines" time="0.036">
+        </testcase>
+        <testcase classname="CodeText when output is blank should not show any lines" name="CodeText when output is blank should not show any lines" time="0.035">
+        </testcase>
+    </testsuite>
+    <testsuite name="CodeTextProgressiveRender" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:30" time="0.651" tests="1">
+        <testcase classname="CodeTextProgressiveRender should render lines progressively" name="CodeTextProgressiveRender should render lines progressively" time="0.038">
+        </testcase>
+    </testsuite>
+    <testsuite name="LoadingSection" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:29" time="0.852" tests="4">
+        <testcase classname="LoadingSection should display progress bar when loading" name="LoadingSection should display progress bar when loading" time="0.024">
+        </testcase>
+        <testcase classname="LoadingSection should display success section when successful" name="LoadingSection should display success section when successful" time="0.01">
+        </testcase>
+        <testcase classname="LoadingSection should display error section when errored" name="LoadingSection should display error section when errored" time="0.019">
+        </testcase>
+        <testcase classname="LoadingSection should display custom error component when there is one passed in" name="LoadingSection should display custom error component when there is one passed in" time="0.004">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestCasePage" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:27" time="3.799" tests="2">
+        <testcase classname="TestCasePage should render test case when fetch completes successfully" name="TestCasePage should render test case when fetch completes successfully" time="0.089">
+        </testcase>
+        <testcase classname="TestCasePage should render error when fetching test case fails" name="TestCasePage should render error when fetching test case fails" time="0.019">
+        </testcase>
+    </testsuite>
+    <testsuite name="TestRunDataWrapper" errors="0" failures="0" skipped="0" timestamp="2020-09-11T20:12:22" time="9.267" tests="2">
+        <testcase classname="TestRunDataWrapper should render wrapper when fetch completes successfully" name="TestRunDataWrapper should render wrapper when fetch completes successfully" time="0.153">
+        </testcase>
+        <testcase classname="TestRunDataWrapper should render processing message when fetching test summary fails and results are still processing" name="TestRunDataWrapper should render processing message when fetching test summary fails and results are still processing" time="0.019">
+        </testcase>
+    </testsuite>
+</testsuites>

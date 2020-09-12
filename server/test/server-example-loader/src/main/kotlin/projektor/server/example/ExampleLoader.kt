@@ -12,6 +12,7 @@ import projektor.parser.grouped.model.GitMetadata
 import projektor.parser.grouped.model.ResultsMetadata
 import projektor.server.api.results.SaveResultsResponse
 import projektor.server.example.coverage.JacocoXmlLoader
+import projektor.server.example.coverage.JestXmlLoader
 
 val serverBaseUrl = System.getenv("SERVER_URL") ?: "http://localhost:8080"
 val uiBaseUrl = System.getenv("SERVER_URL") ?: "http://localhost:1234"
@@ -120,6 +121,13 @@ fun loadResultsWithGitButWithoutCoverage() {
     val resultsResponse = sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata))
 
     println("View run with Git metadata and no test coverage at $uiBaseUrl${resultsResponse.uri}")
+}
+
+fun loadJestWithCoverage() {
+    val resultsResponse = sendResultsToServer(ResultsXmlLoader().jestUi())
+    sendCoverageToServer(resultsResponse.id, JestXmlLoader().ui())
+
+    println("View run with Jest results and coverage at $uiBaseUrl${resultsResponse.uri}")
 }
 
 fun sendResultsToServer(resultXmlList: List<String>): SaveResultsResponse =

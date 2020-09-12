@@ -34,6 +34,17 @@ class MetricsStubber {
     fun findWriteMetricsRequestsForMetric(metricContents: String) =
             findWriteMetricsRequests().filter { it.bodyAsString.contains(metricContents) }
 
+    fun findWriteMetricsRequestForCounterMetric(metricName: String) =
+            findWriteMetricsRequestsForMetric("$metricName,metric_type=counter")
+
+    fun verifyWriteMetricsRequestForCounterMetric(metricName: String, expectedCount: Int): Boolean {
+        val metricWriteRequests = findWriteMetricsRequestsForMetric(metricName)
+
+        val metricCounts = metricWriteRequests.map { it.bodyAsString.substringAfter("$metricName,metric_type=counter value=").substring(0, 1).toInt() }
+
+        return metricCounts.any { it >= expectedCount }
+    }
+
     fun findWriteMetricsRequestForCounterMetric(metricName: String, expectedCount: Int) =
             findWriteMetricsRequestsForMetric("$metricName,metric_type=counter value=$expectedCount")
 }

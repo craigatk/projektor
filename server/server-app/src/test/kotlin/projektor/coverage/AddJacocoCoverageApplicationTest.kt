@@ -19,7 +19,7 @@ import strikt.assertions.isEqualTo
 
 @KtorExperimentalAPI
 @ExperimentalStdlibApi
-class AddCoverageApplicationTest : ApplicationTestCase() {
+class AddJacocoCoverageApplicationTest : ApplicationTestCase() {
     @Test
     fun `should add Jacoco coverage to test run then get it`() {
         val publicId = randomPublicId()
