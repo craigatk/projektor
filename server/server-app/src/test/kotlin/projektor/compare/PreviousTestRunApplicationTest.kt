@@ -29,19 +29,19 @@ class PreviousTestRunApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$thisPublicId/previous") {
                 val differentTestRun = testRunDBGenerator.createSimpleTestRun(differentRepoPublicId)
-                testRunDBGenerator.addGitMetadata(differentTestRun, "projektor/different", true, "main")
+                testRunDBGenerator.addGitMetadata(differentTestRun, "projektor/different", true, "main", null)
                 runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), differentRepoPublicId) }
 
                 val oldestTestRun = testRunDBGenerator.createSimpleTestRun(oldestPublicId)
-                testRunDBGenerator.addGitMetadata(oldestTestRun, repoName, true, "main")
+                testRunDBGenerator.addGitMetadata(oldestTestRun, repoName, true, "main", null)
                 runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), oldestPublicId) }
 
                 val newerTestRun = testRunDBGenerator.createSimpleTestRun(previousPublicId)
-                testRunDBGenerator.addGitMetadata(newerTestRun, repoName, true, "main")
+                testRunDBGenerator.addGitMetadata(newerTestRun, repoName, true, "main", null)
                 runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), previousPublicId) }
 
                 val thisPublicTestRun = testRunDBGenerator.createSimpleTestRun(thisPublicId)
-                testRunDBGenerator.addGitMetadata(thisPublicTestRun, repoName, true, "main")
+                testRunDBGenerator.addGitMetadata(thisPublicTestRun, repoName, true, "main", null)
                 runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), thisPublicId) }
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -62,7 +62,7 @@ class PreviousTestRunApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/previous") {
                 val differentTestRun = testRunDBGenerator.createSimpleTestRun(publicId)
-                testRunDBGenerator.addGitMetadata(differentTestRun, repoName, true, "main")
+                testRunDBGenerator.addGitMetadata(differentTestRun, repoName, true, "main", null)
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.NoContent)
             }

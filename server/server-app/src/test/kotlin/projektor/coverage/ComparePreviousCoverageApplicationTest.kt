@@ -5,7 +5,6 @@ import io.ktor.server.testing.*
 import io.ktor.util.*
 import java.math.BigDecimal
 import kotlin.test.assertNotNull
-import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
@@ -27,14 +26,17 @@ class ComparePreviousCoverageApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$thisPublicId/coverage") {
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                        publicId = previousPublicId,
+                        coverageText = JacocoXmlLoader().serverApp(),
+                        repoName = repoName
+                )
 
-                val previousTestRun = testRunDBGenerator.createSimpleTestRun(previousPublicId)
-                testRunDBGenerator.addGitMetadata(previousTestRun, repoName, true, "main")
-                runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), previousPublicId) }
-
-                val thisPublicTestRun = testRunDBGenerator.createSimpleTestRun(thisPublicId)
-                testRunDBGenerator.addGitMetadata(thisPublicTestRun, repoName, true, "main")
-                runBlocking { coverageService.saveReport(JacocoXmlLoader().serverAppReduced(), thisPublicId) }
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                        publicId = thisPublicId,
+                        coverageText = JacocoXmlLoader().serverAppReduced(),
+                        repoName = repoName
+                )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
@@ -85,13 +87,17 @@ class ComparePreviousCoverageApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$thisPublicId/coverage") {
 
-                val previousTestRun = testRunDBGenerator.createSimpleTestRun(previousPublicId)
-                testRunDBGenerator.addGitMetadata(previousTestRun, repoName, true, "main")
-                runBlocking { coverageService.saveReport(JacocoXmlLoader().serverAppReduced(), previousPublicId) }
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                        publicId = previousPublicId,
+                        coverageText = JacocoXmlLoader().serverAppReduced(),
+                        repoName = repoName
+                )
 
-                val thisPublicTestRun = testRunDBGenerator.createSimpleTestRun(thisPublicId)
-                testRunDBGenerator.addGitMetadata(thisPublicTestRun, repoName, true, "main")
-                runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), thisPublicId) }
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                        publicId = thisPublicId,
+                        coverageText = JacocoXmlLoader().serverApp(),
+                        repoName = repoName
+                )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 

@@ -15,7 +15,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -43,7 +43,7 @@ import projektor.database.generated.tables.records.GitMetadataRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class GitMetadata extends TableImpl<GitMetadataRecord> {
 
-    private static final long serialVersionUID = 2027597125;
+    private static final long serialVersionUID = -1002832491;
 
     /**
      * The reference instance of <code>public.git_metadata</code>
@@ -89,6 +89,11 @@ public class GitMetadata extends TableImpl<GitMetadataRecord> {
     public final TableField<GitMetadataRecord, String> ORG_NAME = createField(DSL.name("org_name"), org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
+     * The column <code>public.git_metadata.project_name</code>.
+     */
+    public final TableField<GitMetadataRecord, String> PROJECT_NAME = createField(DSL.name("project_name"), org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
      * Create a <code>public.git_metadata</code> table reference
      */
     public GitMetadata() {
@@ -128,7 +133,7 @@ public class GitMetadata extends TableImpl<GitMetadataRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.GIT_METADATA_IS_MAIN_BRANCH_IDX, Indexes.GIT_METADATA_REPO_NAME_IDX, Indexes.GIT_METADATA_TEST_RUN_ID_IDX);
+        return Arrays.<Index>asList(Indexes.GIT_METADATA_IS_MAIN_BRANCH_IDX, Indexes.GIT_METADATA_PROJECT_NAME_IDX, Indexes.GIT_METADATA_REPO_NAME_IDX, Indexes.GIT_METADATA_TEST_RUN_ID_IDX);
     }
 
     @Override
@@ -182,11 +187,11 @@ public class GitMetadata extends TableImpl<GitMetadataRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<Long, Long, String, Boolean, String, String> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row7<Long, Long, String, Boolean, String, String, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }

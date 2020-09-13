@@ -11,7 +11,6 @@ import kotlin.test.assertNotNull
 import org.awaitility.Awaitility.waitAtMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
-import org.junit.Ignore
 import org.junit.jupiter.api.*
 import projektor.ApplicationTestCase
 import projektor.metrics.MetricsStubber
@@ -64,7 +63,7 @@ class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
     }
 
     @Test
-    @Ignore // This test is just way too flaky, ignoring this until I find a more reliable way to test the metrics
+    @Disabled // This test is just way too flaky, ignoring this until I find a more reliable way to test the metrics
     fun `should record metrics when saving grouped test results`() {
         metricsEnabled = true
         metricsPort = metricsStubber.port()

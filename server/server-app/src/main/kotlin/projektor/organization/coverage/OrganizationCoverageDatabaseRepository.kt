@@ -18,8 +18,9 @@ class OrganizationCoverageDatabaseRepository(private val dslContext: DSLContext)
     override suspend fun findReposWithCoverage(orgName: String): List<RepositoryTestRun> =
             withContext(Dispatchers.IO) {
                 val resultSet = dslContext.selectDistinct(
-                        firstValue(TEST_RUN.PUBLIC_ID).over().partitionBy(GIT_METADATA.REPO_NAME).orderBy(TEST_RUN.CREATED_TIMESTAMP.desc()).`as`("public_id"),
-                        GIT_METADATA.REPO_NAME
+                        firstValue(TEST_RUN.PUBLIC_ID).over().partitionBy(GIT_METADATA.REPO_NAME, GIT_METADATA.PROJECT_NAME).orderBy(TEST_RUN.CREATED_TIMESTAMP.desc()).`as`("public_id"),
+                        GIT_METADATA.REPO_NAME,
+                        GIT_METADATA.PROJECT_NAME
                 )
                         .from(GIT_METADATA)
                         .innerJoin(TEST_RUN).on(GIT_METADATA.TEST_RUN_ID.eq(TEST_RUN.ID))

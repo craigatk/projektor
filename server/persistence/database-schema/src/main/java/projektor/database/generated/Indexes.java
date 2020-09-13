@@ -44,6 +44,7 @@ public class Indexes {
     public static final Index CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX = Indexes0.CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX;
     public static final Index CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_IDX = Indexes0.CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_IDX;
     public static final Index GIT_METADATA_IS_MAIN_BRANCH_IDX = Indexes0.GIT_METADATA_IS_MAIN_BRANCH_IDX;
+    public static final Index GIT_METADATA_PROJECT_NAME_IDX = Indexes0.GIT_METADATA_PROJECT_NAME_IDX;
     public static final Index GIT_METADATA_REPO_NAME_IDX = Indexes0.GIT_METADATA_REPO_NAME_IDX;
     public static final Index GIT_METADATA_TEST_RUN_ID_IDX = Indexes0.GIT_METADATA_TEST_RUN_ID_IDX;
     public static final Index GIT_REPOSITORY_ORG_NAME_IDX = Indexes0.GIT_REPOSITORY_ORG_NAME_IDX;
@@ -67,6 +68,7 @@ public class Indexes {
         public static Index CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX = Internal.createIndex("code_coverage_run_test_run_public_id_idx", CodeCoverageRun.CODE_COVERAGE_RUN, new OrderField[] { CodeCoverageRun.CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID }, false);
         public static Index CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_IDX = Internal.createIndex("code_coverage_stats_code_coverage_run_id_idx", CodeCoverageStats.CODE_COVERAGE_STATS, new OrderField[] { CodeCoverageStats.CODE_COVERAGE_STATS.CODE_COVERAGE_RUN_ID }, false);
         public static Index GIT_METADATA_IS_MAIN_BRANCH_IDX = Internal.createIndex("git_metadata_is_main_branch_idx", GitMetadata.GIT_METADATA, new OrderField[] { GitMetadata.GIT_METADATA.IS_MAIN_BRANCH }, false);
+        public static Index GIT_METADATA_PROJECT_NAME_IDX = Internal.createIndex("git_metadata_project_name_idx", GitMetadata.GIT_METADATA, new OrderField[] { GitMetadata.GIT_METADATA.PROJECT_NAME }, false);
         public static Index GIT_METADATA_REPO_NAME_IDX = Internal.createIndex("git_metadata_repo_name_idx", GitMetadata.GIT_METADATA, new OrderField[] { GitMetadata.GIT_METADATA.REPO_NAME }, false);
         public static Index GIT_METADATA_TEST_RUN_ID_IDX = Internal.createIndex("git_metadata_test_run_id_idx", GitMetadata.GIT_METADATA, new OrderField[] { GitMetadata.GIT_METADATA.TEST_RUN_ID }, false);
         public static Index GIT_REPOSITORY_ORG_NAME_IDX = Internal.createIndex("git_repository_org_name_idx", GitRepository.GIT_REPOSITORY, new OrderField[] { GitRepository.GIT_REPOSITORY.ORG_NAME }, false);

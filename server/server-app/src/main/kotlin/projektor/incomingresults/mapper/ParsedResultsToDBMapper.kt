@@ -90,6 +90,7 @@ fun GitMetadata.toDB(testRunId: Long): GitMetadataDB {
     gitMetadataDB.testRunId = testRunId
     gitMetadataDB.repoName = repoName
     gitMetadataDB.orgName = repoName?.split("/")?.firstOrNull()
+    gitMetadataDB.projectName = projectName
     gitMetadataDB.branchName = branchName
     gitMetadataDB.isMainBranch = isMainBranch
 

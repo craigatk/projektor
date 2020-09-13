@@ -22,7 +22,7 @@ import javax.annotation.processing.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class GitMetadata implements Serializable {
 
-    private static final long serialVersionUID = -395495640;
+    private static final long serialVersionUID = 1551502700;
 
     private Long    id;
     private Long    testRunId;
@@ -30,6 +30,7 @@ public class GitMetadata implements Serializable {
     private Boolean isMainBranch;
     private String  branchName;
     private String  orgName;
+    private String  projectName;
 
     public GitMetadata() {}
 
@@ -40,6 +41,7 @@ public class GitMetadata implements Serializable {
         this.isMainBranch = value.isMainBranch;
         this.branchName = value.branchName;
         this.orgName = value.orgName;
+        this.projectName = value.projectName;
     }
 
     public GitMetadata(
@@ -48,7 +50,8 @@ public class GitMetadata implements Serializable {
         String  repoName,
         Boolean isMainBranch,
         String  branchName,
-        String  orgName
+        String  orgName,
+        String  projectName
     ) {
         this.id = id;
         this.testRunId = testRunId;
@@ -56,6 +59,7 @@ public class GitMetadata implements Serializable {
         this.isMainBranch = isMainBranch;
         this.branchName = branchName;
         this.orgName = orgName;
+        this.projectName = projectName;
     }
 
     public Long getId() {
@@ -112,6 +116,15 @@ public class GitMetadata implements Serializable {
         return this;
     }
 
+    public String getProjectName() {
+        return this.projectName;
+    }
+
+    public GitMetadata setProjectName(String projectName) {
+        this.projectName = projectName;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -157,6 +170,12 @@ public class GitMetadata implements Serializable {
         }
         else if (!orgName.equals(other.orgName))
             return false;
+        if (projectName == null) {
+            if (other.projectName != null)
+                return false;
+        }
+        else if (!projectName.equals(other.projectName))
+            return false;
         return true;
     }
 
@@ -170,6 +189,7 @@ public class GitMetadata implements Serializable {
         result = prime * result + ((this.isMainBranch == null) ? 0 : this.isMainBranch.hashCode());
         result = prime * result + ((this.branchName == null) ? 0 : this.branchName.hashCode());
         result = prime * result + ((this.orgName == null) ? 0 : this.orgName.hashCode());
+        result = prime * result + ((this.projectName == null) ? 0 : this.projectName.hashCode());
         return result;
     }
 
@@ -183,6 +203,7 @@ public class GitMetadata implements Serializable {
         sb.append(", ").append(isMainBranch);
         sb.append(", ").append(branchName);
         sb.append(", ").append(orgName);
+        sb.append(", ").append(projectName);
 
         sb.append(")");
         return sb.toString();
