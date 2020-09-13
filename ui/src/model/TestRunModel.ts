@@ -85,6 +85,7 @@ interface TestSuiteOutput {
 interface TestRunGitMetadata {
   repoName?: string;
   orgName?: string;
+  projectName?: string;
   branchName?: string;
   isMainBranch: boolean;
 }

@@ -25,7 +25,9 @@ const OrganizationCoverageDetails = ({
     const coverageTableRows = organizationCoverage.repositories.map(
       (repositoryCoverage) =>
         ({
-          name: repositoryCoverage.repoName,
+          name: repositoryCoverage.projectName
+            ? `${repositoryCoverage.repoName} ${repositoryCoverage.projectName}`
+            : repositoryCoverage.repoName,
           stats: repositoryCoverage.coverage.overallStats,
           previousTestRunId: repositoryCoverage.coverage.previousTestRunId,
           nameLinkUrl: `/tests/${repositoryCoverage.publicId}/`,
