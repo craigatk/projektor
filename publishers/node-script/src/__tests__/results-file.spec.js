@@ -7,7 +7,7 @@ const {
 const fs = require("fs");
 
 describe("results file", () => {
-  const resultsFileName = defaultResultsFileName;
+  const resultsFileName = "projektor_results_test.json";
 
   afterEach(() => {
     if (fs.existsSync(resultsFileName)) {
