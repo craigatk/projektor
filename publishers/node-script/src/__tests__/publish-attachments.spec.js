@@ -1,4 +1,3 @@
-const waitForExpect = require("wait-for-expect");
 const axios = require("axios");
 const MockAdapter = require("axios-mock-adapter");
 const { collectAndSendResults } = require("../publish");
@@ -20,7 +19,7 @@ describe("publish with attachments", () => {
     const serverUrl = "http://localhost:8080";
 
     mockAxios
-      .onPost("http://localhost:8080/results")
+      .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
     mockAxios
@@ -33,41 +32,37 @@ describe("publish with attachments", () => {
 
     const publishToken = "myPublishToken";
 
-    collectAndSendResults(
+    await collectAndSendResults(
       serverUrl,
       publishToken,
       [fileGlob],
       [attachmentGlob]
     );
 
-    await waitForExpect(() => {
-      expect(mockAxios.history.post.length).toBe(3);
+    expect(mockAxios.history.post.length).toBe(3);
 
-      const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
-        postRequest.url.includes("results")
-      );
-      expect(resultsPostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(
-        publishToken
-      );
+    const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
+      postRequest.url.includes("groupedResults")
+    );
+    expect(resultsPostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(publishToken);
 
-      const postData = resultsPostRequest.data;
-      expect(postData).toContain("resultsDir1-results1");
-      expect(postData).toContain("resultsDir1-results2");
+    const postData = resultsPostRequest.data;
+    expect(postData).toContain("resultsDir1-results1");
+    expect(postData).toContain("resultsDir1-results2");
 
-      const attachment1PostRequest = mockAxios.history.post.find(
-        (postRequest) => postRequest.url.includes("attachments/attachment1.txt")
-      );
-      expect(attachment1PostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(
-        publishToken
-      );
+    const attachment1PostRequest = mockAxios.history.post.find((postRequest) =>
+      postRequest.url.includes("attachments/attachment1.txt")
+    );
+    expect(attachment1PostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(
+      publishToken
+    );
 
-      const attachment2PostRequest = mockAxios.history.post.find(
-        (postRequest) => postRequest.url.includes("attachments/attachment2.txt")
-      );
-      expect(attachment2PostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(
-        publishToken
-      );
-    });
+    const attachment2PostRequest = mockAxios.history.post.find((postRequest) =>
+      postRequest.url.includes("attachments/attachment2.txt")
+    );
+    expect(attachment2PostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(
+      publishToken
+    );
   });
 
   it("should publish results with nested attachments to server", async () => {
@@ -76,7 +71,7 @@ describe("publish with attachments", () => {
     const serverUrl = "http://localhost:8080";
 
     mockAxios
-      .onPost("http://localhost:8080/results")
+      .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "DEF567", uri: "/tests/DEF567" });
 
     mockAxios
@@ -91,23 +86,19 @@ describe("publish with attachments", () => {
       )
       .reply(200);
 
-    collectAndSendResults(serverUrl, null, [fileGlob], [attachmentGlob]);
+    await collectAndSendResults(serverUrl, null, [fileGlob], [attachmentGlob]);
 
-    await waitForExpect(() => {
-      expect(mockAxios.history.post.length).toBe(3);
+    expect(mockAxios.history.post.length).toBe(3);
 
-      const attachment1PostRequest = mockAxios.history.post.find(
-        (postRequest) =>
-          postRequest.url.includes("attachments/attachmentNested1.txt")
-      );
-      expect(attachment1PostRequest).not.toBeNull();
+    const attachment1PostRequest = mockAxios.history.post.find((postRequest) =>
+      postRequest.url.includes("attachments/attachmentNested1.txt")
+    );
+    expect(attachment1PostRequest).not.toBeNull();
 
-      const attachment2PostRequest = mockAxios.history.post.find(
-        (postRequest) =>
-          postRequest.url.includes("attachments/attachmentNested2.txt")
-      );
-      expect(attachment2PostRequest).not.toBeNull();
-    });
+    const attachment2PostRequest = mockAxios.history.post.find((postRequest) =>
+      postRequest.url.includes("attachments/attachmentNested2.txt")
+    );
+    expect(attachment2PostRequest).not.toBeNull();
   });
 
   it("when publishing attachments fails should not fail build", async () => {
@@ -116,7 +107,7 @@ describe("publish with attachments", () => {
     const serverUrl = "http://localhost:8080";
 
     mockAxios
-      .onPost("http://localhost:8080/results")
+      .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "FAIL123", uri: "/tests/FAIL123" });
 
     mockAxios
@@ -125,16 +116,13 @@ describe("publish with attachments", () => {
       )
       .reply(400, null);
 
-    collectAndSendResults(serverUrl, null, [fileGlob], [attachmentGlob]);
+    await collectAndSendResults(serverUrl, null, [fileGlob], [attachmentGlob]);
 
-    await waitForExpect(() => {
-      expect(mockAxios.history.post.length).toBe(3);
+    expect(mockAxios.history.post.length).toBe(3);
 
-      const attachment1PostRequest = mockAxios.history.post.find(
-        (postRequest) =>
-          postRequest.url.includes("attachments/attachmentNested1.txt")
-      );
-      expect(attachment1PostRequest).not.toBeNull();
-    });
+    const attachment1PostRequest = mockAxios.history.post.find((postRequest) =>
+      postRequest.url.includes("attachments/attachmentNested1.txt")
+    );
+    expect(attachment1PostRequest).not.toBeNull();
   });
 });

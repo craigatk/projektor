@@ -22,7 +22,7 @@ describe("Projektor publisher", () => {
     const serverUrl = "http://localhost:8080";
 
     mockAxios
-      .onPost("http://localhost:8080/results")
+      .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
     const resultsBlob = collectResults([fileGlob]);
@@ -82,7 +82,7 @@ describe("Projektor publisher", () => {
     const serverUrl = "http://localhost:8080";
 
     mockAxios
-      .onPost("http://localhost:8080/results")
+      .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
     await collectAndSendResults(serverUrl, null, [fileGlob]);
@@ -100,7 +100,7 @@ describe("Projektor publisher", () => {
     const serverUrl = "http://localhost:8080";
 
     mockAxios
-      .onPost("http://localhost:8080/results")
+      .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
     const publishToken = "myPublishToken";

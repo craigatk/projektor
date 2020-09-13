@@ -58,12 +58,20 @@ async function run(args, publishToken, defaultConfigFilePath) {
   }
 
   if (resultsFileGlobs) {
+    const isCI = process.env.CI && process.env.CI !== "false";
+    const gitRepoName =
+      process.env.VELA_REPO_FULL_NAME || process.env.GITHUB_REPOSITORY;
+    const gitBranchName = findGitBranchName();
+
     const { resultsBlob, reportUrl, publicId } = await collectAndSendResults(
       serverUrl,
       publishToken,
       resultsFileGlobs,
       attachmentFileGlobs,
-      coverageFileGlobs
+      coverageFileGlobs,
+      gitRepoName,
+      gitBranchName,
+      projectName
     );
 
     if (!resultsBlob) {
@@ -72,8 +80,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
       );
     }
 
-    const writeResultsFile = process.env.CI && process.env.CI !== "false";
-    if (writeResultsFile) {
+    if (isCI) {
       writeResultsFileToDisk(publicId, reportUrl, "projektor_report.json");
     }
 
@@ -125,6 +132,14 @@ function printLinkFromFile(resultsFileName) {
 
 function containsTestFailure(resultsBlob) {
   return resultsBlob.indexOf("<failure") != -1;
+}
+
+function findGitBranchName() {
+  const gitRef = process.env.VELA_BUILD_REF || process.env.GITHUB_REF;
+  const gitBranchParts = gitRef ? gitRef.split("/") : [];
+
+  // refs/head/branch-name
+  return gitBranchParts.length === 3 ? gitBranchParts[2] : null;
 }
 
 module.exports = {

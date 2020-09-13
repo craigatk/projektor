@@ -19,7 +19,7 @@ describe("publish with coverage", () => {
     const serverUrl = "http://localhost:8080";
 
     mockAxios
-      .onPost("http://localhost:8080/results")
+      .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
     mockAxios.onPost("http://localhost:8080/run/ABC123/coverage").reply(200);
@@ -33,7 +33,7 @@ describe("publish with coverage", () => {
     expect(mockAxios.history.post.length).toBe(2);
 
     const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("results")
+      postRequest.url.includes("groupedResults")
     );
     expect(resultsPostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(publishToken);
 
@@ -53,7 +53,7 @@ describe("publish with coverage", () => {
     const serverUrl = "http://localhost:8080";
 
     mockAxios
-      .onPost("http://localhost:8080/results")
+      .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "FAIL123", uri: "/tests/FAIL123" });
 
     mockAxios

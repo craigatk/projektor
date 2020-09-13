@@ -20,20 +20,32 @@ describe("Publishing with coverage via CLI", () => {
           "No test results files found in locations"
         );
 
-        expect(stdout).toContain("Sending 1 coverage result(s) to Projektor server")
+        expect(stdout).toContain(
+          "Sending 1 coverage result(s) to Projektor server"
+        );
         expect(stdout).toContain("Finished sending coverage");
 
         const testRunId = extractTestRunId(stdout);
         console.log("Test ID", testRunId);
 
-        const coverageResponse = await fetchCoverage(testRunId, serverPort);
-        expect(coverageResponse.status).toEqual(200);
+        await waitForExpect(async () => {
+          const testRunSummaryResponse = await fetchTestRunSummary(
+            testRunId,
+            serverPort
+          );
+          expect(testRunSummaryResponse.status).toEqual(200);
+        });
 
-        console.log("Coverage data", coverageResponse.data);
+        await waitForExpect(async () => {
+          const coverageResponse = await fetchCoverage(testRunId, serverPort);
+          expect(coverageResponse.status).toEqual(200);
 
-        expect(
-          coverageResponse.data.overall_stats.line_stat.covered_percentage
-        ).toBe(90.5);
+          console.log("Coverage data", coverageResponse.data);
+
+          expect(
+            coverageResponse.data.overall_stats.line_stat.covered_percentage
+          ).toBe(90.5);
+        });
 
         done();
       }

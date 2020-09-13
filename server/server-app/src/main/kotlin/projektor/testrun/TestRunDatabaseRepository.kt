@@ -118,7 +118,10 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
         val gitMetadataDao = GitMetadataDao(configuration)
 
         val gitMetadataDB = git?.toDB(testRunId)
-        gitMetadataDB?.let { gitMetadataDao.insert(it) }
+
+        if (gitMetadataDB?.repoName != null) {
+            gitMetadataDao.insert(gitMetadataDB)
+        }
     }
 
     private fun saveGitRepository(gitMetadata: GitMetadata?) {

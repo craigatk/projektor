@@ -43,7 +43,14 @@ const collectFileContents = (fileGlobs) => {
   });
 };
 
-const sendResults = async (serverUrl, publishToken, resultsBlob) => {
+const sendResults = async (
+  serverUrl,
+  publishToken,
+  resultsBlob,
+  gitRepoName,
+  gitBranchName,
+  projectName
+) => {
   const headers = {};
 
   if (publishToken) {
@@ -54,7 +61,27 @@ const sendResults = async (serverUrl, publishToken, resultsBlob) => {
     headers,
   });
 
-  const resp = await axiosInstance.post(`${serverUrl}/results`, resultsBlob);
+  const groupedResults = {
+    groupedTestSuites: [
+      {
+        groupName: `${projectName || "Tests"}`,
+        testSuitesBlob: resultsBlob,
+      },
+    ],
+    metadata: {
+      git: {
+        repoName: gitRepoName,
+        branchName: gitBranchName,
+        isMainBranch: gitBranchName === "main" || gitBranchName === "master",
+        projectName,
+      },
+    },
+  };
+
+  const resp = await axiosInstance.post(
+    `${serverUrl}/groupedResults`,
+    groupedResults
+  );
 
   return resp.data;
 };
@@ -182,7 +209,10 @@ const collectAndSendResults = async (
   publishToken,
   resultsFileGlobs,
   attachmentFileGlobs,
-  coverageFileGlobs
+  coverageFileGlobs,
+  gitRepoName,
+  gitBranchName,
+  projectName
 ) => {
   console.log(
     `Gathering results from ${resultsFileGlobs} to send to Projektor server ${serverUrl}`
@@ -195,7 +225,10 @@ const collectAndSendResults = async (
       const resultsResponseData = await sendResults(
         serverUrl,
         publishToken,
-        resultsBlob
+        resultsBlob,
+        gitRepoName,
+        gitBranchName,
+        projectName
       );
 
       const publicId = resultsResponseData.id;

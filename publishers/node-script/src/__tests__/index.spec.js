@@ -19,7 +19,7 @@ describe("node script index", () => {
 
   it("should use settings from projektor.json if there is one", async () => {
     mockAxios
-      .onPost("http://localhost:8080/results")
+      .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
     const { reportUrl, publicId } = await run(
@@ -34,6 +34,7 @@ describe("node script index", () => {
     expect(mockAxios.history.post.length).toBe(1);
 
     const postRequest = mockAxios.history.post[0];
+    expect(postRequest.url).toContain("/groupedResults");
     const postData = postRequest.data;
 
     expect(postData).toContain("resultsDir1-results1");
@@ -44,7 +45,7 @@ describe("node script index", () => {
 
   it("should use settings from custom projektor.json if it is specified on command line", async () => {
     mockAxios
-      .onPost("http://localhost:8080/results")
+      .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "DEF345", uri: "/tests/DEF345" });
 
     const { reportUrl, publicId } = await runCLI(
@@ -81,12 +82,12 @@ describe("node script index", () => {
 
   it("should exit with non-zero exit code when a test failure and configured via CLI", async () => {
     mockAxios
-      .onPost("http://localhost:8080/results")
+      .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "FOO123", uri: "/tests/FOO123" });
 
     await runCLI(
       [
-        "--serverUrl=http://localhost:8080/results",
+        "--serverUrl=http://localhost:8080",
         "--exitWithFailure",
         "src/__tests__/resultsWithFailure/*.xml",
       ],
@@ -105,12 +106,12 @@ describe("node script index", () => {
 
   it("should not exit with non-zero exit code when all tests passed and configured via CLI", async () => {
     mockAxios
-      .onPost("http://localhost:8080/results")
+      .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "FOO345", uri: "/tests/FOO345" });
 
     await runCLI(
       [
-        "--serverUrl=http://localhost:8080/results",
+        "--serverUrl=http://localhost:8080",
         "--exitWithFailure",
         "src/__tests__/resultsDir1/*.xml",
       ],
@@ -133,7 +134,7 @@ describe("node script index", () => {
     const serverUrl = "http://localhost:8080";
 
     mockAxios
-      .onPost("http://localhost:8080/results")
+      .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
     mockAxios
@@ -153,7 +154,7 @@ describe("node script index", () => {
     expect(mockAxios.history.post.length).toBe(3);
 
     const postUrls = mockAxios.history.post.map((post) => post.url);
-    expect(postUrls).toContain("http://localhost:8080/results");
+    expect(postUrls).toContain("http://localhost:8080/groupedResults");
     expect(postUrls).toContain(
       "http://localhost:8080/run/ABC123/attachments/attachment1.txt"
     );
@@ -171,7 +172,7 @@ describe("node script index", () => {
     const serverUrl = "http://localhost:8080";
 
     mockAxios
-      .onPost("http://localhost:8080/results")
+      .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
     mockAxios
@@ -191,7 +192,7 @@ describe("node script index", () => {
     expect(mockAxios.history.post.length).toBe(4);
 
     const postUrls = mockAxios.history.post.map((post) => post.url);
-    expect(postUrls).toContain("http://localhost:8080/results");
+    expect(postUrls).toContain("http://localhost:8080/groupedResults");
     expect(postUrls).toContain(
       "http://localhost:8080/run/ABC123/attachments/attachment1.txt"
     );
