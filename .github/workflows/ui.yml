@@ -41,7 +41,15 @@ jobs:
         run: |
           cd ui
           yarn install
-          yarn test:projektor:ci
+          yarn test
+
+      - name: Projektor publish
+        if: failure() || success()
+        env:
+          PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
+        run: |
+          cd ui
+          yarn projektor:jest:ci
 
   ui-cypress-test:
     runs-on: ubuntu-18.04

@@ -3,5 +3,8 @@
   "results": [
     "testResults/*.xml"
   ],
-  "projectName": "node-script"
+  "projectName": "node-script",
+  "coverage": [
+    "coverage/*.xml"
+  ]
 }

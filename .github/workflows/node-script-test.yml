@@ -24,7 +24,7 @@ jobs:
           yarn test
 
       - name: Projektor publish
-        if: failure()
+        if: failure() || success()
         env:
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
         run: |
