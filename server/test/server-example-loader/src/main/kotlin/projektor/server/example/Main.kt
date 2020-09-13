@@ -9,6 +9,7 @@ fun main() {
     loadSingleCoverageExample()
     loadMultipleCoverageExample()
     loadMultipleCoverageWithPreviousRunExample()
+    loadCoverageWithProjectName()
     loadResultsWithGitButWithoutCoverage()
     loadJestWithCoverage()
     loadInvalidExample()

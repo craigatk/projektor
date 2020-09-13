@@ -166,6 +166,55 @@ describe("OrganizationCoveragePage", () => {
     ).toHaveTextContent("98.11%");
   });
 
+  it("should display project name when it is set", async () => {
+    const orgName = "my-proj-org";
+
+    const repoCoverage1 = {
+      publicId: "repoCov1",
+      repoName: `${orgName}/repo1`,
+      projectName: "server",
+      coverage: {
+        groups: [],
+        overallStats: {
+          lineStat: {
+            covered: 10,
+            missed: 1,
+            total: 11,
+            coveredPercentage: 90.11,
+          } as CoverageStat,
+          statementStat: {
+            covered: 10,
+            missed: 1,
+            total: 11,
+            coveredPercentage: 91.11,
+          } as CoverageStat,
+          branchStat: {
+            covered: 10,
+            missed: 1,
+            total: 11,
+            coveredPercentage: 92.11,
+          } as CoverageStat,
+        } as CoverageStats,
+      } as Coverage,
+    } as RepositoryCoverage;
+
+    const organizationCoverage = {
+      repositories: [repoCoverage1],
+    } as OrganizationCoverage;
+
+    mockAxios
+      .onGet(`http://localhost:8080/org/${orgName}/coverage`)
+      .reply(200, organizationCoverage);
+
+    const { findByTestId } = render(
+      <OrganizationCoveragePage orgName={orgName} />
+    );
+
+    expect(await findByTestId("coverage-name-1")).toHaveTextContent(
+      `${orgName}/repo1 server`
+    );
+  });
+
   it("should not display coverage data when the organization doesn't have any repos with coverage", async () => {
     const orgName = "no-coverage";
 

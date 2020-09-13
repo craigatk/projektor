@@ -3,6 +3,7 @@ import { Coverage } from "./TestRunModel";
 interface RepositoryCoverage {
   publicId: string;
   repoName: string;
+  projectName?: string;
   coverage?: Coverage;
 }
 

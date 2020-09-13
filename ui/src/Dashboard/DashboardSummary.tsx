@@ -8,6 +8,7 @@ import TestRunDate from "./TestRunDate";
 import TestRunCleanupDate from "./TestRunCleanupDate";
 import TestRunMessages from "../TestRunMessages/TestRunMessages";
 import GitRepoListItem from "./GitRepoListItem";
+import DashboardSummaryItem from "./DashboardSummaryItem";
 
 interface DashboardSummaryProps {
   publicId: string;
@@ -67,6 +68,13 @@ const DashboardSummary = ({
           <List dense={true}>
             {gitMetadata && gitMetadata.repoName && (
               <GitRepoListItem gitMetadata={gitMetadata} />
+            )}
+            {gitMetadata && gitMetadata.projectName && (
+              <DashboardSummaryItem
+                label="Project"
+                testId="dashboard-summary-project-name"
+                value={gitMetadata.projectName}
+              />
             )}
             <TestRunDate createdTimestamp={createdTimestamp} />
 

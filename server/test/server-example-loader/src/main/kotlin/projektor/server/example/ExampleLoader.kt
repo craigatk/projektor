@@ -108,6 +108,24 @@ fun loadMultipleCoverageWithPreviousRunExample() {
     println("View run with multiple coverage results and previous results at $uiBaseUrl${currentResultsResponse.uri}")
 }
 
+fun loadCoverageWithProjectName() {
+    val repoName = "projektor/projektor"
+    val branchName = "main"
+    val projectName = "server"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    gitMetadata.projectName = projectName
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+
+    val currentResultsResponse = sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata))
+    sendCoverageToServer(currentResultsResponse.id, JacocoXmlLoader().serverApp())
+
+    println("View run coverage and project name at $uiBaseUrl${currentResultsResponse.uri}")
+}
+
 fun loadResultsWithGitButWithoutCoverage() {
     val repoName = "no-coverage/projektor"
     val branchName = "main"
