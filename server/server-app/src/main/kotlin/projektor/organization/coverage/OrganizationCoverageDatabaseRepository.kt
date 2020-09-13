@@ -25,7 +25,7 @@ class OrganizationCoverageDatabaseRepository(private val dslContext: DSLContext)
                         .from(GIT_METADATA)
                         .innerJoin(TEST_RUN).on(GIT_METADATA.TEST_RUN_ID.eq(TEST_RUN.ID))
                         .innerJoin(CODE_COVERAGE_RUN).on(TEST_RUN.PUBLIC_ID.eq(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID))
-                        .where(GIT_METADATA.ORG_NAME.eq(orgName))
+                        .where(GIT_METADATA.ORG_NAME.eq(orgName).and(GIT_METADATA.IS_MAIN_BRANCH.eq(true)))
                         .fetchResultSet()
 
                 val repositoryTestRuns: List<RepositoryTestRun> = resultSet.use {
