@@ -134,6 +134,43 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
     }
 
     @Test
+    fun `should only find main branch runs`() {
+        val orgName = RandomStringUtils.randomAlphabetic(12)
+        val repoName = "$orgName/repo"
+
+        val mainBranchId = randomPublicId()
+        val featureBranchId = randomPublicId()
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Get, "/org/$orgName/coverage") {
+
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                        publicId = mainBranchId,
+                        coverageText = JacocoXmlLoader().serverApp(),
+                        repoName = repoName,
+                        branchName = "main"
+                )
+
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                        publicId = featureBranchId,
+                        coverageText = JacocoXmlLoader().serverApp(),
+                        repoName = repoName,
+                        branchName = "feature/branch"
+                )
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+
+                val organizationCoverage = objectMapper.readValue(response.content, OrganizationCoverage::class.java)
+                assertNotNull(organizationCoverage)
+
+                expectThat(organizationCoverage.repositories).hasSize(1)
+
+                expectThat(organizationCoverage.repositories[0].publicId).isEqualTo(mainBranchId.id)
+            }
+        }
+    }
+
+    @Test
     fun `when no org with name should return 204 response`() {
         val orgName = RandomStringUtils.randomAlphabetic(12)
 
