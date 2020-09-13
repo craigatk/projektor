@@ -4,5 +4,6 @@ data class TestRunGitMetadata(
     val repoName: String?,
     val orgName: String?,
     val branchName: String?,
+    val projectName: String?,
     val isMainBranch: Boolean
 )

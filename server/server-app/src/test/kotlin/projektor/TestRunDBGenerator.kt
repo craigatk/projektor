@@ -72,13 +72,20 @@ class TestRunDBGenerator(
         return testRun
     }
 
-    fun addGitMetadata(testRunDB: TestRunDB, repoName: String, isMainBranch: Boolean, branchName: String): GitMetadataDB {
+    fun addGitMetadata(
+        testRunDB: TestRunDB,
+        repoName: String,
+        isMainBranch: Boolean,
+        branchName: String,
+        projectName: String?
+    ): GitMetadataDB {
         val gitMetadata = GitMetadataDB()
         gitMetadata.testRunId = testRunDB.id
         gitMetadata.repoName = repoName
         gitMetadata.orgName = repoName.split("/").first()
         gitMetadata.isMainBranch = isMainBranch
         gitMetadata.branchName = branchName
+        gitMetadata.projectName = projectName
         gitMetadataDao.insert(gitMetadata)
 
         return gitMetadata
@@ -107,9 +114,15 @@ class TestRunDBGenerator(
         return testRun
     }
 
-    fun createTestRunWithCoverageAndGitMetadata(publicId: PublicId, coverageText: String, repoName: String, branchName: String = "main") {
+    fun createTestRunWithCoverageAndGitMetadata(
+        publicId: PublicId,
+        coverageText: String,
+        repoName: String,
+        branchName: String = "main",
+        projectName: String? = null
+    ) {
         val previousTestRun = createSimpleTestRun(publicId)
-        addGitMetadata(previousTestRun, repoName, branchName == "main", branchName)
+        addGitMetadata(previousTestRun, repoName, branchName == "main", branchName, projectName)
         runBlocking { coverageService.saveReport(coverageText, publicId) }
     }
 

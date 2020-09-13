@@ -25,6 +25,7 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
         val publicId1 = randomPublicId()
         val repo1 = "$orgName/repo1"
         val olderRunRepo1 = randomPublicId()
+        val otherProjectRepo1 = randomPublicId()
 
         val publicId2 = randomPublicId()
         val repo2 = "$orgName/repo2"
@@ -43,12 +44,20 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                         publicId = olderRunRepo1,
                         coverageText = JacocoXmlLoader().serverApp(),
-                        repoName = repo1
+                        repoName = repo1,
+                        projectName = "proj1"
                 )
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                         publicId = publicId1,
                         coverageText = JacocoXmlLoader().serverApp(),
-                        repoName = repo1
+                        repoName = repo1,
+                        projectName = "proj1"
+                )
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                        publicId = otherProjectRepo1,
+                        coverageText = JacocoXmlLoader().serverAppReduced(),
+                        repoName = repo1,
+                        projectName = "proj2"
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -84,14 +93,22 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
                 val organizationCoverage = objectMapper.readValue(response.content, OrganizationCoverage::class.java)
                 assertNotNull(organizationCoverage)
 
-                expectThat(organizationCoverage.repositories).hasSize(3)
+                expectThat(organizationCoverage.repositories).hasSize(4)
 
-                val repositoryData1 = organizationCoverage.repositories.find { it.repoName == repo1 }
-                assertNotNull(repositoryData1)
+                val repositoryDatas1 = organizationCoverage.repositories.filter { it.repoName == repo1 }
+                expectThat(repositoryDatas1).hasSize(2)
 
-                expectThat(repositoryData1.publicId).isEqualTo(publicId1.id)
+                val repo1DataProj1 = repositoryDatas1.find { it.projectName == "proj1" }
+                assertNotNull(repo1DataProj1)
+                expectThat(repo1DataProj1.publicId).isEqualTo(publicId1.id)
+                expectThat(repo1DataProj1.coverage).isNotNull().and {
+                    get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(BigDecimal("97.44"))
+                }
 
-                expectThat(repositoryData1.coverage).isNotNull().and {
+                val repo1DataProj2 = repositoryDatas1.find { it.projectName == "proj2" }
+                assertNotNull(repo1DataProj2)
+                expectThat(repo1DataProj2.publicId).isEqualTo(otherProjectRepo1.id)
+                expectThat(repo1DataProj1.coverage).isNotNull().and {
                     get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(BigDecimal("97.44"))
                 }
 

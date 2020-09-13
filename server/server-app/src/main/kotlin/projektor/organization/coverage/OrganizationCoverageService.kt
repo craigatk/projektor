@@ -17,6 +17,7 @@ class OrganizationCoverageService(
             RepositoryCoverage(
                     publicId = repositoryTestRun.publicId.id,
                     repoName = repositoryTestRun.repoName,
+                    projectName = repositoryTestRun.projectName,
                     coverage = coverage
             )
         }

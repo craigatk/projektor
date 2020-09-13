@@ -33,6 +33,7 @@ class GroupedResultsConverter(
                     git = metadata.git?.let { gitMetadata ->
                         GitMetadata(
                                 repoName = gitMetadata.repoName,
+                                projectName = gitMetadata.projectName,
                                 branchName = gitMetadata.branchName,
                                 isMainBranch = gitMetadata.isMainBranch
                         )

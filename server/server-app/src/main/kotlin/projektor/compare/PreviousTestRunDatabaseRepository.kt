@@ -26,6 +26,12 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
                             .where(GIT_METADATA.IS_MAIN_BRANCH.eq(true)
                                     .and(TEST_RUN.PUBLIC_ID.ne(publicId.id))
                                     .and(GIT_METADATA.REPO_NAME.eq(currentRunInfo.repoName))
+                                    .let {
+                                        if (currentRunInfo.projectName == null)
+                                            it.and(GIT_METADATA.PROJECT_NAME.isNull)
+                                        else
+                                            it.and(GIT_METADATA.PROJECT_NAME.eq(currentRunInfo.projectName))
+                                    }
                                     .and(TEST_RUN.CREATED_TIMESTAMP.lessThan(Timestamp.valueOf(currentRunInfo.createdTimestamp)))
                             )
                             .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
@@ -38,5 +44,5 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
                 }
             }
 
-    data class CurrentRunInfo(val repoName: String, val createdTimestamp: LocalDateTime)
+    data class CurrentRunInfo(val repoName: String, val createdTimestamp: LocalDateTime, val projectName: String?)
 }

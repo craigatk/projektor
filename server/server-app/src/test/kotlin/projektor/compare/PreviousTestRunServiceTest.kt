@@ -17,21 +17,30 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
         val previousTestRunService: PreviousTestRunService by inject()
 
         val previousPublicId = randomPublicId()
+        val previousWithDifferentProjectName = randomPublicId()
         val thisPublicId = randomPublicId()
         val newerPublicId = randomPublicId()
 
         val repoName = "${RandomStringUtils.randomAlphabetic(8)}/${RandomStringUtils.randomAlphabetic(8)}"
 
         val previousTestRun = testRunDBGenerator.createSimpleTestRun(previousPublicId)
-        testRunDBGenerator.addGitMetadata(previousTestRun, repoName, true, "main")
+        testRunDBGenerator.addGitMetadata(previousTestRun, repoName, true, "main", null)
         runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), previousPublicId) }
 
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = previousWithDifferentProjectName,
+                coverageText = JacocoXmlLoader().serverAppReduced(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = "other-project"
+        )
+
         val thisTestRun = testRunDBGenerator.createSimpleTestRun(thisPublicId)
-        testRunDBGenerator.addGitMetadata(thisTestRun, repoName, true, "main")
+        testRunDBGenerator.addGitMetadata(thisTestRun, repoName, true, "main", null)
         runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), thisPublicId) }
 
         val newerTestRun = testRunDBGenerator.createSimpleTestRun(newerPublicId)
-        testRunDBGenerator.addGitMetadata(newerTestRun, repoName, true, "main")
+        testRunDBGenerator.addGitMetadata(newerTestRun, repoName, true, "main", null)
         runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), newerPublicId) }
 
         val returnedId = runBlocking { previousTestRunService.findPreviousMainBranchRunWithCoverage(thisPublicId) }

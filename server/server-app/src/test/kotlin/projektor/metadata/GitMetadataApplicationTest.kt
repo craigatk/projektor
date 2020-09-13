@@ -10,6 +10,7 @@ import projektor.incomingresults.randomPublicId
 import projektor.server.api.metadata.TestRunGitMetadata
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import strikt.assertions.isNull
 import strikt.assertions.isTrue
 
 @KtorExperimentalAPI
@@ -22,10 +23,10 @@ class GitMetadataApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/metadata/git") {
                 val testRun = testRunDBGenerator.createSimpleTestRun(publicId)
-                testRunDBGenerator.addGitMetadata(testRun, "projektor/projektor", true, "main")
+                testRunDBGenerator.addGitMetadata(testRun, "projektor/projektor", true, "main", null)
 
                 val anotherTestRun = testRunDBGenerator.createSimpleTestRun(anotherPublicId)
-                testRunDBGenerator.addGitMetadata(anotherTestRun, "projektor/another", true, "main")
+                testRunDBGenerator.addGitMetadata(anotherTestRun, "projektor/another", true, "main", null)
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
@@ -36,6 +37,36 @@ class GitMetadataApplicationTest : ApplicationTestCase() {
                     get { repoName }.isEqualTo("projektor/projektor")
                     get { orgName }.isEqualTo("projektor")
                     get { branchName }.isEqualTo("main")
+                    get { projectName }.isNull()
+                    get { isMainBranch }.isTrue()
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `should get Git metadata for test run with project name`() {
+        val publicId = randomPublicId()
+        val anotherPublicId = randomPublicId()
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Get, "/run/$publicId/metadata/git") {
+                val testRun = testRunDBGenerator.createSimpleTestRun(publicId)
+                testRunDBGenerator.addGitMetadata(testRun, "projektor/projektor", true, "main", "my-project")
+
+                val anotherTestRun = testRunDBGenerator.createSimpleTestRun(anotherPublicId)
+                testRunDBGenerator.addGitMetadata(anotherTestRun, "projektor/another", true, "main", null)
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+
+                val gitMetadata = objectMapper.readValue(response.content, TestRunGitMetadata::class.java)
+                assertNotNull(gitMetadata)
+
+                expectThat(gitMetadata) {
+                    get { repoName }.isEqualTo("projektor/projektor")
+                    get { orgName }.isEqualTo("projektor")
+                    get { branchName }.isEqualTo("main")
+                    get { projectName }.isEqualTo("my-project")
                     get { isMainBranch }.isTrue()
                 }
             }
