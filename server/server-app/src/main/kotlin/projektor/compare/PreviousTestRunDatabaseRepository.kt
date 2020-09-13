@@ -11,7 +11,11 @@ import projektor.server.api.PublicId
 class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : PreviousTestRunRepository {
     override suspend fun findPreviousMainBranchRunWithCoverage(publicId: PublicId): PublicId? =
             withContext(Dispatchers.IO) {
-                val currentRunInfo = dslContext.select(GIT_METADATA.REPO_NAME, TEST_RUN.CREATED_TIMESTAMP)
+                val currentRunInfo = dslContext.select(
+                                GIT_METADATA.REPO_NAME,
+                                TEST_RUN.CREATED_TIMESTAMP,
+                                GIT_METADATA.PROJECT_NAME
+                        )
                         .from(GIT_METADATA)
                         .innerJoin(TEST_RUN).on(GIT_METADATA.TEST_RUN_ID.eq(TEST_RUN.ID))
                         .where(TEST_RUN.PUBLIC_ID.eq(publicId.id))

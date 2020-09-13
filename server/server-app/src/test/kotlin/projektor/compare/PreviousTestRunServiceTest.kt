@@ -49,4 +49,42 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
         val previousIdFromOldest = runBlocking { previousTestRunService.findPreviousMainBranchRunWithCoverage(previousPublicId) }
         expectThat(previousIdFromOldest).isNull()
     }
+
+    @Test
+    fun `should find previous test run with the same project name`() {
+        val previousTestRunService: PreviousTestRunService by inject()
+
+        val previousPublicId = randomPublicId()
+        val previousWithDifferentProjectName = randomPublicId()
+        val thisPublicId = randomPublicId()
+
+        val repoName = "${RandomStringUtils.randomAlphabetic(8)}/${RandomStringUtils.randomAlphabetic(8)}"
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = previousPublicId,
+                coverageText = JacocoXmlLoader().serverAppReduced(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = "project"
+        )
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = previousWithDifferentProjectName,
+                coverageText = JacocoXmlLoader().serverAppReduced(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = "other-project"
+        )
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = thisPublicId,
+                coverageText = JacocoXmlLoader().serverAppReduced(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = "project"
+        )
+
+        val returnedId = runBlocking { previousTestRunService.findPreviousMainBranchRunWithCoverage(thisPublicId) }
+        expectThat(returnedId).isEqualTo(previousPublicId)
+    }
 }
