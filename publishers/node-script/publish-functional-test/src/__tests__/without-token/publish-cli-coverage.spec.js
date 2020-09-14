@@ -51,4 +51,43 @@ describe("Publishing with coverage via CLI", () => {
       }
     );
   });
+
+  it("should publish results and coverage to server configured on command line", async (done) => {
+    exec(
+      `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --coverage=coverage/*.xml results/*.xml`,
+      async (error, stdout, stderr) => {
+        verifyOutput(error, stdout, stderr, serverPort);
+        expect(error).toBeNull();
+
+        expect(stdout).toContain(
+          "Sending 1 coverage result(s) to Projektor server"
+        );
+        expect(stdout).toContain("Finished sending coverage");
+
+        const testRunId = extractTestRunId(stdout);
+        console.log("Test ID", testRunId);
+
+        await waitForExpect(async () => {
+          const testRunSummaryResponse = await fetchTestRunSummary(
+            testRunId,
+            serverPort
+          );
+          expect(testRunSummaryResponse.status).toEqual(200);
+        });
+
+        await waitForExpect(async () => {
+          const coverageResponse = await fetchCoverage(testRunId, serverPort);
+          expect(coverageResponse.status).toEqual(200);
+
+          console.log("Coverage data", coverageResponse.data);
+
+          expect(
+            coverageResponse.data.overall_stats.line_stat.covered_percentage
+          ).toBe(90.5);
+        });
+
+        done();
+      }
+    );
+  });
 });
