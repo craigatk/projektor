@@ -93,22 +93,7 @@ const CoverageTable = ({
             cellStyle,
             headerStyle,
           },
-          {
-            title: "Statement",
-            field: "statementCoveredPercentage",
-            render: (rowData) => (
-              <CoverageGraph
-                coverageStat={rowData.statementStat}
-                type="Statement"
-                height={15}
-                inline={true}
-                previousTestRunId={rowData.previousTestRunId}
-                testIdPrefix={`statement-coverage-row-${rowData.idx}`}
-              />
-            ),
-            cellStyle,
-            headerStyle,
-          },
+
           {
             title: "Branch",
             field: "branchCoveredPercentage",
@@ -120,6 +105,22 @@ const CoverageTable = ({
                 inline={true}
                 previousTestRunId={rowData.previousTestRunId}
                 testIdPrefix={`branch-coverage-row-${rowData.idx}`}
+              />
+            ),
+            cellStyle,
+            headerStyle,
+          },
+          {
+            title: "Statement",
+            field: "statementCoveredPercentage",
+            render: (rowData) => (
+              <CoverageGraph
+                coverageStat={rowData.statementStat}
+                type="Statement"
+                height={15}
+                inline={true}
+                previousTestRunId={rowData.previousTestRunId}
+                testIdPrefix={`statement-coverage-row-${rowData.idx}`}
               />
             ),
             cellStyle,

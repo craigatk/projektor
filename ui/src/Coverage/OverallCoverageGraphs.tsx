@@ -34,6 +34,15 @@ const OverallCoverageGraphs = ({
           previousTestRunId={previousTestRunId}
         />
       </Grid>
+      <Grid item sm={4} xs={12} data-testid="overall-coverage-section-branch">
+        <CoverageGraph
+          type="Branch"
+          coverageStat={overallStats.branchStat}
+          height={25}
+          inline={false}
+          previousTestRunId={previousTestRunId}
+        />
+      </Grid>
       <Grid
         item
         sm={4}
@@ -43,15 +52,6 @@ const OverallCoverageGraphs = ({
         <CoverageGraph
           type="Statement"
           coverageStat={overallStats.statementStat}
-          height={25}
-          inline={false}
-          previousTestRunId={previousTestRunId}
-        />
-      </Grid>
-      <Grid item sm={4} xs={12} data-testid="overall-coverage-section-branch">
-        <CoverageGraph
-          type="Branch"
-          coverageStat={overallStats.branchStat}
           height={25}
           inline={false}
           previousTestRunId={previousTestRunId}
