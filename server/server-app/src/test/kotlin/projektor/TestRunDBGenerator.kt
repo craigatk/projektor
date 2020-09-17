@@ -120,10 +120,12 @@ class TestRunDBGenerator(
         repoName: String,
         branchName: String = "main",
         projectName: String? = null
-    ) {
-        val previousTestRun = createSimpleTestRun(publicId)
-        addGitMetadata(previousTestRun, repoName, branchName == "main", branchName, projectName)
+    ): TestRunDB {
+        val testRunDB = createSimpleTestRun(publicId)
+        addGitMetadata(testRunDB, repoName, branchName == "main", branchName, projectName)
         runBlocking { coverageService.saveReport(coverageText, publicId) }
+
+        return testRunDB
     }
 
     fun addTestSuiteGroupToTestRun(testSuiteGroup: TestSuiteGroupDB, testRun: TestRunDB, testSuiteClassNames: List<String>) {

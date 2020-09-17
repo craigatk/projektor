@@ -1,5 +1,7 @@
 package projektor.server.example.coverage
 
+import java.math.BigDecimal
+
 class JacocoXmlLoader : CoverageXmlLoader() {
     fun jacocoXmlParser() = loadTextFromFile("jacoco-xml-parser-jacocoTestReport.xml")
     fun jacocoXmlParserReduced() = loadTextFromFile("jacoco-xml-parser-reduced-jacocoTestReport.xml")
@@ -9,4 +11,13 @@ class JacocoXmlLoader : CoverageXmlLoader() {
 
     fun serverApp() = loadTextFromFile("server-app-jacocoTestReport.xml")
     fun serverAppReduced() = loadTextFromFile("server-app-reduced-jacocoTestReport.xml")
+
+    companion object {
+        val jacocoXmlParserLineCoveragePercentage = BigDecimal("92.86")
+
+        val junitResultsParserLineCoveragePercentage = BigDecimal("92.31")
+
+        val serverAppLineCoveragePercentage = BigDecimal("97.44")
+        val serverAppReducedLineCoveragePercentage = BigDecimal("95.40")
+    }
 }
