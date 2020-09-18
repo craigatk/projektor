@@ -6,6 +6,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.apache.commons.lang3.RandomStringUtils
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.ResultsXmlLoader
 import projektor.parser.grouped.model.GitMetadata
@@ -146,6 +147,26 @@ fun loadJestWithCoverage() {
     sendCoverageToServer(resultsResponse.id, JestXmlLoader().ui())
 
     println("View run with Jest results and coverage at $uiBaseUrl${resultsResponse.uri}")
+}
+
+fun repositoryCoverageTimeline() {
+    val repoName = "${RandomStringUtils.randomAlphabetic(8)}/timeline"
+    val branchName = "main"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+
+    sendCoverageToServer(sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().jacocoXmlParser())
+    sendCoverageToServer(sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().jacocoXmlParserReduced())
+    sendCoverageToServer(sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().serverAppReduced())
+    sendCoverageToServer(sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().serverApp())
+    sendCoverageToServer(sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().junitResultsParser())
+    sendCoverageToServer(sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().junitResultsParserReduced())
+
+    println("View repository coverage timeline at $uiBaseUrl/repository/$repoName")
 }
 
 fun sendResultsToServer(resultXmlList: List<String>): SaveResultsResponse =

@@ -12,5 +12,6 @@ fun main() {
     loadCoverageWithProjectName()
     loadResultsWithGitButWithoutCoverage()
     loadJestWithCoverage()
+    repositoryCoverageTimeline()
     loadInvalidExample()
 }
