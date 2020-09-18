@@ -8,10 +8,11 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  Dot,
+  ResponsiveContainer,
 } from "recharts";
 import moment from "moment";
 import RepositoryCoverageTimelineGraphTooltip from "./RepositoryCoverageTimelineGraphTooltip";
+import RepositoryCoverageTimelineGraphActiveDot from "./RepositoryCoverageTimelineGraphActiveDot";
 
 interface RepositoryCoverageTimelineGraphProps {
   coverageTimeline: RepositoryCoverageTimeline;
@@ -32,40 +33,40 @@ const RepositoryCoverageTimelineGraph = ({
   const yAxisTickFormatter = (value) => `${value}%`;
 
   return (
-    <div data-testid="RepositoryCoverageTimelineGraph">
-      <LineChart
-        width={800}
-        height={300}
-        data={data}
-        margin={{
-          top: 30,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" tickFormatter={xAxisTickFormatter} />
-        <YAxis tickFormatter={yAxisTickFormatter} />
-        <Legend
-          formatter={(value, _) =>
-            value === "lineValue" ? "Line coverage" : "Branch coverage"
-          }
-        />
-        <Tooltip content={<RepositoryCoverageTimelineGraphTooltip />} />
-        <Line
-          type="monotone"
-          dataKey="lineValue"
-          stroke="#8884d8"
-          activeDot={{ r: 8 }}
-        />
-        <Line
-          type="monotone"
-          dataKey="branchValue"
-          stroke="#64aed8"
-          activeDot={{ r: 8 }}
-        />
-      </LineChart>
+    <div data-testid="repository-coverage-timeline-graph">
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart
+          data={data}
+          margin={{
+            top: 30,
+            right: 50,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="date" tickFormatter={xAxisTickFormatter} />
+          <YAxis tickFormatter={yAxisTickFormatter} />
+          <Legend
+            formatter={(value, _) =>
+              value === "lineValue" ? "Line coverage" : "Branch coverage"
+            }
+          />
+          <Tooltip content={<RepositoryCoverageTimelineGraphTooltip />} />
+          <Line
+            type="monotone"
+            dataKey="lineValue"
+            stroke="#8884d8"
+            activeDot={<RepositoryCoverageTimelineGraphActiveDot />}
+          />
+          <Line
+            type="monotone"
+            dataKey="branchValue"
+            stroke="#64aed8"
+            activeDot={<RepositoryCoverageTimelineGraphActiveDot />}
+          />
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 };

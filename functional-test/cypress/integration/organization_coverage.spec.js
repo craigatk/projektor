@@ -29,7 +29,7 @@ context("organization coverage", () => {
       }
     );
 
-    cy.getByTestId("nav-link-organization").click()
+    cy.getByTestId("nav-link-organization").click();
 
     cy.getByTestId("coverage-name-1").should("contain", `${org}/less-coverage`);
     cy.getByTestId("coverage-name-2").should("contain", `${org}/more-coverage`);

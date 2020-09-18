@@ -6,7 +6,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.apache.commons.lang3.RandomStringUtils
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.ResultsXmlLoader
 import projektor.parser.grouped.model.GitMetadata
@@ -150,7 +149,7 @@ fun loadJestWithCoverage() {
 }
 
 fun repositoryCoverageTimeline() {
-    val repoName = "${RandomStringUtils.randomAlphabetic(8)}/timeline"
+    val repoName = "cov-org/cov-repo"
     val branchName = "main"
     val gitMetadata = GitMetadata()
     gitMetadata.repoName = repoName

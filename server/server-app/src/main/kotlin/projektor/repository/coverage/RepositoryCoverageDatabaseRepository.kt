@@ -47,6 +47,7 @@ class RepositoryCoverageDatabaseRepository(private val dslContext: DSLContext) :
                                         .and(CODE_COVERAGE_STATS.SCOPE.eq("GROUP"))
                         )
                         .groupBy(TEST_RUN.PUBLIC_ID, TEST_RUN.CREATED_TIMESTAMP)
+                        .orderBy(TEST_RUN.CREATED_TIMESTAMP.asc())
                         .fetchResultSet()
 
                 val timelineEntries: List<ReportTimelineEntry> = resultSet.use {

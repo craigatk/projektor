@@ -11,6 +11,7 @@ import SideMenuLink from "./SideMenuLink";
 import PinSideMenuItem from "../Pin/PinSideMenuItem";
 import CoverageIcon from "../Icons/CoverageIcon";
 import OrganizationIcon from "../Icons/OrganizationIcon";
+import RepositoryIcon from "../Icons/RepositoryIcon";
 
 interface SideMenuProps {
   publicId: string;
@@ -102,6 +103,18 @@ const SideMenu = ({
             linkTestId="nav-link-attachments"
           />
         ) : null}
+        {gitMetadata && gitMetadata.repoName && (
+          <SideMenuLink
+            linkTo={
+              gitMetadata.projectName
+                ? `/repository/${gitMetadata.repoName}/project/${gitMetadata.projectName}`
+                : `/repository/${gitMetadata.repoName}`
+            }
+            icon={<RepositoryIcon />}
+            linkText="Repository"
+            linkTestId="nav-link-repository"
+          />
+        )}
         {gitMetadata && gitMetadata.orgName && (
           <SideMenuLink
             linkTo={`/organization/${gitMetadata.orgName}`}
