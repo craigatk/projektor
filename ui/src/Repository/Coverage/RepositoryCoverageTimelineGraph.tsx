@@ -13,13 +13,16 @@ import {
 import moment from "moment";
 import RepositoryCoverageTimelineGraphTooltip from "./RepositoryCoverageTimelineGraphTooltip";
 import RepositoryCoverageTimelineGraphActiveDot from "./RepositoryCoverageTimelineGraphActiveDot";
+import RepositoryCoverageTimelineGraphDot from "./RepositoryCoverageTimelineGraphDot";
 
 interface RepositoryCoverageTimelineGraphProps {
   coverageTimeline: RepositoryCoverageTimeline;
+  graphWidth?: number;
 }
 
 const RepositoryCoverageTimelineGraph = ({
   coverageTimeline,
+  graphWidth,
 }: RepositoryCoverageTimelineGraphProps) => {
   const data = coverageTimeline.timelineEntries.map((entry) => ({
     date: moment.utc(entry.createdTimestamp).format("YYYY-MM-DD hh:mm:ss"),
@@ -34,7 +37,7 @@ const RepositoryCoverageTimelineGraph = ({
 
   return (
     <div data-testid="repository-coverage-timeline-graph">
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width={graphWidth || "100%"} height={300}>
         <LineChart
           data={data}
           margin={{
@@ -58,12 +61,14 @@ const RepositoryCoverageTimelineGraph = ({
             dataKey="lineValue"
             stroke="#8884d8"
             activeDot={<RepositoryCoverageTimelineGraphActiveDot />}
+            dot={<RepositoryCoverageTimelineGraphDot />}
           />
           <Line
             type="monotone"
             dataKey="branchValue"
             stroke="#64aed8"
             activeDot={<RepositoryCoverageTimelineGraphActiveDot />}
+            dot={<RepositoryCoverageTimelineGraphDot />}
           />
         </LineChart>
       </ResponsiveContainer>

@@ -13,18 +13,21 @@ const useStyles = makeStyles(() => ({
 
 const RepositoryCoverageTimelineGraphActiveDot = (props) => {
   const classes = useStyles({});
+  const { cy, cx, fill, dataKey, payload } = props;
+  const { publicId } = payload;
+
   const dotOnClick = () => {
-    const publicId = props.payload.publicId;
     navigate(`/tests/${publicId}`);
   };
   return (
     <Dot
       r={8}
-      cy={props.cy}
-      cx={props.cx}
-      fill={props.fill}
+      cy={cy}
+      cx={cx}
+      fill={fill}
       onClick={dotOnClick}
       className={classes.dot}
+      role={`active-dot-${dataKey}-${publicId}`}
     />
   );
 };

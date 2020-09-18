@@ -26,18 +26,27 @@ const RepositoryCoverageTimelineGraphTooltip = (props) => {
     const dateMoment = moment(date);
 
     return (
-      <div className={classes.box}>
+      <div
+        className={classes.box}
+        data-testid="coverage-timeline-graph-tooltip"
+      >
         <div className={classes.line}>
           <span className={classes.label}>Line coverage</span>
-          {lineValue}%
+          <span data-testid="tooltip-line-coverage-percentage">
+            {lineValue}%
+          </span>
         </div>
         <div className={classes.line}>
           <span className={classes.label}>Branch coverage</span>
-          {branchValue}%
+          <span data-testid="tooltip-branch-coverage-percentage">
+            {branchValue}%
+          </span>
         </div>
         <div className={classes.line}>
           <span className={classes.label}>Run date</span>
-          {dateMoment.format("MMM Do YYYY h:mm a")}
+          <span data-testid="tooltip-run-date">
+            {dateMoment.format("MMM Do YYYY h:mm a")}
+          </span>
         </div>
       </div>
     );
