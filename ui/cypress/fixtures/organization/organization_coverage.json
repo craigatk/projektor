@@ -1,0 +1,63 @@
+{
+  "repositories": [
+    {
+      "public_id": "AF5EZOPSKX2K",
+      "repo_name": "cov-org/cov-repo",
+      "project_name": null,
+      "coverage": {
+        "groups": [
+          {
+            "name": "junit-results-parser",
+            "stats": {
+              "statement_stat": {
+                "covered": 0,
+                "missed": 0,
+                "total": 0,
+                "covered_percentage": 0,
+                "covered_percentage_delta": null
+              },
+              "line_stat": {
+                "covered": 7,
+                "missed": 6,
+                "total": 13,
+                "covered_percentage": 53.85,
+                "covered_percentage_delta": null
+              },
+              "branch_stat": {
+                "covered": 41,
+                "missed": 17,
+                "total": 58,
+                "covered_percentage": 70.69,
+                "covered_percentage_delta": null
+              }
+            }
+          }
+        ],
+        "overall_stats": {
+          "statement_stat": {
+            "covered": 41,
+            "missed": 17,
+            "total": 58,
+            "covered_percentage": 70.69,
+            "covered_percentage_delta": null
+          },
+          "line_stat": {
+            "covered": 7,
+            "missed": 6,
+            "total": 13,
+            "covered_percentage": 53.85,
+            "covered_percentage_delta": null
+          },
+          "branch_stat": {
+            "covered": 0,
+            "missed": 0,
+            "total": 0,
+            "covered_percentage": 0,
+            "covered_percentage_delta": null
+          }
+        },
+        "previous_test_run_id": null
+      }
+    }
+  ]
+}
