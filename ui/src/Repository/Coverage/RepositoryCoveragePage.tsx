@@ -41,6 +41,7 @@ const RepositoryCoveragePage = ({
       successComponent={
         <RepositoryCoverageDetails
           coverageTimeline={repositoryCoverageTimeline}
+          repoName={repoName}
         />
       }
     />
