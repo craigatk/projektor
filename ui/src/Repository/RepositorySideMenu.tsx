@@ -3,9 +3,11 @@ import { makeStyles } from "@material-ui/styles";
 import { Drawer, List, Typography } from "@material-ui/core";
 import SideMenuLink from "../SideMenu/SideMenuLink";
 import CoverageIcon from "../Icons/CoverageIcon";
+import OrganizationIcon from "../Icons/OrganizationIcon";
 
 interface RepositorySideMenuProps {
   repoName: string;
+  orgName: string;
   projectName?: string;
 }
 
@@ -29,6 +31,7 @@ const useStyles = makeStyles(() => ({
 
 const RepositorySideMenu = ({
   repoName,
+  orgName,
   projectName,
 }: RepositorySideMenuProps) => {
   const classes = useStyles({});
@@ -55,6 +58,12 @@ const RepositorySideMenu = ({
           icon={<CoverageIcon />}
           linkText="Coverage"
           linkTestId="nav-link-org-coverage"
+        />
+        <SideMenuLink
+          linkTo={`/organization/${orgName}`}
+          icon={<OrganizationIcon />}
+          linkText="Organization"
+          linkTestId="nav-link-organization"
         />
       </List>
     </Drawer>

@@ -1,14 +1,16 @@
 import * as React from "react";
 import { CoverageStat } from "../model/TestRunModel";
-import HSBar from "react-horizontal-stacked-bar-chart";
 import { makeStyles, Typography } from "@material-ui/core";
 import CoveragePercentage from "./CoveragePercentage";
+import CleanLink from "../Link/CleanLink";
+import CoverageGraphImpl from "./CoverageGraphImpl";
 
 interface CoverageGraphProps {
   coverageStat: CoverageStat;
   type: string;
   height: number;
   inline: boolean;
+  coveredPercentageLink?: string;
   previousTestRunId?: string;
   testIdPrefix?: string;
 }
@@ -30,24 +32,11 @@ const CoverageGraph = ({
   type,
   height,
   inline,
+  coveredPercentageLink,
   previousTestRunId,
   testIdPrefix,
 }: CoverageGraphProps) => {
   const classes = useStyles({ inline });
-
-  const coveredDescription = inline ? (
-    <span>
-      {coverageStat.covered} Covered (
-      <CoveragePercentage
-        coverageStat={coverageStat}
-        previousTestRunId={previousTestRunId}
-        testId={`${testIdPrefix}-covered-percentage`}
-      />
-      )
-    </span>
-  ) : (
-    <span>{coverageStat.covered} Covered</span>
-  );
 
   if (coverageStat.total > 0) {
     return (
@@ -64,22 +53,29 @@ const CoverageGraph = ({
             />
           </Typography>
         )}
-        <HSBar // https://www.npmjs.com/package/react-horizontal-stacked-bar-chart
-          data={[
-            {
-              value: coverageStat.covered,
-              description: coveredDescription,
-              color: "rgb(0,255,0)",
-            },
-            {
-              value: coverageStat.missed,
-              description: `${coverageStat.missed}`,
-              color: "red",
-            },
-          ]}
-          showTextDown
-          height={height}
-        />
+        {coveredPercentageLink && (
+          <CleanLink
+            to={coveredPercentageLink}
+            data-testid={`${testIdPrefix}-covered-percentage-link`}
+          >
+            <CoverageGraphImpl
+              coverageStat={coverageStat}
+              height={height}
+              inline={inline}
+              previousTestRunId={previousTestRunId}
+              testIdPrefix={testIdPrefix}
+            />
+          </CleanLink>
+        )}
+        {!coveredPercentageLink && (
+          <CoverageGraphImpl
+            coverageStat={coverageStat}
+            height={height}
+            inline={inline}
+            previousTestRunId={previousTestRunId}
+            testIdPrefix={testIdPrefix}
+          />
+        )}
       </div>
     );
   } else {

@@ -30,7 +30,10 @@ const OrganizationCoverageDetails = ({
             : repositoryCoverage.repoName,
           stats: repositoryCoverage.coverage.overallStats,
           previousTestRunId: repositoryCoverage.coverage.previousTestRunId,
-          nameLinkUrl: `/tests/${repositoryCoverage.publicId}/`,
+          nameLinkUrl: repositoryCoverage.projectName
+            ? `/repository/${repositoryCoverage.repoName}/project/${repositoryCoverage.projectName}`
+            : `/repository/${repositoryCoverage.repoName}`,
+          coveredPercentageLink: `/tests/${repositoryCoverage.publicId}/`,
         } as CoverageTableRow)
     );
 

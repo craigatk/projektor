@@ -122,4 +122,54 @@ describe("CoverageGraph", () => {
 
     expect(queryByTestId("coverage-graph-title-line")).toBeNull();
   });
+
+  it("graph should have link when specified", () => {
+    const coverageStat = {
+      covered: 10,
+      missed: 1,
+      total: 11,
+      coveredPercentage: 98.89,
+    } as CoverageStat;
+
+    const type = "Line";
+
+    const { queryByTestId } = render(
+      <CoverageGraph
+        coverageStat={coverageStat}
+        type={type}
+        height={25}
+        inline={true}
+        testIdPrefix="graph"
+        coveredPercentageLink="/tests/ABC123/"
+      />
+    );
+
+    expect(queryByTestId("graph-covered-percentage-link")).toBeInTheDocument();
+  });
+
+  it("graph should not have link when not specified", () => {
+    const coverageStat = {
+      covered: 10,
+      missed: 1,
+      total: 11,
+      coveredPercentage: 98.89,
+    } as CoverageStat;
+
+    const type = "Line";
+
+    const { queryByTestId } = render(
+      <CoverageGraph
+        coverageStat={coverageStat}
+        type={type}
+        height={25}
+        inline={true}
+        testIdPrefix="graph"
+        coveredPercentageLink={null}
+      />
+    );
+
+    expect(
+      queryByTestId("graph-covered-percentage-link")
+    ).not.toBeInTheDocument();
+  });
 });

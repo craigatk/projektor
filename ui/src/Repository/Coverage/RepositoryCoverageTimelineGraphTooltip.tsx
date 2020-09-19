@@ -51,7 +51,7 @@ const RepositoryCoverageTimelineGraphTooltip = (props) => {
       </div>
     );
   } else {
-    return <span></span>;
+    return <span data-testid="empty-tooltip" />;
   }
 };
 
