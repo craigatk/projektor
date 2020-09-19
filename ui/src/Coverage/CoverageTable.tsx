@@ -8,6 +8,7 @@ import CleanLink from "../Link/CleanLink";
 interface CoverageTableRow {
   name: string;
   stats: CoverageStats;
+  coveredPercentageLink?: string;
   previousTestRunId?: string;
   nameLinkUrl?: string;
 }
@@ -86,6 +87,7 @@ const CoverageTable = ({
                 type="Line"
                 height={15}
                 inline={true}
+                coveredPercentageLink={rowData.coveredPercentageLink}
                 previousTestRunId={rowData.previousTestRunId}
                 testIdPrefix={`line-coverage-row-${rowData.idx}`}
               />
@@ -103,6 +105,7 @@ const CoverageTable = ({
                 type="Branch"
                 height={15}
                 inline={true}
+                coveredPercentageLink={rowData.coveredPercentageLink}
                 previousTestRunId={rowData.previousTestRunId}
                 testIdPrefix={`branch-coverage-row-${rowData.idx}`}
               />
@@ -119,6 +122,7 @@ const CoverageTable = ({
                 type="Statement"
                 height={15}
                 inline={true}
+                coveredPercentageLink={rowData.coveredPercentageLink}
                 previousTestRunId={rowData.previousTestRunId}
                 testIdPrefix={`statement-coverage-row-${rowData.idx}`}
               />
@@ -135,6 +139,7 @@ const CoverageTable = ({
           statementCoveredPercentage: row.stats.lineStat.coveredPercentage,
           branchStat: row.stats.branchStat,
           branchCoveredPercentage: row.stats.lineStat.coveredPercentage,
+          coveredPercentageLink: row.coveredPercentageLink,
           previousTestRunId: row.previousTestRunId,
           nameLinkUrl: row.nameLinkUrl,
           idx: idx + 1,

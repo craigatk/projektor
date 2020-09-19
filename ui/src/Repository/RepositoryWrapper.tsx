@@ -46,7 +46,7 @@ const RepositoryWrapper = ({
           {repoName} {projectName || ""}
         </Typography>
       </AppBar>
-      <RepositorySideMenu repoName={repoName} />
+      <RepositorySideMenu orgName={orgPart} repoName={repoName} />
       <main className={classes.content}>
         <Router>
           <RepositoryCoveragePage
