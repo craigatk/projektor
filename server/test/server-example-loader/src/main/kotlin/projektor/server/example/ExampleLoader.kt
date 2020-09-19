@@ -148,6 +148,26 @@ fun loadJestWithCoverage() {
     println("View run with Jest results and coverage at $uiBaseUrl${resultsResponse.uri}")
 }
 
+fun repositoryCoverageTimeline() {
+    val repoName = "cov-org/cov-repo"
+    val branchName = "main"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+
+    sendCoverageToServer(sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().jacocoXmlParser())
+    sendCoverageToServer(sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().jacocoXmlParserReduced())
+    sendCoverageToServer(sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().serverAppReduced())
+    sendCoverageToServer(sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().serverApp())
+    sendCoverageToServer(sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().junitResultsParser())
+    sendCoverageToServer(sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().junitResultsParserReduced())
+
+    println("View repository coverage timeline at $uiBaseUrl/repository/$repoName")
+}
+
 fun sendResultsToServer(resultXmlList: List<String>): SaveResultsResponse =
         resultXmlList.joinToString("\n").let(::sendResultsToServer)
 

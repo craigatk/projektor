@@ -3,7 +3,6 @@ package projektor.organization
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.*
-import java.math.BigDecimal
 import kotlin.test.assertNotNull
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
@@ -11,6 +10,10 @@ import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.organization.OrganizationCoverage
 import projektor.server.example.coverage.JacocoXmlLoader
+import projektor.server.example.coverage.JacocoXmlLoader.Companion.jacocoXmlParserLineCoveragePercentage
+import projektor.server.example.coverage.JacocoXmlLoader.Companion.junitResultsParserLineCoveragePercentage
+import projektor.server.example.coverage.JacocoXmlLoader.Companion.serverAppLineCoveragePercentage
+import projektor.server.example.coverage.JacocoXmlLoader.Companion.serverAppReducedLineCoveragePercentage
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
@@ -102,14 +105,14 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
                 assertNotNull(repo1DataProj1)
                 expectThat(repo1DataProj1.publicId).isEqualTo(publicId1.id)
                 expectThat(repo1DataProj1.coverage).isNotNull().and {
-                    get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(BigDecimal("97.44"))
+                    get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(serverAppLineCoveragePercentage)
                 }
 
                 val repo1DataProj2 = repositoryDatas1.find { it.projectName == "proj2" }
                 assertNotNull(repo1DataProj2)
                 expectThat(repo1DataProj2.publicId).isEqualTo(otherProjectRepo1.id)
-                expectThat(repo1DataProj1.coverage).isNotNull().and {
-                    get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(BigDecimal("97.44"))
+                expectThat(repo1DataProj2.coverage).isNotNull().and {
+                    get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(serverAppReducedLineCoveragePercentage)
                 }
 
                 val repositoryData2 = organizationCoverage.repositories.find { it.repoName == repo2 }
@@ -118,7 +121,7 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
                 expectThat(repositoryData2.publicId).isEqualTo(publicId2.id)
 
                 expectThat(repositoryData2.coverage).isNotNull().and {
-                    get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(BigDecimal("92.86"))
+                    get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(jacocoXmlParserLineCoveragePercentage)
                 }
 
                 val repositoryData3 = organizationCoverage.repositories.find { it.repoName == repo3 }
@@ -127,7 +130,7 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
                 expectThat(repositoryData3.publicId).isEqualTo(publicId3.id)
 
                 expectThat(repositoryData3.coverage).isNotNull().and {
-                    get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(BigDecimal("92.31"))
+                    get { overallStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(junitResultsParserLineCoveragePercentage)
                 }
             }
         }

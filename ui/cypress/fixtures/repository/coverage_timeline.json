@@ -1,0 +1,166 @@
+{
+  "timeline_entries": [
+    {
+      "public_id": "2XMM8MYQTKM0",
+      "created_timestamp": "2020-09-10T14:29:06.099989Z",
+      "coverage_stats": {
+        "statement_stat": {
+          "covered": 87,
+          "missed": 4,
+          "total": 91,
+          "covered_percentage": 95.6,
+          "covered_percentage_delta": null
+        },
+        "line_stat": {
+          "covered": 13,
+          "missed": 1,
+          "total": 14,
+          "covered_percentage": 92.86,
+          "covered_percentage_delta": null
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "total": 0,
+          "covered_percentage": 0,
+          "covered_percentage_delta": null
+        }
+      }
+    },
+    {
+      "public_id": "3RZRSBCSALZ2",
+      "created_timestamp": "2020-09-12T14:29:06.156063Z",
+      "coverage_stats": {
+        "statement_stat": {
+          "covered": 77,
+          "missed": 14,
+          "total": 91,
+          "covered_percentage": 84.62,
+          "covered_percentage_delta": null
+        },
+        "line_stat": {
+          "covered": 3,
+          "missed": 11,
+          "total": 14,
+          "covered_percentage": 21.43,
+          "covered_percentage_delta": null
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "total": 0,
+          "covered_percentage": 0,
+          "covered_percentage_delta": null
+        }
+      }
+    },
+    {
+      "public_id": "WJIHLB2MTRAW",
+      "created_timestamp": "2020-09-13T14:29:06.207412Z",
+      "coverage_stats": {
+        "statement_stat": {
+          "covered": 8796,
+          "missed": 355,
+          "total": 9151,
+          "covered_percentage": 96.12,
+          "covered_percentage_delta": null
+        },
+        "line_stat": {
+          "covered": 933,
+          "missed": 45,
+          "total": 978,
+          "covered_percentage": 95.4,
+          "covered_percentage_delta": null
+        },
+        "branch_stat": {
+          "covered": 171,
+          "missed": 77,
+          "total": 248,
+          "covered_percentage": 68.95,
+          "covered_percentage_delta": null
+        }
+      }
+    },
+    {
+      "public_id": "BYYUCDMQ5WJ6",
+      "created_timestamp": "2020-09-14T14:29:06.284512Z",
+      "coverage_stats": {
+        "statement_stat": {
+          "covered": 8816,
+          "missed": 335,
+          "total": 9151,
+          "covered_percentage": 96.34,
+          "covered_percentage_delta": null
+        },
+        "line_stat": {
+          "covered": 953,
+          "missed": 25,
+          "total": 978,
+          "covered_percentage": 97.44,
+          "covered_percentage_delta": null
+        },
+        "branch_stat": {
+          "covered": 191,
+          "missed": 57,
+          "total": 248,
+          "covered_percentage": 77.02,
+          "covered_percentage_delta": null
+        }
+      }
+    },
+    {
+      "public_id": "KRXBI9GH213D",
+      "created_timestamp": "2020-09-15T14:29:06.366582Z",
+      "coverage_stats": {
+        "statement_stat": {
+          "covered": 46,
+          "missed": 12,
+          "total": 58,
+          "covered_percentage": 79.31,
+          "covered_percentage_delta": null
+        },
+        "line_stat": {
+          "covered": 12,
+          "missed": 1,
+          "total": 13,
+          "covered_percentage": 92.31,
+          "covered_percentage_delta": null
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "total": 0,
+          "covered_percentage": 0,
+          "covered_percentage_delta": null
+        }
+      }
+    },
+    {
+      "public_id": "XPF0IHDJBLOO",
+      "created_timestamp": "2020-09-18T14:29:06.404585Z",
+      "coverage_stats": {
+        "statement_stat": {
+          "covered": 41,
+          "missed": 17,
+          "total": 58,
+          "covered_percentage": 70.69,
+          "covered_percentage_delta": null
+        },
+        "line_stat": {
+          "covered": 7,
+          "missed": 6,
+          "total": 13,
+          "covered_percentage": 53.85,
+          "covered_percentage_delta": null
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "total": 0,
+          "covered_percentage": 0,
+          "covered_percentage_delta": null
+        }
+      }
+    }
+  ]
+}

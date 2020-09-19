@@ -14,6 +14,10 @@ fun Route.ui() {
         resources("static/")
         defaultResource("static/index.html")
     }
+    static("/repository/{path...}") {
+        resources("static/")
+        defaultResource("static/index.html")
+    }
     static("/tests/{path...}") {
         resources("static/")
         defaultResource("static/index.html")

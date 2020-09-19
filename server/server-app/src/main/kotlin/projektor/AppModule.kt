@@ -31,6 +31,9 @@ import projektor.organization.coverage.OrganizationCoverageDatabaseRepository
 import projektor.organization.coverage.OrganizationCoverageRepository
 import projektor.organization.coverage.OrganizationCoverageService
 import projektor.parser.grouped.GroupedResultsParser
+import projektor.repository.coverage.RepositoryCoverageDatabaseRepository
+import projektor.repository.coverage.RepositoryCoverageRepository
+import projektor.repository.coverage.RepositoryCoverageService
 import projektor.results.processor.TestResultsProcessor
 import projektor.schedule.Scheduler
 import projektor.schedule.SchedulerLock
@@ -75,6 +78,8 @@ fun createAppModule(
 
     single<OrganizationCoverageRepository> { OrganizationCoverageDatabaseRepository(get()) }
 
+    single<RepositoryCoverageRepository> { RepositoryCoverageDatabaseRepository(get()) }
+
     single { CoverageService(get(), get()) }
     single { GroupedResultsParser() }
     single { GroupedResultsConverter(get(), get()) }
@@ -93,4 +98,6 @@ fun createAppModule(
     single { Scheduler(get()) }
 
     single { OrganizationCoverageService(get(), get()) }
+
+    single { RepositoryCoverageService(get()) }
 }

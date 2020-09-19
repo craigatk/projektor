@@ -65,3 +65,10 @@ Cypress.Commands.add("holdShift", () =>
 Cypress.Commands.add("releaseShift", () =>
   cy.get("body").type("{shift}", { release: true })
 );
+
+Cypress.Commands.add("getByRole", role =>
+    cy.get(`[role="${role}"]`)
+);
+Cypress.Commands.add("roleShouldExist", role =>
+    cy.getByRole(role).should("exist")
+);
