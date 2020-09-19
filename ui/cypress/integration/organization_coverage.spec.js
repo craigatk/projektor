@@ -48,16 +48,16 @@ context("organization coverage", () => {
 
     cy.testIdShouldExist("organization-coverage-details");
 
-    const publicId = "AF5EZOPSKX2K"
+    const publicId = "AF5EZOPSKX2K";
 
     cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
 
     cy.route("GET", `run/${publicId}`, "fixture:test_run.json");
 
     cy.route(
-        "GET",
-        `run/${publicId}/cases/failed`,
-        "fixture:failed_test_cases.json"
+      "GET",
+      `run/${publicId}/cases/failed`,
+      "fixture:failed_test_cases.json"
     );
 
     cy.getByTestId("line-coverage-row-1-covered-percentage-link").click();

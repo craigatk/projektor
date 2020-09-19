@@ -56,4 +56,18 @@ describe("RepositoryCoveragePage", () => {
 
     await findByTestId("repository-coverage-timeline-graph");
   });
+
+  it("should display message when no coverage timeline", async () => {
+    const repoName = "my-org/my-repo";
+
+    mockAxios
+      .onGet(`http://localhost:8080/repo/${repoName}/coverage/timeline`)
+      .reply(200);
+
+    const { findByTestId } = render(
+      <RepositoryCoveragePage orgPart="my-org" repoPart="my-repo" />
+    );
+
+    await findByTestId("repo-no-coverage");
+  });
 });
