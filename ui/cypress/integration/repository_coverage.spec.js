@@ -102,7 +102,7 @@ context("repository coverage", () => {
     cy.roleShouldExist(`dot-lineValue-${publicId}`);
   });
 
-  it("when project name should link from repository on side nav to show repository coverage data", () => {
+  it("when project name should link from repository on side nav of test run page to show repository coverage data", () => {
     const repoName = "cov-org/cov-repo";
     const publicId = "WJIHLB2MTRAW";
     const projectName = "cov-project";
@@ -137,5 +137,32 @@ context("repository coverage", () => {
 
     cy.testIdShouldExist("repository-coverage-timeline-graph");
     cy.roleShouldExist(`dot-lineValue-${publicId}`);
+  });
+
+  it("when project name should link from repository on side nav of repository page", () => {
+    const repoName = "cov-org/cov-repo";
+    const projectName = "cov-project";
+
+    cy.server();
+
+    cy.route(
+      "GET",
+      `repo/${repoName}/project/${projectName}/coverage/timeline`,
+      "fixture:repository/coverage_timeline.json"
+    );
+
+    cy.visit(
+      `http://localhost:1234/repository/${repoName}/project/${projectName}`
+    );
+
+    cy.testIdShouldExist("repository-coverage-timeline-graph");
+
+    cy.getByTestId("nav-link-repo-coverage").click();
+
+    cy.testIdShouldExist("repository-coverage-timeline-graph");
+    cy.url().should(
+      "contain",
+      `/repository/${repoName}/project/${projectName}`
+    );
   });
 });
