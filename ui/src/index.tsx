@@ -12,7 +12,7 @@ const App = () => {
       <Welcome path="/" />
       <OrganizationWrapper path="/organization/:orgName/*" orgName="" />
       <RepositoryWrapper
-        path="/repository/:orgPart/:repoPart/project/:projectName*"
+        path="/repository/:orgPart/:repoPart/project/:projectName/*"
         orgPart=""
         repoPart=""
       />

@@ -54,7 +54,7 @@ const RepositorySideMenu = ({
           linkTo={repositoryLinkUrlUI(repoName, projectName, "/coverage")}
           icon={<CoverageIcon />}
           linkText="Coverage"
-          linkTestId="nav-link-org-coverage"
+          linkTestId="nav-link-repo-coverage"
         />
         <SideMenuLink
           linkTo={`/organization/${orgName}`}
