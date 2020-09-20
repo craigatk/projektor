@@ -12,6 +12,7 @@ import PinSideMenuItem from "../Pin/PinSideMenuItem";
 import CoverageIcon from "../Icons/CoverageIcon";
 import OrganizationIcon from "../Icons/OrganizationIcon";
 import RepositoryIcon from "../Icons/RepositoryIcon";
+import { repositoryLinkUrlUI } from "../Repository/RepositoryLink";
 
 interface SideMenuProps {
   publicId: string;
@@ -23,7 +24,7 @@ interface SideMenuProps {
 
 const sideNavWidth = 180;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   drawer: {
     width: sideNavWidth,
     flexShrink: 0,
@@ -105,11 +106,11 @@ const SideMenu = ({
         ) : null}
         {gitMetadata && gitMetadata.repoName && (
           <SideMenuLink
-            linkTo={
-              gitMetadata.projectName
-                ? `/repository/${gitMetadata.repoName}/project/${gitMetadata.projectName}`
-                : `/repository/${gitMetadata.repoName}`
-            }
+            linkTo={repositoryLinkUrlUI(
+              gitMetadata.repoName,
+              gitMetadata.projectName,
+              null
+            )}
             icon={<RepositoryIcon />}
             linkText="Repository"
             linkTestId="nav-link-repository"

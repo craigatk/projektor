@@ -4,6 +4,7 @@ import { Drawer, List, Typography } from "@material-ui/core";
 import SideMenuLink from "../SideMenu/SideMenuLink";
 import CoverageIcon from "../Icons/CoverageIcon";
 import OrganizationIcon from "../Icons/OrganizationIcon";
+import { repositoryLinkUrlUI } from "./RepositoryLink";
 
 interface RepositorySideMenuProps {
   repoName: string;
@@ -50,11 +51,7 @@ const RepositorySideMenu = ({
       </Typography>
       <List>
         <SideMenuLink
-          linkTo={
-            projectName
-              ? `/repository/${repoName}/project/${projectName}/coverage`
-              : `/repository/${repoName}/coverage`
-          }
+          linkTo={repositoryLinkUrlUI(repoName, projectName, "/coverage")}
           icon={<CoverageIcon />}
           linkText="Coverage"
           linkTestId="nav-link-org-coverage"
