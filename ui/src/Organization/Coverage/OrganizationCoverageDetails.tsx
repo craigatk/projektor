@@ -3,6 +3,7 @@ import { OrganizationCoverage } from "../../model/OrganizationModel";
 import CoverageTable, { CoverageTableRow } from "../../Coverage/CoverageTable";
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
+import { repositoryLinkUrlUI } from "../../Repository/RepositoryLink";
 
 interface OrganizationCoverageDetailsProps {
   orgName: string;
@@ -30,9 +31,11 @@ const OrganizationCoverageDetails = ({
             : repositoryCoverage.repoName,
           stats: repositoryCoverage.coverage.overallStats,
           previousTestRunId: repositoryCoverage.coverage.previousTestRunId,
-          nameLinkUrl: repositoryCoverage.projectName
-            ? `/repository/${repositoryCoverage.repoName}/project/${repositoryCoverage.projectName}`
-            : `/repository/${repositoryCoverage.repoName}`,
+          nameLinkUrl: repositoryLinkUrlUI(
+            repositoryCoverage.repoName,
+            repositoryCoverage.projectName,
+            null
+          ),
           coveredPercentageLink: `/tests/${repositoryCoverage.publicId}/`,
         } as CoverageTableRow)
     );

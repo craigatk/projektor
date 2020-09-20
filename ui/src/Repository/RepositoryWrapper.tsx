@@ -11,7 +11,7 @@ interface RepositoryWrapperProps extends RouteComponentProps {
   projectName?: string;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: "flex",
   },
@@ -46,7 +46,11 @@ const RepositoryWrapper = ({
           {repoName} {projectName || ""}
         </Typography>
       </AppBar>
-      <RepositorySideMenu orgName={orgPart} repoName={repoName} />
+      <RepositorySideMenu
+        orgName={orgPart}
+        repoName={repoName}
+        projectName={projectName}
+      />
       <main className={classes.content}>
         <Router>
           <RepositoryCoveragePage

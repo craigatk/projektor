@@ -69,6 +69,13 @@ const DashboardSummary = ({
             {gitMetadata && gitMetadata.repoName && (
               <GitRepoListItem gitMetadata={gitMetadata} />
             )}
+            {gitMetadata && gitMetadata.branchName && (
+              <DashboardSummaryItem
+                label="Branch"
+                testId="dashboard-summary-branch-name"
+                value={gitMetadata.branchName}
+              />
+            )}
             {gitMetadata && gitMetadata.projectName && (
               <DashboardSummaryItem
                 label="Project"
