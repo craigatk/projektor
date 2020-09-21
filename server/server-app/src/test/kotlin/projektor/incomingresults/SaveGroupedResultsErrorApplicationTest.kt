@@ -81,4 +81,13 @@ class SaveGroupedResultsErrorApplicationTest : ApplicationTestCase() {
             }
         }
     }
+
+    @Test
+    fun `when empty results body should respond with 400`() {
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/groupedResults").apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.BadRequest)
+            }
+        }
+    }
 }
