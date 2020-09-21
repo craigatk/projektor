@@ -28,6 +28,7 @@ class ApplyTestResultsBuildListener {
         Logger logger = project.logger
 
         ProjektorTaskFinishedListener projektorTaskFinishedListener = new ProjektorTaskFinishedListener(
+                new DateProvider(),
                 logger
         )
         project.gradle.taskGraph.addTaskExecutionListener(projektorTaskFinishedListener)

@@ -99,6 +99,7 @@ interface TestRunSummary {
   passed: boolean;
   cumulativeDuration: number;
   averageDuration: number;
+  wallClockDuration?: number;
   slowestTestCaseDuration: number;
   createdTimestamp: Date;
 }

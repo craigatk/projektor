@@ -16,6 +16,7 @@ fun TestRunSummary.toDB(): TestRunDB {
     testRunDB.averageDuration = averageDuration
     testRunDB.slowestTestCaseDuration = slowestTestCaseDuration
     testRunDB.createdTimestamp = Timestamp.from(createdTimestamp)
+    testRunDB.wallClockDuration = wallClockDuration
 
     return testRunDB
 }

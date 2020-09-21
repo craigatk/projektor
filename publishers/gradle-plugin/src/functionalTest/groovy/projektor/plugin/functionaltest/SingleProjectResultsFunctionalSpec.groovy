@@ -56,6 +56,10 @@ class SingleProjectResultsFunctionalSpec extends ProjektorPluginFunctionalSpecif
             assert testRun.testSuites.find { it.className == expectedClassName }
         }
 
+        and:
+        testRun.summary.wallClockDuration != null
+        testRun.summary.wallClockDuration > BigDecimal.ZERO
+
         when:
         Response<List<TestSuite>> testSuitesResponse = projektorTestRunApi.testSuites(testId).execute()
 

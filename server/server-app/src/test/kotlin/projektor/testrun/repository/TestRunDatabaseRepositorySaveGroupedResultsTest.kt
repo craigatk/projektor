@@ -42,7 +42,7 @@ class TestRunDatabaseRepositorySaveGroupedResultsTest : DatabaseRepositoryTestCa
                 "directory-2"
         )
 
-        val groupedResults = GroupedResults(listOf(testGroup1, testGroup2), null)
+        val groupedResults = GroupedResults(listOf(testGroup1, testGroup2), null, null)
 
         runBlocking { testRunDatabaseRepository.saveGroupedTestRun(publicId, groupedResults) }
 
@@ -92,7 +92,7 @@ class TestRunDatabaseRepositorySaveGroupedResultsTest : DatabaseRepositoryTestCa
                 "directory"
         )
 
-        val groupedResults = GroupedResults(listOf(testGroup), null)
+        val groupedResults = GroupedResults(listOf(testGroup), null, null)
 
         runBlocking { testRunDatabaseRepository.saveGroupedTestRun(publicId, groupedResults) }
 

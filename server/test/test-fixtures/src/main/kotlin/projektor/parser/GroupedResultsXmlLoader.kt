@@ -1,5 +1,6 @@
 package projektor.parser
 
+import java.math.BigDecimal
 import projektor.parser.grouped.GroupedResultsParser
 import projektor.parser.grouped.model.GroupedResults
 import projektor.parser.grouped.model.GroupedTestSuites
@@ -9,7 +10,7 @@ class GroupedResultsXmlLoader {
     private val groupedResultsParser = GroupedResultsParser()
     private val resultsXmlLoader = ResultsXmlLoader()
 
-    fun passingGroupedResults(metadata: ResultsMetadata? = null): String {
+    fun passingGroupedResults(metadata: ResultsMetadata? = null, wallClockDuration: BigDecimal? = null): String {
         val groupedTestSuites1 = GroupedTestSuites()
         groupedTestSuites1.groupName = "Group1"
         groupedTestSuites1.groupLabel = "unitTest"
@@ -25,6 +26,7 @@ class GroupedResultsXmlLoader {
         val groupedResults = GroupedResults()
         groupedResults.groupedTestSuites = listOf(groupedTestSuites1, groupedTestSuites2)
         groupedResults.metadata = metadata
+        groupedResults.wallClockDuration = wallClockDuration
 
         return groupedResultsParser.serializeGroupedResults(groupedResults)
     }

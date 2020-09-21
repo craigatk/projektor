@@ -17,7 +17,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row11;
+import org.jooq.Row12;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -45,7 +45,7 @@ import projektor.database.generated.tables.records.TestRunRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestRun extends TableImpl<TestRunRecord> {
 
-    private static final long serialVersionUID = -1888364122;
+    private static final long serialVersionUID = 178032035;
 
     /**
      * The reference instance of <code>public.test_run</code>
@@ -114,6 +114,11 @@ public class TestRun extends TableImpl<TestRunRecord> {
      * The column <code>public.test_run.created_timestamp</code>.
      */
     public final TableField<TestRunRecord, Timestamp> CREATED_TIMESTAMP = createField(DSL.name("created_timestamp"), org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false), this, "");
+
+    /**
+     * The column <code>public.test_run.wall_clock_duration</code>.
+     */
+    public final TableField<TestRunRecord, BigDecimal> WALL_CLOCK_DURATION = createField(DSL.name("wall_clock_duration"), org.jooq.impl.SQLDataType.NUMERIC(12, 3), this, "");
 
     /**
      * Create a <code>public.test_run</code> table reference
@@ -200,11 +205,11 @@ public class TestRun extends TableImpl<TestRunRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row11 type methods
+    // Row12 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row11<Long, String, Integer, Integer, Integer, Integer, Boolean, BigDecimal, BigDecimal, BigDecimal, Timestamp> fieldsRow() {
-        return (Row11) super.fieldsRow();
+    public Row12<Long, String, Integer, Integer, Integer, Integer, Boolean, BigDecimal, BigDecimal, BigDecimal, Timestamp, BigDecimal> fieldsRow() {
+        return (Row12) super.fieldsRow();
     }
 }
