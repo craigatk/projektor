@@ -6,6 +6,7 @@ interface TestRunDurationProps {
   publicId: string;
   averageDuration: number;
   cumulativeDuration: number;
+  wallClockDuration?: number;
   slowestTestCaseDuration: number;
 }
 
@@ -20,6 +21,7 @@ const TestRunDuration = ({
   publicId,
   averageDuration,
   cumulativeDuration,
+  wallClockDuration,
   slowestTestCaseDuration,
 }: TestRunDurationProps) => {
   const classes = useStyles({});
@@ -37,6 +39,20 @@ const TestRunDuration = ({
           }
         />
       </ListItem>
+      {wallClockDuration && (
+        <ListItem>
+          <ListItemText
+            primary={
+              <span>
+                <span className={classes.label}>Wall clock duration</span>
+                <span data-testid="test-run-wall-clock-duration">
+                  {wallClockDuration}s
+                </span>
+              </span>
+            }
+          />
+        </ListItem>
+      )}
       <ListItem>
         <ListItemText
           primary={

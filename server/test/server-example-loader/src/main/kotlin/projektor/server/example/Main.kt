@@ -6,6 +6,7 @@ fun main() {
     loadCypressExamples()
     loadPassingGroupedExample()
     loadPassingGroupedExampleWithAttachments()
+    loadGroupedExampleWithWallClock()
     loadSingleCoverageExample()
     loadMultipleCoverageExample()
     loadMultipleCoverageWithPreviousRunExample()

@@ -97,6 +97,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
         groupedResults.metadata = new ResultsMetadata(
                 git: GitMetadataFinder.findGitMetadata(gitResolutionConfig, logger)
         )
+        groupedResults.wallClockDuration = projektorTaskFinishedListener.testWallClockDurationInSeconds
 
         ResultsClient resultsClient = new ResultsClient(clientConfig, logger)
         PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)

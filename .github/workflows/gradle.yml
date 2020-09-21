@@ -57,5 +57,6 @@ jobs:
 
     - name: Projektor report URL
       uses: craigatk/projektor-action@v7
+      if: failure() || success()
       with:
         print-link: true

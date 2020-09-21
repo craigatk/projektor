@@ -216,4 +216,18 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     public List<projektor.database.generated.tables.pojos.TestRun> fetchByCreatedTimestamp(Timestamp... values) {
         return fetch(TestRun.TEST_RUN.CREATED_TIMESTAMP, values);
     }
+
+    /**
+     * Fetch records that have <code>wall_clock_duration BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestRun> fetchRangeOfWallClockDuration(BigDecimal lowerInclusive, BigDecimal upperInclusive) {
+        return fetchRange(TestRun.TEST_RUN.WALL_CLOCK_DURATION, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>wall_clock_duration IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestRun> fetchByWallClockDuration(BigDecimal... values) {
+        return fetch(TestRun.TEST_RUN.WALL_CLOCK_DURATION, values);
+    }
 }

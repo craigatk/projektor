@@ -41,6 +41,10 @@ class GroupedResultsConverter(
             )
         }
 
-        GroupedResults(groupedTestSuites, metadata)
+        GroupedResults(
+                groupedTestSuites = groupedTestSuites,
+                metadata = metadata,
+                wallClockDuration = incomingGroupedResults.wallClockDuration
+        )
     }
 }

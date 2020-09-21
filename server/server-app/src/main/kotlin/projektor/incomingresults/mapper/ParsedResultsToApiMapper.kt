@@ -10,7 +10,7 @@ import projektor.server.api.TestRunSummary
 
 val roundingMathContext = MathContext(3, RoundingMode.HALF_UP)
 
-fun toTestRunSummary(publicId: PublicId, testSuites: List<TestSuite>): TestRunSummary {
+fun toTestRunSummary(publicId: PublicId, testSuites: List<TestSuite>, wallClockDuration: BigDecimal?): TestRunSummary {
     val totalTestCount = testSuites.sumBy { it.tests }
     val totalFailureCount = testSuites.sumBy { it.failures }
 
@@ -34,7 +34,8 @@ fun toTestRunSummary(publicId: PublicId, testSuites: List<TestSuite>): TestRunSu
             cumulativeDuration,
             averageDuration,
             slowestTestCaseDuration,
-            Instant.now()
+            Instant.now(),
+            wallClockDuration
     )
 }
 

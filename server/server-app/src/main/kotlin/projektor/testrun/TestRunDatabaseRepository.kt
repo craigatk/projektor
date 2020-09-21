@@ -32,7 +32,7 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
 
     override suspend fun saveTestRun(publicId: PublicId, testSuites: List<ParsedTestSuite>) =
         withContext(Dispatchers.IO) {
-            val testRunSummary = toTestRunSummary(publicId, testSuites)
+            val testRunSummary = toTestRunSummary(publicId, testSuites, null)
             val testRunDB = testRunSummary.toDB()
 
             dslContext.transaction { configuration ->
@@ -51,7 +51,7 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
     override suspend fun saveGroupedTestRun(publicId: PublicId, groupedResults: GroupedResults) =
             withContext(Dispatchers.IO) {
                 val testSuites = groupedResults.groupedTestSuites.flatMap { it.testSuites }
-                val testRunSummary = toTestRunSummary(publicId, testSuites)
+                val testRunSummary = toTestRunSummary(publicId, testSuites, groupedResults.wallClockDuration)
                 val testRunDB = testRunSummary.toDB()
 
                 logger.info("Starting inserting test run $publicId")

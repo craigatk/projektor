@@ -28,6 +28,7 @@ const DashboardSummary = ({
     totalTestCount,
     averageDuration,
     cumulativeDuration,
+    wallClockDuration,
     slowestTestCaseDuration,
     createdTimestamp,
   } = testRunSummary;
@@ -59,6 +60,7 @@ const DashboardSummary = ({
                 publicId={publicId}
                 averageDuration={averageDuration}
                 cumulativeDuration={cumulativeDuration}
+                wallClockDuration={wallClockDuration}
                 slowestTestCaseDuration={slowestTestCaseDuration}
               />
             )}

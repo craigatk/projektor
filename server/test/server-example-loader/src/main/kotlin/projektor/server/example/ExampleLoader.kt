@@ -2,6 +2,7 @@ package projektor.server.example
 
 import com.google.gson.Gson
 import java.io.File
+import java.math.BigDecimal
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -63,7 +64,14 @@ fun loadPassingGroupedExampleWithAttachments() {
     val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(null))
     sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/attachment-1.txt")
     sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/test-run-summary.png")
-    println("View run with passing grouped tests and attachments at at $uiBaseUrl${saveResultsResponse.uri}")
+    println("View run with passing grouped tests and attachments at $uiBaseUrl${saveResultsResponse.uri}")
+}
+
+fun loadGroupedExampleWithWallClock() {
+    val groupedResultsXmlLoader = GroupedResultsXmlLoader()
+    val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(null, BigDecimal("12.251")))
+
+    println("View run with passing grouped tests and wall clock duration at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
 fun loadInvalidExample() {
