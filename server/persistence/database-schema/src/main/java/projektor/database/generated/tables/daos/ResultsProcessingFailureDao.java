@@ -4,6 +4,7 @@
 package projektor.database.generated.tables.daos;
 
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.annotation.processing.Generated;
@@ -80,5 +81,19 @@ public class ResultsProcessingFailureDao extends DAOImpl<ResultsProcessingFailur
      */
     public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchByBody(String... values) {
         return fetch(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.BODY, values);
+    }
+
+    /**
+     * Fetch records that have <code>created_timestamp BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchRangeOfCreatedTimestamp(Timestamp lowerInclusive, Timestamp upperInclusive) {
+        return fetchRange(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.CREATED_TIMESTAMP, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>created_timestamp IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchByCreatedTimestamp(Timestamp... values) {
+        return fetch(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.CREATED_TIMESTAMP, values);
     }
 }

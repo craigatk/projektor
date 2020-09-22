@@ -1,17 +1,27 @@
 package projektor.parser;
 
+import com.ctc.wstx.api.WstxInputProperties;
+import com.ctc.wstx.stax.WstxInputFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import projektor.parser.model.TestSuite;
 import projektor.parser.model.TestSuites;
 
+import javax.xml.stream.XMLInputFactory;
 import java.io.IOException;
 import java.util.List;
 
 public class JUnitResultsParser {
-    private final ObjectMapper mapper = new XmlMapper()
-            .registerModule(new JavaTimeModule());
+    private final ObjectMapper mapper;
+
+    public JUnitResultsParser() {
+        XMLInputFactory xmlInputFactory = new WstxInputFactory();
+        xmlInputFactory.setProperty(WstxInputProperties.P_MAX_ATTRIBUTE_SIZE, Integer.MAX_VALUE);
+
+        this.mapper = new XmlMapper(xmlInputFactory)
+                .registerModule(new JavaTimeModule());
+    }
 
     /**
      * Parses a test suite XML in this format
