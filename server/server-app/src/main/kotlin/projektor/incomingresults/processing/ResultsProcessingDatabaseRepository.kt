@@ -56,6 +56,7 @@ class ResultsProcessingDatabaseRepository(private val dslContext: DSLContext) : 
                 val resultsProcessingFailure = ResultsProcessingFailure()
                 resultsProcessingFailure.publicId = publicId.id
                 resultsProcessingFailure.body = resultsBody
+                resultsProcessingFailure.createdTimestamp = Timestamp.valueOf(LocalDateTime.now())
                 resultsProcessingFailureDao.insert(resultsProcessingFailure)
 
                 updateProcessingStatus

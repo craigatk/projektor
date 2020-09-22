@@ -89,6 +89,7 @@ class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 .isNotNull()
                 .and {
                     get { resultsBody }.isEqualTo(resultsBody)
+                    get { createdTimestamp }.isNotNull()
                 }
     }
 

@@ -4,6 +4,7 @@
 package projektor.database.generated.tables;
 
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row2;
+import org.jooq.Row3;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -40,7 +41,7 @@ import projektor.database.generated.tables.records.ResultsProcessingFailureRecor
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ResultsProcessingFailure extends TableImpl<ResultsProcessingFailureRecord> {
 
-    private static final long serialVersionUID = 830366811;
+    private static final long serialVersionUID = -1806028352;
 
     /**
      * The reference instance of <code>public.results_processing_failure</code>
@@ -64,6 +65,11 @@ public class ResultsProcessingFailure extends TableImpl<ResultsProcessingFailure
      * The column <code>public.results_processing_failure.body</code>.
      */
     public final TableField<ResultsProcessingFailureRecord, String> BODY = createField(DSL.name("body"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+
+    /**
+     * The column <code>public.results_processing_failure.created_timestamp</code>.
+     */
+    public final TableField<ResultsProcessingFailureRecord, Timestamp> CREATED_TIMESTAMP = createField(DSL.name("created_timestamp"), org.jooq.impl.SQLDataType.TIMESTAMP, this, "");
 
     /**
      * Create a <code>public.results_processing_failure</code> table reference
@@ -149,11 +155,11 @@ public class ResultsProcessingFailure extends TableImpl<ResultsProcessingFailure
     }
 
     // -------------------------------------------------------------------------
-    // Row2 type methods
+    // Row3 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row2<String, String> fieldsRow() {
-        return (Row2) super.fieldsRow();
+    public Row3<String, String, Timestamp> fieldsRow() {
+        return (Row3) super.fieldsRow();
     }
 }

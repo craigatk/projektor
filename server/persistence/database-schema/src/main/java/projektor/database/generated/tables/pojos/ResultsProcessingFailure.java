@@ -5,6 +5,7 @@ package projektor.database.generated.tables.pojos;
 
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.annotation.processing.Generated;
 
@@ -22,24 +23,28 @@ import javax.annotation.processing.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ResultsProcessingFailure implements Serializable {
 
-    private static final long serialVersionUID = -734631397;
+    private static final long serialVersionUID = 366369141;
 
-    private String publicId;
-    private String body;
+    private String    publicId;
+    private String    body;
+    private Timestamp createdTimestamp;
 
     public ResultsProcessingFailure() {}
 
     public ResultsProcessingFailure(ResultsProcessingFailure value) {
         this.publicId = value.publicId;
         this.body = value.body;
+        this.createdTimestamp = value.createdTimestamp;
     }
 
     public ResultsProcessingFailure(
-        String publicId,
-        String body
+        String    publicId,
+        String    body,
+        Timestamp createdTimestamp
     ) {
         this.publicId = publicId;
         this.body = body;
+        this.createdTimestamp = createdTimestamp;
     }
 
     public String getPublicId() {
@@ -57,6 +62,15 @@ public class ResultsProcessingFailure implements Serializable {
 
     public ResultsProcessingFailure setBody(String body) {
         this.body = body;
+        return this;
+    }
+
+    public Timestamp getCreatedTimestamp() {
+        return this.createdTimestamp;
+    }
+
+    public ResultsProcessingFailure setCreatedTimestamp(Timestamp createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
         return this;
     }
 
@@ -81,6 +95,12 @@ public class ResultsProcessingFailure implements Serializable {
         }
         else if (!body.equals(other.body))
             return false;
+        if (createdTimestamp == null) {
+            if (other.createdTimestamp != null)
+                return false;
+        }
+        else if (!createdTimestamp.equals(other.createdTimestamp))
+            return false;
         return true;
     }
 
@@ -90,6 +110,7 @@ public class ResultsProcessingFailure implements Serializable {
         int result = 1;
         result = prime * result + ((this.publicId == null) ? 0 : this.publicId.hashCode());
         result = prime * result + ((this.body == null) ? 0 : this.body.hashCode());
+        result = prime * result + ((this.createdTimestamp == null) ? 0 : this.createdTimestamp.hashCode());
         return result;
     }
 
@@ -99,6 +120,7 @@ public class ResultsProcessingFailure implements Serializable {
 
         sb.append(publicId);
         sb.append(", ").append(body);
+        sb.append(", ").append(createdTimestamp);
 
         sb.append(")");
         return sb.toString();
