@@ -4,6 +4,8 @@ import { makeStyles } from "@material-ui/styles";
 import { AppBar, Typography } from "@material-ui/core";
 import RepositorySideMenu from "./RepositorySideMenu";
 import RepositoryCoveragePage from "./Coverage/RepositoryCoveragePage";
+import RepositoryTimelinePage from "./Timeline/RepositoryTimelinePage";
+import RepositoryHomePage from "./Home/RepositoryHomePage";
 
 interface RepositoryWrapperProps extends RouteComponentProps {
   orgPart: string;
@@ -53,7 +55,7 @@ const RepositoryWrapper = ({
       />
       <main className={classes.content}>
         <Router>
-          <RepositoryCoveragePage
+          <RepositoryHomePage
             path="/"
             orgPart={orgPart}
             repoPart={repoPart}
@@ -61,6 +63,12 @@ const RepositoryWrapper = ({
           />
           <RepositoryCoveragePage
             path="/coverage"
+            orgPart={orgPart}
+            repoPart={repoPart}
+            projectName={projectName}
+          />
+          <RepositoryTimelinePage
+            path="/timeline"
             orgPart={orgPart}
             repoPart={repoPart}
             projectName={projectName}

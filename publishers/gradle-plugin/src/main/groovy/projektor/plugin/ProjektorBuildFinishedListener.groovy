@@ -91,11 +91,14 @@ class ProjektorBuildFinishedListener implements BuildListener {
                 logger
         )
 
+        boolean isCI = isCI(System.getenv())
+
         logger.info("Build finished, gathering and publishing Projektor test reports from " +
                 "${projectTestResultsCollector.testGroupsCount()} test tasks")
         GroupedResults groupedResults = projectTestResultsCollector.createGroupedResults()
         groupedResults.metadata = new ResultsMetadata(
-                git: GitMetadataFinder.findGitMetadata(gitResolutionConfig, logger)
+                git: GitMetadataFinder.findGitMetadata(gitResolutionConfig, logger),
+                ci: isCI
         )
         groupedResults.wallClockDuration = projektorTaskFinishedListener.testWallClockDurationInSeconds
 
@@ -104,7 +107,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
 
         new ResultsLogger(logger).logReportResults(publishResult)
 
-        writeNotifications(buildResult, publishResult)
+        writeNotifications(buildResult, publishResult, isCI)
 
         if (attachments) {
             AttachmentsClient attachmentsClient = new AttachmentsClient(clientConfig, logger)
@@ -124,7 +127,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
         }
     }
 
-    private void writeNotifications(BuildResult buildResult, PublishResult publishResult) {
+    private void writeNotifications(BuildResult buildResult, PublishResult publishResult, boolean isCI) {
         if (notificationConfig.writeSlackMessageFile) {
             String rootProjectName = buildResult.gradle.rootProject.name
             SlackAttachmentsMessage slackAttachmentsMessage = new SlackMessageBuilder()
@@ -139,7 +142,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
             )
         }
 
-        if (notificationConfig.writeLinkFile && isCI(System.getenv())) {
+        if (notificationConfig.writeLinkFile && isCI) {
             new LinkMessageWriter().writeLinkFile(
                     new LinkModel(reportUrl: publishResult.reportUrl, id: publishResult.publicId),
                     notificationConfig,

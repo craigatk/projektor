@@ -14,5 +14,6 @@ fun main() {
     loadResultsWithGitButWithoutCoverage()
     loadJestWithCoverage()
     repositoryCoverageTimeline()
+    loadMultipleTestRunsFromSameRepoForTimeline()
     loadInvalidExample()
 }

@@ -11,6 +11,7 @@ import projektor.database.generated.tables.CodeCoverageRun;
 import projektor.database.generated.tables.CodeCoverageStats;
 import projektor.database.generated.tables.GitMetadata;
 import projektor.database.generated.tables.GitRepository;
+import projektor.database.generated.tables.ResultsMetadata;
 import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.ResultsProcessingFailure;
 import projektor.database.generated.tables.TestCase;
@@ -59,6 +60,11 @@ public class Tables {
      * The table <code>public.git_repository</code>.
      */
     public static final GitRepository GIT_REPOSITORY = GitRepository.GIT_REPOSITORY;
+
+    /**
+     * The table <code>public.results_metadata</code>.
+     */
+    public static final ResultsMetadata RESULTS_METADATA = ResultsMetadata.RESULTS_METADATA;
 
     /**
      * The table <code>public.results_processing</code>.

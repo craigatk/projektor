@@ -2,6 +2,8 @@ package projektor.plugin.functionaltest
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.gradle.testkit.runner.BuildResult
+import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import projektor.plugin.PluginOutput
@@ -9,6 +11,7 @@ import projektor.plugin.SpecWriter
 import projektor.server.client.ProjektorAttachmentsApi
 import projektor.server.client.ProjektorClientBuilder
 import projektor.server.client.ProjektorTestRunApi
+import projektor.server.client.ProjektorTestRunMetadataApi
 import spock.lang.Specification
 
 class ProjektorPluginFunctionalSpecification extends Specification {
@@ -34,8 +37,31 @@ class ProjektorPluginFunctionalSpecification extends Specification {
             ProjektorTestRunApi.class
     )
 
+    ProjektorTestRunMetadataApi projektorTestRunMetadataApi = ProjektorClientBuilder.INSTANCE.createApi(
+            PROJEKTOR_SERVER_URL,
+            okHttpClient,
+            ProjektorTestRunMetadataApi.class
+    )
+
     static String extractTestId(String output) {
         return PluginOutput.extractTestId(output, PROJEKTOR_SERVER_URL)
+    }
+
+    BuildResult runFailedBuildWithEnvironment(Map<String, String> envMap, String... buildArgs) {
+        Map<String, String> currentEnv = System.getenv()
+        Map<String, String> augmentedEnv = new HashMap<>(currentEnv)
+        augmentedEnv.putAll(envMap)
+
+        BuildResult result = GradleRunner.create()
+                .withProjectDir(projectRootDir.root)
+                .withEnvironment(augmentedEnv)
+                .withArguments(buildArgs)
+                .withPluginClasspath()
+                .buildAndFail()
+
+        println result.output
+
+        return result
     }
 
     private static HttpLoggingInterceptor createLoggingInterceptor() {

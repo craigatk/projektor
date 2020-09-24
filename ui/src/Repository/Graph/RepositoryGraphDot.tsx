@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Dot } from "recharts";
 
-const RepositoryCoverageTimelineGraphDot = (props) => {
+const RepositoryGraphDot = (props) => {
   const { dataKey, payload } = props;
   const { publicId } = payload;
   const value = payload[dataKey];
@@ -15,4 +15,4 @@ const RepositoryCoverageTimelineGraphDot = (props) => {
   );
 };
 
-export default RepositoryCoverageTimelineGraphDot;
+export default RepositoryGraphDot;

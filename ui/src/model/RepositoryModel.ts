@@ -1,5 +1,16 @@
 import { CoverageStats } from "./TestRunModel";
 
+interface RepositoryTimelineEntry {
+  publicId: string;
+  createdTimestamp: Date;
+  cumulativeDuration: Date;
+  totalTestCount: number;
+}
+
+interface RepositoryTimeline {
+  timelineEntries: RepositoryTimelineEntry[];
+}
+
 interface RepositoryCoverageTimelineEntry {
   publicId: string;
   createdTimestamp: Date;
@@ -10,4 +21,9 @@ interface RepositoryCoverageTimeline {
   timelineEntries: RepositoryCoverageTimelineEntry[];
 }
 
-export { RepositoryCoverageTimeline, RepositoryCoverageTimelineEntry };
+export {
+  RepositoryTimelineEntry,
+  RepositoryTimeline,
+  RepositoryCoverageTimeline,
+  RepositoryCoverageTimelineEntry,
+};

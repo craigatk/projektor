@@ -1,5 +1,5 @@
 import * as React from "react";
-import { RepositoryCoverageTimeline } from "../../model/RepositoryModel";
+import { RepositoryTimeline } from "../../model/RepositoryModel";
 import {
   LineChart,
   Line,
@@ -11,32 +11,32 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import moment from "moment";
-import RepositoryCoverageTimelineGraphTooltip from "./RepositoryCoverageTimelineGraphTooltip";
+import RepositoryTimelineGraphTooltip from "./RepositoryTimelineGraphTooltip";
 import RepositoryGraphActiveDot from "../Graph/RepositoryGraphActiveDot";
 import RepositoryGraphDot from "../Graph//RepositoryGraphDot";
 
-interface RepositoryCoverageTimelineGraphProps {
-  coverageTimeline: RepositoryCoverageTimeline;
+interface RepositoryTimelineGraphProps {
+  timeline: RepositoryTimeline;
   graphWidth?: number;
 }
 
-const RepositoryCoverageTimelineGraph = ({
-  coverageTimeline,
+const RepositoryTimelineGraph = ({
+  timeline,
   graphWidth,
-}: RepositoryCoverageTimelineGraphProps) => {
-  const data = coverageTimeline.timelineEntries.map((entry) => ({
+}: RepositoryTimelineGraphProps) => {
+  const data = timeline.timelineEntries.map((entry) => ({
     date: moment.utc(entry.createdTimestamp).format("YYYY-MM-DD hh:mm:ss"),
     publicId: entry.publicId,
-    lineValue: entry.coverageStats.lineStat.coveredPercentage,
-    branchValue: entry.coverageStats.branchStat.coveredPercentage,
+    duration: entry.cumulativeDuration,
+    totalTestCount: entry.totalTestCount,
   }));
 
   const xAxisTickFormatter = (value) => moment(value).format("MMM Do YYYY");
 
-  const yAxisTickFormatter = (value) => `${value}%`;
+  const durationYAxisFormatter = (value) => `${value}s`;
 
   return (
-    <div data-testid="repository-coverage-timeline-graph">
+    <div data-testid="repository-timeline-graph">
       <ResponsiveContainer width={graphWidth || "100%"} height={300}>
         <LineChart
           data={data}
@@ -49,26 +49,33 @@ const RepositoryCoverageTimelineGraph = ({
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" tickFormatter={xAxisTickFormatter} />
-          <YAxis tickFormatter={yAxisTickFormatter} />
+          <YAxis
+            yAxisId="duration"
+            orientation="left"
+            tickFormatter={durationYAxisFormatter}
+          />
+          <YAxis yAxisId="totalTestCount" orientation="right" />
           <Legend
             formatter={(value, _) =>
-              value === "lineValue" ? "Line coverage" : "Branch coverage"
+              value === "duration" ? "Test execution time" : "Test count"
             }
           />
-          <Tooltip content={<RepositoryCoverageTimelineGraphTooltip />} />
+          <Tooltip content={<RepositoryTimelineGraphTooltip />} />
           <Line
             type="monotone"
-            dataKey="lineValue"
+            dataKey="duration"
             stroke="#8884d8"
             activeDot={<RepositoryGraphActiveDot />}
             dot={<RepositoryGraphDot />}
+            yAxisId="duration"
           />
           <Line
             type="monotone"
-            dataKey="branchValue"
+            dataKey="totalTestCount"
             stroke="#64aed8"
             activeDot={<RepositoryGraphActiveDot />}
             dot={<RepositoryGraphDot />}
+            yAxisId="totalTestCount"
           />
         </LineChart>
       </ResponsiveContainer>
@@ -76,4 +83,4 @@ const RepositoryCoverageTimelineGraph = ({
   );
 };
 
-export default RepositoryCoverageTimelineGraph;
+export default RepositoryTimelineGraph;

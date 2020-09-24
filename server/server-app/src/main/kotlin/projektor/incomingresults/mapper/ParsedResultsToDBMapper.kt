@@ -3,12 +3,14 @@ package projektor.incomingresults.mapper
 import java.sql.Timestamp
 import java.time.ZoneOffset
 import projektor.database.generated.tables.pojos.GitMetadata as GitMetadataDB
+import projektor.database.generated.tables.pojos.ResultsMetadata as ResultsMetadataDB
 import projektor.database.generated.tables.pojos.TestCase as TestCaseDB
 import projektor.database.generated.tables.pojos.TestFailure as TestFailureDB
 import projektor.database.generated.tables.pojos.TestSuite as TestSuiteDB
 import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedTestSuites
+import projektor.incomingresults.model.ResultsMetadata
 import projektor.parser.model.Failure
 import projektor.parser.model.TestCase
 import projektor.parser.model.TestSuite
@@ -84,6 +86,14 @@ fun parsePackageAndClassName(classNameWithPackage: String): Pair<String?, String
     } else {
         Pair(null, classNameWithPackage)
     }
+
+fun ResultsMetadata.toDB(testRunId: Long): ResultsMetadataDB {
+    val resultsMetadataDB = ResultsMetadataDB()
+    resultsMetadataDB.testRunId = testRunId
+    resultsMetadataDB.ci = ci
+
+    return resultsMetadataDB
+}
 
 fun GitMetadata.toDB(testRunId: Long): GitMetadataDB {
     val gitMetadataDB = GitMetadataDB()

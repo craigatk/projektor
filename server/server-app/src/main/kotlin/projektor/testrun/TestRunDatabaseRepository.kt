@@ -16,6 +16,7 @@ import projektor.incomingresults.mapper.toDB
 import projektor.incomingresults.mapper.toTestRunSummary
 import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedResults
+import projektor.incomingresults.model.ResultsMetadata
 import projektor.parser.model.TestSuite as ParsedTestSuite
 import projektor.server.api.PublicId
 import projektor.server.api.TestRun
@@ -73,6 +74,7 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
                         testSuiteStartingIndex += groupedTestSuites.testSuites.size
                     }
 
+                    saveResultsMetadata(testRunDB.id, groupedResults.metadata, configuration)
                     saveGitMetadata(testRunDB.id, groupedResults.metadata?.git, configuration)
                 }
 
@@ -108,6 +110,18 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
                 }
             }
         }
+    }
+
+    private fun saveResultsMetadata(
+        testRunId: Long,
+        resultsMetadata: ResultsMetadata?,
+        configuration: Configuration
+    ) {
+        val resultsMetadataDao = ResultsMetadataDao(configuration)
+
+        val resultsMetadataDB = resultsMetadata?.toDB(testRunId)
+
+        resultsMetadataDB?.let { resultsMetadataDao.insert(it) }
     }
 
     private fun saveGitMetadata(
