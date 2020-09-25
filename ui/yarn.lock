@@ -6901,10 +6901,10 @@ prelude-ls@~1.1.2:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
   integrity sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
 
-prettier@2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.0.2.tgz#1ba8f3eb92231e769b7fcd7cb73ae1b6b74ade08"
-  integrity sha512-5xJQIPT8BraI7ZnaDwSbu5zLrB6vvi8hVV58yHQ+QK64qrY40dULy0HSRlQ2/2IdzeBpjhDkqdcFBnFeDEMVdg==
+prettier@2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.1.2.tgz#3050700dae2e4c8b67c4c3f666cdb8af405e1ce5"
+  integrity sha512-16c7K+x4qVlJg9rEbXl7HEGmQyZlG4R9AgP+oHKRMsMsuk8s+ATStlf1NpDqyBI1HpVyfjLOeMhH2LvuNvV5Vg==
 
 pretty-bytes@5.3.0:
   version "5.3.0"
@@ -6941,10 +6941,10 @@ process@^0.11.10:
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
   integrity sha1-czIwDoQBYb2j5podHZGn1LwW8YI=
 
-projektor-publish@2.7.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/projektor-publish/-/projektor-publish-2.7.0.tgz#48fae63e19badd915efef2a577ff8de8f0168274"
-  integrity sha512-KWgAdcir7oOG0bLQqtfx1TKvC3CaQ3WE/G7OPsyMij96uNWR473yl+oReEH8pvgARnb3s/cAQpL26hx53x158A==
+projektor-publish@2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/projektor-publish/-/projektor-publish-2.8.0.tgz#574d7803051857a2afacf5fbf4be5060c82fcd33"
+  integrity sha512-qtU4BO3vdsFfkOWEQLqTdzIU9ZARaUON9k/8zUrsMXaiQcNozBwKl5sQAFIzt1HaIv4MO+iTYjbN6Yyxbe0NtQ==
   dependencies:
     axios "0.19.2"
     glob "7.1.4"
