@@ -8,6 +8,7 @@ context("repository timeline", () => {
 
         cy.readFile("cypress/fixtures/grouped-passing-tests-with-git.json").then(
             (resultsBlob) => {
+                resultsBlob.metadata.ci = true;
                 resultsBlob.metadata.git.repoName = repoName;
 
                 cy.loadGroupedFixtureData(resultsBlob, "");
@@ -16,6 +17,7 @@ context("repository timeline", () => {
 
         cy.readFile("cypress/fixtures/grouped-passing-tests-with-git.json").then(
             (resultsBlob) => {
+                resultsBlob.metadata.ci = true;
                 resultsBlob.metadata.git.repoName = repoName;
 
                 cy.loadGroupedFixtureData(resultsBlob, "");
