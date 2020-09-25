@@ -58,7 +58,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
   }
 
   if (resultsFileGlobs) {
-    const isCI = process.env.CI && process.env.CI !== "false";
+    const isCI = Boolean(process.env.CI) && process.env.CI !== "false";
     const gitRepoName =
       process.env.VELA_REPO_FULL_NAME || process.env.GITHUB_REPOSITORY;
     const gitBranchName = findGitBranchName();
@@ -71,7 +71,8 @@ async function run(args, publishToken, defaultConfigFilePath) {
       coverageFileGlobs,
       gitRepoName,
       gitBranchName,
-      projectName
+      projectName,
+      isCI
     );
 
     if (!resultsBlob) {
