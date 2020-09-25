@@ -116,6 +116,25 @@ fun loadMultipleCoverageWithPreviousRunExample() {
     println("View run with multiple coverage results and previous results at $uiBaseUrl${currentResultsResponse.uri}")
 }
 
+fun loadMultipleTestRunsFromSameRepoForTimeline() {
+    val repoName = "timeline-org/timeline-repo"
+    val branchName = "main"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+    resultsMetadata.ci = true
+
+    sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata))
+    sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXml = ResultsXmlLoader().jestUi(), metadata = resultsMetadata))
+    sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXml = ResultsXmlLoader().longOutput(), metadata = resultsMetadata))
+    sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXml = ResultsXmlLoader().someIgnored(), metadata = resultsMetadata))
+
+    println("View repository test run timeline at $uiBaseUrl/repository/$repoName")
+}
+
 fun loadCoverageWithProjectName() {
     val repoName = "projektor/projektor"
     val branchName = "main"

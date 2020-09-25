@@ -5,6 +5,8 @@ import SideMenuLink from "../SideMenu/SideMenuLink";
 import CoverageIcon from "../Icons/CoverageIcon";
 import OrganizationIcon from "../Icons/OrganizationIcon";
 import { repositoryLinkUrlUI } from "./RepositoryLink";
+import RepositoryIcon from "../Icons/RepositoryIcon";
+import DashboardIcon from "../Icons/DashboardIcon";
 
 interface RepositorySideMenuProps {
   repoName: string;
@@ -50,6 +52,18 @@ const RepositorySideMenu = ({
         Projektor
       </Typography>
       <List>
+        <SideMenuLink
+            linkTo={repositoryLinkUrlUI(repoName, projectName, "/")}
+            icon={<DashboardIcon />}
+            linkText="Dashboard"
+            linkTestId="nav-link-repo-dashboard"
+        />
+        <SideMenuLink
+          linkTo={repositoryLinkUrlUI(repoName, projectName, "/timeline")}
+          icon={<RepositoryIcon />}
+          linkText="Test duration"
+          linkTestId="nav-link-repo-timeline"
+        />
         <SideMenuLink
           linkTo={repositoryLinkUrlUI(repoName, projectName, "/coverage")}
           icon={<CoverageIcon />}

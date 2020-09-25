@@ -11,7 +11,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const RepositoryCoverageTimelineGraphActiveDot = (props) => {
+const RepositoryGraphActiveDot = (props) => {
   const classes = useStyles({});
   const { cy, cx, fill, dataKey, payload } = props;
   const { publicId } = payload;
@@ -32,4 +32,4 @@ const RepositoryCoverageTimelineGraphActiveDot = (props) => {
   );
 };
 
-export default RepositoryCoverageTimelineGraphActiveDot;
+export default RepositoryGraphActiveDot;

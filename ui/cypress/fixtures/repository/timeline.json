@@ -1,0 +1,36 @@
+{
+  "timeline_entries": [
+    {
+      "public_id": "JHLQTLR7XGQH",
+      "created_timestamp": "2020-09-24T16:40:28.913593Z",
+      "cumulative_duration": 0.46,
+      "wall_clock_duration": null,
+      "total_test_count": 3,
+      "passed": true
+    },
+    {
+      "public_id": "GGHZI4NSIMSF",
+      "created_timestamp": "2020-09-24T16:40:28.937590Z",
+      "cumulative_duration": 10.258,
+      "wall_clock_duration": null,
+      "total_test_count": 63,
+      "passed": true
+    },
+    {
+      "public_id": "RZYV6GVTUUOL",
+      "created_timestamp": "2020-09-24T16:40:28.955588Z",
+      "cumulative_duration": 0.229,
+      "wall_clock_duration": null,
+      "total_test_count": 1,
+      "passed": true
+    },
+    {
+      "public_id": "PC6TVRUMGPOS",
+      "created_timestamp": "2020-09-24T16:40:28.984589Z",
+      "cumulative_duration": 0.164,
+      "wall_clock_duration": null,
+      "total_test_count": 10,
+      "passed": true
+    }
+  ]
+}

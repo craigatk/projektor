@@ -31,7 +31,7 @@ class GroupedResultsXmlLoader {
         return groupedResultsParser.serializeGroupedResults(groupedResults)
     }
 
-    fun wrapResultsXmlInGroup(resultsXml: String): String {
+    fun wrapResultsXmlInGroup(resultsXml: String, metadata: ResultsMetadata? = null): String {
         val groupedTestSuites = GroupedTestSuites()
         groupedTestSuites.groupName = "Group1"
         groupedTestSuites.groupLabel = "unitTest"
@@ -40,6 +40,7 @@ class GroupedResultsXmlLoader {
 
         val groupedResults = GroupedResults()
         groupedResults.groupedTestSuites = listOf(groupedTestSuites)
+        groupedResults.metadata = metadata
 
         return groupedResultsParser.serializeGroupedResults(groupedResults)
     }

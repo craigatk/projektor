@@ -10,6 +10,7 @@ import kotlinx.coroutines.runBlocking
 import projektor.coverage.CoverageService
 import projektor.database.generated.tables.daos.*
 import projektor.database.generated.tables.pojos.GitMetadata as GitMetadataDB
+import projektor.database.generated.tables.pojos.ResultsMetadata as ResultsMetadataDB
 import projektor.database.generated.tables.pojos.TestCase as TestCaseDB
 import projektor.database.generated.tables.pojos.TestFailure as TestFailureDB
 import projektor.database.generated.tables.pojos.TestRun as TestRunDB
@@ -17,6 +18,7 @@ import projektor.database.generated.tables.pojos.TestRunSystemAttributes
 import projektor.database.generated.tables.pojos.TestSuite as TestSuiteDB
 import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 import projektor.incomingresults.mapper.parsePackageAndClassName
+import projektor.incomingresults.mapper.roundingMathContext
 import projektor.server.api.PublicId
 
 class TestRunDBGenerator(
@@ -27,6 +29,7 @@ class TestRunDBGenerator(
     private val testFailureDao: TestFailureDao,
     private val testRunSystemAttributesDao: TestRunSystemAttributesDao,
     private val gitMetadataDao: GitMetadataDao,
+    private val resultsMetadataDao: ResultsMetadataDao,
     private val coverageService: CoverageService
 ) {
     fun createTestRun(publicId: PublicId, testSuiteDataList: List<TestSuiteData>): TestRunDB {
@@ -89,6 +92,18 @@ class TestRunDBGenerator(
         gitMetadataDao.insert(gitMetadata)
 
         return gitMetadata
+    }
+
+    fun addResultsMetadata(
+        testRunDB: TestRunDB,
+        ci: Boolean
+    ): ResultsMetadataDB {
+        val resultsMetadata = ResultsMetadataDB()
+        resultsMetadata.testRunId = testRunDB.id
+        resultsMetadata.ci = ci
+        resultsMetadataDao.insert(resultsMetadata)
+
+        return resultsMetadata
     }
 
     fun createSimpleTestRun(publicId: PublicId): TestRunDB =
@@ -156,14 +171,17 @@ data class TestSuiteData(
     val skippedTestCaseNames: List<String>
 )
 
-fun createTestRun(publicId: PublicId, totalTestCount: Int): TestRunDB = TestRunDB()
+fun createTestRun(publicId: PublicId, totalTestCount: Int, cumulativeDuration: BigDecimal = BigDecimal("30.000")): TestRunDB = TestRunDB()
         .setPublicId(publicId.id)
         .setTotalTestCount(totalTestCount)
         .setTotalPassingCount(totalTestCount)
         .setTotalFailureCount(0)
         .setTotalSkippedCount(0)
-        .setCumulativeDuration(BigDecimal("30.000"))
-        .setAverageDuration(if (totalTestCount > 0) BigDecimal("30.000").divide(totalTestCount.toBigDecimal()) else BigDecimal("30.000"))
+        .setCumulativeDuration(cumulativeDuration)
+        .setAverageDuration(if (totalTestCount > 0)
+                cumulativeDuration.divide(totalTestCount.toBigDecimal(), roundingMathContext)
+            else
+                cumulativeDuration)
         .setSlowestTestCaseDuration(BigDecimal("10.000"))
         .setPassed(true)
         .setCreatedTimestamp(Timestamp.from(Instant.now()))

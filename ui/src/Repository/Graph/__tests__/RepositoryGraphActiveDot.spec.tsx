@@ -3,10 +3,10 @@ jest.mock("@reach/router");
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import { render } from "@testing-library/react";
-import RepositoryCoverageTimelineGraphActiveDot from "../RepositoryCoverageTimelineGraphActiveDot";
+import RepositoryGraphActiveDot from "../RepositoryGraphActiveDot";
 import { navigate } from "@reach/router";
 
-describe("RepositoryCoverageTimelineGraphActiveDot", () => {
+describe("RepositoryGraphActiveDot", () => {
   beforeEach(() => {
     // @ts-ignore
     navigate.mockReset();
@@ -25,9 +25,7 @@ describe("RepositoryCoverageTimelineGraphActiveDot", () => {
       },
     };
 
-    const { getByRole } = render(
-      <RepositoryCoverageTimelineGraphActiveDot {...props} />
-    );
+    const { getByRole } = render(<RepositoryGraphActiveDot {...props} />);
 
     getByRole(`active-dot-lineValue-${publicId}`).click();
 

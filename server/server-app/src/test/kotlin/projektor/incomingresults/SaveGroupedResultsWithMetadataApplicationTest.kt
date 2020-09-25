@@ -78,4 +78,34 @@ class SaveGroupedResultsWithMetadataApplicationTest : ApplicationTestCase() {
             }
         }
     }
+
+    @Test
+    fun `should save grouped results with results metadata`() {
+        val gitMetadata = GitMetadata()
+        gitMetadata.repoName = "craigatk/projektor"
+        gitMetadata.branchName = "main"
+        gitMetadata.projectName = "ui-proj"
+        gitMetadata.isMainBranch = true
+        val metadata = ResultsMetadata()
+        metadata.git = gitMetadata
+        metadata.ci = true
+        val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/groupedResults") {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(requestBody)
+            }.apply {
+                val (_, testRun) = waitForTestRunSaveToComplete(response)
+
+                val resultsMetadataList = resultsMetadataDao.fetchByTestRunId(testRun.id)
+                expectThat(resultsMetadataList).hasSize(1)
+
+                val resultsMetadata = resultsMetadataList[0]
+                expectThat(resultsMetadata) {
+                    get { ci }.isTrue()
+                }
+            }
+        }
+    }
 }

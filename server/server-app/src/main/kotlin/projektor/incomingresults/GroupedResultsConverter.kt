@@ -37,7 +37,8 @@ class GroupedResultsConverter(
                                 branchName = gitMetadata.branchName,
                                 isMainBranch = gitMetadata.isMainBranch
                         )
-                    }
+                    },
+                    ci = metadata.ci
             )
         }
 

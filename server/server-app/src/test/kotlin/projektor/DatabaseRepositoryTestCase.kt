@@ -35,6 +35,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
     lateinit var resultsProcessingFailureDao: ResultsProcessingFailureDao
     lateinit var attachmentDao: TestRunAttachmentDao
     lateinit var gitMetadataDao: GitMetadataDao
+    lateinit var resultsMetadataDao: ResultsMetadataDao
     lateinit var testRunSystemAttributesDao: TestRunSystemAttributesDao
 
     lateinit var coverageRunDao: CodeCoverageRunDao
@@ -95,6 +96,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
         resultsProcessingFailureDao = ResultsProcessingFailureDao(dslContext.configuration())
         attachmentDao = TestRunAttachmentDao(dslContext.configuration())
         gitMetadataDao = GitMetadataDao(dslContext.configuration())
+        resultsMetadataDao = ResultsMetadataDao(dslContext.configuration())
         testRunSystemAttributesDao = TestRunSystemAttributesDao(dslContext.configuration())
 
         coverageRunDao = CodeCoverageRunDao(dslContext.configuration())
@@ -113,6 +115,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
                 testFailureDao,
                 testRunSystemAttributesDao,
                 gitMetadataDao,
+                resultsMetadataDao,
                 coverageService
         )
     }
