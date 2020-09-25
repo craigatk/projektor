@@ -33,7 +33,7 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                                 it.and(GIT_METADATA.PROJECT_NAME.isNull)
                             else
                                 it.and(GIT_METADATA.PROJECT_NAME.eq(projectName))
-                        }.and((RESULTS_METADATA.CI.isNull).or(RESULTS_METADATA.CI.eq(true))))
+                        }.and(RESULTS_METADATA.CI.eq(true)))
                         .orderBy(TEST_RUN.CREATED_TIMESTAMP.asc())
                         .fetchResultSet()
 

@@ -43,20 +43,13 @@ class RepositoryTestRunDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val timeline = runBlocking { repositoryTestRunDatabaseRepository.fetchRepositoryTestRunTimeline(repoName, projectName) }
         assertNotNull(timeline)
 
-        expectThat(timeline.timelineEntries).hasSize(2)
+        expectThat(timeline.timelineEntries).hasSize(1)
 
         val firstEntry = timeline.timelineEntries[0]
         expectThat(firstEntry) {
             get { publicId }.isEqualTo(firstRunCITruePublicId.id)
             get { totalTestCount }.isEqualTo(20)
             get { cumulativeDuration }.isEqualTo(BigDecimal("25.000"))
-        }
-
-        val secondEntry = timeline.timelineEntries[1]
-        expectThat(secondEntry) {
-            get { publicId }.isEqualTo(secondRunCINullPublicId.id)
-            get { totalTestCount }.isEqualTo(30)
-            get { cumulativeDuration }.isEqualTo(BigDecimal("35.000"))
         }
     }
 

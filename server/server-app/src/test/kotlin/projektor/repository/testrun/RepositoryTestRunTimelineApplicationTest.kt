@@ -31,14 +31,17 @@ class RepositoryTestRunTimelineApplicationTest : ApplicationTestCase() {
                 val firstTestRun = createTestRun(firstRunPublicId, 20, BigDecimal("10.001"))
                 testRunDao.insert(firstTestRun)
                 testRunDBGenerator.addGitMetadata(firstTestRun, repoName, true, "main", null)
+                testRunDBGenerator.addResultsMetadata(firstTestRun, true)
 
                 val secondTestRun = createTestRun(secondRunPublicId, 30, BigDecimal("15.001"))
                 testRunDao.insert(secondTestRun)
                 testRunDBGenerator.addGitMetadata(secondTestRun, repoName, true, "main", null)
+                testRunDBGenerator.addResultsMetadata(secondTestRun, true)
 
                 val thirdTestRun = createTestRun(thirdRunPublicId, 45, BigDecimal("25.001"))
                 testRunDao.insert(thirdTestRun)
                 testRunDBGenerator.addGitMetadata(thirdTestRun, repoName, true, "main", null)
+                testRunDBGenerator.addResultsMetadata(thirdTestRun, true)
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
@@ -86,14 +89,17 @@ class RepositoryTestRunTimelineApplicationTest : ApplicationTestCase() {
                 val firstTestRun = createTestRun(firstRunPublicId, 20, BigDecimal("10.001"))
                 testRunDao.insert(firstTestRun)
                 testRunDBGenerator.addGitMetadata(firstTestRun, repoName, true, "main", projectName)
+                testRunDBGenerator.addResultsMetadata(firstTestRun, true)
 
                 val secondTestRun = createTestRun(secondRunPublicId, 30, BigDecimal("15.001"))
                 testRunDao.insert(secondTestRun)
                 testRunDBGenerator.addGitMetadata(secondTestRun, repoName, true, "main", projectName)
+                testRunDBGenerator.addResultsMetadata(secondTestRun, true)
 
                 val thirdTestRun = createTestRun(thirdRunPublicId, 45, BigDecimal("25.001"))
                 testRunDao.insert(thirdTestRun)
                 testRunDBGenerator.addGitMetadata(thirdTestRun, repoName, true, "main", projectName)
+                testRunDBGenerator.addResultsMetadata(thirdTestRun, true)
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
