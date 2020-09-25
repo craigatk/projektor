@@ -49,7 +49,8 @@ const sendResults = async (
   resultsBlob,
   gitRepoName,
   gitBranchName,
-  projectName
+  projectName,
+  isCI
 ) => {
   const headers = {};
 
@@ -75,6 +76,7 @@ const sendResults = async (
         isMainBranch: gitBranchName === "main" || gitBranchName === "master",
         projectName,
       },
+      ci: isCI,
     },
   };
 
@@ -212,7 +214,8 @@ const collectAndSendResults = async (
   coverageFileGlobs,
   gitRepoName,
   gitBranchName,
-  projectName
+  projectName,
+  isCI
 ) => {
   console.log(
     `Gathering results from ${resultsFileGlobs} to send to Projektor server ${serverUrl}`
@@ -228,7 +231,8 @@ const collectAndSendResults = async (
         resultsBlob,
         gitRepoName,
         gitBranchName,
-        projectName
+        projectName,
+        isCI
       );
 
       const publicId = resultsResponseData.id;

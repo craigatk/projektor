@@ -1,6 +1,6 @@
 {
   "name": "projektor-publish",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "homepage": "https://projektor.dev/docs/node-script/",
   "repository": {
     "type": "git",
@@ -26,7 +26,7 @@
     "env-cmd": "10.1.0",
     "jest": "25.1.0",
     "jest-junit": "10.0.0",
-    "prettier": "2.0.1",
+    "prettier": "2.1.2",
     "projektor-publish": "2.7.0",
     "wait-for-expect": "3.0.1"
   },

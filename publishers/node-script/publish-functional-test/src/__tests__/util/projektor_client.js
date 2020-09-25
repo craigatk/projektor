@@ -18,6 +18,9 @@ const fetchAttachment = (attachmentName, testRunId, serverPort) => {
 const fetchCoverage = (testRunId, serverPort) =>
   axios.get(`http://localhost:${serverPort}/run/${testRunId}/coverage`);
 
+const fetchResultsMetadata = (testRunId, serverPort) =>
+  axios.get(`http://localhost:${serverPort}/run/${testRunId}/metadata`);
+
 const fetchGitMetadata = (testRunId, serverPort) =>
   axios.get(`http://localhost:${serverPort}/run/${testRunId}/metadata/git`);
 
@@ -26,5 +29,6 @@ module.exports = {
   fetchAttachments,
   fetchAttachment,
   fetchCoverage,
+  fetchResultsMetadata,
   fetchGitMetadata,
 };
