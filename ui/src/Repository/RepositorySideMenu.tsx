@@ -53,10 +53,10 @@ const RepositorySideMenu = ({
       </Typography>
       <List>
         <SideMenuLink
-            linkTo={repositoryLinkUrlUI(repoName, projectName, "/")}
-            icon={<DashboardIcon />}
-            linkText="Dashboard"
-            linkTestId="nav-link-repo-dashboard"
+          linkTo={repositoryLinkUrlUI(repoName, projectName, "/")}
+          icon={<DashboardIcon />}
+          linkText="Dashboard"
+          linkTestId="nav-link-repo-dashboard"
         />
         <SideMenuLink
           linkTo={repositoryLinkUrlUI(repoName, projectName, "/timeline")}
