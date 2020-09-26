@@ -1,6 +1,7 @@
 package projektor.server.api
 
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 data class TestCase(
     val idx: Int,
@@ -13,5 +14,10 @@ data class TestCase(
     val skipped: Boolean,
     val hasSystemOut: Boolean,
     val hasSystemErr: Boolean,
+    val publicId: String,
+    val createdTimestamp: LocalDateTime?,
     val failure: TestFailure?
-)
+) {
+    val fullName: String
+        get() = """${packageName?.let { "$it."} ?: ""}$className.$name"""
+}

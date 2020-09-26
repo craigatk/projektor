@@ -3,11 +3,15 @@ package projektor.repository.testrun
 import kotlin.streams.toList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.jooq.Condition
 import org.jooq.DSLContext
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables.*
+import projektor.server.api.TestCase
 import projektor.server.api.repository.RepositoryTestRunTimeline
 import projektor.server.api.repository.RepositoryTestRunTimelineEntry
+import projektor.testcase.TestCaseDatabaseRepository
+import projektor.testcase.TestCaseDatabaseRepository.Companion.selectTestCase
 
 class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : RepositoryTestRunRepository {
     private val timelineEntryMapper = JdbcMapperFactory.newInstance()
@@ -27,13 +31,8 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                 )
                         .from(TEST_RUN)
                         .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
-                        .leftOuterJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
-                        .where(GIT_METADATA.REPO_NAME.eq(repoName).let {
-                            if (projectName == null)
-                                it.and(GIT_METADATA.PROJECT_NAME.isNull)
-                            else
-                                it.and(GIT_METADATA.PROJECT_NAME.eq(projectName))
-                        }.and(RESULTS_METADATA.CI.eq(true)))
+                        .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
+                        .where(runInCIFromRepo(repoName, projectName))
                         .orderBy(TEST_RUN.CREATED_TIMESTAMP.asc())
                         .fetchResultSet()
 
@@ -43,4 +42,27 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
 
                 if (timelineEntries.isNotEmpty()) RepositoryTestRunTimeline(timelineEntries) else null
             }
+
+    override suspend fun fetchRepositoryFailingTestCases(repoName: String, projectName: String?): List<TestCase> =
+            withContext(Dispatchers.IO) {
+                val resultSet = selectTestCase(dslContext)
+                        .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                        .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
+                        .where(runInCIFromRepo(repoName, projectName)
+                                .and(TEST_CASE.PASSED.eq(false))
+                        )
+                        .fetchResultSet()
+
+                resultSet.use { TestCaseDatabaseRepository.testCaseMapper.stream(it).toList() }
+            }
+
+    companion object {
+        fun runInCIFromRepo(repoName: String, projectName: String?): Condition =
+                GIT_METADATA.REPO_NAME.eq(repoName).let {
+                    if (projectName == null)
+                        it.and(GIT_METADATA.PROJECT_NAME.isNull)
+                    else
+                        it.and(GIT_METADATA.PROJECT_NAME.eq(projectName))
+                }.and(RESULTS_METADATA.CI.eq(true))
+    }
 }

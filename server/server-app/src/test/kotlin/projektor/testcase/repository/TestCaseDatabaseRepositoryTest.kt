@@ -108,6 +108,7 @@ class TestCaseDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                     get { hasSystemOut }.isTrue()
                     get { hasSystemErr }.isFalse()
                     get { passed }.isFalse()
+                    get { packageName }.isEqualTo("com.example")
                     get { failure }.isNotNull()
                             .and {
                                 get { failureMessage }.isEqualTo("testCaseToFind failure message")

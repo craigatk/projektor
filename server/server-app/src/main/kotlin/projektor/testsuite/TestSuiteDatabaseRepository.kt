@@ -23,6 +23,7 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
                 val resultSet = dslContext
                         .select(Tables.TEST_SUITE.fields().toList())
                         .select(addPrefixToFields("test_cases_", Tables.TEST_CASE.fields().toList()))
+                        .select(Tables.TEST_RUN.PUBLIC_ID.`as`("test_cases_public_id"))
                         .select(Tables.TEST_SUITE.IDX.`as`("test_cases_test_suite_idx"))
                         .select(addPrefixToFields("test_cases_failure_", Tables.TEST_FAILURE.fields().toList()))
                         .select(Tables.TEST_SUITE_GROUP.fields().toList())

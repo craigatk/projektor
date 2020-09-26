@@ -12,7 +12,7 @@ import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
-class RepositoryTestRunDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
+class RepositoryTestRunDatabaseRepositoryTimelineTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should find entries without project name for CI builds`() {
         val repositoryTestRunDatabaseRepository = RepositoryTestRunDatabaseRepository(dslContext)
