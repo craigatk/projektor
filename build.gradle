@@ -12,14 +12,13 @@ buildscript {
 }
 
 plugins {
-    id "dev.projektor.publish" version "5.6.0"
+    id "dev.projektor.publish" version "5.6.1"
     id 'com.github.psxpaul.execfork' version '0.1.13' apply false
 }
 
 projektor {
     serverUrl = "https://projektorlive.herokuapp.com"
     publishToken = System.getenv("PROJEKTOR_TOKEN") ?: project.findProperty('projektor_publish_token') ?: null
-    autoPublishOnFailureOnly = false
 }
 
 allprojects {
