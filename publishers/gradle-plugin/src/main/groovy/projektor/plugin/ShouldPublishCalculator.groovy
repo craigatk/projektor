@@ -6,10 +6,11 @@ class ShouldPublishCalculator {
     static boolean shouldPublishResults(
             ProjektorPublishPluginExtension extension,
             BuildResult buildResult,
+            boolean resultsDataExists,
             boolean coverageTasksExecuted,
             Map<String, String> environment
     ) {
-        return shouldPublishBasedOnBuildResult(extension, buildResult) ||
+        return shouldPublishBasedOnBuildResult(resultsDataExists, extension, buildResult) ||
                 shouldPublishBasedOnCoverage(extension, coverageTasksExecuted, environment)
     }
 
@@ -18,10 +19,11 @@ class ShouldPublishCalculator {
     }
 
     private static boolean shouldPublishBasedOnBuildResult(
+            boolean resultsDataExists,
             ProjektorPublishPluginExtension extension,
             BuildResult buildResult
     ) {
-        return !extension.autoPublishOnFailureOnly || buildResult.failure != null
+        return resultsDataExists && (!extension.autoPublishOnFailureOnly || buildResult.failure != null)
     }
 
     private static boolean shouldPublishBasedOnCoverage(
