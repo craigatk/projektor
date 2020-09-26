@@ -70,27 +70,32 @@ class ProjektorBuildFinishedListener implements BuildListener {
                 logger
         )
 
-        boolean shouldPublish = ShouldPublishCalculator.shouldPublishResults(
-                extension,
-                buildResult,
-                codeCoverageTaskCollector.hasCodeCoverageData(),
-                System.getenv()
-        )
-
-        if (shouldPublish) {
-            collectAndPublishResults(buildResult, codeCoverageTaskCollector)
-        } else {
-            logger.info("Projektor set to auto-publish only on failure and tests passed")
-        }
-    }
-
-    private void collectAndPublishResults(BuildResult buildResult, CodeCoverageTaskCollector codeCoverageTaskCollector) {
         List<TestGroup> testGroupsFromAdditionalDirs = TestDirectoryGroup.listFromDirPaths(projectDir, additionalResultsDirs)
         ProjectTestResultsCollector projectTestResultsCollector = new ProjectTestResultsCollector(
                 this.projektorTaskFinishedListener.testGroups + testGroupsFromAdditionalDirs,
                 logger
         )
 
+        boolean shouldPublish = ShouldPublishCalculator.shouldPublishResults(
+                extension,
+                buildResult,
+                projectTestResultsCollector.hasTestGroups(),
+                codeCoverageTaskCollector.hasCodeCoverageData(),
+                System.getenv()
+        )
+
+        if (shouldPublish) {
+            collectAndPublishResults(buildResult, projectTestResultsCollector, codeCoverageTaskCollector)
+        } else {
+            logger.info("Projektor set to auto-publish only on failure and tests passed")
+        }
+    }
+
+    private void collectAndPublishResults(
+            BuildResult buildResult,
+            ProjectTestResultsCollector projectTestResultsCollector,
+            CodeCoverageTaskCollector codeCoverageTaskCollector
+    ) {
         boolean isCI = isCI(System.getenv())
 
         logger.info("Build finished, gathering and publishing Projektor test reports from " +

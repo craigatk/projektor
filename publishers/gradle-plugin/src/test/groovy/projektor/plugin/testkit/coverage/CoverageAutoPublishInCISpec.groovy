@@ -79,4 +79,37 @@ class CoverageAutoPublishInCISpec extends SingleProjectSpec {
         resultsStubber.findResultsRequests().size() == 0
         coverageStubber.findCoverageRequests(publicId).size() == 0
     }
+
+    def "should not publish results and coverage when auto publish on failure only set to false and running non-test task"() {
+        given:
+        buildFile << """
+            projektor {
+                serverUrl = '${serverUrl}'
+                autoPublishOnFailureOnly = false
+            }
+        """.stripIndent()
+
+        String publicId = "AUTOCOV123"
+        resultsStubber.stubResultsPostSuccess(publicId)
+
+        coverageStubber.stubCoveragePostSuccess(publicId)
+
+        File sourceDir = createSourceDirectory(projectRootDir)
+        File testDir = createTestDirectory(projectRootDir)
+
+        writeSourceCodeFile(sourceDir)
+        writePartialCoverageSpecFile(testDir, "PartialSpec")
+
+        when:
+        def result = runSuccessfulBuild('tasks')
+
+        then:
+        result.task(":tasks").outcome == SUCCESS
+        !result.task(":jacocoTestReport")
+        !result.task(":test")
+
+        and:
+        resultsStubber.findResultsRequests().size() == 0
+        coverageStubber.findCoverageRequests(publicId).size() == 0
+    }
 }
