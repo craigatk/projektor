@@ -7,7 +7,7 @@
 
     <appender name="test-appender" class="projektor.TestLogAppender"/>
 
-    <Logger name="org.jooq.tools.LoggerListener" level="debug">
+    <Logger name="org.jooq.tools.LoggerListener" level="info">
         <AppenderRef ref="STDOUT"/>
     </Logger>
 
