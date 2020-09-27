@@ -75,6 +75,19 @@ class TestRunDBGenerator(
         return testRun
     }
 
+    fun createTestRunInRepo(
+            publicId: PublicId,
+            testSuiteDataList: List<TestSuiteData>,
+            repoName: String,
+            ci: Boolean,
+            projectName: String?
+    ): TestRunDB {
+        val testRunDB = createTestRun(publicId, testSuiteDataList)
+        addResultsMetadata(testRunDB, ci)
+        addGitMetadata(testRunDB, repoName, true, "main", projectName)
+        return testRunDB
+    }
+
     fun addGitMetadata(
         testRunDB: TestRunDB,
         repoName: String,
@@ -117,6 +130,13 @@ class TestRunDBGenerator(
                             )
                     )
             )
+
+    fun createSimpleTestRunInRepo(publicId: PublicId, repoName: String, ci: Boolean, projectName: String?): TestRunDB {
+        val testRunDB = createSimpleTestRun(publicId)
+        addResultsMetadata(testRunDB, ci)
+        addGitMetadata(testRunDB, repoName, true, "main", projectName)
+        return testRunDB
+    }
 
     fun createTestRun(publicId: PublicId, createdOn: LocalDate, pinned: Boolean): TestRunDB {
         val testRun = createTestRun(publicId, listOf())

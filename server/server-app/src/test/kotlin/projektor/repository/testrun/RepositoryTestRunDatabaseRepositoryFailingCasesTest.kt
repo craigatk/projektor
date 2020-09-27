@@ -8,10 +8,7 @@ import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.TestCase
 import strikt.api.expectThat
-import strikt.assertions.any
-import strikt.assertions.contains
-import strikt.assertions.hasSize
-import strikt.assertions.isEqualTo
+import strikt.assertions.*
 
 class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTestCase() {
     @Test
@@ -47,23 +44,20 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
                 )
         )
 
-        val firstTestRun = testRunDBGenerator.createTestRun(firstRunCITruePublicId, testSuiteDataList)
-        testRunDBGenerator.addResultsMetadata(firstTestRun, true)
-        testRunDBGenerator.addGitMetadata(firstTestRun, repoName, true, "main", projectName)
+        val maxRuns = 4
 
-        val secondTestRun = testRunDBGenerator.createTestRun(secondRunCITruePublicId, testSuiteDataList)
-        testRunDBGenerator.addResultsMetadata(secondTestRun, true)
-        testRunDBGenerator.addGitMetadata(secondTestRun, repoName, true, "main", projectName)
+        testRunDBGenerator.createTestRunInRepo(firstRunCITruePublicId, testSuiteDataList, repoName, true, projectName)
+        testRunDBGenerator.createTestRunInRepo(secondRunCITruePublicId, testSuiteDataList, repoName, true, projectName)
+        testRunDBGenerator.createTestRunInRepo(nonCIPublicId, testSuiteDataList, repoName, false, projectName)
+        testRunDBGenerator.createTestRunInRepo(ciInOtherRepoPublicId, testSuiteDataList, "$orgName/another-project", true, projectName)
 
-        val nonCITestRun = testRunDBGenerator.createTestRun(nonCIPublicId, testSuiteDataList)
-        testRunDBGenerator.addResultsMetadata(nonCITestRun, false)
-        testRunDBGenerator.addGitMetadata(nonCITestRun, repoName, true, "main", projectName)
-
-        val ciInAnotherRepoTestRun = testRunDBGenerator.createTestRun(ciInOtherRepoPublicId, testSuiteDataList)
-        testRunDBGenerator.addResultsMetadata(ciInAnotherRepoTestRun, true)
-        testRunDBGenerator.addGitMetadata(ciInAnotherRepoTestRun, "$orgName/another-repo", true, "main", projectName)
-
-        val failingTestCases = runBlocking { repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(repoName, projectName) }
+        val failingTestCases = runBlocking {
+            repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
+                    repoName,
+                    projectName,
+                    maxRuns
+            )
+        }
 
         val failingTestCaseNames = failingTestCases.map(TestCase::fullName)
 
@@ -108,5 +102,62 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
                     any { get { publicId }.isEqualTo(firstRunCITruePublicId.id) }
                     any { get { publicId }.isEqualTo(secondRunCITruePublicId.id) }
                 }
+    }
+
+    @Test
+    fun `should filter out older test runs`() {
+        val repositoryTestRunDatabaseRepository = RepositoryTestRunDatabaseRepository(dslContext)
+
+        val orgName = RandomStringUtils.randomAlphabetic(12)
+        val repoName = "$orgName/repo"
+        val projectName = null
+
+        val firstRunCITruePublicId = randomPublicId()
+        val secondRunCITruePublicId = randomPublicId()
+        val thirdRunCITruePublicId = randomPublicId()
+
+        val testSuiteDataList = listOf(
+                TestSuiteData("projektor.failingTestSuite1",
+                        listOf("passing1"),
+                        listOf("failing1"),
+                        listOf()
+                ),
+                TestSuiteData("projektor.passingTestSuite",
+                        listOf("passing2"),
+                        listOf(),
+                        listOf()
+                )
+        )
+
+        listOf(firstRunCITruePublicId, secondRunCITruePublicId, thirdRunCITruePublicId).forEach { publicId ->
+            testRunDBGenerator.createTestRunInRepo(publicId, testSuiteDataList, repoName, true, projectName)
+        }
+
+        val failingTestCasesMax1 = runBlocking {
+            repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
+                    repoName,
+                    projectName,
+                    1
+            )
+        }
+
+        expectThat(failingTestCasesMax1)
+                .hasSize(1)
+
+        expectThat(failingTestCasesMax1[0].publicId).isEqualTo(thirdRunCITruePublicId.id)
+
+        val failingTestCasesMax2 = runBlocking {
+            repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
+                    repoName,
+                    projectName,
+                    2
+            )
+        }
+
+        expectThat(failingTestCasesMax2)
+                .hasSize(2)
+
+        expectThat(failingTestCasesMax2[0].publicId).isEqualTo(thirdRunCITruePublicId.id)
+        expectThat(failingTestCasesMax2[1].publicId).isEqualTo(secondRunCITruePublicId.id)
     }
 }

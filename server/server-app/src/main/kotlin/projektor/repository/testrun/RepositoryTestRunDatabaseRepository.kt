@@ -5,8 +5,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.Condition
 import org.jooq.DSLContext
+import org.jooq.impl.DSL.*
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables.*
+import projektor.server.api.PublicId
 import projektor.server.api.TestCase
 import projektor.server.api.repository.RepositoryTestRunTimeline
 import projektor.server.api.repository.RepositoryTestRunTimelineEntry
@@ -43,17 +45,52 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                 if (timelineEntries.isNotEmpty()) RepositoryTestRunTimeline(timelineEntries) else null
             }
 
-    override suspend fun fetchRepositoryFailingTestCases(repoName: String, projectName: String?): List<TestCase> =
+    override suspend fun fetchRepositoryFailingTestCases(repoName: String, projectName: String?, maxRuns: Int): List<TestCase> =
             withContext(Dispatchers.IO) {
+                val createdTimestamps = dslContext.select(asterisk())
+                        .from(
+                                dslContext.select(
+                                        TEST_RUN.CREATED_TIMESTAMP,
+                                        rowNumber().over().orderBy(TEST_RUN.CREATED_TIMESTAMP.desc()).`as`("row_num")
+                                )
+                                        .from(TEST_RUN)
+                                        .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                                        .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
+                                        .where(runInCIFromRepo(repoName, projectName))
+                                        .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                        )
+                        .where("row_num <= $maxRuns")
+                        .fetch(TEST_RUN.CREATED_TIMESTAMP)
+
+                val minCreatedTimestamp = createdTimestamps.minOrNull()
+
                 val resultSet = selectTestCase(dslContext)
                         .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
                         .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
                         .where(runInCIFromRepo(repoName, projectName)
                                 .and(TEST_CASE.PASSED.eq(false))
+                                .and(TEST_RUN.CREATED_TIMESTAMP.ge(minCreatedTimestamp))
                         )
+                        .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
                         .fetchResultSet()
 
-                resultSet.use { TestCaseDatabaseRepository.testCaseMapper.stream(it).toList() }
+                val testCases = resultSet.use { TestCaseDatabaseRepository.testCaseMapper.stream(it).toList() }
+
+                testCases
+            }
+
+    override suspend fun fetchRecentTestRunPublicIds(repoName: String, projectName: String?, limit: Int): List<PublicId> =
+            withContext(Dispatchers.IO) {
+                dslContext
+                        .select(TEST_RUN.PUBLIC_ID)
+                        .from(TEST_RUN)
+                        .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                        .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
+                        .where(runInCIFromRepo(repoName, projectName))
+                        .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                        .limit(limit)
+                        .fetchInto(String::class.java)
+                        .map { PublicId(it) }
             }
 
     companion object {
