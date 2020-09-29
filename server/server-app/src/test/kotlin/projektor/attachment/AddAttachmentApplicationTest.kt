@@ -6,13 +6,13 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
-import java.io.File
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import java.io.File
 
 @KtorExperimentalAPI
 @ExperimentalStdlibApi
@@ -27,14 +27,15 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-attachment.txt") {
                 testRunDBGenerator.createTestRun(
-                        publicId,
-                        listOf(
-                                TestSuiteData("testSuite1",
-                                        listOf("testSuite1TestCase1", "testSuite1TestCase2"),
-                                        listOf(),
-                                        listOf()
-                                )
+                    publicId,
+                    listOf(
+                        TestSuiteData(
+                            "testSuite1",
+                            listOf("testSuite1TestCase1", "testSuite1TestCase2"),
+                            listOf(),
+                            listOf()
                         )
+                    )
                 )
 
                 addHeader("content-length", attachmentBytes.size.toString())

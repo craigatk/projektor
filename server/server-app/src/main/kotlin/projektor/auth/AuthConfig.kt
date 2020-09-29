@@ -9,7 +9,7 @@ data class AuthConfig(val publishToken: String?) {
         const val PublishToken = "X-PROJEKTOR-TOKEN"
 
         fun createAuthConfig(applicationConfig: ApplicationConfig) = AuthConfig(
-                applicationConfig.propertyOrNull("ktor.auth.publishToken")?.getString()
+            applicationConfig.propertyOrNull("ktor.auth.publishToken")?.getString()
         )
     }
 }

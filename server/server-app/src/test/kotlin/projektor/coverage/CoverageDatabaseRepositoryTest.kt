@@ -1,7 +1,5 @@
 package projektor.coverage
 
-import java.math.BigDecimal
-import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -13,6 +11,8 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isFalse
 import strikt.assertions.isTrue
+import java.math.BigDecimal
+import kotlin.test.assertNotNull
 
 class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     @Test
@@ -24,12 +24,13 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
         val coverageRun = runBlocking { coverageDatabaseRepository.createOrGetCoverageRun(publicId) }
 
-        val coverageReport = CoverageReport("my-report",
-                CoverageReportStats(
-                        statementStat = CoverageReportStat(75, 25),
-                        lineStat = CoverageReportStat(60, 0),
-                        branchStat = CoverageReportStat(33, 66)
-                )
+        val coverageReport = CoverageReport(
+            "my-report",
+            CoverageReportStats(
+                statementStat = CoverageReportStat(75, 25),
+                lineStat = CoverageReportStat(60, 0),
+                branchStat = CoverageReportStat(33, 66)
+            )
         )
         runBlocking { coverageDatabaseRepository.addCoverageReport(coverageRun, coverageReport) }
 
@@ -63,12 +64,13 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
         val coverageRun = runBlocking { coverageDatabaseRepository.createOrGetCoverageRun(publicId) }
 
-        val coverageReport = CoverageReport("my-report",
-                CoverageReportStats(
-                        statementStat = CoverageReportStat(75, 25),
-                        lineStat = CoverageReportStat(60, 0),
-                        branchStat = CoverageReportStat(33, 66)
-                )
+        val coverageReport = CoverageReport(
+            "my-report",
+            CoverageReportStats(
+                statementStat = CoverageReportStat(75, 25),
+                lineStat = CoverageReportStat(60, 0),
+                branchStat = CoverageReportStat(33, 66)
+            )
         )
         runBlocking { coverageDatabaseRepository.addCoverageReport(coverageRun, coverageReport) }
 

@@ -5,7 +5,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
-import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.database.generated.tables.pojos.TestRunSystemAttributes
@@ -15,6 +14,7 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isFalse
 import strikt.assertions.isNotNull
 import strikt.assertions.isTrue
+import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
@@ -25,8 +25,8 @@ class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/attributes") {
                 testRunDBGenerator.createTestRun(
-                        publicId,
-                        listOf()
+                    publicId,
+                    listOf()
                 )
 
                 testRunSystemAttributesDao.insert(TestRunSystemAttributes(publicId.id, true))
@@ -58,8 +58,8 @@ class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/attributes/pin") {
                 testRunDBGenerator.createTestRun(
-                        publicId,
-                        listOf()
+                    publicId,
+                    listOf()
                 )
 
                 testRunSystemAttributesDao.insert(TestRunSystemAttributes(publicId.id, false))
@@ -67,8 +67,8 @@ class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
                 expectThat(testRunSystemAttributesDao.fetchOneByTestRunPublicId(publicId.id))
-                        .isNotNull()
-                        .and { get { pinned }.isTrue() }
+                    .isNotNull()
+                    .and { get { pinned }.isTrue() }
             }
         }
     }
@@ -90,8 +90,8 @@ class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/attributes/unpin") {
                 testRunDBGenerator.createTestRun(
-                        publicId,
-                        listOf()
+                    publicId,
+                    listOf()
                 )
 
                 testRunSystemAttributesDao.insert(TestRunSystemAttributes(publicId.id, true))
@@ -99,8 +99,8 @@ class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
                 expectThat(testRunSystemAttributesDao.fetchOneByTestRunPublicId(publicId.id))
-                        .isNotNull()
-                        .and { get { pinned }.isFalse() }
+                    .isNotNull()
+                    .and { get { pinned }.isFalse() }
             }
         }
     }

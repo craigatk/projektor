@@ -1,8 +1,6 @@
 package projektor.server.example
 
 import com.google.gson.Gson
-import java.io.File
-import java.math.BigDecimal
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -14,6 +12,8 @@ import projektor.parser.grouped.model.ResultsMetadata
 import projektor.server.api.results.SaveResultsResponse
 import projektor.server.example.coverage.JacocoXmlLoader
 import projektor.server.example.coverage.JestXmlLoader
+import java.io.File
+import java.math.BigDecimal
 
 val serverBaseUrl = System.getenv("SERVER_URL") ?: "http://localhost:8080"
 val uiBaseUrl = System.getenv("SERVER_URL") ?: "http://localhost:1234"
@@ -31,16 +31,16 @@ fun loadAllExamples() {
     val resultsXmlLoader = ResultsXmlLoader()
 
     val testResults = listOf(
-            resultsXmlLoader.passing(),
-            resultsXmlLoader.failing(),
-            resultsXmlLoader.failingLongFailureMessage(),
-            resultsXmlLoader.longOutput(),
-            resultsXmlLoader.output(),
-            resultsXmlLoader.reallyLongOutput(),
-            resultsXmlLoader.reallyLongOutput5000(),
-            resultsXmlLoader.reallyLongOutput10000(),
-            resultsXmlLoader.someIgnored(),
-            resultsXmlLoader.someIgnoredSomeFailing()
+        resultsXmlLoader.passing(),
+        resultsXmlLoader.failing(),
+        resultsXmlLoader.failingLongFailureMessage(),
+        resultsXmlLoader.longOutput(),
+        resultsXmlLoader.output(),
+        resultsXmlLoader.reallyLongOutput(),
+        resultsXmlLoader.reallyLongOutput5000(),
+        resultsXmlLoader.reallyLongOutput10000(),
+        resultsXmlLoader.someIgnored(),
+        resultsXmlLoader.someIgnoredSomeFailing()
     )
 
     val saveResultsResponse = sendResultsToServer(testResults)
@@ -196,7 +196,7 @@ fun repositoryCoverageTimeline() {
 }
 
 fun sendResultsToServer(resultXmlList: List<String>): SaveResultsResponse =
-        resultXmlList.joinToString("\n").let(::sendResultsToServer)
+    resultXmlList.joinToString("\n").let(::sendResultsToServer)
 
 fun sendResultsToServer(resultsBlob: String): SaveResultsResponse {
     val client = OkHttpClient()
@@ -205,9 +205,9 @@ fun sendResultsToServer(resultsBlob: String): SaveResultsResponse {
     val requestBody = resultsBlob.toRequestBody(plainTextMediaType)
 
     val request = Request.Builder()
-            .url(url)
-            .post(requestBody)
-            .build()
+        .url(url)
+        .post(requestBody)
+        .build()
 
     val response = client.newCall(request).execute()
     val responseString = response.body?.string()
@@ -222,9 +222,9 @@ fun sendAttachmentToServer(publicId: String, attachmentFilePath: String) {
     val requestBody = attachmentFile.readBytes().toRequestBody(mediaType)
 
     val request = Request.Builder()
-            .url(url)
-            .post(requestBody)
-            .build()
+        .url(url)
+        .post(requestBody)
+        .build()
 
     val response = client.newCall(request).execute()
     println("Response code ${response.code} from uploading attachment $attachmentFilePath")
@@ -237,9 +237,9 @@ fun sendGroupedResultsToServer(groupedResultsJson: String): SaveResultsResponse 
     val requestBody = groupedResultsJson.toRequestBody(mediaType)
 
     val request = Request.Builder()
-            .url(url)
-            .post(requestBody)
-            .build()
+        .url(url)
+        .post(requestBody)
+        .build()
 
     val response = client.newCall(request).execute()
     val responseString = response.body?.string()
@@ -254,9 +254,9 @@ fun sendCoverageToServer(publicId: String, reportXml: String) {
     val requestBody = reportXml.toRequestBody(mediaType)
 
     val request = Request.Builder()
-            .url(url)
-            .post(requestBody)
-            .build()
+        .url(url)
+        .post(requestBody)
+        .build()
 
     client.newCall(request).execute()
 }

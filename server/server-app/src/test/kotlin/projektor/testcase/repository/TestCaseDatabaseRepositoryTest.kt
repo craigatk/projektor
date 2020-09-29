@@ -1,6 +1,5 @@
 package projektor.testcase.repository
 
-import java.math.BigDecimal
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.*
@@ -9,36 +8,40 @@ import projektor.server.api.TestCase
 import projektor.testcase.TestCaseDatabaseRepository
 import strikt.api.expectThat
 import strikt.assertions.*
+import java.math.BigDecimal
 
 class TestCaseDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should fetch failed test cases from multiple test suites`() {
         val publicId = randomPublicId()
-        testRunDBGenerator.createTestRun(publicId, listOf(
+        testRunDBGenerator.createTestRun(
+            publicId,
+            listOf(
                 TestSuiteData(
-                        "testSuite1",
-                        listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
-                        listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
-                        listOf()
+                    "testSuite1",
+                    listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
+                    listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
+                    listOf()
                 ),
                 TestSuiteData(
-                        "testSuite2",
-                        listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
-                        listOf("testSuite2FailedTestCase1"),
-                        listOf()
+                    "testSuite2",
+                    listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
+                    listOf("testSuite2FailedTestCase1"),
+                    listOf()
                 )
-        ))
+            )
+        )
 
         val testCaseDatabaseRepository = TestCaseDatabaseRepository(dslContext)
 
         val failedTestCases = runBlocking { testCaseDatabaseRepository.fetchFailedTestCases(publicId) }
 
         expectThat(failedTestCases)
-                .hasSize(3)
-                .map(TestCase::name)
-                .contains("testSuite1FailedTestCase1")
-                .contains("testSuite1FailedTestCase2")
-                .contains("testSuite2FailedTestCase1")
+            .hasSize(3)
+            .map(TestCase::name)
+            .contains("testSuite1FailedTestCase1")
+            .contains("testSuite1FailedTestCase2")
+            .contains("testSuite2FailedTestCase1")
     }
 
     @Test
@@ -64,15 +67,15 @@ class TestCaseDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val slowTestCases = runBlocking { testCaseDatabaseRepository.fetchSlowTestCases(publicId, limit) }
 
         expectThat(slowTestCases)
-                .hasSize(5)
-                .map(TestCase::duration)
-                .containsExactly(
-                        BigDecimal("25.000"),
-                        BigDecimal("24.000"),
-                        BigDecimal("23.000"),
-                        BigDecimal("22.000"),
-                        BigDecimal("21.000")
-                )
+            .hasSize(5)
+            .map(TestCase::duration)
+            .containsExactly(
+                BigDecimal("25.000"),
+                BigDecimal("24.000"),
+                BigDecimal("23.000"),
+                BigDecimal("22.000"),
+                BigDecimal("21.000")
+            )
     }
 
     @Test
@@ -101,19 +104,20 @@ class TestCaseDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val foundTestCase = runBlocking { testCaseDatabaseRepository.fetchTestCase(publicId, testSuite.idx, 1) }
 
         expectThat(foundTestCase)
-                .isNotNull()
-                .and {
-                    get { idx }.isEqualTo(1)
-                    get { testSuiteIdx }.isEqualTo(2)
-                    get { hasSystemOut }.isTrue()
-                    get { hasSystemErr }.isFalse()
-                    get { passed }.isFalse()
-                    get { failure }.isNotNull()
-                            .and {
-                                get { failureMessage }.isEqualTo("testCaseToFind failure message")
-                                get { failureText }.isEqualTo("testCaseToFind failure text")
-                                get { failureType }.isEqualTo("testCaseToFind failure type")
-                            }
-                }
+            .isNotNull()
+            .and {
+                get { idx }.isEqualTo(1)
+                get { testSuiteIdx }.isEqualTo(2)
+                get { hasSystemOut }.isTrue()
+                get { hasSystemErr }.isFalse()
+                get { passed }.isFalse()
+                get { packageName }.isEqualTo("com.example")
+                get { failure }.isNotNull()
+                    .and {
+                        get { failureMessage }.isEqualTo("testCaseToFind failure message")
+                        get { failureText }.isEqualTo("testCaseToFind failure text")
+                        get { failureType }.isEqualTo("testCaseToFind failure type")
+                    }
+            }
     }
 }

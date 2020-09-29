@@ -25,8 +25,8 @@ class ObjectStoreClientBucketSpec : StringSpec() {
             val bucketName = "wrongaccessbucket"
 
             expectCatching { ObjectStoreClient(configWithWrongAccessKey).createBucketIfNotExists(bucketName) }
-                    .failed()
-                    .isA<BucketCreationException>()
+                .failed()
+                .isA<BucketCreationException>()
         }
     }
 }

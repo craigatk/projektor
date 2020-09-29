@@ -36,7 +36,7 @@ fun Route.testSuites(testSuiteService: TestSuiteService) {
         val testSuite = testSuiteService.fetchTestSuite(PublicId(publicId), testSuiteIdx)
 
         testSuite?.let { call.respond(HttpStatusCode.OK, testSuite) }
-                ?: call.respond(HttpStatusCode.NotFound)
+            ?: call.respond(HttpStatusCode.NotFound)
     }
     get("/run/{publicId}/suites") {
         val publicId = call.parameters.getOrFail("publicId")

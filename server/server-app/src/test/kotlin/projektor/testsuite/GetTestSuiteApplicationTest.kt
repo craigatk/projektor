@@ -3,17 +3,17 @@ package projektor.testsuite
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.KtorExperimentalAPI
-import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
-import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.TestSuite
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
+import kotlin.test.assertNotNull
+import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 
 @KtorExperimentalAPI
 class GetTestSuiteApplicationTest : ApplicationTestCase() {
@@ -25,19 +25,21 @@ class GetTestSuiteApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/suite/$testSuiteIdx") {
                 testRunDBGenerator.createTestRun(
-                        publicId,
-                        listOf(
-                                TestSuiteData("testSuite1",
-                                        listOf("testSuite1TestCase1"),
-                                        listOf("testSuite1TestCase2"),
-                                        listOf()
-                                ),
-                                TestSuiteData("testSuite2",
-                                        listOf("testSuite2TestCase1", "testSuite2TestCase2", "testSuite2TestCase3"),
-                                        listOf(),
-                                        listOf()
-                                )
+                    publicId,
+                    listOf(
+                        TestSuiteData(
+                            "testSuite1",
+                            listOf("testSuite1TestCase1"),
+                            listOf("testSuite1TestCase2"),
+                            listOf()
+                        ),
+                        TestSuiteData(
+                            "testSuite2",
+                            listOf("testSuite2TestCase1", "testSuite2TestCase2", "testSuite2TestCase3"),
+                            listOf(),
+                            listOf()
                         )
+                    )
                 )
             }.apply {
                 val responseContent = response.content
@@ -73,19 +75,21 @@ class GetTestSuiteApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/suite/$testSuiteIdx") {
                 val testRun = testRunDBGenerator.createTestRun(
-                        publicId,
-                        listOf(
-                                TestSuiteData("projektor.TestSuite1",
-                                        listOf("testCase1"),
-                                        listOf(),
-                                        listOf()
-                                ),
-                                TestSuiteData("projektor.TestSuite2",
-                                        listOf("testCase2"),
-                                        listOf(),
-                                        listOf()
-                                )
+                    publicId,
+                    listOf(
+                        TestSuiteData(
+                            "projektor.TestSuite1",
+                            listOf("testCase1"),
+                            listOf(),
+                            listOf()
+                        ),
+                        TestSuiteData(
+                            "projektor.TestSuite2",
+                            listOf("testCase2"),
+                            listOf(),
+                            listOf()
                         )
+                    )
                 )
 
                 val testSuiteGroup = TestSuiteGroupDB()
@@ -102,10 +106,10 @@ class GetTestSuiteApplicationTest : ApplicationTestCase() {
                 val responseSuite = objectMapper.readValue(responseContent, TestSuite::class.java)
 
                 expectThat(responseSuite)
-                        .isNotNull()
-                        .and {
-                            get { groupName }.isEqualTo("MyGroup")
-                        }
+                    .isNotNull()
+                    .and {
+                        get { groupName }.isEqualTo("MyGroup")
+                    }
             }
         }
     }

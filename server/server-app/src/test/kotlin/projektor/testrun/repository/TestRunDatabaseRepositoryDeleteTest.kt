@@ -1,6 +1,5 @@
 package projektor.testrun.repository
 
-import java.time.LocalDate
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -11,6 +10,7 @@ import strikt.api.expectThat
 import strikt.assertions.contains
 import strikt.assertions.doesNotContain
 import strikt.assertions.isNull
+import java.time.LocalDate
 
 class TestRunDatabaseRepositoryDeleteTest : DatabaseRepositoryTestCase() {
     @Test
@@ -19,21 +19,22 @@ class TestRunDatabaseRepositoryDeleteTest : DatabaseRepositoryTestCase() {
 
         val publicId = randomPublicId()
 
-        val testRun = testRunDBGenerator.createTestRun(publicId,
-                listOf(
-                        TestSuiteData(
-                                "testSuite1",
-                                listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
-                                listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
-                                listOf()
-                        ),
-                        TestSuiteData(
-                                "testSuite2",
-                                listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
-                                listOf("testSuite2FailedTestCase1"),
-                                listOf()
-                        )
+        val testRun = testRunDBGenerator.createTestRun(
+            publicId,
+            listOf(
+                TestSuiteData(
+                    "testSuite1",
+                    listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
+                    listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
+                    listOf()
+                ),
+                TestSuiteData(
+                    "testSuite2",
+                    listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
+                    listOf("testSuite2FailedTestCase1"),
+                    listOf()
                 )
+            )
         )
 
         val testSuiteIds = testSuiteDao.fetchByTestRunId(testRun.id).map { it.id }
@@ -71,7 +72,7 @@ class TestRunDatabaseRepositoryDeleteTest : DatabaseRepositoryTestCase() {
         val testRunsToDelete = runBlocking { testRunDatabaseRepository.findTestRunsToDelete(LocalDate.of(2020, 2, 2)) }
 
         expectThat(testRunsToDelete)
-                .contains(shouldDelete1PublicId, shouldDelete2PublicId)
-                .doesNotContain(tooNewPublicId, pinnedPublicId)
+            .contains(shouldDelete1PublicId, shouldDelete2PublicId)
+            .doesNotContain(tooNewPublicId, pinnedPublicId)
     }
 }

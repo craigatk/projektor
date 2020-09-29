@@ -23,6 +23,7 @@ test {
 }
 
 ktlint {
+    version = "0.39.0"
     disabledRules = ["no-wildcard-imports"]
 }
 

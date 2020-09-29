@@ -1,8 +1,5 @@
 package projektor.schedule
 
-import java.util.concurrent.TimeUnit
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTime
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.Test
@@ -11,6 +8,9 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isGreaterThanOrEqualTo
 import strikt.assertions.isNotNull
+import java.util.concurrent.TimeUnit
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
 @ExperimentalTime
 class SchedulerTest : DatabaseRepositoryTestCase() {

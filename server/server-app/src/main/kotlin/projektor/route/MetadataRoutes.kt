@@ -16,7 +16,7 @@ fun Route.metadata(testRunMetadataService: TestRunMetadataService) {
         val metadata = testRunMetadataService.fetchResultsMetadata(PublicId(publicId))
 
         metadata?.let { call.respond(HttpStatusCode.OK, it) }
-                ?: call.respond(HttpStatusCode.NoContent)
+            ?: call.respond(HttpStatusCode.NoContent)
     }
 
     get("/run/{publicId}/metadata/git") {
@@ -25,6 +25,6 @@ fun Route.metadata(testRunMetadataService: TestRunMetadataService) {
         val gitMetadata = testRunMetadataService.fetchGitMetadata(PublicId(publicId))
 
         gitMetadata?.let { call.respond(HttpStatusCode.OK, it) }
-                ?: call.respond(HttpStatusCode.NoContent)
+            ?: call.respond(HttpStatusCode.NoContent)
     }
 }

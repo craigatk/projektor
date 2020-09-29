@@ -12,7 +12,7 @@ data class CoverageReportStat(val covered: Int, val missed: Int) {
         get() {
             return if (total > 0) {
                 val fraction = this.covered.toBigDecimal()
-                        .divide(this.total.toBigDecimal(), MathContext(4, RoundingMode.HALF_DOWN))
+                    .divide(this.total.toBigDecimal(), MathContext(4, RoundingMode.HALF_DOWN))
 
                 fraction.times(BigDecimal(100.00)).setScale(2, RoundingMode.HALF_DOWN)
             } else {

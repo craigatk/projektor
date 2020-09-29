@@ -1,12 +1,12 @@
 package projektor.cleanup
 
 import io.ktor.util.KtorExperimentalAPI
-import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import projektor.schedule.ScheduleDelay
 import projektor.schedule.ScheduledJob
 import projektor.schedule.Scheduler
+import java.util.concurrent.TimeUnit
 
 @KtorExperimentalAPI
 class CleanupScheduledJob(private val cleanupService: CleanupService) : Runnable {
@@ -27,9 +27,9 @@ class CleanupScheduledJob(private val cleanupService: CleanupService) : Runnable
             if (cleanupConfig.enabled) {
                 val cleanupScheduledJob = CleanupScheduledJob(cleanupService)
                 val job = ScheduledJob(
-                        cleanupJobName,
-                        cleanupScheduledJob,
-                        ScheduleDelay(1, TimeUnit.DAYS)
+                    cleanupJobName,
+                    cleanupScheduledJob,
+                    ScheduleDelay(1, TimeUnit.DAYS)
                 )
 
                 scheduler.scheduleJob(job)

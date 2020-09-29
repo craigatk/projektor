@@ -1,8 +1,8 @@
 package projektor.incomingresults.mapper
 
+import projektor.server.api.TestRunSummary
 import java.sql.Timestamp
 import projektor.database.generated.tables.pojos.TestRun as TestRunDB
-import projektor.server.api.TestRunSummary
 
 fun TestRunSummary.toDB(): TestRunDB {
     val testRunDB = TestRunDB()

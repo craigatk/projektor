@@ -6,8 +6,6 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
-import java.io.File
-import java.math.BigDecimal
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -17,6 +15,8 @@ import projektor.server.api.attachments.AddAttachmentResponse
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
+import java.io.File
+import java.math.BigDecimal
 
 @KtorExperimentalAPI
 class AddAttachmentMaxSizeApplicationTest : ApplicationTestCase() {
@@ -29,14 +29,15 @@ class AddAttachmentMaxSizeApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-run-summary.png") {
                 testRunDBGenerator.createTestRun(
-                        publicId,
-                        listOf(
-                                TestSuiteData("testSuite1",
-                                        listOf("testSuite1TestCase1", "testSuite1TestCase2"),
-                                        listOf(),
-                                        listOf()
-                                )
+                    publicId,
+                    listOf(
+                        TestSuiteData(
+                            "testSuite1",
+                            listOf("testSuite1TestCase1", "testSuite1TestCase2"),
+                            listOf(),
+                            listOf()
                         )
+                    )
                 )
 
                 addHeader("content-length", "23342")
@@ -59,14 +60,15 @@ class AddAttachmentMaxSizeApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-run-summary.png") {
                 testRunDBGenerator.createTestRun(
-                        publicId,
-                        listOf(
-                                TestSuiteData("testSuite1",
-                                        listOf("testSuite1TestCase1", "testSuite1TestCase2"),
-                                        listOf(),
-                                        listOf()
-                                )
+                    publicId,
+                    listOf(
+                        TestSuiteData(
+                            "testSuite1",
+                            listOf("testSuite1TestCase1", "testSuite1TestCase2"),
+                            listOf(),
+                            listOf()
                         )
+                    )
                 )
 
                 addHeader("content-length", "23342")

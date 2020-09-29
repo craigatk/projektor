@@ -31,10 +31,10 @@ class TestResultsServiceTest : DatabaseRepositoryTestCase() {
 
         val resultsProcessing = resultsProcessingDao.fetchOneByPublicId(publicId.id)
         expectThat(resultsProcessing)
-                .isNotNull()
-                .and {
-                    get { status }.isEqualTo(ResultsProcessingStatus.SUCCESS.name)
-                }
+            .isNotNull()
+            .and {
+                get { status }.isEqualTo(ResultsProcessingStatus.SUCCESS.name)
+            }
     }
 
     @Test
@@ -50,7 +50,7 @@ class TestResultsServiceTest : DatabaseRepositoryTestCase() {
         val resultsProcessing = resultsProcessingDao.fetchOneByPublicId(publicId.id)
 
         expectThat(resultsProcessing)
-                .isNotNull()
-                .get { status }.isEqualTo(ResultsProcessingStatus.ERROR.name)
+            .isNotNull()
+            .get { status }.isEqualTo(ResultsProcessingStatus.ERROR.name)
     }
 }

@@ -24,8 +24,8 @@ class TestRunSystemAttributesDatabaseRepositoryTest : DatabaseRepositoryTestCase
 
         val attributes = runBlocking { repository.fetchAttributes(publicId) }
         expectThat(attributes)
-                .isNotNull()
-                .and { get { pinned }.isTrue() }
+            .isNotNull()
+            .and { get { pinned }.isTrue() }
     }
 
     @Test
@@ -37,8 +37,8 @@ class TestRunSystemAttributesDatabaseRepositoryTest : DatabaseRepositoryTestCase
 
         val attributes = runBlocking { repository.fetchAttributes(publicId) }
         expectThat(attributes)
-                .isNotNull()
-                .and { get { pinned }.isFalse() }
+            .isNotNull()
+            .and { get { pinned }.isFalse() }
     }
 
     @Test
@@ -62,8 +62,8 @@ class TestRunSystemAttributesDatabaseRepositoryTest : DatabaseRepositoryTestCase
 
         val attributes = runBlocking { repository.fetchAttributes(publicId) }
         expectThat(attributes)
-                .isNotNull()
-                .and { get { pinned }.isTrue() }
+            .isNotNull()
+            .and { get { pinned }.isTrue() }
     }
 
     @Test
@@ -77,8 +77,8 @@ class TestRunSystemAttributesDatabaseRepositoryTest : DatabaseRepositoryTestCase
 
         val attributes = runBlocking { repository.fetchAttributes(publicId) }
         expectThat(attributes)
-                .isNotNull()
-                .and { get { pinned }.isTrue() }
+            .isNotNull()
+            .and { get { pinned }.isTrue() }
     }
 
     @Test
@@ -91,8 +91,8 @@ class TestRunSystemAttributesDatabaseRepositoryTest : DatabaseRepositoryTestCase
 
         val attributes = runBlocking { repository.fetchAttributes(publicId) }
         expectThat(attributes)
-                .isNotNull()
-                .and { get { pinned }.isFalse() }
+            .isNotNull()
+            .and { get { pinned }.isFalse() }
     }
 
     @Test
@@ -106,7 +106,7 @@ class TestRunSystemAttributesDatabaseRepositoryTest : DatabaseRepositoryTestCase
 
         val attributes = runBlocking { repository.fetchAttributes(publicId) }
         expectThat(attributes)
-                .isNotNull()
-                .and { get { pinned }.isFalse() }
+            .isNotNull()
+            .and { get { pinned }.isFalse() }
     }
 }

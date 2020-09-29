@@ -1,6 +1,5 @@
 package projektor.incomingresults.processing
 
-import java.time.LocalDateTime
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -14,6 +13,7 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
+import java.time.LocalDateTime
 
 class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     private lateinit var resultsProcessingDatabaseRepository: ResultsProcessingRepository
@@ -35,13 +35,13 @@ class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
             get { id }.isEqualTo(publicId.id)
             get { status }.isEqualTo(ResultsProcessingStatus.RECEIVED)
             get { createdTimestamp }.isNotNull()
-                    .and {
-                        get { year }.isEqualTo(now.year)
-                        get { month }.isEqualTo(now.month)
-                        get { dayOfMonth }.isEqualTo(now.dayOfMonth)
-                        get { hour }.isEqualTo(now.hour)
-                        get { minute }.isEqualTo(now.minute)
-                    }
+                .and {
+                    get { year }.isEqualTo(now.year)
+                    get { month }.isEqualTo(now.month)
+                    get { dayOfMonth }.isEqualTo(now.dayOfMonth)
+                    get { hour }.isEqualTo(now.hour)
+                    get { minute }.isEqualTo(now.minute)
+                }
         }
     }
 
@@ -50,16 +50,16 @@ class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val publicId = randomPublicId()
 
         val resultsProcessingDB = ResultsProcessing()
-                .setPublicId(publicId.id)
-                .setStatus(ResultsProcessingStatus.RECEIVED.name)
+            .setPublicId(publicId.id)
+            .setStatus(ResultsProcessingStatus.RECEIVED.name)
         resultsProcessingDao.insert(resultsProcessingDB)
 
         runBlocking { resultsProcessingDatabaseRepository.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.PROCESSING) }
 
         val updatedResultsProcessing = resultsProcessingDao.fetchOneByPublicId(publicId.id)
         expectThat(updatedResultsProcessing)
-                .isNotNull()
-                .get { status }.isEqualTo(ResultsProcessingStatus.PROCESSING.name)
+            .isNotNull()
+            .get { status }.isEqualTo(ResultsProcessingStatus.PROCESSING.name)
     }
 
     @Test
@@ -67,8 +67,8 @@ class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val publicId = randomPublicId()
 
         val resultsProcessingDB = ResultsProcessing()
-                .setPublicId(publicId.id)
-                .setStatus(ResultsProcessingStatus.RECEIVED.name)
+            .setPublicId(publicId.id)
+            .setStatus(ResultsProcessingStatus.RECEIVED.name)
         resultsProcessingDao.insert(resultsProcessingDB)
 
         val newErrorMessage = "An error occurred"
@@ -78,19 +78,19 @@ class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
         val updatedResultsProcessing = resultsProcessingDao.fetchOneByPublicId(publicId.id)
         expectThat(updatedResultsProcessing)
-                .isNotNull()
-                .and {
-                    get { status }.isEqualTo(ResultsProcessingStatus.ERROR.name)
-                    get { errorMessage }.isEqualTo(newErrorMessage)
-                }
+            .isNotNull()
+            .and {
+                get { status }.isEqualTo(ResultsProcessingStatus.ERROR.name)
+                get { errorMessage }.isEqualTo(newErrorMessage)
+            }
 
         val resultsProcessingFailure = resultsProcessingFailureDao.fetchOneByPublicId(publicId.id)
         expectThat(resultsProcessingFailure)
-                .isNotNull()
-                .and {
-                    get { resultsBody }.isEqualTo(resultsBody)
-                    get { createdTimestamp }.isNotNull()
-                }
+            .isNotNull()
+            .and {
+                get { resultsBody }.isEqualTo(resultsBody)
+                get { createdTimestamp }.isNotNull()
+            }
     }
 
     @Test
@@ -98,17 +98,17 @@ class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val publicId = randomPublicId()
 
         val resultsProcessingDB = ResultsProcessing()
-                .setPublicId(publicId.id)
-                .setStatus(ResultsProcessingStatus.RECEIVED.name)
+            .setPublicId(publicId.id)
+            .setStatus(ResultsProcessingStatus.RECEIVED.name)
         resultsProcessingDao.insert(resultsProcessingDB)
 
         val resultsProcessing = runBlocking { resultsProcessingDatabaseRepository.fetchResultsProcessing(publicId) }
 
         expectThat(resultsProcessing)
-                .isNotNull()
-                .and {
-                    get { status }.isEqualTo(ResultsProcessingStatus.RECEIVED)
-                }
+            .isNotNull()
+            .and {
+                get { status }.isEqualTo(ResultsProcessingStatus.RECEIVED)
+            }
     }
 
     @Test

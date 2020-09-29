@@ -1,18 +1,18 @@
 package projektor.testrun.repository
 
-import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
 import projektor.incomingresults.randomPublicId
 import projektor.parser.model.Failure
-import projektor.parser.model.TestCase as ParsedTestCase
-import projektor.parser.model.TestSuite as ParsedTestSuite
 import projektor.testrun.TestRunDatabaseRepository
 import strikt.api.expectThat
 import strikt.assertions.any
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
+import kotlin.test.assertNotNull
+import projektor.parser.model.TestCase as ParsedTestCase
+import projektor.parser.model.TestSuite as ParsedTestSuite
 
 class TestRunDatabaseRepositorySaveResultsTest : DatabaseRepositoryTestCase() {
 
@@ -122,10 +122,10 @@ class TestRunDatabaseRepositorySaveResultsTest : DatabaseRepositoryTestCase() {
         assertNotNull(failedTestCaseDB)
         val failedTestCaseFailuresDB = testFailureDao.fetchByTestCaseId(failedTestCaseDB.id)
         expectThat(failedTestCaseFailuresDB)
-                .hasSize(1)
-                .any {
-                    get { failureMessage }.isEqualTo("Failed test case")
-                }
+            .hasSize(1)
+            .any {
+                get { failureMessage }.isEqualTo("Failed test case")
+            }
 
         expectThat(testCases).any {
             get { name }.isEqualTo("ErroredTestCase")
@@ -136,9 +136,9 @@ class TestRunDatabaseRepositorySaveResultsTest : DatabaseRepositoryTestCase() {
         assertNotNull(erroredTestCaseDB)
         val erroredTestCaseFailuresDB = testFailureDao.fetchByTestCaseId(erroredTestCaseDB.id)
         expectThat(erroredTestCaseFailuresDB)
-                .hasSize(1)
-                .any {
-                    get { failureMessage }.isEqualTo("Errored test case")
-                }
+            .hasSize(1)
+            .any {
+                get { failureMessage }.isEqualTo("Errored test case")
+            }
     }
 }

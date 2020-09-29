@@ -16,6 +16,6 @@ fun Route.previousRuns(previousTestRunService: PreviousTestRunService) {
         val previousPublicId = previousTestRunService.findPreviousMainBranchRunWithCoverage(PublicId(publicId))
 
         previousPublicId?.let { call.respond(HttpStatusCode.OK, previousPublicId) }
-                ?: call.respond(HttpStatusCode.NoContent)
+            ?: call.respond(HttpStatusCode.NoContent)
     }
 }

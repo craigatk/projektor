@@ -1,12 +1,12 @@
 package projektor.incomingresults.mapper
 
-import java.math.BigDecimal
 import org.junit.jupiter.api.Test
 import projektor.incomingresults.randomPublicId
 import projektor.parser.model.TestCase
 import projektor.parser.model.TestSuite
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import java.math.BigDecimal
 
 class ParsedResultsToApiMapperTest {
     @Test

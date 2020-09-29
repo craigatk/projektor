@@ -15,10 +15,10 @@ class OrganizationCoverageService(
             val coverage = coverageService.getCoverage(repositoryTestRun.publicId)
 
             RepositoryCoverage(
-                    publicId = repositoryTestRun.publicId.id,
-                    repoName = repositoryTestRun.repoName,
-                    projectName = repositoryTestRun.projectName,
-                    coverage = coverage
+                publicId = repositoryTestRun.publicId.id,
+                repoName = repositoryTestRun.repoName,
+                projectName = repositoryTestRun.projectName,
+                coverage = coverage
             )
         }
 
@@ -26,5 +26,5 @@ class OrganizationCoverageService(
     }
 
     suspend fun findReposWithCoverage(orgName: String): List<RepositoryTestRun> =
-            organizationCoverageRepository.findReposWithCoverage(orgName)
+        organizationCoverageRepository.findReposWithCoverage(orgName)
 }

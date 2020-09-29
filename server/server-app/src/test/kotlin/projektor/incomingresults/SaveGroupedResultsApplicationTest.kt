@@ -6,8 +6,6 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
-import java.time.Duration
-import kotlin.test.assertNotNull
 import org.awaitility.Awaitility.waitAtMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
@@ -19,6 +17,8 @@ import projektor.server.api.results.ResultsProcessingStatus
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isNotNull
+import java.time.Duration
+import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
@@ -47,7 +47,7 @@ class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
 
                 val testSuiteGroups = testSuiteGroupDao.fetchByTestRunId(testRun.id)
                 expectThat(testSuiteGroups)
-                        .hasSize(2)
+                    .hasSize(2)
 
                 val testSuiteGroup1 = testSuiteGroups.find { it.groupName == "Group1" }
                 assertNotNull(testSuiteGroup1)

@@ -3,7 +3,6 @@ package projektor.compare
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.*
-import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
@@ -13,6 +12,7 @@ import projektor.server.api.PublicId
 import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 @ExperimentalStdlibApi

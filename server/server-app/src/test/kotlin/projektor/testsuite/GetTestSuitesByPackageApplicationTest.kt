@@ -46,9 +46,9 @@ class GetTestSuitesByPackageApplicationTest : ApplicationTestCase() {
                 val responseSuites: List<TestSuite> = objectMapper.readValue(response.content, object : TypeReference<List<TestSuite>>() {})
 
                 expectThat(responseSuites)
-                        .hasSize(2)
-                        .map(TestSuite::className)
-                        .contains("ShouldGet1", "ShouldGet2")
+                    .hasSize(2)
+                    .map(TestSuite::className)
+                    .contains("ShouldGet1", "ShouldGet2")
             }
         }
     }

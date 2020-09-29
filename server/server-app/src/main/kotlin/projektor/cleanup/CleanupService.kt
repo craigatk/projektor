@@ -1,8 +1,6 @@
 package projektor.cleanup
 
 import io.ktor.util.KtorExperimentalAPI
-import java.lang.Exception
-import java.time.LocalDate
 import org.slf4j.LoggerFactory
 import projektor.attachment.AttachmentService
 import projektor.coverage.CoverageService
@@ -10,6 +8,8 @@ import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.server.api.PublicId
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.testrun.TestRunRepository
+import java.lang.Exception
+import java.time.LocalDate
 
 @KtorExperimentalAPI
 class CleanupService(

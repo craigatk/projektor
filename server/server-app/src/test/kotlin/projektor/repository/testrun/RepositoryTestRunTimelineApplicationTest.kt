@@ -3,8 +3,6 @@ package projektor.repository.testrun
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.*
-import java.math.BigDecimal
-import kotlin.test.assertNotNull
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
@@ -14,6 +12,8 @@ import projektor.server.api.repository.RepositoryTestRunTimeline
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
+import java.math.BigDecimal
+import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 class RepositoryTestRunTimelineApplicationTest : ApplicationTestCase() {

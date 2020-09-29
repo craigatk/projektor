@@ -6,7 +6,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
-import java.math.BigDecimal
 import org.junit.jupiter.api.Test
 import projektor.*
 import projektor.incomingresults.randomPublicId
@@ -16,6 +15,7 @@ import strikt.assertions.containsExactly
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import strikt.assertions.map
+import java.math.BigDecimal
 
 @KtorExperimentalAPI
 class GetSlowTestCasesApplicationTest : ApplicationTestCase() {
@@ -43,20 +43,20 @@ class GetSlowTestCasesApplicationTest : ApplicationTestCase() {
                 val slowTestCases: List<TestCase> = objectMapper.readValue(response.content, object : TypeReference<List<TestCase>>() {})
 
                 expectThat(slowTestCases)
-                        .hasSize(10)
-                        .map(TestCase::duration)
-                        .containsExactly(
-                                BigDecimal("25.000"),
-                                BigDecimal("24.000"),
-                                BigDecimal("23.000"),
-                                BigDecimal("22.000"),
-                                BigDecimal("21.000"),
-                                BigDecimal("20.000"),
-                                BigDecimal("19.000"),
-                                BigDecimal("18.000"),
-                                BigDecimal("17.000"),
-                                BigDecimal("16.000")
-                        )
+                    .hasSize(10)
+                    .map(TestCase::duration)
+                    .containsExactly(
+                        BigDecimal("25.000"),
+                        BigDecimal("24.000"),
+                        BigDecimal("23.000"),
+                        BigDecimal("22.000"),
+                        BigDecimal("21.000"),
+                        BigDecimal("20.000"),
+                        BigDecimal("19.000"),
+                        BigDecimal("18.000"),
+                        BigDecimal("17.000"),
+                        BigDecimal("16.000")
+                    )
             }
         }
     }

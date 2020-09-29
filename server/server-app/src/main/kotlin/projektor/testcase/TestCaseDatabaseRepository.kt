@@ -1,68 +1,80 @@
 package projektor.testcase
 
-import kotlin.streams.toList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
+import org.jooq.Record
+import org.jooq.SelectOnConditionStep
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
-import projektor.database.generated.Tables
+import projektor.database.generated.Tables.*
 import projektor.server.api.PublicId
 import projektor.server.api.TestCase
 import projektor.util.addPrefixToFields
+import kotlin.streams.toList
 
 class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseRepository {
-    private val testCaseMapper = JdbcMapperFactory.newInstance()
-            .addKeys("id", "failure_id")
-            .ignorePropertyNotFound()
-            .newMapper(TestCase::class.java)
 
     override suspend fun fetchFailedTestCases(testRunPublicId: PublicId): List<TestCase> =
-            withContext(Dispatchers.IO) {
-                val resultSet = selectTestCase()
-                        .where(Tables.TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
-                                .and(Tables.TEST_CASE.PASSED.eq(false)))
-                        .orderBy(Tables.TEST_CASE.ID)
-                        .fetchResultSet()
+        withContext(Dispatchers.IO) {
+            val resultSet = selectTestCase(dslContext)
+                .where(
+                    TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
+                        .and(TEST_CASE.PASSED.eq(false))
+                )
+                .orderBy(TEST_CASE.ID)
+                .fetchResultSet()
 
-                resultSet.use { testCaseMapper.stream(it).toList() }
-            }
+            resultSet.use { testCaseMapper.stream(it).toList() }
+        }
 
     override suspend fun fetchSlowTestCases(testRunPublicId: PublicId, limit: Int): List<TestCase> =
         withContext(Dispatchers.IO) {
-            val resultSet = selectTestCase()
-                    .where(Tables.TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
-                    .orderBy(Tables.TEST_CASE.DURATION.desc())
-                    .limit(limit)
-                    .fetchResultSet()
+            val resultSet = selectTestCase(dslContext)
+                .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
+                .orderBy(TEST_CASE.DURATION.desc())
+                .limit(limit)
+                .fetchResultSet()
 
             resultSet.use { testCaseMapper.stream(it).toList() }
         }
 
     override suspend fun fetchTestCase(testRunPublicId: PublicId, testSuiteIdx: Int, testCaseIdx: Int): TestCase? =
-            withContext(Dispatchers.IO) {
-                val resultSet = selectTestCase()
-                        .where(Tables.TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
-                                .and(Tables.TEST_SUITE.IDX.eq(testSuiteIdx))
-                                .and(Tables.TEST_CASE.IDX.eq(testCaseIdx)))
-                        .orderBy(Tables.TEST_CASE.ID)
-                        .fetchResultSet()
+        withContext(Dispatchers.IO) {
+            val resultSet = selectTestCase(dslContext)
+                .where(
+                    TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
+                        .and(TEST_SUITE.IDX.eq(testSuiteIdx))
+                        .and(TEST_CASE.IDX.eq(testCaseIdx))
+                )
+                .orderBy(TEST_CASE.ID)
+                .fetchResultSet()
 
-                val testCase: TestCase? = resultSet.use {
-                    testCaseMapper.stream(resultSet).findFirst().orElse(null)
-                }
-
-                testCase
+            val testCase: TestCase? = resultSet.use {
+                testCaseMapper.stream(resultSet).findFirst().orElse(null)
             }
 
-    private fun selectTestCase() =
+            testCase
+        }
+
+    companion object {
+        val testCaseMapper = JdbcMapperFactory.newInstance()
+            .addKeys("id", "failure_id")
+            .ignorePropertyNotFound()
+            .newMapper(TestCase::class.java)
+
+        fun selectTestCase(dslContext: DSLContext): SelectOnConditionStep<Record> =
             dslContext
-                    .select(Tables.TEST_CASE.fields().toList())
-                    .select(Tables.TEST_SUITE.IDX.`as`("test_suite_idx"))
-                    .select(Tables.TEST_SUITE.HAS_SYSTEM_OUT.`as`("has_system_out"))
-                    .select(Tables.TEST_SUITE.HAS_SYSTEM_ERR.`as`("has_system_err"))
-                    .select(addPrefixToFields("failure_", Tables.TEST_FAILURE.fields().toList()))
-                    .from(Tables.TEST_CASE)
-                    .innerJoin(Tables.TEST_SUITE).on(Tables.TEST_SUITE.ID.eq(Tables.TEST_CASE.TEST_SUITE_ID))
-                    .innerJoin(Tables.TEST_RUN).on(Tables.TEST_SUITE.TEST_RUN_ID.eq(Tables.TEST_RUN.ID))
-                    .leftOuterJoin(Tables.TEST_FAILURE).on(Tables.TEST_FAILURE.TEST_CASE_ID.eq(Tables.TEST_CASE.ID))
+                .select(TEST_CASE.fields().toList())
+                .select(TEST_SUITE.IDX.`as`("test_suite_idx"))
+                .select(TEST_SUITE.HAS_SYSTEM_OUT.`as`("has_system_out"))
+                .select(TEST_SUITE.HAS_SYSTEM_ERR.`as`("has_system_err"))
+                .select(TEST_SUITE.PACKAGE_NAME.`as`("package_name"))
+                .select(TEST_RUN.PUBLIC_ID.`as`("public_id"))
+                .select(TEST_RUN.CREATED_TIMESTAMP.`as`("created_timestamp"))
+                .select(addPrefixToFields("failure_", TEST_FAILURE.fields().toList()))
+                .from(TEST_CASE)
+                .innerJoin(TEST_SUITE).on(TEST_SUITE.ID.eq(TEST_CASE.TEST_SUITE_ID))
+                .innerJoin(TEST_RUN).on(TEST_SUITE.TEST_RUN_ID.eq(TEST_RUN.ID))
+                .leftOuterJoin(TEST_FAILURE).on(TEST_FAILURE.TEST_CASE_ID.eq(TEST_CASE.ID))
+    }
 }

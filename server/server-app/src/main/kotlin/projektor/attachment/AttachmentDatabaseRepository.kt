@@ -23,20 +23,22 @@ class AttachmentDatabaseRepository(private val dslContext: DSLContext) : Attachm
     }
 
     override suspend fun listAttachments(publicId: PublicId): List<Attachment> =
-            withContext(Dispatchers.IO) {
-                dslContext.select(Tables.TEST_RUN_ATTACHMENT.fields().toList())
-                        .from(Tables.TEST_RUN_ATTACHMENT)
-                        .where(Tables.TEST_RUN_ATTACHMENT.TEST_RUN_PUBLIC_ID.eq(publicId.id))
-                        .fetchInto(Attachment::class.java)
-            }
+        withContext(Dispatchers.IO) {
+            dslContext.select(Tables.TEST_RUN_ATTACHMENT.fields().toList())
+                .from(Tables.TEST_RUN_ATTACHMENT)
+                .where(Tables.TEST_RUN_ATTACHMENT.TEST_RUN_PUBLIC_ID.eq(publicId.id))
+                .fetchInto(Attachment::class.java)
+        }
 
     override suspend fun deleteAttachment(publicId: PublicId, objectName: String) {
         withContext(Dispatchers.IO) {
             dslContext
-                    .deleteFrom(Tables.TEST_RUN_ATTACHMENT)
-                    .where(Tables.TEST_RUN_ATTACHMENT.TEST_RUN_PUBLIC_ID.eq(publicId.id)
-                            .and(Tables.TEST_RUN_ATTACHMENT.OBJECT_NAME.eq(objectName)))
-                    .execute()
+                .deleteFrom(Tables.TEST_RUN_ATTACHMENT)
+                .where(
+                    Tables.TEST_RUN_ATTACHMENT.TEST_RUN_PUBLIC_ID.eq(publicId.id)
+                        .and(Tables.TEST_RUN_ATTACHMENT.OBJECT_NAME.eq(objectName))
+                )
+                .execute()
         }
     }
 }

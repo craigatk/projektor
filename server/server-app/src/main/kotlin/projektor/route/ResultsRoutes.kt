@@ -80,8 +80,8 @@ fun Route.results(
         val processingResults = testResultsProcessingService.fetchResultsProcessing(PublicId(publicId))
 
         processingResults
-                ?.let { call.respond(HttpStatusCode.OK, it) }
-                ?: call.respond(HttpStatusCode.NotFound)
+            ?.let { call.respond(HttpStatusCode.OK, it) }
+            ?: call.respond(HttpStatusCode.NotFound)
     }
 }
 

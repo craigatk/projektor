@@ -25,9 +25,9 @@ class CoverageService(
             val overallStats = coverageRepository.fetchOverallStats(publicId)
 
             Coverage(
-                    groups = coverageReports.map { it.toCoverageGroup(null) },
-                    overallStats = overallStats.toCoverageStats(null),
-                    previousTestRunId = null
+                groups = coverageReports.map { it.toCoverageGroup(null) },
+                overallStats = overallStats.toCoverageStats(null),
+                previousTestRunId = null
             )
         } else {
             null
@@ -45,9 +45,9 @@ class CoverageService(
             val previousCoverage: Coverage? = previousTestRun?.let { getCoverage(it) }
 
             Coverage(
-                    groups = coverageReports.map { it.toCoverageGroup(previousCoverage) },
-                    overallStats = overallStats.toCoverageStats(previousCoverage?.overallStats),
-                    previousTestRunId = previousTestRun?.id
+                groups = coverageReports.map { it.toCoverageGroup(previousCoverage) },
+                overallStats = overallStats.toCoverageStats(previousCoverage?.overallStats),
+                previousTestRunId = previousTestRun?.id
             )
         } else {
             null
@@ -67,8 +67,8 @@ class CoverageService(
     }
 
     suspend fun coverageExists(publicId: PublicId): Boolean =
-            coverageRepository.coverageExists(publicId)
+        coverageRepository.coverageExists(publicId)
 
     suspend fun deleteCoverage(publicId: PublicId) =
-            coverageRepository.deleteCoverage(publicId)
+        coverageRepository.deleteCoverage(publicId)
 }

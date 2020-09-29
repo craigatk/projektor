@@ -16,12 +16,12 @@ class JacocoCoverageReportParser {
         val branchStat = createStat(parsedReport, CounterType.BRANCH)
 
         return CoverageReport(
-                parsedReport.name,
-                CoverageReportStats(
-                        statementStat = statementStat,
-                        lineStat = lineStat,
-                        branchStat = branchStat
-                )
+            parsedReport.name,
+            CoverageReportStats(
+                statementStat = statementStat,
+                lineStat = lineStat,
+                branchStat = branchStat
+            )
         )
     }
 

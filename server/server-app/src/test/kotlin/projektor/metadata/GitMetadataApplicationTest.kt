@@ -3,7 +3,6 @@ package projektor.metadata
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.*
-import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -12,6 +11,7 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNull
 import strikt.assertions.isTrue
+import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 class GitMetadataApplicationTest : ApplicationTestCase() {

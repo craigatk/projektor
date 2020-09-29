@@ -49,10 +49,10 @@ open class DatabaseRepositoryTestCase : KoinTest {
         val hikariConfig = HikariConfig()
 
         val dataSourceConfig = DataSourceConfig(
-                System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5433/projektordb",
-                System.getenv("DB_USERNAME") ?: "testuser",
-                System.getenv("DB_PASSWORD") ?: "testpass",
-                "public"
+            System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5433/projektordb",
+            System.getenv("DB_USERNAME") ?: "testuser",
+            System.getenv("DB_PASSWORD") ?: "testpass",
+            "public"
         )
 
         hikariConfig.username = dataSourceConfig.username
@@ -67,24 +67,26 @@ open class DatabaseRepositoryTestCase : KoinTest {
         dslContext = DSL.using(dataSource, SQLDialect.POSTGRES)
 
         val metricsConfig = InfluxMetricsConfig(
-                false,
-                "",
-                "",
-                null,
-                null,
-                false,
-                10,
-                "test"
+            false,
+            "",
+            "",
+            null,
+            null,
+            false,
+            10,
+            "test"
         )
 
         startKoin {
-            modules(createAppModule(
+            modules(
+                createAppModule(
                     dataSource,
                     AuthConfig(null),
                     dslContext,
                     createRegistry(metricsConfig),
                     MessageConfig(listOf())
-            ))
+                )
+            )
         }
 
         testRunDao = TestRunDao(dslContext.configuration())
@@ -108,15 +110,15 @@ open class DatabaseRepositoryTestCase : KoinTest {
         coverageService = CoverageService(coverageRepository, previousTestRunService)
 
         testRunDBGenerator = TestRunDBGenerator(
-                testRunDao,
-                testSuiteGroupDao,
-                testSuiteDao,
-                testCaseDao,
-                testFailureDao,
-                testRunSystemAttributesDao,
-                gitMetadataDao,
-                resultsMetadataDao,
-                coverageService
+            testRunDao,
+            testSuiteGroupDao,
+            testSuiteDao,
+            testCaseDao,
+            testFailureDao,
+            testRunSystemAttributesDao,
+            gitMetadataDao,
+            resultsMetadataDao,
+            coverageService
         )
     }
 

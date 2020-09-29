@@ -17,15 +17,15 @@ object CoverageParser {
     }
 
     private fun findReportType(reportXml: String): CoverageReportType? =
-            when {
-                JacocoXmlReportParser.isJacocoReport(reportXml) -> {
-                    CoverageReportType.JACOCO
-                }
-                JestXmlReportParser.isJestReport(reportXml) -> {
-                    CoverageReportType.JEST
-                }
-                else -> {
-                    null
-                }
+        when {
+            JacocoXmlReportParser.isJacocoReport(reportXml) -> {
+                CoverageReportType.JACOCO
             }
+            JestXmlReportParser.isJestReport(reportXml) -> {
+                CoverageReportType.JEST
+            }
+            else -> {
+                null
+            }
+        }
 }

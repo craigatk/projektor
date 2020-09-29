@@ -4,12 +4,12 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
 import projektor.TestSuiteData
-import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 import projektor.incomingresults.randomPublicId
 import projektor.testsuite.TestSuiteDatabaseRepository
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
+import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 
 class TestSuiteDatabaseRepositoryFetchGroupedSuitesTest : DatabaseRepositoryTestCase() {
     @Test
@@ -18,19 +18,21 @@ class TestSuiteDatabaseRepositoryFetchGroupedSuitesTest : DatabaseRepositoryTest
         val publicId = randomPublicId()
 
         val testRun = testRunDBGenerator.createTestRun(
-                publicId,
-                listOf(
-                        TestSuiteData("projektor.TestSuite1",
-                                listOf("testCase1"),
-                                listOf(),
-                                listOf()
-                        ),
-                        TestSuiteData("projektor.TestSuite2",
-                                listOf("testCase2"),
-                                listOf(),
-                                listOf()
-                        )
+            publicId,
+            listOf(
+                TestSuiteData(
+                    "projektor.TestSuite1",
+                    listOf("testCase1"),
+                    listOf(),
+                    listOf()
+                ),
+                TestSuiteData(
+                    "projektor.TestSuite2",
+                    listOf("testCase2"),
+                    listOf(),
+                    listOf()
                 )
+            )
         )
 
         val testSuiteGroup = TestSuiteGroupDB()
@@ -43,18 +45,18 @@ class TestSuiteDatabaseRepositoryFetchGroupedSuitesTest : DatabaseRepositoryTest
 
         val testSuite1 = runBlocking { testSuiteDatabaseRepository.fetchTestSuite(publicId, 1) }
         expectThat(testSuite1)
-                .isNotNull()
-                .and {
-                    get { groupName }.isEqualTo("MyGroup")
-                    get { groupLabel }.isEqualTo("MyLabel")
-                }
+            .isNotNull()
+            .and {
+                get { groupName }.isEqualTo("MyGroup")
+                get { groupLabel }.isEqualTo("MyLabel")
+            }
 
         val testSuite2 = runBlocking { testSuiteDatabaseRepository.fetchTestSuite(publicId, 2) }
         expectThat(testSuite2)
-                .isNotNull()
-                .and {
-                    get { groupName }.isEqualTo("MyGroup")
-                    get { groupLabel }.isEqualTo("MyLabel")
-                }
+            .isNotNull()
+            .and {
+                get { groupName }.isEqualTo("MyGroup")
+                get { groupLabel }.isEqualTo("MyLabel")
+            }
     }
 }
