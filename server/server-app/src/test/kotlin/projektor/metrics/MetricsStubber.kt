@@ -26,16 +26,16 @@ class MetricsStubber {
     }
 
     fun findCreateMetricsDatabaseRequests(): List<LoggedRequest> =
-            wireMockServer.findAll(WireMock.postRequestedFor(WireMock.urlMatching("/query.*")))
+        wireMockServer.findAll(WireMock.postRequestedFor(WireMock.urlMatching("/query.*")))
 
     fun findWriteMetricsRequests(): List<LoggedRequest> =
-            wireMockServer.findAll(WireMock.postRequestedFor(WireMock.urlMatching("/write.*")))
+        wireMockServer.findAll(WireMock.postRequestedFor(WireMock.urlMatching("/write.*")))
 
     fun findWriteMetricsRequestsForMetric(metricContents: String) =
-            findWriteMetricsRequests().filter { it.bodyAsString.contains(metricContents) }
+        findWriteMetricsRequests().filter { it.bodyAsString.contains(metricContents) }
 
     fun findWriteMetricsRequestForCounterMetric(metricName: String) =
-            findWriteMetricsRequestsForMetric("$metricName,metric_type=counter")
+        findWriteMetricsRequestsForMetric("$metricName,metric_type=counter")
 
     fun verifyWriteMetricsRequestForCounterMetric(metricName: String, expectedCount: Int): Boolean {
         val metricWriteRequests = findWriteMetricsRequestsForMetric(metricName)
@@ -46,5 +46,5 @@ class MetricsStubber {
     }
 
     fun findWriteMetricsRequestForCounterMetric(metricName: String, expectedCount: Int) =
-            findWriteMetricsRequestsForMetric("$metricName,metric_type=counter value=$expectedCount")
+        findWriteMetricsRequestsForMetric("$metricName,metric_type=counter value=$expectedCount")
 }

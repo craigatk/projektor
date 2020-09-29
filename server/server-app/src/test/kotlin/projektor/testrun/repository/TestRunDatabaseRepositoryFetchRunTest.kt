@@ -1,10 +1,5 @@
 package projektor.testrun.repository
 
-import java.math.BigDecimal
-import java.sql.Timestamp
-import java.time.Instant
-import java.time.LocalDateTime
-import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -16,6 +11,11 @@ import projektor.incomingresults.randomPublicId
 import projektor.testrun.TestRunDatabaseRepository
 import strikt.api.expectThat
 import strikt.assertions.*
+import java.math.BigDecimal
+import java.sql.Timestamp
+import java.time.Instant
+import java.time.LocalDateTime
+import kotlin.test.assertNotNull
 
 class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
 
@@ -92,33 +92,33 @@ class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
         assertNotNull(testRun)
 
         expectThat(testRun)
-                .get { summary }.and {
-                    get { totalTestCount }.isEqualTo(3)
-                    get { totalPassingCount }.isEqualTo(1)
-                    get { totalFailureCount }.isEqualTo(1)
-                    get { totalSkippedCount }.isEqualTo(1)
-                    get { cumulativeDuration }.isEqualTo(BigDecimal("9.000"))
-                    get { averageDuration }.isEqualTo(BigDecimal("3.000"))
-                    get { slowestTestCaseDuration }.isEqualTo(BigDecimal("5.000"))
-                }
+            .get { summary }.and {
+                get { totalTestCount }.isEqualTo(3)
+                get { totalPassingCount }.isEqualTo(1)
+                get { totalFailureCount }.isEqualTo(1)
+                get { totalSkippedCount }.isEqualTo(1)
+                get { cumulativeDuration }.isEqualTo(BigDecimal("9.000"))
+                get { averageDuration }.isEqualTo(BigDecimal("3.000"))
+                get { slowestTestCaseDuration }.isEqualTo(BigDecimal("5.000"))
+            }
 
         expectThat(testRun.testSuites)
-                .isNotNull()
-                .hasSize(1)
-                .any {
-                    get { idx }.isEqualTo(1)
-                    get { testCount }.isEqualTo(3)
-                    get { passingCount }.isEqualTo(1)
-                    get { failureCount }.isEqualTo(1)
-                    get { skippedCount }.isEqualTo(1)
-                    get { className }.isEqualTo("TestSuiteSpec")
-                    get { packageName }.isNotNull().isEqualTo("projektor")
-                    get { startTs }.isNotNull()
-                    get { hostname }.isNotNull().isEqualTo("myhostname")
-                    get { duration }.isEqualTo(BigDecimal("9.000"))
-                    get { hasSystemOut }.isEqualTo(true)
-                    get { hasSystemErr }.isEqualTo(false)
-                }
+            .isNotNull()
+            .hasSize(1)
+            .any {
+                get { idx }.isEqualTo(1)
+                get { testCount }.isEqualTo(3)
+                get { passingCount }.isEqualTo(1)
+                get { failureCount }.isEqualTo(1)
+                get { skippedCount }.isEqualTo(1)
+                get { className }.isEqualTo("TestSuiteSpec")
+                get { packageName }.isNotNull().isEqualTo("projektor")
+                get { startTs }.isNotNull()
+                get { hostname }.isNotNull().isEqualTo("myhostname")
+                get { duration }.isEqualTo(BigDecimal("9.000"))
+                get { hasSystemOut }.isEqualTo(true)
+                get { hasSystemErr }.isEqualTo(false)
+            }
     }
 
     @Test
@@ -127,21 +127,21 @@ class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
         val publicId = randomPublicId()
 
         testRunDBGenerator.createTestRun(
-                publicId,
-                listOf(
-                        TestSuiteData(
-                                "testSuite1",
-                                listOf("testSuite1PassedTestCase1", "testSuitePassed1TestCase2"),
-                                listOf("testSuite1FailedTestCase1"),
-                                listOf("testSuite1SkippedTestCase1", "testSuite1SkippedTestCase2")
-                        ),
-                        TestSuiteData(
-                                "testSuite2",
-                                listOf("testSuite2PassedTestCase1"),
-                                listOf("testSuite2FailedTestCase1", "testSuite2FailedTestCase2", "testSuite2FailedTestCase3"),
-                                listOf()
-                        )
+            publicId,
+            listOf(
+                TestSuiteData(
+                    "testSuite1",
+                    listOf("testSuite1PassedTestCase1", "testSuitePassed1TestCase2"),
+                    listOf("testSuite1FailedTestCase1"),
+                    listOf("testSuite1SkippedTestCase1", "testSuite1SkippedTestCase2")
+                ),
+                TestSuiteData(
+                    "testSuite2",
+                    listOf("testSuite2PassedTestCase1"),
+                    listOf("testSuite2FailedTestCase1", "testSuite2FailedTestCase2", "testSuite2FailedTestCase3"),
+                    listOf()
                 )
+            )
         )
 
         val testRun = runBlocking { testRunDatabaseRepository.fetchTestRun(publicId) }
@@ -149,15 +149,15 @@ class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
 
         expectThat(testRun) {
             get { testSuites }
-                    .isNotNull()
-                    .and {
-                        any {
-                            get { className }.isEqualTo("testSuite1")
-                        }
-                        any {
-                            get { className }.isEqualTo("testSuite2")
-                        }
+                .isNotNull()
+                .and {
+                    any {
+                        get { className }.isEqualTo("testSuite1")
                     }
+                    any {
+                        get { className }.isEqualTo("testSuite2")
+                    }
+                }
         }
 
         val testSuite1 = testRun.testSuites?.find { it.className == "testSuite1" }

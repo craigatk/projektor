@@ -11,4 +11,4 @@ fun gzip(content: String): ByteArray {
 }
 
 fun ungzip(content: ByteArray): String =
-        GZIPInputStream(content.inputStream()).bufferedReader(Charsets.UTF_8).use { it.readText() }
+    GZIPInputStream(content.inputStream()).bufferedReader(Charsets.UTF_8).use { it.readText() }

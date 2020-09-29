@@ -1,13 +1,13 @@
 package projektor.parser.coverage
 
 import io.kotest.core.spec.style.StringSpec
-import java.math.BigDecimal
 import projektor.server.example.coverage.JacocoXmlLoader
 import projektor.server.example.coverage.JestXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
+import java.math.BigDecimal
 
 class CoverageParserSpec : StringSpec({
     "should parse Jacoco test report" {

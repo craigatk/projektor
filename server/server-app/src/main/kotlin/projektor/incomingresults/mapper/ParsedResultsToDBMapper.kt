@@ -1,5 +1,11 @@
 package projektor.incomingresults.mapper
 
+import projektor.incomingresults.model.GitMetadata
+import projektor.incomingresults.model.GroupedTestSuites
+import projektor.incomingresults.model.ResultsMetadata
+import projektor.parser.model.Failure
+import projektor.parser.model.TestCase
+import projektor.parser.model.TestSuite
 import java.sql.Timestamp
 import java.time.ZoneOffset
 import projektor.database.generated.tables.pojos.GitMetadata as GitMetadataDB
@@ -8,12 +14,6 @@ import projektor.database.generated.tables.pojos.TestCase as TestCaseDB
 import projektor.database.generated.tables.pojos.TestFailure as TestFailureDB
 import projektor.database.generated.tables.pojos.TestSuite as TestSuiteDB
 import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
-import projektor.incomingresults.model.GitMetadata
-import projektor.incomingresults.model.GroupedTestSuites
-import projektor.incomingresults.model.ResultsMetadata
-import projektor.parser.model.Failure
-import projektor.parser.model.TestCase
-import projektor.parser.model.TestSuite
 
 fun GroupedTestSuites.toDB(testRunId: Long): TestSuiteGroupDB {
     val testSuiteGroupDB = TestSuiteGroupDB()

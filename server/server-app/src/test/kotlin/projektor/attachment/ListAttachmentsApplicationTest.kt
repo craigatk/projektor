@@ -6,8 +6,6 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
-import java.io.File
-import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -18,6 +16,8 @@ import strikt.assertions.any
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
+import java.io.File
+import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 class ListAttachmentsApplicationTest : ApplicationTestCase() {
@@ -35,14 +35,15 @@ class ListAttachmentsApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/attachments/$attachment1FileName") {
                 testRunDBGenerator.createTestRun(
-                        publicId,
-                        listOf(
-                                TestSuiteData("testSuite1",
-                                        listOf("testSuite1TestCase1", "testSuite1TestCase2"),
-                                        listOf(),
-                                        listOf()
-                                )
+                    publicId,
+                    listOf(
+                        TestSuiteData(
+                            "testSuite1",
+                            listOf("testSuite1TestCase1", "testSuite1TestCase2"),
+                            listOf(),
+                            listOf()
                         )
+                    )
                 )
                 addHeader("content-length", attachment1Bytes.size.toString())
                 setBody(attachment1Bytes)

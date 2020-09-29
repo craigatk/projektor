@@ -1,10 +1,10 @@
 package projektor.schedule
 
-import java.time.Instant
-import javax.sql.DataSource
 import net.javacrumbs.shedlock.core.DefaultLockingTaskExecutor
 import net.javacrumbs.shedlock.core.LockConfiguration
 import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider
+import java.time.Instant
+import javax.sql.DataSource
 
 class SchedulerLock(dataSource: DataSource) {
     private val lockProvider = JdbcTemplateLockProvider(dataSource)

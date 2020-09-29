@@ -27,21 +27,24 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
         val ciInOtherRepoPublicId = randomPublicId()
 
         val testSuiteDataList = listOf(
-                TestSuiteData("projektor.failingTestSuite1",
-                        listOf("passing1"),
-                        listOf("failing1", "failing2"),
-                        listOf()
-                ),
-                TestSuiteData("projektor.passingTestSuite",
-                        listOf("passing2"),
-                        listOf(),
-                        listOf()
-                ),
-                TestSuiteData("projektor.failingTestSuite2",
-                        listOf("passing3"),
-                        listOf("failing3", "failing4"),
-                        listOf()
-                )
+            TestSuiteData(
+                "projektor.failingTestSuite1",
+                listOf("passing1"),
+                listOf("failing1", "failing2"),
+                listOf()
+            ),
+            TestSuiteData(
+                "projektor.passingTestSuite",
+                listOf("passing2"),
+                listOf(),
+                listOf()
+            ),
+            TestSuiteData(
+                "projektor.failingTestSuite2",
+                listOf("passing3"),
+                listOf("failing3", "failing4"),
+                listOf()
+            )
         )
 
         val maxRuns = 4
@@ -53,55 +56,55 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
 
         val failingTestCases = runBlocking {
             repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
-                    repoName,
-                    projectName,
-                    maxRuns
+                repoName,
+                projectName,
+                maxRuns
             )
         }
 
         val failingTestCaseNames = failingTestCases.map(TestCase::fullName)
 
         expectThat(failingTestCaseNames)
-                .contains(
-                        "projektor.failing1ClassName.failing1",
-                        "projektor.failing2ClassName.failing2",
-                        "projektor.failing3ClassName.failing3",
-                        "projektor.failing4ClassName.failing4",
-                )
+            .contains(
+                "projektor.failing1ClassName.failing1",
+                "projektor.failing2ClassName.failing2",
+                "projektor.failing3ClassName.failing3",
+                "projektor.failing4ClassName.failing4",
+            )
 
         expectThat(failingTestCaseNames).hasSize(8)
 
         val failing1Cases = failingTestCases.filter { it.name == "failing1" }
         expectThat(failing1Cases)
-                .hasSize(2)
-                .and {
-                    any { get { publicId }.isEqualTo(firstRunCITruePublicId.id) }
-                    any { get { publicId }.isEqualTo(secondRunCITruePublicId.id) }
-                }
+            .hasSize(2)
+            .and {
+                any { get { publicId }.isEqualTo(firstRunCITruePublicId.id) }
+                any { get { publicId }.isEqualTo(secondRunCITruePublicId.id) }
+            }
 
         val failing2Cases = failingTestCases.filter { it.name == "failing2" }
         expectThat(failing2Cases)
-                .hasSize(2)
-                .and {
-                    any { get { publicId }.isEqualTo(firstRunCITruePublicId.id) }
-                    any { get { publicId }.isEqualTo(secondRunCITruePublicId.id) }
-                }
+            .hasSize(2)
+            .and {
+                any { get { publicId }.isEqualTo(firstRunCITruePublicId.id) }
+                any { get { publicId }.isEqualTo(secondRunCITruePublicId.id) }
+            }
 
         val failing3Cases = failingTestCases.filter { it.name == "failing3" }
         expectThat(failing3Cases)
-                .hasSize(2)
-                .and {
-                    any { get { publicId }.isEqualTo(firstRunCITruePublicId.id) }
-                    any { get { publicId }.isEqualTo(secondRunCITruePublicId.id) }
-                }
+            .hasSize(2)
+            .and {
+                any { get { publicId }.isEqualTo(firstRunCITruePublicId.id) }
+                any { get { publicId }.isEqualTo(secondRunCITruePublicId.id) }
+            }
 
         val failing4Cases = failingTestCases.filter { it.name == "failing4" }
         expectThat(failing4Cases)
-                .hasSize(2)
-                .and {
-                    any { get { publicId }.isEqualTo(firstRunCITruePublicId.id) }
-                    any { get { publicId }.isEqualTo(secondRunCITruePublicId.id) }
-                }
+            .hasSize(2)
+            .and {
+                any { get { publicId }.isEqualTo(firstRunCITruePublicId.id) }
+                any { get { publicId }.isEqualTo(secondRunCITruePublicId.id) }
+            }
     }
 
     @Test
@@ -117,16 +120,18 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
         val thirdRunCITruePublicId = randomPublicId()
 
         val testSuiteDataList = listOf(
-                TestSuiteData("projektor.failingTestSuite1",
-                        listOf("passing1"),
-                        listOf("failing1"),
-                        listOf()
-                ),
-                TestSuiteData("projektor.passingTestSuite",
-                        listOf("passing2"),
-                        listOf(),
-                        listOf()
-                )
+            TestSuiteData(
+                "projektor.failingTestSuite1",
+                listOf("passing1"),
+                listOf("failing1"),
+                listOf()
+            ),
+            TestSuiteData(
+                "projektor.passingTestSuite",
+                listOf("passing2"),
+                listOf(),
+                listOf()
+            )
         )
 
         listOf(firstRunCITruePublicId, secondRunCITruePublicId, thirdRunCITruePublicId).forEach { publicId ->
@@ -135,27 +140,27 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
 
         val failingTestCasesMax1 = runBlocking {
             repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
-                    repoName,
-                    projectName,
-                    1
+                repoName,
+                projectName,
+                1
             )
         }
 
         expectThat(failingTestCasesMax1)
-                .hasSize(1)
+            .hasSize(1)
 
         expectThat(failingTestCasesMax1[0].publicId).isEqualTo(thirdRunCITruePublicId.id)
 
         val failingTestCasesMax2 = runBlocking {
             repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
-                    repoName,
-                    projectName,
-                    2
+                repoName,
+                projectName,
+                2
             )
         }
 
         expectThat(failingTestCasesMax2)
-                .hasSize(2)
+            .hasSize(2)
 
         expectThat(failingTestCasesMax2[0].publicId).isEqualTo(thirdRunCITruePublicId.id)
         expectThat(failingTestCasesMax2[1].publicId).isEqualTo(secondRunCITruePublicId.id)

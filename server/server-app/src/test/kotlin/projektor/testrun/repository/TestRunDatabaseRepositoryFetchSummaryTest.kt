@@ -1,8 +1,5 @@
 package projektor.testrun.repository
 
-import java.math.BigDecimal
-import java.sql.Timestamp
-import java.time.Instant
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -12,6 +9,9 @@ import projektor.testrun.TestRunDatabaseRepository
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
+import java.math.BigDecimal
+import java.sql.Timestamp
+import java.time.Instant
 
 class TestRunDatabaseRepositoryFetchSummaryTest : DatabaseRepositoryTestCase() {
     @Test
@@ -35,15 +35,15 @@ class TestRunDatabaseRepositoryFetchSummaryTest : DatabaseRepositoryTestCase() {
         val testRunSummary = runBlocking { testRunDatabaseRepository.fetchTestRunSummary(publicId) }
 
         expectThat(testRunSummary)
-                .isNotNull()
-                .and {
-                    get { totalTestCount }.isEqualTo(3)
-                    get { totalPassingCount }.isEqualTo(1)
-                    get { totalFailureCount }.isEqualTo(1)
-                    get { totalSkippedCount }.isEqualTo(1)
-                    get { cumulativeDuration }.isEqualTo(BigDecimal("9.000"))
-                    get { averageDuration }.isEqualTo(BigDecimal("3.000"))
-                    get { slowestTestCaseDuration }.isEqualTo(BigDecimal("5.000"))
-                }
+            .isNotNull()
+            .and {
+                get { totalTestCount }.isEqualTo(3)
+                get { totalPassingCount }.isEqualTo(1)
+                get { totalFailureCount }.isEqualTo(1)
+                get { totalSkippedCount }.isEqualTo(1)
+                get { cumulativeDuration }.isEqualTo(BigDecimal("9.000"))
+                get { averageDuration }.isEqualTo(BigDecimal("3.000"))
+                get { slowestTestCaseDuration }.isEqualTo(BigDecimal("5.000"))
+            }
     }
 }

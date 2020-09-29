@@ -3,18 +3,18 @@ package projektor.testrun
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.KtorExperimentalAPI
-import java.math.BigDecimal
-import java.sql.Timestamp
-import java.time.Instant
-import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
-import projektor.database.generated.tables.pojos.TestRun as TestRunDB
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.TestRunSummary
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isFalse
+import java.math.BigDecimal
+import java.sql.Timestamp
+import java.time.Instant
+import kotlin.test.assertNotNull
+import projektor.database.generated.tables.pojos.TestRun as TestRunDB
 
 @KtorExperimentalAPI
 class GetTestRunSummaryApplicationTest : ApplicationTestCase() {
@@ -25,16 +25,16 @@ class GetTestRunSummaryApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/summary") {
                 val testRun = TestRunDB()
-                        .setPublicId(publicId.id)
-                        .setTotalTestCount(6)
-                        .setTotalPassingCount(4)
-                        .setTotalFailureCount(2)
-                        .setTotalSkippedCount(1)
-                        .setCumulativeDuration(BigDecimal("30.000"))
-                        .setAverageDuration(BigDecimal("5.000"))
-                        .setSlowestTestCaseDuration(BigDecimal("10.000"))
-                        .setPassed(false)
-                        .setCreatedTimestamp(Timestamp.from(Instant.now()))
+                    .setPublicId(publicId.id)
+                    .setTotalTestCount(6)
+                    .setTotalPassingCount(4)
+                    .setTotalFailureCount(2)
+                    .setTotalSkippedCount(1)
+                    .setCumulativeDuration(BigDecimal("30.000"))
+                    .setAverageDuration(BigDecimal("5.000"))
+                    .setSlowestTestCaseDuration(BigDecimal("10.000"))
+                    .setPassed(false)
+                    .setCreatedTimestamp(Timestamp.from(Instant.now()))
 
                 testRunDao.insert(testRun)
             }.apply {

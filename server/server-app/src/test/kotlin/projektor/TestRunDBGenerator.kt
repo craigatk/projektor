@@ -1,25 +1,25 @@
 package projektor
 
+import kotlinx.coroutines.runBlocking
+import projektor.coverage.CoverageService
+import projektor.database.generated.tables.daos.*
+import projektor.database.generated.tables.pojos.TestRunSystemAttributes
+import projektor.incomingresults.mapper.parsePackageAndClassName
+import projektor.incomingresults.mapper.roundingMathContext
+import projektor.server.api.PublicId
 import java.math.BigDecimal
 import java.sql.Timestamp
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import kotlinx.coroutines.runBlocking
-import projektor.coverage.CoverageService
-import projektor.database.generated.tables.daos.*
 import projektor.database.generated.tables.pojos.GitMetadata as GitMetadataDB
 import projektor.database.generated.tables.pojos.ResultsMetadata as ResultsMetadataDB
 import projektor.database.generated.tables.pojos.TestCase as TestCaseDB
 import projektor.database.generated.tables.pojos.TestFailure as TestFailureDB
 import projektor.database.generated.tables.pojos.TestRun as TestRunDB
-import projektor.database.generated.tables.pojos.TestRunSystemAttributes
 import projektor.database.generated.tables.pojos.TestSuite as TestSuiteDB
 import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
-import projektor.incomingresults.mapper.parsePackageAndClassName
-import projektor.incomingresults.mapper.roundingMathContext
-import projektor.server.api.PublicId
 
 class TestRunDBGenerator(
     private val testRunDao: TestRunDao,
@@ -76,11 +76,11 @@ class TestRunDBGenerator(
     }
 
     fun createTestRunInRepo(
-            publicId: PublicId,
-            testSuiteDataList: List<TestSuiteData>,
-            repoName: String,
-            ci: Boolean,
-            projectName: String?
+        publicId: PublicId,
+        testSuiteDataList: List<TestSuiteData>,
+        repoName: String,
+        ci: Boolean,
+        projectName: String?
     ): TestRunDB {
         val testRunDB = createTestRun(publicId, testSuiteDataList)
         addResultsMetadata(testRunDB, ci)
@@ -120,16 +120,17 @@ class TestRunDBGenerator(
     }
 
     fun createSimpleTestRun(publicId: PublicId): TestRunDB =
-            createTestRun(
-                    publicId,
-                    listOf(
-                            TestSuiteData("testSuite1",
-                                    listOf("testSuite1TestCase1"),
-                                    listOf(),
-                                    listOf()
-                            )
-                    )
+        createTestRun(
+            publicId,
+            listOf(
+                TestSuiteData(
+                    "testSuite1",
+                    listOf("testSuite1TestCase1"),
+                    listOf(),
+                    listOf()
+                )
             )
+        )
 
     fun createSimpleTestRunInRepo(publicId: PublicId, repoName: String, ci: Boolean, projectName: String?): TestRunDB {
         val testRunDB = createSimpleTestRun(publicId)
@@ -192,44 +193,46 @@ data class TestSuiteData(
 )
 
 fun createTestRun(publicId: PublicId, totalTestCount: Int, cumulativeDuration: BigDecimal = BigDecimal("30.000")): TestRunDB = TestRunDB()
-        .setPublicId(publicId.id)
-        .setTotalTestCount(totalTestCount)
-        .setTotalPassingCount(totalTestCount)
-        .setTotalFailureCount(0)
-        .setTotalSkippedCount(0)
-        .setCumulativeDuration(cumulativeDuration)
-        .setAverageDuration(if (totalTestCount > 0)
-                cumulativeDuration.divide(totalTestCount.toBigDecimal(), roundingMathContext)
-            else
-                cumulativeDuration)
-        .setSlowestTestCaseDuration(BigDecimal("10.000"))
-        .setPassed(true)
-        .setCreatedTimestamp(Timestamp.from(Instant.now()))
+    .setPublicId(publicId.id)
+    .setTotalTestCount(totalTestCount)
+    .setTotalPassingCount(totalTestCount)
+    .setTotalFailureCount(0)
+    .setTotalSkippedCount(0)
+    .setCumulativeDuration(cumulativeDuration)
+    .setAverageDuration(
+        if (totalTestCount > 0)
+            cumulativeDuration.divide(totalTestCount.toBigDecimal(), roundingMathContext)
+        else
+            cumulativeDuration
+    )
+    .setSlowestTestCaseDuration(BigDecimal("10.000"))
+    .setPassed(true)
+    .setCreatedTimestamp(Timestamp.from(Instant.now()))
 
 fun createTestSuite(testRunId: Long, packageAndClassName: String, idx: Int): TestSuiteDB = TestSuiteDB()
-        .setTestRunId(testRunId)
-        .setPackageName(parsePackageAndClassName(packageAndClassName).first)
-        .setClassName(parsePackageAndClassName(packageAndClassName).second)
-        .setIdx(idx)
-        .setTestCount(6)
-        .setPassingCount(3)
-        .setFailureCount(2)
-        .setSkippedCount(1)
-        .setDuration(BigDecimal.TEN)
-        .setStartTs(Timestamp.valueOf(LocalDateTime.now()))
-        .setHostname("hostname")
+    .setTestRunId(testRunId)
+    .setPackageName(parsePackageAndClassName(packageAndClassName).first)
+    .setClassName(parsePackageAndClassName(packageAndClassName).second)
+    .setIdx(idx)
+    .setTestCount(6)
+    .setPassingCount(3)
+    .setFailureCount(2)
+    .setSkippedCount(1)
+    .setDuration(BigDecimal.TEN)
+    .setStartTs(Timestamp.valueOf(LocalDateTime.now()))
+    .setHostname("hostname")
 
 fun createTestCase(testSuiteId: Long, name: String, idx: Int, passed: Boolean): TestCaseDB = TestCaseDB()
-        .setTestSuiteId(testSuiteId)
-        .setName(name)
-        .setIdx(idx)
-        .setClassName("${name}ClassName")
-        .setDuration(BigDecimal("2.5"))
-        .setPassed(passed)
-        .setSkipped(false)
+    .setTestSuiteId(testSuiteId)
+    .setName(name)
+    .setIdx(idx)
+    .setClassName("${name}ClassName")
+    .setDuration(BigDecimal("2.5"))
+    .setPassed(passed)
+    .setSkipped(false)
 
 fun createTestFailure(testCaseId: Long, testCaseName: String): TestFailureDB = TestFailureDB()
-        .setTestCaseId(testCaseId)
-        .setFailureMessage("$testCaseName failure message")
-        .setFailureText("$testCaseName failure text")
-        .setFailureType("$testCaseName failure type")
+    .setTestCaseId(testCaseId)
+    .setFailureMessage("$testCaseName failure message")
+    .setFailureText("$testCaseName failure text")
+    .setFailureType("$testCaseName failure type")

@@ -17,24 +17,27 @@ class TestSuiteDatabaseRepositoryFetchSuitesTest : DatabaseRepositoryTestCase() 
         val publicId = randomPublicId()
 
         testRunDBGenerator.createTestRun(
-                publicId,
-                listOf(
-                        TestSuiteData("projektor.TestSuite1",
-                                listOf("testCase1"),
-                                listOf(),
-                                listOf()
-                        ),
-                        TestSuiteData("projektor.TestSuite2",
-                                listOf("testCase1"),
-                                listOf(),
-                                listOf()
-                        ),
-                        TestSuiteData("something.else.testSuite2",
-                                listOf("testCase1"),
-                                listOf(),
-                                listOf()
-                        )
+            publicId,
+            listOf(
+                TestSuiteData(
+                    "projektor.TestSuite1",
+                    listOf("testCase1"),
+                    listOf(),
+                    listOf()
+                ),
+                TestSuiteData(
+                    "projektor.TestSuite2",
+                    listOf("testCase1"),
+                    listOf(),
+                    listOf()
+                ),
+                TestSuiteData(
+                    "something.else.testSuite2",
+                    listOf("testCase1"),
+                    listOf(),
+                    listOf()
                 )
+            )
         )
 
         val testSuites = runBlocking {
@@ -42,15 +45,15 @@ class TestSuiteDatabaseRepositoryFetchSuitesTest : DatabaseRepositoryTestCase() 
         }
 
         expectThat(testSuites)
-                .hasSize(2)
-                .any {
-                    get { packageName }.isNotNull().isEqualTo("projektor")
-                    get { className }.isEqualTo("TestSuite1")
-                }
-                .any {
-                    get { packageName }.isNotNull().isEqualTo("projektor")
-                    get { className }.isEqualTo("TestSuite2")
-                }
+            .hasSize(2)
+            .any {
+                get { packageName }.isNotNull().isEqualTo("projektor")
+                get { className }.isEqualTo("TestSuite1")
+            }
+            .any {
+                get { packageName }.isNotNull().isEqualTo("projektor")
+                get { className }.isEqualTo("TestSuite2")
+            }
     }
 
     @Test
@@ -59,24 +62,27 @@ class TestSuiteDatabaseRepositoryFetchSuitesTest : DatabaseRepositoryTestCase() 
         val publicId = randomPublicId()
 
         testRunDBGenerator.createTestRun(
-                publicId,
-                listOf(
-                        TestSuiteData("projektor.TestSuite1",
-                                listOf("testCase1"),
-                                listOf(),
-                                listOf()
-                        ),
-                        TestSuiteData("projektor.TestSuite2",
-                                listOf("testCase1"),
-                                listOf(),
-                                listOf()
-                        ),
-                        TestSuiteData("something.else.testSuite2",
-                                listOf("testCase1"),
-                                listOf(),
-                                listOf()
-                        )
+            publicId,
+            listOf(
+                TestSuiteData(
+                    "projektor.TestSuite1",
+                    listOf("testCase1"),
+                    listOf(),
+                    listOf()
+                ),
+                TestSuiteData(
+                    "projektor.TestSuite2",
+                    listOf("testCase1"),
+                    listOf(),
+                    listOf()
+                ),
+                TestSuiteData(
+                    "something.else.testSuite2",
+                    listOf("testCase1"),
+                    listOf(),
+                    listOf()
                 )
+            )
         )
 
         val testSuites = runBlocking {

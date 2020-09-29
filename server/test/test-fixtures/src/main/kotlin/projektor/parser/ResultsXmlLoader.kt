@@ -25,17 +25,17 @@ class ResultsXmlLoader {
     fun someIgnoredSomeFailing() = loadTextFromFile("TEST-projektor.example.spock.IgnoreSomeMethodsAndSomeFailingSpec.xml")
 
     fun invalid() = loadTextFromFile("TEST-projektor.example.spock.PassingSpec.xml")
-            .replace("<testsuite", "testsuite")
+        .replace("<testsuite", "testsuite")
 
     fun cypressResults(): List<String> {
         val cypressResourceList = ClassGraph()
-                .whitelistPaths("cypress")
-                .scan()
-                .getResourcesWithExtension("xml")
+            .whitelistPaths("cypress")
+            .scan()
+            .getResourcesWithExtension("xml")
 
         return cypressResourceList
-                .map { String(it.load()) }
-                .map(ResultsXmlMerger::removeTestSuitesWrapper)
+            .map { String(it.load()) }
+            .map(ResultsXmlMerger::removeTestSuitesWrapper)
     }
 
     fun jestUi() = loadTextFromFile("jest/ui-junit.xml")
@@ -45,7 +45,7 @@ class ResultsXmlLoader {
     fun pytestPassing() = loadTextFromFile("pytest/pytest-passing.xml")
 
     private fun loadTextFromFile(filename: String) = javaClass
-            .getResourceAsStream("/$filename")
-            .bufferedReader()
-            .readText()
+        .getResourceAsStream("/$filename")
+        .bufferedReader()
+        .readText()
 }

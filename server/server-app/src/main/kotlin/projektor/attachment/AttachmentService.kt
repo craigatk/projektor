@@ -1,8 +1,6 @@
 package projektor.attachment
 
 import io.ktor.util.KtorExperimentalAPI
-import java.io.InputStream
-import java.math.BigDecimal
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import projektor.objectstore.ObjectStoreClient
@@ -10,6 +8,8 @@ import projektor.objectstore.ObjectStoreConfig
 import projektor.objectstore.bucket.BucketCreationException
 import projektor.server.api.PublicId
 import projektor.server.api.attachments.Attachment
+import java.io.InputStream
+import java.math.BigDecimal
 
 @KtorExperimentalAPI
 class AttachmentService(
@@ -34,8 +34,8 @@ class AttachmentService(
         val maxSizeInBytes = config.maxSizeMB?.let { it * BigDecimal.valueOf(1024) * BigDecimal.valueOf(1024) }
 
         return maxSizeInBytes == null ||
-                attachmentSizeInBytes == null ||
-                attachmentSizeInBytes.toBigDecimal() <= maxSizeInBytes
+            attachmentSizeInBytes == null ||
+            attachmentSizeInBytes.toBigDecimal() <= maxSizeInBytes
     }
 
     suspend fun addAttachment(publicId: PublicId, fileName: String, attachmentStream: InputStream, attachmentSize: Long?): AddAttachmentResult {

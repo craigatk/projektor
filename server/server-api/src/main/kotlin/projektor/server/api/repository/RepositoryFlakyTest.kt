@@ -4,8 +4,8 @@ import projektor.server.api.TestCase
 import java.time.LocalDateTime
 
 data class RepositoryFlakyTest(
-        val testCase: TestCase,
-        val failureCount: Int,
-        val latestPublicId: String,
-        val latestCreatedTimestamp: LocalDateTime
+    val testCase: TestCase,
+    val failureCount: Int,
+    val latestPublicId: String,
+    val latestCreatedTimestamp: LocalDateTime
 )

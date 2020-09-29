@@ -7,7 +7,6 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
-import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.auth.AuthConfig
@@ -15,6 +14,7 @@ import projektor.parser.GroupedResultsXmlLoader
 import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
 import strikt.assertions.*
+import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 class SaveGroupedResultsTokenApplicationTest : ApplicationTestCase() {

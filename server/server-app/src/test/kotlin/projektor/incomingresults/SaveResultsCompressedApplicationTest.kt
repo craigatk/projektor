@@ -3,12 +3,12 @@ package projektor.incomingresults
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.KtorExperimentalAPI
-import java.math.BigDecimal
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.util.gzip
 import strikt.api.expectThat
 import strikt.assertions.*
+import java.math.BigDecimal
 
 @KtorExperimentalAPI
 class SaveResultsCompressedApplicationTest : ApplicationTestCase() {

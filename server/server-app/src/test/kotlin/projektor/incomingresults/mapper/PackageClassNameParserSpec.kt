@@ -8,9 +8,10 @@ import strikt.assertions.isEqualTo
 
 class PackageClassNameParserSpec : StringSpec({
     "should parse package and class name" {
-        forAll(row("example.Spec", "example", "Spec"),
-                row("com.example.sub.package.MyTestSpec", "com.example.sub.package", "MyTestSpec"),
-                row("Spec", null, "Spec")
+        forAll(
+            row("example.Spec", "example", "Spec"),
+            row("com.example.sub.package.MyTestSpec", "com.example.sub.package", "MyTestSpec"),
+            row("Spec", null, "Spec")
         ) { classAndPackage, expectedPackage, expectedClass ->
             val packageAndClass = parsePackageAndClassName(classAndPackage)
 

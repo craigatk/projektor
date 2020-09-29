@@ -18,12 +18,12 @@ class TestResultsProcessorSpec : StringSpec({
         val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
 
         expectThat(testSuiteList)
-                .hasSize(12)
-                .map(TestSuite::name)
-                .contains(
-                        "test suite",
-                        "test run with failed test cases"
-                )
+            .hasSize(12)
+            .map(TestSuite::name)
+            .contains(
+                "test suite",
+                "test run with failed test cases"
+            )
     }
 
     "should parse blob with multiple test suite elements into a test suite list" {
@@ -34,12 +34,12 @@ class TestResultsProcessorSpec : StringSpec({
         val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
 
         expectThat(testSuiteList)
-                .hasSize(2)
-                .map(TestSuite::name)
-                .contains(
-                        "projektor.example.spock.PassingSpec",
-                        "projektor.example.spock.FailingSpec"
-                )
+            .hasSize(2)
+            .map(TestSuite::name)
+            .contains(
+                "projektor.example.spock.PassingSpec",
+                "projektor.example.spock.FailingSpec"
+            )
     }
 
     "should parse blob with single test suite into test suite list" {
@@ -50,11 +50,11 @@ class TestResultsProcessorSpec : StringSpec({
         val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
 
         expectThat(testSuiteList)
-                .hasSize(1)
-                .map(TestSuite::name)
-                .contains(
-                        "projektor.example.spock.PassingSpec"
-                )
+            .hasSize(1)
+            .map(TestSuite::name)
+            .contains(
+                "projektor.example.spock.PassingSpec"
+            )
     }
 
     "should parse pytest results with lower-case utf-8 encoding in xml header" {
@@ -65,10 +65,10 @@ class TestResultsProcessorSpec : StringSpec({
         val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
 
         expectThat(testSuiteList)
-                .hasSize(1)
-                .map(TestSuite::name)
-                .contains(
-                        "pytest"
-                )
+            .hasSize(1)
+            .map(TestSuite::name)
+            .contains(
+                "pytest"
+            )
     }
 })

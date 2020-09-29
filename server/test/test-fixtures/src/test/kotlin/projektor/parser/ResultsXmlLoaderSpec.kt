@@ -17,10 +17,10 @@ class ResultsXmlLoaderSpec : StringSpec({
         val cypressResults = ResultsXmlLoader().cypressResults()
 
         expectThat(cypressResults)
-                .hasSize(6)
-                .all {
-                    contains("<testsuite")
-                    not().contains("<testsuites")
-                }
+            .hasSize(6)
+            .all {
+                contains("<testsuite")
+                not().contains("<testsuites")
+            }
     }
 })

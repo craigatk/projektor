@@ -1,10 +1,10 @@
 package projektor.parser
 
-import java.math.BigDecimal
 import projektor.parser.grouped.GroupedResultsParser
 import projektor.parser.grouped.model.GroupedResults
 import projektor.parser.grouped.model.GroupedTestSuites
 import projektor.parser.grouped.model.ResultsMetadata
+import java.math.BigDecimal
 
 class GroupedResultsXmlLoader {
     private val groupedResultsParser = GroupedResultsParser()

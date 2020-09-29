@@ -11,13 +11,13 @@ import projektor.server.api.attributes.TestRunSystemAttributes
 class TestRunSystemAttributesDatabaseRepository(private val dslContext: DSLContext) : TestRunSystemAttributesRepository {
 
     override suspend fun fetchAttributes(publicId: PublicId): TestRunSystemAttributes? =
-            withContext(Dispatchers.IO) {
-                dslContext
-                        .select(TEST_RUN_SYSTEM_ATTRIBUTES.fields().toList())
-                        .from(TEST_RUN_SYSTEM_ATTRIBUTES)
-                        .where(TEST_RUN_SYSTEM_ATTRIBUTES.TEST_RUN_PUBLIC_ID.eq(publicId.id))
-                        .fetchOneInto(TestRunSystemAttributes::class.java)
-            }
+        withContext(Dispatchers.IO) {
+            dslContext
+                .select(TEST_RUN_SYSTEM_ATTRIBUTES.fields().toList())
+                .from(TEST_RUN_SYSTEM_ATTRIBUTES)
+                .where(TEST_RUN_SYSTEM_ATTRIBUTES.TEST_RUN_PUBLIC_ID.eq(publicId.id))
+                .fetchOneInto(TestRunSystemAttributes::class.java)
+        }
 
     override suspend fun pin(publicId: PublicId) = upsertPinned(publicId, true)
 
@@ -27,11 +27,11 @@ class TestRunSystemAttributesDatabaseRepository(private val dslContext: DSLConte
         withContext(Dispatchers.IO) {
             try {
                 dslContext
-                        .insertInto(TEST_RUN_SYSTEM_ATTRIBUTES, TEST_RUN_SYSTEM_ATTRIBUTES.TEST_RUN_PUBLIC_ID, TEST_RUN_SYSTEM_ATTRIBUTES.PINNED)
-                        .values(publicId.id, newPinnedValue)
-                        .onDuplicateKeyUpdate()
-                        .set(TEST_RUN_SYSTEM_ATTRIBUTES.PINNED, newPinnedValue)
-                        .execute()
+                    .insertInto(TEST_RUN_SYSTEM_ATTRIBUTES, TEST_RUN_SYSTEM_ATTRIBUTES.TEST_RUN_PUBLIC_ID, TEST_RUN_SYSTEM_ATTRIBUTES.PINNED)
+                    .values(publicId.id, newPinnedValue)
+                    .onDuplicateKeyUpdate()
+                    .set(TEST_RUN_SYSTEM_ATTRIBUTES.PINNED, newPinnedValue)
+                    .execute()
             } catch (e: DataAccessException) {
                 0
             }

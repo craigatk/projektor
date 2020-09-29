@@ -38,8 +38,8 @@ fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
         val coverage = coverageService.getCoverageWithPreviousRunComparison(PublicId(publicId))
 
         coverage
-                ?.let { call.respond(HttpStatusCode.OK, it) }
-                ?: call.respond(HttpStatusCode.NoContent)
+            ?.let { call.respond(HttpStatusCode.OK, it) }
+            ?: call.respond(HttpStatusCode.NoContent)
     }
 
     get("/run/{publicId}/coverage/overall") {
@@ -48,8 +48,8 @@ fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
         val overallCoverageStats = coverageService.getOverallStats(PublicId(publicId))
 
         overallCoverageStats
-                ?.let { call.respond(HttpStatusCode.OK, it) }
-                ?: call.respond(HttpStatusCode.NoContent)
+            ?.let { call.respond(HttpStatusCode.OK, it) }
+            ?: call.respond(HttpStatusCode.NoContent)
     }
 
     get("/run/{publicId}/coverage/exists") {

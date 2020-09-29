@@ -6,7 +6,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
-import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -16,6 +15,7 @@ import projektor.util.ungzip
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
+import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 class GetTestRunCompressionApplicationTest : ApplicationTestCase() {
@@ -28,14 +28,15 @@ class GetTestRunCompressionApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId") {
                 testRunDBGenerator.createTestRun(
-                        publicId,
-                        (1..testSuiteCount).map {
-                            TestSuiteData("reallyLongNameForTestSuite$it",
-                                    listOf("testSuite${it}TestCase1", "testSuite${it}TestCase2"),
-                                    listOf(),
-                                    listOf()
-                            )
-                        }
+                    publicId,
+                    (1..testSuiteCount).map {
+                        TestSuiteData(
+                            "reallyLongNameForTestSuite$it",
+                            listOf("testSuite${it}TestCase1", "testSuite${it}TestCase2"),
+                            listOf(),
+                            listOf()
+                        )
+                    }
                 )
 
                 addHeader(HttpHeaders.AcceptEncoding, "gzip")
@@ -68,14 +69,15 @@ class GetTestRunCompressionApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId") {
                 testRunDBGenerator.createTestRun(
-                        publicId,
-                        (1..testSuiteCount).map {
-                            TestSuiteData("shortTestSuite$it",
-                                    listOf("testSuite${it}TestCase1", "testSuite${it}TestCase2"),
-                                    listOf(),
-                                    listOf()
-                            )
-                        }
+                    publicId,
+                    (1..testSuiteCount).map {
+                        TestSuiteData(
+                            "shortTestSuite$it",
+                            listOf("testSuite${it}TestCase1", "testSuite${it}TestCase2"),
+                            listOf(),
+                            listOf()
+                        )
+                    }
                 )
 
                 addHeader(HttpHeaders.AcceptEncoding, "gzip")

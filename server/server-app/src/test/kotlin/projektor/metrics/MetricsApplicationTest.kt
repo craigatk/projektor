@@ -28,8 +28,8 @@ class MetricsApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId") {
                 testRunDBGenerator.createTestRun(
-                        publicId,
-                        listOf()
+                    publicId,
+                    listOf()
                 )
             }.apply {
                 await until { metricsStubber.findCreateMetricsDatabaseRequests().isNotEmpty() }
@@ -50,8 +50,8 @@ class MetricsApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId") {
                 testRunDBGenerator.createTestRun(
-                        publicId,
-                        listOf()
+                    publicId,
+                    listOf()
                 )
             }.apply {
                 await until { metricsStubber.findCreateMetricsDatabaseRequests().isNotEmpty() }

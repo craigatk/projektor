@@ -84,15 +84,15 @@ class AttachmentDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         runBlocking { attachmentDatabaseRepository.deleteAttachment(publicId, "shouldDelete") }
 
         expectThat(attachmentDao.fetchByTestRunPublicId(publicId.id))
-                .hasSize(1)
-                .and {
-                    get(0).get { objectName }.isEqualTo("shouldNotDelete")
-                }
+            .hasSize(1)
+            .and {
+                get(0).get { objectName }.isEqualTo("shouldNotDelete")
+            }
 
         expectThat(attachmentDao.fetchByTestRunPublicId(anotherPublicId.id))
-                .hasSize(1)
-                .and {
-                    get(0).get { objectName }.isEqualTo("shouldDelete")
-                }
+            .hasSize(1)
+            .and {
+                get(0).get { objectName }.isEqualTo("shouldDelete")
+            }
     }
 }

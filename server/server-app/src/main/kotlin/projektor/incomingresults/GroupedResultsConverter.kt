@@ -18,34 +18,34 @@ class GroupedResultsConverter(
 
         val groupedTestSuites = incomingGroupedResults.groupedTestSuites.map {
             val nonEmptyTestSuites = testResultsProcessor.parseResultsBlob(it.testSuitesBlob)
-                    .filter { testSuite -> !testSuite.testCases.isNullOrEmpty() }
+                .filter { testSuite -> !testSuite.testCases.isNullOrEmpty() }
 
             GroupedTestSuites(
-                    groupName = it.groupName,
-                    groupLabel = it.groupLabel,
-                    directory = it.directory,
-                    testSuites = nonEmptyTestSuites
+                groupName = it.groupName,
+                groupLabel = it.groupLabel,
+                directory = it.directory,
+                testSuites = nonEmptyTestSuites
             )
         }
 
         val metadata = incomingGroupedResults.metadata?.let { metadata ->
             ResultsMetadata(
-                    git = metadata.git?.let { gitMetadata ->
-                        GitMetadata(
-                                repoName = gitMetadata.repoName,
-                                projectName = gitMetadata.projectName,
-                                branchName = gitMetadata.branchName,
-                                isMainBranch = gitMetadata.isMainBranch
-                        )
-                    },
-                    ci = metadata.ci
+                git = metadata.git?.let { gitMetadata ->
+                    GitMetadata(
+                        repoName = gitMetadata.repoName,
+                        projectName = gitMetadata.projectName,
+                        branchName = gitMetadata.branchName,
+                        isMainBranch = gitMetadata.isMainBranch
+                    )
+                },
+                ci = metadata.ci
             )
         }
 
         GroupedResults(
-                groupedTestSuites = groupedTestSuites,
-                metadata = metadata,
-                wallClockDuration = incomingGroupedResults.wallClockDuration
+            groupedTestSuites = groupedTestSuites,
+            metadata = metadata,
+            wallClockDuration = incomingGroupedResults.wallClockDuration
         )
     }
 }

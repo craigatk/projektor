@@ -20,7 +20,7 @@ fun Route.testCases(testCaseService: TestCaseService) {
         val testCase = testCaseService.fetchTestCase(PublicId(publicId), testSuiteIdx, testCaseIdx)
 
         testCase?.let { call.respond(HttpStatusCode.OK, testCase) }
-                ?: call.respond(HttpStatusCode.NotFound)
+            ?: call.respond(HttpStatusCode.NotFound)
     }
     get("/run/{publicId}/cases/failed") {
         val publicId = call.parameters.getOrFail("publicId")

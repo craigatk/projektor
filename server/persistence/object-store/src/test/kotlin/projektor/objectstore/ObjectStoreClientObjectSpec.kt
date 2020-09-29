@@ -1,11 +1,11 @@
 package projektor.objectstore
 
 import io.kotest.core.spec.style.StringSpec
-import java.io.File
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
+import java.io.File
 
 @ExperimentalStdlibApi
 class ObjectStoreClientObjectSpec : StringSpec() {
@@ -22,13 +22,13 @@ class ObjectStoreClientObjectSpec : StringSpec() {
             client.putObject(bucketName, objectName, File("src/test/resources/test_file.txt").inputStream())
 
             expectThat(client.getObject(bucketName, objectName))
-                    .isNotNull()
-                    .and { get { readBytes().decodeToString() }.isEqualTo("Here is a test file") }
+                .isNotNull()
+                .and { get { readBytes().decodeToString() }.isEqualTo("Here is a test file") }
         }
 
         "when trying to get object that does not exist should return null"() {
             expectThat(client.getObject(bucketName, "objectDoesNotExist"))
-                    .isNull()
+                .isNull()
         }
 
         "should delete object"() {

@@ -19,7 +19,7 @@ fun Route.testRunSystemAttributes(testRunSystemAttributesService: TestRunSystemA
         val systemAttributes = testRunSystemAttributesService.fetchAttributes(PublicId(publicId))
 
         systemAttributes?.let { call.respond(HttpStatusCode.OK, it) }
-                ?: call.respond(HttpStatusCode.NotFound)
+            ?: call.respond(HttpStatusCode.NotFound)
     }
 
     post("/run/{publicId}/attributes/pin") {

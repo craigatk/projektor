@@ -13,7 +13,9 @@ class ResultsXmlMergerSpec : StringSpec({
 
         val resultsWithTestSuitesRemoved = ResultsXmlMerger.removeTestSuitesWrapper(resultsXml)
 
-        expectThat(resultsWithTestSuitesRemoved).isEqualTo("""<testsuite name="Root Suite" timestamp="2019-10-03T11:49:11" tests="0" failures="0" time="0">
-</testsuite>""")
+        expectThat(resultsWithTestSuitesRemoved).isEqualTo(
+            """<testsuite name="Root Suite" timestamp="2019-10-03T11:49:11" tests="0" failures="0" time="0">
+</testsuite>"""
+        )
     }
 })

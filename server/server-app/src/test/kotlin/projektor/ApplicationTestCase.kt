@@ -12,8 +12,6 @@ import io.ktor.application.Application
 import io.ktor.config.MapApplicationConfig
 import io.ktor.server.testing.*
 import io.ktor.util.KtorExperimentalAPI
-import java.math.BigDecimal
-import kotlin.test.assertNotNull
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
@@ -33,17 +31,19 @@ import projektor.server.api.results.ResultsProcessingStatus
 import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import java.math.BigDecimal
+import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 open class ApplicationTestCase {
     val resultsXmlLoader = ResultsXmlLoader()
 
     val objectMapper: ObjectMapper = ObjectMapper()
-            .registerKotlinModule()
-            .registerModule(JavaTimeModule())
-            .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
-            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        .registerKotlinModule()
+        .registerModule(JavaTimeModule())
+        .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
     lateinit var dataSource: HikariDataSource
     lateinit var dslContext: DSLContext
@@ -153,15 +153,15 @@ open class ApplicationTestCase {
         gitRepositoryDao = GitRepositoryDao(dslContext.configuration())
 
         testRunDBGenerator = TestRunDBGenerator(
-                testRunDao,
-                testSuiteGroupDao,
-                testSuiteDao,
-                testCaseDao,
-                testFailureDao,
-                testRunSystemAttributesDao,
-                gitMetadataDao,
-                resultsMetadataDao,
-                coverageService
+            testRunDao,
+            testSuiteGroupDao,
+            testSuiteDao,
+            testCaseDao,
+            testFailureDao,
+            testRunSystemAttributesDao,
+            gitMetadataDao,
+            resultsMetadataDao,
+            coverageService
         )
 
         this.application = application

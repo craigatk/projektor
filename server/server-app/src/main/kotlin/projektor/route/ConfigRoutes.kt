@@ -13,11 +13,14 @@ import projektor.server.api.config.ServerConfig
 @KtorExperimentalAPI
 fun Route.config(cleanupConfig: CleanupConfig) {
     get("/config") {
-        call.respond(HttpStatusCode.OK, ServerConfig(
+        call.respond(
+            HttpStatusCode.OK,
+            ServerConfig(
                 ServerCleanupConfig(
-                        cleanupConfig.enabled,
-                        cleanupConfig.maxReportAgeDays
+                    cleanupConfig.enabled,
+                    cleanupConfig.maxReportAgeDays
                 )
-        ))
+            )
+        )
     }
 }

@@ -5,7 +5,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
-import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -14,6 +13,7 @@ import strikt.api.expectThat
 import strikt.assertions.contains
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
+import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 class MessageApplicationTest : ApplicationTestCase() {
@@ -26,16 +26,16 @@ class MessageApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/messages")
-            .apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+                .apply {
+                    expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
-                val messagesResponse = objectMapper.readValue(response.content, Messages::class.java)
-                assertNotNull(messagesResponse)
+                    val messagesResponse = objectMapper.readValue(response.content, Messages::class.java)
+                    assertNotNull(messagesResponse)
 
-                expectThat(messagesResponse.messages)
+                    expectThat(messagesResponse.messages)
                         .hasSize(1)
                         .contains("Here is a global message")
-            }
+                }
         }
     }
 
@@ -47,17 +47,17 @@ class MessageApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/messages")
-                    .apply {
-                        expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+                .apply {
+                    expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
-                        val messagesResponse = objectMapper.readValue(response.content, Messages::class.java)
-                        assertNotNull(messagesResponse)
+                    val messagesResponse = objectMapper.readValue(response.content, Messages::class.java)
+                    assertNotNull(messagesResponse)
 
-                        expectThat(messagesResponse.messages)
-                                .hasSize(2)
-                                .contains("First global message")
-                                .contains("Second global message")
-                    }
+                    expectThat(messagesResponse.messages)
+                        .hasSize(2)
+                        .contains("First global message")
+                        .contains("Second global message")
+                }
         }
     }
 
@@ -69,15 +69,15 @@ class MessageApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/messages")
-                    .apply {
-                        expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+                .apply {
+                    expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
-                        val messagesResponse = objectMapper.readValue(response.content, Messages::class.java)
-                        assertNotNull(messagesResponse)
+                    val messagesResponse = objectMapper.readValue(response.content, Messages::class.java)
+                    assertNotNull(messagesResponse)
 
-                        expectThat(messagesResponse.messages)
-                                .hasSize(0)
-                    }
+                    expectThat(messagesResponse.messages)
+                        .hasSize(0)
+                }
         }
     }
 }

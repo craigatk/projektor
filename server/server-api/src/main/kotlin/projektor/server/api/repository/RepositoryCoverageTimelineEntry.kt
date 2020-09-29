@@ -1,7 +1,7 @@
 package projektor.server.api.repository
 
-import java.time.Instant
 import projektor.server.api.coverage.CoverageStats
+import java.time.Instant
 
 data class RepositoryCoverageTimelineEntry(
     val publicId: String,

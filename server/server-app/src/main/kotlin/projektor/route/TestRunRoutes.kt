@@ -18,7 +18,7 @@ fun Route.testRuns(testRunService: TestRunService) {
         val testRun = testRunService.fetchTestRun(PublicId(publicId))
 
         testRun?.let { call.respond(HttpStatusCode.OK, it) }
-                ?: call.respond(HttpStatusCode.NotFound)
+            ?: call.respond(HttpStatusCode.NotFound)
     }
     get("/run/{publicId}/summary") {
         val publicId = call.parameters.getOrFail("publicId")
@@ -26,6 +26,6 @@ fun Route.testRuns(testRunService: TestRunService) {
         val testRunSummary = testRunService.fetchTestRunSummary(PublicId(publicId))
 
         testRunSummary?.let { call.respond(HttpStatusCode.OK, it) }
-                ?: call.respond(HttpStatusCode.NotFound)
+            ?: call.respond(HttpStatusCode.NotFound)
     }
 }

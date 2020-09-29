@@ -1,10 +1,6 @@
 package projektor.cleanup
 
 import io.ktor.util.KtorExperimentalAPI
-import java.io.File
-import java.sql.Timestamp
-import java.time.Instant
-import java.time.LocalDate
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.test.get
@@ -21,6 +17,10 @@ import projektor.server.api.results.ResultsProcessingStatus
 import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.*
+import java.io.File
+import java.sql.Timestamp
+import java.time.Instant
+import java.time.LocalDate
 
 @KtorExperimentalAPI
 class CleanupServiceTest : DatabaseRepositoryTestCase() {
@@ -28,30 +28,31 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should delete non-grouped test run without attachments`() {
         val cleanupService = CleanupService(
-                CleanupConfig(true, 30, false),
-                get(),
-                get(),
-                get(),
-                null
+            CleanupConfig(true, 30, false),
+            get(),
+            get(),
+            get(),
+            null
         )
 
         val publicId = randomPublicId()
 
-        val testRun = testRunDBGenerator.createTestRun(publicId,
-                listOf(
-                        TestSuiteData(
-                                "testSuite1",
-                                listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
-                                listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
-                                listOf()
-                        ),
-                        TestSuiteData(
-                                "testSuite2",
-                                listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
-                                listOf("testSuite2FailedTestCase1"),
-                                listOf()
-                        )
+        val testRun = testRunDBGenerator.createTestRun(
+            publicId,
+            listOf(
+                TestSuiteData(
+                    "testSuite1",
+                    listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
+                    listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
+                    listOf()
+                ),
+                TestSuiteData(
+                    "testSuite2",
+                    listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
+                    listOf("testSuite2FailedTestCase1"),
+                    listOf()
                 )
+            )
         )
 
         val testSuiteIds = testSuiteDao.fetchByTestRunId(testRun.id).map { it.id }
@@ -73,30 +74,31 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should delete grouped test run without attachments`() {
         val cleanupService = CleanupService(
-                CleanupConfig(true, 30, false),
-                get(),
-                get(),
-                get(),
-                null
+            CleanupConfig(true, 30, false),
+            get(),
+            get(),
+            get(),
+            null
         )
 
         val publicId = randomPublicId()
 
-        val testRun = testRunDBGenerator.createTestRun(publicId,
-                listOf(
-                        TestSuiteData(
-                                "testSuite1",
-                                listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
-                                listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
-                                listOf()
-                        ),
-                        TestSuiteData(
-                                "testSuite2",
-                                listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
-                                listOf("testSuite2FailedTestCase1"),
-                                listOf()
-                        )
+        val testRun = testRunDBGenerator.createTestRun(
+            publicId,
+            listOf(
+                TestSuiteData(
+                    "testSuite1",
+                    listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
+                    listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
+                    listOf()
+                ),
+                TestSuiteData(
+                    "testSuite2",
+                    listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
+                    listOf("testSuite2FailedTestCase1"),
+                    listOf()
                 )
+            )
         )
 
         val testGroup1 = testRunDBGenerator.addTestSuiteGroupToTestRun("group1", testRun, listOf("testSuite1"))
@@ -124,80 +126,83 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should update processing status to 'deleted'`() {
         val cleanupService = CleanupService(
-                CleanupConfig(true, 30, false),
-                get(),
-                get(),
-                get(),
-                null
+            CleanupConfig(true, 30, false),
+            get(),
+            get(),
+            get(),
+            null
         )
 
         val publicId = randomPublicId()
 
-        resultsProcessingDao.insert(ResultsProcessing()
+        resultsProcessingDao.insert(
+            ResultsProcessing()
                 .setPublicId(publicId.id)
                 .setCreatedTimestamp(Timestamp.from(Instant.now()))
                 .setStatus(ResultsProcessingStatus.SUCCESS.name)
         )
 
-        testRunDBGenerator.createTestRun(publicId,
-                listOf(
-                        TestSuiteData(
-                                "testSuite1",
-                                listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
-                                listOf(),
-                                listOf()
-                        )
+        testRunDBGenerator.createTestRun(
+            publicId,
+            listOf(
+                TestSuiteData(
+                    "testSuite1",
+                    listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
+                    listOf(),
+                    listOf()
                 )
+            )
         )
 
         runBlocking { cleanupService.cleanupTestRun(publicId) }
 
         expectThat(resultsProcessingDao.fetchOneByPublicId(publicId.id))
-                .isNotNull()
-                .and {
-                    get { status }.isEqualTo(ResultsProcessingStatus.DELETED.name)
-                }
+            .isNotNull()
+            .and {
+                get { status }.isEqualTo(ResultsProcessingStatus.DELETED.name)
+            }
     }
 
     @Test
     fun `should delete test run with attachments`() {
         val attachmentsConfig = AttachmentConfig(
-                "http://localhost:9000",
-                "attachmentsremoving",
-                true,
-                "minio_access_key",
-                "minio_secret_key",
-                null
+            "http://localhost:9000",
+            "attachmentsremoving",
+            true,
+            "minio_access_key",
+            "minio_secret_key",
+            null
         )
 
         val attachmentService = AttachmentService(attachmentsConfig, AttachmentDatabaseRepository(dslContext))
         attachmentService.conditionallyCreateBucketIfNotExists()
 
         val cleanupService = CleanupService(
-                CleanupConfig(true, 30, false),
-                get(),
-                get(),
-                get(),
-                attachmentService
+            CleanupConfig(true, 30, false),
+            get(),
+            get(),
+            get(),
+            attachmentService
         )
 
         val publicId = randomPublicId()
 
-        val testRun = testRunDBGenerator.createTestRun(publicId,
-                listOf(
-                        TestSuiteData(
-                                "testSuite1",
-                                listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
-                                listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
-                                listOf()
-                        ),
-                        TestSuiteData(
-                                "testSuite2",
-                                listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
-                                listOf("testSuite2FailedTestCase1"),
-                                listOf()
-                        )
+        val testRun = testRunDBGenerator.createTestRun(
+            publicId,
+            listOf(
+                TestSuiteData(
+                    "testSuite1",
+                    listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
+                    listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
+                    listOf()
+                ),
+                TestSuiteData(
+                    "testSuite2",
+                    listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
+                    listOf("testSuite2FailedTestCase1"),
+                    listOf()
                 )
+            )
         )
 
         val attachmentInputStream = File("src/test/resources/test-attachment.txt").inputStream()
@@ -263,8 +268,8 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
         val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
 
         expectThat(cleanedUpTestRuns)
-                .contains(testRunIdToDelete1, testRunIdToDelete2)
-                .doesNotContain(tooNewTestRunId, pinnedTestRunId)
+            .contains(testRunIdToDelete1, testRunIdToDelete2)
+            .doesNotContain(tooNewTestRunId, pinnedTestRunId)
 
         expectThat(testRunDao.fetchOneByPublicId(testRunIdToDelete1.id)).isNull()
         expectThat(testRunDao.fetchOneByPublicId(testRunIdToDelete2.id)).isNull()
@@ -287,7 +292,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
         val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
 
         expectThat(cleanedUpTestRuns)
-                .contains(testRunIdTooOld1, testRunIdTooOld2)
+            .contains(testRunIdTooOld1, testRunIdTooOld2)
 
         expectThat(testRunDao.fetchOneByPublicId(testRunIdTooOld1.id)).isNotNull()
         expectThat(testRunDao.fetchOneByPublicId(testRunIdTooOld2.id)).isNotNull()

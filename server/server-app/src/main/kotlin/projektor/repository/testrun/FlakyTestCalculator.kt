@@ -14,10 +14,10 @@ class FlakyTestCalculator {
             val latestTestCase = flakyTestCaseGroup.value.maxByOrNull { it.createdTimestamp }!!
 
             RepositoryFlakyTest(
-                    testCase = flakyTestCaseGroup.value.first(),
-                    failureCount = flakyTestCaseGroup.value.size,
-                    latestPublicId = latestTestCase.publicId,
-                    latestCreatedTimestamp = latestTestCase.createdTimestamp
+                testCase = flakyTestCaseGroup.value.first(),
+                failureCount = flakyTestCaseGroup.value.size,
+                latestPublicId = latestTestCase.publicId,
+                latestCreatedTimestamp = latestTestCase.createdTimestamp
             )
         }
 

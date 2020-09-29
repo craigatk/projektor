@@ -24,43 +24,45 @@ class GetTestCaseApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/suite/$testSuiteIdx/case/$testCaseIdx") {
                 testRunDBGenerator.createTestRun(
-                        publicId,
-                        listOf(
-                                TestSuiteData("testSuite1",
-                                        listOf("testSuite1TestCase1"),
-                                        listOf("testSuite1TestCase2"),
-                                        listOf()
-                                ),
-                                TestSuiteData("testSuite2",
-                                        listOf("testSuite2TestCase1", "testSuite2TestCase2", "testSuite2TestCase3"),
-                                        listOf(),
-                                        listOf()
-                                )
+                    publicId,
+                    listOf(
+                        TestSuiteData(
+                            "testSuite1",
+                            listOf("testSuite1TestCase1"),
+                            listOf("testSuite1TestCase2"),
+                            listOf()
+                        ),
+                        TestSuiteData(
+                            "testSuite2",
+                            listOf("testSuite2TestCase1", "testSuite2TestCase2", "testSuite2TestCase3"),
+                            listOf(),
+                            listOf()
                         )
+                    )
                 )
             }.apply {
                 val responseTestCase = objectMapper.readValue(response.content, TestCase::class.java)
 
                 expectThat(responseTestCase)
-                        .isNotNull()
-                        .and {
-                            get { name }.isEqualTo("testSuite1TestCase2")
-                            get { className }.isEqualTo("testSuite1TestCase2ClassName")
-                            get { idx }.isEqualTo(2)
-                            get { testSuiteIdx }.isEqualTo(1)
-                            get { hasSystemOut }.isFalse()
-                            get { hasSystemErr }.isFalse()
-                        }
+                    .isNotNull()
+                    .and {
+                        get { name }.isEqualTo("testSuite1TestCase2")
+                        get { className }.isEqualTo("testSuite1TestCase2ClassName")
+                        get { idx }.isEqualTo(2)
+                        get { testSuiteIdx }.isEqualTo(1)
+                        get { hasSystemOut }.isFalse()
+                        get { hasSystemErr }.isFalse()
+                    }
 
                 val failure = responseTestCase.failure
 
                 expectThat(failure)
-                        .isNotNull()
-                        .and {
-                            get { failureMessage }.isEqualTo("testSuite1TestCase2 failure message")
-                            get { failureText }.isEqualTo("testSuite1TestCase2 failure text")
-                            get { failureType }.isEqualTo("testSuite1TestCase2 failure type")
-                        }
+                    .isNotNull()
+                    .and {
+                        get { failureMessage }.isEqualTo("testSuite1TestCase2 failure message")
+                        get { failureText }.isEqualTo("testSuite1TestCase2 failure text")
+                        get { failureType }.isEqualTo("testSuite1TestCase2 failure type")
+                    }
             }
         }
     }
@@ -88,11 +90,11 @@ class GetTestCaseApplicationTest : ApplicationTestCase() {
                 val responseTestCase = objectMapper.readValue(response.content, TestCase::class.java)
 
                 expectThat(responseTestCase)
-                        .isNotNull()
-                        .and {
-                            get { hasSystemOut }.isTrue()
-                            get { hasSystemErr }.isTrue()
-                        }
+                    .isNotNull()
+                    .and {
+                        get { hasSystemOut }.isTrue()
+                        get { hasSystemErr }.isTrue()
+                    }
             }
         }
     }

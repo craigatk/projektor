@@ -1,6 +1,5 @@
 package projektor.incomingresults
 
-import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
@@ -11,6 +10,7 @@ import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.ResultsXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.isNotEmpty
+import kotlin.test.assertNotNull
 
 class GroupedTestResultsServiceTest : DatabaseRepositoryTestCase() {
 

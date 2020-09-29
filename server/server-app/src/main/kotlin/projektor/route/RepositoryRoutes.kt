@@ -21,7 +21,7 @@ fun Route.repository(
         val timeline = repositoryTestRunService.fetchRepositoryTestRunTimeline(fullRepoName, null)
 
         timeline?.let { call.respond(HttpStatusCode.OK, it) }
-                ?: call.respond(HttpStatusCode.NoContent)
+            ?: call.respond(HttpStatusCode.NoContent)
     }
 
     get("/repo/{orgName}/{repoName}/project/{projectName}/timeline") {
@@ -33,7 +33,7 @@ fun Route.repository(
         val timeline = repositoryTestRunService.fetchRepositoryTestRunTimeline(fullRepoName, projectName)
 
         timeline?.let { call.respond(HttpStatusCode.OK, it) }
-                ?: call.respond(HttpStatusCode.NoContent)
+            ?: call.respond(HttpStatusCode.NoContent)
     }
 
     get("/repo/{orgName}/{repoName}/coverage/timeline") {
@@ -44,7 +44,7 @@ fun Route.repository(
         val coverageTimeline = repositoryCoverageService.fetchRepositoryCoverageTimeline(fullRepoName, null)
 
         coverageTimeline?.let { call.respond(HttpStatusCode.OK, it) }
-                ?: call.respond(HttpStatusCode.NoContent)
+            ?: call.respond(HttpStatusCode.NoContent)
     }
 
     get("/repo/{orgName}/{repoName}/project/{projectName}/coverage/timeline") {
@@ -56,6 +56,6 @@ fun Route.repository(
         val coverageTimeline = repositoryCoverageService.fetchRepositoryCoverageTimeline(fullReposName, projectName)
 
         coverageTimeline?.let { call.respond(HttpStatusCode.OK, it) }
-                ?: call.respond(HttpStatusCode.NoContent)
+            ?: call.respond(HttpStatusCode.NoContent)
     }
 }

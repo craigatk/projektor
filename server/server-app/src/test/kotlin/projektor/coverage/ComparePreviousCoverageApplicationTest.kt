@@ -3,8 +3,6 @@ package projektor.coverage
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.*
-import java.math.BigDecimal
-import kotlin.test.assertNotNull
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
@@ -14,6 +12,8 @@ import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
+import java.math.BigDecimal
+import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 class ComparePreviousCoverageApplicationTest : ApplicationTestCase() {
@@ -27,15 +27,15 @@ class ComparePreviousCoverageApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$thisPublicId/coverage") {
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                        publicId = previousPublicId,
-                        coverageText = JacocoXmlLoader().serverApp(),
-                        repoName = repoName
+                    publicId = previousPublicId,
+                    coverageText = JacocoXmlLoader().serverApp(),
+                    repoName = repoName
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                        publicId = thisPublicId,
-                        coverageText = JacocoXmlLoader().serverAppReduced(),
-                        repoName = repoName
+                    publicId = thisPublicId,
+                    coverageText = JacocoXmlLoader().serverAppReduced(),
+                    repoName = repoName
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -88,15 +88,15 @@ class ComparePreviousCoverageApplicationTest : ApplicationTestCase() {
             handleRequest(HttpMethod.Get, "/run/$thisPublicId/coverage") {
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                        publicId = previousPublicId,
-                        coverageText = JacocoXmlLoader().serverAppReduced(),
-                        repoName = repoName
+                    publicId = previousPublicId,
+                    coverageText = JacocoXmlLoader().serverAppReduced(),
+                    repoName = repoName
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                        publicId = thisPublicId,
-                        coverageText = JacocoXmlLoader().serverApp(),
-                        repoName = repoName
+                    publicId = thisPublicId,
+                    coverageText = JacocoXmlLoader().serverApp(),
+                    repoName = repoName
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)

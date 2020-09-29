@@ -3,7 +3,6 @@ package projektor.testrun
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.KtorExperimentalAPI
-import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -14,6 +13,7 @@ import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
+import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 class GetTestRunApplicationTest : ApplicationTestCase() {
@@ -24,19 +24,21 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId") {
                 testRunDBGenerator.createTestRun(
-                        publicId,
-                        listOf(
-                                TestSuiteData("testSuite1",
-                                        listOf("testSuite1TestCase1", "testSuite1TestCase2"),
-                                        listOf(),
-                                        listOf()
-                                ),
-                                TestSuiteData("testSuite2",
-                                        listOf("testSuite2TestCase1", "testSuite2TestCase2", "testSuite2TestCase3"),
-                                        listOf(),
-                                        listOf()
-                                )
+                    publicId,
+                    listOf(
+                        TestSuiteData(
+                            "testSuite1",
+                            listOf("testSuite1TestCase1", "testSuite1TestCase2"),
+                            listOf(),
+                            listOf()
+                        ),
+                        TestSuiteData(
+                            "testSuite2",
+                            listOf("testSuite2TestCase1", "testSuite2TestCase2", "testSuite2TestCase3"),
+                            listOf(),
+                            listOf()
                         )
+                    )
                 )
             }.apply {
                 val responseRun = objectMapper.readValue(response.content, TestRun::class.java)
@@ -64,19 +66,21 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId") {
                 val testRun = testRunDBGenerator.createTestRun(
-                        publicId,
-                        listOf(
-                                TestSuiteData("projektor.TestSuite1",
-                                        listOf("testCase1"),
-                                        listOf(),
-                                        listOf()
-                                ),
-                                TestSuiteData("projektor.TestSuite2",
-                                        listOf("testCase2"),
-                                        listOf(),
-                                        listOf()
-                                )
+                    publicId,
+                    listOf(
+                        TestSuiteData(
+                            "projektor.TestSuite1",
+                            listOf("testCase1"),
+                            listOf(),
+                            listOf()
+                        ),
+                        TestSuiteData(
+                            "projektor.TestSuite2",
+                            listOf("testCase2"),
+                            listOf(),
+                            listOf()
                         )
+                    )
                 )
 
                 val testSuiteGroup1 = TestSuiteGroup()
@@ -105,19 +109,19 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
 
                 val testSuite1 = testSuites.find { it.className == "TestSuite1" }
                 expectThat(testSuite1)
-                        .isNotNull()
-                        .and {
-                            get { groupName }.isEqualTo("MyGroup1")
-                            get { groupLabel }.isEqualTo("MyLabel1")
-                        }
+                    .isNotNull()
+                    .and {
+                        get { groupName }.isEqualTo("MyGroup1")
+                        get { groupLabel }.isEqualTo("MyLabel1")
+                    }
 
                 val testSuite2 = testSuites.find { it.className == "TestSuite2" }
                 expectThat(testSuite2)
-                        .isNotNull()
-                        .and {
-                            get { groupName }.isEqualTo("MyGroup2")
-                            get { groupLabel }.isEqualTo("MyLabel2")
-                        }
+                    .isNotNull()
+                    .and {
+                        get { groupName }.isEqualTo("MyGroup2")
+                        get { groupLabel }.isEqualTo("MyLabel2")
+                    }
             }
         }
     }

@@ -3,7 +3,6 @@ package projektor.incomingresults
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.KtorExperimentalAPI
-import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.ktor.ext.get
@@ -12,6 +11,7 @@ import projektor.testsuite.TestSuiteService
 import strikt.api.expectThat
 import strikt.assertions.isNotEmpty
 import strikt.assertions.isTrue
+import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 class CypressResultsApplicationTest : ApplicationTestCase() {

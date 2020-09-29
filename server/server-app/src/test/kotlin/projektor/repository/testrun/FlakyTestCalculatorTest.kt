@@ -16,30 +16,30 @@ class FlakyTestCalculatorTest {
         val className = "MyFlakyTests"
         val testCaseName = "shouldSometimesPass"
         val oldestTestCase = createTestCase(
-                packageName,
-                className,
-                testCaseName,
-                "oldest-public-id",
-                LocalDateTime.now().minusDays(2)
+            packageName,
+            className,
+            testCaseName,
+            "oldest-public-id",
+            LocalDateTime.now().minusDays(2)
         )
         val middleTestCase = createTestCase(
-                packageName,
-                className,
-                testCaseName,
-                "middle-public-id",
-                LocalDateTime.now().minusDays(1)
+            packageName,
+            className,
+            testCaseName,
+            "middle-public-id",
+            LocalDateTime.now().minusDays(1)
         )
         val newestTestCase = createTestCase(
-                packageName,
-                className,
-                testCaseName,
-                "newest-public-id",
-                LocalDateTime.now()
+            packageName,
+            className,
+            testCaseName,
+            "newest-public-id",
+            LocalDateTime.now()
         )
 
         val flakyTests = FlakyTestCalculator().calculateFlakyTests(
-                listOf(oldestTestCase, middleTestCase, newestTestCase),
-                3
+            listOf(oldestTestCase, middleTestCase, newestTestCase),
+            3
         )
 
         expectThat(flakyTests.tests).hasSize(1)
@@ -58,27 +58,27 @@ class FlakyTestCalculatorTest {
 
         val notFlakyEnoughTestCases = (1..2).map { idx ->
             createTestCase(
-                    packageName,
-                    className,
-                    "notFlakyEnough",
-                    "public-id-$idx",
-                    LocalDateTime.now()
+                packageName,
+                className,
+                "notFlakyEnough",
+                "public-id-$idx",
+                LocalDateTime.now()
             )
         }
 
         val flakyTestCases = (1..3).map { idx ->
             createTestCase(
-                    packageName,
-                    className,
-                    "soFlaky",
-                    "public-id-$idx",
-                    LocalDateTime.now()
+                packageName,
+                className,
+                "soFlaky",
+                "public-id-$idx",
+                LocalDateTime.now()
             )
         }
 
         val flakyTests = FlakyTestCalculator().calculateFlakyTests(
-                notFlakyEnoughTestCases + flakyTestCases,
-                3
+            notFlakyEnoughTestCases + flakyTestCases,
+            3
         )
 
         expectThat(flakyTests.tests).hasSize(1)
@@ -95,27 +95,27 @@ class FlakyTestCalculatorTest {
 
         val flakyTestCases1 = (1..4).map { idx ->
             createTestCase(
-                    packageName,
-                    className,
-                    "flaky-1",
-                    "public-id-$idx",
-                    LocalDateTime.now().plusDays(idx.toLong())
+                packageName,
+                className,
+                "flaky-1",
+                "public-id-$idx",
+                LocalDateTime.now().plusDays(idx.toLong())
             )
         }
 
         val flakyTestCases2 = (1..3).map { idx ->
             createTestCase(
-                    packageName,
-                    className,
-                    "soFlaky",
-                    "public-id-$idx",
-                    LocalDateTime.now().plusDays(idx.toLong())
+                packageName,
+                className,
+                "soFlaky",
+                "public-id-$idx",
+                LocalDateTime.now().plusDays(idx.toLong())
             )
         }
 
         val flakyTests = FlakyTestCalculator().calculateFlakyTests(
-                flakyTestCases1 + flakyTestCases2,
-                3
+            flakyTestCases1 + flakyTestCases2,
+            3
         )
 
         expectThat(flakyTests.tests).hasSize(2)
@@ -133,18 +133,18 @@ class FlakyTestCalculatorTest {
     }
 
     private fun createTestCase(packageName: String, className: String, testCaseName: String, publicId: String, createdTimeStamp: LocalDateTime) = TestCase(
-            idx = 1,
-            testSuiteIdx = 1,
-            name = testCaseName,
-            className = className,
-            packageName = packageName,
-            duration = BigDecimal.ONE,
-            passed = false,
-            skipped = false,
-            hasSystemOut = true,
-            hasSystemErr = true,
-            publicId = publicId,
-            createdTimestamp = createdTimeStamp,
-            failure = null
+        idx = 1,
+        testSuiteIdx = 1,
+        name = testCaseName,
+        className = className,
+        packageName = packageName,
+        duration = BigDecimal.ONE,
+        passed = false,
+        skipped = false,
+        hasSystemOut = true,
+        hasSystemErr = true,
+        publicId = publicId,
+        createdTimestamp = createdTimeStamp,
+        failure = null
     )
 }

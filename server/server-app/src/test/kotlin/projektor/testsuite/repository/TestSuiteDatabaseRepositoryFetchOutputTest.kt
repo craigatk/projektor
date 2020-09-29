@@ -38,7 +38,7 @@ class TestSuiteDatabaseRepositoryFetchOutputTest : DatabaseRepositoryTestCase() 
         }
 
         expectThat(systemOut)
-                .get { value }.isNotNull().isEqualTo("My system out")
+            .get { value }.isNotNull().isEqualTo("My system out")
     }
 
     @Test
@@ -68,6 +68,6 @@ class TestSuiteDatabaseRepositoryFetchOutputTest : DatabaseRepositoryTestCase() 
         }
 
         expectThat(systemErr)
-                .get { value }.isNotNull().isEqualTo("My system err")
+            .get { value }.isNotNull().isEqualTo("My system err")
     }
 }

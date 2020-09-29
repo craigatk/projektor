@@ -11,9 +11,9 @@ data class CleanupConfig(val enabled: Boolean, val maxReportAgeDays: Int?, val d
             val dryRun = applicationConfig.propertyOrNull("ktor.cleanup.dryRun")?.getString()?.toBoolean() ?: false
 
             return CleanupConfig(
-                    maxAgeDays != null && maxAgeDays > 0,
-                    maxAgeDays,
-                    dryRun
+                maxAgeDays != null && maxAgeDays > 0,
+                maxAgeDays,
+                dryRun
             )
         }
     }
