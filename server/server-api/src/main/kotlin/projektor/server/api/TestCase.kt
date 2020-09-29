@@ -15,7 +15,7 @@ data class TestCase(
     val hasSystemOut: Boolean,
     val hasSystemErr: Boolean,
     val publicId: String,
-    val createdTimestamp: LocalDateTime?,
+    val createdTimestamp: LocalDateTime,
     val failure: TestFailure?
 ) {
     val fullName: String

@@ -47,29 +47,24 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
 
     override suspend fun fetchRepositoryFailingTestCases(repoName: String, projectName: String?, maxRuns: Int): List<TestCase> =
             withContext(Dispatchers.IO) {
-                val createdTimestamps = dslContext.select(asterisk())
-                        .from(
-                                dslContext.select(
-                                        TEST_RUN.CREATED_TIMESTAMP,
-                                        rowNumber().over().orderBy(TEST_RUN.CREATED_TIMESTAMP.desc()).`as`("row_num")
-                                )
-                                        .from(TEST_RUN)
-                                        .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
-                                        .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
-                                        .where(runInCIFromRepo(repoName, projectName))
-                                        .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
-                        )
-                        .where("row_num <= $maxRuns")
-                        .fetch(TEST_RUN.CREATED_TIMESTAMP)
-
-                val minCreatedTimestamp = createdTimestamps.minOrNull()
 
                 val resultSet = selectTestCase(dslContext)
                         .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
                         .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
                         .where(runInCIFromRepo(repoName, projectName)
                                 .and(TEST_CASE.PASSED.eq(false))
-                                .and(TEST_RUN.CREATED_TIMESTAMP.ge(minCreatedTimestamp))
+                                .and(TEST_RUN.CREATED_TIMESTAMP.ge(
+                                        dslContext
+                                                .select(min(TEST_RUN.`as`("x").CREATED_TIMESTAMP))
+                                                .from((dslContext.select(TEST_RUN.CREATED_TIMESTAMP)
+                                                        .from(TEST_RUN)
+                                                        .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                                                        .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
+                                                        .where(runInCIFromRepo(repoName, projectName))
+                                                        .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                                                        .limit(maxRuns)
+                                                        ).asTable("x"))
+                                                ))
                         )
                         .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
                         .fetchResultSet()
