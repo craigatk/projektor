@@ -2,10 +2,9 @@ package projektor.repository.testrun
 
 import projektor.server.api.TestCase
 import projektor.server.api.repository.RepositoryFlakyTest
-import projektor.server.api.repository.RepositoryFlakyTests
 
 class FlakyTestCalculator {
-    fun calculateFlakyTests(failingTestCases: List<TestCase>, flakyFailureThreshold: Int): RepositoryFlakyTests {
+    fun calculateFlakyTests(failingTestCases: List<TestCase>, flakyFailureThreshold: Int): List<RepositoryFlakyTest> {
         val testCaseGroups = failingTestCases.groupBy { it.fullName }
 
         val flakyTestCaseGroups = testCaseGroups.filter { it.value.size >= flakyFailureThreshold }
@@ -21,6 +20,6 @@ class FlakyTestCalculator {
             )
         }
 
-        return RepositoryFlakyTests(flakyTestCases)
+        return flakyTestCases
     }
 }
