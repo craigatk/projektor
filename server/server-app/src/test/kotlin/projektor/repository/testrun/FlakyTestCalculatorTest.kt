@@ -42,9 +42,9 @@ class FlakyTestCalculatorTest {
             3
         )
 
-        expectThat(flakyTests.tests).hasSize(1)
+        expectThat(flakyTests).hasSize(1)
 
-        expectThat(flakyTests.tests[0]) {
+        expectThat(flakyTests[0]) {
             get { failureCount }.isEqualTo(3)
             get { latestPublicId }.isEqualTo(newestTestCase.publicId)
             get { latestCreatedTimestamp }.isEqualTo(newestTestCase.createdTimestamp)
@@ -81,9 +81,9 @@ class FlakyTestCalculatorTest {
             3
         )
 
-        expectThat(flakyTests.tests).hasSize(1)
+        expectThat(flakyTests).hasSize(1)
 
-        expectThat(flakyTests.tests[0].testCase) {
+        expectThat(flakyTests[0].testCase) {
             get { name }.isEqualTo("soFlaky")
         }
     }
@@ -118,9 +118,7 @@ class FlakyTestCalculatorTest {
             3
         )
 
-        expectThat(flakyTests.tests).hasSize(2)
-
-        expectThat(flakyTests.tests) {
+        expectThat(flakyTests) {
             any {
                 get { testCase }.get { name }.isEqualTo("flaky-1")
                 get { latestPublicId }.isEqualTo("public-id-4")
