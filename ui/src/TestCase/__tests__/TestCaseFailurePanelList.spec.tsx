@@ -49,20 +49,19 @@ describe("TestCaseFailureListPanel", () => {
     idx: number,
     failure: TestFailure
   ): TestCase {
-    const testCase: TestCase = {
+    return {
       idx,
       testSuiteIdx: 2,
       name: "Test Case",
       packageName: "",
       className: "",
+      fullName: "Test Case",
       duration: 1.2,
       passed: false,
       skipped: false,
       hasSystemOut: true,
       hasSystemErr: true,
       failure,
-    };
-
-    return testCase;
+    } as TestCase;
   }
 });

@@ -1,0 +1,79 @@
+{
+  "tests": [
+    {
+      "test_case": {
+        "idx": 1,
+        "test_suite_idx": 1,
+        "name": "should fetch grouped test suite from database",
+        "package_name": "projektor.testsuite",
+        "class_name": "GetTestSuiteApplicationTest",
+        "duration": 0.105,
+        "passed": false,
+        "skipped": false,
+        "has_system_out": true,
+        "has_system_err": false,
+        "public_id": "32FBHG6FDL8S",
+        "created_timestamp": "2020-09-30T17:27:39.859915",
+        "failure": {
+          "failure_message": "strikt.internal.opentest4j.CompoundAssertionFailure: ▼ Expect that TestSuite(idx=1, packageName=projektor, className=TestSuite1, testCount=1, passingCount=1, skippedCount=0, failureCount=0, startTs=2020-01-14T16:20:30.059, hostname=hostname, duration=10.000, hasSystemOut=false, hasSystemErr=false, groupName=MyGroup, groupLabel=MyLabel, testCases=[TestCase(idx=1, testSuiteIdx=1, name=testCase1, packageName=null, className=testCase1ClassName, duration=2.500, passed=true, skipped=false, hasSystemOut=false, hasSystemErr=false, failure=null)]):\r\n  ✓ is not null\r\n  ▼ \"MyGroup\":\r\n    ✗ is equal to \"MyGroup2\" : found \"MyGroup\"",
+          "failure_type": "strikt.internal.opentest4j.CompoundAssertionFailure",
+          "failure_text": "strikt.internal.opentest4j.CompoundAssertionFailure: ▼ Expect that TestSuite(idx=1, packageName=projektor, className=TestSuite1, testCount=1, passingCount=1, skippedCount=0, failureCount=0, startTs=2020-01-14T16:20:30.059, hostname=hostname, duration=10.000, hasSystemOut=false, hasSystemErr=false, groupName=MyGroup, groupLabel=MyLabel, testCases=[TestCase(idx=1, testSuiteIdx=1, name=testCase1, packageName=null, className=testCase1ClassName, duration=2.500, passed=true, skipped=false, hasSystemOut=false, hasSystemErr=false, failure=null)]):\n  ✓ is not null\n  ▼ \"MyGroup\":\n    ✗ is equal to \"MyGroup2\" : found \"MyGroup\"\n\tat strikt.internal.AssertionStrategy$Throwing.evaluate(AssertionStrategy.kt:107)\n\tat strikt.internal.AssertionBuilder.and(AssertionBuilder.kt:39)\n\tat projektor.testsuite.GetTestSuiteApplicationTest$should fetch grouped test suite from database$2.invoke(GetTestSuiteApplicationTest.kt:105)\n\tat projektor.testsuite.GetTestSuiteApplicationTest$should fetch grouped test suite from database$2.invoke(GetTestSuiteApplicationTest.kt:18)\n\tat io.ktor.server.testing.TestEngineKt$withTestApplication$1.invoke(TestEngine.kt:69)\n\tat io.ktor.server.testing.TestEngineKt$withTestApplication$1.invoke(TestEngine.kt)\n\tat io.ktor.server.testing.TestEngineKt.withApplication(TestEngine.kt:50)\n\tat io.ktor.server.testing.TestEngineKt.withApplication$default(TestEngine.kt:44)\n\tat io.ktor.server.testing.TestEngineKt.withTestApplication(TestEngine.kt:67)\n\tat projektor.testsuite.GetTestSuiteApplicationTest.should fetch grouped test suite from database(GetTestSuiteApplicationTest.kt:72)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)\n\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)\n\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)\n\tat org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)\n\tat org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)\n\tat org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)\n\tat org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)\n\tat org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)\n\tat org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)\n\tat org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)\n\tat org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)\n\tat org.junit.runners.ParentRunner.run(ParentRunner.java:363)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:137)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:115)\n\tat org.junit.vintage.engine.execution.RunnerExecutor.execute(RunnerExecutor.java:40)\n\tat java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)\n\tat java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)\n\tat java.util.Iterator.forEachRemaining(Iterator.java:116)\n\tat java.util.Spliterators$IteratorSpliterator.forEachRemaining(Spliterators.java:1801)\n\tat java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:482)\n\tat java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)\n\tat java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)\n\tat java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)\n\tat java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)\n\tat java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)\n\tat org.junit.vintage.engine.VintageTestEngine.executeAllChildren(VintageTestEngine.java:80)\n\tat org.junit.vintage.engine.VintageTestEngine.execute(VintageTestEngine.java:71)\n\tat org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:229)\n\tat org.junit.platform.launcher.core.DefaultLauncher.lambda$execute$6(DefaultLauncher.java:197)\n\tat org.junit.platform.launcher.core.DefaultLauncher.withInterceptedStreams(DefaultLauncher.java:211)\n\tat org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:191)\n\tat org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:128)\n\tat org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.processAllTestClasses(JUnitPlatformTestClassProcessor.java:99)\n\tat org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.access$000(JUnitPlatformTestClassProcessor.java:79)\n\tat org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor.stop(JUnitPlatformTestClassProcessor.java:75)\n\tat org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:61)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)\n\tat org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)\n\tat org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)\n\tat org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:94)\n\tat com.sun.proxy.$Proxy2.stop(Unknown Source)\n\tat org.gradle.api.internal.tasks.testing.worker.TestWorker.stop(TestWorker.java:132)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)\n\tat org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)\n\tat org.gradle.internal.remote.internal.hub.MessageHubBackedObjectConnection$DispatchWrapper.dispatch(MessageHubBackedObjectConnection.java:182)\n\tat org.gradle.internal.remote.internal.hub.MessageHubBackedObjectConnection$DispatchWrapper.dispatch(MessageHubBackedObjectConnection.java:164)\n\tat org.gradle.internal.remote.internal.hub.MessageHub$Handler.run(MessageHub.java:412)\n\tat org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)\n\tat org.gradle.internal.concurrent.ManagedExecutorImpl$1.run(ManagedExecutorImpl.java:48)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat org.gradle.internal.concurrent.ThreadFactoryImpl$ManagedThreadRunnable.run(ThreadFactoryImpl.java:56)\n\tat java.lang.Thread.run(Thread.java:748)\n"
+        },
+        "full_name": "projektor.testsuite.GetTestSuiteApplicationTest.should fetch grouped test suite from database"
+      },
+      "failure_count": 5,
+      "latest_public_id": "32FBHG6FDL8S",
+      "latest_created_timestamp": "2020-09-30T17:27:39.859915"
+    },
+    {
+      "test_case": {
+        "idx": 1,
+        "test_suite_idx": 1,
+        "name": "should fail",
+        "package_name": "projektor.example.spock",
+        "class_name": "FailingSpec",
+        "duration": 0.119,
+        "passed": false,
+        "skipped": false,
+        "has_system_out": true,
+        "has_system_err": false,
+        "public_id": "AIZY8O99FJ54",
+        "created_timestamp": "2020-09-30T17:27:39.783917",
+        "failure": {
+          "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
+          "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
+          "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec.should fail(FailingSpec.groovy:8)\n"
+        },
+        "full_name": "projektor.example.spock.FailingSpec.should fail"
+      },
+      "failure_count": 3,
+      "latest_public_id": "AIZY8O99FJ54",
+      "latest_created_timestamp": "2020-09-30T17:27:39.783917"
+    },
+    {
+      "test_case": {
+        "idx": 2,
+        "test_suite_idx": 1,
+        "name": "should fail with output",
+        "package_name": "projektor.example.spock",
+        "class_name": "FailingSpec",
+        "duration": 0.006,
+        "passed": false,
+        "skipped": false,
+        "has_system_out": true,
+        "has_system_err": false,
+        "public_id": "AIZY8O99FJ54",
+        "created_timestamp": "2020-09-30T17:27:39.783917",
+        "failure": {
+          "failure_message": "Condition not satisfied:\n\nactual == 3\n|      |\n1      false\n",
+          "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
+          "failure_text": "Condition not satisfied:\n\nactual == 3\n|      |\n1      false\n\n\tat projektor.example.spock.FailingSpec.should fail with output(FailingSpec.groovy:22)\n"
+        },
+        "full_name": "projektor.example.spock.FailingSpec.should fail with output"
+      },
+      "failure_count": 4,
+      "latest_public_id": "AIZY8O99FJ54",
+      "latest_created_timestamp": "2020-09-30T17:27:39.783917"
+    }
+  ]
+}

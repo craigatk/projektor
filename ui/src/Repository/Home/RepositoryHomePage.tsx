@@ -2,6 +2,7 @@ import * as React from "react";
 import { RouteComponentProps } from "@reach/router";
 import RepositoryTimelinePage from "../Timeline/RepositoryTimelinePage";
 import RepositoryCoveragePage from "../Coverage/RepositoryCoveragePage";
+import RepositoryFlakyTestsPage from "../FlakyTests/RepositoryFlakyTestsPage";
 
 interface RepositoryHomePageProps extends RouteComponentProps {
   orgPart: string;
@@ -22,6 +23,12 @@ const RepositoryHomePage = ({
         projectName={projectName}
       />
       <RepositoryCoveragePage
+        orgPart={orgPart}
+        repoPart={repoPart}
+        projectName={projectName}
+        hideIfEmpty={true}
+      />
+      <RepositoryFlakyTestsPage
         orgPart={orgPart}
         repoPart={repoPart}
         projectName={projectName}

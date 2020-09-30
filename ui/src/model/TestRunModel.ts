@@ -53,6 +53,7 @@ interface TestCase {
   name: string;
   packageName: string;
   className: string;
+  fullName: string;
   duration: number;
   passed: boolean;
   skipped: boolean;

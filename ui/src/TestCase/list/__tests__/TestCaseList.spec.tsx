@@ -12,6 +12,7 @@ describe("TestCaseList", () => {
       name: "Test Case",
       packageName: "",
       className: "",
+      fullName: "Test Case",
       duration: 1.2,
       passed: false,
       skipped: false,

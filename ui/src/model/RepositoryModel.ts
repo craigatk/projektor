@@ -1,4 +1,4 @@
-import { CoverageStats } from "./TestRunModel";
+import { CoverageStats, TestCase } from "./TestRunModel";
 
 interface RepositoryTimelineEntry {
   publicId: string;
@@ -21,9 +21,22 @@ interface RepositoryCoverageTimeline {
   timelineEntries: RepositoryCoverageTimelineEntry[];
 }
 
+interface RepositoryFlakyTest {
+  testCase: TestCase;
+  failureCount: number;
+  latestPublicId: string;
+  latestCreatedTimestamp: Date;
+}
+
+interface RepositoryFlakyTests {
+  tests: RepositoryFlakyTest[];
+}
+
 export {
   RepositoryTimelineEntry,
   RepositoryTimeline,
   RepositoryCoverageTimeline,
   RepositoryCoverageTimelineEntry,
+  RepositoryFlakyTest,
+  RepositoryFlakyTests,
 };

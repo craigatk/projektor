@@ -12,6 +12,7 @@ describe("TestCaseFailurePanel", () => {
       name: "Test Case",
       packageName: "",
       className: "",
+      fullName: "Test Case",
       duration: 1.2,
       passed: false,
       skipped: false,
@@ -37,6 +38,7 @@ describe("TestCaseFailurePanel", () => {
       name: "Test Case",
       packageName: "",
       className: "",
+      fullName: "Test Case",
       duration: 1.2,
       passed: true,
       skipped: false,
@@ -62,6 +64,7 @@ describe("TestCaseFailurePanel", () => {
       name: "Test Case",
       packageName: "",
       className: "",
+      fullName: "Test Case",
       duration: 1.2,
       passed: false,
       skipped: false,
@@ -87,6 +90,7 @@ describe("TestCaseFailurePanel", () => {
       name: "Test Case",
       packageName: "",
       className: "",
+      fullName: "Test Case",
       duration: 1.2,
       passed: false,
       skipped: false,
@@ -112,6 +116,7 @@ describe("TestCaseFailurePanel", () => {
       name: "Test Case",
       packageName: "",
       className: "",
+      fullName: "Test Case",
       duration: 1.2,
       passed: false,
       skipped: false,
@@ -173,12 +178,13 @@ describe("TestCaseFailurePanel", () => {
   });
 
   function createTestCaseWithFailure(failure: TestFailure): TestCase {
-    const testCase: TestCase = {
+    return {
       idx: 1,
       testSuiteIdx: 2,
       name: "Test Case",
       packageName: "",
       className: "",
+      fullName: "Test Case",
       duration: 1.2,
       passed: false,
       skipped: false,
@@ -186,7 +192,5 @@ describe("TestCaseFailurePanel", () => {
       hasSystemErr: true,
       failure,
     };
-
-    return testCase;
   }
 });
