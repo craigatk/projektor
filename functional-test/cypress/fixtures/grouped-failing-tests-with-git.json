@@ -1,0 +1,20 @@
+{
+  "groupedTestSuites": [
+    {
+      "groupName": "Group1",
+      "groupLabel": "unitTest",
+      "directory": "/test/unit",
+      "testSuitesBlob": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<testsuite name=\"projektor.example.spock.FailingSpec\" tests=\"2\" skipped=\"0\" failures=\"2\" errors=\"0\" timestamp=\"2019-10-01T13:15:44\" hostname=\"Craigs-MacBook-Pro.local\" time=\"0.125\">\r\n  <properties/>\r\n  <testcase name=\"should fail\" classname=\"projektor.example.spock.FailingSpec\" time=\"0.119\">\r\n    <failure message=\"Condition not satisfied:&#10;&#10;1 == 2&#10;  |&#10;  false&#10;\" type=\"org.spockframework.runtime.SpockComparisonFailure\">Condition not satisfied:\r\n\r\n1 == 2\r\n  |\r\n  false\r\n\r\n\tat projektor.example.spock.FailingSpec.should fail(FailingSpec.groovy:8)\r\n</failure>\r\n  </testcase>\r\n  <testcase name=\"should fail with output\" classname=\"projektor.example.spock.FailingSpec\" time=\"0.006\">\r\n    <failure message=\"Condition not satisfied:&#10;&#10;actual == 3&#10;|      |&#10;1      false&#10;\" type=\"org.spockframework.runtime.SpockComparisonFailure\">Condition not satisfied:\r\n\r\nactual == 3\r\n|      |\r\n1      false\r\n\r\n\tat projektor.example.spock.FailingSpec.should fail with output(FailingSpec.groovy:22)\r\n</failure>\r\n  </testcase>\r\n  <system-out><![CDATA[A line in the given block\r\nAnother line in the given block\r\nA line in the when block\r\nA line in the then block\r\n]]></system-out>\r\n  <system-err><![CDATA[]]></system-err>\r\n</testsuite>\r\n"
+    }
+  ],
+  "metadata": {
+    "git": {
+      "repoName": "flaky-org/flaky-repo",
+      "branchName": "main",
+      "projectName": null,
+      "isMainBranch": true
+    },
+    "ci": true
+  },
+  "wallClockDuration": null
+}
