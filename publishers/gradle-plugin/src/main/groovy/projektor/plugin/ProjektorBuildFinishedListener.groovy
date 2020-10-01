@@ -33,7 +33,6 @@ class ProjektorBuildFinishedListener implements BuildListener {
     private final NotificationConfig notificationConfig
     private final Logger logger
     private final ProjektorPublishPluginExtension extension
-    private final boolean publishOnFailureOnly
     private final File projectDir
     private final List<String> additionalResultsDirs
     private final List<FileTree> attachments
@@ -53,7 +52,6 @@ class ProjektorBuildFinishedListener implements BuildListener {
         this.notificationConfig = notificationConfig
         this.logger = logger
         this.extension = extension
-        this.publishOnFailureOnly = extension.autoPublishOnFailureOnly
         this.projectDir = projectDir
         this.additionalResultsDirs = extension.additionalResultsDirs
         this.attachments = extension.attachments
@@ -96,7 +94,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
             ProjectTestResultsCollector projectTestResultsCollector,
             CodeCoverageTaskCollector codeCoverageTaskCollector
     ) {
-        boolean isCI = isCI(System.getenv())
+        boolean isCI = isCI(System.getenv(), extension)
 
         logger.info("Build finished, gathering and publishing Projektor test reports from " +
                 "${projectTestResultsCollector.testGroupsCount()} test tasks")

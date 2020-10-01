@@ -16,7 +16,6 @@ class PublishResultsTaskTokenSpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublish = false
                 publishToken = 'token12345'
             }
         """.stripIndent()
@@ -51,5 +50,4 @@ class PublishResultsTaskTokenSpec extends SingleProjectSpec {
         HttpHeader publishTokenInHeader = resultsRequests[0].header(ClientToken.PUBLISH_TOKEN_NAME)
         publishTokenInHeader.firstValue() == "token12345"
     }
-
 }

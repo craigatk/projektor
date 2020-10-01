@@ -1,7 +1,6 @@
 package projektor.plugin.functionaltest
 
 import org.apache.commons.lang3.RandomStringUtils
-import org.gradle.testkit.runner.GradleRunner
 import projektor.server.api.TestRun
 import projektor.server.api.coverage.Coverage
 import projektor.server.api.coverage.CoverageStats
@@ -36,7 +35,6 @@ class MultiProjectCoverageFunctionalSpec extends MultiProjectFunctionalSpecifica
         rootBuildFile << """
             projektor {
                 serverUrl = '${PROJEKTOR_SERVER_URL}'
-                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 
@@ -50,11 +48,7 @@ class MultiProjectCoverageFunctionalSpec extends MultiProjectFunctionalSpecifica
         writePartialCoverageSpecFile(testDirectory3, "PartialSpec3")
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test', 'jacocoTestReport', '-i')
-                .withPluginClasspath()
-                .build()
+        def result = runPassingBuildInCI('test', 'jacocoTestReport', '-i')
 
         String testId = extractTestId(result.output)
 
@@ -88,12 +82,11 @@ class MultiProjectCoverageFunctionalSpec extends MultiProjectFunctionalSpecifica
         overallStats.lineStat.coveredPercentage == 83.33
     }
 
-    def "when tests not executed but code coverage exists should publish coverage reports from multiple projects"() {
+    def "when tests not executed but code coverage exists and running in CI should publish coverage reports from multiple projects"() {
         given:
         rootBuildFile << """
             projektor {
                 serverUrl = '${PROJEKTOR_SERVER_URL}'
-                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 
@@ -109,18 +102,12 @@ class MultiProjectCoverageFunctionalSpec extends MultiProjectFunctionalSpecifica
         String repoName = "${RandomStringUtils.randomAlphabetic(8)}/${RandomStringUtils.randomAlphabetic(8)}"
         String branchName = "main"
 
-        Map<String, String> currentEnv = System.getenv()
-        Map<String, String> augmentedEnv = new HashMap<>(currentEnv)
+        Map<String, String> augmentedEnv = new HashMap<>()
         augmentedEnv.putAll(["CI": "true"])
         augmentedEnv.putAll(["GITHUB_REPOSITORY": repoName, "GITHUB_REF": "refs/master/${branchName}".toString()])
 
         when:
-        def result1 = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test', 'jacocoTestReport')
-                .withEnvironment(augmentedEnv)
-                .withPluginClasspath()
-                .build()
+        def result1 = runPassingBuildWithEnvironment(augmentedEnv, 'test', 'jacocoTestReport')
 
         String testId1 = extractTestId(result1.output)
 
@@ -154,12 +141,7 @@ class MultiProjectCoverageFunctionalSpec extends MultiProjectFunctionalSpecifica
         overallStats.lineStat.coveredPercentage == 83.33
 
         when:
-        def result2 = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test', 'jacocoTestReport')
-                .withEnvironment(augmentedEnv)
-                .withPluginClasspath()
-                .build()
+        def result2 = runPassingBuildWithEnvironment(augmentedEnv, 'test', 'jacocoTestReport')
 
         String testId2 = extractTestId(result2.output)
 

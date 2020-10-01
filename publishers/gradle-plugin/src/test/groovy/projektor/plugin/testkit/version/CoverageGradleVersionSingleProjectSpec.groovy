@@ -1,7 +1,6 @@
 package projektor.plugin.testkit.version
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.util.GradleVersion
 import projektor.plugin.testkit.SingleProjectSpec
 import spock.lang.Unroll
@@ -25,7 +24,6 @@ class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 
@@ -41,12 +39,7 @@ class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
         writePartialCoverageSpecFile(testDir, "PartialSpec")
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test', 'jacocoTestReport')
-                .withPluginClasspath()
-                .withGradleVersion(gradleVersion)
-                .build()
+        def result = runSuccessfulBuildInCI('test', 'jacocoTestReport')
 
         then:
         result.task(":test").outcome == SUCCESS

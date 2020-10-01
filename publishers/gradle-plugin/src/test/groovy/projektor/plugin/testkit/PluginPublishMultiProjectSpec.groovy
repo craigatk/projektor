@@ -5,7 +5,7 @@ import projektor.plugin.SpecWriter
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 
-class PluginAutoPublishMultiProjectSpec extends MultiProjectSpec {
+class PluginPublishMultiProjectSpec extends MultiProjectSpec {
 
     def setup() {
         SpecWriter.writeFailingSpecFiles(testDirectory1, ["Sample1Spec1", "Sample1Spec2"])

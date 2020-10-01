@@ -19,7 +19,7 @@ class SlackMessageNotificationMultiProjectSpec extends MultiProjectSpec {
             projektor {
                 serverUrl = '${serverUrl}'
                 writeSlackMessageFile = true
-                autoPublishOnFailureOnly = false
+                alwaysPublish = true
             }
         """.stripIndent()
 

@@ -11,7 +11,7 @@ class PublishResultsRetrySpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublishOnFailureOnly = false
+                alwaysPublish = true
                 publishRetryMaxAttempts = 2
                 publishRetryInterval = 50
             }
@@ -36,7 +36,7 @@ class PublishResultsRetrySpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublishOnFailureOnly = false
+                alwaysPublish = true
                 publishRetryMaxAttempts = 2
                 publishRetryInterval = 0
                 publishTimeout = 500

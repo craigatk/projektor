@@ -6,6 +6,7 @@ import projektor.plugin.SpecWriter
 import projektor.plugin.notification.link.LinkModel
 import projektor.plugin.testkit.SingleProjectSpec
 
+import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class LinkFileSingleProjectSpec extends SingleProjectSpec {
@@ -17,7 +18,6 @@ class LinkFileSingleProjectSpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 
@@ -27,7 +27,7 @@ class LinkFileSingleProjectSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = runSuccessfulBuildWithEnvironment(["CI": "true"], 'test')
+        def result = runSuccessfulBuildInCI('test')
 
         then:
         result.task(":test").outcome == SUCCESS
@@ -46,20 +46,19 @@ class LinkFileSingleProjectSpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 
-        SpecWriter.createTestDirectoryWithPassingTest(projectRootDir, "SampleSpec")
+        SpecWriter.createTestDirectoryWithFailingTest(projectRootDir, "SampleSpec")
 
         String resultsId = "ABC123"
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = runSuccessfulBuildWithEnvironment(["CI": "false"], 'test')
+        def result = runFailedBuildWithEnvironment(["CI": "false"], 'test')
 
         then:
-        result.task(":test").outcome == SUCCESS
+        result.task(":test").outcome == FAILED
 
         and:
         File linkFile = new File(projectRootDir.root, "projektor_report.json")

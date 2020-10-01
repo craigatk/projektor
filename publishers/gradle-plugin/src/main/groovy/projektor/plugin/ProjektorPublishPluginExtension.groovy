@@ -3,8 +3,10 @@ package projektor.plugin
 import org.gradle.api.file.FileTree
 
 class ProjektorPublishPluginExtension {
-    boolean autoPublish = true
-    boolean autoPublishOnFailureOnly = true
+    boolean alwaysPublishInCI = true
+    boolean publishOnLocalFailure = true
+    boolean alwaysPublish = false
+
     String serverUrl
     boolean publishTaskEnabled = true
     String publishToken
@@ -23,10 +25,11 @@ class ProjektorPublishPluginExtension {
     String linkFileName = "projektor_report.json"
 
     boolean codeCoveragePublish = true
-    boolean autoPublishWhenCoverageInCI = true
 
     boolean gitInfoEnabled = true
     List<String> gitMainBranchNames = ["main", "master"]
     List<String> gitRepoEnvironmentVariables = ["VELA_REPO_FULL_NAME", "GITHUB_REPOSITORY"]
     List<String> gitRefEnvironmentVariables = ["VELA_BUILD_REF", "GITHUB_REF"]
+
+    List<String> ciEnvironmentVariables = ["CI", "VELA", "DRONE"]
 }

@@ -21,14 +21,8 @@ class PublishResultsTaskMultiProjectWithPluginAppliedToSubprojectsSpec extends M
 
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublish = false
             }
         """.stripIndent()
-    }
-
-    @Override
-    String getAdditionalPluginConfig() {
-        "autoPublish = false"
     }
 
     def "when running publish task from root project should send results from each subproject"() {

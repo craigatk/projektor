@@ -1,7 +1,6 @@
 package projektor.plugin.testkit
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
-import org.gradle.testkit.runner.GradleRunner
 import projektor.plugin.SpecWriter
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
@@ -24,11 +23,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .buildAndFail()
+        def result = runFailedBuild('test')
 
         then:
         !result.output.contains("Projektor plugin enabled but no server specified")
@@ -39,43 +34,11 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
         resultsRequests.size() == 1
     }
 
-    def "when auto-publish is disabled should not send results to server"() {
-        given:
-        buildFile << """
-            projektor {
-                serverUrl = '${serverUrl}'
-                autoPublish = false
-            }
-        """.stripIndent()
-
-        SpecWriter.createTestDirectoryWithFailingTest(projectRootDir, "SampleSpec")
-
-        String resultsId = "ABC123"
-        resultsStubber.stubResultsPostSuccess(resultsId)
-
-        when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test', '-i')
-                .withPluginClasspath()
-                .buildAndFail()
-
-        then:
-        result.output.contains("Projektor plugin auto-publish disabled")
-        !result.output.contains("Projektor plugin enabled but no server specified")
-        verifyOutputDoesNotContainReportLink(result.output)
-
-        and:
-        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
-        resultsRequests.size() == 0
-    }
-
     def "when Projektor plugin is enabled but no server URL set should not send results to server"() {
         given:
         buildFile << """
             projektor {
                 serverUrl = null
-                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 
@@ -85,11 +48,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .build()
+        def result = runSuccessfulBuildInCI('test')
 
         then:
         result.task(":test").outcome == SUCCESS

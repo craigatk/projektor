@@ -14,7 +14,6 @@ class PublishResultsTaskSingleProjectSpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublish = false
             }
         """.stripIndent()
 
@@ -51,5 +50,4 @@ class PublishResultsTaskSingleProjectSpec extends SingleProjectSpec {
         requestBody.contains('SampleSpec')
         requestBody.contains('sample test')
     }
-
 }
