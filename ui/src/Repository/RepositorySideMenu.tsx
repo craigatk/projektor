@@ -7,6 +7,7 @@ import OrganizationIcon from "../Icons/OrganizationIcon";
 import { repositoryLinkUrlUI } from "./RepositoryLink";
 import RepositoryIcon from "../Icons/RepositoryIcon";
 import DashboardIcon from "../Icons/DashboardIcon";
+import FlakyTestsIcon from "../Icons/FlakyTestsIcon";
 
 interface RepositorySideMenuProps {
   repoName: string;
@@ -69,6 +70,12 @@ const RepositorySideMenu = ({
           icon={<CoverageIcon />}
           linkText="Coverage"
           linkTestId="nav-link-repo-coverage"
+        />
+        <SideMenuLink
+          linkTo={repositoryLinkUrlUI(repoName, projectName, "/tests/flaky")}
+          icon={<FlakyTestsIcon />}
+          linkText="Flaky tests"
+          linkTestId="nav-link-repo-flaky-tests"
         />
         <SideMenuLink
           linkTo={`/organization/${orgName}`}

@@ -168,6 +168,32 @@ fun loadResultsWithGitButWithoutCoverage() {
     println("View run with Git metadata and no test coverage at $uiBaseUrl${resultsResponse.uri}")
 }
 
+fun repositoryFlakyTests() {
+    val repoName = "flaky-org/flaky-repo"
+    val branchName = "main"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+    resultsMetadata.ci = true
+
+    repeat(3) {
+        sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXml = ResultsXmlLoader().failing(), metadata = resultsMetadata))
+    }
+
+    repeat(4) {
+        sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXml = ResultsXmlLoader().failingLongFailureMessage(), metadata = resultsMetadata))
+    }
+
+    repeat(2) {
+        sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXml = ResultsXmlLoader().passing(), metadata = resultsMetadata))
+    }
+
+    println("View repository with flaky tests at $uiBaseUrl/repository/$repoName/tests/flaky")
+}
+
 fun loadJestWithCoverage() {
     val resultsResponse = sendResultsToServer(ResultsXmlLoader().jestUi())
     sendCoverageToServer(resultsResponse.id, JestXmlLoader().ui())

@@ -10,12 +10,14 @@ interface RepositoryCoveragePageProps extends RouteComponentProps {
   orgPart: string;
   repoPart: string;
   projectName?: string;
+  hideIfEmpty?: boolean;
 }
 
 const RepositoryCoveragePage = ({
   orgPart,
   repoPart,
   projectName,
+  hideIfEmpty,
 }: RepositoryCoveragePageProps) => {
   const repoName = `${orgPart}/${repoPart}`;
   const [
@@ -42,6 +44,7 @@ const RepositoryCoveragePage = ({
         <RepositoryCoverageDetails
           coverageTimeline={repositoryCoverageTimeline}
           repoName={repoName}
+          hideIfEmpty={hideIfEmpty}
         />
       }
     />

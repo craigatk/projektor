@@ -6,6 +6,7 @@ import RepositorySideMenu from "./RepositorySideMenu";
 import RepositoryCoveragePage from "./Coverage/RepositoryCoveragePage";
 import RepositoryTimelinePage from "./Timeline/RepositoryTimelinePage";
 import RepositoryHomePage from "./Home/RepositoryHomePage";
+import RepositoryFlakyTestsPage from "./FlakyTests/RepositoryFlakyTestsPage";
 
 interface RepositoryWrapperProps extends RouteComponentProps {
   orgPart: string;
@@ -69,6 +70,12 @@ const RepositoryWrapper = ({
           />
           <RepositoryTimelinePage
             path="/timeline"
+            orgPart={orgPart}
+            repoPart={repoPart}
+            projectName={projectName}
+          />
+          <RepositoryFlakyTestsPage
+            path="/tests/flaky"
             orgPart={orgPart}
             repoPart={repoPart}
             projectName={projectName}
