@@ -17,22 +17,74 @@ class ShouldPublishCalculatorSpec extends Specification {
     BuildResult failingBuild = new BuildResult(gradle, new IllegalStateException())
 
     @Unroll
-    def "should-publish-results should be #expectedPublish in scenario #scenario"() {
+    def "should-publish-results should be #shouldPublishResults in scenario #scenario"() {
         expect:
-        ShouldPublishCalculator.shouldPublishResults(extension, buildResult, resultsDataExists, coverageTasksExecuted, env) == shouldPublishResults
+        ShouldPublishCalculator.shouldPublishResults(
+                extension,
+                passingBuild,
+                resultsDataExists,
+                false,
+                environment
+        ) == shouldPublishResults
 
         where:
-        scenario                                                                                          | extension                                                                                              | buildResult  | resultsDataExists | coverageTasksExecuted | env             || shouldPublishResults
-        'passing build with publish on failure only set to false'                                         | new ProjektorPublishPluginExtension(autoPublishOnFailureOnly: false)                                   | passingBuild | true              | false                 | [:]             || true
-        'failing build with publish on failure only set to false'                                         | new ProjektorPublishPluginExtension(autoPublishOnFailureOnly: false)                                   | failingBuild | true              | false                 | [:]             || true
-        'build with no test or coverage results and publish on failure only set to false'                 | new ProjektorPublishPluginExtension(autoPublishOnFailureOnly: false)                                   | failingBuild | false             | false                 | [:]             || false
-        'passing build with publish on failure only set to true'                                          | new ProjektorPublishPluginExtension(autoPublishOnFailureOnly: true)                                    | passingBuild | true              | false                 | [:]             || false
-        'failing build with publish on failure only set to true'                                          | new ProjektorPublishPluginExtension(autoPublishOnFailureOnly: true)                                    | failingBuild | true              | false                 | [:]             || true
-        'passing build with publish coverage in CI set to true and coverage executed'                     | new ProjektorPublishPluginExtension(autoPublishOnFailureOnly: true, autoPublishWhenCoverageInCI: true) | passingBuild | true              | true                  | ["CI": "true"]  || true
-        'passing build with publish coverage in CI set to true and coverage executed but no test results' | new ProjektorPublishPluginExtension(autoPublishOnFailureOnly: true, autoPublishWhenCoverageInCI: true) | passingBuild | false             | true                  | ["CI": "true"]  || true
-        'passing build with publish coverage in CI set to a text value and coverage executed'             | new ProjektorPublishPluginExtension(autoPublishOnFailureOnly: true, autoPublishWhenCoverageInCI: true) | passingBuild | true              | true                  | ["CI": "SYS"]   || true
-        'passing build with publish coverage in CI set to false and coverage executed'                    | new ProjektorPublishPluginExtension(autoPublishOnFailureOnly: true, autoPublishWhenCoverageInCI: true) | passingBuild | true              | true                  | ["CI": "false"] || false
-        'passing build with publish coverage in CI set to true and no coverage executed'                  | new ProjektorPublishPluginExtension(autoPublishOnFailureOnly: true, autoPublishWhenCoverageInCI: true) | passingBuild | true              | false                 | ["CI": "true"]  || false
-        'passing build with publish coverage in CI set to true and coverage executed but not in CI'       | new ProjektorPublishPluginExtension(autoPublishOnFailureOnly: true, autoPublishWhenCoverageInCI: true) | passingBuild | true              | true                  | [:]             || false
+        scenario                                                  | extension                                                | resultsDataExists | environment    || shouldPublishResults
+        "has results and always publish=true"                     | new ProjektorPublishPluginExtension(alwaysPublish: true) | true              | [:]            || true
+        "has no results and always publish=true"                  | new ProjektorPublishPluginExtension(alwaysPublish: true) | false             | [:]            || false
+        "has results and always publish in CI=true and in CI"     | new ProjektorPublishPluginExtension()                    | true              | ["CI": "true"] || true
+        "has no results and always publish in CI=true and in CI"  | new ProjektorPublishPluginExtension()                    | false             | ["CI": "true"] || false
+        "has results and always publish in CI=true and not in CI" | new ProjektorPublishPluginExtension()                    | true              | [:]            || false
+    }
+
+    @Unroll
+    def "should publish on local failure #shouldPublishResults in scenario #scenario"() {
+        expect:
+        ShouldPublishCalculator.shouldPublishResults(
+                extension,
+                buildResult,
+                resultsDataExists,
+                false,
+                [:]
+        ) == shouldPublishResults
+
+        where:
+        scenario                                            | extension                                                         | resultsDataExists | buildResult  || shouldPublishResults
+        "failing local build"                               | new ProjektorPublishPluginExtension()                             | true              | failingBuild || true
+        "failing local build with publish on local = false" | new ProjektorPublishPluginExtension(publishOnLocalFailure: false) | true              | failingBuild || false
+        "passing local build"                               | new ProjektorPublishPluginExtension()                             | true              | passingBuild || false
+    }
+
+    @Unroll
+    def "should publish based on code coverage #shouldPublishResults in scenario #scenario"() {
+        expect:
+        ShouldPublishCalculator.shouldPublishResults(
+                extension,
+                passingBuild,
+                false,
+                coverageTasksExecuted,
+                environment
+        ) == shouldPublishResults
+
+        where:
+        scenario                       | extension                             | coverageTasksExecuted | environment     || shouldPublishResults
+        "in CI with coverage data"     | new ProjektorPublishPluginExtension() | true                  | ["CI": "true"]  || true
+        "not in CI with coverage data" | new ProjektorPublishPluginExtension() | true                  | ["CI": "false"] || false
+        "in CI without coverage data"  | new ProjektorPublishPluginExtension() | false                 | ["CI": "true"]  || false
+    }
+
+    @Unroll
+    def "should be CI #shouldBeCI with environment #environment"() {
+        expect:
+        ShouldPublishCalculator.isCI(environment, new ProjektorPublishPluginExtension()) == shouldBeCI
+
+        where:
+        environment                     || shouldBeCI
+        ["CI": "true"]                  || true
+        ["CI": "VELA"]                  || true
+        ["CI": "false"]                 || false
+        [:]                             || false
+        ["DRONE": "true"]               || true
+        ["VELA": "true"]                || true
+        ["CI": "false", "VELA": "true"] || true
     }
 }

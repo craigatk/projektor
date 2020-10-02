@@ -11,16 +11,12 @@ class ApplyTestResultsBuildListener {
     static void conditionallyAddBuildListener(Project project, ProjektorPublishPluginExtension extension) {
         Logger logger = project.logger
 
-        if (extension.autoPublish) {
-            if (!project.gradle.ext.has(LISTENER_APPLIED_PROPERTY_NAME)) {
-                addBuildListener(project, extension)
+        if (!project.gradle.ext.has(LISTENER_APPLIED_PROPERTY_NAME)) {
+            addBuildListener(project, extension)
 
-                project.gradle.ext.set(LISTENER_APPLIED_PROPERTY_NAME, true)
-            } else {
-                logger.info("Projektor test results build listener already applied, skipping")
-            }
+            project.gradle.ext.set(LISTENER_APPLIED_PROPERTY_NAME, true)
         } else {
-            logger.info("Projektor plugin auto-publish disabled")
+            logger.info("Projektor test results build listener already applied, skipping")
         }
     }
 

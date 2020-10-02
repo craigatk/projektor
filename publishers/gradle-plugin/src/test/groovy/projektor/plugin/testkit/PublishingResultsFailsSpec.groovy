@@ -11,7 +11,7 @@ class PublishingResultsFailsSpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublishOnFailureOnly = false
+                alwaysPublish = true
             }
         """.stripIndent()
 
@@ -37,7 +37,7 @@ class PublishingResultsFailsSpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublishOnFailureOnly = false
+                alwaysPublish = true
             }
         """.stripIndent()
 
@@ -60,7 +60,7 @@ class PublishingResultsFailsSpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublishOnFailureOnly = false
+                alwaysPublish = true
             }
         """.stripIndent()
 

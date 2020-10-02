@@ -1,6 +1,5 @@
 package projektor.plugin.functionaltest
 
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import projektor.plugin.BuildFileWriter
 import projektor.server.api.TestRun
@@ -25,7 +24,6 @@ class SingleProjectCoverageFunctionalSpec extends ProjektorPluginFunctionalSpeci
         buildFile << """
             projektor {
                 serverUrl = '${PROJEKTOR_SERVER_URL}'
-                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 
@@ -36,11 +34,7 @@ class SingleProjectCoverageFunctionalSpec extends ProjektorPluginFunctionalSpeci
         writeFullCoverageSpecFile(testDir, "FullSpec")
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test', 'jacocoTestReport', '-i')
-                .withPluginClasspath()
-                .build()
+        def result = runPassingBuildInCI('test', 'jacocoTestReport', '-i')
 
         then:
         result.task(":test").outcome == TaskOutcome.SUCCESS

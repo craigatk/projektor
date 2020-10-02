@@ -10,30 +10,21 @@ class ShouldPublishCalculator {
             boolean coverageTasksExecuted,
             Map<String, String> environment
     ) {
-        return shouldPublishBasedOnBuildResult(resultsDataExists, extension, buildResult) ||
-                shouldPublishBasedOnCoverage(extension, coverageTasksExecuted, environment)
+        boolean ci = isCI(environment, extension)
+        boolean buildFailed = buildResult.failure != null
+
+        if (resultsDataExists || coverageTasksExecuted) {
+            return extension.alwaysPublish ||
+                    (ci && extension.alwaysPublishInCI) ||
+                    (!ci && extension.publishOnLocalFailure && buildFailed && resultsDataExists)
+        } else {
+            return false
+        }
     }
 
-    static boolean isCI(Map<String, String> environment) {
-        return environment.get("CI") != null && environment.get("CI") != "false"
-    }
-
-    private static boolean shouldPublishBasedOnBuildResult(
-            boolean resultsDataExists,
-            ProjektorPublishPluginExtension extension,
-            BuildResult buildResult
-    ) {
-        return resultsDataExists && (!extension.autoPublishOnFailureOnly || buildResult.failure != null)
-    }
-
-    private static boolean shouldPublishBasedOnCoverage(
-            ProjektorPublishPluginExtension extension,
-            boolean coverageTasksExecuted,
-            Map<String, String> environment
-    ) {
-        return extension.codeCoveragePublish &&
-                extension.autoPublishWhenCoverageInCI &&
-                coverageTasksExecuted &&
-                isCI(environment)
+    static boolean isCI(Map<String, String> environment, ProjektorPublishPluginExtension extension) {
+        return extension.ciEnvironmentVariables.any {envVariable ->
+            environment.get(envVariable) != null && environment.get(envVariable) != "false"
+        }
     }
 }

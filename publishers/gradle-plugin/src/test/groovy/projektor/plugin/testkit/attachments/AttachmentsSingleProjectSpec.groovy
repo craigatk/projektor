@@ -1,7 +1,6 @@
 package projektor.plugin.testkit.attachments
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
-import org.gradle.testkit.runner.GradleRunner
 import projektor.plugin.AttachmentsWireMockStubber
 import projektor.plugin.BuildFileWriter
 import projektor.plugin.SpecWriter
@@ -46,11 +45,7 @@ class AttachmentsSingleProjectSpec extends ProjectSpec {
         attachmentsStubber.stubAttachmentPostSuccess(resultsId, "attachment3.txt")
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .buildAndFail()
+        def result = runFailedBuild('test')
 
         then:
         result.task(":test").outcome == FAILED
@@ -92,11 +87,7 @@ class AttachmentsSingleProjectSpec extends ProjectSpec {
         attachmentsStubber.stubAttachmentPostSuccess(resultsId, "attachment3.txt")
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .build()
+        def result = runSuccessfulBuild('test')
 
         then:
         result.task(":test").outcome == SUCCESS
@@ -122,7 +113,8 @@ class AttachmentsSingleProjectSpec extends ProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublish = false
+                alwaysPublish = false
+                publishOnLocalFailure = false
                 attachments = [fileTree(dir: 'attachments', include: '**/*.txt')]
             }
         """.stripIndent()

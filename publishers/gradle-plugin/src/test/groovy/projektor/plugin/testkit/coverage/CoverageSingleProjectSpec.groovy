@@ -20,7 +20,6 @@ class CoverageSingleProjectSpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublishOnFailureOnly = false
             }
         """.stripIndent()
 
@@ -36,7 +35,7 @@ class CoverageSingleProjectSpec extends SingleProjectSpec {
         writePartialCoverageSpecFile(testDir, "PartialSpec")
 
         when:
-        def result = runSuccessfulBuild('test', 'jacocoTestReport', '-i')
+        def result = runSuccessfulBuildInCI('test', 'jacocoTestReport', '-i')
 
         then:
         result.task(":test").outcome == SUCCESS
@@ -46,12 +45,11 @@ class CoverageSingleProjectSpec extends SingleProjectSpec {
         coverageStubber.findCoverageRequests(publicId).size() == 1
     }
 
-    def "when coverage disabled should bit publish coverage results to server"() {
+    def "when coverage disabled should not publish coverage results to server"() {
         given:
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublishOnFailureOnly = false
                 codeCoveragePublish = false
             }
         """.stripIndent()
@@ -68,7 +66,7 @@ class CoverageSingleProjectSpec extends SingleProjectSpec {
         writePartialCoverageSpecFile(testDir, "PartialSpec")
 
         when:
-        def result = runSuccessfulBuild('test', 'jacocoTestReport', '-i')
+        def result = runSuccessfulBuildInCI('test', 'jacocoTestReport', '-i')
 
         then:
         result.task(":test").outcome == SUCCESS

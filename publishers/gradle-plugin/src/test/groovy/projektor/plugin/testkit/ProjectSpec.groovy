@@ -28,15 +28,11 @@ abstract class ProjectSpec extends Specification {
     }
 
     BuildResult runSuccessfulBuild(String... buildArgs) {
-        BuildResult result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments(buildArgs)
-                .withPluginClasspath()
-                .build()
+        runSuccessfulBuildWithEnvironment(["CI": "false"], buildArgs)
+    }
 
-        println result.output
-
-        return result
+    BuildResult runSuccessfulBuildInCI(String... buildArgs) {
+        runSuccessfulBuildWithEnvironment(["CI": "true"], buildArgs)
     }
 
     BuildResult runSuccessfulBuildWithEnvironment(Map<String, String> envMap, String... buildArgs) {
@@ -56,9 +52,18 @@ abstract class ProjectSpec extends Specification {
         return result
     }
 
-    BuildResult runFailedBuild(String... buildArgs) {
+    BuildResult runFailedBuildInCI(String... buildArgs) {
+        runSuccessfulBuildWithEnvironment(["CI": "true"], buildArgs)
+    }
+
+    BuildResult runFailedBuildWithEnvironment(Map<String, String> envMap, String... buildArgs) {
+        Map<String, String> currentEnv = System.getenv()
+        Map<String, String> augmentedEnv = new HashMap<>(currentEnv)
+        augmentedEnv.putAll(envMap)
+
         BuildResult result = GradleRunner.create()
                 .withProjectDir(projectRootDir.root)
+                .withEnvironment(augmentedEnv)
                 .withArguments(buildArgs)
                 .withPluginClasspath()
                 .buildAndFail()
@@ -66,6 +71,10 @@ abstract class ProjectSpec extends Specification {
         println result.output
 
         return result
+    }
+
+    BuildResult runFailedBuild(String... buildArgs) {
+        runFailedBuildWithEnvironment(["CI": "false"], buildArgs)
     }
 
     boolean includeJacocoPlugin() {

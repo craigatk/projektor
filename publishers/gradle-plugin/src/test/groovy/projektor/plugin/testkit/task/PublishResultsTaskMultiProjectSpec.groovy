@@ -20,7 +20,6 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         rootBuildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublish = false
             }
         """.stripIndent()
 
@@ -69,7 +68,6 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         rootBuildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublish = false
             }
         """.stripIndent()
 

@@ -29,7 +29,7 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
         rootBuildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublishOnFailureOnly = false
+                alwaysPublishInCI = true
             }
         """.stripIndent()
 
@@ -48,7 +48,7 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
         writePartialCoverageSpecFile(testDirectory3, "PartialSpec3")
 
         when:
-        def result = runSuccessfulBuild('test', 'jacocoTestReport', '-i')
+        def result = runSuccessfulBuildInCI('test', 'jacocoTestReport', '-i')
 
         then:
         result.task(":project1:test").outcome == SUCCESS
@@ -69,7 +69,7 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
         rootBuildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublishOnFailureOnly = false
+                alwaysPublishInCI = true
             }
         """.stripIndent()
 
@@ -88,7 +88,7 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
         writePartialCoverageSpecFile(testDirectory3, "PartialSpec3")
 
         when:
-        def result1 = runSuccessfulBuild('test', 'jacocoTestReport', '-i')
+        def result1 = runSuccessfulBuildInCI('test', 'jacocoTestReport', '-i')
 
         then:
         result1.task(":project1:test").outcome == SUCCESS
@@ -113,7 +113,7 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
 
         writePartialCoverageSpecFile(testDirectory2, "PartialSpec4")
 
-        def result2 = runSuccessfulBuild('test', 'jacocoTestReport', '-i')
+        def result2 = runSuccessfulBuildInCI('test', 'jacocoTestReport', '-i')
 
         then:
         result2.task(":project1:test").outcome == UP_TO_DATE
@@ -134,7 +134,7 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
         rootBuildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
-                autoPublishOnFailureOnly = false
+                alwaysPublishInCI = true
             }
         """.stripIndent()
 

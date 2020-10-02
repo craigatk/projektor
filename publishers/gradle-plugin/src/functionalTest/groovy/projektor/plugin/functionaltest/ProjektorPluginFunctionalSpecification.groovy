@@ -47,6 +47,31 @@ class ProjektorPluginFunctionalSpecification extends Specification {
         return PluginOutput.extractTestId(output, PROJEKTOR_SERVER_URL)
     }
 
+    BuildResult runPassingBuildInCI(String... buildArgs) {
+        runPassingBuildWithEnvironment(["CI": "true"], buildArgs)
+    }
+
+    BuildResult runPassingBuildWithEnvironment(Map<String, String> envMap, String... buildArgs) {
+        Map<String, String> currentEnv = System.getenv()
+        Map<String, String> augmentedEnv = new HashMap<>(currentEnv)
+        augmentedEnv.putAll(envMap)
+
+        BuildResult result = GradleRunner.create()
+                .withProjectDir(projectRootDir.root)
+                .withEnvironment(augmentedEnv)
+                .withArguments(buildArgs)
+                .withPluginClasspath()
+                .build()
+
+        println result.output
+
+        return result
+    }
+
+    BuildResult runFailedBuildInCI(String... buildArgs) {
+        runFailedBuildWithEnvironment(["CI": "true"], buildArgs)
+    }
+
     BuildResult runFailedBuildWithEnvironment(Map<String, String> envMap, String... buildArgs) {
         Map<String, String> currentEnv = System.getenv()
         Map<String, String> augmentedEnv = new HashMap<>(currentEnv)
