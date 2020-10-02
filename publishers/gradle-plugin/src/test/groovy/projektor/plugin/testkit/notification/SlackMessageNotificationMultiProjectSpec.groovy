@@ -33,7 +33,7 @@ class SlackMessageNotificationMultiProjectSpec extends MultiProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = runSuccessfulBuild('test')
+        def result = runSuccessfulLocalBuild('test')
 
         then:
         File slackMessageFile = new File(projectRootDir.root, "projektor_failure_message.json")

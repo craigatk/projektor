@@ -51,6 +51,10 @@ class ProjektorPluginFunctionalSpecification extends Specification {
         runPassingBuildWithEnvironment(["CI": "true"], buildArgs)
     }
 
+    BuildResult runPassingLocalBuild(String... buildArgs) {
+        runPassingBuildWithEnvironment(["CI": "false"], buildArgs)
+    }
+
     BuildResult runPassingBuildWithEnvironment(Map<String, String> envMap, String... buildArgs) {
         Map<String, String> currentEnv = System.getenv()
         Map<String, String> augmentedEnv = new HashMap<>(currentEnv)
@@ -70,6 +74,10 @@ class ProjektorPluginFunctionalSpecification extends Specification {
 
     BuildResult runFailedBuildInCI(String... buildArgs) {
         runFailedBuildWithEnvironment(["CI": "true"], buildArgs)
+    }
+
+    BuildResult runFailedLocalBuild(String... buildArgs) {
+        runFailedBuildWithEnvironment(["CI": "false"], buildArgs)
     }
 
     BuildResult runFailedBuildWithEnvironment(Map<String, String> envMap, String... buildArgs) {

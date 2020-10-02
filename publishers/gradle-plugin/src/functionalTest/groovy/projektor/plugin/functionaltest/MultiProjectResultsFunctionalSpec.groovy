@@ -1,6 +1,5 @@
 package projektor.plugin.functionaltest
 
-import org.gradle.testkit.runner.GradleRunner
 import projektor.plugin.SpecFileConfig
 import projektor.plugin.SpecWriter
 import projektor.server.api.TestRun
@@ -33,11 +32,7 @@ class MultiProjectResultsFunctionalSpec extends MultiProjectFunctionalSpecificat
         """.stripIndent()
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test', '--continue')
-                .withPluginClasspath()
-                .buildAndFail()
+        def result = runFailedLocalBuild('test', '--continue')
 
         println result.output
 

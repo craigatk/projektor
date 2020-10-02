@@ -25,7 +25,7 @@ class PluginPublishMultiProjectSpec extends MultiProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = runFailedBuild('test', '--continue')
+        def result = runFailedLocalBuild('test', '--continue')
 
         then:
         result.task(":project1:test").outcome == FAILED
@@ -59,7 +59,7 @@ class PluginPublishMultiProjectSpec extends MultiProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def firstResult = runFailedBuild(':project1:test')
+        def firstResult = runFailedLocalBuild(':project1:test')
 
         then:
         firstResult.task(":project1:test").outcome == FAILED
@@ -81,7 +81,7 @@ class PluginPublishMultiProjectSpec extends MultiProjectSpec {
         when:
         wireMockRule.resetRequests()
 
-        def secondResult = runFailedBuild(':project2:test', ':project3:test', '--continue')
+        def secondResult = runFailedLocalBuild(':project2:test', ':project3:test', '--continue')
         then:
         secondResult.task(":project2:test").outcome == FAILED
         secondResult.task(":project3:test").outcome == FAILED

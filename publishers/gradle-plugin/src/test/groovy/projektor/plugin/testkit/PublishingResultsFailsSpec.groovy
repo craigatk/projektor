@@ -20,7 +20,7 @@ class PublishingResultsFailsSpec extends SingleProjectSpec {
         resultsStubber.stubResultsNetworkingError()
 
         when:
-        BuildResult result = runSuccessfulBuild('test')
+        BuildResult result = runSuccessfulLocalBuild('test')
 
         then:
         result.task(":test").outcome == SUCCESS
@@ -46,7 +46,7 @@ class PublishingResultsFailsSpec extends SingleProjectSpec {
         resultsStubber.stubResultsNetworkingError()
 
         when:
-        BuildResult result = runSuccessfulBuild('test', '--info')
+        BuildResult result = runSuccessfulLocalBuild('test', '--info')
 
         then:
         result.output.contains("Caused by: java.net.SocketException")
@@ -69,7 +69,7 @@ class PublishingResultsFailsSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostFailure(400)
 
         when:
-        BuildResult result = runSuccessfulBuild('test')
+        BuildResult result = runSuccessfulLocalBuild('test')
 
         then:
         result.task(":test").outcome == SUCCESS

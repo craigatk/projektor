@@ -1,7 +1,6 @@
 package projektor.plugin.functionaltest
 
 import okhttp3.ResponseBody
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import projektor.plugin.AttachmentsWriter
 import projektor.plugin.BuildFileWriter
@@ -33,11 +32,7 @@ class SingleProjectAttachmentsFunctionalSpec extends ProjektorPluginFunctionalSp
         AttachmentsWriter.writeAttachmentFile(attachmentsDir1, "attachment2.txt", "Here is attachment 2")
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .buildAndFail()
+        def result = runFailedLocalBuild('test')
 
         then:
         result.task(":test").outcome == TaskOutcome.FAILED

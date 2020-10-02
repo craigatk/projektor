@@ -1,6 +1,5 @@
 package projektor.plugin.functionaltest
 
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import projektor.plugin.BuildFileWriter
 import projektor.plugin.SpecWriter
@@ -32,11 +31,7 @@ class SingleProjectResultsFunctionalSpec extends ProjektorPluginFunctionalSpecif
         SpecWriter.createTestDirectoryWithFailingTests(projectRootDir, expectedTestSuiteClassNames)
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(projectRootDir.root)
-                .withArguments('test')
-                .withPluginClasspath()
-                .buildAndFail()
+        def result = runFailedLocalBuild('test')
 
         then:
         result.task(":test").outcome == TaskOutcome.FAILED

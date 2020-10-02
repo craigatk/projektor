@@ -22,7 +22,7 @@ class PublishResultsRetrySpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostFailure(400)
 
         when:
-        BuildResult result = runSuccessfulBuild('test')
+        BuildResult result = runSuccessfulLocalBuild('test')
 
         then:
         result.task(":test").outcome == SUCCESS
@@ -48,7 +48,7 @@ class PublishResultsRetrySpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostWithDelay(600)
 
         when:
-        BuildResult result = runSuccessfulBuild('test')
+        BuildResult result = runSuccessfulLocalBuild('test')
 
         then:
         result.task(":test").outcome == SUCCESS

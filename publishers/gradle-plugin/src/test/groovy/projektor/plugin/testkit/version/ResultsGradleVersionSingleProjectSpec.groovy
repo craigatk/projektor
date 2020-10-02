@@ -9,7 +9,7 @@ import spock.lang.Unroll
 
 import static projektor.plugin.PluginOutput.verifyOutputContainsReportLink
 
-class GradleVersionSingleProjectSpec extends SingleProjectSpec {
+class ResultsGradleVersionSingleProjectSpec extends SingleProjectSpec {
     @Unroll
     def "should publish results from test task to server with Gradle version #gradleVersion"() {
         given:
