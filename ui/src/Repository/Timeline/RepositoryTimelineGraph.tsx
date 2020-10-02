@@ -26,6 +26,7 @@ const RepositoryTimelineGraph = ({
 }: RepositoryTimelineGraphProps) => {
   const data = timeline.timelineEntries.map((entry) => ({
     date: moment.utc(entry.createdTimestamp).format("YYYY-MM-DD hh:mm:ss"),
+    createdTimestamp: entry.createdTimestamp,
     publicId: entry.publicId,
     duration: entry.cumulativeDuration,
     totalTestCount: entry.totalTestCount,
