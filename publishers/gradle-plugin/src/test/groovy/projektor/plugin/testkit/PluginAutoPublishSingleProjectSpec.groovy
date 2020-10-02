@@ -23,7 +23,7 @@ class PluginAutoPublishSingleProjectSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = runFailedBuild('test')
+        def result = runFailedLocalBuild('test')
 
         then:
         !result.output.contains("Projektor plugin enabled but no server specified")

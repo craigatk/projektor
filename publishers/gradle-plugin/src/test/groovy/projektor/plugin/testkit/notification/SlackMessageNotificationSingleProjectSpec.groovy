@@ -33,7 +33,7 @@ class SlackMessageNotificationSingleProjectSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = runFailedBuild('test')
+        def result = runFailedLocalBuild('test')
 
         then:
         result.task(":test").outcome == FAILED
@@ -72,7 +72,7 @@ class SlackMessageNotificationSingleProjectSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = runFailedBuild('test')
+        def result = runFailedLocalBuild('test')
 
         then:
         result.task(":test").outcome == FAILED

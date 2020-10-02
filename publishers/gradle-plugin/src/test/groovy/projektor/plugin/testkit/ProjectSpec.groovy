@@ -27,7 +27,7 @@ abstract class ProjectSpec extends Specification {
         serverUrl = resultsStubber.serverUrl
     }
 
-    BuildResult runSuccessfulBuild(String... buildArgs) {
+    BuildResult runSuccessfulLocalBuild(String... buildArgs) {
         runSuccessfulBuildWithEnvironment(["CI": "false"], buildArgs)
     }
 
@@ -73,7 +73,7 @@ abstract class ProjectSpec extends Specification {
         return result
     }
 
-    BuildResult runFailedBuild(String... buildArgs) {
+    BuildResult runFailedLocalBuild(String... buildArgs) {
         runFailedBuildWithEnvironment(["CI": "false"], buildArgs)
     }
 

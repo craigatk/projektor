@@ -27,7 +27,7 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def testResult = runSuccessfulBuild('test')
+        def testResult = runSuccessfulLocalBuild('test')
 
         then:
         testResult.task(":project1:test").outcome == SUCCESS
@@ -38,7 +38,7 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         resultsStubber.findResultsRequests().size() == 0
 
         when:
-        def publishResults = runSuccessfulBuild('publishResults')
+        def publishResults = runSuccessfulLocalBuild('publishResults')
 
         then:
         publishResults.task(":project1:publishResults").outcome == SUCCESS
@@ -75,7 +75,7 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def testResult = runSuccessfulBuild('test')
+        def testResult = runSuccessfulLocalBuild('test')
 
         then:
         testResult.task(":project1:test").outcome == SUCCESS
@@ -86,7 +86,7 @@ class PublishResultsTaskMultiProjectSpec extends MultiProjectSpec {
         resultsStubber.findResultsRequests().size() == 0
 
         when:
-        def publishResults = runSuccessfulBuild(':project1:publishResults')
+        def publishResults = runSuccessfulLocalBuild(':project1:publishResults')
 
         then:
         publishResults.task(":project1:publishResults").outcome == SUCCESS

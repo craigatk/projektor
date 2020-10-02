@@ -45,7 +45,7 @@ class AttachmentsSingleProjectSpec extends ProjectSpec {
         attachmentsStubber.stubAttachmentPostSuccess(resultsId, "attachment3.txt")
 
         when:
-        def result = runFailedBuild('test')
+        def result = runFailedLocalBuild('test')
 
         then:
         result.task(":test").outcome == FAILED
@@ -87,7 +87,7 @@ class AttachmentsSingleProjectSpec extends ProjectSpec {
         attachmentsStubber.stubAttachmentPostSuccess(resultsId, "attachment3.txt")
 
         when:
-        def result = runSuccessfulBuild('test')
+        def result = runSuccessfulLocalBuild('test')
 
         then:
         result.task(":test").outcome == SUCCESS
@@ -127,7 +127,7 @@ class AttachmentsSingleProjectSpec extends ProjectSpec {
         attachmentsStubber.stubAttachmentPostSuccess(resultsId, "attachment2.txt")
 
         when:
-        def testResult = runFailedBuild('test')
+        def testResult = runFailedLocalBuild('test')
 
         then:
         testResult.task(":test").outcome == FAILED
@@ -136,7 +136,7 @@ class AttachmentsSingleProjectSpec extends ProjectSpec {
         resultsStubber.findResultsRequests().size() == 0
 
         when:
-        def publishResults = runSuccessfulBuild('publishResults', '--info')
+        def publishResults = runSuccessfulLocalBuild('publishResults', '--info')
 
         then:
         publishResults.task(":publishResults").outcome == SUCCESS

@@ -20,7 +20,7 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = runFailedBuild('test', '--continue')
+        def result = runFailedLocalBuild('test', '--continue')
 
         then:
         PluginOutput.verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
@@ -56,7 +56,7 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = runFailedBuild('test', '--continue')
+        def result = runFailedLocalBuild('test', '--continue')
 
         then:
         PluginOutput.verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
@@ -82,7 +82,7 @@ class PluginAutoPublishMultiProjectWithPluginAppliedToSubprojectsSpec extends Mu
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = runFailedBuild('-p', 'project1', 'test', '--continue')
+        def result = runFailedLocalBuild('-p', 'project1', 'test', '--continue')
 
         then:
         PluginOutput.verifyOutputContainsReportLink(result.output, serverUrl, resultsId)

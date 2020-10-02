@@ -46,7 +46,7 @@ class KotlinDslSpec extends ProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = runFailedBuild('test')
+        def result = runFailedLocalBuild('test')
 
         then:
         result.task(":test").outcome == FAILED

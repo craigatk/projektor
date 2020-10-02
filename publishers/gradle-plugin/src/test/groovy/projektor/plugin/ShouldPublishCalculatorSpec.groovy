@@ -72,6 +72,17 @@ class ShouldPublishCalculatorSpec extends Specification {
         "in CI without coverage data"  | new ProjektorPublishPluginExtension() | false                 | ["CI": "true"]  || false
     }
 
+    def "should not publish when local with passing build and coverage but no results"() {
+        expect:
+        !ShouldPublishCalculator.shouldPublishResults(
+                new ProjektorPublishPluginExtension(),
+                passingBuild,
+                false,
+                true,
+                [:]
+        )
+    }
+
     @Unroll
     def "should be CI #shouldBeCI with environment #environment"() {
         expect:

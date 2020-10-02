@@ -2,7 +2,6 @@ package projektor.plugin.testkit
 
 import com.github.tomakehurst.wiremock.http.HttpHeader
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
-import org.gradle.testkit.runner.GradleRunner
 import projektor.plugin.SpecWriter
 import projektor.plugin.client.ClientToken
 
@@ -22,7 +21,7 @@ class PublishTokenPluginSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        runFailedBuild('test')
+        runFailedLocalBuild('test')
 
         then:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()

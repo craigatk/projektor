@@ -26,7 +26,7 @@ class PublishResultsTaskTokenSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def testResult = runSuccessfulBuild('test')
+        def testResult = runSuccessfulLocalBuild('test')
 
         then:
         testResult.task(":test").outcome == SUCCESS
@@ -35,7 +35,7 @@ class PublishResultsTaskTokenSpec extends SingleProjectSpec {
         resultsStubber.findResultsRequests().size() == 0
 
         when:
-        def publishResults = runSuccessfulBuild('publishResults')
+        def publishResults = runSuccessfulLocalBuild('publishResults')
 
         then:
         publishResults.task(":publishResults").outcome == SUCCESS

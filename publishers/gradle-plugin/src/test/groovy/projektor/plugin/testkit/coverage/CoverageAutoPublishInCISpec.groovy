@@ -65,7 +65,7 @@ class CoverageAutoPublishInCISpec extends SingleProjectSpec {
         writePartialCoverageSpecFile(testDir, "PartialSpec")
 
         when:
-        def result = runSuccessfulBuild('tasks')
+        def result = runSuccessfulLocalBuild('tasks')
 
         then:
         result.task(":tasks").outcome == SUCCESS

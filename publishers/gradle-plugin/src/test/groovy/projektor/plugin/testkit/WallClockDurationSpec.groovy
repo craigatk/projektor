@@ -19,7 +19,7 @@ class WallClockDurationSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        runFailedBuild('test')
+        runFailedLocalBuild('test')
 
         then:
         List<GroupedResults> groupedResultsBodies = resultsStubber.findResultsRequestBodies()

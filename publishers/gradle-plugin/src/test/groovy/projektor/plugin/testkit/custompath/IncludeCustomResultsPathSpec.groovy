@@ -34,7 +34,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = runSuccessfulBuild('test')
+        def result = runSuccessfulLocalBuild('test')
 
         then:
         verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
@@ -64,7 +64,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         SpecWriter.createTestDirectoryWithFailingTest(projectRootDir, "SampleFailingSpec")
 
         when:
-        def result = runFailedBuild('test')
+        def result = runFailedLocalBuild('test')
 
         then:
         verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
@@ -97,7 +97,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         SpecWriter.createTestDirectoryWithPassingTest(projectRootDir, "SampleSpec")
 
         when:
-        def result = runSuccessfulBuild('test', 'publishResults', '--info')
+        def result = runSuccessfulLocalBuild('test', 'publishResults', '--info')
 
         then:
         verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
@@ -129,7 +129,7 @@ class IncludeCustomResultsPathSpec extends SingleProjectSpec {
         resultsStubber.stubResultsPostSuccess(resultsId)
 
         when:
-        def result = runSuccessfulBuild('test')
+        def result = runSuccessfulLocalBuild('test')
 
         then:
         verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
