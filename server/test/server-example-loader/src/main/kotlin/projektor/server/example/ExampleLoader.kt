@@ -135,6 +135,24 @@ fun loadMultipleTestRunsFromSameRepoForTimeline() {
     println("View repository test run timeline at $uiBaseUrl/repository/$repoName")
 }
 
+fun slowTimeline() {
+    val repoName = "slow-org/timeline-repo"
+    val branchName = "main"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+    resultsMetadata.ci = true
+
+    sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXml = ResultsXmlLoader().slow(), metadata = resultsMetadata))
+    sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXml = ResultsXmlLoader().slower(), metadata = resultsMetadata))
+    sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXml = ResultsXmlLoader().slow(), metadata = resultsMetadata))
+
+    println("View repository slow tests run timeline at $uiBaseUrl/repository/$repoName")
+}
+
 fun loadCoverageWithProjectName() {
     val repoName = "projektor/projektor"
     val branchName = "main"

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/styles";
 import moment from "moment-timezone";
+import { formatSecondsDuration } from "../../dateUtils/dateUtils";
 
 const useStyles = makeStyles(() => ({
   box: {
@@ -32,7 +33,9 @@ const RepositoryTimelineGraphTooltip = (props) => {
       <div className={classes.box} data-testid="timeline-graph-tooltip">
         <div className={classes.line}>
           <span className={classes.label}>Test execution time</span>
-          <span data-testid="timeline-tooltip-duration">{duration}s</span>
+          <span data-testid="timeline-tooltip-duration">
+            {formatSecondsDuration(duration)}
+          </span>
         </div>
         <div className={classes.line}>
           <span className={classes.label}>Test count</span>
