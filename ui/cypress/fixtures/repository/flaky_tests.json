@@ -22,6 +22,7 @@
         "full_name": "projektor.testsuite.GetTestSuiteApplicationTest.should fetch grouped test suite from database"
       },
       "failure_count": 5,
+      "failure_percentage": 70.35,
       "latest_public_id": "32FBHG6FDL8S",
       "latest_created_timestamp": "2020-09-30T17:27:39.859915"
     },
@@ -47,6 +48,7 @@
         "full_name": "projektor.example.spock.FailingSpec.should fail"
       },
       "failure_count": 3,
+      "failure_percentage": 50.15,
       "latest_public_id": "AIZY8O99FJ54",
       "latest_created_timestamp": "2020-09-30T17:27:39.783917"
     },
@@ -72,6 +74,7 @@
         "full_name": "projektor.example.spock.FailingSpec.should fail with output"
       },
       "failure_count": 4,
+      "failure_percentage": 60.25,
       "latest_public_id": "AIZY8O99FJ54",
       "latest_created_timestamp": "2020-09-30T17:27:39.783917"
     }

@@ -47,6 +47,19 @@ const RepositoryFlakyTestsTable = ({ flakyTests }: FlakyTestsTableProps) => {
             headerStyle,
           },
           {
+            title: "Failure percentage",
+            field: "failurePercentage",
+            render: (rowData) => (
+              <span
+                data-testid={`flaky-test-case-failure-percentage-${rowData.idx}`}
+              >
+                {rowData.failurePercentage}%
+              </span>
+            ),
+            cellStyle,
+            headerStyle,
+          },
+          {
             title: "Failure count",
             field: "failureCount",
             render: (rowData) => (
@@ -82,6 +95,7 @@ const RepositoryFlakyTestsTable = ({ flakyTests }: FlakyTestsTableProps) => {
           testCaseIdx: flakyTest.testCase.idx,
           testSuiteIdx: flakyTest.testCase.testSuiteIdx,
           failureCount: flakyTest.failureCount,
+          failurePercentage: flakyTest.failurePercentage,
           latestPublicId: flakyTest.latestPublicId,
           latestCreatedTimestamp: flakyTest.latestCreatedTimestamp,
         }))}

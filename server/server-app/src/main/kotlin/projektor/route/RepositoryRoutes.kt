@@ -62,8 +62,8 @@ fun Route.repository(
 
     suspend fun handleFlakyTestsRequest(orgPart: String, repoPart: String, projectName: String?, call: ApplicationCall) {
         val fullRepoName = "$orgPart/$repoPart"
-        val maxRuns = 60
-        val flakyThreshold = 3
+        val maxRuns = 50
+        val flakyThreshold = 5
 
         val flakyTests = repositoryTestRunService.fetchFlakyTests(
             repoName = fullRepoName,
@@ -73,7 +73,14 @@ fun Route.repository(
         )
 
         if (flakyTests.isNotEmpty()) {
-            call.respond(HttpStatusCode.OK, RepositoryFlakyTests(flakyTests))
+            call.respond(
+                HttpStatusCode.OK,
+                RepositoryFlakyTests(
+                    tests = flakyTests,
+                    maxRuns = maxRuns,
+                    failureCountThreshold = flakyThreshold
+                )
+            )
         } else {
             call.respond(HttpStatusCode.NoContent)
         }

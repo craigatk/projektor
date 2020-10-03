@@ -38,6 +38,7 @@ describe("RepositoryFlakyTestsTable", () => {
             hasSystemErr: false,
           } as TestCase,
           failureCount: 4,
+          failurePercentage: 50.0,
           latestCreatedTimestamp: moment
             .utc("2020-10-02T11:03:04.580Z")
             .toDate(),

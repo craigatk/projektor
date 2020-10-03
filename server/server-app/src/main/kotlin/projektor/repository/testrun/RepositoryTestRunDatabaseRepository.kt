@@ -80,7 +80,7 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
             testCases
         }
 
-    override suspend fun fetchRecentTestRunPublicIds(repoName: String, projectName: String?, limit: Int): List<PublicId> =
+    override suspend fun fetchRecentTestRunPublicIds(repoName: String, projectName: String?, maxRuns: Int): List<PublicId> =
         withContext(Dispatchers.IO) {
             dslContext
                 .select(TEST_RUN.PUBLIC_ID)
@@ -89,9 +89,20 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                 .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
                 .where(runInCIFromRepo(repoName, projectName))
                 .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
-                .limit(limit)
+                .limit(maxRuns)
                 .fetchInto(String::class.java)
                 .map { PublicId(it) }
+        }
+
+    override suspend fun fetchTestRunCount(repoName: String, projectName: String?): Long =
+        withContext(Dispatchers.IO) {
+            dslContext
+                .select(count(TEST_RUN.ID))
+                .from(TEST_RUN)
+                .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
+                .where(runInCIFromRepo(repoName, projectName))
+                .fetchOneInto(Long::class.java)
         }
 
     companion object {

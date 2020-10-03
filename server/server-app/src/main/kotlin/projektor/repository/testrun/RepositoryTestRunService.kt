@@ -1,6 +1,7 @@
 package projektor.repository.testrun
 
 import projektor.server.api.repository.RepositoryFlakyTest
+import kotlin.math.min
 
 class RepositoryTestRunService(private val repositoryTestRunRepository: RepositoryTestRunRepository) {
     private val flakyTestCalculator = FlakyTestCalculator()
@@ -10,7 +11,9 @@ class RepositoryTestRunService(private val repositoryTestRunRepository: Reposito
 
     suspend fun fetchFlakyTests(repoName: String, projectName: String?, maxRuns: Int, flakyFailureThreshold: Int): List<RepositoryFlakyTest> {
         val failingTestCases = repositoryTestRunRepository.fetchRepositoryFailingTestCases(repoName, projectName, maxRuns)
+        val totalTestRunCount = repositoryTestRunRepository.fetchTestRunCount(repoName, projectName)
+        val testRunCount = min(maxRuns.toLong(), totalTestRunCount)
 
-        return flakyTestCalculator.calculateFlakyTests(failingTestCases, flakyFailureThreshold)
+        return flakyTestCalculator.calculateFlakyTests(failingTestCases, flakyFailureThreshold, testRunCount)
     }
 }

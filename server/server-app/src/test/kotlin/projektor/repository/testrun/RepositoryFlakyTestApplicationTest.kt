@@ -24,7 +24,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
         val repoName = "$orgName/repo"
         val projectName = null
 
-        val publicIds = (1..3).map { randomPublicId() }
+        val publicIds = (1..5).map { randomPublicId() }
 
         val testSuiteDataList = listOf(
             TestSuiteData(
@@ -66,7 +66,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
         val repoName = "$orgName/repo"
         val projectName = null
 
-        val publicIds = (1..3).map { randomPublicId() }
+        val publicIds = (1..5).map { randomPublicId() }
 
         val testSuiteDataList = listOf(
             TestSuiteData(
@@ -94,7 +94,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
         val repoName = "$orgName/repo"
         val projectName = "my-project"
 
-        val publicIds = (1..3).map { randomPublicId() }
+        val publicIds = (1..5).map { randomPublicId() }
 
         val testSuiteDataList = listOf(
             TestSuiteData(
@@ -136,7 +136,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
         val repoName = "$orgName/repo"
         val projectName = "my-project"
 
-        val publicIds = (1..3).map { randomPublicId() }
+        val publicIds = (1..5).map { randomPublicId() }
 
         val testSuiteDataList = listOf(
             TestSuiteData(
