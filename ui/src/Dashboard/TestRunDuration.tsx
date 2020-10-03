@@ -47,7 +47,7 @@ const TestRunDuration = ({
               <span>
                 <span className={classes.label}>Wall clock duration</span>
                 <span data-testid="test-run-wall-clock-duration">
-                  {wallClockDuration}s
+                  {formatSecondsDuration(wallClockDuration)}
                 </span>
               </span>
             }
