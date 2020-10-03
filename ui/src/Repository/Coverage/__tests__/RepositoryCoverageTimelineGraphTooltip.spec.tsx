@@ -1,13 +1,23 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import { render } from "@testing-library/react";
-import moment from "moment";
+import moment from "moment-timezone";
 import RepositoryCoverageTimelineGraphTooltip from "../RepositoryCoverageTimelineGraphTooltip";
 
 describe("RepositoryCoverageTimelineGraphTooltip", () => {
+  beforeEach(() => {
+    // Set the default timezone so it uses the same timezone when
+    // running locally and when running in CI.
+    moment.tz.setDefault("America/Chicago");
+  });
+
+  afterEach(() => {
+    moment.tz.setDefault();
+  });
+
   it("should render covered percentages and run date", () => {
     const payload = {
-      date: moment("2020-09-12").toDate(),
+      createdTimestamp: moment.utc("2020-10-02T11:03:04.580Z").toDate(),
       lineValue: 97.25,
       branchValue: 80.25,
     };
@@ -27,7 +37,7 @@ describe("RepositoryCoverageTimelineGraphTooltip", () => {
       "80.25%"
     );
     expect(getByTestId("tooltip-run-date")).toHaveTextContent(
-      "Sep 12th 2020 12:00 am"
+      "Oct 2nd 2020 6:03 am"
     );
   });
 

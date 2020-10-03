@@ -26,6 +26,7 @@ const RepositoryCoverageTimelineGraph = ({
 }: RepositoryCoverageTimelineGraphProps) => {
   const data = coverageTimeline.timelineEntries.map((entry) => ({
     date: moment.utc(entry.createdTimestamp).format("YYYY-MM-DD hh:mm:ss"),
+    createdTimestamp: entry.createdTimestamp,
     publicId: entry.publicId,
     lineValue: entry.coverageStats.lineStat.coveredPercentage,
     branchValue: entry.coverageStats.branchStat.coveredPercentage,

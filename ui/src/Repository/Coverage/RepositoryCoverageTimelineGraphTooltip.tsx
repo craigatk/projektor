@@ -1,6 +1,6 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/styles";
-import moment from "moment";
+import moment from "moment-timezone";
 
 const useStyles = makeStyles(() => ({
   box: {
@@ -22,8 +22,11 @@ const RepositoryCoverageTimelineGraphTooltip = (props) => {
   const classes = useStyles({});
 
   if (props.payload && props.payload.length >= 1) {
-    const { date, lineValue, branchValue } = props.payload[0].payload;
-    const dateMoment = moment(date);
+    const {
+      createdTimestamp,
+      lineValue,
+      branchValue,
+    } = props.payload[0].payload;
 
     return (
       <div
@@ -45,7 +48,7 @@ const RepositoryCoverageTimelineGraphTooltip = (props) => {
         <div className={classes.line}>
           <span className={classes.label}>Run date</span>
           <span data-testid="tooltip-run-date">
-            {dateMoment.format("MMM Do YYYY h:mm a")}
+            {moment(createdTimestamp).format("MMM Do YYYY h:mm a")}
           </span>
         </div>
       </div>

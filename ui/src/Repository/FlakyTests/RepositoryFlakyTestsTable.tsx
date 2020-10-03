@@ -2,7 +2,7 @@ import * as React from "react";
 import { RepositoryFlakyTests } from "../../model/RepositoryModel";
 import MaterialTable from "material-table";
 import CleanLink from "../../Link/CleanLink";
-import moment from "moment";
+import moment from "moment-timezone";
 
 interface FlakyTestsTableProps {
   flakyTests: RepositoryFlakyTests;
@@ -68,7 +68,7 @@ const RepositoryFlakyTestsTable = ({ flakyTests }: FlakyTestsTableProps) => {
                 data-testid={`flaky-test-case-latest-failure-${rowData.idx}`}
               >
                 {moment(rowData.latestCreatedTimestamp).format(
-                  "MMMM Do YYYY, h:mm:ss a"
+                  "MMM Do YYYY, h:mm a"
                 )}
               </CleanLink>
             ),
