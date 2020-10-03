@@ -22,7 +22,7 @@ describe("TestRunDuration", () => {
     );
 
     expect(getByTestId("test-run-wall-clock-duration")).toHaveTextContent(
-      "8.75s"
+      "8.750s"
     );
   });
 
