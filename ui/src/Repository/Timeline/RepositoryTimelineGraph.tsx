@@ -14,6 +14,7 @@ import moment from "moment";
 import RepositoryTimelineGraphTooltip from "./RepositoryTimelineGraphTooltip";
 import RepositoryGraphActiveDot from "../Graph/RepositoryGraphActiveDot";
 import RepositoryGraphDot from "../Graph//RepositoryGraphDot";
+import { formatSecondsDurationWithoutMS } from "../../dateUtils/dateUtils";
 
 interface RepositoryTimelineGraphProps {
   timeline: RepositoryTimeline;
@@ -34,7 +35,8 @@ const RepositoryTimelineGraph = ({
 
   const xAxisTickFormatter = (value) => moment(value).format("MMM Do YYYY");
 
-  const durationYAxisFormatter = (value) => `${value}s`;
+  const durationYAxisFormatter = (value) =>
+    formatSecondsDurationWithoutMS(value);
 
   return (
     <div data-testid="repository-timeline-graph">

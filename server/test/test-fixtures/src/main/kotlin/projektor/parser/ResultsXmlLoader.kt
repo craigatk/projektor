@@ -24,6 +24,10 @@ class ResultsXmlLoader {
 
     fun someIgnoredSomeFailing() = loadTextFromFile("TEST-projektor.example.spock.IgnoreSomeMethodsAndSomeFailingSpec.xml")
 
+    fun slow() = loadTextFromFile("TEST-projektor.example.spock.SlowSpec.xml")
+
+    fun slower() = loadTextFromFile("TEST-projektor.example.spock.SlowerSpec.xml")
+
     fun invalid() = loadTextFromFile("TEST-projektor.example.spock.PassingSpec.xml")
         .replace("<testsuite", "testsuite")
 

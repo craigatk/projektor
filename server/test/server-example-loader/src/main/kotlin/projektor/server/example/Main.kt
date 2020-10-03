@@ -16,5 +16,6 @@ fun main() {
     repositoryCoverageTimeline()
     repositoryFlakyTests()
     loadMultipleTestRunsFromSameRepoForTimeline()
+    slowTimeline()
     loadInvalidExample()
 }

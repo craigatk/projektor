@@ -1,6 +1,7 @@
 import * as React from "react";
 import { List, ListItem, ListItemText, makeStyles } from "@material-ui/core";
 import CleanLink from "../Link/CleanLink";
+import { formatSecondsDuration } from "../dateUtils/dateUtils";
 
 interface TestRunDurationProps {
   publicId: string;
@@ -59,7 +60,7 @@ const TestRunDuration = ({
             <span>
               <span className={classes.label}>Cumulative duration</span>
               <span data-testid="test-run-cumulative-duration">
-                {cumulativeDuration}s
+                {formatSecondsDuration(cumulativeDuration)}
               </span>
             </span>
           }
@@ -77,7 +78,7 @@ const TestRunDuration = ({
                 Slowest test case
               </CleanLink>
               <span data-testid="test-run-slowest-test-case-duration">
-                {slowestTestCaseDuration}s
+                {formatSecondsDuration(slowestTestCaseDuration)}
               </span>
             </span>
           }

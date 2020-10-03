@@ -4,6 +4,7 @@ import { TestCase } from "../../model/TestRunModel";
 import TestCaseResultIcon from "../TestCaseResultIcon";
 import { fullTestCaseName } from "../../model/TestCaseHelpers";
 import CleanLink from "../../Link/CleanLink";
+import { formatSecondsDuration } from "../../dateUtils/dateUtils";
 
 interface TestCaseListRowProps {
   publicId: string;
@@ -51,7 +52,7 @@ const TestCaseListRow = ({
       data-testid={`test-case-duration-${testCase.testSuiteIdx}-${testCase.idx}`}
       size="small"
     >
-      {testCase.duration}s
+      {formatSecondsDuration(testCase.duration)}
     </TableCell>
   );
 
