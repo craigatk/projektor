@@ -24,12 +24,15 @@ interface RepositoryCoverageTimeline {
 interface RepositoryFlakyTest {
   testCase: TestCase;
   failureCount: number;
+  failurePercentage: number;
   latestPublicId: string;
   latestCreatedTimestamp: Date;
 }
 
 interface RepositoryFlakyTests {
   tests: RepositoryFlakyTest[];
+  maxRuns: number;
+  failureCountThreshold: number;
 }
 
 export {

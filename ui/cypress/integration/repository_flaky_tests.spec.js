@@ -20,17 +20,29 @@ context("repository flaky tests", () => {
       "contain",
       "projektor.testsuite.GetTestSuiteApplicationTest.should fetch grouped test suite from database"
     );
+    cy.getByTestId("flaky-test-case-failure-percentage-1").should(
+      "contain",
+      "70.35%"
+    );
     cy.getByTestId("flaky-test-case-failure-count-1").should("contain", "5");
 
     cy.getByTestId("flaky-test-case-name-2").should(
       "contain",
       "projektor.example.spock.FailingSpec.should fail with output"
     );
+    cy.getByTestId("flaky-test-case-failure-percentage-2").should(
+      "contain",
+      "60.25%"
+    );
     cy.getByTestId("flaky-test-case-failure-count-2").should("contain", "4");
 
     cy.getByTestId("flaky-test-case-name-3").should(
       "contain",
       "projektor.example.spock.FailingSpec.should fail"
+    );
+    cy.getByTestId("flaky-test-case-failure-percentage-3").should(
+      "contain",
+      "50.15%"
     );
     cy.getByTestId("flaky-test-case-failure-count-3").should("contain", "3");
   });

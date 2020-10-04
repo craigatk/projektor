@@ -197,11 +197,11 @@ fun repositoryFlakyTests() {
     resultsMetadata.git = gitMetadata
     resultsMetadata.ci = true
 
-    repeat(3) {
+    repeat(5) {
         sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXml = ResultsXmlLoader().failing(), metadata = resultsMetadata))
     }
 
-    repeat(4) {
+    repeat(6) {
         sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXml = ResultsXmlLoader().failingLongFailureMessage(), metadata = resultsMetadata))
     }
 

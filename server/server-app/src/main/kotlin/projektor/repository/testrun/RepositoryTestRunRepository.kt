@@ -9,5 +9,7 @@ interface RepositoryTestRunRepository {
 
     suspend fun fetchRepositoryFailingTestCases(repoName: String, projectName: String?, maxRuns: Int): List<TestCase>
 
-    suspend fun fetchRecentTestRunPublicIds(repoName: String, projectName: String?, limit: Int): List<PublicId>
+    suspend fun fetchRecentTestRunPublicIds(repoName: String, projectName: String?, maxRuns: Int): List<PublicId>
+
+    suspend fun fetchTestRunCount(repoName: String, projectName: String?): Long
 }

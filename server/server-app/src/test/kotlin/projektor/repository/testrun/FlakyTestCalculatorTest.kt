@@ -39,13 +39,15 @@ class FlakyTestCalculatorTest {
 
         val flakyTests = FlakyTestCalculator().calculateFlakyTests(
             listOf(oldestTestCase, middleTestCase, newestTestCase),
-            3
+            3,
+            6
         )
 
         expectThat(flakyTests).hasSize(1)
 
         expectThat(flakyTests[0]) {
             get { failureCount }.isEqualTo(3)
+            get { failurePercentage }.isEqualTo(BigDecimal("50.00"))
             get { latestPublicId }.isEqualTo(newestTestCase.publicId)
             get { latestCreatedTimestamp }.isEqualTo(newestTestCase.createdTimestamp)
         }
@@ -78,13 +80,15 @@ class FlakyTestCalculatorTest {
 
         val flakyTests = FlakyTestCalculator().calculateFlakyTests(
             notFlakyEnoughTestCases + flakyTestCases,
+            3,
             3
         )
 
         expectThat(flakyTests).hasSize(1)
 
-        expectThat(flakyTests[0].testCase) {
-            get { name }.isEqualTo("soFlaky")
+        expectThat(flakyTests[0]) {
+            get { testCase }.get { name }.isEqualTo("soFlaky")
+            get { failurePercentage }.isEqualTo(BigDecimal("100.00"))
         }
     }
 
@@ -115,7 +119,8 @@ class FlakyTestCalculatorTest {
 
         val flakyTests = FlakyTestCalculator().calculateFlakyTests(
             flakyTestCases1 + flakyTestCases2,
-            3
+            3,
+            6
         )
 
         expectThat(flakyTests) {

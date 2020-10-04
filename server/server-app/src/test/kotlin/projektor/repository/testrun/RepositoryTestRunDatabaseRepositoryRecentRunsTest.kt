@@ -32,4 +32,21 @@ class RepositoryTestRunDatabaseRepositoryRecentRunsTest : DatabaseRepositoryTest
         expectThat(recentIds[0]).isEqualTo(inRangeNewer)
         expectThat(recentIds[1]).isEqualTo(inRangeOlder)
     }
+
+    @Test
+    fun `should find count of test runs`() {
+        val repositoryTestRunDatabaseRepository = RepositoryTestRunDatabaseRepository(dslContext)
+
+        val orgName = RandomStringUtils.randomAlphabetic(12)
+        val repoName = "$orgName/repo"
+        val projectName = null
+
+        repeat(5) {
+            testRunDBGenerator.createSimpleTestRunInRepo(randomPublicId(), repoName, true, projectName)
+        }
+
+        val runCount = runBlocking { repositoryTestRunDatabaseRepository.fetchTestRunCount(repoName, projectName) }
+
+        expectThat(runCount).isEqualTo(5)
+    }
 }

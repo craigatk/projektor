@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 /// <reference types="Cypress" />
 
 context("repository timeline", () => {
@@ -6,29 +8,15 @@ context("repository timeline", () => {
     const repoPart = "flaky-tests-repo";
     const repoName = `${orgPart}/${repoPart}`;
 
-    cy.readFile("cypress/fixtures/grouped-failing-tests-with-git.json").then(
-      (resultsBlob) => {
-        resultsBlob.metadata.git.repoName = repoName;
+    _.times(5, () => {
+      cy.readFile("cypress/fixtures/grouped-failing-tests-with-git.json").then(
+        (resultsBlob) => {
+          resultsBlob.metadata.git.repoName = repoName;
 
-        cy.loadGroupedFixtureData(resultsBlob, "");
-      }
-    );
-
-    cy.readFile("cypress/fixtures/grouped-failing-tests-with-git.json").then(
-      (resultsBlob) => {
-        resultsBlob.metadata.git.repoName = repoName;
-
-        cy.loadGroupedFixtureData(resultsBlob, "");
-      }
-    );
-
-    cy.readFile("cypress/fixtures/grouped-failing-tests-with-git.json").then(
-      (resultsBlob) => {
-        resultsBlob.metadata.git.repoName = repoName;
-
-        cy.loadGroupedFixtureData(resultsBlob, "");
-      }
-    );
+          cy.loadGroupedFixtureData(resultsBlob, "");
+        }
+      );
+    });
 
     cy.getByTestId("nav-link-repository").click(); // From the test run page
 
@@ -40,6 +28,10 @@ context("repository timeline", () => {
       "contain",
       "projektor.example.spock.FailingSpec"
     );
-    cy.getByTestId("flaky-test-case-failure-count-1").should("contain", "3");
+    cy.getByTestId("flaky-test-case-failure-count-1").should("contain", "5");
+    cy.getByTestId("flaky-test-case-failure-percentage-1").should(
+      "contain",
+      "100%"
+    );
   });
 });

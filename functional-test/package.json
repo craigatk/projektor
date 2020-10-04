@@ -12,6 +12,7 @@
   "devDependencies": {
     "chai-colors": "1.0.1",
     "cypress": "4.11.0",
+    "lodash": "4.17.20",
     "prettier": "2.0.4",
     "rimraf": "3.0.2"
   }
