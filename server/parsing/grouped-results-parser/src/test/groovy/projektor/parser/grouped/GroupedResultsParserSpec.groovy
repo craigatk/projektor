@@ -1,8 +1,10 @@
 package projektor.parser.grouped
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import projektor.parser.grouped.model.GitMetadata
 import projektor.parser.grouped.model.GroupedResults
 import projektor.parser.grouped.model.GroupedTestSuites
+import projektor.parser.grouped.model.ResultsMetadata
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -49,5 +51,69 @@ class GroupedResultsParserSpec extends Specification {
         groupedTestSuites3.groupLabel == "MyLabel3"
         groupedTestSuites3.directory == "path/to/my-group-3"
         groupedTestSuites3.testSuitesBlob == """<testsuites>Blob3</testsuites>"""
+    }
+
+    def "should serialize grouped results"() {
+        given:
+        List<GroupedTestSuites> groupedTestSuites = (1..2).collect { idx ->
+            new GroupedTestSuites(
+                    groupName: "MyGroup${idx}",
+                    groupLabel: "MyLabel${idx}",
+                    directory: "path/to/my-group-${idx}",
+                    testSuitesBlob: """<testsuites>Blob${idx}</testsuites>"""
+            )
+        }
+
+        GroupedResults groupedResults = new GroupedResults(groupedTestSuites: groupedTestSuites)
+
+        when:
+        String serializedGroupedResults = groupedResultsParser.serializeGroupedResults(groupedResults)
+
+        then:
+        serializedGroupedResults != null
+
+        GroupedResults parsedGroupedResults = groupedResultsParser.parseGroupedResults(serializedGroupedResults)
+
+        parsedGroupedResults.groupedTestSuites.size() == 2
+
+        parsedGroupedResults.groupedTestSuites.find { it.groupName == "MyGroup1" }
+        parsedGroupedResults.groupedTestSuites.find { it.groupName == "MyGroup2" }
+    }
+
+    def "should parse grouped results with all metadata"() {
+        given:
+        List<GroupedTestSuites> groupedTestSuites = (1..2).collect { idx ->
+            new GroupedTestSuites(
+                    groupName: "MyGroup${idx}",
+                    groupLabel: "MyLabel${idx}",
+                    directory: "path/to/my-group-${idx}",
+                    testSuitesBlob: """<testsuites>Blob${idx}</testsuites>"""
+            )
+        }
+
+        GroupedResults groupedResults = new GroupedResults(
+                groupedTestSuites: groupedTestSuites,
+                metadata: new ResultsMetadata(
+                        ci: true,
+                        git: new GitMetadata(
+                                repoName: "org/repo",
+                                branchName: "main",
+                                isMainBranch: true
+                        )
+                )
+        )
+
+        when:
+        String groupedResultsXml = mapper.writeValueAsString(groupedResults)
+        GroupedResults parsedGroupedResults = groupedResultsParser.parseGroupedResults(groupedResultsXml)
+
+        then:
+        parsedGroupedResults.metadata.ci
+        parsedGroupedResults.metadata.git.repoName == "org/repo"
+        parsedGroupedResults.metadata.git.branchName == "main"
+        parsedGroupedResults.metadata.git.isMainBranch
+
+        and:
+        parsedGroupedResults.groupedTestSuites.size() == 2
     }
 }
