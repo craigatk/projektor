@@ -71,4 +71,24 @@ class TestResultsProcessorSpec : StringSpec({
                 "pytest"
             )
     }
+
+    "should parse null blob into empty list" {
+        val testResultsProcessor = TestResultsProcessor()
+        val blob: String? = null
+
+        val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
+
+        expectThat(testSuiteList)
+            .hasSize(0)
+    }
+
+    "should parse empty blob into empty list" {
+        val testResultsProcessor = TestResultsProcessor()
+        val blob: String? = ""
+
+        val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
+
+        expectThat(testSuiteList)
+            .hasSize(0)
+    }
 })

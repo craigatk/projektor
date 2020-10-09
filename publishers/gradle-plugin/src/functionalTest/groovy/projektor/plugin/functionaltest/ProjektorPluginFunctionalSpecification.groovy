@@ -13,6 +13,7 @@ import projektor.server.client.ProjektorClientBuilder
 import projektor.server.client.ProjektorTestRunApi
 import projektor.server.client.ProjektorTestRunMetadataApi
 import spock.lang.Specification
+import spock.util.concurrent.PollingConditions
 
 class ProjektorPluginFunctionalSpecification extends Specification {
 
@@ -95,6 +96,12 @@ class ProjektorPluginFunctionalSpecification extends Specification {
         println result.output
 
         return result
+    }
+
+    void waitForTestRunProcessingToComplete(String testId) {
+        new PollingConditions().eventually {
+            assert projektorTestRunApi.testRun(testId).execute().successful
+        }
     }
 
     private static HttpLoggingInterceptor createLoggingInterceptor() {
