@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
-import { render, getNodeText } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { CoverageStat } from "../../model/TestRunModel";
 import CoverageGraph from "../CoverageGraph";
 
