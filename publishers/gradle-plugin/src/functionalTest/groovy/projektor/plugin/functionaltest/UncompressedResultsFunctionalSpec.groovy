@@ -1,6 +1,5 @@
 package projektor.plugin.functionaltest
 
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import projektor.plugin.BuildFileWriter
 import projektor.plugin.SpecWriter
@@ -39,13 +38,11 @@ class UncompressedResultsFunctionalSpec extends ProjektorPluginFunctionalSpecifi
         then:
         result.task(":test").outcome == TaskOutcome.FAILED
 
-        when:
+        then:
         String testId = extractTestId(result.output)
+        waitForTestRunProcessingToComplete(testId)
 
         Response<TestRun> testRunResponse = projektorTestRunApi.testRun(testId).execute()
-
-        then:
-        testRunResponse.successful
 
         TestRun testRun = testRunResponse.body()
         testRun.testSuites.size() == expectedTestSuiteClassNames.size()

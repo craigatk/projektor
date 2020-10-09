@@ -43,8 +43,9 @@ class MultiProjectResultsFunctionalSpec extends MultiProjectFunctionalSpecificat
 
         and:
         String testId = extractTestId(result.output)
+        waitForTestRunProcessingToComplete(testId)
+
         Response<TestRun> testRunResponse = projektorTestRunApi.testRun(testId).execute()
-        testRunResponse.successful
 
         TestRun testRun = testRunResponse.body()
         !testRun.summary.passed
