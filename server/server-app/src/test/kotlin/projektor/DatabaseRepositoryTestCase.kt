@@ -11,13 +11,14 @@ import org.junit.jupiter.api.BeforeEach
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
+import org.koin.test.inject
 import projektor.auth.AuthConfig
-import projektor.compare.PreviousTestRunDatabaseRepository
 import projektor.compare.PreviousTestRunService
-import projektor.coverage.CoverageDatabaseRepository
+import projektor.coverage.CoverageRepository
 import projektor.coverage.CoverageService
 import projektor.database.DataSourceConfig
 import projektor.database.generated.tables.daos.*
+import projektor.error.ProcessingFailureService
 import projektor.message.MessageConfig
 import projektor.metrics.InfluxMetricsConfig
 import projektor.metrics.createRegistry
@@ -105,9 +106,10 @@ open class DatabaseRepositoryTestCase : KoinTest {
         coverageGroupDao = CodeCoverageGroupDao(dslContext.configuration())
         coverageStatsDao = CodeCoverageStatsDao(dslContext.configuration())
 
-        val coverageRepository = CoverageDatabaseRepository(dslContext)
-        val previousTestRunService = PreviousTestRunService(PreviousTestRunDatabaseRepository(dslContext))
-        coverageService = CoverageService(coverageRepository, previousTestRunService)
+        val coverageRepository: CoverageRepository by inject()
+        val previousTestRunService: PreviousTestRunService by inject()
+        val processingFailureService: ProcessingFailureService by inject()
+        coverageService = CoverageService(coverageRepository, previousTestRunService, processingFailureService)
 
         testRunDBGenerator = TestRunDBGenerator(
             testRunDao,

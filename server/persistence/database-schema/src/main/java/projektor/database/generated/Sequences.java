@@ -44,6 +44,11 @@ public class Sequences {
     public static final Sequence<Long> GIT_METADATA_ID_SEQ = Internal.createSequence("git_metadata_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);
 
     /**
+     * The sequence <code>public.processing_failure_id_seq</code>
+     */
+    public static final Sequence<Long> PROCESSING_FAILURE_ID_SEQ = Internal.createSequence("processing_failure_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);
+
+    /**
      * The sequence <code>public.results_metadata_id_seq</code>
      */
     public static final Sequence<Long> RESULTS_METADATA_ID_SEQ = Internal.createSequence("results_metadata_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);

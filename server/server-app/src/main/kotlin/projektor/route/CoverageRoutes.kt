@@ -27,8 +27,8 @@ fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
             val reportXml = call.receive<String>()
 
             coverageService.saveReport(reportXml, PublicId(publicId))
-
-            call.respond(HttpStatusCode.OK)
+                ?.let { call.respond(HttpStatusCode.OK) }
+                ?: call.respond(HttpStatusCode.BadRequest)
         }
     }
 

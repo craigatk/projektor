@@ -209,6 +209,11 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
         val attachmentFileNames = listOf("attachment1.txt", "attachment2.txt", "attachment3.txt")
         attachmentFileNames.forEach { runBlocking { attachmentService.addAttachment(publicId, it, attachmentInputStream, null) } }
 
+        attachmentFileNames.forEach { attachmentFileName ->
+            val attachmentBeforeCleanup = runBlocking { attachmentService.getAttachment(publicId, attachmentFileName) }
+            expectThat(attachmentBeforeCleanup).isNotNull()
+        }
+
         val testSuiteIds = testSuiteDao.fetchByTestRunId(testRun.id).map { it.id }
         val testCaseIds = testSuiteIds.flatMap { testCaseDao.fetchByTestSuiteId(it) }.map { it.id }
 

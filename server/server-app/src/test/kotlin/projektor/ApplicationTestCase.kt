@@ -19,12 +19,12 @@ import org.jooq.DSLContext
 import org.junit.jupiter.api.AfterEach
 import org.koin.ktor.ext.get
 import org.slf4j.LoggerFactory
-import projektor.compare.PreviousTestRunDatabaseRepository
 import projektor.compare.PreviousTestRunService
-import projektor.coverage.CoverageDatabaseRepository
+import projektor.coverage.CoverageRepository
 import projektor.coverage.CoverageService
 import projektor.database.generated.tables.daos.*
 import projektor.database.generated.tables.pojos.TestRun
+import projektor.error.ProcessingFailureService
 import projektor.parser.ResultsXmlLoader
 import projektor.server.api.PublicId
 import projektor.server.api.results.ResultsProcessingStatus
@@ -58,6 +58,7 @@ open class ApplicationTestCase {
     lateinit var resultsProcessingFailureDao: ResultsProcessingFailureDao
     lateinit var gitMetadataDao: GitMetadataDao
     lateinit var resultsMetadataDao: ResultsMetadataDao
+    lateinit var processingFailureDao: ProcessingFailureDao
     lateinit var testRunDBGenerator: TestRunDBGenerator
 
     lateinit var coverageRunDao: CodeCoverageRunDao
@@ -141,14 +142,16 @@ open class ApplicationTestCase {
         resultsProcessingFailureDao = ResultsProcessingFailureDao(dslContext.configuration())
         gitMetadataDao = GitMetadataDao(dslContext.configuration())
         resultsMetadataDao = ResultsMetadataDao(dslContext.configuration())
+        processingFailureDao = ProcessingFailureDao(dslContext.configuration())
 
         coverageRunDao = CodeCoverageRunDao(dslContext.configuration())
         coverageGroupDao = CodeCoverageGroupDao(dslContext.configuration())
         coverageStatsDao = CodeCoverageStatsDao(dslContext.configuration())
 
-        val coverageRepository = CoverageDatabaseRepository(dslContext)
-        val previousTestRunService = PreviousTestRunService(PreviousTestRunDatabaseRepository(dslContext))
-        coverageService = CoverageService(coverageRepository, previousTestRunService)
+        val coverageRepository: CoverageRepository = application.get()
+        val previousTestRunService: PreviousTestRunService = application.get()
+        val processingFailureService: ProcessingFailureService = application.get()
+        coverageService = CoverageService(coverageRepository, previousTestRunService, processingFailureService)
 
         gitRepositoryDao = GitRepositoryDao(dslContext.configuration())
 

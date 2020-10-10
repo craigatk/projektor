@@ -18,7 +18,6 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
-@ExperimentalStdlibApi
 class AddJacocoCoverageApplicationTest : ApplicationTestCase() {
     @Test
     fun `should add Jacoco coverage to test run then get it`() {

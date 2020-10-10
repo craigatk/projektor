@@ -15,6 +15,9 @@ import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageDatabaseRepository
 import projektor.coverage.CoverageRepository
 import projektor.coverage.CoverageService
+import projektor.error.ProcessingFailureDatabaseRepository
+import projektor.error.ProcessingFailureRepository
+import projektor.error.ProcessingFailureService
 import projektor.incomingresults.GroupedResultsConverter
 import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
@@ -76,6 +79,7 @@ fun createAppModule(
     single<ResultsProcessingRepository> { ResultsProcessingDatabaseRepository(get()) }
     single<PreviousTestRunRepository> { PreviousTestRunDatabaseRepository(get()) }
     single<TestRunMetadataRepository> { TestRunMetadataDatabaseRepository(get()) }
+    single<ProcessingFailureRepository> { ProcessingFailureDatabaseRepository(get()) }
 
     single<CoverageRepository> { CoverageDatabaseRepository(get()) }
 
@@ -84,12 +88,13 @@ fun createAppModule(
     single<RepositoryCoverageRepository> { RepositoryCoverageDatabaseRepository(get()) }
     single<RepositoryTestRunRepository> { RepositoryTestRunDatabaseRepository(get()) }
 
-    single { CoverageService(get(), get()) }
+    single { CoverageService(get(), get(), get()) }
     single { GroupedResultsParser() }
     single { GroupedResultsConverter(get(), get()) }
     single { GroupedTestResultsService(get(), get(), get(), get(), get()) }
     single { MessageService(messageConfig) }
     single { PreviousTestRunService(get()) }
+    single { ProcessingFailureService(get()) }
     single { TestCaseService(get()) }
     single { TestSuiteService(get()) }
     single { TestResultsProcessingService(get()) }
