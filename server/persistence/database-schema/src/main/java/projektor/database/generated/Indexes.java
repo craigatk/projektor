@@ -15,6 +15,7 @@ import projektor.database.generated.tables.CodeCoverageRun;
 import projektor.database.generated.tables.CodeCoverageStats;
 import projektor.database.generated.tables.GitMetadata;
 import projektor.database.generated.tables.GitRepository;
+import projektor.database.generated.tables.ProcessingFailure;
 import projektor.database.generated.tables.ResultsMetadata;
 import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.TestCase;
@@ -49,6 +50,7 @@ public class Indexes {
     public static final Index GIT_METADATA_REPO_NAME_IDX = Indexes0.GIT_METADATA_REPO_NAME_IDX;
     public static final Index GIT_METADATA_TEST_RUN_ID_IDX = Indexes0.GIT_METADATA_TEST_RUN_ID_IDX;
     public static final Index GIT_REPOSITORY_ORG_NAME_IDX = Indexes0.GIT_REPOSITORY_ORG_NAME_IDX;
+    public static final Index IDX_PROCESSING_FAILURE_PUBLIC_ID = Indexes0.IDX_PROCESSING_FAILURE_PUBLIC_ID;
     public static final Index RESULTS_METADATA_TEST_RUN_ID_IDX = Indexes0.RESULTS_METADATA_TEST_RUN_ID_IDX;
     public static final Index IDX_RESULTS_PROCESSING_STATUS = Indexes0.IDX_RESULTS_PROCESSING_STATUS;
     public static final Index IDX_TEST_CASE_DURATION = Indexes0.IDX_TEST_CASE_DURATION;
@@ -74,6 +76,7 @@ public class Indexes {
         public static Index GIT_METADATA_REPO_NAME_IDX = Internal.createIndex("git_metadata_repo_name_idx", GitMetadata.GIT_METADATA, new OrderField[] { GitMetadata.GIT_METADATA.REPO_NAME }, false);
         public static Index GIT_METADATA_TEST_RUN_ID_IDX = Internal.createIndex("git_metadata_test_run_id_idx", GitMetadata.GIT_METADATA, new OrderField[] { GitMetadata.GIT_METADATA.TEST_RUN_ID }, false);
         public static Index GIT_REPOSITORY_ORG_NAME_IDX = Internal.createIndex("git_repository_org_name_idx", GitRepository.GIT_REPOSITORY, new OrderField[] { GitRepository.GIT_REPOSITORY.ORG_NAME }, false);
+        public static Index IDX_PROCESSING_FAILURE_PUBLIC_ID = Internal.createIndex("idx_processing_failure_public_id", ProcessingFailure.PROCESSING_FAILURE, new OrderField[] { ProcessingFailure.PROCESSING_FAILURE.PUBLIC_ID }, false);
         public static Index RESULTS_METADATA_TEST_RUN_ID_IDX = Internal.createIndex("results_metadata_test_run_id_idx", ResultsMetadata.RESULTS_METADATA, new OrderField[] { ResultsMetadata.RESULTS_METADATA.TEST_RUN_ID }, false);
         public static Index IDX_RESULTS_PROCESSING_STATUS = Internal.createIndex("idx_results_processing_status", ResultsProcessing.RESULTS_PROCESSING, new OrderField[] { ResultsProcessing.RESULTS_PROCESSING.STATUS }, false);
         public static Index IDX_TEST_CASE_DURATION = Internal.createIndex("idx_test_case_duration", TestCase.TEST_CASE, new OrderField[] { TestCase.TEST_CASE.DURATION }, false);

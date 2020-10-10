@@ -1,21 +1,40 @@
 package projektor.coverage
 
+import org.slf4j.LoggerFactory
 import projektor.compare.PreviousTestRunService
+import projektor.error.FailureBodyType
+import projektor.error.ProcessingFailureService
 import projektor.parser.coverage.CoverageParser
+import projektor.parser.coverage.model.CoverageReport
 import projektor.server.api.PublicId
 import projektor.server.api.coverage.Coverage
 import projektor.server.api.coverage.CoverageStats
 
 class CoverageService(
     private val coverageRepository: CoverageRepository,
-    private val previousTestRunService: PreviousTestRunService
+    private val previousTestRunService: PreviousTestRunService,
+    private val processingFailureService: ProcessingFailureService
 ) {
-    suspend fun saveReport(reportXml: String, publicId: PublicId) {
-        val coverageRun = coverageRepository.createOrGetCoverageRun(publicId)
-        val coverageReport = CoverageParser.parseReport(reportXml)
+    private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
-        coverageReport?.let { coverageRepository.addCoverageReport(coverageRun, it) }
-    }
+    suspend fun saveReport(reportXml: String, publicId: PublicId): CoverageReport? =
+        try {
+            val coverageRun = coverageRepository.createOrGetCoverageRun(publicId)
+            val coverageReport = CoverageParser.parseReport(reportXml)
+
+            coverageReport?.let { coverageRepository.addCoverageReport(coverageRun, it) }
+
+            coverageReport
+        } catch (e: Exception) {
+            logger.error("Error saving coverage report", e)
+            processingFailureService.recordProcessingFailure(
+                publicId = publicId,
+                body = reportXml,
+                bodyType = FailureBodyType.COVERAGE,
+                e = e
+            )
+            null
+        }
 
     suspend fun getCoverage(publicId: PublicId): Coverage? {
         val hasCoverageData = coverageExists(publicId)

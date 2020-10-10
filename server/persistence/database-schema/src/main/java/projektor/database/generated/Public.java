@@ -19,6 +19,7 @@ import projektor.database.generated.tables.CodeCoverageRun;
 import projektor.database.generated.tables.CodeCoverageStats;
 import projektor.database.generated.tables.GitMetadata;
 import projektor.database.generated.tables.GitRepository;
+import projektor.database.generated.tables.ProcessingFailure;
 import projektor.database.generated.tables.ResultsMetadata;
 import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.ResultsProcessingFailure;
@@ -44,7 +45,7 @@ import projektor.database.generated.tables.TestSuiteGroup;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 203235251;
+    private static final long serialVersionUID = 1965454634;
 
     /**
      * The reference instance of <code>public</code>
@@ -75,6 +76,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.git_repository</code>.
      */
     public final GitRepository GIT_REPOSITORY = GitRepository.GIT_REPOSITORY;
+
+    /**
+     * The table <code>public.processing_failure</code>.
+     */
+    public final ProcessingFailure PROCESSING_FAILURE = ProcessingFailure.PROCESSING_FAILURE;
 
     /**
      * The table <code>public.results_metadata</code>.
@@ -146,6 +152,7 @@ public class Public extends SchemaImpl {
             Sequences.CODE_COVERAGE_RUN_ID_SEQ,
             Sequences.CODE_COVERAGE_STATS_ID_SEQ,
             Sequences.GIT_METADATA_ID_SEQ,
+            Sequences.PROCESSING_FAILURE_ID_SEQ,
             Sequences.RESULTS_METADATA_ID_SEQ,
             Sequences.TEST_CASE_ID_SEQ,
             Sequences.TEST_CASE_TEST_SUITE_ID_SEQ,
@@ -166,6 +173,7 @@ public class Public extends SchemaImpl {
             CodeCoverageStats.CODE_COVERAGE_STATS,
             GitMetadata.GIT_METADATA,
             GitRepository.GIT_REPOSITORY,
+            ProcessingFailure.PROCESSING_FAILURE,
             ResultsMetadata.RESULTS_METADATA,
             ResultsProcessing.RESULTS_PROCESSING,
             ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE,
