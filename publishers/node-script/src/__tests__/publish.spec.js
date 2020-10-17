@@ -1,6 +1,9 @@
 const axios = require("axios");
 const MockAdapter = require("axios-mock-adapter");
 const {
+  extractUncompressedResultsPostData,
+} = require("./util/compression-util");
+const {
   collectResults,
   sendResults,
   collectAndSendResults,
@@ -131,5 +134,75 @@ describe("Projektor publisher", () => {
 
     expect(postData).toContain("resultsDir1-results1");
     expect(postData).toContain("resultsDir1-results2");
+  });
+
+  it("should compress results when enabled", async () => {
+    const fileGlob = "src/__tests__/resultsDir1/*.xml";
+    const serverUrl = "http://localhost:8080";
+
+    mockAxios
+      .onPost("http://localhost:8080/groupedResults")
+      .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
+
+    await collectAndSendResults(
+      serverUrl,
+      null,
+      [fileGlob],
+      [],
+      [],
+      "my-org/my-repo",
+      "my-branch",
+      null,
+      false,
+      true
+    );
+
+    const uncompressedPostData = await extractUncompressedResultsPostData(
+      mockAxios
+    );
+    const parsedResultsPostData = JSON.parse(uncompressedPostData);
+
+    expect(parsedResultsPostData.groupedTestSuites[0].testSuitesBlob).toContain(
+      "resultsDir1-results1"
+    );
+    expect(parsedResultsPostData.metadata.git.repoName).toEqual(
+      "my-org/my-repo"
+    );
+    expect(parsedResultsPostData.metadata.git.branchName).toEqual("my-branch");
+  });
+
+  it("should not compress results when not enabled", async () => {
+    const fileGlob = "src/__tests__/resultsDir1/*.xml";
+    const serverUrl = "http://localhost:8080";
+
+    mockAxios
+      .onPost("http://localhost:8080/groupedResults")
+      .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
+
+    await collectAndSendResults(
+      serverUrl,
+      null,
+      [fileGlob],
+      [],
+      [],
+      "my-org/my-repo",
+      "my-branch",
+      null,
+      false,
+      false
+    );
+
+    expect(mockAxios.history.post.length).toBe(1);
+
+    const postData = mockAxios.history.post[0].data;
+    const parsedResultsPostData = JSON.parse(postData);
+
+    expect(parsedResultsPostData.groupedTestSuites[0].testSuitesBlob).toContain(
+      "resultsDir1-results1"
+    );
+    expect(parsedResultsPostData.metadata.git.repoName).toEqual(
+      "my-org/my-repo"
+    );
+    expect(parsedResultsPostData.metadata.git.branchName).toEqual("my-branch");
   });
 });

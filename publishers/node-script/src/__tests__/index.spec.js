@@ -1,5 +1,8 @@
 const axios = require("axios");
 const MockAdapter = require("axios-mock-adapter");
+const {
+  extractUncompressedResultsPostData,
+} = require("./util/compression-util");
 const { run, runCLI } = require("../index");
 
 describe("node script index", () => {
@@ -35,7 +38,7 @@ describe("node script index", () => {
 
     const postRequest = mockAxios.history.post[0];
     expect(postRequest.url).toContain("/groupedResults");
-    const postData = postRequest.data;
+    const postData = await extractUncompressedResultsPostData(mockAxios);
 
     expect(postData).toContain("resultsDir1-results1");
     expect(postData).toContain("resultsDir1-results2");
@@ -57,10 +60,7 @@ describe("node script index", () => {
     expect(reportUrl).toEqual("http://localhost:8080/tests/DEF345");
     expect(publicId).toEqual("DEF345");
 
-    expect(mockAxios.history.post.length).toBe(1);
-
-    const postRequest = mockAxios.history.post[0];
-    const postData = postRequest.data;
+    const postData = await extractUncompressedResultsPostData(mockAxios);
 
     expect(postData).toContain("resultsDir1-results1");
     expect(postData).toContain("resultsDir1-results2");
@@ -97,10 +97,7 @@ describe("node script index", () => {
 
     expect(process.exitCode).toBe(1);
 
-    expect(mockAxios.history.post.length).toBe(1);
-
-    const postRequest = mockAxios.history.post[0];
-    const postData = postRequest.data;
+    const postData = await extractUncompressedResultsPostData(mockAxios);
     expect(postData).toContain("side nav");
   });
 
@@ -121,10 +118,7 @@ describe("node script index", () => {
 
     expect(process.exitCode).not.toBe(1);
 
-    expect(mockAxios.history.post.length).toBe(1);
-
-    const postRequest = mockAxios.history.post[0];
-    const postData = postRequest.data;
+    const postData = await extractUncompressedResultsPostData(mockAxios);
     expect(postData).toContain("resultsDir1-results1");
   });
 

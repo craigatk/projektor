@@ -13,6 +13,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
   const { collectAndSendResults } = require("./publish");
   const { writeSlackMessageFileToDisk } = require("./slack");
   const { writeResultsFileToDisk } = require("./results-file");
+  const _ = require("lodash");
 
   let serverUrl;
   let resultsFileGlobs;
@@ -22,6 +23,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
   let writeSlackMessageFile;
   let slackMessageFileName;
   let projectName;
+  let compressionEnabled;
 
   const configFilePath = args.configFile || defaultConfigFilePath;
 
@@ -37,6 +39,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
     writeSlackMessageFile = config.writeSlackMessageFile;
     slackMessageFileName = config.slackMessageFileName;
     projectName = config.projectName;
+    compressionEnabled = config.compressionEnabled;
   } else {
     serverUrl = args.serverUrl;
     resultsFileGlobs = args.resultsFileGlobs;
@@ -55,6 +58,11 @@ async function run(args, publishToken, defaultConfigFilePath) {
     writeSlackMessageFile = args.writeSlackMessageFile;
     slackMessageFileName = args.slackMessageFileName;
     projectName = args.projectName;
+    compressionEnabled = args.compressionEnabled;
+  }
+
+  if (_.isNil(compressionEnabled)) {
+    compressionEnabled = true;
   }
 
   if (resultsFileGlobs) {
@@ -72,7 +80,8 @@ async function run(args, publishToken, defaultConfigFilePath) {
       gitRepoName,
       gitBranchName,
       projectName,
-      isCI
+      isCI,
+      compressionEnabled
     );
 
     if (!resultsBlob) {
@@ -132,7 +141,7 @@ function printLinkFromFile(resultsFileName) {
 }
 
 function containsTestFailure(resultsBlob) {
-  return resultsBlob.indexOf("<failure") != -1;
+  return resultsBlob.indexOf("<failure") !== -1;
 }
 
 function findGitBranchName() {

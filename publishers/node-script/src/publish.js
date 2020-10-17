@@ -2,6 +2,7 @@ const glob = require("glob");
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
+const { gzip } = require("node-gzip");
 
 const isFile = (path) => fs.lstatSync(path).isFile();
 
@@ -50,7 +51,8 @@ const sendResults = async (
   gitRepoName,
   gitBranchName,
   projectName,
-  isCI
+  isCI,
+  compressionEnabled
 ) => {
   const headers = {};
 
@@ -80,9 +82,18 @@ const sendResults = async (
     },
   };
 
+  const compressionConfig = {
+    headers: {
+      "Content-Encoding": "gzip",
+    },
+  };
+
   const resp = await axiosInstance.post(
     `${serverUrl}/groupedResults`,
-    groupedResults
+    compressionEnabled
+      ? await gzip(JSON.stringify(groupedResults))
+      : groupedResults,
+    compressionEnabled ? compressionConfig : null
   );
 
   return resp.data;
@@ -215,7 +226,8 @@ const collectAndSendResults = async (
   gitRepoName,
   gitBranchName,
   projectName,
-  isCI
+  isCI,
+  compressionEnabled
 ) => {
   console.log(
     `Gathering results from ${resultsFileGlobs} to send to Projektor server ${serverUrl}`
@@ -232,7 +244,8 @@ const collectAndSendResults = async (
         gitRepoName,
         gitBranchName,
         projectName,
-        isCI
+        isCI,
+        compressionEnabled
       );
 
       const publicId = resultsResponseData.id;
