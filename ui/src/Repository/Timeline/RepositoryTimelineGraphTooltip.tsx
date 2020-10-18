@@ -27,6 +27,7 @@ const RepositoryTimelineGraphTooltip = (props) => {
       createdTimestamp,
       duration,
       totalTestCount,
+      testAverageDuration,
     } = props.payload[0].payload;
 
     return (
@@ -41,6 +42,12 @@ const RepositoryTimelineGraphTooltip = (props) => {
           <span className={classes.label}>Test count</span>
           <span data-testid="timeline-tooltip-test-count">
             {totalTestCount} tests
+          </span>
+        </div>
+        <div className={classes.line}>
+          <span className={classes.label}>Average test execution time</span>
+          <span data-testid="timeline-tooltip-average-duration">
+            {formatSecondsDuration(testAverageDuration)}
           </span>
         </div>
         <div className={classes.line}>

@@ -6,6 +6,7 @@
       "cumulative_duration": 0.46,
       "wall_clock_duration": null,
       "total_test_count": 3,
+      "test_average_duration": 0.153,
       "passed": true
     },
     {
@@ -14,6 +15,7 @@
       "cumulative_duration": 10.258,
       "wall_clock_duration": null,
       "total_test_count": 63,
+      "test_average_duration": 0.163,
       "passed": true
     },
     {
@@ -22,6 +24,7 @@
       "cumulative_duration": 0.229,
       "wall_clock_duration": null,
       "total_test_count": 1,
+      "test_average_duration": 0.229,
       "passed": true
     },
     {
@@ -30,6 +33,7 @@
       "cumulative_duration": 0.164,
       "wall_clock_duration": null,
       "total_test_count": 10,
+      "test_average_duration": 0.016,
       "passed": true
     }
   ]

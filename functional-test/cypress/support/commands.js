@@ -11,7 +11,7 @@ Cypress.Commands.add("loadFixture", (fixturePath, visitUri = "") =>
 );
 
 Cypress.Commands.add(
-  "loadGroupedFixtureData",
+  "loadGroupedFixtureDataAndVisitTestRun",
   (fixtureData, visitUri = "", loadingFunc = null) =>
     cy
       .request("POST", `http://localhost:8080/groupedResults`, fixtureData)
@@ -32,13 +32,27 @@ Cypress.Commands.add(
       })
 );
 
+Cypress.Commands.add("loadGroupedFixtureData", (fixtureData) =>
+  cy
+    .request("POST", `http://localhost:8080/groupedResults`, fixtureData)
+    .then((resp) => {
+      const publicId = resp.body.id;
+
+      return publicId;
+    })
+);
+
 Cypress.Commands.add(
   "loadGroupedFixture",
   (fixturePath, visitUri = "", loadingFunc = null) =>
     cy
       .readFile(fixturePath)
       .then((resultsBlob) =>
-        cy.loadGroupedFixtureData(resultsBlob, visitUri, loadingFunc)
+        cy.loadGroupedFixtureDataAndVisitTestRun(
+          resultsBlob,
+          visitUri,
+          loadingFunc
+        )
       )
 );
 

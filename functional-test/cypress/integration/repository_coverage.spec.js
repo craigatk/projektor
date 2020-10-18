@@ -19,7 +19,11 @@ context("repository coverage", () => {
       (resultsBlob) => {
         resultsBlob.metadata.git.repoName = repoName;
 
-        cy.loadGroupedFixtureData(resultsBlob, "", loadMoreCoverageFunc);
+        cy.loadGroupedFixtureDataAndVisitTestRun(
+          resultsBlob,
+          "",
+          loadMoreCoverageFunc
+        );
       }
     );
 
@@ -27,7 +31,11 @@ context("repository coverage", () => {
       (resultsBlob) => {
         resultsBlob.metadata.git.repoName = repoName;
 
-        cy.loadGroupedFixtureData(resultsBlob, "", loadLessCoverageFunc);
+        cy.loadGroupedFixtureDataAndVisitTestRun(
+          resultsBlob,
+          "",
+          loadLessCoverageFunc
+        );
       }
     );
 

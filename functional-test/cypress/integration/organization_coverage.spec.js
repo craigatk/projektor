@@ -17,7 +17,11 @@ context("organization coverage", () => {
       (resultsBlob) => {
         resultsBlob.metadata.git.repoName = `${org}/more-coverage`;
 
-        cy.loadGroupedFixtureData(resultsBlob, "", loadMoreCoverageFunc);
+        cy.loadGroupedFixtureDataAndVisitTestRun(
+          resultsBlob,
+          "",
+          loadMoreCoverageFunc
+        );
       }
     );
 
@@ -25,7 +29,11 @@ context("organization coverage", () => {
       (resultsBlob) => {
         resultsBlob.metadata.git.repoName = `${org}/less-coverage`;
 
-        cy.loadGroupedFixtureData(resultsBlob, "", loadLessCoverageFunc);
+        cy.loadGroupedFixtureDataAndVisitTestRun(
+          resultsBlob,
+          "",
+          loadLessCoverageFunc
+        );
       }
     );
 

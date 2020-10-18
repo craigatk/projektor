@@ -13,7 +13,7 @@ context("repository timeline", () => {
         (resultsBlob) => {
           resultsBlob.metadata.git.repoName = repoName;
 
-          cy.loadGroupedFixtureData(resultsBlob, "");
+          cy.loadGroupedFixtureDataAndVisitTestRun(resultsBlob, "");
         }
       );
     });

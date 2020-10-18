@@ -31,6 +31,7 @@ const RepositoryTimelineGraph = ({
     publicId: entry.publicId,
     duration: entry.cumulativeDuration,
     totalTestCount: entry.totalTestCount,
+    testAverageDuration: entry.testAverageDuration,
   }));
 
   const xAxisTickFormatter = (value) => moment(value).format("MMM Do YYYY");

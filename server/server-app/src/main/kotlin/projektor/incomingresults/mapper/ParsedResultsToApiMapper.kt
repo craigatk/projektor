@@ -3,12 +3,9 @@ package projektor.incomingresults.mapper
 import projektor.parser.model.TestSuite
 import projektor.server.api.PublicId
 import projektor.server.api.TestRunSummary
+import projektor.server.api.util.calculateAverageDuration
 import java.math.BigDecimal
-import java.math.MathContext
-import java.math.RoundingMode
 import java.time.Instant
-
-val roundingMathContext = MathContext(3, RoundingMode.HALF_UP)
 
 fun toTestRunSummary(publicId: PublicId, testSuites: List<TestSuite>, wallClockDuration: BigDecimal?): TestRunSummary {
     val totalTestCount = testSuites.sumBy { it.tests }
@@ -37,12 +34,4 @@ fun toTestRunSummary(publicId: PublicId, testSuites: List<TestSuite>, wallClockD
         Instant.now(),
         wallClockDuration
     )
-}
-
-private fun calculateAverageDuration(cumulativeDuration: BigDecimal, totalTestCount: Int): BigDecimal {
-    return if (cumulativeDuration > BigDecimal.ZERO && totalTestCount > 0) {
-        cumulativeDuration.divide(totalTestCount.toBigDecimal(), roundingMathContext)
-    } else {
-        BigDecimal.ZERO
-    }
 }

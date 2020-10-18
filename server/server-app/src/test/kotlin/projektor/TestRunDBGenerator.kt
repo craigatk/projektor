@@ -5,8 +5,8 @@ import projektor.coverage.CoverageService
 import projektor.database.generated.tables.daos.*
 import projektor.database.generated.tables.pojos.TestRunSystemAttributes
 import projektor.incomingresults.mapper.parsePackageAndClassName
-import projektor.incomingresults.mapper.roundingMathContext
 import projektor.server.api.PublicId
+import projektor.server.api.util.calculateAverageDuration
 import java.math.BigDecimal
 import java.sql.Timestamp
 import java.time.Instant
@@ -201,7 +201,7 @@ fun createTestRun(publicId: PublicId, totalTestCount: Int, cumulativeDuration: B
     .setCumulativeDuration(cumulativeDuration)
     .setAverageDuration(
         if (totalTestCount > 0)
-            cumulativeDuration.divide(totalTestCount.toBigDecimal(), roundingMathContext)
+            calculateAverageDuration(cumulativeDuration, totalTestCount)
         else
             cumulativeDuration
     )
