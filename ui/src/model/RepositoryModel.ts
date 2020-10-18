@@ -3,8 +3,9 @@ import { CoverageStats, TestCase } from "./TestRunModel";
 interface RepositoryTimelineEntry {
   publicId: string;
   createdTimestamp: Date;
-  cumulativeDuration: Date;
+  cumulativeDuration: number;
   totalTestCount: number;
+  testAverageDuration: number;
 }
 
 interface RepositoryTimeline {

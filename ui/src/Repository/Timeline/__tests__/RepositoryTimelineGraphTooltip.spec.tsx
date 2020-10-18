@@ -15,13 +15,54 @@ describe("RepositoryTimelineGraphTooltip", () => {
     moment.tz.setDefault();
   });
 
+  it("should display total and average test durations", () => {
+    const createdTimestamp = moment.utc("2020-10-02T11:03:04.580Z").toDate();
+    const duration = 170;
+    const totalTestCount = 15;
+    const testAverageDuration = 11.333;
+
+    const props = {
+      payload: [
+        {
+          payload: {
+            createdTimestamp,
+            duration,
+            totalTestCount,
+            testAverageDuration,
+          },
+        },
+      ],
+    };
+
+    const { getByTestId } = render(
+      <RepositoryTimelineGraphTooltip {...props} />
+    );
+
+    expect(getByTestId("timeline-tooltip-duration")).toHaveTextContent(
+      "2m 50.000s"
+    );
+    expect(getByTestId("timeline-tooltip-average-duration")).toHaveTextContent(
+      "11.333s"
+    );
+  });
+
   it("should display run date in local timezone", () => {
     const createdTimestamp = moment.utc("2020-10-02T11:03:04.580Z").toDate();
     const duration = 170;
     const totalTestCount = 15;
+    const testAverageDuration = 11.333;
 
     const props = {
-      payload: [{ payload: { createdTimestamp, duration, totalTestCount } }],
+      payload: [
+        {
+          payload: {
+            createdTimestamp,
+            duration,
+            totalTestCount,
+            testAverageDuration,
+          },
+        },
+      ],
     };
 
     const { getByTestId } = render(

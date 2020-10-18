@@ -55,6 +55,10 @@ context("repository coverage", () => {
 
     cy.getByTestId("timeline-tooltip-duration").should("contain", "10.258s");
     cy.getByTestId("timeline-tooltip-test-count").should("contain", "63 tests");
+    cy.getByTestId("timeline-tooltip-average-duration").should(
+      "contain",
+      "0.163s"
+    );
     cy.getByTestId("timeline-tooltip-run-date").should(
       "contain",
       "Sep 24th 2020"

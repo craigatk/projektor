@@ -55,6 +55,7 @@ class RepositoryTestRunTimelineApplicationTest : ApplicationTestCase() {
                     get { publicId }.isEqualTo(firstRunPublicId.id)
                     get { totalTestCount }.isEqualTo(20)
                     get { cumulativeDuration }.isEqualTo(BigDecimal("10.001"))
+                    get { testAverageDuration }.isEqualTo(BigDecimal("0.500"))
                 }
 
                 val secondEntry = testRunTimeline.timelineEntries[1]
@@ -62,6 +63,7 @@ class RepositoryTestRunTimelineApplicationTest : ApplicationTestCase() {
                     get { publicId }.isEqualTo(secondRunPublicId.id)
                     get { totalTestCount }.isEqualTo(30)
                     get { cumulativeDuration }.isEqualTo(BigDecimal("15.001"))
+                    get { testAverageDuration }.isEqualTo(BigDecimal("0.500"))
                 }
 
                 val thirdEntry = testRunTimeline.timelineEntries[2]
@@ -69,6 +71,7 @@ class RepositoryTestRunTimelineApplicationTest : ApplicationTestCase() {
                     get { publicId }.isEqualTo(thirdRunPublicId.id)
                     get { totalTestCount }.isEqualTo(45)
                     get { cumulativeDuration }.isEqualTo(BigDecimal("25.001"))
+                    get { testAverageDuration }.isEqualTo(BigDecimal("0.556"))
                 }
             }
         }
