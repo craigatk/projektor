@@ -1,0 +1,1 @@
+ALTER TABLE test_case ALTER COLUMN class_name DROP NOT NULL;

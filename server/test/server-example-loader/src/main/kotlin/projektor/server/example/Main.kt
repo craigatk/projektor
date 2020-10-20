@@ -7,6 +7,7 @@ fun main() {
     loadPassingGroupedExample()
     loadPassingGroupedExampleWithAttachments()
     loadGroupedExampleWithWallClock()
+    loadK6Example()
     loadSingleCoverageExample()
     loadMultipleCoverageExample()
     loadMultipleCoverageWithPreviousRunExample()
