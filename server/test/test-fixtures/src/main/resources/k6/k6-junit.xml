@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<testsuites tests="2" failures="1" time="0.839">
+    <testsuite name="/k6/test/example.k6.js" tests="2" failures="1" time="0.839" timestamp="2019-11-25T18:17:45.353Z">
+        <testcase name="checks">
+            <system-out>  ✓ checks.....................: 50.00% ✓ 20  ✗ 20 </system-out>
+        </testcase>
+        <testcase name="errors">
+            <failure message="  ✗ errors.....................: 50.00% ✓ 10  ✗ 10 ">  ✗ errors.....................: 50.00% ✓ 10  ✗ 10 </failure>
+            <system-out>  ✗ errors.....................: 50.00% ✓ 10  ✗ 10 </system-out>
+        </testcase>
+        <system-out>
+            <!-- Raw output from k6 command -->
+        </system-out>
+    </testsuite>
+</testsuites>

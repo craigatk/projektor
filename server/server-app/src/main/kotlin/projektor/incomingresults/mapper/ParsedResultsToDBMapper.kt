@@ -75,11 +75,14 @@ fun Failure.toDB(testCaseId: Long): TestFailureDB {
     return testFailureDB
 }
 
-fun parsePackageAndClassName(classNameWithPackage: String): Pair<String?, String> =
-    if (classNameWithPackage.contains('.')) {
+fun parsePackageAndClassName(classNameWithPackage: String?): Pair<String?, String?> =
+    if (classNameWithPackage != null && classNameWithPackage.contains('.')) {
         val packageEndIndex = classNameWithPackage.lastIndexOf('.')
 
-        val packageName = classNameWithPackage.substring(0, packageEndIndex)
+        // A leading forward slash messes up the URL
+        val packageStartIndex = if (classNameWithPackage.startsWith("/")) 1 else 0
+
+        val packageName = classNameWithPackage.substring(packageStartIndex, packageEndIndex)
         val className = classNameWithPackage.substring(packageEndIndex + 1)
 
         Pair(packageName, className)

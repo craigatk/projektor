@@ -44,7 +44,7 @@ import projektor.database.generated.tables.records.TestCaseRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TestCase extends TableImpl<TestCaseRecord> {
 
-    private static final long serialVersionUID = -1039994236;
+    private static final long serialVersionUID = -1917455869;
 
     /**
      * The reference instance of <code>public.test_case</code>
@@ -87,7 +87,7 @@ public class TestCase extends TableImpl<TestCaseRecord> {
     /**
      * The column <code>public.test_case.class_name</code>.
      */
-    public final TableField<TestCaseRecord, String> CLASS_NAME = createField(DSL.name("class_name"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<TestCaseRecord, String> CLASS_NAME = createField(DSL.name("class_name"), org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>public.test_case.duration</code>.

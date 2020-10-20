@@ -79,6 +79,11 @@ fun loadInvalidExample() {
     println("View run with invalid results at at $uiBaseUrl${resultsResponse.uri}")
 }
 
+fun loadK6Example() {
+    val resultsResponse = sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().k6()))
+    println("View run with k6 results at at $uiBaseUrl${resultsResponse.uri}")
+}
+
 fun loadSingleCoverageExample() {
     val resultsResponse = sendResultsToServer(ResultsXmlLoader().passing())
     sendCoverageToServer(resultsResponse.id, JacocoXmlLoader().serverApp())
