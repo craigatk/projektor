@@ -79,9 +79,12 @@ fun loadInvalidExample() {
     println("View run with invalid results at at $uiBaseUrl${resultsResponse.uri}")
 }
 
-fun loadK6Example() {
-    val resultsResponse = sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().k6()))
-    println("View run with k6 results at at $uiBaseUrl${resultsResponse.uri}")
+fun loadK6Examples() {
+    val k6ExampleResponse = sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().k6Example()))
+    println("View run with k6 example results at at $uiBaseUrl${k6ExampleResponse.uri}")
+
+    val k6GetFailedTestCasesLargeResponse = sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().k6GetFailedTestCasesLarge()))
+    println("View run with k6 getFailedTestCasesLarge results at at $uiBaseUrl${k6GetFailedTestCasesLargeResponse.uri}")
 }
 
 fun loadSingleCoverageExample() {

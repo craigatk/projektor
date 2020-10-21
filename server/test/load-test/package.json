@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "k6-to-junit": "1.0.3"
+  }
+}

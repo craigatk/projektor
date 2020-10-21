@@ -1,9 +1,19 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import { render } from "@testing-library/react";
+import mediaQuery from "css-mediaquery";
 import { TestRunGitMetadata, TestRunSummary } from "../../model/TestRunModel";
 import DashboardSummary from "../DashboardSummary";
 import { PinState } from "../../Pin/PinState";
+
+// From https://material-ui.com/components/use-media-query/#testing
+function createMatchMedia(width) {
+  return (query) => ({
+    matches: mediaQuery.match(query, { width }),
+    addListener: () => {},
+    removeListener: () => {},
+  });
+}
 
 describe("Dashboard summary", () => {
   const publicId = "34567";
@@ -19,6 +29,11 @@ describe("Dashboard summary", () => {
     averageDuration: 2.5,
     slowestTestCaseDuration: 5.0,
   } as TestRunSummary;
+
+  beforeAll(() => {
+    // @ts-ignore
+    window.matchMedia = createMatchMedia(window.innerWidth);
+  });
 
   it("should display project name when it exists", () => {
     const gitMetadata = {
@@ -110,5 +125,48 @@ describe("Dashboard summary", () => {
     );
 
     expect(queryByTestId("dashboard-summary-branch-name")).toBeNull();
+  });
+
+  it("should display duration when it is set", () => {
+    const { getByTestId } = render(
+      <PinState publicId={publicId}>
+        <DashboardSummary
+          publicId={publicId}
+          testRunSummary={testRunSummary}
+          gitMetadata={null}
+        />
+      </PinState>
+    );
+
+    expect(getByTestId("test-run-cumulative-duration")).toHaveTextContent(
+      "10.000s"
+    );
+    expect(getByTestId("test-run-average-duration")).toHaveTextContent("2.5s");
+  });
+
+  it("should not display duration section when average duration is 0", () => {
+    const testRunSummaryWithoutDuration = {
+      id: publicId,
+      totalTestCount: 4,
+      totalPassingCount: 2,
+      totalSkippedCount: 1,
+      totalFailureCount: 1,
+      passed: false,
+      cumulativeDuration: 0,
+      averageDuration: 0,
+      slowestTestCaseDuration: 0,
+    } as TestRunSummary;
+
+    const { getByTestId } = render(
+      <PinState publicId={publicId}>
+        <DashboardSummary
+          publicId={publicId}
+          testRunSummary={testRunSummaryWithoutDuration}
+          gitMetadata={null}
+        />
+      </PinState>
+    );
+
+    expect(getByTestId("dashboard-summary-duration-section")).toBeEmpty();
   });
 });
