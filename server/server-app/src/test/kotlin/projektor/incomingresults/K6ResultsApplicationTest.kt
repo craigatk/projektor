@@ -20,7 +20,7 @@ import strikt.assertions.isNotNull
 class K6ResultsApplicationTest : ApplicationTestCase() {
     @Test
     fun `should save results from k6 run to database`() {
-        val resultsBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().k6())
+        val resultsBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().k6Example())
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/groupedResults") {

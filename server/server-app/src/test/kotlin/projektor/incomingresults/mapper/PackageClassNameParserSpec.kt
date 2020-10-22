@@ -11,7 +11,8 @@ class PackageClassNameParserSpec : StringSpec({
         forAll(
             row("example.Spec", "example", "Spec"),
             row("com.example.sub.package.MyTestSpec", "com.example.sub.package", "MyTestSpec"),
-            row("Spec", null, "Spec")
+            row("Spec", null, "Spec"),
+            row("/k6/test.js", "k6/test", "js")
         ) { classAndPackage, expectedPackage, expectedClass ->
             val packageAndClass = parsePackageAndClassName(classAndPackage)
 

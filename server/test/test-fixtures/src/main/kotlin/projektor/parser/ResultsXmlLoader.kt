@@ -48,7 +48,8 @@ class ResultsXmlLoader {
 
     fun pytestPassing() = loadTextFromFile("pytest/pytest-passing.xml")
 
-    fun k6() = loadTextFromFile("k6/k6-junit.xml")
+    fun k6Example() = loadTextFromFile("k6/k6-junit.xml")
+    fun k6GetFailedTestCasesLarge() = loadTextFromFile("k6/k6-getFailedTestCasesLarge.xml")
 
     private fun loadTextFromFile(filename: String) = javaClass
         .getResourceAsStream("/$filename")

@@ -34,9 +34,9 @@ const DashboardSummary = ({
   } = testRunSummary;
 
   const hasDurationData =
-    averageDuration &&
+    !!averageDuration &&
     averageDuration > 0 &&
-    cumulativeDuration &&
+    !!cumulativeDuration &&
     cumulativeDuration > 0;
 
   return (
@@ -44,7 +44,12 @@ const DashboardSummary = ({
       <PageTitle title="Tests" testid="dashboard-summary-title" />
       <TestRunMessages publicId={publicId} />
       <Grid container>
-        <Grid item sm={3} xs={12}>
+        <Grid
+          item
+          sm={3}
+          xs={12}
+          data-testid="dashboard-summary-test-count-section"
+        >
           <TestCountList
             passedCount={totalPassingCount}
             failedCount={totalFailureCount}
@@ -54,7 +59,12 @@ const DashboardSummary = ({
           />
         </Grid>
         <Hidden xsDown>
-          <Grid item sm={3} xs={12}>
+          <Grid
+            item
+            sm={3}
+            xs={12}
+            data-testid="dashboard-summary-duration-section"
+          >
             {hasDurationData && (
               <TestRunDuration
                 publicId={publicId}
@@ -66,7 +76,12 @@ const DashboardSummary = ({
             )}
           </Grid>
         </Hidden>
-        <Grid item sm={4} xs={12}>
+        <Grid
+          item
+          sm={4}
+          xs={12}
+          data-testid="dashboard-summary-metadata-section"
+        >
           <List dense={true}>
             {gitMetadata && gitMetadata.repoName && (
               <GitRepoListItem gitMetadata={gitMetadata} />

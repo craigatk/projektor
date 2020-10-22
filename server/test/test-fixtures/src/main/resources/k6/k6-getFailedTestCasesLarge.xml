@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<testsuites tests="0" failures="0" time="15.745">
+  <testsuite name="getFailedTestCasesLarge.js" tests="0" failures="0" time="15.745" timestamp="2020-10-20T11:51:38.674Z">
+    <system-out>
+      <![CDATA[
+          /\      |‾‾| /‾‾/   /‾‾/   
+     /\  /  \     |  |/  /   /  /    
+    /  \/    \    |     (   /   ‾‾\  
+   /          \   |  |\  \ |  (‾)  | 
+  / __________ \  |__| \__\ \_____/ .io
+
+  execution: local
+     script: getFailedTestCasesLarge.js
+     output: -
+
+  scenarios: (100.00%) 1 scenario, 50 max VUs, 40s max duration (incl. graceful stop):
+           * default: Up to 50 looping VUs for 10s over 1 stages (gracefulRampDown: 30s, gracefulStop: 30s)
+
+
+Run       [ 100% ] setup()
+default   [   0% ]
+
+Run       [ 100% ] setup()
+default   [   0% ]
+
+Run       [ 100% ] setup()
+default   [   0% ]
+
+Run       [ 100% ] setup()
+default   [   0% ]
+
+Run       [ 100% ] setup()
+default   [   0% ]
+
+running (05.8s), 04/50 VUs, 631 complete and 0 interrupted iterations
+default   [   8% ] 04/50 VUs  00.8s/10.0s
+
+running (06.8s), 09/50 VUs, 1994 complete and 0 interrupted iterations
+default   [  18% ] 09/50 VUs  01.8s/10.0s
+
+running (07.8s), 14/50 VUs, 3389 complete and 0 interrupted iterations
+default   [  28% ] 14/50 VUs  02.8s/10.0s
+
+running (08.8s), 19/50 VUs, 4767 complete and 0 interrupted iterations
+default   [  38% ] 19/50 VUs  03.8s/10.0s
+
+running (09.8s), 24/50 VUs, 6156 complete and 0 interrupted iterations
+default   [  48% ] 24/50 VUs  04.8s/10.0s
+
+running (10.8s), 29/50 VUs, 7557 complete and 0 interrupted iterations
+default   [  58% ] 29/50 VUs  05.8s/10.0s
+
+running (11.8s), 34/50 VUs, 8935 complete and 0 interrupted iterations
+default   [  68% ] 34/50 VUs  06.8s/10.0s
+
+running (12.8s), 39/50 VUs, 10317 complete and 0 interrupted iterations
+default   [  78% ] 39/50 VUs  07.8s/10.0s
+
+running (13.8s), 43/50 VUs, 11648 complete and 0 interrupted iterations
+default   [  88% ] 43/50 VUs  08.8s/10.0s
+
+running (14.8s), 48/50 VUs, 13052 complete and 0 interrupted iterations
+default   [  98% ] 48/50 VUs  09.8s/10.0s
+
+running (15.1s), 00/50 VUs, 13446 complete and 0 interrupted iterations
+default ✓ [ 100% ] 00/50 VUs  10s
+
+    ✓ status is 200
+
+    █ setup
+
+    checks.....................: 100.00% ✓ 13446 ✗ 0   
+    data_received..............: 11 MB   751 kB/s
+    data_sent..................: 1.8 MB  120 kB/s
+    http_req_blocked...........: avg=6.55µs   min=1.9µs  med=4.3µs   max=992.8µs p(90)=5.73µs   p(95)=6.8µs   
+    http_req_connecting........: avg=1.33µs   min=0s     med=0s      max=872.9µs p(90)=0s       p(95)=0s      
+    http_req_duration..........: avg=18.5ms   min=1.81ms med=17.76ms max=87.31ms p(90)=32.93ms  p(95)=36.36ms 
+    http_req_receiving.........: avg=144.17µs min=55.1µs med=127.2µs max=4.28ms  p(90)=191.53µs p(95)=231.06µs
+    http_req_sending...........: avg=18.74µs  min=6.9µs  med=16.29µs max=1.47ms  p(90)=23µs     p(95)=30.4µs  
+    http_req_tls_handshaking...: avg=0s       min=0s     med=0s      max=0s      p(90)=0s       p(95)=0s      
+    http_req_waiting...........: avg=18.33ms  min=1.64ms med=17.62ms max=87.19ms p(90)=32.77ms  p(95)=36.21ms 
+    http_reqs..................: 13447   892.834479/s
+    iteration_duration.........: avg=19ms     min=1.88ms med=17.9ms  max=5.01s   p(90)=33.07ms  p(95)=36.5ms  
+    iterations.................: 13446   892.768083/s
+    vus........................: 49      min=0   max=49
+    vus_max....................: 50      min=50  max=50
+]]>
+    </system-out>
+  </testsuite>
+</testsuites>

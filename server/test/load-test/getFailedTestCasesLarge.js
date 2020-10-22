@@ -6,7 +6,7 @@ import { statusCheck200 } from "./util/statusCheck.js";
 
 export let options = {
     stages: [
-        { duration: "180s", target: 50 }
+        { duration: "10s", target: 50 }
     ],
     setupTimeout: "30s"
 };
