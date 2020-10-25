@@ -1,0 +1,1802 @@
+{
+  "files": [
+    {
+      "file_name": "DataSourceConfig.kt",
+      "directory_name": "projektor/database",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 160,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 160,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 28,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 28,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "AttachmentMapper.kt",
+      "directory_name": "projektor/attachment",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 32,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 32,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 6,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 6,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "AttachmentRepository.kt",
+      "directory_name": "projektor/attachment",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        },
+        "line_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "AttachmentService.kt",
+      "directory_name": "projektor/attachment",
+      "missed_lines": [],
+      "partial_lines": [24, 38],
+      "stats": {
+        "statement_stat": {
+          "covered": 378,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 378,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 33,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 33,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 8,
+          "missed": 2,
+          "covered_percentage_delta": null,
+          "total": 10,
+          "covered_percentage": 80.0
+        }
+      }
+    },
+    {
+      "file_name": "AddAttachmentResult.kt",
+      "directory_name": "projektor/attachment",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 18,
+          "missed": 3,
+          "covered_percentage_delta": null,
+          "total": 21,
+          "covered_percentage": 85.71
+        },
+        "line_stat": {
+          "covered": 2,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 2,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "AttachmentDatabaseRepository.kt",
+      "directory_name": "projektor/attachment",
+      "missed_lines": [41],
+      "partial_lines": [34],
+      "stats": {
+        "statement_stat": {
+          "covered": 155,
+          "missed": 3,
+          "covered_percentage_delta": null,
+          "total": 158,
+          "covered_percentage": 98.1
+        },
+        "line_stat": {
+          "covered": 21,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 22,
+          "covered_percentage": 95.45
+        },
+        "branch_stat": {
+          "covered": 3,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 4,
+          "covered_percentage": 75.0
+        }
+      }
+    },
+    {
+      "file_name": "AttachmentConfig.kt",
+      "directory_name": "projektor/attachment",
+      "missed_lines": [],
+      "partial_lines": [18, 23, 26],
+      "stats": {
+        "statement_stat": {
+          "covered": 159,
+          "missed": 4,
+          "covered_percentage_delta": null,
+          "total": 163,
+          "covered_percentage": 97.55
+        },
+        "line_stat": {
+          "covered": 16,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 16,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 9,
+          "missed": 5,
+          "covered_percentage_delta": null,
+          "total": 14,
+          "covered_percentage": 64.29
+        }
+      }
+    },
+    {
+      "file_name": "Scheduler.kt",
+      "directory_name": "projektor/schedule",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 123,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 123,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 12,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 12,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "SchedulerLock.kt",
+      "directory_name": "projektor/schedule",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 66,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 66,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 7,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 7,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "InfluxMetricsConfig.kt",
+      "directory_name": "projektor/metrics",
+      "missed_lines": [],
+      "partial_lines": [19, 20, 21, 24, 25, 26],
+      "stats": {
+        "statement_stat": {
+          "covered": 199,
+          "missed": 6,
+          "covered_percentage_delta": null,
+          "total": 205,
+          "covered_percentage": 97.07
+        },
+        "line_stat": {
+          "covered": 19,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 19,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 18,
+          "missed": 8,
+          "covered_percentage_delta": null,
+          "total": 26,
+          "covered_percentage": 69.23
+        }
+      }
+    },
+    {
+      "file_name": "MetricsService.kt",
+      "directory_name": "projektor/metrics",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 69,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 69,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 12,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 12,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "InfluxMetrics.kt",
+      "directory_name": "projektor/metrics",
+      "missed_lines": [],
+      "partial_lines": [23, 24, 25, 26, 27],
+      "stats": {
+        "statement_stat": {
+          "covered": 91,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 91,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 12,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 12,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 11,
+          "missed": 5,
+          "covered_percentage_delta": null,
+          "total": 16,
+          "covered_percentage": 68.75
+        }
+      }
+    },
+    {
+      "file_name": "KtorApplicationExt.kt",
+      "directory_name": "projektor",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 156,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 156,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 1,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 1,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "Application.kt",
+      "directory_name": "projektor",
+      "missed_lines": [102, 103, 104, 105],
+      "partial_lines": [92, 101],
+      "stats": {
+        "statement_stat": {
+          "covered": 701,
+          "missed": 51,
+          "covered_percentage_delta": null,
+          "total": 752,
+          "covered_percentage": 93.22
+        },
+        "line_stat": {
+          "covered": 83,
+          "missed": 4,
+          "covered_percentage_delta": null,
+          "total": 87,
+          "covered_percentage": 95.4
+        },
+        "branch_stat": {
+          "covered": 12,
+          "missed": 2,
+          "covered_percentage_delta": null,
+          "total": 14,
+          "covered_percentage": 85.71
+        }
+      }
+    },
+    {
+      "file_name": "AppModule.kt",
+      "directory_name": "projektor",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 537,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 537,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 26,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 26,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "AuthConfig.kt",
+      "directory_name": "projektor/auth",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 25,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 25,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 4,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 4,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 2,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 2,
+          "covered_percentage": 100.0
+        }
+      }
+    },
+    {
+      "file_name": "AuthService.kt",
+      "directory_name": "projektor/auth",
+      "missed_lines": [],
+      "partial_lines": [8],
+      "stats": {
+        "statement_stat": {
+          "covered": 37,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 37,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 2,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 2,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 7,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 8,
+          "covered_percentage": 87.5
+        }
+      }
+    },
+    {
+      "file_name": "ApiToDBMapper.kt",
+      "directory_name": "projektor/incomingresults/mapper",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 65,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 65,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 12,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 12,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "ParsedResultsToApiMapper.kt",
+      "directory_name": "projektor/incomingresults/mapper",
+      "missed_lines": [],
+      "partial_lines": [42],
+      "stats": {
+        "statement_stat": {
+          "covered": 212,
+          "missed": 2,
+          "covered_percentage_delta": null,
+          "total": 214,
+          "covered_percentage": 99.07
+        },
+        "line_stat": {
+          "covered": 26,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 26,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 11,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 12,
+          "covered_percentage": 91.67
+        }
+      }
+    },
+    {
+      "file_name": "ParsedResultsToDBMapper.kt",
+      "directory_name": "projektor/incomingresults/mapper",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 345,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 345,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 49,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 49,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 20,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 20,
+          "covered_percentage": 100.0
+        }
+      }
+    },
+    {
+      "file_name": "TestRunSystemAttributesService.kt",
+      "directory_name": "projektor/testrun/attributes",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 27,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 27,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 4,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 4,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "TestRunSystemAttributesDatabaseRepository.kt",
+      "directory_name": "projektor/testrun/attributes",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 113,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 113,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 22,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 22,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "TestRunSystemAttributesRepository.kt",
+      "directory_name": "projektor/testrun/attributes",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        },
+        "line_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "TestCaseDatabaseRepository.kt",
+      "directory_name": "projektor/testcase",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 327,
+          "missed": 15,
+          "covered_percentage_delta": null,
+          "total": 342,
+          "covered_percentage": 95.61
+        },
+        "line_stat": {
+          "covered": 42,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 42,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "TestCaseService.kt",
+      "directory_name": "projektor/testcase",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 30,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 30,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 4,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 4,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "TestCaseRepository.kt",
+      "directory_name": "projektor/testcase",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        },
+        "line_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "GroupedResults.kt",
+      "directory_name": "projektor/incomingresults/model",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 12,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 12,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 1,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 1,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "GroupedTestSuites.kt",
+      "directory_name": "projektor/incomingresults/model",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 30,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 30,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 5,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 5,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "TestRunDatabaseRepository.kt",
+      "directory_name": "projektor/testrun",
+      "missed_lines": [152],
+      "partial_lines": [141, 147],
+      "stats": {
+        "statement_stat": {
+          "covered": 689,
+          "missed": 9,
+          "covered_percentage_delta": null,
+          "total": 698,
+          "covered_percentage": 98.71
+        },
+        "line_stat": {
+          "covered": 98,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 99,
+          "covered_percentage": 98.99
+        },
+        "branch_stat": {
+          "covered": 6,
+          "missed": 2,
+          "covered_percentage_delta": null,
+          "total": 8,
+          "covered_percentage": 75.0
+        }
+      }
+    },
+    {
+      "file_name": "TestRunService.kt",
+      "directory_name": "projektor/testrun",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 21,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 21,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 3,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 3,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "TestRunRepository.kt",
+      "directory_name": "projektor/testrun",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        },
+        "line_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "TestResultsService.kt",
+      "directory_name": "projektor/incomingresults",
+      "missed_lines": [],
+      "partial_lines": [53],
+      "stats": {
+        "statement_stat": {
+          "covered": 252,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 252,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 23,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 23,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 7,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 8,
+          "covered_percentage": 87.5
+        }
+      }
+    },
+    {
+      "file_name": "TestResultsProcessingService.kt",
+      "directory_name": "projektor/incomingresults",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 36,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 36,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 5,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 5,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "GroupedTestResultsService.kt",
+      "directory_name": "projektor/incomingresults",
+      "missed_lines": [60, 61],
+      "partial_lines": [67],
+      "stats": {
+        "statement_stat": {
+          "covered": 304,
+          "missed": 32,
+          "covered_percentage_delta": null,
+          "total": 336,
+          "covered_percentage": 90.48
+        },
+        "line_stat": {
+          "covered": 36,
+          "missed": 2,
+          "covered_percentage_delta": null,
+          "total": 38,
+          "covered_percentage": 94.74
+        },
+        "branch_stat": {
+          "covered": 1,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 2,
+          "covered_percentage": 50.0
+        }
+      }
+    },
+    {
+      "file_name": "GroupedResultsConverter.kt",
+      "directory_name": "projektor/incomingresults",
+      "missed_lines": [],
+      "partial_lines": [19],
+      "stats": {
+        "statement_stat": {
+          "covered": 115,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 115,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 14,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 14,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 7,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 8,
+          "covered_percentage": 87.5
+        }
+      }
+    },
+    {
+      "file_name": "PersistTestResultsException.kt",
+      "directory_name": "projektor/incomingresults",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 29,
+          "missed": 3,
+          "covered_percentage_delta": null,
+          "total": 32,
+          "covered_percentage": 90.62
+        },
+        "line_stat": {
+          "covered": 1,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 1,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "RandomPublicId.kt",
+      "directory_name": "projektor/incomingresults",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 22,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 22,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 1,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 1,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "MessageConfig.kt",
+      "directory_name": "projektor/message",
+      "missed_lines": [],
+      "partial_lines": [12],
+      "stats": {
+        "statement_stat": {
+          "covered": 63,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 63,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 4,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 4,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 5,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 6,
+          "covered_percentage": 83.33
+        }
+      }
+    },
+    {
+      "file_name": "MessageService.kt",
+      "directory_name": "projektor/message",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 19,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 19,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 2,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 2,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "AttachmentRoutes.kt",
+      "directory_name": "projektor/route",
+      "missed_lines": [44, 49, 66, 78],
+      "partial_lines": [37, 43, 57, 73],
+      "stats": {
+        "statement_stat": {
+          "covered": 375,
+          "missed": 40,
+          "covered_percentage_delta": null,
+          "total": 415,
+          "covered_percentage": 90.36
+        },
+        "line_stat": {
+          "covered": 33,
+          "missed": 4,
+          "covered_percentage_delta": null,
+          "total": 37,
+          "covered_percentage": 89.19
+        },
+        "branch_stat": {
+          "covered": 14,
+          "missed": 4,
+          "covered_percentage_delta": null,
+          "total": 18,
+          "covered_percentage": 77.78
+        }
+      }
+    },
+    {
+      "file_name": "ResultsRoutes.kt",
+      "directory_name": "projektor/route",
+      "missed_lines": [72],
+      "partial_lines": [63],
+      "stats": {
+        "statement_stat": {
+          "covered": 398,
+          "missed": 12,
+          "covered_percentage_delta": null,
+          "total": 410,
+          "covered_percentage": 97.07
+        },
+        "line_stat": {
+          "covered": 37,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 38,
+          "covered_percentage": 97.37
+        },
+        "branch_stat": {
+          "covered": 14,
+          "missed": 2,
+          "covered_percentage_delta": null,
+          "total": 16,
+          "covered_percentage": 87.5
+        }
+      }
+    },
+    {
+      "file_name": "TestSuiteRoutes.kt",
+      "directory_name": "projektor/route",
+      "missed_lines": [39],
+      "partial_lines": [38, 45],
+      "stats": {
+        "statement_stat": {
+          "covered": 345,
+          "missed": 22,
+          "covered_percentage_delta": null,
+          "total": 367,
+          "covered_percentage": 94.01
+        },
+        "line_stat": {
+          "covered": 27,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 28,
+          "covered_percentage": 96.43
+        },
+        "branch_stat": {
+          "covered": 2,
+          "missed": 4,
+          "covered_percentage_delta": null,
+          "total": 6,
+          "covered_percentage": 33.33
+        }
+      }
+    },
+    {
+      "file_name": "MessageRoutes.kt",
+      "directory_name": "projektor/route",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 53,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 53,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 5,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 5,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "HealthRoute.kt",
+      "directory_name": "projektor/route",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 37,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 37,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 4,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 4,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "ConfigRoutes.kt",
+      "directory_name": "projektor/route",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 49,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 49,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 7,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 7,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "TestCaseRoutes.kt",
+      "directory_name": "projektor/route",
+      "missed_lines": [23],
+      "partial_lines": [22],
+      "stats": {
+        "statement_stat": {
+          "covered": 238,
+          "missed": 12,
+          "covered_percentage_delta": null,
+          "total": 250,
+          "covered_percentage": 95.2
+        },
+        "line_stat": {
+          "covered": 18,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 19,
+          "covered_percentage": 94.74
+        },
+        "branch_stat": {
+          "covered": 1,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 2,
+          "covered_percentage": 50.0
+        }
+      }
+    },
+    {
+      "file_name": "TestRunSystemAttributesRoutes.kt",
+      "directory_name": "projektor/route",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 241,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 241,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 17,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 17,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 6,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 6,
+          "covered_percentage": 100.0
+        }
+      }
+    },
+    {
+      "file_name": "UIRoutes.kt",
+      "directory_name": "projektor/route",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 42,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 42,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 9,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 9,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "Status.kt",
+      "directory_name": "projektor/route",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 12,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 12,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 1,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 1,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "TestRunRoutes.kt",
+      "directory_name": "projektor/route",
+      "missed_lines": [21, 29],
+      "partial_lines": [20, 28],
+      "stats": {
+        "statement_stat": {
+          "covered": 155,
+          "missed": 24,
+          "covered_percentage_delta": null,
+          "total": 179,
+          "covered_percentage": 86.59
+        },
+        "line_stat": {
+          "covered": 11,
+          "missed": 2,
+          "covered_percentage_delta": null,
+          "total": 13,
+          "covered_percentage": 84.62
+        },
+        "branch_stat": {
+          "covered": 2,
+          "missed": 2,
+          "covered_percentage_delta": null,
+          "total": 4,
+          "covered_percentage": 50.0
+        }
+      }
+    },
+    {
+      "file_name": "VersionRoutes.kt",
+      "directory_name": "projektor/route",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 18,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 18,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 4,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 4,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "ResultsProcessingRepository.kt",
+      "directory_name": "projektor/incomingresults/processing",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        },
+        "line_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "ResultsProcessingDatabaseRepository.kt",
+      "directory_name": "projektor/incomingresults/processing",
+      "missed_lines": [],
+      "partial_lines": [54],
+      "stats": {
+        "statement_stat": {
+          "covered": 280,
+          "missed": 6,
+          "covered_percentage_delta": null,
+          "total": 286,
+          "covered_percentage": 97.9
+        },
+        "line_stat": {
+          "covered": 44,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 44,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 3,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 4,
+          "covered_percentage": 75.0
+        }
+      }
+    },
+    {
+      "file_name": "TestSuiteDatabaseRepository.kt",
+      "directory_name": "projektor/testsuite",
+      "missed_lines": [54],
+      "partial_lines": [49, 53],
+      "stats": {
+        "statement_stat": {
+          "covered": 370,
+          "missed": 13,
+          "covered_percentage_delta": null,
+          "total": 383,
+          "covered_percentage": 96.61
+        },
+        "line_stat": {
+          "covered": 48,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 49,
+          "covered_percentage": 97.96
+        },
+        "branch_stat": {
+          "covered": 2,
+          "missed": 2,
+          "covered_percentage_delta": null,
+          "total": 4,
+          "covered_percentage": 50.0
+        }
+      }
+    },
+    {
+      "file_name": "TestSuiteRepository.kt",
+      "directory_name": "projektor/testsuite",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        },
+        "line_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "TestSuiteSearchCriteria.kt",
+      "directory_name": "projektor/testsuite",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 15,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 15,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 1,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 1,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "TestSuiteService.kt",
+      "directory_name": "projektor/testsuite",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 37,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 37,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 5,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 5,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "GzipUtil.kt",
+      "directory_name": "projektor/util",
+      "missed_lines": [],
+      "partial_lines": [9, 14],
+      "stats": {
+        "statement_stat": {
+          "covered": 139,
+          "missed": 16,
+          "covered_percentage_delta": null,
+          "total": 155,
+          "covered_percentage": 89.68
+        },
+        "line_stat": {
+          "covered": 4,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 4,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 2,
+          "missed": 2,
+          "covered_percentage_delta": null,
+          "total": 4,
+          "covered_percentage": 50.0
+        }
+      }
+    },
+    {
+      "file_name": "JooqUtil.kt",
+      "directory_name": "projektor/util",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 27,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 27,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 1,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 1,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "CleanupScheduledJob.kt",
+      "directory_name": "projektor/cleanup",
+      "missed_lines": [16, 18, 20, 21],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 48,
+          "missed": 35,
+          "covered_percentage_delta": null,
+          "total": 83,
+          "covered_percentage": 57.83
+        },
+        "line_stat": {
+          "covered": 10,
+          "missed": 4,
+          "covered_percentage_delta": null,
+          "total": 14,
+          "covered_percentage": 71.43
+        },
+        "branch_stat": {
+          "covered": 2,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 2,
+          "covered_percentage": 100.0
+        }
+      }
+    },
+    {
+      "file_name": "CleanupService.kt",
+      "directory_name": "projektor/cleanup",
+      "missed_lines": [58, 59, 60],
+      "partial_lines": [24, 30],
+      "stats": {
+        "statement_stat": {
+          "covered": 256,
+          "missed": 18,
+          "covered_percentage_delta": null,
+          "total": 274,
+          "covered_percentage": 93.43
+        },
+        "line_stat": {
+          "covered": 24,
+          "missed": 3,
+          "covered_percentage_delta": null,
+          "total": 27,
+          "covered_percentage": 88.89
+        },
+        "branch_stat": {
+          "covered": 9,
+          "missed": 3,
+          "covered_percentage_delta": null,
+          "total": 12,
+          "covered_percentage": 75.0
+        }
+      }
+    },
+    {
+      "file_name": "CleanupConfig.kt",
+      "directory_name": "projektor/cleanup",
+      "missed_lines": [],
+      "partial_lines": [10, 11, 14],
+      "stats": {
+        "statement_stat": {
+          "covered": 64,
+          "missed": 9,
+          "covered_percentage_delta": null,
+          "total": 73,
+          "covered_percentage": 87.67
+        },
+        "line_stat": {
+          "covered": 7,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 7,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 7,
+          "missed": 5,
+          "covered_percentage_delta": null,
+          "total": 12,
+          "covered_percentage": 58.33
+        }
+      }
+    }
+  ]
+}

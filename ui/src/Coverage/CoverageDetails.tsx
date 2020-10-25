@@ -15,7 +15,7 @@ const useStyles = makeStyles({
   },
 });
 
-const CoverageDetails = ({ coverage }: CoverageDetailsProps) => {
+const CoverageDetails = ({ coverage, publicId }: CoverageDetailsProps) => {
   const classes = useStyles({});
 
   const coverageTableRows = coverage.groups.map(
@@ -24,6 +24,7 @@ const CoverageDetails = ({ coverage }: CoverageDetailsProps) => {
         name: group.name,
         stats: group.stats,
         previousTestRunId: coverage.previousTestRunId,
+        nameLinkUrl: `/tests/${publicId}/coverage/${group.name}/files`,
       } as CoverageTableRow)
   );
 

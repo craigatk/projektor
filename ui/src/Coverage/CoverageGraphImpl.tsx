@@ -32,20 +32,28 @@ const CoverageGraphImpl = ({
     <span>{coverageStat.covered} Covered</span>
   );
 
+  const data = [
+    {
+      value: coverageStat.covered,
+      description: coveredDescription,
+      color: "rgb(0,255,0)",
+    },
+  ];
+
+  if (coverageStat.missed > 0) {
+    // The HSBar component sets a NaN width if the value is 0
+    // so don't add that data element if it is 0.
+    data.push({
+      value: coverageStat.missed,
+      // @ts-ignore
+      description: `${coverageStat.missed}`,
+      color: "red",
+    });
+  }
+
   return (
     <HSBar // https://www.npmjs.com/package/react-horizontal-stacked-bar-chart
-      data={[
-        {
-          value: coverageStat.covered,
-          description: coveredDescription,
-          color: "rgb(0,255,0)",
-        },
-        {
-          value: coverageStat.missed,
-          description: `${coverageStat.missed}`,
-          color: "red",
-        },
-      ]}
+      data={data}
       showTextDown
       height={height}
     />

@@ -15,6 +15,7 @@ import { AppBar, Typography } from "@material-ui/core";
 import AttachmentsPage from "../Attachments/AttachmentsPage";
 import { PinState } from "../Pin/PinState";
 import CoveragePage from "../Coverage/CoveragePage";
+import CoverageGroupFilesPage from "../Coverage/CoverageGroupFilesPage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -102,6 +103,11 @@ const TestRunMenuWrapper = ({
                 testCaseIdx={0}
               />
               <AttachmentsPage path="/attachments" publicId={publicId} />
+              <CoverageGroupFilesPage
+                path="/coverage/:coverageGroupName/files"
+                publicId={publicId}
+                coverageGroupName=""
+              />
               <CoveragePage path="/coverage" publicId={publicId} />
             </Router>
           </QueryParamProvider>
