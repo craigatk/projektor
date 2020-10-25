@@ -12,8 +12,6 @@ fun CoverageReportStat.toCoverageStat(previousCoverageStats: CoverageStat?): Cov
     CoverageStat(
         covered = this.covered,
         missed = this.missed,
-        total = this.total,
-        coveredPercentage = this.percentCovered,
         coveredPercentageDelta = previousCoverageStats?.let { this.percentCovered - it.coveredPercentage }
     )
 

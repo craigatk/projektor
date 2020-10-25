@@ -9,6 +9,7 @@ import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
+import projektor.server.api.coverage.CoverageFiles
 import projektor.server.api.coverage.CoverageStats
 import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectThat
@@ -63,6 +64,36 @@ class AddJacocoCoverageApplicationTest : ApplicationTestCase() {
                     get { total }.isEqualTo(9151)
                     get { coveredPercentage }.isEqualTo(BigDecimal("96.34"))
                 }
+            }
+        }
+    }
+
+    @Test
+    fun `should add Jacoco coverage report and get its files`() {
+        val publicId = randomPublicId()
+        val coverageGroup = "server-app"
+
+        val reportXmlBytes = JacocoXmlLoader().serverApp().toByteArray()
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/run/$publicId/coverage") {
+                testRunDBGenerator.createSimpleTestRun(publicId)
+
+                setBody(reportXmlBytes)
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+
+                val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicId.id)
+                expectThat(coverageRuns).hasSize(1)
+            }
+
+            handleRequest(HttpMethod.Get, "/run/$publicId/coverage/$coverageGroup/files").apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+
+                val coverageFiles = objectMapper.readValue(response.content, CoverageFiles::class.java)
+                assertNotNull(coverageFiles)
+
+                expectThat(coverageFiles.files).hasSize(62)
             }
         }
     }

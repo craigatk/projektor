@@ -10,6 +10,7 @@ import org.jooq.Index;
 import org.jooq.OrderField;
 import org.jooq.impl.Internal;
 
+import projektor.database.generated.tables.CodeCoverageFile;
 import projektor.database.generated.tables.CodeCoverageGroup;
 import projektor.database.generated.tables.CodeCoverageRun;
 import projektor.database.generated.tables.CodeCoverageStats;
@@ -42,6 +43,8 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
+    public static final Index CODE_COVERAGE_FILE_CODE_COVERAGE_GROUP_ID_IDX = Indexes0.CODE_COVERAGE_FILE_CODE_COVERAGE_GROUP_ID_IDX;
+    public static final Index CODE_COVERAGE_FILE_CODE_COVERAGE_RUN_ID_IDX = Indexes0.CODE_COVERAGE_FILE_CODE_COVERAGE_RUN_ID_IDX;
     public static final Index CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_IDX = Indexes0.CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_IDX;
     public static final Index CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX = Indexes0.CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX;
     public static final Index CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_IDX = Indexes0.CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_IDX;
@@ -68,6 +71,8 @@ public class Indexes {
     // -------------------------------------------------------------------------
 
     private static class Indexes0 {
+        public static Index CODE_COVERAGE_FILE_CODE_COVERAGE_GROUP_ID_IDX = Internal.createIndex("code_coverage_file_code_coverage_group_id_idx", CodeCoverageFile.CODE_COVERAGE_FILE, new OrderField[] { CodeCoverageFile.CODE_COVERAGE_FILE.CODE_COVERAGE_GROUP_ID }, false);
+        public static Index CODE_COVERAGE_FILE_CODE_COVERAGE_RUN_ID_IDX = Internal.createIndex("code_coverage_file_code_coverage_run_id_idx", CodeCoverageFile.CODE_COVERAGE_FILE, new OrderField[] { CodeCoverageFile.CODE_COVERAGE_FILE.CODE_COVERAGE_RUN_ID }, false);
         public static Index CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_IDX = Internal.createIndex("code_coverage_group_code_coverage_run_id_idx", CodeCoverageGroup.CODE_COVERAGE_GROUP, new OrderField[] { CodeCoverageGroup.CODE_COVERAGE_GROUP.CODE_COVERAGE_RUN_ID }, false);
         public static Index CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX = Internal.createIndex("code_coverage_run_test_run_public_id_idx", CodeCoverageRun.CODE_COVERAGE_RUN, new OrderField[] { CodeCoverageRun.CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID }, false);
         public static Index CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_IDX = Internal.createIndex("code_coverage_stats_code_coverage_run_id_idx", CodeCoverageStats.CODE_COVERAGE_STATS, new OrderField[] { CodeCoverageStats.CODE_COVERAGE_STATS.CODE_COVERAGE_RUN_ID }, false);

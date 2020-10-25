@@ -15,6 +15,7 @@ import projektor.auth.AuthService
 import projektor.coverage.CoverageService
 import projektor.server.api.PublicId
 import projektor.server.api.coverage.CoverageExists
+import projektor.server.api.coverage.CoverageFiles
 
 @KtorExperimentalAPI
 fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
@@ -58,5 +59,18 @@ fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
         val coverageExists = coverageService.coverageExists(PublicId(publicId))
 
         call.respond(HttpStatusCode.OK, CoverageExists(coverageExists))
+    }
+
+    get("/run/{publicId}/coverage/{coverageGroupName}/files") {
+        val publicId = call.parameters.getOrFail("publicId")
+        val coverageGroupName = call.parameters.getOrFail("coverageGroupName")
+
+        val coverageGroupFiles = coverageService.getCoverageGroupFiles(PublicId(publicId), coverageGroupName)
+
+        if (coverageGroupFiles.isNotEmpty()) {
+            call.respond(HttpStatusCode.OK, CoverageFiles(coverageGroupFiles))
+        } else {
+            call.respond(HttpStatusCode.NoContent)
+        }
     }
 }
