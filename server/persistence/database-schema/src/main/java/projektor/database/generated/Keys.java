@@ -12,6 +12,7 @@ import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.Internal;
 
+import projektor.database.generated.tables.CodeCoverageFile;
 import projektor.database.generated.tables.CodeCoverageGroup;
 import projektor.database.generated.tables.CodeCoverageRun;
 import projektor.database.generated.tables.CodeCoverageStats;
@@ -28,6 +29,7 @@ import projektor.database.generated.tables.TestRunAttachment;
 import projektor.database.generated.tables.TestRunSystemAttributes;
 import projektor.database.generated.tables.TestSuite;
 import projektor.database.generated.tables.TestSuiteGroup;
+import projektor.database.generated.tables.records.CodeCoverageFileRecord;
 import projektor.database.generated.tables.records.CodeCoverageGroupRecord;
 import projektor.database.generated.tables.records.CodeCoverageRunRecord;
 import projektor.database.generated.tables.records.CodeCoverageStatsRecord;
@@ -64,6 +66,7 @@ public class Keys {
     // IDENTITY definitions
     // -------------------------------------------------------------------------
 
+    public static final Identity<CodeCoverageFileRecord, Long> IDENTITY_CODE_COVERAGE_FILE = Identities0.IDENTITY_CODE_COVERAGE_FILE;
     public static final Identity<CodeCoverageGroupRecord, Long> IDENTITY_CODE_COVERAGE_GROUP = Identities0.IDENTITY_CODE_COVERAGE_GROUP;
     public static final Identity<CodeCoverageRunRecord, Long> IDENTITY_CODE_COVERAGE_RUN = Identities0.IDENTITY_CODE_COVERAGE_RUN;
     public static final Identity<CodeCoverageStatsRecord, Long> IDENTITY_CODE_COVERAGE_STATS = Identities0.IDENTITY_CODE_COVERAGE_STATS;
@@ -81,6 +84,7 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final UniqueKey<CodeCoverageFileRecord> CODE_COVERAGE_FILE_PKEY = UniqueKeys0.CODE_COVERAGE_FILE_PKEY;
     public static final UniqueKey<CodeCoverageGroupRecord> CODE_COVERAGE_GROUP_PKEY = UniqueKeys0.CODE_COVERAGE_GROUP_PKEY;
     public static final UniqueKey<CodeCoverageRunRecord> CODE_COVERAGE_RUN_PKEY = UniqueKeys0.CODE_COVERAGE_RUN_PKEY;
     public static final UniqueKey<CodeCoverageStatsRecord> CODE_COVERAGE_STATS_PKEY = UniqueKeys0.CODE_COVERAGE_STATS_PKEY;
@@ -103,6 +107,9 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final ForeignKey<CodeCoverageFileRecord, CodeCoverageRunRecord> CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_CODE_COVERAGE_RUN_ID_FKEY = ForeignKeys0.CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_CODE_COVERAGE_RUN_ID_FKEY;
+    public static final ForeignKey<CodeCoverageFileRecord, CodeCoverageGroupRecord> CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_CODE_COVERAGE_GROUP_ID_FKEY = ForeignKeys0.CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_CODE_COVERAGE_GROUP_ID_FKEY;
+    public static final ForeignKey<CodeCoverageFileRecord, CodeCoverageStatsRecord> CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_STATS_ID_FKEY = ForeignKeys0.CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_STATS_ID_FKEY;
     public static final ForeignKey<CodeCoverageGroupRecord, CodeCoverageRunRecord> CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_FKEY = ForeignKeys0.CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_FKEY;
     public static final ForeignKey<CodeCoverageGroupRecord, CodeCoverageStatsRecord> CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_STATS_ID_FKEY = ForeignKeys0.CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_STATS_ID_FKEY;
     public static final ForeignKey<CodeCoverageStatsRecord, CodeCoverageRunRecord> CODE_COVERAGE_STATS__CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_FKEY = ForeignKeys0.CODE_COVERAGE_STATS__CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_FKEY;
@@ -122,6 +129,7 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     private static class Identities0 {
+        public static Identity<CodeCoverageFileRecord, Long> IDENTITY_CODE_COVERAGE_FILE = Internal.createIdentity(CodeCoverageFile.CODE_COVERAGE_FILE, CodeCoverageFile.CODE_COVERAGE_FILE.ID);
         public static Identity<CodeCoverageGroupRecord, Long> IDENTITY_CODE_COVERAGE_GROUP = Internal.createIdentity(CodeCoverageGroup.CODE_COVERAGE_GROUP, CodeCoverageGroup.CODE_COVERAGE_GROUP.ID);
         public static Identity<CodeCoverageRunRecord, Long> IDENTITY_CODE_COVERAGE_RUN = Internal.createIdentity(CodeCoverageRun.CODE_COVERAGE_RUN, CodeCoverageRun.CODE_COVERAGE_RUN.ID);
         public static Identity<CodeCoverageStatsRecord, Long> IDENTITY_CODE_COVERAGE_STATS = Internal.createIdentity(CodeCoverageStats.CODE_COVERAGE_STATS, CodeCoverageStats.CODE_COVERAGE_STATS.ID);
@@ -137,6 +145,7 @@ public class Keys {
     }
 
     private static class UniqueKeys0 {
+        public static final UniqueKey<CodeCoverageFileRecord> CODE_COVERAGE_FILE_PKEY = Internal.createUniqueKey(CodeCoverageFile.CODE_COVERAGE_FILE, "code_coverage_file_pkey", new TableField[] { CodeCoverageFile.CODE_COVERAGE_FILE.ID }, true);
         public static final UniqueKey<CodeCoverageGroupRecord> CODE_COVERAGE_GROUP_PKEY = Internal.createUniqueKey(CodeCoverageGroup.CODE_COVERAGE_GROUP, "code_coverage_group_pkey", new TableField[] { CodeCoverageGroup.CODE_COVERAGE_GROUP.ID }, true);
         public static final UniqueKey<CodeCoverageRunRecord> CODE_COVERAGE_RUN_PKEY = Internal.createUniqueKey(CodeCoverageRun.CODE_COVERAGE_RUN, "code_coverage_run_pkey", new TableField[] { CodeCoverageRun.CODE_COVERAGE_RUN.ID }, true);
         public static final UniqueKey<CodeCoverageStatsRecord> CODE_COVERAGE_STATS_PKEY = Internal.createUniqueKey(CodeCoverageStats.CODE_COVERAGE_STATS, "code_coverage_stats_pkey", new TableField[] { CodeCoverageStats.CODE_COVERAGE_STATS.ID }, true);
@@ -157,6 +166,9 @@ public class Keys {
     }
 
     private static class ForeignKeys0 {
+        public static final ForeignKey<CodeCoverageFileRecord, CodeCoverageRunRecord> CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_CODE_COVERAGE_RUN_ID_FKEY = Internal.createForeignKey(Keys.CODE_COVERAGE_RUN_PKEY, CodeCoverageFile.CODE_COVERAGE_FILE, "code_coverage_file_code_coverage_run_id_fkey", new TableField[] { CodeCoverageFile.CODE_COVERAGE_FILE.CODE_COVERAGE_RUN_ID }, true);
+        public static final ForeignKey<CodeCoverageFileRecord, CodeCoverageGroupRecord> CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_CODE_COVERAGE_GROUP_ID_FKEY = Internal.createForeignKey(Keys.CODE_COVERAGE_GROUP_PKEY, CodeCoverageFile.CODE_COVERAGE_FILE, "code_coverage_file_code_coverage_group_id_fkey", new TableField[] { CodeCoverageFile.CODE_COVERAGE_FILE.CODE_COVERAGE_GROUP_ID }, true);
+        public static final ForeignKey<CodeCoverageFileRecord, CodeCoverageStatsRecord> CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_STATS_ID_FKEY = Internal.createForeignKey(Keys.CODE_COVERAGE_STATS_PKEY, CodeCoverageFile.CODE_COVERAGE_FILE, "code_coverage_file_stats_id_fkey", new TableField[] { CodeCoverageFile.CODE_COVERAGE_FILE.STATS_ID }, true);
         public static final ForeignKey<CodeCoverageGroupRecord, CodeCoverageRunRecord> CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_FKEY = Internal.createForeignKey(Keys.CODE_COVERAGE_RUN_PKEY, CodeCoverageGroup.CODE_COVERAGE_GROUP, "code_coverage_group_code_coverage_run_id_fkey", new TableField[] { CodeCoverageGroup.CODE_COVERAGE_GROUP.CODE_COVERAGE_RUN_ID }, true);
         public static final ForeignKey<CodeCoverageGroupRecord, CodeCoverageStatsRecord> CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_STATS_ID_FKEY = Internal.createForeignKey(Keys.CODE_COVERAGE_STATS_PKEY, CodeCoverageGroup.CODE_COVERAGE_GROUP, "code_coverage_group_stats_id_fkey", new TableField[] { CodeCoverageGroup.CODE_COVERAGE_GROUP.STATS_ID }, true);
         public static final ForeignKey<CodeCoverageStatsRecord, CodeCoverageRunRecord> CODE_COVERAGE_STATS__CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_FKEY = Internal.createForeignKey(Keys.CODE_COVERAGE_RUN_PKEY, CodeCoverageStats.CODE_COVERAGE_STATS, "code_coverage_stats_code_coverage_run_id_fkey", new TableField[] { CodeCoverageStats.CODE_COVERAGE_STATS.CODE_COVERAGE_RUN_ID }, true);

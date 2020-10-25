@@ -8,15 +8,15 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Report {
+public class SourceFile {
     @JacksonXmlProperty(isAttribute = true)
     public String name;
+
+    @JsonProperty("line")
+    @JacksonXmlElementWrapper(useWrapping = false)
+    public List<Line> lines;
 
     @JsonProperty("counter")
     @JacksonXmlElementWrapper(useWrapping = false)
     public List<Counter> counters;
-
-    @JsonProperty("package")
-    @JacksonXmlElementWrapper(useWrapping = false)
-    public List<ReportPackage> packages;
 }

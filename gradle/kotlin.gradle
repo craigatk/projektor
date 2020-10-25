@@ -16,6 +16,7 @@ dependencies {
 
     testImplementation "io.kotest:kotest-runner-junit5-jvm:${kotest_version}"
     testImplementation "io.strikt:strikt-core:${strikt_version}"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
 }
 
 test {

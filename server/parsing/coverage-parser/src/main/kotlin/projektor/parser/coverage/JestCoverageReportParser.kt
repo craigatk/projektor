@@ -21,7 +21,8 @@ class JestCoverageReportParser {
                     missed = parsedReport.project.metrics.conditionals - parsedReport.project.metrics.coveredConditionals
                 ),
                 statementStat = CoverageReportStat(covered = 0, missed = 0)
-            )
+            ),
+            null
         )
     }
 }

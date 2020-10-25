@@ -24,6 +24,11 @@ import org.jooq.impl.Internal;
 public class Sequences {
 
     /**
+     * The sequence <code>public.code_coverage_file_id_seq</code>
+     */
+    public static final Sequence<Long> CODE_COVERAGE_FILE_ID_SEQ = Internal.createSequence("code_coverage_file_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);
+
+    /**
      * The sequence <code>public.code_coverage_group_id_seq</code>
      */
     public static final Sequence<Long> CODE_COVERAGE_GROUP_ID_SEQ = Internal.createSequence("code_coverage_group_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);

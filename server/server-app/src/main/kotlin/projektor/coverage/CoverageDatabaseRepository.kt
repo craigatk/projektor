@@ -6,15 +6,19 @@ import org.jooq.DSLContext
 import org.jooq.impl.DSL.sum
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables.*
+import projektor.database.generated.tables.daos.CodeCoverageFileDao
 import projektor.database.generated.tables.daos.CodeCoverageGroupDao
 import projektor.database.generated.tables.daos.CodeCoverageRunDao
 import projektor.database.generated.tables.daos.CodeCoverageStatsDao
+import projektor.database.generated.tables.pojos.CodeCoverageFile
 import projektor.database.generated.tables.pojos.CodeCoverageGroup
 import projektor.database.generated.tables.pojos.CodeCoverageRun
 import projektor.database.generated.tables.pojos.CodeCoverageStats
 import projektor.parser.coverage.model.CoverageReport
+import projektor.parser.coverage.model.CoverageReportFile
 import projektor.parser.coverage.model.CoverageReportStats
 import projektor.server.api.PublicId
+import projektor.server.api.coverage.CoverageFile
 import kotlin.streams.toList
 
 class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageRepository {
@@ -29,6 +33,11 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
         .addKeys("id")
         .ignorePropertyNotFound()
         .newMapper(CoverageReportStats::class.java)
+
+    private val coverageFileMapper = JdbcMapperFactory.newInstance()
+        .addKeys("id", "stats_id")
+        .ignorePropertyNotFound()
+        .newMapper(CoverageFile::class.java)
 
     override suspend fun createOrGetCoverageRun(publicId: PublicId): CodeCoverageRun =
         withContext(Dispatchers.IO) {
@@ -73,6 +82,44 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
             codeCoverageGroup
         }
 
+    override suspend fun insertCoverageFiles(
+        coverageReportFiles: List<CoverageReportFile>,
+        coverageRun: CodeCoverageRun,
+        coverageGroup: CodeCoverageGroup
+    ) =
+        withContext(Dispatchers.IO) {
+            dslContext.transaction { configuration ->
+                val codeCoverageFileDao = CodeCoverageFileDao(configuration)
+                val codeCoverageStatsDao = CodeCoverageStatsDao(configuration)
+
+                coverageReportFiles.forEach { reportFile ->
+                    val reportFileStats = reportFile.stats
+
+                    val fileStats = CodeCoverageStats()
+                    fileStats.codeCoverageRunId = coverageRun.id
+                    fileStats.statementCovered = reportFileStats.statementStat.covered
+                    fileStats.statementMissed = reportFileStats.statementStat.missed
+                    fileStats.lineCovered = reportFileStats.lineStat.covered
+                    fileStats.lineMissed = reportFileStats.lineStat.missed
+                    fileStats.branchCovered = reportFileStats.branchStat.covered
+                    fileStats.branchMissed = reportFileStats.branchStat.missed
+                    fileStats.scope = "FILE"
+                    codeCoverageStatsDao.insert(fileStats)
+
+                    val codeCoverageFile = CodeCoverageFile()
+                    codeCoverageFile.codeCoverageRunId = coverageRun.id
+                    codeCoverageFile.codeCoverageGroupId = coverageGroup.id
+                    codeCoverageFile.statsId = fileStats.id
+                    codeCoverageFile.fileName = reportFile.fileName
+                    codeCoverageFile.directoryName = reportFile.directoryName
+                    codeCoverageFile.setMissedLines(*reportFile.missedLines.toTypedArray())
+                    codeCoverageFile.setPartialLines(*reportFile.partialLines.toTypedArray())
+
+                    codeCoverageFileDao.insert(codeCoverageFile)
+                }
+            }
+        }
+
     override suspend fun fetchOverallStats(publicId: PublicId): CoverageReportStats =
         withContext(Dispatchers.IO) {
             val resultSet = dslContext.select(
@@ -102,6 +149,31 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
                 dslContext.selectFrom(CODE_COVERAGE_RUN)
                     .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id))
             )
+        }
+
+    override suspend fun fetchCoverageFiles(publicId: PublicId, groupName: String): List<CoverageFile> =
+        withContext(Dispatchers.IO) {
+            val resultSet = dslContext.select(
+                *CODE_COVERAGE_FILE.fields(),
+                CODE_COVERAGE_STATS.BRANCH_COVERED.`as`("stats_branch_stat_covered"),
+                CODE_COVERAGE_STATS.BRANCH_MISSED.`as`("stats_branch_stat_missed"),
+                CODE_COVERAGE_STATS.STATEMENT_COVERED.`as`("stats_statement_stat_covered"),
+                CODE_COVERAGE_STATS.STATEMENT_MISSED.`as`("stats_statement_stat_missed"),
+                CODE_COVERAGE_STATS.LINE_COVERED.`as`("stats_line_stat_covered"),
+                CODE_COVERAGE_STATS.LINE_MISSED.`as`("stats_line_stat_missed")
+            )
+                .from(CODE_COVERAGE_FILE)
+                .innerJoin(CODE_COVERAGE_RUN).on(CODE_COVERAGE_FILE.CODE_COVERAGE_RUN_ID.eq(CODE_COVERAGE_RUN.ID))
+                .innerJoin(CODE_COVERAGE_GROUP).on(CODE_COVERAGE_FILE.CODE_COVERAGE_GROUP_ID.eq(CODE_COVERAGE_GROUP.ID))
+                .innerJoin(CODE_COVERAGE_STATS).on(CODE_COVERAGE_FILE.STATS_ID.eq(CODE_COVERAGE_STATS.ID))
+                .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id).and(CODE_COVERAGE_GROUP.NAME.eq(groupName)))
+                .fetchResultSet()
+
+            val coverageFiles: List<CoverageFile> = resultSet.use {
+                coverageFileMapper.stream(resultSet).toList()
+            }
+
+            coverageFiles
         }
 
     override suspend fun fetchCoverageList(publicId: PublicId): List<CoverageReport> =

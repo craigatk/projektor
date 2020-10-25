@@ -8,6 +8,7 @@ import projektor.parser.coverage.CoverageParser
 import projektor.parser.coverage.model.CoverageReport
 import projektor.server.api.PublicId
 import projektor.server.api.coverage.Coverage
+import projektor.server.api.coverage.CoverageFile
 import projektor.server.api.coverage.CoverageStats
 
 class CoverageService(
@@ -22,7 +23,19 @@ class CoverageService(
             val coverageRun = coverageRepository.createOrGetCoverageRun(publicId)
             val coverageReport = CoverageParser.parseReport(reportXml)
 
-            coverageReport?.let { coverageRepository.addCoverageReport(coverageRun, it) }
+            coverageReport?.let {
+                val coverageGroup = coverageRepository.addCoverageReport(coverageRun, it)
+
+                val coverageFiles = coverageReport.files
+
+                if (coverageFiles != null && coverageFiles.isNotEmpty()) {
+                    coverageRepository.insertCoverageFiles(
+                        coverageFiles,
+                        coverageRun,
+                        coverageGroup
+                    )
+                }
+            }
 
             coverageReport
         } catch (e: Exception) {
@@ -90,4 +103,7 @@ class CoverageService(
 
     suspend fun deleteCoverage(publicId: PublicId) =
         coverageRepository.deleteCoverage(publicId)
+
+    suspend fun getCoverageGroupFiles(publicId: PublicId, groupName: String): List<CoverageFile> =
+        coverageRepository.fetchCoverageFiles(publicId, groupName)
 }

@@ -14,6 +14,7 @@ import org.jooq.Sequence;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
 
+import projektor.database.generated.tables.CodeCoverageFile;
 import projektor.database.generated.tables.CodeCoverageGroup;
 import projektor.database.generated.tables.CodeCoverageRun;
 import projektor.database.generated.tables.CodeCoverageStats;
@@ -45,12 +46,17 @@ import projektor.database.generated.tables.TestSuiteGroup;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 1965454634;
+    private static final long serialVersionUID = 948411568;
 
     /**
      * The reference instance of <code>public</code>
      */
     public static final Public PUBLIC = new Public();
+
+    /**
+     * The table <code>public.code_coverage_file</code>.
+     */
+    public final CodeCoverageFile CODE_COVERAGE_FILE = CodeCoverageFile.CODE_COVERAGE_FILE;
 
     /**
      * The table <code>public.code_coverage_group</code>.
@@ -148,6 +154,7 @@ public class Public extends SchemaImpl {
     @Override
     public final List<Sequence<?>> getSequences() {
         return Arrays.<Sequence<?>>asList(
+            Sequences.CODE_COVERAGE_FILE_ID_SEQ,
             Sequences.CODE_COVERAGE_GROUP_ID_SEQ,
             Sequences.CODE_COVERAGE_RUN_ID_SEQ,
             Sequences.CODE_COVERAGE_STATS_ID_SEQ,
@@ -168,6 +175,7 @@ public class Public extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.<Table<?>>asList(
+            CodeCoverageFile.CODE_COVERAGE_FILE,
             CodeCoverageGroup.CODE_COVERAGE_GROUP,
             CodeCoverageRun.CODE_COVERAGE_RUN,
             CodeCoverageStats.CODE_COVERAGE_STATS,
