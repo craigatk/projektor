@@ -63,7 +63,7 @@ dependencies {
 
     testImplementation "org.koin:koin-test:${koin_version}"
 
-    testImplementation "com.github.tomakehurst:wiremock-jre8:2.27.1"
+    testImplementation "com.github.tomakehurst:wiremock-jre8:2.27.2"
 }
 
 task cleanStaticResources(type: Delete) {
