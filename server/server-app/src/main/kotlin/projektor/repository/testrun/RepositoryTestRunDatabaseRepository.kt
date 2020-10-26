@@ -102,7 +102,7 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                 .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
                 .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
                 .where(runInCIFromRepo(repoName, projectName))
-                .fetchOneInto(Long::class.java)
+                .fetchOneInto(Long::class.java)!!
         }
 
     companion object {

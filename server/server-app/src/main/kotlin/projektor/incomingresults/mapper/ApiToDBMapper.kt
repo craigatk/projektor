@@ -1,7 +1,8 @@
 package projektor.incomingresults.mapper
 
 import projektor.server.api.TestRunSummary
-import java.sql.Timestamp
+import java.time.LocalDateTime
+import java.time.ZoneId
 import projektor.database.generated.tables.pojos.TestRun as TestRunDB
 
 fun TestRunSummary.toDB(): TestRunDB {
@@ -15,7 +16,7 @@ fun TestRunSummary.toDB(): TestRunDB {
     testRunDB.cumulativeDuration = cumulativeDuration
     testRunDB.averageDuration = averageDuration
     testRunDB.slowestTestCaseDuration = slowestTestCaseDuration
-    testRunDB.createdTimestamp = Timestamp.from(createdTimestamp)
+    testRunDB.createdTimestamp = LocalDateTime.ofInstant(createdTimestamp, ZoneId.of("Z"))
     testRunDB.wallClockDuration = wallClockDuration
 
     return testRunDB

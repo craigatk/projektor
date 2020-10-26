@@ -18,9 +18,8 @@ import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.*
 import java.io.File
-import java.sql.Timestamp
-import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @KtorExperimentalAPI
 class CleanupServiceTest : DatabaseRepositoryTestCase() {
@@ -138,7 +137,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
         resultsProcessingDao.insert(
             ResultsProcessing()
                 .setPublicId(publicId.id)
-                .setCreatedTimestamp(Timestamp.from(Instant.now()))
+                .setCreatedTimestamp(LocalDateTime.now())
                 .setStatus(ResultsProcessingStatus.SUCCESS.name)
         )
 

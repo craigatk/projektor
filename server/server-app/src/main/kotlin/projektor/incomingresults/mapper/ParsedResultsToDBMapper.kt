@@ -6,8 +6,6 @@ import projektor.incomingresults.model.ResultsMetadata
 import projektor.parser.model.Failure
 import projektor.parser.model.TestCase
 import projektor.parser.model.TestSuite
-import java.sql.Timestamp
-import java.time.ZoneOffset
 import projektor.database.generated.tables.pojos.GitMetadata as GitMetadataDB
 import projektor.database.generated.tables.pojos.ResultsMetadata as ResultsMetadataDB
 import projektor.database.generated.tables.pojos.TestCase as TestCaseDB
@@ -38,7 +36,7 @@ fun TestSuite.toDB(testRunId: Long, testGroupId: Long?, testSuiteIdx: Int): Test
     testSuiteDB.passingCount = passingCount
     testSuiteDB.skippedCount = skipped
     testSuiteDB.failureCount = failures + errors
-    testSuiteDB.startTs = if (timestamp != null) Timestamp.from(timestamp.toInstant(ZoneOffset.UTC)) else null
+    testSuiteDB.startTs = timestamp
     testSuiteDB.hostname = hostname
     testSuiteDB.duration = time
     testSuiteDB.systemOut = systemOut

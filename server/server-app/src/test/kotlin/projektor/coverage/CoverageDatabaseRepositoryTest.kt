@@ -176,8 +176,8 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val coverageFile1 = coverageFiles.find { it.fileName == "File1.kt" }
         expectThat(coverageFile1).isNotNull().and {
             get { directoryName }.isEqualTo("dir-1")
-            get { missedLines }.hasSize(1).contains(12)
-            get { partialLines }.hasSize(2).contains(14, 15)
+            get { missedLines.toList() }.hasSize(1).contains(12)
+            get { partialLines.toList() }.hasSize(2).contains(14, 15)
             get { stats }.and {
                 get { lineStat.coveredPercentage }.isEqualTo(BigDecimal("100.00"))
                 get { branchStat.coveredPercentage }.isEqualTo(BigDecimal("33.33"))
@@ -187,8 +187,8 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val coverageFile2 = coverageFiles.find { it.fileName == "File2.kt" }
         expectThat(coverageFile2).isNotNull().and {
             get { directoryName }.isEqualTo("dir-2")
-            get { missedLines }.hasSize(3).contains(18, 19, 20)
-            get { partialLines }.hasSize(1).contains(21)
+            get { missedLines.toList() }.hasSize(3).contains(18, 19, 20)
+            get { partialLines.toList() }.hasSize(1).contains(21)
             get { stats }.and {
                 get { lineStat.coveredPercentage }.isEqualTo(BigDecimal("84.62"))
                 get { branchStat.coveredPercentage }.isEqualTo(BigDecimal("92.31"))

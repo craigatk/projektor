@@ -11,7 +11,6 @@ import projektor.database.generated.tables.pojos.ResultsProcessingFailure
 import projektor.server.api.PublicId
 import projektor.server.api.results.ResultsProcessing
 import projektor.server.api.results.ResultsProcessingStatus
-import java.sql.Timestamp
 import java.time.LocalDateTime
 import projektor.database.generated.tables.pojos.ResultsProcessing as ResultsProcessingDB
 
@@ -31,7 +30,7 @@ class ResultsProcessingDatabaseRepository(private val dslContext: DSLContext) : 
             val resultsProcessingDB = ResultsProcessingDB()
                 .setPublicId(publicId.id)
                 .setStatus(ResultsProcessingStatus.RECEIVED.name)
-                .setCreatedTimestamp(Timestamp.valueOf(createdTimestamp))
+                .setCreatedTimestamp(createdTimestamp)
             resultsProcessingDao.insert(resultsProcessingDB)
 
             ResultsProcessing(publicId.id, ResultsProcessingStatus.RECEIVED, createdTimestamp, null)
@@ -56,7 +55,7 @@ class ResultsProcessingDatabaseRepository(private val dslContext: DSLContext) : 
             val resultsProcessingFailure = ResultsProcessingFailure()
             resultsProcessingFailure.publicId = publicId.id
             resultsProcessingFailure.body = resultsBody
-            resultsProcessingFailure.createdTimestamp = Timestamp.valueOf(LocalDateTime.now())
+            resultsProcessingFailure.createdTimestamp = LocalDateTime.now()
             resultsProcessingFailureDao.insert(resultsProcessingFailure)
 
             updateProcessingStatus

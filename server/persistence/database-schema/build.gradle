@@ -1,19 +1,24 @@
 plugins {
     id "com.avast.gradle.docker-compose" version "0.9.4"
-    id 'nu.studer.jooq' version '4.1'
+    id 'nu.studer.jooq' version '5.1.0'
     id "org.flywaydb.flyway" version "6.0.0"
     id "java-library"
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
 }
 
 dependencies {
     api "org.flywaydb:flyway-core:6.0.0"
     api "com.zaxxer:HikariCP:3.3.1"
-    api 'org.jooq:jooq:3.13.1'
+    api 'org.jooq:jooq:3.14.0'
 
     // Needs to be 'compile' scope so the Flyway plugin can see it
     compile "org.postgresql:postgresql:$postgresDriverVersion"
 
-    jooqRuntime "org.postgresql:postgresql:$postgresDriverVersion"
+    jooqGenerator "org.postgresql:postgresql:$postgresDriverVersion"
 }
 
 flyway {
@@ -23,47 +28,49 @@ flyway {
 }
 
 jooq {
-    version = '3.13.1'
-    edition = 'OSS'
-    generateSchemaSourceOnCompilation = false
-    model(sourceSets.main) {
-        jdbc {
-            driver = 'org.postgresql.Driver'
-            url = 'jdbc:postgresql://localhost:5433/projektordb'
-            user = 'testuser'
-            password = 'testpass'
-        }
-        generator {
-            name = 'org.jooq.codegen.DefaultGenerator'
-            strategy {
-                name = 'org.jooq.codegen.DefaultGeneratorStrategy'
-            }
-            database {
-                name = 'org.jooq.meta.postgres.PostgresDatabase'
-                excludes = "flyway_schema_history | shedlock"
-                inputSchema = "public"
-            }
-            generate {
-                relations = true
-                deprecated = false
-                records = true
-                fluentSetters = true
-                pojos = true
-                pojosEqualsAndHashCode = true
-                daos = true
-            }
-            target {
-                packageName = 'projektor.database.generated'
-                directory = 'src/main/java'
+    version = '3.14.0'
+
+    configurations {
+        main {
+            generateSchemaSourceOnCompilation = false
+            generationTool {
+                jdbc {
+                    driver = 'org.postgresql.Driver'
+                    url = 'jdbc:postgresql://localhost:5433/projektordb'
+                    user = 'testuser'
+                    password = 'testpass'
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    strategy {
+                        name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                    }
+                    database {
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'
+                        excludes = "flyway_schema_history | shedlock"
+                        inputSchema = "public"
+                    }
+                    generate {
+                        relations = true
+                        deprecated = false
+                        records = true
+                        fluentSetters = true
+                        pojos = true
+                        pojosEqualsAndHashCode = true
+                        daos = true
+                    }
+                    target {
+                        packageName = 'projektor.database.generated'
+                        directory = 'src/main/java'
+                    }
+                }
             }
         }
     }
 }
 
-generateModelJooqSchemaSource.inputs.dir("${projectDir}/src/main/resources/db/migration")
-generateModelJooqSchemaSource.outputs.cacheIf { true }
-
-task generateJooq(dependsOn: generateModelJooqSchemaSource)
+generateJooq.inputs.dir("${projectDir}/src/main/resources/db/migration")
+generateJooq.outputs.cacheIf { true }
 
 flywayMigrate.dependsOn composeUp
 generateJooq.dependsOn flywayMigrate

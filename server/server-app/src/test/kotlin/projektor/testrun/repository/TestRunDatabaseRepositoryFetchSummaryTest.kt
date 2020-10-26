@@ -10,8 +10,7 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import java.math.BigDecimal
-import java.sql.Timestamp
-import java.time.Instant
+import java.time.LocalDateTime
 
 class TestRunDatabaseRepositoryFetchSummaryTest : DatabaseRepositoryTestCase() {
     @Test
@@ -29,7 +28,7 @@ class TestRunDatabaseRepositoryFetchSummaryTest : DatabaseRepositoryTestCase() {
         testRunDB.cumulativeDuration = BigDecimal("9.00")
         testRunDB.averageDuration = BigDecimal("3.00")
         testRunDB.slowestTestCaseDuration = BigDecimal("5.00")
-        testRunDB.createdTimestamp = Timestamp.from(Instant.now())
+        testRunDB.createdTimestamp = LocalDateTime.now()
         testRunDao.insert(testRunDB)
 
         val testRunSummary = runBlocking { testRunDatabaseRepository.fetchTestRunSummary(publicId) }

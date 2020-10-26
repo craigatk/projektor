@@ -12,8 +12,6 @@ import projektor.testrun.TestRunDatabaseRepository
 import strikt.api.expectThat
 import strikt.assertions.*
 import java.math.BigDecimal
-import java.sql.Timestamp
-import java.time.Instant
 import java.time.LocalDateTime
 import kotlin.test.assertNotNull
 
@@ -34,7 +32,7 @@ class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
         testRunDB.cumulativeDuration = BigDecimal("9.00")
         testRunDB.averageDuration = BigDecimal("3.00")
         testRunDB.slowestTestCaseDuration = BigDecimal("5.00")
-        testRunDB.createdTimestamp = Timestamp.from(Instant.now())
+        testRunDB.createdTimestamp = LocalDateTime.now()
         testRunDao.insert(testRunDB)
 
         val testSuiteDB = TestSuite()
@@ -46,7 +44,7 @@ class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
         testSuiteDB.failureCount = 1
         testSuiteDB.className = "TestSuiteSpec"
         testSuiteDB.packageName = "projektor"
-        testSuiteDB.startTs = Timestamp.valueOf(LocalDateTime.of(2019, 11, 1, 0, 0, 0))
+        testSuiteDB.startTs = LocalDateTime.of(2019, 11, 1, 0, 0, 0)
         testSuiteDB.hostname = "myhostname"
         testSuiteDB.duration = BigDecimal("9.00")
         testSuiteDB.systemOut = "Some system out"
