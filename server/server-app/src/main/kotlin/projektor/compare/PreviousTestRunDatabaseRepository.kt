@@ -5,7 +5,6 @@ import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
 import projektor.database.generated.Tables.*
 import projektor.server.api.PublicId
-import java.sql.Timestamp
 import java.time.LocalDateTime
 
 class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : PreviousTestRunRepository {
@@ -37,7 +36,7 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
                                 else
                                     it.and(GIT_METADATA.PROJECT_NAME.eq(currentRunInfo.projectName))
                             }
-                            .and(TEST_RUN.CREATED_TIMESTAMP.lessThan(Timestamp.valueOf(currentRunInfo.createdTimestamp)))
+                            .and(TEST_RUN.CREATED_TIMESTAMP.lessThan(currentRunInfo.createdTimestamp))
                     )
                     .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
                     .limit(1)

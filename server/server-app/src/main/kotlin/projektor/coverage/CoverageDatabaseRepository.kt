@@ -35,7 +35,7 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
         .newMapper(CoverageReportStats::class.java)
 
     private val coverageFileMapper = JdbcMapperFactory.newInstance()
-        .addKeys("id", "stats_id")
+        .addKeys("id")
         .ignorePropertyNotFound()
         .newMapper(CoverageFile::class.java)
 
@@ -154,7 +154,10 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
     override suspend fun fetchCoverageFiles(publicId: PublicId, groupName: String): List<CoverageFile> =
         withContext(Dispatchers.IO) {
             val resultSet = dslContext.select(
-                *CODE_COVERAGE_FILE.fields(),
+                CODE_COVERAGE_FILE.DIRECTORY_NAME,
+                CODE_COVERAGE_FILE.FILE_NAME,
+                CODE_COVERAGE_FILE.MISSED_LINES,
+                CODE_COVERAGE_FILE.PARTIAL_LINES,
                 CODE_COVERAGE_STATS.BRANCH_COVERED.`as`("stats_branch_stat_covered"),
                 CODE_COVERAGE_STATS.BRANCH_MISSED.`as`("stats_branch_stat_missed"),
                 CODE_COVERAGE_STATS.STATEMENT_COVERED.`as`("stats_statement_stat_covered"),

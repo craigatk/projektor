@@ -8,11 +8,8 @@ import projektor.incomingresults.mapper.parsePackageAndClassName
 import projektor.server.api.PublicId
 import projektor.server.api.util.calculateAverageDuration
 import java.math.BigDecimal
-import java.sql.Timestamp
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
 import projektor.database.generated.tables.pojos.GitMetadata as GitMetadataDB
 import projektor.database.generated.tables.pojos.ResultsMetadata as ResultsMetadataDB
 import projektor.database.generated.tables.pojos.TestCase as TestCaseDB
@@ -141,7 +138,7 @@ class TestRunDBGenerator(
 
     fun createTestRun(publicId: PublicId, createdOn: LocalDate, pinned: Boolean): TestRunDB {
         val testRun = createTestRun(publicId, listOf())
-        testRun.createdTimestamp = Timestamp.from(createdOn.atStartOfDay(ZoneId.of("UTC")).toInstant())
+        testRun.createdTimestamp = createdOn.atStartOfDay()
         testRunDao.update(testRun)
 
         val testRunSystemAttributes = TestRunSystemAttributes(publicId.id, pinned)
@@ -207,7 +204,7 @@ fun createTestRun(publicId: PublicId, totalTestCount: Int, cumulativeDuration: B
     )
     .setSlowestTestCaseDuration(BigDecimal("10.000"))
     .setPassed(true)
-    .setCreatedTimestamp(Timestamp.from(Instant.now()))
+    .setCreatedTimestamp(LocalDateTime.now())
 
 fun createTestSuite(testRunId: Long, packageAndClassName: String, idx: Int): TestSuiteDB = TestSuiteDB()
     .setTestRunId(testRunId)
@@ -219,7 +216,7 @@ fun createTestSuite(testRunId: Long, packageAndClassName: String, idx: Int): Tes
     .setFailureCount(2)
     .setSkippedCount(1)
     .setDuration(BigDecimal.TEN)
-    .setStartTs(Timestamp.valueOf(LocalDateTime.now()))
+    .setStartTs(LocalDateTime.now())
     .setHostname("hostname")
 
 fun createTestCase(testSuiteId: Long, name: String, idx: Int, passed: Boolean): TestCaseDB = TestCaseDB()

@@ -11,8 +11,7 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isFalse
 import java.math.BigDecimal
-import java.sql.Timestamp
-import java.time.Instant
+import java.time.LocalDateTime
 import kotlin.test.assertNotNull
 import projektor.database.generated.tables.pojos.TestRun as TestRunDB
 
@@ -34,7 +33,7 @@ class GetTestRunSummaryApplicationTest : ApplicationTestCase() {
                     .setAverageDuration(BigDecimal("5.000"))
                     .setSlowestTestCaseDuration(BigDecimal("10.000"))
                     .setPassed(false)
-                    .setCreatedTimestamp(Timestamp.from(Instant.now()))
+                    .setCreatedTimestamp(LocalDateTime.now())
 
                 testRunDao.insert(testRun)
             }.apply {

@@ -15,10 +15,16 @@ import projektor.server.example.coverage.JacocoXmlLoader.Companion.serverAppRedu
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
+import java.time.ZoneOffset
+import java.util.*
 import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
+    init {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+    }
+
     @Test
     fun `should fetch coverage timeline for repository without project name`() {
         val orgName = RandomStringUtils.randomAlphabetic(12)
@@ -82,7 +88,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                 assertNotNull(firstTimelineEntry)
 
                 expectThat(firstTimelineEntry) {
-                    get { createdTimestamp }.isEqualTo(firstTestRunDB.createdTimestamp.toInstant())
+                    get { createdTimestamp }.isEqualTo(firstTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
                     get { coverageStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(serverAppReducedLineCoveragePercentage)
                 }
 
@@ -91,7 +97,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                 assertNotNull(secondTimelineEntry)
 
                 expectThat(secondTimelineEntry) {
-                    get { createdTimestamp }.isEqualTo(secondTestRunDB.createdTimestamp.toInstant())
+                    get { createdTimestamp }.isEqualTo(secondTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
                     get { coverageStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(serverAppLineCoveragePercentage)
                 }
 
@@ -100,7 +106,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                 assertNotNull(thirdTimelineEntry)
 
                 expectThat(thirdTimelineEntry) {
-                    get { createdTimestamp }.isEqualTo(thirdTestRunDB.createdTimestamp.toInstant())
+                    get { createdTimestamp }.isEqualTo(thirdTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
                     get { coverageStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(jacocoXmlParserLineCoveragePercentage)
                 }
             }
@@ -174,7 +180,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                 assertNotNull(firstTimelineEntry)
 
                 expectThat(firstTimelineEntry) {
-                    get { createdTimestamp }.isEqualTo(firstTestRunDB.createdTimestamp.toInstant())
+                    get { createdTimestamp }.isEqualTo(firstTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
                     get { coverageStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(serverAppReducedLineCoveragePercentage)
                 }
 
@@ -183,7 +189,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                 assertNotNull(secondTimelineEntry)
 
                 expectThat(secondTimelineEntry) {
-                    get { createdTimestamp }.isEqualTo(secondTestRunDB.createdTimestamp.toInstant())
+                    get { createdTimestamp }.isEqualTo(secondTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
                     get { coverageStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(serverAppLineCoveragePercentage)
                 }
             }

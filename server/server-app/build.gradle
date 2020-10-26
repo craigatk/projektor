@@ -46,7 +46,7 @@ dependencies {
 
     implementation "net.javacrumbs.shedlock:shedlock-provider-jdbc-template:4.8.0"
 
-    implementation 'org.simpleflatmapper:sfm-jooq:8.2.1'
+    implementation 'org.simpleflatmapper:sfm-jooq:8.2.3'
 
     implementation "ch.qos.logback:logback-classic:1.2.3"
 

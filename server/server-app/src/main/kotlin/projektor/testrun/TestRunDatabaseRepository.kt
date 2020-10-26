@@ -17,7 +17,6 @@ import projektor.server.api.PublicId
 import projektor.server.api.TestRun
 import projektor.server.api.TestRunSummary
 import projektor.util.addPrefixToFields
-import java.sql.Timestamp
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -206,7 +205,7 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
 
     override suspend fun findTestRunsToDelete(createdBefore: LocalDate): List<PublicId> =
         withContext(Dispatchers.IO) {
-            val createdBeforeTimestamp = Timestamp.valueOf(LocalDateTime.of(createdBefore, LocalTime.MIDNIGHT))
+            val createdBeforeTimestamp = LocalDateTime.of(createdBefore, LocalTime.MIDNIGHT)
 
             dslContext
                 .select(TEST_RUN.PUBLIC_ID)

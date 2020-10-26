@@ -69,7 +69,7 @@ class AddJacocoCoverageApplicationTest : ApplicationTestCase() {
     }
 
     @Test
-    fun `should add Jacoco coverage report and get its files`() {
+    fun `should add server-app Jacoco coverage report and get its files`() {
         val publicId = randomPublicId()
         val coverageGroup = "server-app"
 
