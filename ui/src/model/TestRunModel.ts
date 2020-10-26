@@ -33,6 +33,18 @@ interface Coverage {
   previousTestRunId?: string;
 }
 
+interface CoverageFile {
+  fileName: string;
+  directoryName: string;
+  stats: CoverageStats;
+  missedLines: number[];
+  partialLines: number[];
+}
+
+interface CoverageFiles {
+  files: CoverageFile[];
+}
+
 interface CoverageExists {
   exists: boolean;
 }
@@ -133,6 +145,8 @@ export {
   Attachments,
   Coverage,
   CoverageExists,
+  CoverageFile,
+  CoverageFiles,
   CoverageGroup,
   CoverageStat,
   CoverageStats,
