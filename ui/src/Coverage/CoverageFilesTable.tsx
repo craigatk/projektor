@@ -27,17 +27,19 @@ const CoverageFilesTable = ({
   coverageGroupName,
 }: CoverageFilesTableProps) => {
   if (coverageFiles && coverageFiles.files && coverageFiles.files.length > 0) {
-    const rows = coverageFiles.files.map((row) => ({
-      fileName: row.fileName,
-      directoryName: row.directoryName,
-      fullName: calculateFullName(row.directoryName, row.fileName),
-      lineStat: row.stats.lineStat,
-      lineCoveredPercentage: row.stats.lineStat.coveredPercentage,
-      branchStat: row.stats.branchStat,
-      branchCoveredPercentage: row.stats.branchStat.coveredPercentage,
-      missedLines: row.missedLines,
-      partialLines: row.partialLines,
-    }));
+    const rows = coverageFiles.files
+      .filter((file) => file.stats.lineStat.total > 0)
+      .map((file) => ({
+        fileName: file.fileName,
+        directoryName: file.directoryName,
+        fullName: calculateFullName(file.directoryName, file.fileName),
+        lineStat: file.stats.lineStat,
+        lineCoveredPercentage: file.stats.lineStat.coveredPercentage,
+        branchStat: file.stats.branchStat,
+        branchCoveredPercentage: file.stats.branchStat.coveredPercentage,
+        missedLines: file.missedLines,
+        partialLines: file.partialLines,
+      }));
 
     const sortedRows = rows
       .sort((a, b) => a.fullName.localeCompare(b.fullName))
