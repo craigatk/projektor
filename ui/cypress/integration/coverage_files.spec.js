@@ -58,5 +58,10 @@ describe("file-level coverage", () => {
       "contain",
       "92, 101"
     );
+
+    // Should filter out files with no lines of code (in this case an interface)
+    cy.findAllByText("projektor/attachment/AttachmentRepository.kt").should(
+      "not.exist"
+    );
   });
 });
