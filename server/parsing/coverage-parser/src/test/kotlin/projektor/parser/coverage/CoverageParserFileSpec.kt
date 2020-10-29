@@ -2,6 +2,7 @@ package projektor.parser.coverage
 
 import io.kotest.core.spec.style.StringSpec
 import projektor.server.example.coverage.JacocoXmlLoader
+import projektor.server.example.coverage.JestXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.*
 import java.math.BigDecimal
@@ -37,6 +38,26 @@ class CoverageParserFileSpec : StringSpec({
                 get { lineStat }.get { percentCovered }.isEqualTo(BigDecimal("100.00"))
                 get { branchStat }.get { percentCovered }.isEqualTo(BigDecimal("50.00"))
             }
+        }
+    }
+
+    "should parse file-level stats from Jest test report" {
+        val jacocoReportXml = JestXmlLoader().ui2()
+
+        val coverageReport = CoverageParser.parseReport(jacocoReportXml)
+        assertNotNull(coverageReport)
+
+        val coverageReportFiles = coverageReport.files
+        assertNotNull(coverageReportFiles)
+
+        val coverageSummaryFile = coverageReportFiles.find { it.fileName == "CoverageSummary.tsx" }
+
+        expectThat(coverageSummaryFile).isNotNull().and {
+            get { directoryName }.isEqualTo("src.Coverage")
+            get { missedLines }.hasSize(3).contains(19, 20, 26)
+            get { partialLines }.hasSize(0)
+            get { stats.lineStat.percentCovered }.isEqualTo(BigDecimal("82.35"))
+            get { stats.branchStat.percentCovered }.isEqualTo(BigDecimal("50.00"))
         }
     }
 })

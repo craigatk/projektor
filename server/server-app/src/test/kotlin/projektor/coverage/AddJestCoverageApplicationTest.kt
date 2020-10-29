@@ -9,6 +9,7 @@ import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
+import projektor.server.api.coverage.CoverageFiles
 import projektor.server.api.coverage.CoverageStats
 import projektor.server.example.coverage.JestXmlLoader
 import strikt.api.expectThat
@@ -62,6 +63,35 @@ class AddJestCoverageApplicationTest : ApplicationTestCase() {
                     get { missed }.isEqualTo(0)
                     get { total }.isEqualTo(0)
                 }
+            }
+        }
+    }
+
+    @Test
+    fun `should add Jest coverage and get its files`() {
+        val publicId = randomPublicId()
+
+        val reportXmlBytes = JestXmlLoader().ui2().toByteArray()
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/run/$publicId/coverage") {
+                testRunDBGenerator.createSimpleTestRun(publicId)
+
+                setBody(reportXmlBytes)
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+
+                val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicId.id)
+                expectThat(coverageRuns).hasSize(1)
+            }
+
+            handleRequest(HttpMethod.Get, "/run/$publicId/coverage/All%20files/files").apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+
+                val coverageFiles = objectMapper.readValue(response.content, CoverageFiles::class.java)
+                assertNotNull(coverageFiles)
+
+                expectThat(coverageFiles.files).hasSize(97)
             }
         }
     }
