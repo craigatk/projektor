@@ -8,13 +8,11 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Project {
-    public Metrics metrics;
-
+public class CoveragePackage {
     @JacksonXmlProperty(isAttribute = true)
     public String name;
 
-    @JsonProperty("package")
+    @JsonProperty("file")
     @JacksonXmlElementWrapper(useWrapping = false)
-    public List<CoveragePackage> packages;
+    public List<CoverageFile> files;
 }
