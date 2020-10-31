@@ -1,20 +1,20 @@
-package projektor.parser.jest
+package projektor.parser.coverage.clover
 
-import projektor.parser.jest.model.Coverage
-import projektor.parser.jest.model.CoverageFile
-import projektor.parser.jest.model.CoverageLine
-import projektor.parser.jest.model.CoveragePackage
-import projektor.parser.jest.model.LineType
+import projektor.parser.coverage.clover.model.Coverage
+import projektor.parser.coverage.clover.model.CoverageFile
+import projektor.parser.coverage.clover.model.CoverageLine
+import projektor.parser.coverage.clover.model.CoveragePackage
+import projektor.parser.coverage.clover.model.LineType
 import projektor.server.example.coverage.JestXmlLoader
 import spock.lang.Specification
 
-class JestXmlReportParserFileSpec extends Specification {
+class CloverXmlReportParserFileSpec extends Specification {
     def "should parse file-level coverage details"() {
         given:
-        String reportXml = new JestXmlLoader().ui()
+        String reportXml = new JestXmlLoader().uiClover()
 
         when:
-        Coverage coverage = new JestXmlReportParser().parseReport(reportXml)
+        Coverage coverage = new CloverXmlReportParser().parseReport(reportXml)
 
         then:
         coverage.project.packages.size() == 22

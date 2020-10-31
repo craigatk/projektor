@@ -1,4 +1,4 @@
-package projektor.parser.jest.model;
+package projektor.parser.coverage.clover.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

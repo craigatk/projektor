@@ -36,7 +36,7 @@ class CoverageParserSpec : StringSpec({
     }
 
     "should parse Jest test report" {
-        val jestReportXml = JestXmlLoader().ui()
+        val jestReportXml = JestXmlLoader().uiClover()
 
         val coverageReport = CoverageParser.parseReport(jestReportXml)
 

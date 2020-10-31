@@ -41,8 +41,8 @@ class CoverageParserFileSpec : StringSpec({
         }
     }
 
-    "should parse file-level stats from Jest test report" {
-        val jacocoReportXml = JestXmlLoader().ui2()
+    "should parse file-level stats from Jest Clover coverage report" {
+        val jacocoReportXml = JestXmlLoader().uiClover2()
 
         val coverageReport = CoverageParser.parseReport(jacocoReportXml)
         assertNotNull(coverageReport)

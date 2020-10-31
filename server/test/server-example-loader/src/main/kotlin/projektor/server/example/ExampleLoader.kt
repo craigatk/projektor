@@ -222,7 +222,7 @@ fun repositoryFlakyTests() {
 
 fun loadJestWithCoverage() {
     val resultsResponse = sendResultsToServer(ResultsXmlLoader().jestUi())
-    sendCoverageToServer(resultsResponse.id, JestXmlLoader().ui())
+    sendCoverageToServer(resultsResponse.id, JestXmlLoader().uiClover())
 
     println("View run with Jest results and coverage at $uiBaseUrl${resultsResponse.uri}")
 }
