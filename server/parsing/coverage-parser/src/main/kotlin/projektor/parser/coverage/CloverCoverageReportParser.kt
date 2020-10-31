@@ -1,16 +1,16 @@
 package projektor.parser.coverage
 
+import projektor.parser.coverage.clover.CloverXmlReportParser
+import projektor.parser.coverage.clover.model.LineType
+import projektor.parser.coverage.clover.model.Metrics
 import projektor.parser.coverage.model.CoverageReport
 import projektor.parser.coverage.model.CoverageReportFile
 import projektor.parser.coverage.model.CoverageReportStat
 import projektor.parser.coverage.model.CoverageReportStats
-import projektor.parser.jest.JestXmlReportParser
-import projektor.parser.jest.model.LineType
-import projektor.parser.jest.model.Metrics
 
-class JestCoverageReportParser {
+class CloverCoverageReportParser {
     fun parseReport(reportXml: String): CoverageReport {
-        val parsedReport = JestXmlReportParser().parseReport(reportXml)
+        val parsedReport = CloverXmlReportParser().parseReport(reportXml)
 
         val files = parsedReport.project.packages.flatMap { pkg ->
             pkg.files.map { sourceFile ->
@@ -18,7 +18,7 @@ class JestCoverageReportParser {
                     directoryName = pkg.name,
                     fileName = sourceFile.name,
                     missedLines = sourceFile.lines?.filter { it.lineCoverageType() == LineType.MISSED }?.map { it.number } ?: listOf(),
-                    partialLines = sourceFile.lines?.filter { it.lineCoverageType() == LineType.PARTIAL }?.map { it.number } ?: listOf(),
+                    partialLines = listOf(), // Clover partial lines from Jest coverage reports is not accurate so don't show anything rather than inaccurate data
                     stats = createStats(sourceFile.metrics)
                 )
             }

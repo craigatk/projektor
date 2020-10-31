@@ -19,12 +19,12 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
-class AddJestCoverageApplicationTest : ApplicationTestCase() {
+class AddJestCloverCoverageApplicationTest : ApplicationTestCase() {
     @Test
     fun `should add Jest coverage to test run then get it`() {
         val publicId = randomPublicId()
 
-        val reportXmlBytes = JestXmlLoader().ui().toByteArray()
+        val reportXmlBytes = JestXmlLoader().uiClover().toByteArray()
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/coverage") {
@@ -71,7 +71,7 @@ class AddJestCoverageApplicationTest : ApplicationTestCase() {
     fun `should add Jest coverage and get its files`() {
         val publicId = randomPublicId()
 
-        val reportXmlBytes = JestXmlLoader().ui2().toByteArray()
+        val reportXmlBytes = JestXmlLoader().uiClover2().toByteArray()
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/coverage") {

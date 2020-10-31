@@ -41,8 +41,8 @@ class CoverageParserFileSpec : StringSpec({
         }
     }
 
-    "should parse file-level stats from Jest test report" {
-        val jacocoReportXml = JestXmlLoader().ui2()
+    "should parse file-level stats from Jest Clover coverage report" {
+        val jacocoReportXml = JestXmlLoader().uiClover2()
 
         val coverageReport = CoverageParser.parseReport(jacocoReportXml)
         assertNotNull(coverageReport)
@@ -58,6 +58,20 @@ class CoverageParserFileSpec : StringSpec({
             get { partialLines }.hasSize(0)
             get { stats.lineStat.percentCovered }.isEqualTo(BigDecimal("82.35"))
             get { stats.branchStat.percentCovered }.isEqualTo(BigDecimal("50.00"))
+        }
+    }
+
+    "should not show any partial lines in Clover stats because they aren't accurate" {
+        val jacocoReportXml = JestXmlLoader().uiClover2()
+
+        val coverageReport = CoverageParser.parseReport(jacocoReportXml)
+        assertNotNull(coverageReport)
+
+        val coverageReportFiles = coverageReport.files
+        assertNotNull(coverageReportFiles)
+
+        expectThat(coverageReportFiles).all {
+            get { partialLines }.hasSize(0)
         }
     }
 })

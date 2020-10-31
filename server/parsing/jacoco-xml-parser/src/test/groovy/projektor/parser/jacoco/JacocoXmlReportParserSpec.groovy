@@ -46,7 +46,7 @@ class JacocoXmlReportParserSpec extends Specification {
         reportXml                               || shouldBeJacoco
         new JacocoXmlLoader().serverApp()       || true
         new JacocoXmlLoader().jacocoXmlParser() || true
-        new JestXmlLoader().ui()                || false
+        new JestXmlLoader().uiClover() || false
     }
 
     private static void verifyCounter(List<Counter> counters, CounterType type, int expectedMissed, int expectedCovered) {

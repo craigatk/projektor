@@ -1,4 +1,4 @@
-package projektor.parser.jest.model;
+package projektor.parser.coverage.clover.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,13 +8,11 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CoverageFile {
+public class CoveragePackage {
     @JacksonXmlProperty(isAttribute = true)
     public String name;
 
-    public Metrics metrics;
-
-    @JsonProperty("line")
+    @JsonProperty("file")
     @JacksonXmlElementWrapper(useWrapping = false)
-    public List<CoverageLine> lines;
+    public List<CoverageFile> files;
 }

@@ -1,15 +1,15 @@
-package projektor.parser.jest;
+package projektor.parser.coverage.clover;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import projektor.parser.jest.model.Coverage;
+import projektor.parser.coverage.clover.model.Coverage;
 
 import java.io.IOException;
 
-public class JestXmlReportParser {
+public class CloverXmlReportParser {
     private final ObjectMapper mapper = new XmlMapper();
 
-    public static boolean isJestReport(String reportXml) {
+    public static boolean isCloverReport(String reportXml) {
         return reportXml.contains("clover=");
     }
 
