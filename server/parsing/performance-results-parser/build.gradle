@@ -1,0 +1,11 @@
+plugins {
+    id 'jacoco'
+}
+
+apply from: "../../../gradle/kotlin.gradle"
+
+dependencies {
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.11.3"
+
+    testImplementation(project(':server:test:performance-fixtures'))
+}
