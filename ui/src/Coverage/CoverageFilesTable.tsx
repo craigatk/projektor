@@ -42,7 +42,9 @@ const CoverageFilesTable = ({
       }));
 
     const sortedRows = rows
-      .sort((a, b) => a.fullName.localeCompare(b.fullName))
+      .sort(
+        (a, b) => a.lineStat.coveredPercentage - b.lineStat.coveredPercentage
+      )
       .map((row, idx) => ({
         ...row,
         idx: idx + 1,
