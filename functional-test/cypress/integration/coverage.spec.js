@@ -63,22 +63,19 @@ context("test coverage data", () => {
 
     cy.getByTestId("coverage-file-name-1").should(
         "contain",
-        "projektor/Application.kt"
+        "projektor/cleanup/CleanupScheduledJob.kt"
     );
     cy.getByTestId(
         "coverage-file-line-coverage-row-1-covered-percentage"
-    ).should("contain", "95.4%");
+    ).should("contain", "71.43%");
     cy.getByTestId("branch-coverage-row-1-covered-percentage").should(
         "contain",
-        "85.71%"
+        "100%"
     );
     cy.getByTestId("coverage-file-missed-lines-1").should(
         "contain",
-        "102, 103, 104, 105"
+        "16, 18, 20, 21"
     );
-    cy.getByTestId("coverage-file-partial-lines-1").should(
-        "contain",
-        "92, 101"
-    );
+    cy.getByTestId("coverage-file-partial-lines-1").should("be.empty");
   });
 });
