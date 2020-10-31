@@ -18,7 +18,7 @@ class CloverCoverageReportParser {
                     directoryName = pkg.name,
                     fileName = sourceFile.name,
                     missedLines = sourceFile.lines?.filter { it.lineCoverageType() == LineType.MISSED }?.map { it.number } ?: listOf(),
-                    partialLines = sourceFile.lines?.filter { it.lineCoverageType() == LineType.PARTIAL }?.map { it.number } ?: listOf(),
+                    partialLines = listOf(), // Clover partial lines from Jest coverage reports is not accurate so don't show anything rather than inaccurate data
                     stats = createStats(sourceFile.metrics)
                 )
             }
