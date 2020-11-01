@@ -10,6 +10,7 @@ import projektor.database.generated.tables.CodeCoverageRun;
 import projektor.database.generated.tables.CodeCoverageStats;
 import projektor.database.generated.tables.GitMetadata;
 import projektor.database.generated.tables.GitRepository;
+import projektor.database.generated.tables.PerformanceResults;
 import projektor.database.generated.tables.ProcessingFailure;
 import projektor.database.generated.tables.ResultsMetadata;
 import projektor.database.generated.tables.ResultsProcessing;
@@ -58,6 +59,11 @@ public class Tables {
      * The table <code>public.git_repository</code>.
      */
     public static final GitRepository GIT_REPOSITORY = GitRepository.GIT_REPOSITORY;
+
+    /**
+     * The table <code>public.performance_results</code>.
+     */
+    public static final PerformanceResults PERFORMANCE_RESULTS = PerformanceResults.PERFORMANCE_RESULTS;
 
     /**
      * The table <code>public.processing_failure</code>.

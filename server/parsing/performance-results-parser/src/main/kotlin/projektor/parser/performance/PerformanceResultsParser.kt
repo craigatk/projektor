@@ -1,18 +1,18 @@
 package projektor.parser.performance
 
 import projektor.parser.performance.k6.K6PerformanceResultsParser
-import projektor.parser.performance.model.PerformanceResults
+import projektor.parser.performance.model.PerformanceResultsReport
 import projektor.parser.performance.model.PerformanceStats
 import projektor.parser.performance.model.RequestStats
 
 class PerformanceResultsParser {
     private val k6PerformanceResultsParser = K6PerformanceResultsParser()
 
-    fun parseResults(resultsStr: String): PerformanceResults? =
+    fun parseResults(resultsStr: String): PerformanceResultsReport? =
         try {
             val k6Results = k6PerformanceResultsParser.parseResults(resultsStr)
 
-            PerformanceResults(
+            PerformanceResultsReport(
                 requestStats = RequestStats(
                     ratePerSecond = k6Results.metrics.iterations.rate,
                     count = k6Results.metrics.iterations.count
