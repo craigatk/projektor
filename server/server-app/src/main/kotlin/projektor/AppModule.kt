@@ -34,6 +34,9 @@ import projektor.organization.coverage.OrganizationCoverageDatabaseRepository
 import projektor.organization.coverage.OrganizationCoverageRepository
 import projektor.organization.coverage.OrganizationCoverageService
 import projektor.parser.grouped.GroupedResultsParser
+import projektor.parser.performance.PerformanceResultsParser
+import projektor.performance.PerformanceResultsDatabaseRepository
+import projektor.performance.PerformanceResultsRepository
 import projektor.repository.coverage.RepositoryCoverageDatabaseRepository
 import projektor.repository.coverage.RepositoryCoverageRepository
 import projektor.repository.coverage.RepositoryCoverageService
@@ -88,10 +91,13 @@ fun createAppModule(
     single<RepositoryCoverageRepository> { RepositoryCoverageDatabaseRepository(get()) }
     single<RepositoryTestRunRepository> { RepositoryTestRunDatabaseRepository(get()) }
 
+    single<PerformanceResultsRepository> { PerformanceResultsDatabaseRepository(get()) }
+
     single { CoverageService(get(), get(), get()) }
     single { GroupedResultsParser() }
-    single { GroupedResultsConverter(get(), get()) }
-    single { GroupedTestResultsService(get(), get(), get(), get(), get()) }
+    single { PerformanceResultsParser() }
+    single { GroupedResultsConverter(get(), get(), get()) }
+    single { GroupedTestResultsService(get(), get(), get(), get(), get(), get()) }
     single { MessageService(messageConfig) }
     single { PreviousTestRunService(get()) }
     single { ProcessingFailureService(get()) }

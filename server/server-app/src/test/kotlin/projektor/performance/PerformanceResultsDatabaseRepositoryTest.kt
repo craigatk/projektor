@@ -4,10 +4,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
 import projektor.database.generated.tables.daos.PerformanceResultsDao
+import projektor.incomingresults.model.PerformanceResult
 import projektor.incomingresults.randomPublicId
-import projektor.parser.performance.model.PerformanceResultsReport
-import projektor.parser.performance.model.PerformanceStats
-import projektor.parser.performance.model.RequestStats
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
@@ -23,26 +21,20 @@ class PerformanceResultsDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
         val testRun = testRunDBGenerator.createEmptyTestRun(publicId)
 
-        val results = PerformanceResultsReport(
-            requestStats = RequestStats(
-                ratePerSecond = BigDecimal("50.00"),
-                count = 4000
-            ),
-            performanceStats = PerformanceStats(
-                average = BigDecimal("18.022342"),
-                maximum = BigDecimal("56.29193"),
-                p95 = BigDecimal("45.02142")
-            )
+        val result = PerformanceResult(
+            name = "perf.json",
+            requestsPerSecond = BigDecimal("50.00"),
+            requestCount = 4000,
+            average = BigDecimal("18.022342"),
+            maximum = BigDecimal("56.29193"),
+            p95 = BigDecimal("45.02142")
         )
-
-        val name = "perf.json"
 
         runBlocking {
             performanceResultsDatabaseRepository.savePerformanceResults(
                 testRun.id,
                 publicId,
-                name,
-                results
+                result
             )
         }
 
@@ -52,7 +44,7 @@ class PerformanceResultsDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val fetchResults = fetchedResultsList[0]
 
         expectThat(fetchResults) {
-            get { name }.isEqualTo(name)
+            get { name }.isEqualTo("perf.json")
             get { requestsPerSecond }.isEqualTo(BigDecimal("50.000"))
             get { requestCount }.isEqualTo(4000)
             get { average }.isEqualTo(BigDecimal("18.022"))

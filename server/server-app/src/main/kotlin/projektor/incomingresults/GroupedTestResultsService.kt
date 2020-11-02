@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 import projektor.incomingresults.model.GroupedResults
 import projektor.metrics.MetricsService
+import projektor.performance.PerformanceResultsRepository
 import projektor.server.api.PublicId
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.testrun.TestRunRepository
@@ -15,6 +16,7 @@ class GroupedTestResultsService(
     private val testResultsProcessingService: TestResultsProcessingService,
     private val groupedResultsConverter: GroupedResultsConverter,
     private val testRunRepository: TestRunRepository,
+    private val performanceResultsRepository: PerformanceResultsRepository,
     private val metricRegistry: MeterRegistry,
     private val metricsService: MetricsService
 ) {
@@ -50,7 +52,11 @@ class GroupedTestResultsService(
 
     suspend fun doPersistTestResults(publicId: PublicId, groupedResults: GroupedResults, groupedResultsBlob: String) {
         try {
-            testRunRepository.saveGroupedTestRun(publicId, groupedResults)
+            val (testRunId, _) = testRunRepository.saveGroupedTestRun(publicId, groupedResults)
+
+            groupedResults.performanceResults.forEach { performanceResult ->
+                performanceResultsRepository.savePerformanceResults(testRunId, publicId, performanceResult)
+            }
 
             testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.SUCCESS)
 

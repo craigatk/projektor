@@ -1,3 +1,0 @@
-package projektor.performance
-
-class PerformanceResultsService

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import projektor.parser.grouped.model.GitMetadata
 import projektor.parser.grouped.model.GroupedResults
 import projektor.parser.grouped.model.GroupedTestSuites
+import projektor.parser.grouped.model.PerformanceResult
 import projektor.parser.grouped.model.ResultsMetadata
 import spock.lang.Specification
 import spock.lang.Subject
@@ -115,5 +116,24 @@ class GroupedResultsParserSpec extends Specification {
 
         and:
         parsedGroupedResults.groupedTestSuites.size() == 2
+    }
+
+    def "should deserialize results with only performance results"() {
+        given:
+        GroupedResults groupedResults = new GroupedResults()
+        groupedResults.metadata = new ResultsMetadata(
+                git: new GitMetadata(repoName: "my-repo", branchName: "main", isMainBranch: true)
+        )
+        groupedResults.performanceResults = [new PerformanceResult(name: "perf-1", resultsBlob: """
+"metrics": {}
+""")]
+        String resultsJson = mapper.writeValueAsString(groupedResults)
+
+        when:
+        GroupedResults parsedResults = groupedResultsParser.parseGroupedResults(resultsJson)
+
+        then:
+        parsedResults.performanceResults.size() == 1
+        groupedResults.performanceResults.find { it.name == "perf-1" }
     }
 }
