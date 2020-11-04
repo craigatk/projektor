@@ -15,6 +15,7 @@ import projektor.database.generated.tables.CodeCoverageRun;
 import projektor.database.generated.tables.CodeCoverageStats;
 import projektor.database.generated.tables.GitMetadata;
 import projektor.database.generated.tables.GitRepository;
+import projektor.database.generated.tables.PerformanceResults;
 import projektor.database.generated.tables.ProcessingFailure;
 import projektor.database.generated.tables.ResultsMetadata;
 import projektor.database.generated.tables.ResultsProcessing;
@@ -56,5 +57,7 @@ public class Indexes {
     public static final Index IDX_TEST_RUN_PUBLIC_ID = Internal.createIndex(DSL.name("idx_test_run_public_id"), TestRun.TEST_RUN, new OrderField[] { TestRun.TEST_RUN.PUBLIC_ID }, false);
     public static final Index IDX_TEST_SUITE_IDX = Internal.createIndex(DSL.name("idx_test_suite_idx"), TestSuite.TEST_SUITE, new OrderField[] { TestSuite.TEST_SUITE.IDX }, false);
     public static final Index IDX_TEST_SUITE_TEST_RUN_ID = Internal.createIndex(DSL.name("idx_test_suite_test_run_id"), TestSuite.TEST_SUITE, new OrderField[] { TestSuite.TEST_SUITE.TEST_RUN_ID }, false);
+    public static final Index PERFORMANCE_RESULTS_PUBLIC_ID_IDX = Internal.createIndex(DSL.name("performance_results_public_id_idx"), PerformanceResults.PERFORMANCE_RESULTS, new OrderField[] { PerformanceResults.PERFORMANCE_RESULTS.TEST_RUN_PUBLIC_ID }, false);
+    public static final Index PERFORMANCE_RESULTS_RUN_ID_IDX = Internal.createIndex(DSL.name("performance_results_run_id_idx"), PerformanceResults.PERFORMANCE_RESULTS, new OrderField[] { PerformanceResults.PERFORMANCE_RESULTS.TEST_RUN_ID }, false);
     public static final Index RESULTS_METADATA_TEST_RUN_ID_IDX = Internal.createIndex(DSL.name("results_metadata_test_run_id_idx"), ResultsMetadata.RESULTS_METADATA, new OrderField[] { ResultsMetadata.RESULTS_METADATA.TEST_RUN_ID }, false);
 }

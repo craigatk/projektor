@@ -10,7 +10,7 @@ class K6PerformanceResultsParserTest : StringSpec({
     "should parse k6 results" {
         val k6PerformanceResultsParser = K6PerformanceResultsParser()
 
-        val k6ResultsStr = PerformanceResultsLoader().k6tGetFailedTestCasesLarge()
+        val k6ResultsStr = PerformanceResultsLoader().k6GetFailedTestCasesLarge()
 
         val k6Results = k6PerformanceResultsParser.parseResults(k6ResultsStr)
 

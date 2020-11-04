@@ -81,7 +81,7 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
 
             logger.info("Finished inserting test run $publicId")
 
-            testRunSummary
+            Pair(testRunDB.id, testRunSummary)
         }
 
     private fun saveTestSuites(

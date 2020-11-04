@@ -10,7 +10,7 @@ import java.time.LocalDate
 interface TestRunRepository {
     suspend fun saveTestRun(publicId: PublicId, testSuites: List<TestSuite>): TestRunSummary
 
-    suspend fun saveGroupedTestRun(publicId: PublicId, groupedResults: GroupedResults): TestRunSummary
+    suspend fun saveGroupedTestRun(publicId: PublicId, groupedResults: GroupedResults): Pair<Long, TestRunSummary>
 
     suspend fun fetchTestRun(publicId: PublicId): TestRun?
 

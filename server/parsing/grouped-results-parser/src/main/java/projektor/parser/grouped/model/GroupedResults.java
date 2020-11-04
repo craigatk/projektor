@@ -5,6 +5,7 @@ import java.util.List;
 
 public class GroupedResults {
     public List<GroupedTestSuites> groupedTestSuites;
+    public List<PerformanceResult> performanceResults;
     public ResultsMetadata metadata;
     public BigDecimal wallClockDuration;
 }

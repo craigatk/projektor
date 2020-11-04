@@ -3,6 +3,7 @@ package projektor.parser
 import projektor.parser.grouped.GroupedResultsParser
 import projektor.parser.grouped.model.GroupedResults
 import projektor.parser.grouped.model.GroupedTestSuites
+import projektor.parser.grouped.model.PerformanceResult
 import projektor.parser.grouped.model.ResultsMetadata
 import java.math.BigDecimal
 
@@ -40,6 +41,14 @@ class GroupedResultsXmlLoader {
 
         val groupedResults = GroupedResults()
         groupedResults.groupedTestSuites = listOf(groupedTestSuites)
+        groupedResults.metadata = metadata
+
+        return groupedResultsParser.serializeGroupedResults(groupedResults)
+    }
+
+    fun wrapPerformanceResultsInGroup(performanceResults: List<PerformanceResult>, metadata: ResultsMetadata? = null): String {
+        val groupedResults = GroupedResults()
+        groupedResults.performanceResults = performanceResults
         groupedResults.metadata = metadata
 
         return groupedResultsParser.serializeGroupedResults(groupedResults)

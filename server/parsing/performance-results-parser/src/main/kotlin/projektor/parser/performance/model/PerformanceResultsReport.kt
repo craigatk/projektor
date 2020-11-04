@@ -1,6 +1,6 @@
 package projektor.parser.performance.model
 
-class PerformanceResults(
+class PerformanceResultsReport(
     val requestStats: RequestStats,
     val performanceStats: PerformanceStats
 )
