@@ -51,6 +51,8 @@ class ResultsXmlLoader {
     fun k6Example() = loadTextFromFile("k6/k6-junit.xml")
     fun k6GetFailedTestCasesLarge() = loadTextFromFile("k6/k6-getFailedTestCasesLarge.xml")
 
+    fun singleQuoteXmlDeclaration() = loadTextFromFile("single-quote-xml-declaration.xml")
+
     private fun loadTextFromFile(filename: String) = javaClass
         .getResourceAsStream("/$filename")
         .bufferedReader()
