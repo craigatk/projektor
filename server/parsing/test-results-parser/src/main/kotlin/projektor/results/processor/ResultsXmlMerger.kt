@@ -14,8 +14,7 @@ object ResultsXmlMerger {
     }
 
     private fun removeXmlHeader(resultXml: String) = resultXml
-        .replace(Regex("""<\?xml version="1.0" encoding="[Uu][Tt][Ff]-8"\?>"""), "")
-        .replace("""<?xml version="1.0"?>""", "")
+        .replace(Regex("""<\?xml.*\?>"""), "")
 
     private fun wrappedInTestSuitesXml(resultsXml: String) = """<?xml version="1.0" encoding="UTF-8"?>
             <testsuites>
