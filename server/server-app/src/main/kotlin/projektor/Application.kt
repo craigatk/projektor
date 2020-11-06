@@ -41,6 +41,7 @@ import projektor.metadata.TestRunMetadataService
 import projektor.metrics.InfluxMetricsConfig
 import projektor.metrics.createRegistry
 import projektor.organization.coverage.OrganizationCoverageService
+import projektor.performance.PerformanceResultsService
 import projektor.repository.coverage.RepositoryCoverageService
 import projektor.repository.testrun.RepositoryTestRunService
 import projektor.route.*
@@ -148,6 +149,8 @@ fun Application.main() {
     val repositoryCoverageService: RepositoryCoverageService by inject()
     val repositoryTestRunService: RepositoryTestRunService by inject()
 
+    val performanceResultsService: PerformanceResultsService by inject()
+
     routing {
         attachments(attachmentService, authService)
         config(cleanupConfig)
@@ -156,6 +159,7 @@ fun Application.main() {
         messages(messageService)
         metadata(testRunMetadataService)
         organization(organizationCoverageService)
+        performance(performanceResultsService)
         previousRuns(previousTestRunService)
         repository(repositoryCoverageService, repositoryTestRunService)
         results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService, metricRegistry)

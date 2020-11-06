@@ -18,7 +18,7 @@ import strikt.assertions.isNotNull
 import java.math.BigDecimal
 
 @KtorExperimentalAPI
-class PerformanceResultsApplicationTest : ApplicationTestCase() {
+class SavePerformanceResultsApplicationTest : ApplicationTestCase() {
     @Test
     fun `should save results with no test results and two performance results`() {
         val gitMetadata = GitMetadata()

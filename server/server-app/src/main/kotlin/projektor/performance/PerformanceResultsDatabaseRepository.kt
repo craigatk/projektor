@@ -3,10 +3,12 @@ package projektor.performance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
+import projektor.database.generated.Tables.PERFORMANCE_RESULTS
 import projektor.database.generated.tables.daos.PerformanceResultsDao
 import projektor.database.generated.tables.pojos.PerformanceResults
-import projektor.incomingresults.model.PerformanceResult
 import projektor.server.api.PublicId
+import projektor.server.api.performance.PerformanceResult
+import projektor.incomingresults.model.PerformanceResult as IncomingPerformanceResult
 
 class PerformanceResultsDatabaseRepository(private val dslContext: DSLContext) : PerformanceResultsRepository {
     private val performanceResultsDao = PerformanceResultsDao(dslContext.configuration())
@@ -14,7 +16,7 @@ class PerformanceResultsDatabaseRepository(private val dslContext: DSLContext) :
     override suspend fun savePerformanceResults(
         testRunId: Long,
         publicId: PublicId,
-        results: PerformanceResult
+        results: IncomingPerformanceResult
     ) =
         withContext(Dispatchers.IO) {
             val performanceResults = PerformanceResults()
@@ -27,5 +29,13 @@ class PerformanceResultsDatabaseRepository(private val dslContext: DSLContext) :
             performanceResults.maximum = results.maximum
             performanceResults.p95 = results.p95
             performanceResultsDao.insert(performanceResults)
+        }
+
+    override suspend fun fetchResults(publicId: PublicId): List<PerformanceResult> =
+        withContext(Dispatchers.IO) {
+            dslContext
+                .selectFrom(PERFORMANCE_RESULTS)
+                .where(PERFORMANCE_RESULTS.TEST_RUN_PUBLIC_ID.eq(publicId.id))
+                .fetchInto(PerformanceResult::class.java)
         }
 }
