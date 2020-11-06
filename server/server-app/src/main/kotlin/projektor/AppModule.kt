@@ -37,6 +37,7 @@ import projektor.parser.grouped.GroupedResultsParser
 import projektor.parser.performance.PerformanceResultsParser
 import projektor.performance.PerformanceResultsDatabaseRepository
 import projektor.performance.PerformanceResultsRepository
+import projektor.performance.PerformanceResultsService
 import projektor.repository.coverage.RepositoryCoverageDatabaseRepository
 import projektor.repository.coverage.RepositoryCoverageRepository
 import projektor.repository.coverage.RepositoryCoverageService
@@ -92,6 +93,7 @@ fun createAppModule(
     single<RepositoryTestRunRepository> { RepositoryTestRunDatabaseRepository(get()) }
 
     single<PerformanceResultsRepository> { PerformanceResultsDatabaseRepository(get()) }
+    single { PerformanceResultsService(get()) }
 
     single { CoverageService(get(), get(), get()) }
     single { GroupedResultsParser() }
