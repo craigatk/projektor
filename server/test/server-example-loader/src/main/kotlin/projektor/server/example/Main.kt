@@ -18,5 +18,6 @@ fun main() {
     repositoryFlakyTests()
     loadMultipleTestRunsFromSameRepoForTimeline()
     slowTimeline()
-    loadInvalidExample()
+    loadPerformanceK6GetRun()
+    loadPerformanceK6GetFailedTestCasesLarge()
 }

@@ -12,6 +12,7 @@ import projektor.parser.grouped.model.ResultsMetadata
 import projektor.server.api.results.SaveResultsResponse
 import projektor.server.example.coverage.JacocoXmlLoader
 import projektor.server.example.coverage.JestXmlLoader
+import projektor.server.example.performance.PerformanceResultsLoader
 import java.io.File
 import java.math.BigDecimal
 
@@ -225,6 +226,22 @@ fun loadJestWithCoverage() {
     sendCoverageToServer(resultsResponse.id, JestXmlLoader().uiClover())
 
     println("View run with Jest results and coverage at $uiBaseUrl${resultsResponse.uri}")
+}
+
+fun loadPerformanceK6GetRun() {
+    val k6Results = PerformanceResultsLoader().k6GetRun()
+    val groupedResults = GroupedResultsXmlLoader().wrapPerformanceResultsInGroup("perf.json", k6Results, null)
+    val resultsResponse = sendGroupedResultsToServer(groupedResults)
+
+    println("View run with k6 get-run performance results at $uiBaseUrl${resultsResponse.uri}")
+}
+
+fun loadPerformanceK6GetFailedTestCasesLarge() {
+    val k6Results = PerformanceResultsLoader().k6GetFailedTestCasesLarge()
+    val groupedResults = GroupedResultsXmlLoader().wrapPerformanceResultsInGroup("perf.json", k6Results, null)
+    val resultsResponse = sendGroupedResultsToServer(groupedResults)
+
+    println("View run with k6 get-failed-test-cases-large performance results at $uiBaseUrl${resultsResponse.uri}")
 }
 
 fun repositoryCoverageTimeline() {

@@ -14,6 +14,7 @@ import {
   CoverageExists,
   TestRunGitMetadata,
   CoverageFiles,
+  PerformanceResults,
 } from "../model/TestRunModel";
 import TestSuiteOutputType from "./TestSuiteOutputType";
 import { axiosInstance, axiosInstanceWithoutCache } from "./AxiosService";
@@ -150,6 +151,12 @@ const fetchCoverageGroupFiles = (
     `/run/${publicId}/coverage/${coverageGroupName}/files`
   );
 
+const fetchPerformanceResults = (
+  publicId: string
+): Promise<AxiosResponse<PerformanceResults>> =>
+  // @ts-ignore
+  axiosInstance.get(`/run/${publicId}/performance`);
+
 export {
   fetchAttachments,
   fetchMessages,
@@ -160,6 +167,7 @@ export {
   fetchCoverage,
   fetchCoverageExists,
   fetchCoverageGroupFiles,
+  fetchPerformanceResults,
   fetchOverallCoverageStats,
   fetchSlowTestCases,
   fetchTestCaseDetails,
