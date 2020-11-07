@@ -60,6 +60,10 @@ describe("TestRunDataWrapper", () => {
       .onGet(`http://localhost:8080/run/${publicId}/attachments`)
       .reply(200, attachments);
 
+    mockAxios
+      .onGet(`http://localhost:8080/run/${publicId}/performance`)
+      .reply(204);
+
     const { getByTestId, queryByTestId } = render(
       <TestRunDataWrapper publicId={publicId} />
     );

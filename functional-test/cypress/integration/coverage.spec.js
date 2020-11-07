@@ -44,12 +44,12 @@ context("test coverage data", () => {
 
   it("should display file-level coverage data", () => {
     const loadCoverageFunc = (publicId) =>
-        cy.loadCoverageReport("server-app-jacocoTestReport.xml", publicId);
+      cy.loadCoverageReport("server-app-jacocoTestReport.xml", publicId);
 
     cy.loadGroupedFixture(
-        "cypress/fixtures/grouped-passing-tests.json",
-        "",
-        loadCoverageFunc
+      "cypress/fixtures/grouped-passing-tests.json",
+      "",
+      loadCoverageFunc
     );
 
     cy.getByTestId("nav-link-coverage").click();
@@ -62,19 +62,19 @@ context("test coverage data", () => {
     cy.getByTestId("coverage-name-1").click();
 
     cy.getByTestId("coverage-file-name-1").should(
-        "contain",
-        "projektor/cleanup/CleanupScheduledJob.kt"
+      "contain",
+      "projektor/cleanup/CleanupScheduledJob.kt"
     );
     cy.getByTestId(
-        "coverage-file-line-coverage-row-1-covered-percentage"
+      "coverage-file-line-coverage-row-1-covered-percentage"
     ).should("contain", "71.43%");
     cy.getByTestId("branch-coverage-row-1-covered-percentage").should(
-        "contain",
-        "100%"
+      "contain",
+      "100%"
     );
     cy.getByTestId("coverage-file-missed-lines-1").should(
-        "contain",
-        "16, 18, 20, 21"
+      "contain",
+      "16, 18, 20, 21"
     );
     cy.getByTestId("coverage-file-partial-lines-1").should("be.empty");
   });

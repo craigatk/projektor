@@ -53,4 +53,12 @@ class GroupedResultsXmlLoader {
 
         return groupedResultsParser.serializeGroupedResults(groupedResults)
     }
+
+    fun wrapPerformanceResultsInGroup(name: String, performanceResultsBlob: String, metadata: ResultsMetadata? = null): String {
+        val performanceResult = PerformanceResult()
+        performanceResult.name = name
+        performanceResult.resultsBlob = performanceResultsBlob
+
+        return wrapPerformanceResultsInGroup(listOf(performanceResult), metadata)
+    }
 }

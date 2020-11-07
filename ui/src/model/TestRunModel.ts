@@ -53,6 +53,19 @@ interface Messages {
   messages: string[];
 }
 
+interface PerformanceResult {
+  name: string;
+  requestsPerSecond: number;
+  requestCount: number;
+  average: number;
+  maximum: number;
+  p95: number;
+}
+
+interface PerformanceResults {
+  results: PerformanceResult[];
+}
+
 interface TestFailure {
   failureMessage: string;
   failureType: string;
@@ -151,6 +164,8 @@ export {
   CoverageStat,
   CoverageStats,
   Messages,
+  PerformanceResult,
+  PerformanceResults,
   TestRunSummary,
   TestRun,
   TestSuite,

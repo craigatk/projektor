@@ -5,6 +5,7 @@ import DashboardSummary from "./DashboardSummary";
 import { RouteComponentProps } from "@reach/router";
 import TestRunAllTests from "../TestRun/TestRunAllTests";
 import CoverageSummary from "../Coverage/CoverageSummary";
+import PerformanceSection from "../Performance/PerformanceSection";
 
 interface DashboardProps extends RouteComponentProps {
   publicId: string;
@@ -26,10 +27,13 @@ const Dashboard = ({
       />
       <CoverageSummary publicId={publicId} />
       {testRunSummary.passed ? (
-        <TestRunAllTests publicId={publicId} />
+        testRunSummary.totalTestCount > 0 ? (
+          <TestRunAllTests publicId={publicId} />
+        ) : null
       ) : (
         <FailedTestCases publicId={publicId} />
       )}
+      <PerformanceSection publicId={publicId} />
     </div>
   );
 };

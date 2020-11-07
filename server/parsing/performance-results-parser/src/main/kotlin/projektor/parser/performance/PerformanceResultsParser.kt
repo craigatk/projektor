@@ -1,11 +1,14 @@
 package projektor.parser.performance
 
+import org.slf4j.LoggerFactory
 import projektor.parser.performance.k6.K6PerformanceResultsParser
 import projektor.parser.performance.model.PerformanceResultsReport
 import projektor.parser.performance.model.PerformanceStats
 import projektor.parser.performance.model.RequestStats
 
 class PerformanceResultsParser {
+    private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
+
     private val k6PerformanceResultsParser = K6PerformanceResultsParser()
 
     fun parseResults(resultsStr: String): PerformanceResultsReport? =
@@ -24,6 +27,7 @@ class PerformanceResultsParser {
                 )
             )
         } catch (e: Exception) {
+            logger.warn("Error parsing performance results", e)
             null
         }
 }

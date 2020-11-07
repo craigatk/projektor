@@ -44,38 +44,42 @@ const DashboardSummary = ({
       <PageTitle title="Tests" testid="dashboard-summary-title" />
       <TestRunMessages publicId={publicId} />
       <Grid container>
-        <Grid
-          item
-          sm={3}
-          xs={12}
-          data-testid="dashboard-summary-test-count-section"
-        >
-          <TestCountList
-            passedCount={totalPassingCount}
-            failedCount={totalFailureCount}
-            skippedCount={totalSkippedCount}
-            totalCount={totalTestCount}
-            horizontal={false}
-          />
-        </Grid>
-        <Hidden xsDown>
+        {totalTestCount > 0 ? (
           <Grid
             item
             sm={3}
             xs={12}
-            data-testid="dashboard-summary-duration-section"
+            data-testid="dashboard-summary-test-count-section"
           >
-            {hasDurationData && (
-              <TestRunDuration
-                publicId={publicId}
-                averageDuration={averageDuration}
-                cumulativeDuration={cumulativeDuration}
-                wallClockDuration={wallClockDuration}
-                slowestTestCaseDuration={slowestTestCaseDuration}
-              />
-            )}
+            <TestCountList
+              passedCount={totalPassingCount}
+              failedCount={totalFailureCount}
+              skippedCount={totalSkippedCount}
+              totalCount={totalTestCount}
+              horizontal={false}
+            />
           </Grid>
-        </Hidden>
+        ) : null}
+        {totalTestCount > 0 ? (
+          <Hidden xsDown>
+            <Grid
+              item
+              sm={3}
+              xs={12}
+              data-testid="dashboard-summary-duration-section"
+            >
+              {hasDurationData && (
+                <TestRunDuration
+                  publicId={publicId}
+                  averageDuration={averageDuration}
+                  cumulativeDuration={cumulativeDuration}
+                  wallClockDuration={wallClockDuration}
+                  slowestTestCaseDuration={slowestTestCaseDuration}
+                />
+              )}
+            </Grid>
+          </Hidden>
+        ) : null}
         <Grid
           item
           sm={4}
