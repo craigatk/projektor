@@ -19,4 +19,16 @@ fun Route.repositoryPerformance(repositoryPerformanceService: RepositoryPerforma
         repositoryPerformanceTimeline?.let { call.respond(HttpStatusCode.OK, it) }
             ?: call.respond(HttpStatusCode.NoContent)
     }
+
+    get("/repo/{orgPart}/{repoPart}/project/{projectName}/performance/timeline") {
+        val orgPart = call.parameters.getOrFail("orgPart")
+        val repoPart = call.parameters.getOrFail("repoPart")
+        val projectName = call.parameters.getOrFail("projectName")
+        val fullRepoName = "$orgPart/$repoPart"
+
+        val repositoryPerformanceTimeline = repositoryPerformanceService.fetchPerformanceTimeline(fullRepoName, projectName)
+
+        repositoryPerformanceTimeline?.let { call.respond(HttpStatusCode.OK, it) }
+            ?: call.respond(HttpStatusCode.NoContent)
+    }
 }
