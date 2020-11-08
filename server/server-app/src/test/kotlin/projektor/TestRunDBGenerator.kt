@@ -135,6 +135,16 @@ class TestRunDBGenerator(
             listOf()
         )
 
+    fun createEmptyTestRunInRepo(publicId: PublicId, repoName: String, ci: Boolean, projectName: String?): TestRunDB {
+        val testRunDB = createTestRun(
+            publicId,
+            listOf()
+        )
+        addResultsMetadata(testRunDB, ci)
+        addGitMetadata(testRunDB, repoName, true, "main", projectName)
+        return testRunDB
+    }
+
     fun createSimpleTestRunInRepo(publicId: PublicId, repoName: String, ci: Boolean, projectName: String?): TestRunDB {
         val testRunDB = createSimpleTestRun(publicId)
         addResultsMetadata(testRunDB, ci)

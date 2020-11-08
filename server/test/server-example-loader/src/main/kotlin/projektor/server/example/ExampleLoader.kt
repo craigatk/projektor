@@ -244,6 +244,28 @@ fun loadPerformanceK6GetFailedTestCasesLarge() {
     println("View run with k6 get-failed-test-cases-large performance results at $uiBaseUrl${resultsResponse.uri}")
 }
 
+fun performanceSingleTestTimeline() {
+    val repoName = "performance-org/performance-repo"
+    val branchName = "main"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+
+    val testName = "perf-test"
+
+    val k6GetFailedTestCasesLargeResults = PerformanceResultsLoader().k6GetFailedTestCasesLarge()
+    val k6GetRunResults = PerformanceResultsLoader().k6GetRun()
+
+    sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapPerformanceResultsInGroup(testName, k6GetRunResults, resultsMetadata))
+    sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapPerformanceResultsInGroup(testName, k6GetFailedTestCasesLargeResults, resultsMetadata))
+    sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapPerformanceResultsInGroup(testName, k6GetRunResults, resultsMetadata))
+
+    println("View performance test timeline with single test at $uiBaseUrl/repository/$repoName")
+}
+
 fun repositoryCoverageTimeline() {
     val repoName = "cov-org/cov-repo"
     val branchName = "main"

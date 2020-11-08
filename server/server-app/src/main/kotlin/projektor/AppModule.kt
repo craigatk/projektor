@@ -41,6 +41,9 @@ import projektor.performance.PerformanceResultsService
 import projektor.repository.coverage.RepositoryCoverageDatabaseRepository
 import projektor.repository.coverage.RepositoryCoverageRepository
 import projektor.repository.coverage.RepositoryCoverageService
+import projektor.repository.performance.RepositoryPerformanceDatabaseRepository
+import projektor.repository.performance.RepositoryPerformanceRepository
+import projektor.repository.performance.RepositoryPerformanceService
 import projektor.repository.testrun.RepositoryTestRunDatabaseRepository
 import projektor.repository.testrun.RepositoryTestRunRepository
 import projektor.repository.testrun.RepositoryTestRunService
@@ -90,6 +93,7 @@ fun createAppModule(
     single<OrganizationCoverageRepository> { OrganizationCoverageDatabaseRepository(get()) }
 
     single<RepositoryCoverageRepository> { RepositoryCoverageDatabaseRepository(get()) }
+    single<RepositoryPerformanceRepository> { RepositoryPerformanceDatabaseRepository(get()) }
     single<RepositoryTestRunRepository> { RepositoryTestRunDatabaseRepository(get()) }
 
     single<PerformanceResultsRepository> { PerformanceResultsDatabaseRepository(get()) }
@@ -117,5 +121,6 @@ fun createAppModule(
     single { OrganizationCoverageService(get(), get()) }
 
     single { RepositoryCoverageService(get()) }
+    single { RepositoryPerformanceService(get()) }
     single { RepositoryTestRunService(get()) }
 }
