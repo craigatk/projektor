@@ -1,4 +1,4 @@
-import { CoverageStats, TestCase } from "./TestRunModel";
+import { CoverageStats, PerformanceResult, TestCase } from "./TestRunModel";
 
 interface RepositoryTimelineEntry {
   publicId: string;
@@ -36,6 +36,21 @@ interface RepositoryFlakyTests {
   failureCountThreshold: number;
 }
 
+interface RepositoryPerformanceTestTimelineEntry {
+  publicId: string;
+  createdTimestamp: Date;
+  performanceResult: PerformanceResult;
+}
+
+interface RepositoryPerformanceTestTimeline {
+  name: string;
+  entries: RepositoryPerformanceTestTimelineEntry[];
+}
+
+interface RepositoryPerformanceTimeline {
+  testTimelines: RepositoryPerformanceTestTimeline[];
+}
+
 export {
   RepositoryTimelineEntry,
   RepositoryTimeline,
@@ -43,4 +58,7 @@ export {
   RepositoryCoverageTimelineEntry,
   RepositoryFlakyTest,
   RepositoryFlakyTests,
+  RepositoryPerformanceTestTimelineEntry,
+  RepositoryPerformanceTestTimeline,
+  RepositoryPerformanceTimeline,
 };

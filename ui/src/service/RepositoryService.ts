@@ -3,6 +3,7 @@ import { AxiosResponse } from "axios";
 import {
   RepositoryCoverageTimeline,
   RepositoryFlakyTests,
+  RepositoryPerformanceTimeline,
   RepositoryTimeline,
 } from "../model/RepositoryModel";
 
@@ -39,8 +40,20 @@ const fetchRepositoryFlakyTests = (
   return axiosInstance.get<RepositoryFlakyTests>(url);
 };
 
+const fetchRepositoryPerformanceTimeline = (
+  repoName: string,
+  projectName?: string
+): Promise<AxiosResponse<RepositoryPerformanceTimeline>> => {
+  const url = projectName
+    ? `repo/${repoName}/project/${projectName}/performance/timeline`
+    : `repo/${repoName}/performance/timeline`;
+  // @ts-ignore
+  return axiosInstance.get<RepositoryPerformanceTimeline>(url);
+};
+
 export {
   fetchRepositoryTimeline,
   fetchRepositoryCoverageTimeline,
   fetchRepositoryFlakyTests,
+  fetchRepositoryPerformanceTimeline,
 };

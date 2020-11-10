@@ -3,6 +3,7 @@ import { RouteComponentProps } from "@reach/router";
 import RepositoryTimelinePage from "../Timeline/RepositoryTimelinePage";
 import RepositoryCoveragePage from "../Coverage/RepositoryCoveragePage";
 import RepositoryFlakyTestsPage from "../FlakyTests/RepositoryFlakyTestsPage";
+import RepositoryPerformanceTimelineSection from "../Performance/RepositoryPerformanceTimelineSection";
 
 interface RepositoryHomePageProps extends RouteComponentProps {
   orgPart: string;
@@ -21,12 +22,18 @@ const RepositoryHomePage = ({
         orgPart={orgPart}
         repoPart={repoPart}
         projectName={projectName}
+        hideIfEmpty={true}
       />
       <RepositoryCoveragePage
         orgPart={orgPart}
         repoPart={repoPart}
         projectName={projectName}
         hideIfEmpty={true}
+      />
+      <RepositoryPerformanceTimelineSection
+        orgPart={orgPart}
+        repoPart={repoPart}
+        projectName={projectName}
       />
       <RepositoryFlakyTestsPage
         orgPart={orgPart}
