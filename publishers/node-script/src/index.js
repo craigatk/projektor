@@ -19,6 +19,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
   let resultsFileGlobs;
   let attachmentFileGlobs;
   let coverageFileGlobs;
+  let performanceFileGlobs;
   let exitWithFailure;
   let writeSlackMessageFile;
   let slackMessageFileName;
@@ -35,6 +36,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
     resultsFileGlobs = config.results;
     attachmentFileGlobs = config.attachments;
     coverageFileGlobs = config.coverage;
+    performanceFileGlobs = config.performance;
     exitWithFailure = config.exitWithFailure;
     writeSlackMessageFile = config.writeSlackMessageFile;
     slackMessageFileName = config.slackMessageFileName;
@@ -54,6 +56,11 @@ async function run(args, publishToken, defaultConfigFilePath) {
         ? args.coverage
         : [args.coverage];
     }
+    if (args.performance) {
+      performanceFileGlobs = Array.isArray(args.performance)
+        ? args.performance
+        : [args.performance];
+    }
     exitWithFailure = args.exitWithFailure;
     writeSlackMessageFile = args.writeSlackMessageFile;
     slackMessageFileName = args.slackMessageFileName;
@@ -65,18 +72,24 @@ async function run(args, publishToken, defaultConfigFilePath) {
     compressionEnabled = true;
   }
 
-  if (resultsFileGlobs) {
+  if (resultsFileGlobs || performanceFileGlobs) {
     const isCI = Boolean(process.env.CI) && process.env.CI !== "false";
     const gitRepoName =
       process.env.VELA_REPO_FULL_NAME || process.env.GITHUB_REPOSITORY;
     const gitBranchName = findGitBranchName();
 
-    const { resultsBlob, reportUrl, publicId } = await collectAndSendResults(
+    const {
+      resultsBlob,
+      performanceResults,
+      reportUrl,
+      publicId,
+    } = await collectAndSendResults(
       serverUrl,
       publishToken,
       resultsFileGlobs,
       attachmentFileGlobs,
       coverageFileGlobs,
+      performanceFileGlobs,
       gitRepoName,
       gitBranchName,
       projectName,
@@ -84,9 +97,15 @@ async function run(args, publishToken, defaultConfigFilePath) {
       compressionEnabled
     );
 
-    if (!resultsBlob) {
+    if (!resultsBlob && !performanceFileGlobs) {
       console.log(
         `No test results files found in locations ${resultsFileGlobs}`
+      );
+    }
+
+    if (performanceFileGlobs && performanceResults.length === 0) {
+      console.log(
+        `No performance results files found in locations ${performanceFileGlobs}`
       );
     }
 

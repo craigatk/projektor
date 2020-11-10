@@ -3,10 +3,15 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 const { gzip } = require("node-gzip");
+const _ = require("lodash");
 
 const isFile = (path) => fs.lstatSync(path).isFile();
 
 const globsToFilePaths = (fileGlobs) => {
+  if (_.isNil(fileGlobs)) {
+    return [];
+  }
+
   const allFilePaths = [];
 
   fileGlobs.forEach((fileGlob) => {
@@ -34,6 +39,22 @@ const collectResults = (resultsFileGlobs) => {
   return resultsBlob;
 };
 
+const collectPerformanceResults = (performanceFileGlobs) => {
+  const performanceFilePaths = globsToFilePaths(performanceFileGlobs);
+
+  const performanceResults = performanceFilePaths.map((filePath) => {
+    const fileContents = fs.readFileSync(filePath).toString();
+    const fileName = path.basename(filePath);
+
+    return {
+      name: fileName,
+      resultsBlob: fileContents,
+    };
+  });
+
+  return performanceResults;
+};
+
 const collectFileContents = (fileGlobs) => {
   const filePaths = globsToFilePaths(fileGlobs);
 
@@ -48,6 +69,7 @@ const sendResults = async (
   serverUrl,
   publishToken,
   resultsBlob,
+  performanceResults,
   gitRepoName,
   gitBranchName,
   projectName,
@@ -64,13 +86,18 @@ const sendResults = async (
     headers,
   });
 
+  const groupedTestSuites = resultsBlob
+    ? [
+        {
+          groupName: `${projectName || "Tests"}`,
+          testSuitesBlob: resultsBlob,
+        },
+      ]
+    : [];
+
   const groupedResults = {
-    groupedTestSuites: [
-      {
-        groupName: `${projectName || "Tests"}`,
-        testSuitesBlob: resultsBlob,
-      },
-    ],
+    groupedTestSuites,
+    performanceResults,
     metadata: {
       git: {
         repoName: gitRepoName,
@@ -223,6 +250,7 @@ const collectAndSendResults = async (
   resultsFileGlobs,
   attachmentFileGlobs,
   coverageFileGlobs,
+  performanceFileGlobs,
   gitRepoName,
   gitBranchName,
   projectName,
@@ -234,13 +262,15 @@ const collectAndSendResults = async (
   );
 
   const resultsBlob = collectResults(resultsFileGlobs);
+  const performanceResults = collectPerformanceResults(performanceFileGlobs);
 
-  if (resultsBlob.length > 0) {
+  if (resultsBlob.length > 0 || performanceResults.length > 0) {
     try {
       const resultsResponseData = await sendResults(
         serverUrl,
         publishToken,
         resultsBlob,
+        performanceResults,
         gitRepoName,
         gitBranchName,
         projectName,
@@ -266,16 +296,21 @@ const collectAndSendResults = async (
         publicId
       );
 
-      return { resultsBlob, publicId, reportUrl };
+      return { resultsBlob, publicId, reportUrl, performanceResults };
     } catch (e) {
       console.error(
         `Error publishing results to Projektor server ${serverUrl}`,
         e.message
       );
-      return { resultsBlob, publicId: null, reportUrl: null };
+      return {
+        resultsBlob,
+        performanceResults,
+        publicId: null,
+        reportUrl: null,
+      };
     }
   } else {
-    return { resultsBlob, publicId: null, reportUrl: null };
+    return { resultsBlob, performanceResults, publicId: null, reportUrl: null };
   }
 };
 

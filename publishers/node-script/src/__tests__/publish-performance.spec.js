@@ -2,7 +2,7 @@ const axios = require("axios");
 const MockAdapter = require("axios-mock-adapter");
 const { collectAndSendResults } = require("../publish");
 
-describe("Node script publishing with Git metadata", () => {
+describe("Node script publishing with performance results", () => {
   let mockAxios;
 
   beforeEach(() => {
@@ -13,8 +13,8 @@ describe("Node script publishing with Git metadata", () => {
     mockAxios.restore();
   });
 
-  it("should publish results along with Git repo, main branch, and project name", async () => {
-    const fileGlob = "src/__tests__/resultsDir1/*.xml";
+  it("should publish performance results only from directory", async () => {
+    const performanceFileGlob = "src/__tests__/performanceResults/*.json";
     const serverUrl = "http://localhost:8080";
     mockAxios
       .onPost("http://localhost:8080/groupedResults")
@@ -23,13 +23,14 @@ describe("Node script publishing with Git metadata", () => {
     await collectAndSendResults(
       serverUrl,
       null,
-      [fileGlob],
       null,
       null,
       null,
+      [performanceFileGlob],
       "projektor/projektor",
       "main",
-      "my-proj"
+      "my-proj",
+      true
     );
 
     expect(mockAxios.history.post.length).toBe(1);
@@ -39,25 +40,24 @@ describe("Node script publishing with Git metadata", () => {
     );
 
     const parsedRequestBody = JSON.parse(resultsPostRequest.data);
+    expect(parsedRequestBody.groupedTestSuites.length).toBe(0);
 
-    expect(parsedRequestBody.groupedTestSuites.length).toBe(1);
-    expect(parsedRequestBody.groupedTestSuites[0].testSuitesBlob).toContain(
-      "resultsDir1-results1"
-    );
-    expect(parsedRequestBody.groupedTestSuites[0].testSuitesBlob).toContain(
-      "resultsDir1-results2"
-    );
+    expect(parsedRequestBody.performanceResults.length).toBe(2);
 
-    expect(parsedRequestBody.metadata.git.repoName).toEqual(
-      "projektor/projektor"
+    const file1 = parsedRequestBody.performanceResults.find(
+      (file) => file.name === "perf-test-1.json"
     );
-    expect(parsedRequestBody.metadata.git.branchName).toEqual("main");
-    expect(parsedRequestBody.metadata.git.isMainBranch).toEqual(true);
-    expect(parsedRequestBody.metadata.git.projectName).toEqual("my-proj");
+    expect(file1.resultsBlob).toBe('{"name":"perf-test-1"}');
+
+    const file2 = parsedRequestBody.performanceResults.find(
+      (file) => file.name === "perf-test-2.json"
+    );
+    expect(file2.resultsBlob).toBe('{"name":"perf-test-2"}');
   });
 
-  it("should publish results along with Git repo, non-main branch, and project name", async () => {
-    const fileGlob = "src/__tests__/resultsDir1/*.xml";
+  it("should publish performance results only from one file", async () => {
+    const performanceFileGlob =
+      "src/__tests__/performanceResults/perf-test-1.json";
     const serverUrl = "http://localhost:8080";
     mockAxios
       .onPost("http://localhost:8080/groupedResults")
@@ -66,13 +66,14 @@ describe("Node script publishing with Git metadata", () => {
     await collectAndSendResults(
       serverUrl,
       null,
-      [fileGlob],
       null,
       null,
       null,
+      [performanceFileGlob],
       "projektor/projektor",
-      "feature/branch",
-      "my-proj"
+      "main",
+      "my-proj",
+      true
     );
 
     expect(mockAxios.history.post.length).toBe(1);
@@ -82,12 +83,14 @@ describe("Node script publishing with Git metadata", () => {
     );
 
     const parsedRequestBody = JSON.parse(resultsPostRequest.data);
+    expect(parsedRequestBody.groupedTestSuites.length).toBe(0);
 
-    expect(parsedRequestBody.metadata.git.repoName).toEqual(
-      "projektor/projektor"
+    expect(parsedRequestBody.performanceResults.length).toBe(1);
+    expect(parsedRequestBody.performanceResults[0].name).toBe(
+      "perf-test-1.json"
     );
-    expect(parsedRequestBody.metadata.git.branchName).toEqual("feature/branch");
-    expect(parsedRequestBody.metadata.git.isMainBranch).toEqual(false);
-    expect(parsedRequestBody.metadata.git.projectName).toEqual("my-proj");
+    expect(parsedRequestBody.performanceResults[0].resultsBlob).toBe(
+      '{"name":"perf-test-1"}'
+    );
   });
 });
