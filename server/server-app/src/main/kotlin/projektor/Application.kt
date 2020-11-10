@@ -43,6 +43,7 @@ import projektor.metrics.createRegistry
 import projektor.organization.coverage.OrganizationCoverageService
 import projektor.performance.PerformanceResultsService
 import projektor.repository.coverage.RepositoryCoverageService
+import projektor.repository.performance.RepositoryPerformanceService
 import projektor.repository.testrun.RepositoryTestRunService
 import projektor.route.*
 import projektor.schedule.Scheduler
@@ -147,6 +148,7 @@ fun Application.main() {
     val organizationCoverageService: OrganizationCoverageService by inject()
 
     val repositoryCoverageService: RepositoryCoverageService by inject()
+    val repositoryPerformanceService: RepositoryPerformanceService by inject()
     val repositoryTestRunService: RepositoryTestRunService by inject()
 
     val performanceResultsService: PerformanceResultsService by inject()
@@ -162,6 +164,7 @@ fun Application.main() {
         performance(performanceResultsService)
         previousRuns(previousTestRunService)
         repository(repositoryCoverageService, repositoryTestRunService)
+        repositoryPerformance(repositoryPerformanceService)
         results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService, metricRegistry)
         testCases(testCaseService)
         testSuites(testSuiteService)

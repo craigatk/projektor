@@ -20,4 +20,5 @@ fun main() {
     slowTimeline()
     loadPerformanceK6GetRun()
     loadPerformanceK6GetFailedTestCasesLarge()
+    performanceSingleTestTimeline()
 }
