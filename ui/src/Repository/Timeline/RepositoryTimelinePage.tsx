@@ -10,12 +10,14 @@ interface RepositoryTimelinePageProps extends RouteComponentProps {
   orgPart: string;
   repoPart: string;
   projectName?: string;
+  hideIfEmpty: boolean;
 }
 
 const RepositoryTimelinePage = ({
   orgPart,
   repoPart,
   projectName,
+  hideIfEmpty,
 }: RepositoryTimelinePageProps) => {
   const repoName = `${orgPart}/${repoPart}`;
   const [repositoryTimeline, setRepositoryTimeline] = React.useState<
@@ -41,6 +43,7 @@ const RepositoryTimelinePage = ({
         <RepositoryTimelineDetails
           timeline={repositoryTimeline}
           repoName={repoName}
+          hideIfEmpty={hideIfEmpty}
         />
       }
     />
