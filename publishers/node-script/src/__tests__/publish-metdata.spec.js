@@ -28,6 +28,7 @@ describe("Node script publishing with results metadata", () => {
       [fileGlob],
       null,
       null,
+      null,
       "projektor/projektor",
       "main",
       "my-proj",

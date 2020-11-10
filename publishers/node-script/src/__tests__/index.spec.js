@@ -197,4 +197,36 @@ describe("node script index", () => {
       "http://localhost:8080/run/ABC123/attachments/attachmentNested1.txt"
     );
   });
+
+  it("should send performance results", async () => {
+    const serverUrl = "http://localhost:8080";
+    const performance = ["src/__tests__/performanceResults/*.json"];
+    const compressionEnabled = false;
+
+    await run(
+      { performance, serverUrl, compressionEnabled },
+      null,
+      "projektor.none.json"
+    );
+
+    expect(mockAxios.history.post.length).toBe(1);
+
+    const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
+      postRequest.url.includes("groupedResults")
+    );
+
+    const parsedRequestBody = JSON.parse(resultsPostRequest.data.toString());
+    expect(parsedRequestBody.groupedTestSuites.length).toBe(0);
+
+    expect(parsedRequestBody.performanceResults.length).toBe(2);
+    const file1 = parsedRequestBody.performanceResults.find(
+      (file) => file.name === "perf-test-1.json"
+    );
+    expect(file1.resultsBlob).toBe('{"name":"perf-test-1"}');
+
+    const file2 = parsedRequestBody.performanceResults.find(
+      (file) => file.name === "perf-test-2.json"
+    );
+    expect(file2.resultsBlob).toBe('{"name":"perf-test-2"}');
+  });
 });
