@@ -3,7 +3,6 @@ import { RepositoryPerformanceTestTimeline } from "../../model/RepositoryModel";
 import moment from "moment";
 import RepositoryGraphActiveDot from "../Graph/RepositoryGraphActiveDot";
 import RepositoryGraphDot from "../Graph/RepositoryGraphDot";
-import RepositoryCoverageTimelineGraphTooltip from "../Coverage/RepositoryCoverageTimelineGraphTooltip";
 import RepositoryPerformanceTimelineGraphTooltip from "./RepositoryPerformanceTimelineGraphTooltip";
 import {
   LineChart,
@@ -37,6 +36,8 @@ const RepositoryPerformanceTimelineGraph = ({
 
   const xAxisTickFormatter = (value) => moment(value).format("MMM Do YYYY");
 
+  const yAxisTickFormatter = (value) => `${value}ms`;
+
   return (
     <div data-testid="repository-performance-timeline-graph">
       <ResponsiveContainer width={graphWidth || "100%"} height={300}>
@@ -51,9 +52,13 @@ const RepositoryPerformanceTimelineGraph = ({
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" tickFormatter={xAxisTickFormatter} />
-          <YAxis />
+          <YAxis tickFormatter={yAxisTickFormatter} />
           <Legend
-            formatter={(value, _) => (value === "average" ? "Average" : "p95")}
+            formatter={(value, _) =>
+              value === "average"
+                ? "Average response time"
+                : "p95 response time"
+            }
           />
           <Tooltip content={<RepositoryPerformanceTimelineGraphTooltip />} />
           <Line
