@@ -8,6 +8,7 @@ import PageTitle from "../../PageTitle";
 interface RepositoryFlakyTestsDetailsProps {
   flakyTests: RepositoryFlakyTests;
   repoName: string;
+  hideIfEmpty: boolean;
 }
 
 const useStyles = makeStyles(() => ({
@@ -19,6 +20,7 @@ const useStyles = makeStyles(() => ({
 const RepositoryFlakyTestsDetails = ({
   flakyTests,
   repoName,
+  hideIfEmpty,
 }: RepositoryFlakyTestsDetailsProps) => {
   const classes = useStyles({});
 
@@ -29,7 +31,7 @@ const RepositoryFlakyTestsDetails = ({
         <RepositoryFlakyTestsTable flakyTests={flakyTests} />
       </div>
     );
-  } else {
+  } else if (!hideIfEmpty) {
     return (
       <div data-testid="repository-no-flaky-tests">
         <Typography align="center" className={classes.noFlakyTests}>
@@ -37,6 +39,8 @@ const RepositoryFlakyTestsDetails = ({
         </Typography>
       </div>
     );
+  } else {
+    return <div></div>;
   }
 };
 

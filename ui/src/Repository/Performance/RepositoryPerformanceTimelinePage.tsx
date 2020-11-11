@@ -4,18 +4,21 @@ import { RepositoryPerformanceTimeline } from "../../model/RepositoryModel";
 import { fetchRepositoryPerformanceTimeline } from "../../service/RepositoryService";
 import LoadingSection from "../../Loading/LoadingSection";
 import RepositoryPerformanceTimelineDetails from "./RepositoryPerformanceTimelineDetails";
+import { RouteComponentProps } from "@reach/router";
 
-interface RepositoryPerformanceTimelineSectionProps {
+interface RepositoryPerformanceTimelinePageProps extends RouteComponentProps {
   orgPart: string;
   repoPart: string;
   projectName?: string;
+  hideIfEmpty: boolean;
 }
 
-const RepositoryPerformanceTimelineSection = ({
+const RepositoryPerformanceTimelinePage = ({
   orgPart,
   repoPart,
   projectName,
-}: RepositoryPerformanceTimelineSectionProps) => {
+  hideIfEmpty,
+}: RepositoryPerformanceTimelinePageProps) => {
   const repoName = `${orgPart}/${repoPart}`;
 
   const [
@@ -41,10 +44,12 @@ const RepositoryPerformanceTimelineSection = ({
       successComponent={
         <RepositoryPerformanceTimelineDetails
           performanceTimeline={repositoryPerformanceTimeline}
+          repoName={repoName}
+          hideIfEmpty={hideIfEmpty}
         />
       }
     />
   );
 };
 
-export default RepositoryPerformanceTimelineSection;
+export default RepositoryPerformanceTimelinePage;

@@ -10,12 +10,14 @@ interface RepositoryFlakyTestsPageProps extends RouteComponentProps {
   orgPart: string;
   repoPart: string;
   projectName?: string;
+  hideIfEmpty: boolean;
 }
 
 const RepositoryFlakyTestsPage = ({
   orgPart,
   repoPart,
   projectName,
+  hideIfEmpty,
 }: RepositoryFlakyTestsPageProps) => {
   const repoName = `${orgPart}/${repoPart}`;
 
@@ -42,6 +44,7 @@ const RepositoryFlakyTestsPage = ({
         <RepositoryFlakyTestsDetails
           flakyTests={flakyTests}
           repoName={repoName}
+          hideIfEmpty={hideIfEmpty}
         />
       }
     />
