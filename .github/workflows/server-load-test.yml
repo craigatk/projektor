@@ -69,3 +69,4 @@ jobs:
       with:
         server-url: https://projektorlive.herokuapp.com
         performance: server/test/load-test/test-results/*.json
+        token: ${{ secrets.PROJEKTOR_TOKEN }}
