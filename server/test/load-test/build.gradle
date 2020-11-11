@@ -1,0 +1,25 @@
+plugins {
+    id 'com.github.psxpaul.execfork'
+}
+
+evaluationDependsOn(':server:server-app')
+
+task loadTest(type: Exec) {
+    dependsOn 'startServerDaemon'
+
+    commandLine "k6" ,"run", "--summary-export=test-results/getRun.json", "getRun.js"
+}
+
+// https://github.com/psxpaul/gradle-execfork-plugin
+task startServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {
+    dependsOn ':server:server-app:assembleFull'
+    classpath = tasks.getByPath(':server:server-app:shadowJar').outputs.files
+    main = 'io.ktor.server.netty.EngineMain'
+    stopAfter = loadTest
+    waitForPort = 8080
+    waitForOutput = 'Application started'
+    timeout = 120
+    environment = [
+            'PORT': '8080',
+    ]
+}
