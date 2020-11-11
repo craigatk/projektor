@@ -7,7 +7,7 @@ evaluationDependsOn(':server:server-app')
 task loadTest(type: Exec) {
     dependsOn 'startServerDaemon'
 
-    commandLine "k6" ,"run", "getRun.js"
+    commandLine "k6" ,"run", "--summary-export=test-results/getRun.json", "getRun.js"
 }
 
 // https://github.com/psxpaul/gradle-execfork-plugin

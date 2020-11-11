@@ -1,0 +1,68 @@
+name: Server load test
+
+on:
+  push:
+    paths-ignore:
+      - 'functional-test/**'
+      - 'ui/**'
+
+jobs:
+  gradle-build:
+    runs-on: ubuntu-18.04
+    services:
+      database:
+        image: postgres:11.2-alpine
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: projektordb
+          TZ: UTC
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      objectstorage:
+        image: bitnami/minio:2020.8.4-debian-10-r0
+        ports:
+          - "9000:9000"
+        volumes:
+          - /tmp:/data
+        env:
+          MINIO_ACCESS_KEY: minio_access_key
+          MINIO_SECRET_KEY: minio_secret_key
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - name: Cache Gradle dependencies
+      uses: actions/cache@v1
+      with:
+        path: ~/.gradle/caches/modules-2
+        key: ${{ runner.os }}-gradle-modules-${{ hashFiles('**/*gradle*') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-modules-
+
+    - name: Install k6
+      run: |
+        sudo apt-get install k6
+
+    - name: Build with Gradle
+      env:
+        DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
+        PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
+        CACHE_ACCESS_KEY: ${{ secrets.CACHE_ACCESS_KEY }}
+        CACHE_SECRET_KEY: ${{ secrets.CACHE_SECRET_KEY }}
+      run: ./gradlew :server:test:load-test:loadTest
+
+    - name: Projektor results
+      uses: craigatk/projektor-action@v12
+      if: failure() || success()
+      with:
+        server-url: https://projektorlive.herokuapp.com
+        performance: server/test/load-test/test-results/*.json
