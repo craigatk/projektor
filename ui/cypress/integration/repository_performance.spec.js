@@ -24,7 +24,7 @@ describe("repository performance", () => {
     );
 
     publicIds.forEach((publicId) =>
-      cy.roleShouldExist(`dot-average-${publicId}`)
+      cy.roleShouldExist(`dot-requestsPerSecond-${publicId}`)
     );
 
     publicIds.forEach((publicId) => cy.roleShouldExist(`dot-p95-${publicId}`));
@@ -59,7 +59,7 @@ describe("repository performance", () => {
     );
 
     publicIds.forEach((publicId) =>
-      cy.roleShouldExist(`dot-average-${publicId}`)
+      cy.roleShouldExist(`dot-requestsPerSecond-${publicId}`)
     );
 
     publicIds.forEach((publicId) => cy.roleShouldExist(`dot-p95-${publicId}`));
