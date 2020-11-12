@@ -36,7 +36,7 @@ const RepositoryPerformanceTimelineGraph = ({
 
   const xAxisTickFormatter = (value) => moment(value).format("MMM Do YYYY");
 
-  const yAxisTickFormatter = (value) => `${value}ms`;
+  const p95YAxisTickFormatter = (value) => `${value}ms`;
 
   return (
     <div data-testid="repository-performance-timeline-graph">
@@ -52,21 +52,25 @@ const RepositoryPerformanceTimelineGraph = ({
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" tickFormatter={xAxisTickFormatter} />
-          <YAxis tickFormatter={yAxisTickFormatter} />
+          <YAxis
+            yAxisId="p95"
+            orientation="left"
+            tickFormatter={p95YAxisTickFormatter}
+          />
+          <YAxis yAxisId="requestsPerSecond" orientation="right" />
           <Legend
             formatter={(value, _) =>
-              value === "average"
-                ? "Average response time"
-                : "p95 response time"
+              value === "p95" ? "p95 response time" : "Requests per second"
             }
           />
           <Tooltip content={<RepositoryPerformanceTimelineGraphTooltip />} />
           <Line
             type="monotone"
-            dataKey="average"
-            stroke="#8884d8"
+            dataKey="requestsPerSecond"
+            stroke="#d8ac54"
             activeDot={<RepositoryGraphActiveDot />}
             dot={<RepositoryGraphDot />}
+            yAxisId="requestsPerSecond"
           />
           <Line
             type="monotone"
@@ -74,6 +78,7 @@ const RepositoryPerformanceTimelineGraph = ({
             stroke="#64aed8"
             activeDot={<RepositoryGraphActiveDot />}
             dot={<RepositoryGraphDot />}
+            yAxisId="p95"
           />
         </LineChart>
       </ResponsiveContainer>
