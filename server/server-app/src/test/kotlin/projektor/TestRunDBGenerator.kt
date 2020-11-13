@@ -89,7 +89,7 @@ class TestRunDBGenerator(
         testRunDB: TestRunDB,
         repoName: String,
         isMainBranch: Boolean,
-        branchName: String,
+        branchName: String?,
         projectName: String?
     ): GitMetadataDB {
         val gitMetadata = GitMetadataDB()
