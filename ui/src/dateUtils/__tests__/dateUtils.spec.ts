@@ -5,6 +5,14 @@ import {
 
 describe("dateUtils", () => {
   describe("formatSecondsDuration", () => {
+    it("should format duration less than 1 second", () => {
+      expect(formatSecondsDuration(0.423, 1)).toEqual("0.423s");
+    });
+
+    it("should format duration less than 1 minute with MS threshold of 1", () => {
+      expect(formatSecondsDuration(23.423, 1)).toEqual("23s");
+    });
+
     it("should format duration less than 1 minute", () => {
       expect(formatSecondsDuration(34.023)).toEqual("34.023s");
     });

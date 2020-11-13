@@ -17,6 +17,7 @@ fun main() {
     repositoryCoverageTimeline()
     repositoryFlakyTests()
     loadMultipleTestRunsFromSameRepoForTimeline()
+    loadMultipleShortTestRunsFromSameRepoForTimeline()
     slowTimeline()
     loadPerformanceK6GetRun()
     loadPerformanceK6GetFailedTestCasesLarge()

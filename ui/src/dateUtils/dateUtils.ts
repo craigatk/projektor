@@ -2,9 +2,10 @@ import moment from "moment";
 
 const formatSecondsDuration = (
   durationInSeconds: number,
-  includeMS: boolean = true
+  includeMSThreshold: number = 60 * 60
 ): string => {
-  const secondsFormat = includeMS ? "s.SSS[s]" : "s[s]";
+  const secondsFormat =
+    durationInSeconds < includeMSThreshold ? "s.SSS[s]" : "s[s]";
 
   let timeFormat = secondsFormat;
 
@@ -21,6 +22,6 @@ const formatSecondsDuration = (
 };
 
 const formatSecondsDurationWithoutMS = (durationInSeconds: number): string =>
-  formatSecondsDuration(durationInSeconds, false);
+  formatSecondsDuration(durationInSeconds, 0);
 
 export { formatSecondsDuration, formatSecondsDurationWithoutMS };
