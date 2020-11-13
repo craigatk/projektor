@@ -24,6 +24,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
   let writeSlackMessageFile;
   let slackMessageFileName;
   let projectName;
+  let repositoryName;
   let compressionEnabled;
 
   const configFilePath = args.configFile || defaultConfigFilePath;
@@ -40,6 +41,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
     exitWithFailure = config.exitWithFailure;
     writeSlackMessageFile = config.writeSlackMessageFile;
     slackMessageFileName = config.slackMessageFileName;
+    repositoryName = config.repositoryName;
     projectName = config.projectName;
     compressionEnabled = config.compressionEnabled;
   } else {
@@ -64,6 +66,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
     exitWithFailure = args.exitWithFailure;
     writeSlackMessageFile = args.writeSlackMessageFile;
     slackMessageFileName = args.slackMessageFileName;
+    repositoryName = args.repositoryName;
     projectName = args.projectName;
     compressionEnabled = args.compressionEnabled;
   }
@@ -75,7 +78,9 @@ async function run(args, publishToken, defaultConfigFilePath) {
   if (resultsFileGlobs || performanceFileGlobs) {
     const isCI = Boolean(process.env.CI) && process.env.CI !== "false";
     const gitRepoName =
-      process.env.VELA_REPO_FULL_NAME || process.env.GITHUB_REPOSITORY;
+      repositoryName ||
+      process.env.VELA_REPO_FULL_NAME ||
+      process.env.GITHUB_REPOSITORY;
     const gitBranchName = findGitBranchName();
 
     const {
