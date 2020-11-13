@@ -31,7 +31,6 @@ class RepositoryPerformanceDatabaseRepository(private val dslContext: DSLContext
                 .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
                 .where(
                     GIT_METADATA.REPO_NAME.eq(repoName)
-                        .and(GIT_METADATA.IS_MAIN_BRANCH.eq(true))
                         .let {
                             if (projectName == null)
                                 it.and(GIT_METADATA.PROJECT_NAME.isNull)
