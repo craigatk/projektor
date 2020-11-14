@@ -46,7 +46,7 @@ class CoverageService(
                 bodyType = FailureBodyType.COVERAGE,
                 e = e
             )
-            null
+            throw e
         }
 
     suspend fun getCoverage(publicId: PublicId): Coverage? {

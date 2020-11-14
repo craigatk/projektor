@@ -22,7 +22,7 @@ import projektor.incomingresults.PersistTestResultsException
 import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
 import projektor.server.api.PublicId
-import projektor.server.api.results.SaveResultsErrorResponse
+import projektor.server.api.results.SaveResultsError
 import projektor.server.api.results.SaveResultsResponse
 import projektor.util.ungzip
 
@@ -66,7 +66,7 @@ fun Route.results(
 
                     call.respond(HttpStatusCode.OK, SaveResultsResponse(publicId.id, "/tests/${publicId.id}"))
                 } catch (e: PersistTestResultsException) {
-                    call.respond(HttpStatusCode.BadRequest, SaveResultsErrorResponse(e.publicId.id, e.errorMessage))
+                    call.respond(HttpStatusCode.BadRequest, SaveResultsError(e.publicId.id, e.errorMessage))
                 }
             } else {
                 call.respond(HttpStatusCode.BadRequest)

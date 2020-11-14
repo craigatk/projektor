@@ -7,11 +7,13 @@ import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.error.FailureBodyType
 import projektor.incomingresults.randomPublicId
+import projektor.server.api.coverage.SaveCoverageError
 import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.contains
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
 
 @KtorExperimentalAPI
 class AddCoverageFailureApplicationTest : ApplicationTestCase() {
@@ -28,6 +30,13 @@ class AddCoverageFailureApplicationTest : ApplicationTestCase() {
                 setBody(invalidReportXml.toByteArray())
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.BadRequest)
+
+                val saveCoverageErrorResponse = objectMapper.readValue(response.content, SaveCoverageError::class.java)
+
+                expectThat(saveCoverageErrorResponse) {
+                    get { id }.isEqualTo(publicId.id)
+                    get { errorMessage }.isNotNull().contains("Unexpected EOF; was expecting a close tag for element <report>")
+                }
 
                 val processingFailures = processingFailureDao.fetchByPublicId(publicId.id)
                 expectThat(processingFailures).hasSize(1)

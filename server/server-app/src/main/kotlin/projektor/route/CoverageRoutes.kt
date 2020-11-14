@@ -16,6 +16,7 @@ import projektor.coverage.CoverageService
 import projektor.server.api.PublicId
 import projektor.server.api.coverage.CoverageExists
 import projektor.server.api.coverage.CoverageFiles
+import projektor.server.api.coverage.SaveCoverageError
 
 @KtorExperimentalAPI
 fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
@@ -27,9 +28,13 @@ fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
         } else {
             val reportXml = call.receive<String>()
 
-            coverageService.saveReport(reportXml, PublicId(publicId))
-                ?.let { call.respond(HttpStatusCode.OK) }
-                ?: call.respond(HttpStatusCode.BadRequest)
+            try {
+                coverageService.saveReport(reportXml, PublicId(publicId))
+                    ?.let { call.respond(HttpStatusCode.OK) }
+                    ?: call.respond(HttpStatusCode.BadRequest)
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, SaveCoverageError(publicId, e.message))
+            }
         }
     }
 

@@ -13,6 +13,8 @@ const formatSecondsDuration = (
     timeFormat = "H[h] m[m]";
   } else if (durationInSeconds >= 60) {
     timeFormat = `m[m] ${secondsFormat}`;
+  } else if (durationInSeconds === 0) {
+    timeFormat = "s[s]";
   }
 
   return moment("2015-01-01")
