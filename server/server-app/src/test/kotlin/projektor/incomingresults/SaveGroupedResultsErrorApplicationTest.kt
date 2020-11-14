@@ -14,9 +14,10 @@ import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.server.api.results.ResultsProcessingStatus
-import projektor.server.api.results.SaveResultsErrorResponse
+import projektor.server.api.results.SaveResultsError
 import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
+import strikt.assertions.contains
 import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
@@ -32,10 +33,12 @@ class SaveGroupedResultsErrorApplicationTest : ApplicationTestCase() {
                 setBody(malformedResults)
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.BadRequest)
-                val resultsResponse = objectMapper.readValue(response.content, SaveResultsErrorResponse::class.java)
+                val resultsResponse = objectMapper.readValue(response.content, SaveResultsError::class.java)
 
                 val publicId = resultsResponse.id
                 assertNotNull(publicId)
+
+                expectThat(resultsResponse.errorMessage).contains("(code 32) in content after '<' (malformed start element?)")
 
                 await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.ERROR.name }
             }
@@ -54,7 +57,7 @@ class SaveGroupedResultsErrorApplicationTest : ApplicationTestCase() {
                     setBody(malformedResults)
                 }.apply {
                     expectThat(response.status()).isEqualTo(HttpStatusCode.BadRequest)
-                    val resultsResponse = objectMapper.readValue(response.content, SaveResultsErrorResponse::class.java)
+                    val resultsResponse = objectMapper.readValue(response.content, SaveResultsError::class.java)
 
                     val publicId = resultsResponse.id
                     assertNotNull(publicId)

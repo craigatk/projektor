@@ -24,6 +24,10 @@ describe("dateUtils", () => {
     it("should format duration over 1 hour", () => {
       expect(formatSecondsDuration(60 * 60 + 67)).toEqual("1h 1m");
     });
+
+    it("should format 0 seconds without any milliseconds", () => {
+      expect(formatSecondsDuration(0)).toEqual("0s");
+    });
   });
 
   describe("formatSecondsDurationWithoutMS", () => {
