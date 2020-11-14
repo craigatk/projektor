@@ -210,7 +210,7 @@ const collectAndSendAttachments = (
   }
 };
 
-const collectAndSendCoverage = (
+const collectAndSendCoverage = async (
   serverUrl,
   publishToken,
   coverageFileGlobs,
@@ -224,18 +224,24 @@ const collectAndSendCoverage = (
       console.log(
         `Sending ${coverageCount} coverage result(s) to Projektor server`
       );
-      coverageFiles.forEach((coverageFile) =>
-        sendCoverage(
-          serverUrl,
-          publicId,
-          publishToken,
-          coverageFile.contents
-        ).catch((e) => {
-          console.error(
-            `Error sending coverage result ${coverageFile} to Projektor server ${serverUrl}`,
-            e.message
-          );
-        })
+      await Promise.all(
+        coverageFiles.map((coverageFile) =>
+          sendCoverage(
+            serverUrl,
+            publicId,
+            publishToken,
+            coverageFile.contents
+          ).catch((e) => {
+            console.error(
+              `Error sending coverage result ${coverageFile.name} to Projektor server ${serverUrl}`,
+              e.message
+            );
+
+            if (e.response && e.response.data) {
+              console.error("Error from server", e.response.data.error_message);
+            }
+          })
+        )
       );
       console.log(
         `Finished sending coverage ${coverageCount} results to Projektor`
@@ -302,6 +308,10 @@ const collectAndSendResults = async (
         `Error publishing results to Projektor server ${serverUrl}`,
         e.message
       );
+      if (e.response && e.response.data) {
+        console.error("Error from server", e.response.data.error_message);
+      }
+
       return {
         resultsBlob,
         performanceResults,
