@@ -1,5 +1,6 @@
 package projektor.coverage
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -14,7 +15,9 @@ import strikt.assertions.*
 import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
+@KtorExperimentalAPI
 class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
+
     @Test
     fun `when one coverage report should fetch its overall stats`() {
         val coverageDatabaseRepository = CoverageDatabaseRepository(dslContext)

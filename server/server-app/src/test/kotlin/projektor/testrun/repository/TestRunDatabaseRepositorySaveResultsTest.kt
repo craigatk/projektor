@@ -1,5 +1,6 @@
 package projektor.testrun.repository
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -14,6 +15,7 @@ import kotlin.test.assertNotNull
 import projektor.parser.model.TestCase as ParsedTestCase
 import projektor.parser.model.TestSuite as ParsedTestSuite
 
+@KtorExperimentalAPI
 class TestRunDatabaseRepositorySaveResultsTest : DatabaseRepositoryTestCase() {
 
     @Test

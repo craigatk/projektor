@@ -1,5 +1,6 @@
 package projektor.repository.testrun
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
@@ -9,7 +10,9 @@ import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
+@KtorExperimentalAPI
 class RepositoryTestRunDatabaseRepositoryRecentRunsTest : DatabaseRepositoryTestCase() {
+
     @Test
     fun `should find recent test run public IDs`() {
         val repositoryTestRunDatabaseRepository = RepositoryTestRunDatabaseRepository(dslContext)

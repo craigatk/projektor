@@ -18,5 +18,7 @@ interface TestRunRepository {
 
     suspend fun deleteTestRun(publicId: PublicId)
 
-    suspend fun findTestRunsToDelete(createdBefore: LocalDate): List<PublicId>
+    suspend fun findTestRunsCreatedBeforeAndNotPinned(createdBefore: LocalDate): List<PublicId>
+
+    suspend fun findTestRunsCreatedBeforeAndNotPinnedWithAttachments(createdBefore: LocalDate): List<PublicId>
 }

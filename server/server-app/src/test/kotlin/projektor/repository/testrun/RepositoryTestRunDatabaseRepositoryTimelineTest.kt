@@ -1,5 +1,6 @@
 package projektor.repository.testrun
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
@@ -12,7 +13,9 @@ import strikt.assertions.isEqualTo
 import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
+@KtorExperimentalAPI
 class RepositoryTestRunDatabaseRepositoryTimelineTest : DatabaseRepositoryTestCase() {
+
     @Test
     fun `should find entries without project name for CI builds`() {
         val repositoryTestRunDatabaseRepository = RepositoryTestRunDatabaseRepository(dslContext)

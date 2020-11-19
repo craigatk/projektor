@@ -1,5 +1,6 @@
 package projektor.compare
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
@@ -11,7 +12,9 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNull
 
+@KtorExperimentalAPI
 class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
+
     @Test
     fun `should exclude test run that is newer than specified test run`() {
         val previousTestRunService: PreviousTestRunService by inject()

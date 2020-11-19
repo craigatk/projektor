@@ -80,7 +80,8 @@ open class ApplicationTestCase {
     protected var attachmentsBucketName = "attachmentstesting"
     protected var attachmentsAutoCreateBucket = true
 
-    protected var cleanupMaxAgeDays: Int? = null
+    protected var attachmentCleanupMaxAgeDays: Int? = null
+    protected var reportCleanupMaxAgeDays: Int? = null
 
     protected var metricsEnabled: Boolean = false
     protected var metricsPort: Int = 0
@@ -110,7 +111,11 @@ open class ApplicationTestCase {
                 attachmentsMaxSizeMB?.let { put("ktor.attachment.maxSizeMB", it.toString()) }
             }
 
-            cleanupMaxAgeDays?.let {
+            attachmentCleanupMaxAgeDays?.let {
+                put("ktor.cleanup.maxAttachmentAgeDays", it.toString())
+            }
+
+            reportCleanupMaxAgeDays?.let {
                 put("ktor.cleanup.maxReportAgeDays", it.toString())
             }
 
@@ -164,7 +169,8 @@ open class ApplicationTestCase {
             testRunSystemAttributesDao,
             gitMetadataDao,
             resultsMetadataDao,
-            coverageService
+            coverageService,
+            attachmentDao
         )
 
         this.application = application

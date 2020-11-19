@@ -1,5 +1,6 @@
 package projektor.testrun.repository
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -12,7 +13,9 @@ import strikt.assertions.isNotNull
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
+@KtorExperimentalAPI
 class TestRunDatabaseRepositoryFetchSummaryTest : DatabaseRepositoryTestCase() {
+
     @Test
     fun `should fetch all fields in the test run summary`() {
         val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)

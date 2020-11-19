@@ -1,5 +1,6 @@
 package projektor.performance
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -11,7 +12,9 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import java.math.BigDecimal
 
+@KtorExperimentalAPI
 class PerformanceResultsDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
+
     @Test
     fun `should insert performance test results`() {
         val performanceResultsDatabaseRepository = PerformanceResultsDatabaseRepository(dslContext)

@@ -1,5 +1,6 @@
 package projektor.testrun.attributes
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -11,7 +12,9 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 import strikt.assertions.isTrue
 
+@KtorExperimentalAPI
 class TestRunSystemAttributesDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
+
     @Test
     fun `should fetch pinned when it is true`() {
         val repository = TestRunSystemAttributesDatabaseRepository(dslContext)

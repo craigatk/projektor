@@ -12,7 +12,7 @@ import java.lang.Exception
 import java.time.LocalDate
 
 @KtorExperimentalAPI
-class CleanupService(
+class TestRunCleanupService(
     private val cleanupConfig: CleanupConfig,
     private val testRunRepository: TestRunRepository,
     private val resultsProcessingRepository: ResultsProcessingRepository,
@@ -21,22 +21,22 @@ class CleanupService(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
-    suspend fun conditionallyExecuteCleanup(): List<PublicId> =
-        if (cleanupConfig.enabled) {
-            val maxReportAgeDays = cleanupConfig.maxReportAgeDays?.toLong() ?: Long.MAX_VALUE
+    suspend fun conditionallyCleanupTestRuns(): List<PublicId> =
+        if (cleanupConfig.reportCleanupEnabled) {
+            val maxReportAgeDays = cleanupConfig.maxReportAgeDays?.toLong() ?: 0
 
             val createdBefore = LocalDate.now().minusDays(maxReportAgeDays)
-            val testRunsToCleanUp = testRunRepository.findTestRunsToDelete(createdBefore)
+            val testRunsToCleanUp = testRunRepository.findTestRunsCreatedBeforeAndNotPinned(createdBefore)
 
             val cleanedUpTestRunIds = testRunsToCleanUp.mapNotNull {
                 conditionallyCleanupTestRun(it, cleanupConfig)
             }
 
-            logger.info("Removed ${cleanedUpTestRunIds.size} created before $createdBefore")
+            logger.info("Removed ${cleanedUpTestRunIds.size} test runs created before $createdBefore")
 
             cleanedUpTestRunIds
         } else {
-            logger.info("Clean up not enabled, skipping")
+            logger.info("Test run clean up not enabled, skipping")
 
             listOf()
         }

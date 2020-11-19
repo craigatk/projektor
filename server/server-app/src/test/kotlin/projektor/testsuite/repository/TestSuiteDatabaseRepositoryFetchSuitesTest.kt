@@ -1,5 +1,6 @@
 package projektor.testsuite.repository
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -10,6 +11,7 @@ import projektor.testsuite.TestSuiteSearchCriteria
 import strikt.api.expectThat
 import strikt.assertions.*
 
+@KtorExperimentalAPI
 class TestSuiteDatabaseRepositoryFetchSuitesTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should fetch test suites with specific package name`() {

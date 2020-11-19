@@ -1,5 +1,6 @@
 package projektor.testcase.repository
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.*
@@ -10,6 +11,7 @@ import strikt.api.expectThat
 import strikt.assertions.*
 import java.math.BigDecimal
 
+@KtorExperimentalAPI
 class TestCaseDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should fetch failed test cases from multiple test suites`() {

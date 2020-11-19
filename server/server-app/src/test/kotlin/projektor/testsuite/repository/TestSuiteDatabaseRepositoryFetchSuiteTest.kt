@@ -1,5 +1,6 @@
 package projektor.testsuite.repository
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -11,7 +12,9 @@ import strikt.assertions.any
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
+@KtorExperimentalAPI
 class TestSuiteDatabaseRepositoryFetchSuiteTest : DatabaseRepositoryTestCase() {
+
     @Test
     fun `when test suite failed should fetch test suite along with test cases and failures`() {
         val testSuiteDatabaseRepository = TestSuiteDatabaseRepository(dslContext)

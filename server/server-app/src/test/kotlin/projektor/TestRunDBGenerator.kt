@@ -3,6 +3,7 @@ package projektor
 import kotlinx.coroutines.runBlocking
 import projektor.coverage.CoverageService
 import projektor.database.generated.tables.daos.*
+import projektor.database.generated.tables.pojos.TestRunAttachment
 import projektor.database.generated.tables.pojos.TestRunSystemAttributes
 import projektor.incomingresults.mapper.parsePackageAndClassName
 import projektor.server.api.PublicId
@@ -27,7 +28,8 @@ class TestRunDBGenerator(
     private val testRunSystemAttributesDao: TestRunSystemAttributesDao,
     private val gitMetadataDao: GitMetadataDao,
     private val resultsMetadataDao: ResultsMetadataDao,
-    private val coverageService: CoverageService
+    private val coverageService: CoverageService,
+    private val attachmentDao: TestRunAttachmentDao
 ) {
     fun createTestRun(publicId: PublicId, testSuiteDataList: List<TestSuiteData>): TestRunDB {
         val testRun = createTestRun(publicId, testSuiteDataList.size)
@@ -195,6 +197,16 @@ class TestRunDBGenerator(
         addTestSuiteGroupToTestRun(testSuiteGroup, testRun, testSuiteClassNames)
 
         return testSuiteGroup
+    }
+
+    fun addAttachment(publicId: PublicId, objectName: String, fileName: String): TestRunAttachment {
+        val attachment = TestRunAttachment()
+        attachment.testRunPublicId = publicId.id
+        attachment.objectName = objectName
+        attachment.fileName = fileName
+        attachmentDao.insert(attachment)
+
+        return attachment
     }
 }
 

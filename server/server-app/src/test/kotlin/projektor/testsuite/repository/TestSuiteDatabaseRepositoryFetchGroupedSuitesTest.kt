@@ -1,5 +1,6 @@
 package projektor.testsuite.repository
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -11,7 +12,9 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 
+@KtorExperimentalAPI
 class TestSuiteDatabaseRepositoryFetchGroupedSuitesTest : DatabaseRepositoryTestCase() {
+
     @Test
     fun `should fetch grouped test suites`() {
         val testSuiteDatabaseRepository = TestSuiteDatabaseRepository(dslContext)

@@ -22,12 +22,12 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @KtorExperimentalAPI
-class CleanupServiceTest : DatabaseRepositoryTestCase() {
+class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
 
     @Test
     fun `should delete non-grouped test run without attachments`() {
-        val cleanupService = CleanupService(
-            CleanupConfig(true, 30, false),
+        val cleanupService = TestRunCleanupService(
+            CleanupConfig(30, null, false),
             get(),
             get(),
             get(),
@@ -72,8 +72,8 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
 
     @Test
     fun `should delete grouped test run without attachments`() {
-        val cleanupService = CleanupService(
-            CleanupConfig(true, 30, false),
+        val cleanupService = TestRunCleanupService(
+            CleanupConfig(30, null, false),
             get(),
             get(),
             get(),
@@ -124,8 +124,8 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
 
     @Test
     fun `should update processing status to 'deleted'`() {
-        val cleanupService = CleanupService(
-            CleanupConfig(true, 30, false),
+        val cleanupService = TestRunCleanupService(
+            CleanupConfig(30, null, false),
             get(),
             get(),
             get(),
@@ -176,8 +176,8 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
         val attachmentService = AttachmentService(attachmentsConfig, AttachmentDatabaseRepository(dslContext))
         attachmentService.conditionallyCreateBucketIfNotExists()
 
-        val cleanupService = CleanupService(
-            CleanupConfig(true, 30, false),
+        val cleanupService = TestRunCleanupService(
+            CleanupConfig(30, null, false),
             get(),
             get(),
             get(),
@@ -241,11 +241,11 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
         val publicId = randomPublicId()
         testRunDBGenerator.createTestRun(publicId, LocalDate.now().minusDays(10), false)
 
-        val cleanupConfig = CleanupConfig(false, null, false)
+        val cleanupConfig = CleanupConfig(null, null, false)
 
-        val cleanupService = CleanupService(cleanupConfig, get(), get(), get(), null)
+        val cleanupService = TestRunCleanupService(cleanupConfig, get(), get(), get(), null)
 
-        val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
+        val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyCleanupTestRuns() }
 
         expectThat(cleanedUpTestRuns).hasSize(0)
 
@@ -266,10 +266,10 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
         val pinnedTestRunId = randomPublicId()
         testRunDBGenerator.createTestRun(pinnedTestRunId, LocalDate.now().minusDays(31), true)
 
-        val cleanupConfig = CleanupConfig(true, 30, false)
-        val cleanupService = CleanupService(cleanupConfig, get(), get(), get(), null)
+        val cleanupConfig = CleanupConfig(30, null, false)
+        val cleanupService = TestRunCleanupService(cleanupConfig, get(), get(), get(), null)
 
-        val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
+        val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyCleanupTestRuns() }
 
         expectThat(cleanedUpTestRuns)
             .contains(testRunIdToDelete1, testRunIdToDelete2)
@@ -290,10 +290,10 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
         val testRunIdTooOld2 = randomPublicId()
         testRunDBGenerator.createTestRun(testRunIdTooOld2, LocalDate.now().minusDays(45), false)
 
-        val cleanupConfig = CleanupConfig(true, 30, true)
-        val cleanupService = CleanupService(cleanupConfig, get(), get(), get(), null)
+        val cleanupConfig = CleanupConfig(30, null, true)
+        val cleanupService = TestRunCleanupService(cleanupConfig, get(), get(), get(), null)
 
-        val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
+        val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyCleanupTestRuns() }
 
         expectThat(cleanedUpTestRuns)
             .contains(testRunIdTooOld1, testRunIdTooOld2)
@@ -305,8 +305,8 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should delete coverage along with test run`() {
         val coverageService: CoverageService by inject()
-        val cleanupConfig = CleanupConfig(true, 30, false)
-        val cleanupService = CleanupService(cleanupConfig, get(), get(), get(), null)
+        val cleanupConfig = CleanupConfig(30, null, false)
+        val cleanupService = TestRunCleanupService(cleanupConfig, get(), get(), get(), null)
 
         val publicIdToRemove = randomPublicId()
         testRunDBGenerator.createTestRun(publicIdToRemove, LocalDate.now().minusDays(31), false)
@@ -324,7 +324,7 @@ class CleanupServiceTest : DatabaseRepositoryTestCase() {
         val coverageStats = coverageStatsDao.fetchByCodeCoverageRunId(coverageRun.id)
         expectThat(coverageStats).isNotEmpty()
 
-        val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyExecuteCleanup() }
+        val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyCleanupTestRuns() }
         expectThat(cleanedUpTestRuns).contains(cleanedUpTestRuns)
 
         expectThat(coverageRunDao.fetchOneById(coverageRun.id)).isNull()

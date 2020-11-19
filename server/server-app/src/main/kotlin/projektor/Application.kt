@@ -25,9 +25,10 @@ import projektor.attachment.AttachmentRepository
 import projektor.attachment.AttachmentService
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
+import projektor.cleanup.AttachmentCleanupService
 import projektor.cleanup.CleanupConfig
 import projektor.cleanup.CleanupScheduledJob
-import projektor.cleanup.CleanupService
+import projektor.cleanup.TestRunCleanupService
 import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageService
 import projektor.database.DataSourceConfig
@@ -139,9 +140,10 @@ fun Application.main() {
 
     val coverageService: CoverageService by inject()
 
-    val cleanupService = CleanupService(cleanupConfig, testRunRepository, resultsProcessingRepository, coverageService, attachmentService)
+    val testRunCleanupService = TestRunCleanupService(cleanupConfig, testRunRepository, resultsProcessingRepository, coverageService, attachmentService)
+    val attachmentCleanupService = attachmentService?.let { AttachmentCleanupService(cleanupConfig, testRunRepository, attachmentService) }
     val scheduler: Scheduler by inject()
-    CleanupScheduledJob.conditionallyStartCleanupScheduledJob(cleanupConfig, cleanupService, scheduler)
+    CleanupScheduledJob.conditionallyStartCleanupScheduledJob(cleanupConfig, testRunCleanupService, attachmentCleanupService, scheduler)
 
     val testRunMetadataService: TestRunMetadataService by inject()
 

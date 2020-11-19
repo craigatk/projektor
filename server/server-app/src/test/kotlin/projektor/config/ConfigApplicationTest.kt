@@ -18,7 +18,7 @@ import strikt.assertions.isTrue
 class ConfigApplicationTest : ApplicationTestCase() {
     @Test
     fun `should return cleanup age in days when it is configured`() {
-        cleanupMaxAgeDays = 60
+        reportCleanupMaxAgeDays = 60
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/config").apply {
@@ -33,7 +33,7 @@ class ConfigApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should return cleanup disabled when it is not configured`() {
-        cleanupMaxAgeDays = null
+        reportCleanupMaxAgeDays = null
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/config").apply {

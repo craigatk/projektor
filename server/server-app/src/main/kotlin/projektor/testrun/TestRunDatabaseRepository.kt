@@ -203,19 +203,34 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
         }
     }
 
-    override suspend fun findTestRunsToDelete(createdBefore: LocalDate): List<PublicId> =
+    override suspend fun findTestRunsCreatedBeforeAndNotPinned(createdBefore: LocalDate): List<PublicId> =
+        findTestRunsCreatedBeforeAndNotPinned(createdBefore, false)
+
+    override suspend fun findTestRunsCreatedBeforeAndNotPinnedWithAttachments(createdBefore: LocalDate): List<PublicId> =
+        findTestRunsCreatedBeforeAndNotPinned(createdBefore, true)
+
+    private suspend fun findTestRunsCreatedBeforeAndNotPinned(createdBefore: LocalDate, withAttachmentsOnly: Boolean): List<PublicId> =
         withContext(Dispatchers.IO) {
             val createdBeforeTimestamp = LocalDateTime.of(createdBefore, LocalTime.MIDNIGHT)
 
-            dslContext
-                .select(TEST_RUN.PUBLIC_ID)
-                .from(TEST_RUN)
-                .leftOuterJoin(TEST_RUN_SYSTEM_ATTRIBUTES).on(TEST_RUN_SYSTEM_ATTRIBUTES.TEST_RUN_PUBLIC_ID.eq(TEST_RUN.PUBLIC_ID))
-                .where(
-                    TEST_RUN_SYSTEM_ATTRIBUTES.PINNED.isNull
-                        .or(TEST_RUN_SYSTEM_ATTRIBUTES.PINNED.isFalse)
-                        .and(TEST_RUN.CREATED_TIMESTAMP.lessOrEqual(createdBeforeTimestamp))
-                )
+            val query = if (withAttachmentsOnly) {
+                dslContext
+                    .select(TEST_RUN.PUBLIC_ID)
+                    .from(TEST_RUN)
+                    .leftOuterJoin(TEST_RUN_SYSTEM_ATTRIBUTES).on(TEST_RUN_SYSTEM_ATTRIBUTES.TEST_RUN_PUBLIC_ID.eq(TEST_RUN.PUBLIC_ID))
+                    .innerJoin(TEST_RUN_ATTACHMENT).on(TEST_RUN.PUBLIC_ID.eq(TEST_RUN_ATTACHMENT.TEST_RUN_PUBLIC_ID))
+            } else {
+                dslContext
+                    .select(TEST_RUN.PUBLIC_ID)
+                    .from(TEST_RUN)
+                    .leftOuterJoin(TEST_RUN_SYSTEM_ATTRIBUTES).on(TEST_RUN_SYSTEM_ATTRIBUTES.TEST_RUN_PUBLIC_ID.eq(TEST_RUN.PUBLIC_ID))
+            }
+
+            query.where(
+                TEST_RUN_SYSTEM_ATTRIBUTES.PINNED.isNull
+                    .or(TEST_RUN_SYSTEM_ATTRIBUTES.PINNED.isFalse)
+                    .and(TEST_RUN.CREATED_TIMESTAMP.lessOrEqual(createdBeforeTimestamp))
+            )
                 .fetchInto(String::class.java)
                 .map { PublicId(it) }
         }
