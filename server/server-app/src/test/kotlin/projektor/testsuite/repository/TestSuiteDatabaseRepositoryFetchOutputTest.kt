@@ -1,5 +1,6 @@
 package projektor.testsuite.repository
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -10,7 +11,9 @@ import projektor.testsuite.TestSuiteDatabaseRepository
 import strikt.api.expectThat
 import strikt.assertions.*
 
+@KtorExperimentalAPI
 class TestSuiteDatabaseRepositoryFetchOutputTest : DatabaseRepositoryTestCase() {
+
     @Test
     fun `should fetch test suite system out`() {
         val testSuiteDatabaseRepository = TestSuiteDatabaseRepository(dslContext)

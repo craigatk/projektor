@@ -1,5 +1,6 @@
 package projektor.incomingresults.processing
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -15,6 +16,7 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 import java.time.LocalDateTime
 
+@KtorExperimentalAPI
 class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     private lateinit var resultsProcessingDatabaseRepository: ResultsProcessingRepository
 

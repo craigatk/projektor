@@ -1,5 +1,6 @@
 package projektor.testrun.repository
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -12,7 +13,9 @@ import strikt.assertions.doesNotContain
 import strikt.assertions.isNull
 import java.time.LocalDate
 
+@KtorExperimentalAPI
 class TestRunDatabaseRepositoryDeleteTest : DatabaseRepositoryTestCase() {
+
     @Test
     fun `should delete test run`() {
         val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
@@ -69,10 +72,40 @@ class TestRunDatabaseRepositoryDeleteTest : DatabaseRepositoryTestCase() {
         val shouldDelete2PublicId = randomPublicId()
         testRunDBGenerator.createTestRun(shouldDelete2PublicId, LocalDate.of(2020, 2, 1), false)
 
-        val testRunsToDelete = runBlocking { testRunDatabaseRepository.findTestRunsToDelete(LocalDate.of(2020, 2, 2)) }
+        val testRunsToDelete = runBlocking { testRunDatabaseRepository.findTestRunsCreatedBeforeAndNotPinned(LocalDate.of(2020, 2, 2)) }
 
         expectThat(testRunsToDelete)
             .contains(shouldDelete1PublicId, shouldDelete2PublicId)
             .doesNotContain(tooNewPublicId, pinnedPublicId)
+    }
+
+    @Test
+    fun `should find test runs created before a given date that are not pinned and have attachments`() {
+        val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
+
+        val tooNewPublicId = randomPublicId()
+        testRunDBGenerator.createTestRun(tooNewPublicId, LocalDate.of(2020, 4, 1), false)
+        testRunDBGenerator.addAttachment(tooNewPublicId, "attachment", "attachment.txt")
+
+        val pinnedPublicId = randomPublicId()
+        testRunDBGenerator.createTestRun(pinnedPublicId, LocalDate.of(2020, 2, 1), true)
+        testRunDBGenerator.addAttachment(pinnedPublicId, "attachment", "attachment.txt")
+
+        val shouldFetch1PublicId = randomPublicId()
+        testRunDBGenerator.createTestRun(shouldFetch1PublicId, LocalDate.of(2020, 2, 1), false)
+        testRunDBGenerator.addAttachment(shouldFetch1PublicId, "attachment", "attachment.txt")
+
+        val shouldFetch2PublicId = randomPublicId()
+        testRunDBGenerator.createTestRun(shouldFetch2PublicId, LocalDate.of(2020, 2, 1), false)
+        testRunDBGenerator.addAttachment(shouldFetch2PublicId, "attachment", "attachment.txt")
+
+        val noAttachmentsPublicId = randomPublicId()
+        testRunDBGenerator.createTestRun(noAttachmentsPublicId, LocalDate.of(2020, 2, 1), false)
+
+        val fetchedTestRuns = runBlocking { testRunDatabaseRepository.findTestRunsCreatedBeforeAndNotPinnedWithAttachments(LocalDate.of(2020, 2, 2)) }
+
+        expectThat(fetchedTestRuns)
+            .contains(shouldFetch1PublicId, shouldFetch2PublicId)
+            .doesNotContain(tooNewPublicId, pinnedPublicId, noAttachmentsPublicId)
     }
 }

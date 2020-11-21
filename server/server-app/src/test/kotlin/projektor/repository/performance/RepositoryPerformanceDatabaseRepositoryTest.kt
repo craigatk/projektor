@@ -1,5 +1,6 @@
 package projektor.repository.performance
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
@@ -12,7 +13,9 @@ import strikt.api.expectThat
 import strikt.assertions.hasSize
 import java.math.BigDecimal
 
+@KtorExperimentalAPI
 class RepositoryPerformanceDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
+
     @Test
     fun `should fetch from any branch, not just the main one`() {
         val repositoryPerformanceRepository: RepositoryPerformanceRepository by inject()

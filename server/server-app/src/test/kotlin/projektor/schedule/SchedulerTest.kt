@@ -1,5 +1,6 @@
 package projektor.schedule
 
+import io.ktor.util.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.Test
@@ -13,6 +14,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
 @ExperimentalTime
+@KtorExperimentalAPI
 class SchedulerTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should run scheduled job`() {

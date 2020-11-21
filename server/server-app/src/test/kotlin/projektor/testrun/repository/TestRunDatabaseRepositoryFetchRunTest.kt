@@ -1,5 +1,6 @@
 package projektor.testrun.repository
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -15,6 +16,7 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 import kotlin.test.assertNotNull
 
+@KtorExperimentalAPI
 class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
 
     @Test

@@ -1,9 +1,9 @@
 package projektor.attachment
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
-import projektor.database.generated.tables.pojos.TestRunAttachment
 import projektor.incomingresults.randomPublicId
 import strikt.api.expectThat
 import strikt.assertions.any
@@ -11,6 +11,7 @@ import strikt.assertions.get
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
+@KtorExperimentalAPI
 class AttachmentDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
     @Test
@@ -18,32 +19,21 @@ class AttachmentDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val publicId = randomPublicId()
         val attachmentDatabaseRepository = AttachmentDatabaseRepository(dslContext)
 
-        val attachment1 = TestRunAttachment()
-        attachment1.testRunPublicId = publicId.id
-        attachment1.objectName = "object1"
-        attachment1.fileName = "file1.txt"
-        attachmentDao.insert(attachment1)
-
-        val attachment2 = TestRunAttachment()
-        attachment2.testRunPublicId = publicId.id
-        attachment2.objectName = "object2"
-        attachment2.fileName = "file2.txt"
-        attachmentDao.insert(attachment2)
+        testRunDBGenerator.addAttachment(publicId, "object1", "file1.txt")
+        testRunDBGenerator.addAttachment(publicId, "object2", "file2.txt")
 
         val anotherPublicId = randomPublicId()
-        val attachmentForAnotherTestRun = TestRunAttachment()
-        attachmentForAnotherTestRun.testRunPublicId = anotherPublicId.id
-        attachmentForAnotherTestRun.objectName = "other"
-        attachmentForAnotherTestRun.fileName = "other.txt"
-        attachmentDao.insert(attachmentForAnotherTestRun)
+        testRunDBGenerator.addAttachment(anotherPublicId, "other", "other.txt")
 
         val attachments = runBlocking { attachmentDatabaseRepository.listAttachments(publicId) }
         expectThat(attachments).hasSize(2).and {
             any {
                 get { objectName }.isEqualTo("object1")
+                get { fileName }.isEqualTo("file1.txt")
             }
             any {
                 get { objectName }.isEqualTo("object2")
+                get { fileName }.isEqualTo("file2.txt")
             }
         }
     }
@@ -62,24 +52,11 @@ class AttachmentDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val publicId = randomPublicId()
         val attachmentDatabaseRepository = AttachmentDatabaseRepository(dslContext)
 
-        val attachment1 = TestRunAttachment()
-        attachment1.testRunPublicId = publicId.id
-        attachment1.objectName = "shouldNotDelete"
-        attachment1.fileName = "file1.txt"
-        attachmentDao.insert(attachment1)
-
-        val attachment2 = TestRunAttachment()
-        attachment2.testRunPublicId = publicId.id
-        attachment2.objectName = "shouldDelete"
-        attachment2.fileName = "file2.txt"
-        attachmentDao.insert(attachment2)
+        testRunDBGenerator.addAttachment(publicId, "shouldNotDelete", "file1.txt")
+        testRunDBGenerator.addAttachment(publicId, "shouldDelete", "file2.txt")
 
         val anotherPublicId = randomPublicId()
-        val attachmentForAnotherTestRun = TestRunAttachment()
-        attachmentForAnotherTestRun.testRunPublicId = anotherPublicId.id
-        attachmentForAnotherTestRun.objectName = "shouldDelete"
-        attachmentForAnotherTestRun.fileName = "other.txt"
-        attachmentDao.insert(attachmentForAnotherTestRun)
+        testRunDBGenerator.addAttachment(anotherPublicId, "shouldDelete", "other.txt")
 
         runBlocking { attachmentDatabaseRepository.deleteAttachment(publicId, "shouldDelete") }
 

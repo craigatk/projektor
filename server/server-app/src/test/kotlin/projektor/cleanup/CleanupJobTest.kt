@@ -13,15 +13,15 @@ import java.time.LocalDate
 @KtorExperimentalAPI
 class CleanupJobTest : DatabaseRepositoryTestCase() {
     @Test
-    fun `should execute cleanup`() {
-        val cleanupService = CleanupService(
-            CleanupConfig(true, 30, false),
+    fun `should execute test report cleanup`() {
+        val cleanupService = TestRunCleanupService(
+            CleanupConfig(30, null, false),
             get(),
             get(),
             get(),
             null
         )
-        val cleanupScheduledJob = CleanupScheduledJob(cleanupService)
+        val cleanupScheduledJob = CleanupScheduledJob(cleanupService, null)
 
         val publicIdToDelete = randomPublicId()
         val testRunToDelete = testRunDBGenerator.createTestRun(publicIdToDelete, LocalDate.now().minusDays(31), false)

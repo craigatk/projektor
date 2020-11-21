@@ -1,5 +1,6 @@
 package projektor.incomingresults
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
@@ -13,6 +14,7 @@ import projektor.server.api.results.ResultsProcessingStatus
 import strikt.api.expectThat
 import strikt.assertions.*
 
+@KtorExperimentalAPI
 class TestResultsServiceTest : DatabaseRepositoryTestCase() {
     private lateinit var testResultsService: TestResultsService
 

@@ -11,7 +11,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
+import org.koin.test.get
 import org.koin.test.inject
+import projektor.attachment.AttachmentConfig
+import projektor.attachment.AttachmentService
 import projektor.auth.AuthConfig
 import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageRepository
@@ -23,6 +26,7 @@ import projektor.message.MessageConfig
 import projektor.metrics.InfluxMetricsConfig
 import projektor.metrics.createRegistry
 
+@KtorExperimentalAPI
 open class DatabaseRepositoryTestCase : KoinTest {
     lateinit var dataSource: HikariDataSource
     lateinit var dslContext: DSLContext
@@ -43,6 +47,17 @@ open class DatabaseRepositoryTestCase : KoinTest {
     lateinit var coverageGroupDao: CodeCoverageGroupDao
     lateinit var coverageStatsDao: CodeCoverageStatsDao
     lateinit var coverageService: CoverageService
+
+    val attachmentConfig = AttachmentConfig(
+        url = "http://localhost:9000",
+        bucketName = "attachmentstesting",
+        autoCreateBucket = true,
+        accessKey = "minio_access_key",
+        secretKey = "minio_secret_key",
+        maxSizeMB = null
+    )
+    var attachmentsEnabled = false
+    lateinit var attachmentService: AttachmentService
 
     @KtorExperimentalAPI
     @BeforeEach
@@ -120,8 +135,17 @@ open class DatabaseRepositoryTestCase : KoinTest {
             testRunSystemAttributesDao,
             gitMetadataDao,
             resultsMetadataDao,
-            coverageService
+            coverageService,
+            attachmentDao
         )
+
+        if (attachmentsEnabled) {
+            attachmentService = AttachmentService(
+                attachmentConfig,
+                get()
+            )
+            attachmentService.conditionallyCreateBucketIfNotExists()
+        }
     }
 
     @AfterEach

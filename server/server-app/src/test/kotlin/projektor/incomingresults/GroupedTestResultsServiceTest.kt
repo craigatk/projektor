@@ -1,5 +1,6 @@
 package projektor.incomingresults
 
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
@@ -12,6 +13,7 @@ import strikt.api.expectThat
 import strikt.assertions.isNotEmpty
 import kotlin.test.assertNotNull
 
+@KtorExperimentalAPI
 class GroupedTestResultsServiceTest : DatabaseRepositoryTestCase() {
 
     @Test
