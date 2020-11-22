@@ -1,11 +1,8 @@
 package projektor.route
 
-import io.ktor.application.ApplicationCall
 import io.ktor.application.call
-import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.header
-import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
@@ -14,19 +11,16 @@ import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.getOrFail
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Timer
-import org.slf4j.LoggerFactory
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
 import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.PersistTestResultsException
 import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
+import projektor.route.CompressionRequest.receiveCompressedOrPlainTextPayload
 import projektor.server.api.PublicId
 import projektor.server.api.results.SaveResultsError
 import projektor.server.api.results.SaveResultsResponse
-import projektor.util.ungzip
-
-private val logger = LoggerFactory.getLogger("ResultsRoutes")
 
 @KtorExperimentalAPI
 fun Route.results(
@@ -40,7 +34,7 @@ fun Route.results(
         if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
             call.respond(HttpStatusCode.Unauthorized)
         } else {
-            val resultsBlob = receiveResults(call)
+            val resultsBlob = receiveCompressedOrPlainTextPayload(call)
 
             if (resultsBlob.isNotBlank()) {
                 val publicId = testResultsService.persistTestResultsAsync(resultsBlob)
@@ -57,7 +51,7 @@ fun Route.results(
         } else {
             val timer = metricRegistry.timer("receive_grouped_results")
             val sample = Timer.start(metricRegistry)
-            val groupedResultsBlob = receiveResults(call)
+            val groupedResultsBlob = receiveCompressedOrPlainTextPayload(call)
             sample.stop(timer)
 
             if (groupedResultsBlob.isNotBlank()) {
@@ -83,15 +77,4 @@ fun Route.results(
             ?.let { call.respond(HttpStatusCode.OK, it) }
             ?: call.respond(HttpStatusCode.NotFound)
     }
-}
-
-private suspend fun receiveResults(call: ApplicationCall): String {
-    val resultsBlob = if (call.request.header(HttpHeaders.ContentEncoding) == "gzip") {
-        logger.info("Unzipping compressed results")
-        ungzip(call.receive<ByteArray>())
-    } else {
-        call.receive<String>()
-    }
-
-    return resultsBlob
 }
