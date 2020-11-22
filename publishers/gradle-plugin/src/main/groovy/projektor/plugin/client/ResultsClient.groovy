@@ -3,31 +3,21 @@ package projektor.plugin.client
 import groovy.json.JsonSlurper
 import io.github.resilience4j.retry.Retry
 import okhttp3.MediaType
-import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
 import okhttp3.Response
 import org.gradle.api.logging.Logger
 import projektor.plugin.PublishResult
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.results.grouped.GroupedResultsSerializer
 
-import static projektor.plugin.client.ClientToken.conditionallyAddPublishTokenToRequest
+class ResultsClient extends AbstractClient {
 
-class ResultsClient {
-
-    private final ClientConfig config
-    private final Logger logger
     private final GroupedResultsSerializer groupedResultsSerializer = new GroupedResultsSerializer()
-    private final OkHttpClient client
 
     private final Retry publishRetry
 
     ResultsClient(ClientConfig clientConfig, Logger logger) {
-        this.config = clientConfig
-        this.logger = logger
-
-        this.client = ClientFactory.createClient(clientConfig)
+        super(clientConfig, logger)
         this.publishRetry = ClientFactory.createClientRetry(clientConfig, "publish")
     }
 
@@ -38,22 +28,7 @@ class ResultsClient {
 
         String groupedResultsJson = groupedResultsSerializer.serializeGroupedResults(groupedResults)
 
-        RequestBody body = config.compressionEnabled
-                ? RequestBody.create(mediaType, CompressionUtil.gzip(groupedResultsJson))
-                : RequestBody.create(mediaType, groupedResultsJson)
-
-        String resultsUrl = "${config.serverUrl}/groupedResults"
-        Request.Builder requestBuilder = new Request.Builder()
-                .url(resultsUrl)
-                .post(body)
-
-        if (config.compressionEnabled) {
-            requestBuilder.header("Content-Encoding", "gzip")
-        }
-
-        conditionallyAddPublishTokenToRequest(requestBuilder, config)
-
-        Request request = requestBuilder.build()
+        Request request = buildRequest("groupedResults", mediaType, groupedResultsJson)
 
         try {
             Response response = publishRetry.executeSupplier({ -> client.newCall(request).execute() })
