@@ -3,7 +3,6 @@ package projektor.route
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.header
-import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
@@ -13,6 +12,7 @@ import io.ktor.util.getOrFail
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
 import projektor.coverage.CoverageService
+import projektor.route.CompressionRequest.receiveCompressedOrPlainTextPayload
 import projektor.server.api.PublicId
 import projektor.server.api.coverage.CoverageExists
 import projektor.server.api.coverage.CoverageFiles
@@ -26,7 +26,7 @@ fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
         if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
             call.respond(HttpStatusCode.Unauthorized)
         } else {
-            val reportXml = call.receive<String>()
+            val reportXml = receiveCompressedOrPlainTextPayload(call)
 
             try {
                 coverageService.saveReport(reportXml, PublicId(publicId))
