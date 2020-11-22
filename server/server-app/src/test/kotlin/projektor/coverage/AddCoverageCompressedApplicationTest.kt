@@ -28,7 +28,7 @@ class AddCoverageCompressedApplicationTest : ApplicationTestCase() {
             handleRequest(HttpMethod.Post, "/run/$publicId/coverage") {
                 testRunDBGenerator.createSimpleTestRun(publicId)
 
-                addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.ContentType, "text/plain")
                 addHeader(HttpHeaders.ContentEncoding, "gzip")
                 setBody(compressedBody)
             }.apply {

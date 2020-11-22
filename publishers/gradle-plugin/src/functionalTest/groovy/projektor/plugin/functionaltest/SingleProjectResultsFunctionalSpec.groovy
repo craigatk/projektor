@@ -6,6 +6,7 @@ import projektor.plugin.SpecWriter
 import projektor.server.api.TestRun
 import projektor.server.api.TestSuite
 import retrofit2.Response
+import spock.util.concurrent.PollingConditions
 
 class SingleProjectResultsFunctionalSpec extends ProjektorPluginFunctionalSpecification {
     File buildFile
@@ -39,10 +40,12 @@ class SingleProjectResultsFunctionalSpec extends ProjektorPluginFunctionalSpecif
         when:
         String testId = extractTestId(result.output)
 
-        Response<TestRun> testRunResponse = projektorTestRunApi.testRun(testId).execute()
-
         then:
-        testRunResponse.successful
+        new PollingConditions().eventually {
+            assert projektorTestRunApi.testRun(testId).execute().successful
+        }
+
+        Response<TestRun> testRunResponse = projektorTestRunApi.testRun(testId).execute()
 
         TestRun testRun = testRunResponse.body()
         testRun.testSuites.size() == expectedTestSuiteClassNames.size()
