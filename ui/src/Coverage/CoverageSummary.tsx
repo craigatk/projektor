@@ -4,6 +4,7 @@ import LoadingState from "../Loading/LoadingState";
 import { Coverage } from "../model/TestRunModel";
 import { fetchCoverage } from "../service/TestRunService";
 import OverallCoverageGraphs from "./OverallCoverageGraphs";
+import CleanLink from "../Link/CleanLink";
 
 interface CoverageSummaryProps {
   publicId: string;
@@ -25,7 +26,9 @@ const CoverageSummary = ({ publicId }: CoverageSummaryProps) => {
   if (coverage) {
     return (
       <div>
-        <PageTitle title="Coverage" testid="coverage-summary-title" />
+        <CleanLink to={`/tests/${publicId}/coverage`}>
+          <PageTitle title="Coverage" testid="coverage-summary-title" />
+        </CleanLink>
         <OverallCoverageGraphs
           overallStats={coverage.overallStats}
           previousTestRunId={coverage.previousTestRunId}

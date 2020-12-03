@@ -1,14 +1,16 @@
-package projektor.plugin.results.grouped
+package projektor.plugin.client
 
 import projektor.parser.grouped.GroupedResultsParser
 import projektor.parser.grouped.model.GroupedResults as ServerGroupedResults
 import projektor.parser.grouped.model.GroupedTestSuites as ServerGroupedTestSuites
+import projektor.plugin.results.grouped.GroupedResults
+import projektor.plugin.results.grouped.GroupedTestSuites
 import spock.lang.Specification
 import spock.lang.Subject
 
-class GroupedResultsSerializerSpec extends Specification {
+class PayloadSerializerSpec extends Specification {
     @Subject
-    GroupedResultsSerializer groupedResultsSerializer = new GroupedResultsSerializer()
+    PayloadSerializer payloadSerializer = new PayloadSerializer()
 
     private GroupedResultsParser groupedResultsParser = new GroupedResultsParser()
 
@@ -26,7 +28,7 @@ class GroupedResultsSerializerSpec extends Specification {
         GroupedResults groupedResults = new GroupedResults(groupedTestSuites: groupedTestSuites)
 
         when:
-        String groupedResultsXml = groupedResultsSerializer.serializeGroupedResults(groupedResults)
+        String groupedResultsXml = payloadSerializer.serializePayload(groupedResults)
         ServerGroupedResults parsedGroupedResults = groupedResultsParser.parseGroupedResults(groupedResultsXml)
 
         then:

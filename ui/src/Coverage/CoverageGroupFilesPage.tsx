@@ -1,8 +1,11 @@
 import * as React from "react";
 import { RouteComponentProps } from "@reach/router";
 import LoadingState from "../Loading/LoadingState";
-import { CoverageFiles } from "../model/TestRunModel";
-import { fetchCoverageGroupFiles } from "../service/TestRunService";
+import { CoverageFiles, TestRunGitMetadata } from "../model/TestRunModel";
+import {
+  fetchCoverageGroupFiles,
+  fetchTestRunGitMetadata,
+} from "../service/TestRunService";
 import PageTitle from "../PageTitle";
 import LoadingSection from "../Loading/LoadingSection";
 import CoverageFilesTable from "./CoverageFilesTable";
@@ -20,6 +23,9 @@ const CoverageGroupFilesPage = ({
     LoadingState.Loading
   );
   const [coverageFiles, setCoverageFiles] = React.useState<CoverageFiles>(null);
+  const [gitMetadata, setGitMetadata] = React.useState<TestRunGitMetadata>(
+    null
+  );
 
   React.useEffect(() => {
     fetchCoverageGroupFiles(publicId, coverageGroupName)
@@ -29,6 +35,14 @@ const CoverageGroupFilesPage = ({
       })
       .catch(() => setLoadingState(LoadingState.Error));
   }, [setCoverageFiles, setLoadingState]);
+
+  React.useEffect(() => {
+    fetchTestRunGitMetadata(publicId)
+      .then((response) => {
+        setGitMetadata(response.data);
+      })
+      .catch(() => {});
+  }, [setGitMetadata]);
 
   return (
     <div>
@@ -44,6 +58,7 @@ const CoverageGroupFilesPage = ({
             <CoverageFilesTable
               coverageFiles={coverageFiles}
               coverageGroupName={coverageGroupName}
+              gitMetadata={gitMetadata}
             />
           }
         />

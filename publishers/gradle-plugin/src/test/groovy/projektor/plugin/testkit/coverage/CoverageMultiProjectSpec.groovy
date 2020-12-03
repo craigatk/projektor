@@ -1,5 +1,6 @@
 package projektor.plugin.testkit.coverage
 
+import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.plugin.testkit.MultiProjectSpec
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
@@ -62,6 +63,51 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
 
         and:
         coverageStubber.findCoverageRequests(publicId).size() == 3
+    }
+
+    def "should include full directory path in published coverage data"() {
+        given:
+        rootBuildFile << """
+            projektor {
+                serverUrl = '${serverUrl}'
+                alwaysPublishInCI = true
+            }
+        """.stripIndent()
+
+        String publicId = "COV123"
+        resultsStubber.stubResultsPostSuccess(publicId)
+
+        coverageStubber.stubCoveragePostSuccess(publicId)
+
+        writeSourceCodeFile(sourceDirectory1)
+        writePartialCoverageSpecFile(testDirectory1, "PartialSpec1")
+
+        writeSourceCodeFile(sourceDirectory2)
+        writePartialCoverageSpecFile(testDirectory2, "PartialSpec2")
+
+        writeSourceCodeFile(sourceDirectory3)
+        writePartialCoverageSpecFile(testDirectory3, "PartialSpec3")
+
+        when:
+        def result = runSuccessfulBuildInCI('test', 'jacocoTestReport', '-i')
+
+        then:
+        result.task(":project1:test").outcome == SUCCESS
+        result.task(":project1:jacocoTestReport").outcome == SUCCESS
+
+        result.task(":project2:test").outcome == SUCCESS
+        result.task(":project2:jacocoTestReport").outcome == SUCCESS
+
+        result.task(":project3:test").outcome == SUCCESS
+        result.task(":project3:jacocoTestReport").outcome == SUCCESS
+
+        and:
+        List<CoverageFilePayload> coverageFilePayloads = coverageStubber.findCoveragePayloads(publicId)
+        coverageFilePayloads.size() == 3
+
+        coverageFilePayloads.find { it.baseDirectoryPath == "project1/src/main/groovy"}
+        coverageFilePayloads.find { it.baseDirectoryPath == "project2/src/main/groovy"}
+        coverageFilePayloads.find { it.baseDirectoryPath == "project3/src/main/groovy"}
     }
 
     def "when only one subproject changes should publish coverage from all subprojects"() {

@@ -7,9 +7,13 @@ import io.ktor.routing.*
 import io.ktor.util.*
 import projektor.metadata.TestRunMetadataService
 import projektor.server.api.PublicId
+import projektor.versioncontrol.VersionControlConfig
 
 @KtorExperimentalAPI
-fun Route.metadata(testRunMetadataService: TestRunMetadataService) {
+fun Route.metadata(
+    testRunMetadataService: TestRunMetadataService,
+    versionControlConfig: VersionControlConfig
+) {
     get("/run/{publicId}/metadata") {
         val publicId = call.parameters.getOrFail("publicId")
 
@@ -24,7 +28,12 @@ fun Route.metadata(testRunMetadataService: TestRunMetadataService) {
 
         val gitMetadata = testRunMetadataService.fetchGitMetadata(PublicId(publicId))
 
-        gitMetadata?.let { call.respond(HttpStatusCode.OK, it) }
-            ?: call.respond(HttpStatusCode.NoContent)
+        if (gitMetadata != null) {
+            gitMetadata.gitHubBaseUrl = versionControlConfig.gitHubBaseUrl
+
+            call.respond(HttpStatusCode.OK, gitMetadata)
+        } else {
+            call.respond(HttpStatusCode.NoContent)
+        }
     }
 }

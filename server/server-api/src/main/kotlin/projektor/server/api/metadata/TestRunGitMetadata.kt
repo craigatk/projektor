@@ -6,4 +6,6 @@ data class TestRunGitMetadata(
     val branchName: String?,
     val projectName: String?,
     val isMainBranch: Boolean
-)
+) {
+    var gitHubBaseUrl: String? = null
+}

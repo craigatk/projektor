@@ -54,7 +54,10 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
             }
         }
 
-    override suspend fun addCoverageReport(coverageRun: CodeCoverageRun, coverageReport: CoverageReport): CodeCoverageGroup =
+    override suspend fun addCoverageReport(
+        coverageRun: CodeCoverageRun,
+        coverageReport: CoverageReport
+    ): CodeCoverageGroup =
         withContext(Dispatchers.IO) {
             val codeCoverageGroup = CodeCoverageGroup()
 
@@ -112,6 +115,7 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
                     codeCoverageFile.statsId = fileStats.id
                     codeCoverageFile.fileName = reportFile.fileName
                     codeCoverageFile.directoryName = reportFile.directoryName
+                    codeCoverageFile.filePath = reportFile.filePath
                     codeCoverageFile.setMissedLines(*reportFile.missedLines.toTypedArray())
                     codeCoverageFile.setPartialLines(*reportFile.partialLines.toTypedArray())
 
@@ -156,6 +160,7 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
             val resultSet = dslContext.select(
                 CODE_COVERAGE_FILE.DIRECTORY_NAME,
                 CODE_COVERAGE_FILE.FILE_NAME,
+                CODE_COVERAGE_FILE.FILE_PATH,
                 CODE_COVERAGE_FILE.MISSED_LINES,
                 CODE_COVERAGE_FILE.PARTIAL_LINES,
                 CODE_COVERAGE_STATS.BRANCH_COVERED.`as`("stats_branch_stat_covered"),

@@ -8,9 +8,7 @@ import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.metadata.TestRunGitMetadata
 import strikt.api.expectThat
-import strikt.assertions.isEqualTo
-import strikt.assertions.isNull
-import strikt.assertions.isTrue
+import strikt.assertions.*
 import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
@@ -68,6 +66,34 @@ class GitMetadataApplicationTest : ApplicationTestCase() {
                     get { branchName }.isEqualTo("main")
                     get { projectName }.isEqualTo("my-project")
                     get { isMainBranch }.isTrue()
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `when GitHub base URL should return it`() {
+        val publicId = randomPublicId()
+
+        gitHubBaseUrl = "http://git.localhost:8080/"
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Get, "/run/$publicId/metadata/git") {
+                val testRun = testRunDBGenerator.createSimpleTestRun(publicId)
+                testRunDBGenerator.addGitMetadata(testRun, "projektor/projektor", false, "feature/branch", null)
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+
+                val gitMetadata = objectMapper.readValue(response.content, TestRunGitMetadata::class.java)
+                assertNotNull(gitMetadata)
+
+                expectThat(gitMetadata) {
+                    get { gitHubBaseUrl }.isNotNull().isEqualTo("http://git.localhost:8080/")
+                    get { repoName }.isEqualTo("projektor/projektor")
+                    get { orgName }.isEqualTo("projektor")
+                    get { branchName }.isEqualTo("feature/branch")
+                    get { isMainBranch }.isFalse()
+                    get { projectName }.isNull()
                 }
             }
         }

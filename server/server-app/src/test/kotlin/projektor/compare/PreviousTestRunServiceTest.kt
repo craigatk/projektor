@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import org.koin.core.inject
 import projektor.DatabaseRepositoryTestCase
 import projektor.incomingresults.randomPublicId
+import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
@@ -28,7 +29,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
 
         val previousTestRun = testRunDBGenerator.createSimpleTestRun(previousPublicId)
         testRunDBGenerator.addGitMetadata(previousTestRun, repoName, true, "main", null)
-        runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), previousPublicId) }
+        runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), previousPublicId) }
 
         testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
             publicId = previousWithDifferentProjectName,
@@ -40,11 +41,11 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
 
         val thisTestRun = testRunDBGenerator.createSimpleTestRun(thisPublicId)
         testRunDBGenerator.addGitMetadata(thisTestRun, repoName, true, "main", null)
-        runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), thisPublicId) }
+        runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), thisPublicId) }
 
         val newerTestRun = testRunDBGenerator.createSimpleTestRun(newerPublicId)
         testRunDBGenerator.addGitMetadata(newerTestRun, repoName, true, "main", null)
-        runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), newerPublicId) }
+        runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), newerPublicId) }
 
         val returnedId = runBlocking { previousTestRunService.findPreviousMainBranchRunWithCoverage(thisPublicId) }
         expectThat(returnedId).isEqualTo(previousPublicId)

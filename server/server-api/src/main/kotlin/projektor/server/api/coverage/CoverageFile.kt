@@ -5,5 +5,6 @@ data class CoverageFile(
     val directoryName: String,
     val missedLines: Array<Int>,
     val partialLines: Array<Int>,
-    val stats: CoverageStats
+    val stats: CoverageStats,
+    val filePath: String?
 )

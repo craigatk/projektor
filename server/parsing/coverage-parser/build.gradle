@@ -8,5 +8,8 @@ dependencies {
     implementation project(':server:parsing:jacoco-xml-parser')
     implementation project(':server:parsing:jest-xml-parser')
 
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.9.8"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.11.3"
+
     testImplementation(project(':server:test:coverage-fixtures'))
 }

@@ -8,6 +8,7 @@ import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
+import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.server.api.PublicId
 import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectThat
@@ -30,19 +31,19 @@ class PreviousTestRunApplicationTest : ApplicationTestCase() {
             handleRequest(HttpMethod.Get, "/run/$thisPublicId/previous") {
                 val differentTestRun = testRunDBGenerator.createSimpleTestRun(differentRepoPublicId)
                 testRunDBGenerator.addGitMetadata(differentTestRun, "projektor/different", true, "main", null)
-                runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), differentRepoPublicId) }
+                runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), differentRepoPublicId) }
 
                 val oldestTestRun = testRunDBGenerator.createSimpleTestRun(oldestPublicId)
                 testRunDBGenerator.addGitMetadata(oldestTestRun, repoName, true, "main", null)
-                runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), oldestPublicId) }
+                runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), oldestPublicId) }
 
                 val newerTestRun = testRunDBGenerator.createSimpleTestRun(previousPublicId)
                 testRunDBGenerator.addGitMetadata(newerTestRun, repoName, true, "main", null)
-                runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), previousPublicId) }
+                runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), previousPublicId) }
 
                 val thisPublicTestRun = testRunDBGenerator.createSimpleTestRun(thisPublicId)
                 testRunDBGenerator.addGitMetadata(thisPublicTestRun, repoName, true, "main", null)
-                runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), thisPublicId) }
+                runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), thisPublicId) }
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 

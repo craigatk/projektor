@@ -53,6 +53,7 @@ import projektor.testrun.TestRunRepository
 import projektor.testrun.TestRunService
 import projektor.testrun.attributes.TestRunSystemAttributesService
 import projektor.testsuite.TestSuiteService
+import projektor.versioncontrol.VersionControlConfig
 
 @KtorExperimentalAPI
 fun Application.main() {
@@ -71,6 +72,8 @@ fun Application.main() {
     val cleanupConfig = CleanupConfig.createCleanupConfig(applicationConfig)
 
     val messageConfig = MessageConfig.createMessageConfig(applicationConfig)
+
+    val versionControlConfig = VersionControlConfig.createVersionControlConfig(applicationConfig)
 
     val appModule = createAppModule(dataSource, authConfig, dslContext, metricRegistry, messageConfig)
 
@@ -161,7 +164,7 @@ fun Application.main() {
         coverage(authService, coverageService)
         health()
         messages(messageService)
-        metadata(testRunMetadataService)
+        metadata(testRunMetadataService, versionControlConfig)
         organization(organizationCoverageService)
         performance(performanceResultsService)
         previousRuns(previousTestRunService)

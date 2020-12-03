@@ -2,6 +2,8 @@ package projektor.plugin
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
+import projektor.parser.coverage.payload.CoverageFilePayload
+import projektor.parser.coverage.payload.CoveragePayloadParser
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.post
@@ -29,7 +31,12 @@ class CoverageWireMockStubber extends WireMockStubber {
         ).requests
     }
 
+    List<CoverageFilePayload> findCoveragePayloads(String publicId) {
+        CoveragePayloadParser coveragePayloadParser = new CoveragePayloadParser()
+        findCoverageRequests(publicId).collect { coveragePayloadParser.parseCoverageFilePayload(it.bodyAsString) }
+    }
+
     private static String coverageUrl(String publicId) {
-        return "/run/${publicId}/coverage"
+        return "/run/${publicId}/coverageFile"
     }
 }

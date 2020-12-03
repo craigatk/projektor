@@ -13,7 +13,7 @@ class CoverageParserSpec : StringSpec({
     "should parse Jacoco test report" {
         val jacocoReportXml = JacocoXmlLoader().serverApp()
 
-        val coverageReport = CoverageParser.parseReport(jacocoReportXml)
+        val coverageReport = CoverageParser.parseReport(jacocoReportXml, null)
 
         expectThat(coverageReport).isNotNull().and {
             get { name }.isEqualTo("server-app")
@@ -38,7 +38,7 @@ class CoverageParserSpec : StringSpec({
     "should parse Jest test report" {
         val jestReportXml = JestXmlLoader().uiClover()
 
-        val coverageReport = CoverageParser.parseReport(jestReportXml)
+        val coverageReport = CoverageParser.parseReport(jestReportXml, null)
 
         expectThat(coverageReport).isNotNull().and {
             get { name }.isEqualTo("All files")
@@ -62,7 +62,7 @@ class CoverageParserSpec : StringSpec({
     "when report does not have any branch coverage should parse it" {
         val reportXmlWithoutBranchCoverage = JacocoXmlLoader().junitResultsParser()
 
-        val coverageReport = CoverageParser.parseReport(reportXmlWithoutBranchCoverage)
+        val coverageReport = CoverageParser.parseReport(reportXmlWithoutBranchCoverage, null)
 
         expectThat(coverageReport).isNotNull().and {
             get { name }.isEqualTo("junit-results-parser")
@@ -85,6 +85,6 @@ class CoverageParserSpec : StringSpec({
     }
 
     "when unknown report type should return null" {
-        expectThat(CoverageParser.parseReport("unknown")).isNull()
+        expectThat(CoverageParser.parseReport("unknown", null)).isNull()
     }
 })

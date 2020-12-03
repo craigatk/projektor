@@ -90,6 +90,8 @@ open class ApplicationTestCase {
 
     protected var globalMessages: String? = null
 
+    protected var gitHubBaseUrl: String? = null
+
     fun createTestApplication(application: Application) {
         val schema = databaseSchema
 
@@ -130,6 +132,8 @@ open class ApplicationTestCase {
             }
 
             globalMessages?.let { put("ktor.message.global", it) }
+
+            gitHubBaseUrl?.let { put("ktor.versionControl.gitHubBaseUrl", it) }
         }
 
         application.main()

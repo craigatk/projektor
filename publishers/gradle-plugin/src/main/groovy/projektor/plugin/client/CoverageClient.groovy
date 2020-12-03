@@ -5,8 +5,12 @@ import okhttp3.MediaType
 import okhttp3.Request
 import okhttp3.Response
 import org.gradle.api.logging.Logger
+import projektor.plugin.coverage.CodeCoverageFile
+import projektor.plugin.coverage.model.CoverageFilePayload
 
 class CoverageClient extends AbstractClient {
+    private final PayloadSerializer payloadSerializer = new PayloadSerializer()
+
     private final Retry publishRetry
 
     CoverageClient(ClientConfig clientConfig, Logger logger) {
@@ -15,10 +19,16 @@ class CoverageClient extends AbstractClient {
         this.publishRetry = ClientFactory.createClientRetry(clientConfig, "coverage")
     }
 
-    void sendCoverageToServer(File coverageFile, String publicId) {
-        MediaType mediaType = MediaType.get("text/plain")
+    void sendCoverageToServer(CodeCoverageFile coverageFile, String publicId) {
+        MediaType mediaType = MediaType.get("application/json")
 
-        Request request = buildRequest("run/$publicId/coverage", mediaType, coverageFile.text)
+        CoverageFilePayload coverageFilePayload = new CoverageFilePayload(
+                reportContents: coverageFile.reportFile.text,
+                baseDirectoryPath: coverageFile.baseDirectoryPath
+        )
+        String payloadJson = payloadSerializer.serializePayload(coverageFilePayload)
+
+        Request request = buildRequest("run/$publicId/coverageFile", mediaType, payloadJson)
 
         try {
             Response response = publishRetry.executeSupplier({ -> client.newCall(request).execute() })

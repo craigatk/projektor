@@ -12,7 +12,7 @@ class CoverageParserFileSpec : StringSpec({
     "should parse file-level stats from Jacoco test report" {
         val jacocoReportXml = JacocoXmlLoader().serverApp()
 
-        val coverageReport = CoverageParser.parseReport(jacocoReportXml)
+        val coverageReport = CoverageParser.parseReport(jacocoReportXml, null)
         assertNotNull(coverageReport)
 
         val coverageReportFiles = coverageReport.files
@@ -22,6 +22,7 @@ class CoverageParserFileSpec : StringSpec({
 
         val cleanupScheduledJobFile = coverageReportFiles.find { it.fileName == "CleanupScheduledJob.kt" }
         expectThat(cleanupScheduledJobFile).isNotNull().and {
+            get { directoryName }.isEqualTo("projektor/cleanup")
             get { missedLines }.hasSize(4).contains(16, 18, 20, 21)
             get { partialLines }.hasSize(0)
             get { stats }.and {
@@ -32,6 +33,7 @@ class CoverageParserFileSpec : StringSpec({
 
         val gzipUtilFile = coverageReportFiles.find { it.fileName == "GzipUtil.kt" }
         expectThat(gzipUtilFile).isNotNull().and {
+            get { directoryName }.isEqualTo("projektor/util")
             get { missedLines }.hasSize(0)
             get { partialLines }.hasSize(2).contains(9, 14)
             get { stats }.and {
@@ -41,10 +43,25 @@ class CoverageParserFileSpec : StringSpec({
         }
     }
 
+    "should include full file path when base directory set"() {
+        val jacocoReportXml = JacocoXmlLoader().serverApp()
+
+        val coverageReport = CoverageParser.parseReport(jacocoReportXml, "server/server-app/src/main/kotlin")
+        assertNotNull(coverageReport)
+
+        val coverageReportFiles = coverageReport.files
+
+        val cleanupScheduledJobFile = coverageReportFiles?.find { it.fileName == "CleanupScheduledJob.kt" }
+        expectThat(cleanupScheduledJobFile).isNotNull().and {
+            get { directoryName }.isEqualTo("projektor/cleanup")
+            get { filePath }.isNotNull().isEqualTo("server/server-app/src/main/kotlin/projektor/cleanup/CleanupScheduledJob.kt")
+        }
+    }
+
     "should parse file-level stats from Jest Clover coverage report" {
         val jacocoReportXml = JestXmlLoader().uiClover2()
 
-        val coverageReport = CoverageParser.parseReport(jacocoReportXml)
+        val coverageReport = CoverageParser.parseReport(jacocoReportXml, null)
         assertNotNull(coverageReport)
 
         val coverageReportFiles = coverageReport.files
@@ -64,7 +81,7 @@ class CoverageParserFileSpec : StringSpec({
     "should not show any partial lines in Clover stats because they aren't accurate" {
         val jacocoReportXml = JestXmlLoader().uiClover2()
 
-        val coverageReport = CoverageParser.parseReport(jacocoReportXml)
+        val coverageReport = CoverageParser.parseReport(jacocoReportXml, null)
         assertNotNull(coverageReport)
 
         val coverageReportFiles = coverageReport.files
