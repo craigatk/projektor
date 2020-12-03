@@ -22,4 +22,5 @@ fun main() {
     loadPerformanceK6GetRun()
     loadPerformanceK6GetFailedTestCasesLarge()
     performanceSingleTestTimeline()
+    coveragePayloadWithBaseDirectory()
 }

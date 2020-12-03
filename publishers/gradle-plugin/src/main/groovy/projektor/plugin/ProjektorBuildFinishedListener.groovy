@@ -11,7 +11,7 @@ import projektor.plugin.attachments.AttachmentsPublisher
 import projektor.plugin.client.CoverageClient
 import projektor.plugin.client.ResultsClient
 import projektor.plugin.client.ClientConfig
-import projektor.plugin.coverage.CodeCoverageGroup
+import projektor.plugin.coverage.CodeCoverageFile
 import projektor.plugin.coverage.CodeCoverageTaskCollector
 import projektor.plugin.git.GitMetadataFinder
 import projektor.plugin.git.GitResolutionConfig
@@ -120,12 +120,12 @@ class ProjektorBuildFinishedListener implements BuildListener {
         if (coverageEnabled) {
             CoverageClient coverageClient = new CoverageClient(clientConfig, logger)
 
-            List<CodeCoverageGroup> codeCoverageGroups = codeCoverageTaskCollector.codeCoverageGroups
+            List<CodeCoverageFile> codeCoverageGroups = codeCoverageTaskCollector.codeCoverageFiles
 
             logger.info("Publishing ${codeCoverageGroups.size()} code coverage reports to Projektor server")
 
-            codeCoverageGroups.forEach { CodeCoverageGroup coverageGroup ->
-                coverageClient.sendCoverageToServer(coverageGroup.reportFile, publishResult.publicId)
+            codeCoverageGroups.forEach { CodeCoverageFile coverageGroup ->
+                coverageClient.sendCoverageToServer(coverageGroup, publishResult.publicId)
             }
         }
     }

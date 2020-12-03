@@ -36,6 +36,7 @@ interface Coverage {
 interface CoverageFile {
   fileName: string;
   directoryName: string;
+  filePath?: string;
   stats: CoverageStats;
   missedLines: number[];
   partialLines: number[];
@@ -114,6 +115,7 @@ interface TestRunGitMetadata {
   projectName?: string;
   branchName?: string;
   isMainBranch: boolean;
+  gitHubBaseUrl?: string;
 }
 
 interface TestRunSummary {

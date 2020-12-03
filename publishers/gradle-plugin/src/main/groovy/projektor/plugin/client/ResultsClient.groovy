@@ -8,11 +8,10 @@ import okhttp3.Response
 import org.gradle.api.logging.Logger
 import projektor.plugin.PublishResult
 import projektor.plugin.results.grouped.GroupedResults
-import projektor.plugin.results.grouped.GroupedResultsSerializer
 
 class ResultsClient extends AbstractClient {
 
-    private final GroupedResultsSerializer groupedResultsSerializer = new GroupedResultsSerializer()
+    private final PayloadSerializer payloadSerializer = new PayloadSerializer()
 
     private final Retry publishRetry
 
@@ -26,7 +25,7 @@ class ResultsClient extends AbstractClient {
 
         MediaType mediaType = MediaType.get("application/json")
 
-        String groupedResultsJson = groupedResultsSerializer.serializeGroupedResults(groupedResults)
+        String groupedResultsJson = payloadSerializer.serializePayload(groupedResults)
 
         Request request = buildRequest("groupedResults", mediaType, groupedResultsJson)
 

@@ -1,0 +1,64 @@
+{
+  "files": [
+    {
+      "file_name": "DataSourceConfig.kt",
+      "directory_name": "projektor/database",
+      "file_path": "src/main/kotlin/projektor/database/DataSourceConfig.kt",
+      "missed_lines": [],
+      "partial_lines": [],
+      "stats": {
+        "statement_stat": {
+          "covered": 160,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 160,
+          "covered_percentage": 100.0
+        },
+        "line_stat": {
+          "covered": 28,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 28,
+          "covered_percentage": 100.0
+        },
+        "branch_stat": {
+          "covered": 0,
+          "missed": 0,
+          "covered_percentage_delta": null,
+          "total": 0,
+          "covered_percentage": 0
+        }
+      }
+    },
+    {
+      "file_name": "AttachmentDatabaseRepository.kt",
+      "directory_name": "projektor/attachment",
+      "file_path": "src/main/kotlin/projektor/attachment/AttachmentDatabaseRepository.kt",
+      "missed_lines": [39, 41],
+      "partial_lines": [34, 36],
+      "stats": {
+        "statement_stat": {
+          "covered": 155,
+          "missed": 3,
+          "covered_percentage_delta": null,
+          "total": 158,
+          "covered_percentage": 98.1
+        },
+        "line_stat": {
+          "covered": 21,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 22,
+          "covered_percentage": 95.45
+        },
+        "branch_stat": {
+          "covered": 3,
+          "missed": 1,
+          "covered_percentage_delta": null,
+          "total": 4,
+          "covered_percentage": 75.0
+        }
+      }
+    }
+  ]
+}

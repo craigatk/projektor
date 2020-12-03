@@ -13,7 +13,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row8;
+import org.jooq.Row9;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -89,6 +89,11 @@ public class CodeCoverageFile extends TableImpl<CodeCoverageFileRecord> {
      * The column <code>public.code_coverage_file.partial_lines</code>.
      */
     public final TableField<CodeCoverageFileRecord, Integer[]> PARTIAL_LINES = createField(DSL.name("partial_lines"), SQLDataType.INTEGER.getArrayDataType(), this, "");
+
+    /**
+     * The column <code>public.code_coverage_file.file_path</code>.
+     */
+    public final TableField<CodeCoverageFileRecord, String> FILE_PATH = createField(DSL.name("file_path"), SQLDataType.CLOB, this, "");
 
     private CodeCoverageFile(Name alias, Table<CodeCoverageFileRecord> aliased) {
         this(alias, aliased, null);
@@ -192,11 +197,11 @@ public class CodeCoverageFile extends TableImpl<CodeCoverageFileRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row9 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<Long, Long, Long, Long, String, String, Integer[], Integer[]> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row9<Long, Long, Long, Long, String, String, Integer[], Integer[], String> fieldsRow() {
+        return (Row9) super.fieldsRow();
     }
 }

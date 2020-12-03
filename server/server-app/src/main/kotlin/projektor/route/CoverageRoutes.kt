@@ -12,6 +12,7 @@ import io.ktor.util.getOrFail
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
 import projektor.coverage.CoverageService
+import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.route.CompressionRequest.receiveCompressedOrPlainTextPayload
 import projektor.server.api.PublicId
 import projektor.server.api.coverage.CoverageExists
@@ -29,7 +30,25 @@ fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
             val reportXml = receiveCompressedOrPlainTextPayload(call)
 
             try {
-                coverageService.saveReport(reportXml, PublicId(publicId))
+                coverageService.saveReport(CoverageFilePayload(reportContents = reportXml), PublicId(publicId))
+                    ?.let { call.respond(HttpStatusCode.OK) }
+                    ?: call.respond(HttpStatusCode.BadRequest)
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, SaveCoverageError(publicId, e.message))
+            }
+        }
+    }
+
+    post("/run/{publicId}/coverageFile") {
+        val publicId = call.parameters.getOrFail("publicId")
+
+        if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
+            call.respond(HttpStatusCode.Unauthorized)
+        } else {
+            val incomingPayload = receiveCompressedOrPlainTextPayload(call)
+
+            try {
+                coverageService.parseAndSaveReport(incomingPayload, PublicId(publicId))
                     ?.let { call.respond(HttpStatusCode.OK) }
                     ?: call.respond(HttpStatusCode.BadRequest)
             } catch (e: Exception) {

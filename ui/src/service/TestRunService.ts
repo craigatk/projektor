@@ -128,28 +128,26 @@ const fetchMessages = (publicId: string): Promise<AxiosResponse<Messages>> =>
 
 const fetchCoverage = (publicId: string): Promise<AxiosResponse<Coverage>> =>
   // @ts-ignore
-  axiosInstanceWithoutCache.get(`/run/${publicId}/coverage`);
+  axiosInstance.get(`/run/${publicId}/coverage`);
 
 const fetchCoverageExists = (
   publicId: string
 ): Promise<AxiosResponse<CoverageExists>> =>
   // @ts-ignore
-  axiosInstanceWithoutCache.get(`/run/${publicId}/coverage/exists`);
+  axiosInstance.get(`/run/${publicId}/coverage/exists`);
 
 const fetchOverallCoverageStats = (
   publicId: string
 ): Promise<AxiosResponse<CoverageStats>> =>
   // @ts-ignore
-  axiosInstanceWithoutCache.get(`/run/${publicId}/coverage/overall`);
+  axiosInstance.get(`/run/${publicId}/coverage/overall`);
 
 const fetchCoverageGroupFiles = (
   publicId: string,
   coverageGroupName: string
 ): Promise<AxiosResponse<CoverageFiles>> =>
   // @ts-ignore
-  axiosInstanceWithoutCache.get(
-    `/run/${publicId}/coverage/${coverageGroupName}/files`
-  );
+  axiosInstance.get(`/run/${publicId}/coverage/${coverageGroupName}/files`);
 
 const fetchPerformanceResults = (
   publicId: string

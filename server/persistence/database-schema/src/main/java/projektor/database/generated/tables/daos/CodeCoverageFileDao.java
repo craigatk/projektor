@@ -156,4 +156,18 @@ public class CodeCoverageFileDao extends DAOImpl<CodeCoverageFileRecord, projekt
     public List<projektor.database.generated.tables.pojos.CodeCoverageFile> fetchByPartialLines(Integer[]... values) {
         return fetch(CodeCoverageFile.CODE_COVERAGE_FILE.PARTIAL_LINES, values);
     }
+
+    /**
+     * Fetch records that have <code>file_path BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.CodeCoverageFile> fetchRangeOfFilePath(String lowerInclusive, String upperInclusive) {
+        return fetchRange(CodeCoverageFile.CODE_COVERAGE_FILE.FILE_PATH, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>file_path IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.CodeCoverageFile> fetchByFilePath(String... values) {
+        return fetch(CodeCoverageFile.CODE_COVERAGE_FILE.FILE_PATH, values);
+    }
 }

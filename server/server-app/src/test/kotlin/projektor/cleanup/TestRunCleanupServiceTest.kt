@@ -13,6 +13,7 @@ import projektor.attachment.AttachmentService
 import projektor.coverage.CoverageService
 import projektor.database.generated.tables.pojos.ResultsProcessing
 import projektor.incomingresults.randomPublicId
+import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectThat
@@ -311,8 +312,8 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
         val publicIdToRemove = randomPublicId()
         testRunDBGenerator.createTestRun(publicIdToRemove, LocalDate.now().minusDays(31), false)
 
-        runBlocking { coverageService.saveReport(JacocoXmlLoader().serverApp(), publicIdToRemove) }
-        runBlocking { coverageService.saveReport(JacocoXmlLoader().jacocoXmlParser(), publicIdToRemove) }
+        runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), publicIdToRemove) }
+        runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().jacocoXmlParser()), publicIdToRemove) }
 
         val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicIdToRemove.id)
         expectThat(coverageRuns).hasSize(1)

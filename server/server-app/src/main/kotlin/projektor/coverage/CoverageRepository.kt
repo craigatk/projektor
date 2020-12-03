@@ -11,7 +11,10 @@ import projektor.server.api.coverage.CoverageFile
 interface CoverageRepository {
     suspend fun createOrGetCoverageRun(publicId: PublicId): CodeCoverageRun
 
-    suspend fun addCoverageReport(coverageRun: CodeCoverageRun, coverageReport: CoverageReport): CodeCoverageGroup
+    suspend fun addCoverageReport(
+        coverageRun: CodeCoverageRun,
+        coverageReport: CoverageReport
+    ): CodeCoverageGroup
 
     suspend fun insertCoverageFiles(
         coverageReportFiles: List<CoverageReportFile>,

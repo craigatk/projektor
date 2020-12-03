@@ -6,6 +6,7 @@ import projektor.database.generated.tables.daos.*
 import projektor.database.generated.tables.pojos.TestRunAttachment
 import projektor.database.generated.tables.pojos.TestRunSystemAttributes
 import projektor.incomingresults.mapper.parsePackageAndClassName
+import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.server.api.PublicId
 import projektor.server.api.util.calculateAverageDuration
 import java.math.BigDecimal
@@ -171,10 +172,24 @@ class TestRunDBGenerator(
         repoName: String,
         branchName: String = "main",
         projectName: String? = null
+    ): TestRunDB = createTestRunWithCoverageAndGitMetadata(
+        publicId,
+        CoverageFilePayload(coverageText),
+        repoName,
+        branchName,
+        projectName
+    )
+
+    fun createTestRunWithCoverageAndGitMetadata(
+        publicId: PublicId,
+        coverageFilePayload: CoverageFilePayload,
+        repoName: String,
+        branchName: String = "main",
+        projectName: String? = null
     ): TestRunDB {
         val testRunDB = createSimpleTestRun(publicId)
         addGitMetadata(testRunDB, repoName, branchName == "main", branchName, projectName)
-        runBlocking { coverageService.saveReport(coverageText, publicId) }
+        runBlocking { coverageService.saveReport(coverageFilePayload, publicId) }
 
         return testRunDB
     }

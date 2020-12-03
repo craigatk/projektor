@@ -1,12 +1,14 @@
 import * as React from "react";
 import MaterialTable from "material-table";
-import { CoverageFiles } from "../model/TestRunModel";
+import { CoverageFiles, TestRunGitMetadata } from "../model/TestRunModel";
 import CoverageGraph from "./CoverageGraph";
 import { Typography } from "@material-ui/core";
+import GitHubFileLink from "../VersionControl/GitHubFileLink";
 
 interface CoverageFilesTableProps {
   coverageFiles: CoverageFiles;
   coverageGroupName: string;
+  gitMetadata?: TestRunGitMetadata;
 }
 
 const headerStyle = {
@@ -25,6 +27,7 @@ const calculateFullName = (directoryName: string, fileName: string): string =>
 const CoverageFilesTable = ({
   coverageFiles,
   coverageGroupName,
+  gitMetadata,
 }: CoverageFilesTableProps) => {
   if (coverageFiles && coverageFiles.files && coverageFiles.files.length > 0) {
     const rows = coverageFiles.files
@@ -33,6 +36,7 @@ const CoverageFilesTable = ({
         fileName: file.fileName,
         directoryName: file.directoryName,
         fullName: calculateFullName(file.directoryName, file.fileName),
+        filePath: file.filePath,
         lineStat: file.stats.lineStat,
         lineCoveredPercentage: file.stats.lineStat.coveredPercentage,
         branchStat: file.stats.branchStat,
@@ -68,7 +72,12 @@ const CoverageFilesTable = ({
                   data-testid={`coverage-file-name-${rowData.idx}`}
                   variant="caption"
                 >
-                  {rowData.fullName}
+                  <GitHubFileLink
+                    gitMetadata={gitMetadata}
+                    filePath={rowData.filePath}
+                    linkText={rowData.fullName}
+                    testId={`coverage-file-${rowData.idx}-file-name-link`}
+                  />
                 </Typography>
               ),
               cellStyle,
@@ -112,7 +121,18 @@ const CoverageFilesTable = ({
                   data-testid={`coverage-file-missed-lines-${rowData.idx}`}
                   variant="caption"
                 >
-                  {rowData.missedLines.join(", ")}
+                  {rowData.missedLines.map((missedLine, idx) => (
+                    <span>
+                      <GitHubFileLink
+                        gitMetadata={gitMetadata}
+                        filePath={rowData.filePath}
+                        linkText={missedLine.toString()}
+                        lineNumber={missedLine}
+                        testId={`coverage-file-${rowData.idx}-missed-line-link-${missedLine}`}
+                      />
+                      {idx < rowData.missedLines.length - 1 && <span>, </span>}
+                    </span>
+                  ))}
                 </Typography>
               ),
               cellStyle,
@@ -126,7 +146,18 @@ const CoverageFilesTable = ({
                   data-testid={`coverage-file-partial-lines-${rowData.idx}`}
                   variant="caption"
                 >
-                  {rowData.partialLines.join(", ")}
+                  {rowData.partialLines.map((partialLine, idx) => (
+                    <span>
+                      <GitHubFileLink
+                        gitMetadata={gitMetadata}
+                        filePath={rowData.filePath}
+                        linkText={partialLine.toString()}
+                        lineNumber={partialLine}
+                        testId={`coverage-file-${rowData.idx}-partial-line-link-${partialLine}`}
+                      />
+                      {idx < rowData.partialLines.length - 1 && <span>, </span>}
+                    </span>
+                  ))}
                 </Typography>
               ),
               cellStyle,

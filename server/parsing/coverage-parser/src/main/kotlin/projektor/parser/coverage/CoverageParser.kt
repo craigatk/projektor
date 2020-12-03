@@ -6,11 +6,11 @@ import projektor.parser.coverage.model.CoverageReportType
 import projektor.parser.jacoco.JacocoXmlReportParser
 
 object CoverageParser {
-    fun parseReport(reportXml: String): CoverageReport? {
+    fun parseReport(reportXml: String, baseDirectoryPath: String?): CoverageReport? {
         val reportType = findReportType(reportXml)
 
         return when (reportType) {
-            CoverageReportType.JACOCO -> JacocoCoverageReportParser().parseReport(reportXml)
+            CoverageReportType.JACOCO -> JacocoCoverageReportParser().parseReport(reportXml, baseDirectoryPath)
             CoverageReportType.CLOVER -> CloverCoverageReportParser().parseReport(reportXml)
             else -> null
         }

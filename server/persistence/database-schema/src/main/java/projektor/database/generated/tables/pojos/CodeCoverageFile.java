@@ -24,6 +24,7 @@ public class CodeCoverageFile implements Serializable {
     private String    fileName;
     private Integer[] missedLines;
     private Integer[] partialLines;
+    private String    filePath;
 
     public CodeCoverageFile() {}
 
@@ -36,6 +37,7 @@ public class CodeCoverageFile implements Serializable {
         this.fileName = value.fileName;
         this.missedLines = value.missedLines;
         this.partialLines = value.partialLines;
+        this.filePath = value.filePath;
     }
 
     public CodeCoverageFile(
@@ -46,7 +48,8 @@ public class CodeCoverageFile implements Serializable {
         String    directoryName,
         String    fileName,
         Integer[] missedLines,
-        Integer[] partialLines
+        Integer[] partialLines,
+        String    filePath
     ) {
         this.id = id;
         this.codeCoverageRunId = codeCoverageRunId;
@@ -56,6 +59,7 @@ public class CodeCoverageFile implements Serializable {
         this.fileName = fileName;
         this.missedLines = missedLines;
         this.partialLines = partialLines;
+        this.filePath = filePath;
     }
 
     /**
@@ -178,6 +182,21 @@ public class CodeCoverageFile implements Serializable {
         return this;
     }
 
+    /**
+     * Getter for <code>public.code_coverage_file.file_path</code>.
+     */
+    public String getFilePath() {
+        return this.filePath;
+    }
+
+    /**
+     * Setter for <code>public.code_coverage_file.file_path</code>.
+     */
+    public CodeCoverageFile setFilePath(String filePath) {
+        this.filePath = filePath;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -235,6 +254,12 @@ public class CodeCoverageFile implements Serializable {
         }
         else if (!Arrays.equals(partialLines, other.partialLines))
             return false;
+        if (filePath == null) {
+            if (other.filePath != null)
+                return false;
+        }
+        else if (!filePath.equals(other.filePath))
+            return false;
         return true;
     }
 
@@ -250,6 +275,7 @@ public class CodeCoverageFile implements Serializable {
         result = prime * result + ((this.fileName == null) ? 0 : this.fileName.hashCode());
         result = prime * result + ((this.missedLines == null) ? 0 : Arrays.hashCode(this.missedLines));
         result = prime * result + ((this.partialLines == null) ? 0 : Arrays.hashCode(this.partialLines));
+        result = prime * result + ((this.filePath == null) ? 0 : this.filePath.hashCode());
         return result;
     }
 
@@ -265,6 +291,7 @@ public class CodeCoverageFile implements Serializable {
         sb.append(", ").append(fileName);
         sb.append(", ").append(Arrays.toString(missedLines));
         sb.append(", ").append(Arrays.toString(partialLines));
+        sb.append(", ").append(filePath);
 
         sb.append(")");
         return sb.toString();

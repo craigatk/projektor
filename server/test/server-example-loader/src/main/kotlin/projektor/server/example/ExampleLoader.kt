@@ -10,6 +10,7 @@ import projektor.parser.ResultsXmlLoader
 import projektor.parser.grouped.model.GitMetadata
 import projektor.parser.grouped.model.ResultsMetadata
 import projektor.server.api.results.SaveResultsResponse
+import projektor.server.example.coverage.CoverageFileWrapper.createCoverageFilePayload
 import projektor.server.example.coverage.JacocoXmlLoader
 import projektor.server.example.coverage.JestXmlLoader
 import projektor.server.example.performance.PerformanceResultsLoader
@@ -304,6 +305,24 @@ fun repositoryCoverageTimeline() {
     println("View repository coverage timeline at $uiBaseUrl/repository/$repoName")
 }
 
+fun coveragePayloadWithBaseDirectory() {
+    val repoName = "craigatk/projektor"
+    val branchName = "master"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+
+    val resultsResponse = sendGroupedResultsToServer(GroupedResultsXmlLoader().passingGroupedResults(metadata = resultsMetadata))
+    val publicId = resultsResponse.id
+    sendCoveragePayloadToServer(publicId, createCoverageFilePayload(JacocoXmlLoader().jacocoXmlParser(), "server/parsing/jacoco-xml-parser/src/main/kotlin"))
+    sendCoveragePayloadToServer(publicId, createCoverageFilePayload(JacocoXmlLoader().serverApp(), "server/server-app/src/main/kotlin"))
+
+    println("View run with coverage base directory and Git metadata at $uiBaseUrl${resultsResponse.uri}")
+}
+
 fun sendResultsToServer(resultXmlList: List<String>): SaveResultsResponse =
     resultXmlList.joinToString("\n").let(::sendResultsToServer)
 
@@ -361,6 +380,21 @@ fun sendCoverageToServer(publicId: String, reportXml: String) {
     val mediaType = "text/plain".toMediaType()
     val url = "$serverBaseUrl/run/$publicId/coverage"
     val requestBody = reportXml.toRequestBody(mediaType)
+
+    val request = Request.Builder()
+        .url(url)
+        .post(requestBody)
+        .build()
+
+    client.newCall(request).execute()
+}
+
+fun sendCoveragePayloadToServer(publicId: String, reportPayload: String) {
+    val client = OkHttpClient()
+
+    val mediaType = "application/json".toMediaType()
+    val url = "$serverBaseUrl/run/$publicId/coverageFile"
+    val requestBody = reportPayload.toRequestBody(mediaType)
 
     val request = Request.Builder()
         .url(url)

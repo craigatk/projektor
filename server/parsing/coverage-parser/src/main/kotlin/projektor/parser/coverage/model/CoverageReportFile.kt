@@ -5,5 +5,6 @@ data class CoverageReportFile(
     val fileName: String,
     val stats: CoverageReportStats,
     val missedLines: List<Int>,
-    val partialLines: List<Int>
+    val partialLines: List<Int>,
+    val filePath: String? = null
 )
