@@ -11,7 +11,7 @@ object CoverageParser {
 
         return when (reportType) {
             CoverageReportType.JACOCO -> JacocoCoverageReportParser().parseReport(reportXml, baseDirectoryPath)
-            CoverageReportType.CLOVER -> CloverCoverageReportParser().parseReport(reportXml)
+            CoverageReportType.CLOVER -> CloverCoverageReportParser().parseReport(reportXml, baseDirectoryPath)
             else -> null
         }
     }

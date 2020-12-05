@@ -43,7 +43,7 @@ class CoverageParserFileSpec : StringSpec({
         }
     }
 
-    "should include full file path when base directory set"() {
+    "should include full file path for Jacoco results when base directory set"() {
         val jacocoReportXml = JacocoXmlLoader().serverApp()
 
         val coverageReport = CoverageParser.parseReport(jacocoReportXml, "server/server-app/src/main/kotlin")
@@ -59,9 +59,9 @@ class CoverageParserFileSpec : StringSpec({
     }
 
     "should parse file-level stats from Jest Clover coverage report" {
-        val jacocoReportXml = JestXmlLoader().uiClover2()
+        val reportXml = JestXmlLoader().uiClover2()
 
-        val coverageReport = CoverageParser.parseReport(jacocoReportXml, null)
+        val coverageReport = CoverageParser.parseReport(reportXml, null)
         assertNotNull(coverageReport)
 
         val coverageReportFiles = coverageReport.files
@@ -70,11 +70,28 @@ class CoverageParserFileSpec : StringSpec({
         val coverageSummaryFile = coverageReportFiles.find { it.fileName == "CoverageSummary.tsx" }
 
         expectThat(coverageSummaryFile).isNotNull().and {
-            get { directoryName }.isEqualTo("src.Coverage")
+            get { directoryName }.isEqualTo("src/Coverage")
+            get { filePath }.isEqualTo("src/Coverage/CoverageSummary.tsx")
             get { missedLines }.hasSize(3).contains(19, 20, 26)
             get { partialLines }.hasSize(0)
             get { stats.lineStat.percentCovered }.isEqualTo(BigDecimal("82.35"))
             get { stats.branchStat.percentCovered }.isEqualTo(BigDecimal("50.00"))
+        }
+    }
+
+    "should set file path in Clover results when base directory path set" {
+        val reportXml = JestXmlLoader().uiClover2()
+
+        val coverageReport = CoverageParser.parseReport(reportXml, "ui")
+        assertNotNull(coverageReport)
+
+        val coverageReportFiles = coverageReport.files
+        assertNotNull(coverageReportFiles)
+
+        val coverageSummaryFile = coverageReportFiles.find { it.fileName == "CoverageSummary.tsx" }
+        expectThat(coverageSummaryFile).isNotNull().and {
+            get { directoryName }.isEqualTo("src/Coverage")
+            get { filePath }.isEqualTo("ui/src/Coverage/CoverageSummary.tsx")
         }
     }
 
