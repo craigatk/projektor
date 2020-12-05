@@ -22,7 +22,9 @@ describe("publish with coverage", () => {
       .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
-    mockAxios.onPost("http://localhost:8080/run/ABC123/coverage").reply(200);
+    mockAxios
+      .onPost("http://localhost:8080/run/ABC123/coverageFile")
+      .reply(200);
 
     const publishToken = "myPublishToken";
 
@@ -37,14 +39,51 @@ describe("publish with coverage", () => {
     );
     expect(resultsPostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(publishToken);
 
-    const postData = resultsPostRequest.data;
-    expect(postData).toContain("resultsDir1-results1");
-    expect(postData).toContain("resultsDir1-results2");
+    const resultsPostData = resultsPostRequest.data;
+    expect(resultsPostData).toContain("resultsDir1-results1");
+    expect(resultsPostData).toContain("resultsDir1-results2");
 
     const coveragePostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("/run/ABC123/coverage")
+      postRequest.url.includes("/run/ABC123/coverageFile")
     );
     expect(coveragePostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(publishToken);
+  });
+
+  it("should include base directory path when publishing coverage", async () => {
+    const fileGlob = "src/__tests__/resultsDir1/*.xml";
+    const coverageGlob = "src/__tests__/coverageDir1/*.xml";
+    const serverUrl = "http://localhost:8080";
+
+    mockAxios
+      .onPost("http://localhost:8080/groupedResults")
+      .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
+
+    mockAxios
+      .onPost("http://localhost:8080/run/ABC123/coverageFile")
+      .reply(200);
+
+    const publishToken = "myPublishToken";
+
+    await collectAndSendResults(
+      serverUrl,
+      publishToken,
+      [fileGlob],
+      null,
+      [coverageGlob],
+      null,
+      null,
+      null,
+      null,
+      null,
+      false,
+      "base/dir"
+    );
+
+    const coveragePostRequest = mockAxios.history.post.find((postRequest) =>
+      postRequest.url.includes("/run/ABC123/coverageFile")
+    );
+    const coveragePostData = coveragePostRequest.data;
+    expect(coveragePostData).toContain("base/dir");
   });
 
   it("when publishing coverage fails should not fail build", async () => {
@@ -57,7 +96,7 @@ describe("publish with coverage", () => {
       .reply(200, { id: "FAIL123", uri: "/tests/FAIL123" });
 
     mockAxios
-      .onPost("http://localhost:8080/run/FAIL123/coverage")
+      .onPost("http://localhost:8080/run/FAIL123/coverageFile")
       .reply(400, null);
 
     await collectAndSendResults(serverUrl, null, [fileGlob], null, [
@@ -67,7 +106,7 @@ describe("publish with coverage", () => {
     expect(mockAxios.history.post.length).toBe(2);
 
     const coveragePostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("run/FAIL123/coverage")
+      postRequest.url.includes("run/FAIL123/coverageFile")
     );
     expect(coveragePostRequest).not.toBeNull();
   });

@@ -9,14 +9,19 @@ import projektor.parser.coverage.model.CoverageReportStat
 import projektor.parser.coverage.model.CoverageReportStats
 
 class CloverCoverageReportParser {
-    fun parseReport(reportXml: String): CoverageReport {
+    fun parseReport(reportXml: String, baseDirectoryPath: String?): CoverageReport {
         val parsedReport = CloverXmlReportParser().parseReport(reportXml)
 
         val files = parsedReport.project.packages.flatMap { pkg ->
             pkg.files.map { sourceFile ->
+                val directoryName = pkg.name.replace(".", "/")
+                val fileName = sourceFile.name
+                val filePath = if (baseDirectoryPath != null) "$baseDirectoryPath/$directoryName/$fileName" else "$directoryName/$fileName"
+
                 CoverageReportFile(
-                    directoryName = pkg.name,
-                    fileName = sourceFile.name,
+                    directoryName = directoryName,
+                    fileName = fileName,
+                    filePath = filePath,
                     missedLines = sourceFile.lines?.filter { it.lineCoverageType() == LineType.MISSED }?.map { it.number } ?: listOf(),
                     partialLines = listOf(), // Clover partial lines from Jest coverage reports is not accurate so don't show anything rather than inaccurate data
                     stats = createStats(sourceFile.metrics)

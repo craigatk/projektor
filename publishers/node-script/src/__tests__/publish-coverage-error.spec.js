@@ -26,7 +26,7 @@ describe("publish invalid coverage", () => {
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
     mockAxios
-      .onPost("http://localhost:8080/run/ABC123/coverage")
+      .onPost("http://localhost:8080/run/ABC123/coverageFile")
       .reply(400, { error_message: "Failed to parse" });
 
     await collectAndSendResults(serverUrl, null, [fileGlob], null, [

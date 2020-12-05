@@ -20,6 +20,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
   let attachmentFileGlobs;
   let coverageFileGlobs;
   let performanceFileGlobs;
+  let baseDirectoryPath;
   let exitWithFailure;
   let writeSlackMessageFile;
   let slackMessageFileName;
@@ -38,6 +39,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
     attachmentFileGlobs = config.attachments;
     coverageFileGlobs = config.coverage;
     performanceFileGlobs = config.performance;
+    baseDirectoryPath = config.baseDirectoryPath;
     exitWithFailure = config.exitWithFailure;
     writeSlackMessageFile = config.writeSlackMessageFile;
     slackMessageFileName = config.slackMessageFileName;
@@ -63,6 +65,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
         ? args.performance
         : [args.performance];
     }
+    baseDirectoryPath = args.baseDirectoryPath;
     exitWithFailure = args.exitWithFailure;
     writeSlackMessageFile = args.writeSlackMessageFile;
     slackMessageFileName = args.slackMessageFileName;
@@ -99,7 +102,8 @@ async function run(args, publishToken, defaultConfigFilePath) {
       gitBranchName,
       projectName,
       isCI,
-      compressionEnabled
+      compressionEnabled,
+      baseDirectoryPath
     );
 
     if (!resultsBlob && !performanceFileGlobs) {
