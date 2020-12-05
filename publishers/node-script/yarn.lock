@@ -2659,10 +2659,10 @@ pretty-format@^25.1.0:
     ansi-styles "^4.0.0"
     react-is "^16.12.0"
 
-projektor-publish@2.9.0:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/projektor-publish/-/projektor-publish-2.9.0.tgz#42e9a8aa1af496062d9e265f30fe6b1c5fc592a1"
-  integrity sha512-jrD6CqvwvdanC9VSv7PTe0yFpmac/d6wGZWNYNUDcrjAkDiHYDL2ohmNa96F37niJ5DIPuENUxijJlNOO0ROMQ==
+projektor-publish@2.13.1:
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/projektor-publish/-/projektor-publish-2.13.1.tgz#ecf12fcf96519fca340c5540d55b024774514c9e"
+  integrity sha512-d3RnAW39aILWobmF/5U6h40fP68pxzHln9T0O6mLwwMMIful0iAy2L0Rum1qpxjqOHhzqSzE1uWWNNQmeeqwkQ==
   dependencies:
     axios "0.19.2"
     glob "7.1.4"
