@@ -6,5 +6,6 @@
   "projectName": "ui-jest",
   "coverage": [
     "coverage/*.xml"
-  ]
+  ],
+  "baseDirectoryPath": "ui"
 }

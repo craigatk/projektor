@@ -6,5 +6,6 @@
   "projectName": "node-script",
   "coverage": [
     "coverage/*.xml"
-  ]
+  ],
+  "baseDirectoryPath": "publishers/node-script"
 }
