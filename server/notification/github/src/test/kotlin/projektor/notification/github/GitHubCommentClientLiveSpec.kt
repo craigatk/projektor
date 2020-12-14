@@ -11,13 +11,16 @@ class GitHubCommentClientLiveSpec : StringSpec() {
             val gitHubApiUrl = "https://api.github.com"
 
             val clientConfig = GitHubClientConfig(
-                gitHubAppId,
-                keyContents,
-                ttl,
-                gitHubApiUrl
+                gitHubApiUrl = gitHubApiUrl
             )
 
-            val jwtCreator = JwtProvider()
+            val jwtTokenConfig = JwtTokenConfig(
+                gitHubAppId = gitHubAppId,
+                pemContents = keyContents,
+                ttlMillis = ttl
+            )
+
+            val jwtCreator = JwtProvider(jwtTokenConfig)
 
             val commentClient = GitHubCommentClient(clientConfig, jwtCreator)
 

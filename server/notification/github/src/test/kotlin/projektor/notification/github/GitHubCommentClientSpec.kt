@@ -17,8 +17,6 @@ class GitHubCommentClientSpec : StringSpec() {
         "should create comment on issue" {
             val gitHubApiUrl = "http://localhost:${wireMockServer.port()}/"
 
-            val gitHubAppId = "my-github-app"
-            val ttl: Long = 60_000
             val orgName = "my-org"
             val repoName = "my-repo"
             val issueId = 12
@@ -28,9 +26,6 @@ class GitHubCommentClientSpec : StringSpec() {
             val jwtProvider = MockJwtProvider(jwtToken)
 
             val clientConfig = GitHubClientConfig(
-                gitHubAppId,
-                "pem-contents",
-                ttl,
                 gitHubApiUrl
             )
 
