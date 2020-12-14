@@ -1,8 +1,7 @@
 package projektor.plugin
 
-import okhttp3.OkHttpClient
+import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileTree
-import org.gradle.api.internal.AbstractTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
@@ -14,7 +13,7 @@ import projektor.plugin.client.ClientConfig
 import projektor.plugin.results.ResultsLogger
 import projektor.plugin.results.grouped.GroupedResults
 
-class ProjektorManualPublishTask extends AbstractTask {
+class ProjektorManualPublishTask extends DefaultTask {
 
     @Input
     String serverUrl

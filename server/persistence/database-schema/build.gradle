@@ -16,7 +16,7 @@ dependencies {
     api 'org.jooq:jooq:3.14.0'
 
     // Needs to be 'compile' scope so the Flyway plugin can see it
-    compile "org.postgresql:postgresql:$postgresDriverVersion"
+    api "org.postgresql:postgresql:$postgresDriverVersion"
 
     jooqGenerator "org.postgresql:postgresql:$postgresDriverVersion"
 }
