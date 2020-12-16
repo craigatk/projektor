@@ -3,6 +3,7 @@ package projektor.notification.github
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import io.kotest.core.spec.style.StringSpec
+import projektor.notification.github.auth.MockJwtProvider
 import strikt.api.expectThat
 import strikt.assertions.contains
 import strikt.assertions.hasSize
@@ -46,7 +47,8 @@ class GitHubCommentClientSpec : StringSpec() {
             gitHubWireMockStubber.stubGetIssue(orgName, repoName, issueId)
             gitHubWireMockStubber.stubAddComment(orgName, repoName, issueId)
 
-            gitHubCommentClient.addComment(orgName, repoName, issueId, commentText)
+            val repository = gitHubCommentClient.getRepository(orgName, repoName)
+            gitHubCommentClient.addComment(repository, issueId, commentText)
 
             val addCommentRequestBodies = gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, issueId)
             expectThat(addCommentRequestBodies).hasSize(1)

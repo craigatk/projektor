@@ -1,4 +1,4 @@
-package projektor.notification.github
+package projektor.notification.github.auth
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
