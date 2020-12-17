@@ -1,12 +1,14 @@
 package projektor.notification.github
 
 import org.kohsuke.github.*
+import org.slf4j.LoggerFactory
 import projektor.notification.github.auth.JwtProvider
 
 class GitHubCommentClient(
     private val clientConfig: GitHubClientConfig,
     private val jwtProvider: JwtProvider
 ) {
+    private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
     fun addComment(repository: GHRepository, issueId: Int, commentText: String) {
         val ghIssue = repository.getIssue(issueId)
@@ -38,7 +40,7 @@ class GitHubCommentClient(
         return pullRequestForBranch?.number
     }
 
-    fun getRepository(orgName: String, repoName: String): GHRepository {
+    fun getRepository(orgName: String, repoName: String): GHRepository? {
         val jwtToken = jwtProvider.createJWT()
 
         val gitHub = GitHubBuilder()
@@ -46,14 +48,19 @@ class GitHubCommentClient(
             .withEndpoint(this.clientConfig.gitHubApiUrl)
             .build()
         val gitHubApp = gitHub.app
-        val appInstallation = gitHubApp.getInstallationByRepository(orgName, repoName)
-        val appInstallationToken = appInstallation.createToken().create()
-        val githubAuthAsInst = GitHubBuilder()
-            .withAppInstallationToken(appInstallationToken.token)
-            .withEndpoint(this.clientConfig.gitHubApiUrl)
-            .build()
-        val repository = githubAuthAsInst.getRepository("$orgName/$repoName")
+        return try {
+            val appInstallation = gitHubApp.getInstallationByRepository(orgName, repoName)
+            val appInstallationToken = appInstallation.createToken().create()
+            val githubAuthAsInst = GitHubBuilder()
+                .withAppInstallationToken(appInstallationToken.token)
+                .withEndpoint(this.clientConfig.gitHubApiUrl)
+                .build()
+            val repository = githubAuthAsInst.getRepository("$orgName/$repoName")
 
-        return repository
+            repository
+        } catch (e: GHFileNotFoundException) {
+            logger.info("App installation not found for GitHub repository $orgName/$repoName")
+            return null
+        }
     }
 }

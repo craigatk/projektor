@@ -6,6 +6,8 @@ import projektor.notification.github.auth.JwtTokenConfig
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
+import strikt.assertions.isNull
+import kotlin.test.assertNotNull
 
 class GitHubCommentClientLiveSpec : StringSpec() {
     private val keyContents = loadTextFromFile("projektor-test-reports.2020-12-12.private-key.pem")
@@ -33,6 +35,7 @@ class GitHubCommentClientLiveSpec : StringSpec() {
             val commentText = "Here is a test comment from Projektor"
 
             val repository = commentClient.getRepository("craigatk", "projektor")
+            assertNotNull(repository)
             commentClient.addComment(repository, issueId, commentText)
         }
 
@@ -43,8 +46,21 @@ class GitHubCommentClientLiveSpec : StringSpec() {
             val expectedPrNumber = 249
 
             val repository = commentClient.getRepository("craigatk", "projektor")
+            assertNotNull(repository)
+
             val prNumber = commentClient.findOpenPullRequestsForBranch(repository, branchName)
             expectThat(prNumber).isNotNull().isEqualTo(expectedPrNumber)
+        }
+
+        "!should return null when no PR exists for branch name" {
+            val commentClient = GitHubCommentClient(clientConfig, jwtCreator)
+
+            val branchName = "does-not-exist"
+            val repository = commentClient.getRepository("craigatk", "projektor")
+            assertNotNull(repository)
+
+            val prNumber = commentClient.findOpenPullRequestsForBranch(repository, branchName)
+            expectThat(prNumber).isNull()
         }
 
         "!should find comment in PR with text" {
@@ -54,6 +70,7 @@ class GitHubCommentClientLiveSpec : StringSpec() {
             val prNumber = 249
 
             val repository = commentClient.getRepository("craigatk", "projektor")
+            assertNotNull(repository)
 
             val comment = commentClient.findCommentWithText(repository, prNumber, commentText)
             expectThat(comment).isNotNull()
@@ -66,6 +83,7 @@ class GitHubCommentClientLiveSpec : StringSpec() {
             val prNumber = 249
 
             val repository = commentClient.getRepository("craigatk", "projektor")
+            assertNotNull(repository)
 
             commentClient.addComment(repository, prNumber, commentText)
 
@@ -73,6 +91,13 @@ class GitHubCommentClientLiveSpec : StringSpec() {
             expectThat(comment).isNotNull()
 
             commentClient.updateComment(comment!!, "Comment to update!")
+        }
+
+        "!should return null when repository does not have app installed" {
+            val commentClient = GitHubCommentClient(clientConfig, jwtCreator)
+
+            val repository = commentClient.getRepository("craigatk", "ratpack-standup")
+            expectThat(repository).isNull()
         }
     }
 
