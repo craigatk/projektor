@@ -25,6 +25,7 @@ import projektor.error.ProcessingFailureService
 import projektor.message.MessageConfig
 import projektor.metrics.InfluxMetricsConfig
 import projektor.metrics.createRegistry
+import projektor.notification.NotificationConfig
 
 @KtorExperimentalAPI
 open class DatabaseRepositoryTestCase : KoinTest {
@@ -100,7 +101,9 @@ open class DatabaseRepositoryTestCase : KoinTest {
                     AuthConfig(null),
                     dslContext,
                     createRegistry(metricsConfig),
-                    MessageConfig(listOf())
+                    MessageConfig(listOf()),
+                    NotificationConfig(null),
+                    null
                 )
             )
         }

@@ -10,6 +10,8 @@ import projektor.notification.github.auth.MockJwtProvider
 import strikt.api.expectThat
 import strikt.assertions.contains
 import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -110,7 +112,12 @@ class GitHubCommentServiceSpec : StringSpec() {
             gitHubWireMockStubber.stubGetComment(orgName, repoName, pullRequestNumber, commentId, GitHubCommentCreator.headerText)
             gitHubWireMockStubber.stubUpdateComment(orgName, repoName, pullRequestNumber, commentId)
 
-            commentService.upsertReportComment(report)
+            val pullRequest = commentService.upsertReportComment(report)
+            expectThat(pullRequest).isNotNull().and {
+                get { orgName }.isEqualTo(orgName)
+                get { repoName }.isEqualTo(repoName)
+                get { branchName }.isEqualTo(branchName)
+            }
 
             val addCommentRequestBodies = gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber)
             expectThat(addCommentRequestBodies).hasSize(0)

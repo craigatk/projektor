@@ -41,6 +41,13 @@ import projektor.message.MessageService
 import projektor.metadata.TestRunMetadataService
 import projektor.metrics.InfluxMetricsConfig
 import projektor.metrics.createRegistry
+import projektor.notification.NotificationConfig
+import projektor.notification.github.GitHubClientConfig
+import projektor.notification.github.GitHubNotificationConfig
+import projektor.notification.github.auth.JwtProvider
+import projektor.notification.github.auth.JwtTokenConfig
+import projektor.notification.github.comment.GitHubCommentClient
+import projektor.notification.github.comment.GitHubCommentService
 import projektor.organization.coverage.OrganizationCoverageService
 import projektor.performance.PerformanceResultsService
 import projektor.repository.coverage.RepositoryCoverageService
@@ -75,7 +82,18 @@ fun Application.main() {
 
     val versionControlConfig = VersionControlConfig.createVersionControlConfig(applicationConfig)
 
-    val appModule = createAppModule(dataSource, authConfig, dslContext, metricRegistry, messageConfig)
+    val notificationConfig = NotificationConfig.createNotificationConfig(applicationConfig)
+    val gitHubCommentService = conditionallyCreateGitHubCommentService(applicationConfig)
+
+    val appModule = createAppModule(
+        dataSource = dataSource,
+        authConfig = authConfig,
+        dslContext = dslContext,
+        metricRegistry = metricRegistry,
+        messageConfig = messageConfig,
+        notificationConfig = notificationConfig,
+        gitHubCommentService = gitHubCommentService
+    )
 
     install(CORS) {
         anyHost()
@@ -186,3 +204,29 @@ private fun conditionallyCreateAttachmentService(applicationConfig: ApplicationC
         AttachmentService(AttachmentConfig.createAttachmentConfig(applicationConfig), attachmentRepository)
     else
         null
+
+@KtorExperimentalAPI
+private fun conditionallyCreateGitHubCommentService(applicationConfig: ApplicationConfig): GitHubCommentService? {
+    val gitHubNotificationConfig = GitHubNotificationConfig.createGitHubNotificationConfig(applicationConfig)
+    val (gitHubApiUrl, gitHubAppId, privateKey) = gitHubNotificationConfig
+
+    return if (gitHubApiUrl != null && gitHubAppId != null && privateKey != null) {
+        val jwtTokenConfig = JwtTokenConfig(
+            gitHubAppId = gitHubAppId,
+            pemContents = privateKey,
+            ttlMillis = 60_000
+        )
+        val jwtProvider = JwtProvider(jwtTokenConfig)
+
+        val gitHubClientConfig = GitHubClientConfig(gitHubApiUrl = gitHubApiUrl)
+
+        val gitHubCommentClient = GitHubCommentClient(
+            clientConfig = gitHubClientConfig,
+            jwtProvider = jwtProvider
+        )
+
+        GitHubCommentService(gitHubCommentClient)
+    } else {
+        null
+    }
+}

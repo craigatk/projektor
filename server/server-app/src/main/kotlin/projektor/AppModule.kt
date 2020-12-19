@@ -30,6 +30,9 @@ import projektor.metadata.TestRunMetadataDatabaseRepository
 import projektor.metadata.TestRunMetadataRepository
 import projektor.metadata.TestRunMetadataService
 import projektor.metrics.MetricsService
+import projektor.notification.NotificationConfig
+import projektor.notification.github.GitHubPullRequestCommentService
+import projektor.notification.github.comment.GitHubCommentService
 import projektor.organization.coverage.OrganizationCoverageDatabaseRepository
 import projektor.organization.coverage.OrganizationCoverageRepository
 import projektor.organization.coverage.OrganizationCoverageService
@@ -69,7 +72,9 @@ fun createAppModule(
     authConfig: AuthConfig,
     dslContext: DSLContext,
     metricRegistry: MeterRegistry,
-    messageConfig: MessageConfig
+    messageConfig: MessageConfig,
+    notificationConfig: NotificationConfig,
+    gitHubCommentService: GitHubCommentService?
 ) = module {
     single { dataSource }
     single { TestResultsProcessor() }
@@ -103,7 +108,7 @@ fun createAppModule(
     single { GroupedResultsParser() }
     single { PerformanceResultsParser() }
     single { GroupedResultsConverter(get(), get(), get()) }
-    single { GroupedTestResultsService(get(), get(), get(), get(), get(), get()) }
+    single { GroupedTestResultsService(get(), get(), get(), get(), get(), get(), get()) }
     single { MessageService(messageConfig) }
     single { PreviousTestRunService(get()) }
     single { ProcessingFailureService(get()) }
@@ -123,4 +128,6 @@ fun createAppModule(
     single { RepositoryCoverageService(get()) }
     single { RepositoryPerformanceService(get()) }
     single { RepositoryTestRunService(get()) }
+
+    single { GitHubPullRequestCommentService(notificationConfig, gitHubCommentService) }
 }
