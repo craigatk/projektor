@@ -12,7 +12,7 @@ class GitHubCommentCreatorSpec : StringSpec() {
     init {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
 
-        "should create comment without project or coverage" {
+        "should create comment for passing build without project or coverage" {
             val report = ReportCommentData(
                 projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
                 git = ReportCommentGitData(
@@ -38,9 +38,75 @@ class GitHubCommentCreatorSpec : StringSpec() {
                 """
 **Projektor reports**
 
-| Projektor report | Result | Tests | Coverage | Project | Date | 
-| ---------------- | ------ | ----- | -------- | ------- | ---- |
-| [Projektor report](https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/) | Passed | [25 total](https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/all) | | | 2020-12-16 02:30 PM UTC |
+| Projektor report | Result | Tests executed | Coverage | Project | Date | 
+| ---------------- | ------ | -------------- | -------- | ------- | ---- |
+| [Projektor report](https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/) | Passed | [25 total](https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/all) | |  | 2020-12-16 02:30 PM UTC |
+                """.trimIndent().trim()
+            )
+        }
+
+        "should create comment for passing build with project" {
+            val report = ReportCommentData(
+                projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
+                git = ReportCommentGitData(
+                    orgName = "my-org",
+                    repoName = "my-repo",
+                    branchName = "my-branch"
+                ),
+                publicId = "V1BMYK93MTNR",
+                createdDate = LocalDateTime.of(
+                    LocalDate.of(2020, 12, 16),
+                    LocalTime.of(14, 30)
+                ),
+                passed = true,
+                failedTestCount = 0,
+                totalTestCount = 25,
+                coverage = null,
+                project = "my-project"
+            )
+
+            val commentText = GitHubCommentCreator.createComment(report)
+
+            expectThat(commentText).isEqualTo(
+                """
+**Projektor reports**
+
+| Projektor report | Result | Tests executed | Coverage | Project | Date | 
+| ---------------- | ------ | -------------- | -------- | ------- | ---- |
+| [Projektor report](https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/) | Passed | [25 total](https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/all) | | my-project | 2020-12-16 02:30 PM UTC |
+                """.trimIndent().trim()
+            )
+        }
+
+        "should create comment for failing build" {
+            val report = ReportCommentData(
+                projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
+                git = ReportCommentGitData(
+                    orgName = "my-org",
+                    repoName = "my-repo",
+                    branchName = "my-branch"
+                ),
+                publicId = "V1BMYK93MTNR",
+                createdDate = LocalDateTime.of(
+                    LocalDate.of(2020, 12, 16),
+                    LocalTime.of(14, 30)
+                ),
+                passed = false,
+                failedTestCount = 5,
+                totalTestCount = 30,
+                coverage = null,
+                project = null
+            )
+
+            val commentText = GitHubCommentCreator.createComment(report)
+
+            expectThat(commentText).isEqualTo(
+                """
+**Projektor reports**
+
+| Projektor report | Result | Tests executed | Coverage | Project | Date | 
+| ---------------- | ------ | -------------- | -------- | ------- | ---- |
+| [Projektor report](https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/) | Failed | [5 failed](https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/failed) / [30 total](https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/all) | |  | 2020-12-16 02:30 PM UTC |
                 """.trimIndent().trim()
             )
         }

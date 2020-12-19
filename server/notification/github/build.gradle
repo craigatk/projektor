@@ -1,5 +1,6 @@
 plugins {
     id "java-test-fixtures"
+    id 'jacoco'
 }
 
 apply from: "../../../gradle/kotlin.gradle"

@@ -19,8 +19,8 @@ object GitHubCommentCreator {
         return """
 **$headerText**
 
-| Projektor report | Result | Tests | Coverage | Project | Date | 
-| ---------------- | ------ | ----- | -------- | ------- | ---- |
+| Projektor report | Result | Tests executed | Coverage | Project | Date | 
+| ---------------- | ------ | -------------- | -------- | ------- | ---- |
         """.trimIndent().trim()
     }
 
@@ -31,7 +31,7 @@ object GitHubCommentCreator {
         else
             "[${report.failedTestCount} failed](${createReportLink(report, "failed")}) / [${report.totalTestCount} total](${createReportLink(report, "all")})"
 
-        return "| [Projektor report](${createReportLink(report, "")}) | $resultText | $testText | | | ${dateFormatter.format(report.createdDate)} UTC |"
+        return "| [Projektor report](${createReportLink(report, "")}) | $resultText | $testText | | ${report.project ?: ""} | ${dateFormatter.format(report.createdDate)} UTC |"
     }
 
     private fun createReportLink(report: ReportCommentData, uri: String): String {
