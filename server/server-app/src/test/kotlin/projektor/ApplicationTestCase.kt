@@ -92,6 +92,11 @@ open class ApplicationTestCase {
 
     protected var gitHubBaseUrl: String? = null
 
+    protected var serverBaseUrl: String? = null
+    protected var gitHubApiUrl: String? = null
+    protected var gitHubAppId: String? = null
+    protected var gitHubPrivateKeyEncoded: String? = null
+
     fun createTestApplication(application: Application) {
         val schema = databaseSchema
 
@@ -134,6 +139,11 @@ open class ApplicationTestCase {
             globalMessages?.let { put("ktor.message.global", it) }
 
             gitHubBaseUrl?.let { put("ktor.versionControl.gitHubBaseUrl", it) }
+
+            serverBaseUrl?.let { put("ktor.notification.serverBaseUrl", it) }
+            gitHubApiUrl?.let { put("ktor.notification.gitHub.gitHubApiUrl", it) }
+            gitHubAppId?.let { put("ktor.notification.gitHub.gitHubAppId", it) }
+            gitHubPrivateKeyEncoded?.let { put("ktor.notification.gitHub.privateKey", it) }
         }
 
         application.main()
@@ -205,6 +215,11 @@ open class ApplicationTestCase {
 
         return Pair(PublicId(publicId), testRun)
     }
+
+    protected fun loadTextFromFile(filename: String) = javaClass
+        .getResourceAsStream("/$filename")
+        .bufferedReader()
+        .readText()
 
     @AfterEach
     fun closeDataSource() {
