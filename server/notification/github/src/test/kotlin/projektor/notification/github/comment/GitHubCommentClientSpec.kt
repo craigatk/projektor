@@ -1,15 +1,18 @@
-package projektor.notification.github
+package projektor.notification.github.comment
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import io.kotest.core.spec.style.StringSpec
+import projektor.notification.github.GitHubClientConfig
+import projektor.notification.github.GitHubWireMockStubber
+import projektor.notification.github.WireMockTestListener
 import projektor.notification.github.auth.MockJwtProvider
 import strikt.api.expectThat
 import strikt.assertions.*
 import kotlin.test.assertNotNull
 
 class GitHubCommentClientSpec : StringSpec() {
-    private val wireMockServer = WireMockServer(wireMockConfig().dynamicPort())
+    private val wireMockServer = WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort())
     private val gitHubWireMockStubber = GitHubWireMockStubber(wireMockServer)
 
     override fun listeners() = listOf(WireMockTestListener(wireMockServer))

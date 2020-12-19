@@ -3,7 +3,8 @@ package projektor.notification.github.comment
 import java.time.LocalDateTime
 
 data class ReportCommentData(
-    val serverBaseUrl: String,
+    val projektorServerBaseUrl: String,
+    val git: ReportCommentGitData,
     val publicId: String,
     val createdDate: LocalDateTime,
     val passed: Boolean,

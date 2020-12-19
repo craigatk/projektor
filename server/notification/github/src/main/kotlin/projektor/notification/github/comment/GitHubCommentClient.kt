@@ -1,7 +1,8 @@
-package projektor.notification.github
+package projektor.notification.github.comment
 
 import org.kohsuke.github.*
 import org.slf4j.LoggerFactory
+import projektor.notification.github.GitHubClientConfig
 import projektor.notification.github.auth.JwtProvider
 
 class GitHubCommentClient(

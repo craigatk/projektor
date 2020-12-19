@@ -13,15 +13,18 @@ class GitHubCommentCreatorSpec : StringSpec() {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
 
         "should create comment without project or coverage" {
-            val createdDate = LocalDateTime.of(
-                LocalDate.of(2020, 12, 16),
-                LocalTime.of(14, 30)
-            )
-
             val report = ReportCommentData(
-                serverBaseUrl = "https://projektorlive.herokuapp.com/",
+                projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
+                git = ReportCommentGitData(
+                    orgName = "my-org",
+                    repoName = "my-repo",
+                    branchName = "my-branch"
+                ),
                 publicId = "V1BMYK93MTNR",
-                createdDate = createdDate,
+                createdDate = LocalDateTime.of(
+                    LocalDate.of(2020, 12, 16),
+                    LocalTime.of(14, 30)
+                ),
                 passed = true,
                 failedTestCount = 0,
                 totalTestCount = 25,
@@ -33,7 +36,7 @@ class GitHubCommentCreatorSpec : StringSpec() {
 
             expectThat(commentText).isEqualTo(
                 """
-Projektor reports:
+**Projektor reports**
 
 | Projektor report | Result | Tests | Coverage | Project | Date | 
 | ---------------- | ------ | ----- | -------- | ------- | ---- |

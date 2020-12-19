@@ -1,6 +1,8 @@
-package projektor.notification.github
+package projektor.notification.github.comment
 
+import io.kotest.core.annotation.Ignored
 import io.kotest.core.spec.style.StringSpec
+import projektor.notification.github.GitHubClientConfig
 import projektor.notification.github.auth.JwtProvider
 import projektor.notification.github.auth.JwtTokenConfig
 import strikt.api.expectThat
@@ -9,6 +11,7 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 import kotlin.test.assertNotNull
 
+@Ignored
 class GitHubCommentClientLiveSpec : StringSpec() {
     private val keyContents = loadTextFromFile("projektor-test-reports.2020-12-12.private-key.pem")
     private val ttl: Long = 60000

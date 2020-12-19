@@ -3,23 +3,21 @@ package projektor.notification.github.comment
 import java.time.format.DateTimeFormatter
 
 object GitHubCommentCreator {
-    private const val headerText = "Projektor reports:"
+    const val headerText = "Projektor reports"
 
     private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a")
 
     fun appendComment(existingComment: String, report: ReportCommentData): String {
-        return ""
+        return existingComment + "\n" + createReportTableRow(report)
     }
 
     fun createComment(report: ReportCommentData): String {
         return createReportTableHeader() + "\n" + createReportTableRow(report)
     }
 
-    fun isReportComment(commentBody: String): Boolean = commentBody.contains(headerText)
-
     private fun createReportTableHeader(): String {
         return """
-$headerText
+**$headerText**
 
 | Projektor report | Result | Tests | Coverage | Project | Date | 
 | ---------------- | ------ | ----- | -------- | ------- | ---- |
@@ -37,7 +35,7 @@ $headerText
     }
 
     private fun createReportLink(report: ReportCommentData, uri: String): String {
-        val baseUrl = if (report.serverBaseUrl.endsWith("/")) report.serverBaseUrl else "${report.serverBaseUrl}/"
+        val baseUrl = if (report.projektorServerBaseUrl.endsWith("/")) report.projektorServerBaseUrl else "${report.projektorServerBaseUrl}/"
 
         return "${baseUrl}tests/${report.publicId}/$uri"
     }

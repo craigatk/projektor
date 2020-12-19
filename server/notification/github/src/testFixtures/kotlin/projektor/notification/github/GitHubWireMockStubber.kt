@@ -924,8 +924,112 @@ class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
         )
     }
 
+    fun stubListComments(orgName: String, repoName: String, issueId: Int, commentBodies: List<String>) {
+        val responseBodies = commentBodies.mapIndexed { idx, commentBody ->
+"""
+    {
+    "id": ${idx + 1},
+    "node_id": "MDEyOklzc3VlQ29tbWVudDE=",
+    "url": "https://api.github.com/repos/$orgName/$repoName/issues/comments/${idx + 1}",
+    "html_url": "https://github.com/$orgName/$repoName/issues/$issueId#issuecomment-${idx + 1}",
+    "body": "$commentBody",
+    "user": {
+      "login": "octocat",
+      "id": 1,
+      "node_id": "MDQ6VXNlcjE=",
+      "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/octocat",
+      "type": "User",
+      "site_admin": false
+    },
+    "created_at": "2011-04-14T16:00:49Z",
+    "updated_at": "2011-04-14T16:00:49Z",
+    "issue_url": "https://api.github.com/repos/octocat/Hello-World/issues/1347",
+    "author_association": "collaborator"
+  }
+            """.trimIndent()
+        }
+
+        wireMockServer.stubFor(
+            get(urlEqualTo("/repos/$orgName/$repoName/issues/$issueId/comments"))
+                .willReturn(
+                    aResponse().withBody("""[${responseBodies.joinToString(",")}]""")
+                )
+        )
+    }
+
+    fun stubGetComment(orgName: String, repoName: String, issueId: Int, commentId: Int, commentBody: String) {
+        val responseBody = """
+            {
+              "id": $commentId,
+              "node_id": "MDEyOklzc3VlQ29tbWVudDE=",
+              "url": "https://api.github.com/repos/$orgName/$repoName/issues/comments/$commentId",
+              "html_url": "https://github.com/$orgName/$repoName/issues/$issueId#issuecomment-$commentId",
+              "body": "$commentBody",
+              "user": {
+                "login": "octocat",
+                "id": 1,
+                "node_id": "MDQ6VXNlcjE=",
+                "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+                "gravatar_id": "",
+                "type": "User",
+                "site_admin": false
+              },
+              "created_at": "2011-04-14T16:00:49Z",
+              "updated_at": "2011-04-14T16:00:49Z",
+              "issue_url": "https://api.github.com/repos/$orgName/$repoName/issues/$issueId",
+              "author_association": "collaborator"
+            }
+        """.trimIndent()
+
+        wireMockServer.stubFor(
+            get(urlEqualTo("/repos/$orgName/$repoName/issues/comments/$commentId"))
+                .willReturn(
+                    aResponse().withBody(responseBody)
+                )
+        )
+    }
+
+    fun stubUpdateComment(orgName: String, repoName: String, issueId: Int, commentId: Int) {
+        val responseBody = """
+            {
+              "id": 1,
+              "node_id": "MDEyOklzc3VlQ29tbWVudDE=",
+              "url": "https://api.github.com/repos/octocat/Hello-World/issues/comments/1",
+              "html_url": "https://github.com/octocat/Hello-World/issues/1347#issuecomment-1",
+              "body": "Me too",
+              "user": {
+                "login": "octocat",
+                "id": 1,
+                "node_id": "MDQ6VXNlcjE=",
+                "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+                "gravatar_id": "",
+                "type": "User",
+                "site_admin": false
+              },
+              "created_at": "2011-04-14T16:00:49Z",
+              "updated_at": "2011-04-14T16:00:49Z",
+              "issue_url": "https://api.github.com/repos/$orgName/$repoName/issues/$issueId",
+              "author_association": "collaborator"
+            }
+        """.trimIndent()
+
+        wireMockServer.stubFor(
+            patch(urlEqualTo("/repos/$orgName/$repoName/issues/comments/$commentId"))
+                .willReturn(
+                    aResponse().withBody(responseBody)
+                )
+        )
+    }
+
     fun findAddCommentRequestBodies(orgName: String, repoName: String, issueId: Int) =
         wireMockServer.findRequestsMatching(
             postRequestedFor(urlEqualTo("/repos/$orgName/$repoName/issues/$issueId/comments")).build()
+        ).requests.map { it.bodyAsString }
+
+    fun findUpdateCommentRequestBodies(orgName: String, repoName: String, commentId: Int) =
+        wireMockServer.findRequestsMatching(
+            patchRequestedFor(urlEqualTo("/repos/$orgName/$repoName/issues/comments/$commentId")).build()
         ).requests.map { it.bodyAsString }
 }
