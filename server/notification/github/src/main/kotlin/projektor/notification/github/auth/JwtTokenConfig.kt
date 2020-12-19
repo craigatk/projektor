@@ -1,4 +1,4 @@
-package projektor.notification.github
+package projektor.notification.github.auth
 
 data class JwtTokenConfig(
     val gitHubAppId: String,
