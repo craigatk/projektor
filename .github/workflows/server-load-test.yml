@@ -65,9 +65,10 @@ jobs:
       run: ./gradlew :server:test:load-test:loadTest
 
     - name: Projektor results
-      uses: craigatk/projektor-action@v12
+      uses: craigatk/projektor-action@v13
       if: failure() || success()
       with:
         server-url: https://projektorlive.herokuapp.com
         performance: server/test/load-test/test-results/*.json
         token: ${{ secrets.PROJEKTOR_TOKEN }}
+        project-name: server-load-test
