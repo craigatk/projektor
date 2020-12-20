@@ -5,6 +5,7 @@ import projektor.server.api.TestRun
 import projektor.server.api.coverage.Coverage
 import projektor.server.api.coverage.CoverageStats
 import retrofit2.Response
+import spock.util.concurrent.PollingConditions
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.gradle.testkit.runner.TaskOutcome.UP_TO_DATE
@@ -63,23 +64,27 @@ class MultiProjectCoverageFunctionalSpec extends MultiProjectFunctionalSpecifica
         result.task(":project3:jacocoTestReport").outcome == SUCCESS
 
         and:
-        Response<TestRun> testRunResponse = projektorTestRunApi.testRun(testId).execute()
-        testRunResponse.successful
+        new PollingConditions().eventually {
+            Response<TestRun> testRunResponse = projektorTestRunApi.testRun(testId).execute()
+            assert testRunResponse.successful
+        }
 
         and:
-        Response<CoverageStats> overallStatsResponse = projektorTestRunApi.coverageOverallStats(testId).execute()
-        overallStatsResponse.successful
+        new PollingConditions().eventually {
+            Response<CoverageStats> overallStatsResponse = projektorTestRunApi.coverageOverallStats(testId).execute()
+            assert overallStatsResponse.successful
 
-        CoverageStats overallStats = overallStatsResponse.body()
-        overallStats.statementStat.covered == 20
-        overallStats.statementStat.missed == 16
-        overallStats.statementStat.total == 36
-        overallStats.statementStat.coveredPercentage == 55.56
+            CoverageStats overallStats = overallStatsResponse.body()
+            assert overallStats.statementStat.covered == 20
+            assert overallStats.statementStat.missed == 16
+            assert overallStats.statementStat.total == 36
+            assert overallStats.statementStat.coveredPercentage == 55.56
 
-        overallStats.lineStat.covered == 5
-        overallStats.lineStat.missed == 1
-        overallStats.lineStat.total == 6
-        overallStats.lineStat.coveredPercentage == 83.33
+            assert overallStats.lineStat.covered == 5
+            assert overallStats.lineStat.missed == 1
+            assert overallStats.lineStat.total == 6
+            assert overallStats.lineStat.coveredPercentage == 83.33
+        }
     }
 
     def "when tests not executed but code coverage exists and running in CI should publish coverage reports from multiple projects"() {
@@ -122,23 +127,27 @@ class MultiProjectCoverageFunctionalSpec extends MultiProjectFunctionalSpecifica
         result1.task(":project3:jacocoTestReport").outcome == SUCCESS
 
         and:
-        Response<TestRun> testRunResponse1 = projektorTestRunApi.testRun(testId1).execute()
-        testRunResponse1.successful
+        new PollingConditions().eventually {
+            Response<TestRun> testRunResponse1 = projektorTestRunApi.testRun(testId1).execute()
+            assert testRunResponse1.successful
+        }
 
         and:
-        Response<CoverageStats> overallStatsResponse1 = projektorTestRunApi.coverageOverallStats(testId1).execute()
-        overallStatsResponse1.successful
+        new PollingConditions().eventually {
+            Response<CoverageStats> overallStatsResponse1 = projektorTestRunApi.coverageOverallStats(testId1).execute()
+            assert overallStatsResponse1.successful
 
-        CoverageStats overallStats = overallStatsResponse1.body()
-        overallStats.statementStat.covered == 20
-        overallStats.statementStat.missed == 16
-        overallStats.statementStat.total == 36
-        overallStats.statementStat.coveredPercentage == 55.56
+            CoverageStats overallStats = overallStatsResponse1.body()
+            assert overallStats.statementStat.covered == 20
+            assert overallStats.statementStat.missed == 16
+            assert overallStats.statementStat.total == 36
+            assert overallStats.statementStat.coveredPercentage == 55.56
 
-        overallStats.lineStat.covered == 5
-        overallStats.lineStat.missed == 1
-        overallStats.lineStat.total == 6
-        overallStats.lineStat.coveredPercentage == 83.33
+            assert overallStats.lineStat.covered == 5
+            assert overallStats.lineStat.missed == 1
+            assert overallStats.lineStat.total == 6
+            assert overallStats.lineStat.coveredPercentage == 83.33
+        }
 
         when:
         def result2 = runPassingBuildWithEnvironment(augmentedEnv, 'test', 'jacocoTestReport')
@@ -156,20 +165,24 @@ class MultiProjectCoverageFunctionalSpec extends MultiProjectFunctionalSpecifica
         result2.task(":project3:jacocoTestReport").outcome == UP_TO_DATE
 
         and:
-        Response<TestRun> testRunResponse2 = projektorTestRunApi.testRun(testId2).execute()
-        testRunResponse2.successful
+        new PollingConditions().eventually {
+            Response<TestRun> testRunResponse2 = projektorTestRunApi.testRun(testId2).execute()
+            assert testRunResponse2.successful
+        }
 
         and:
-        Response<Coverage> coverageResponse2 = projektorTestRunApi.coverage(testId2).execute()
-        coverageResponse2.successful
+        new PollingConditions().eventually {
+            Response<Coverage> coverageResponse2 = projektorTestRunApi.coverage(testId2).execute()
+            assert coverageResponse2.successful
 
-        Coverage coverage2 = coverageResponse2.body()
-        coverage2.previousTestRunId == testId1
+            Coverage coverage2 = coverageResponse2.body()
+            assert coverage2.previousTestRunId == testId1
 
-        coverage2.overallStats.statementStat.coveredPercentage == 55.56
-        coverage2.overallStats.statementStat.coveredPercentageDelta == 0.00
+            assert coverage2.overallStats.statementStat.coveredPercentage == 55.56
+            assert coverage2.overallStats.statementStat.coveredPercentageDelta == 0.00
 
-        coverage2.overallStats.lineStat.coveredPercentage == 83.33
-        coverage2.overallStats.lineStat.coveredPercentageDelta == 0.00
+            assert coverage2.overallStats.lineStat.coveredPercentage == 83.33
+            assert coverage2.overallStats.lineStat.coveredPercentageDelta == 0.00
+        }
     }
 }

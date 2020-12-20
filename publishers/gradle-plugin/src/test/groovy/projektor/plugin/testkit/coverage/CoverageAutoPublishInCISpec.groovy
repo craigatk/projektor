@@ -1,5 +1,6 @@
 package projektor.plugin.testkit.coverage
 
+import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.testkit.SingleProjectSpec
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
@@ -25,8 +26,6 @@ class CoverageAutoPublishInCISpec extends SingleProjectSpec {
         String publicId = "AUTOCOV123"
         resultsStubber.stubResultsPostSuccess(publicId)
 
-        coverageStubber.stubCoveragePostSuccess(publicId)
-
         File sourceDir = createSourceDirectory(projectRootDir)
         File testDir = createTestDirectory(projectRootDir)
 
@@ -41,8 +40,10 @@ class CoverageAutoPublishInCISpec extends SingleProjectSpec {
         result.task(":jacocoTestReport").outcome == SUCCESS
 
         and:
-        resultsStubber.findResultsRequests().size() == 1
-        coverageStubber.findCoverageRequests(publicId).size() == 1
+        List<GroupedResults> resultRequestBodies = resultsStubber.findResultsRequestBodies()
+        resultRequestBodies.size() == 1
+
+        resultRequestBodies[0].coverageFiles.size() == 1
     }
 
     def "should not publish results and coverage when local and running non-test task"() {
@@ -55,8 +56,6 @@ class CoverageAutoPublishInCISpec extends SingleProjectSpec {
 
         String publicId = "AUTOCOV123"
         resultsStubber.stubResultsPostSuccess(publicId)
-
-        coverageStubber.stubCoveragePostSuccess(publicId)
 
         File sourceDir = createSourceDirectory(projectRootDir)
         File testDir = createTestDirectory(projectRootDir)
@@ -74,6 +73,5 @@ class CoverageAutoPublishInCISpec extends SingleProjectSpec {
 
         and:
         resultsStubber.findResultsRequests().size() == 0
-        coverageStubber.findCoverageRequests(publicId).size() == 0
     }
 }

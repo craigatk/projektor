@@ -1,6 +1,7 @@
 package projektor.plugin.testkit.coverage
 
-import projektor.parser.coverage.payload.CoverageFilePayload
+import projektor.plugin.coverage.model.CoverageFilePayload
+import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.testkit.MultiProjectSpec
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
@@ -37,8 +38,6 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
         String publicId = "COV123"
         resultsStubber.stubResultsPostSuccess(publicId)
 
-        coverageStubber.stubCoveragePostSuccess(publicId)
-
         writeSourceCodeFile(sourceDirectory1)
         writePartialCoverageSpecFile(testDirectory1, "PartialSpec1")
 
@@ -62,7 +61,11 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
         result.task(":project3:jacocoTestReport").outcome == SUCCESS
 
         and:
-        coverageStubber.findCoverageRequests(publicId).size() == 3
+        List<GroupedResults> resultsRequestBodies = resultsStubber.findResultsRequestBodies()
+        resultsRequestBodies.size() == 1
+
+        List<CoverageFilePayload> coverageFilePayloads = resultsRequestBodies[0].coverageFiles
+        coverageFilePayloads.size() == 3
     }
 
     def "should include full directory path in published coverage data"() {
@@ -77,8 +80,6 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
         String publicId = "COV123"
         resultsStubber.stubResultsPostSuccess(publicId)
 
-        coverageStubber.stubCoveragePostSuccess(publicId)
-
         writeSourceCodeFile(sourceDirectory1)
         writePartialCoverageSpecFile(testDirectory1, "PartialSpec1")
 
@@ -102,7 +103,10 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
         result.task(":project3:jacocoTestReport").outcome == SUCCESS
 
         and:
-        List<CoverageFilePayload> coverageFilePayloads = coverageStubber.findCoveragePayloads(publicId)
+        List<GroupedResults> resultsRequestBodies = resultsStubber.findResultsRequestBodies()
+        resultsRequestBodies.size() == 1
+
+        List<CoverageFilePayload> coverageFilePayloads = resultsRequestBodies[0].coverageFiles
         coverageFilePayloads.size() == 3
 
         coverageFilePayloads.find { it.baseDirectoryPath == "project1/src/main/groovy"}
@@ -121,8 +125,6 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
 
         String publicId1 = "COVER1"
         resultsStubber.stubResultsPostSuccess(publicId1)
-
-        coverageStubber.stubCoveragePostSuccess(publicId1)
 
         writeSourceCodeFile(sourceDirectory1)
         writePartialCoverageSpecFile(testDirectory1, "PartialSpec1")
@@ -147,15 +149,17 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
         result1.task(":project3:jacocoTestReport").outcome == SUCCESS
 
         and:
-        coverageStubber.findCoverageRequests(publicId1).size() == 3
+        List<GroupedResults> resultsRequestBodies1 = resultsStubber.findResultsRequestBodies()
+        resultsRequestBodies1.size() == 1
+
+        List<CoverageFilePayload> coverageFilePayloads1 = resultsRequestBodies1[0].coverageFiles
+        coverageFilePayloads1.size() == 3
 
         when:
         wireMockRule.resetAll()
 
         String publicId2 = "COVER2"
         resultsStubber.stubResultsPostSuccess(publicId2)
-
-        coverageStubber.stubCoveragePostSuccess(publicId2)
 
         writePartialCoverageSpecFile(testDirectory2, "PartialSpec4")
 
@@ -172,7 +176,11 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
         result2.task(":project3:jacocoTestReport").outcome == UP_TO_DATE
 
         and:
-        coverageStubber.findCoverageRequests(publicId2).size() == 3
+        List<GroupedResults> resultsRequestBodies2 = resultsStubber.findResultsRequestBodies()
+        resultsRequestBodies2.size() == 1
+
+        List<CoverageFilePayload> coverageFilePayloads2 = resultsRequestBodies2[0].coverageFiles
+        coverageFilePayloads2.size() == 3
     }
 
     def "when no subprojects change and in CI should publish coverage from all subprojects"() {
@@ -186,8 +194,6 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
 
         String publicId1 = "COVER1"
         resultsStubber.stubResultsPostSuccess(publicId1)
-
-        coverageStubber.stubCoveragePostSuccess(publicId1)
 
         writeSourceCodeFile(sourceDirectory1)
         writePartialCoverageSpecFile(testDirectory1, "PartialSpec1")
@@ -212,15 +218,17 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
         result1.task(":project3:jacocoTestReport").outcome == SUCCESS
 
         and:
-        coverageStubber.findCoverageRequests(publicId1).size() == 3
+        List<GroupedResults> resultsRequestBodies1 = resultsStubber.findResultsRequestBodies()
+        resultsRequestBodies1.size() == 1
+
+        List<CoverageFilePayload> coverageFilePayloads1 = resultsRequestBodies1[0].coverageFiles
+        coverageFilePayloads1.size() == 3
 
         when:
         wireMockRule.resetAll()
 
         String publicId2 = "COVER2"
         resultsStubber.stubResultsPostSuccess(publicId2)
-
-        coverageStubber.stubCoveragePostSuccess(publicId2)
 
         def result2 = runSuccessfulBuildWithEnvironment(["CI": "true"], 'test', 'jacocoTestReport', '-i')
 
@@ -235,6 +243,10 @@ class CoverageMultiProjectSpec extends MultiProjectSpec {
         result2.task(":project3:jacocoTestReport").outcome == UP_TO_DATE
 
         and:
-        coverageStubber.findCoverageRequests(publicId2).size() == 3
+        List<GroupedResults> resultsRequestBodies2 = resultsStubber.findResultsRequestBodies()
+        resultsRequestBodies2.size() == 1
+
+        List<CoverageFilePayload> coverageFilePayloads2 = resultsRequestBodies2[0].coverageFiles
+        coverageFilePayloads2.size() == 3
     }
 }

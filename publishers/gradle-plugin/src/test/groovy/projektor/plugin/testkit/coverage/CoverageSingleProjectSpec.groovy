@@ -1,5 +1,7 @@
 package projektor.plugin.testkit.coverage
 
+import projektor.plugin.coverage.model.CoverageFilePayload
+import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.testkit.SingleProjectSpec
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
@@ -26,8 +28,6 @@ class CoverageSingleProjectSpec extends SingleProjectSpec {
         String publicId = "COV123"
         resultsStubber.stubResultsPostSuccess(publicId)
 
-        coverageStubber.stubCoveragePostSuccess(publicId)
-
         File sourceDir = createSourceDirectory(projectRootDir)
         File testDir = createTestDirectory(projectRootDir)
 
@@ -42,7 +42,13 @@ class CoverageSingleProjectSpec extends SingleProjectSpec {
         result.task(":jacocoTestReport").outcome == SUCCESS
 
         and:
-        coverageStubber.findCoverageRequests(publicId).size() == 1
+        List<GroupedResults> resultsRequestBodies = resultsStubber.findResultsRequestBodies()
+        resultsRequestBodies.size() == 1
+
+        List<CoverageFilePayload> coverageFilePayloads = resultsRequestBodies[0].coverageFiles
+        coverageFilePayloads.size() == 1
+
+        coverageFilePayloads[0].reportContents.contains("MyClass")
     }
 
     def "when coverage disabled should not publish coverage results to server"() {
@@ -57,8 +63,6 @@ class CoverageSingleProjectSpec extends SingleProjectSpec {
         String publicId = "COV123"
         resultsStubber.stubResultsPostSuccess(publicId)
 
-        coverageStubber.stubCoveragePostSuccess(publicId)
-
         File sourceDir = createSourceDirectory(projectRootDir)
         File testDir = createTestDirectory(projectRootDir)
 
@@ -73,6 +77,10 @@ class CoverageSingleProjectSpec extends SingleProjectSpec {
         result.task(":jacocoTestReport").outcome == SUCCESS
 
         and:
-        coverageStubber.findCoverageRequests(publicId).size() == 0
+        List<GroupedResults> resultsRequestBodies = resultsStubber.findResultsRequestBodies()
+        resultsRequestBodies.size() == 1
+
+        List<CoverageFilePayload> coverageFilePayloads = resultsRequestBodies[0].coverageFiles
+        coverageFilePayloads.size() == 0
     }
 }
