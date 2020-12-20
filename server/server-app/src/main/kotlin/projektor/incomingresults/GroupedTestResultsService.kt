@@ -6,13 +6,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
+import projektor.coverage.CoverageService
 import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedResults
 import projektor.metrics.MetricsService
 import projektor.notification.github.GitHubPullRequestCommentService
+import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.performance.PerformanceResultsRepository
 import projektor.server.api.PublicId
 import projektor.server.api.TestRunSummary
+import projektor.server.api.coverage.Coverage
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.testrun.TestRunRepository
 
@@ -24,7 +27,8 @@ class GroupedTestResultsService(
     private val performanceResultsRepository: PerformanceResultsRepository,
     private val metricRegistry: MeterRegistry,
     private val metricsService: MetricsService,
-    private val gitHubPullRequestCommentService: GitHubPullRequestCommentService
+    private val gitHubPullRequestCommentService: GitHubPullRequestCommentService,
+    private val coverageService: CoverageService
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
@@ -68,7 +72,9 @@ class GroupedTestResultsService(
 
             recordSuccessfulProcessMetrics()
 
-            publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git)
+            val coverage = groupedResults.coverageFiles?.let { saveCoverage(publicId, it) }
+
+            publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git, coverage)
         } catch (e: Exception) {
             val errorMessage = "Error persisting test results: ${e.message}"
             handleException(publicId, groupedResultsBlob, errorMessage, e)
@@ -76,9 +82,17 @@ class GroupedTestResultsService(
         }
     }
 
-    private fun publishCommentToPullRequest(testRunSummary: TestRunSummary, gitMetadata: GitMetadata?) {
+    private suspend fun saveCoverage(publicId: PublicId, coverageFiles: List<CoverageFilePayload>): Coverage? {
+        coverageFiles.forEach { coverageFile ->
+            coverageService.saveReport(coverageFile, publicId)
+        }
+
+        return coverageService.getCoverageWithPreviousRunComparison(publicId)
+    }
+
+    private fun publishCommentToPullRequest(testRunSummary: TestRunSummary, gitMetadata: GitMetadata?, coverage: Coverage?) {
         try {
-            val pullRequest = gitHubPullRequestCommentService.upsertComment(testRunSummary, gitMetadata)
+            val pullRequest = gitHubPullRequestCommentService.upsertComment(testRunSummary, gitMetadata, coverage)
 
             if (pullRequest != null) {
                 logger.info("Successfully commented on pull request ${pullRequest.number} in ${pullRequest.orgName}/${pullRequest.repoName}")

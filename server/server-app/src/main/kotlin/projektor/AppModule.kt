@@ -108,7 +108,7 @@ fun createAppModule(
     single { GroupedResultsParser() }
     single { PerformanceResultsParser() }
     single { GroupedResultsConverter(get(), get(), get()) }
-    single { GroupedTestResultsService(get(), get(), get(), get(), get(), get(), get()) }
+    single { GroupedTestResultsService(get(), get(), get(), get(), get(), get(), get(), get()) }
     single { MessageService(messageConfig) }
     single { PreviousTestRunService(get()) }
     single { ProcessingFailureService(get()) }

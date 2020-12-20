@@ -3,6 +3,7 @@ package projektor.incomingresults
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import projektor.incomingresults.model.*
+import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.parser.grouped.GroupedResultsParser
 import projektor.parser.performance.PerformanceResultsParser
 import projektor.results.processor.TestResultsProcessor
@@ -58,7 +59,13 @@ class GroupedResultsConverter(
             groupedTestSuites = groupedTestSuites,
             performanceResults = performanceResults,
             metadata = metadata,
-            wallClockDuration = incomingGroupedResults.wallClockDuration
+            wallClockDuration = incomingGroupedResults.wallClockDuration,
+            coverageFiles = incomingGroupedResults.coverageFiles?.map { incomingCoverageFile ->
+                CoverageFilePayload(
+                    reportContents = incomingCoverageFile.reportContents,
+                    baseDirectoryPath = incomingCoverageFile.baseDirectoryPath
+                )
+            }
         )
     }
 }
