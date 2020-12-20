@@ -9,12 +9,12 @@ class GitHubCommentService(private val commentClient: GitHubCommentClient) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
     fun upsertReportComment(commentData: ReportCommentData): PullRequest? {
-        val (orgName, repoName, branchName) = commentData.git
+        val (orgName, repoName, branchName, commitSha) = commentData.git
 
         val repository = commentClient.getRepository(orgName, repoName)
 
         return if (repository != null) {
-            val pullRequestNumber = commentClient.findOpenPullRequestsForBranch(repository, branchName)
+            val pullRequestNumber = commentClient.findOpenPullRequests(repository, branchName, commitSha)
 
             if (pullRequestNumber != null) {
                 upsertComment(repository, pullRequestNumber, commentData)

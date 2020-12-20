@@ -598,7 +598,9 @@ class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
         )
     }
 
-    fun stubListPullRequests(orgName: String, repoName: String, branchNames: List<String>) {
+    fun stubListPullRequests(orgName: String, repoName: String, branchNames: List<String>, commitShas: List<String> = listOf()) {
+        val shas = if (commitShas.isEmpty()) branchNames.map { "$it-sha" } else commitShas
+
         val responseBody = branchNames.mapIndexed { idx, branchName ->
             """
                 {
@@ -726,7 +728,7 @@ class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
     "head": {
       "label": "$orgName:$branchName",
       "ref": "$branchName",
-      "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e",
+      "sha": "${shas[idx]}",
       "user": {
         "login": "octocat",
         "id": 1,

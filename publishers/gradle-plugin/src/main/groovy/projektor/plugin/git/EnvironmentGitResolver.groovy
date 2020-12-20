@@ -10,6 +10,7 @@ class EnvironmentGitResolver extends GitResolver {
         this.environmentResolver = environmentResolver
     }
 
+    @Override
     String findBranchName() {
         String ref = environmentResolver.findFirstEnvironmentValue(config.refEnvironmentVariables)
 
@@ -20,7 +21,13 @@ class EnvironmentGitResolver extends GitResolver {
         }
     }
 
+    @Override
     String findRepository() {
         return environmentResolver.findFirstEnvironmentValue(config.repoEnvironmentVariables)
+    }
+
+    @Override
+    String findCommitSha() {
+        return environmentResolver.findFirstEnvironmentValue(config.commitShaEnvironmentVariables)
     }
 }

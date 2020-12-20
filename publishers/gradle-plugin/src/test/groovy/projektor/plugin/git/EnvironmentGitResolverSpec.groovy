@@ -84,4 +84,21 @@ class EnvironmentGitResolverSpec extends Specification {
         and:
         repositoryName == repoEnvironmentValue
     }
+
+    def "should find commit SHA"() {
+        given:
+        GitResolutionConfig config = new GitResolutionConfig(
+                commitShaEnvironmentVariables: ["12345", "67890"]
+        )
+        EnvironmentGitResolver gitResolver = new EnvironmentGitResolver(config, environmentResolver, logger)
+
+        when:
+        String commitSha = gitResolver.findCommitSha()
+
+        then:
+        1 * environmentResolver.findFirstEnvironmentValue(["12345", "67890"]) >> "12345"
+
+        and:
+        commitSha == "12345"
+    }
 }

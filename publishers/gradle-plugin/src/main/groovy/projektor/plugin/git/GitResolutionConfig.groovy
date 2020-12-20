@@ -7,13 +7,15 @@ class GitResolutionConfig {
     List<String> mainBranchNames
     List<String> repoEnvironmentVariables
     List<String> refEnvironmentVariables
+    List<String> commitShaEnvironmentVariables
 
     static GitResolutionConfig fromExtension(ProjektorPublishPluginExtension extension) {
         return new GitResolutionConfig(
                 enabled: extension.gitInfoEnabled,
                 mainBranchNames: extension.gitMainBranchNames,
                 repoEnvironmentVariables: extension.gitRepoEnvironmentVariables,
-                refEnvironmentVariables: extension.gitRefEnvironmentVariables
+                refEnvironmentVariables: extension.gitRefEnvironmentVariables,
+                commitShaEnvironmentVariables: extension.gitCommitShaEnvironmentVariables
         )
     }
 }

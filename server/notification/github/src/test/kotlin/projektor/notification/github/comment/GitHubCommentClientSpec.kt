@@ -83,7 +83,7 @@ class GitHubCommentClientSpec : StringSpec() {
             val repository = gitHubCommentClient.getRepository(orgName, repoName)
             assertNotNull(repository)
 
-            val pullRequestNumber = gitHubCommentClient.findOpenPullRequestsForBranch(repository, "the-branch")
+            val pullRequestNumber = gitHubCommentClient.findOpenPullRequests(repository, "the-branch", null)
             expectThat(pullRequestNumber).isNotNull().isEqualTo(1)
         }
 
@@ -104,7 +104,7 @@ class GitHubCommentClientSpec : StringSpec() {
             val repository = gitHubCommentClient.getRepository(orgName, repoName)
             assertNotNull(repository)
 
-            val pullRequestNumber = gitHubCommentClient.findOpenPullRequestsForBranch(repository, "some-branch")
+            val pullRequestNumber = gitHubCommentClient.findOpenPullRequests(repository, "some-branch", null)
             expectThat(pullRequestNumber).isNull()
         }
     }

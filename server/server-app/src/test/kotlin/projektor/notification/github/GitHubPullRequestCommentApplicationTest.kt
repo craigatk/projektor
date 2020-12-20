@@ -166,4 +166,50 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
             }
         }
     }
+
+    @Test
+    fun `should find pull request by commit SHA and add comment to it`() {
+        val privateKeyContents = loadTextFromFile("fake_private_key.pem")
+
+        serverBaseUrl = "http://localhost:8080"
+        gitHubApiUrl = "http://localhost:${wireMockServer.port()}"
+        gitHubAppId = "12345"
+        gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(privateKeyContents)
+
+        val orgName = "craigatk"
+        val repoName = "projektor"
+        val branchName = "main"
+        val commitSha = "123456789"
+
+        val pullRequestNumber = 2
+        gitHubWireMockStubber.stubRepositoryRequests(orgName, repoName)
+        gitHubWireMockStubber.stubListPullRequests(orgName, repoName, listOf("branch-1", "branch-2"), listOf("sha-1", commitSha))
+        gitHubWireMockStubber.stubGetIssue(orgName, repoName, pullRequestNumber)
+        gitHubWireMockStubber.stubListComments(orgName, repoName, pullRequestNumber, listOf("Some other comment"))
+        gitHubWireMockStubber.stubAddComment(orgName, repoName, pullRequestNumber)
+
+        val gitMetadata = GitMetadata()
+        gitMetadata.repoName = "$orgName/$repoName"
+        gitMetadata.branchName = branchName
+        gitMetadata.isMainBranch = true
+        gitMetadata.commitSha = commitSha
+        val metadata = ResultsMetadata()
+        metadata.git = gitMetadata
+        val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/groupedResults") {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(requestBody)
+            }.apply {
+                val (publicId, _) = waitForTestRunSaveToComplete(response)
+
+                await until { gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber).size == 1 }
+
+                val addCommentRequestBodies = gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber)
+                expectThat(addCommentRequestBodies).hasSize(1)
+                expectThat(addCommentRequestBodies[0]).contains(publicId.id)
+            }
+        }
+    }
 }

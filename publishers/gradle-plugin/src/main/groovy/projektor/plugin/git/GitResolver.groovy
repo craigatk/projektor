@@ -17,6 +17,8 @@ abstract class GitResolver {
 
     abstract String findRepository()
 
+    abstract String findCommitSha()
+
     boolean isMainBranch() {
         String branchName = findBranchName()
 
@@ -31,7 +33,8 @@ abstract class GitResolver {
                 GitMetadata gitMetadata = new GitMetadata(
                         repoName: findRepository(),
                         branchName: findBranchName(),
-                        isMainBranch: isMainBranch()
+                        isMainBranch: isMainBranch(),
+                        commitSha: findCommitSha()
                 )
 
                 logger.info("Projektor sending Git metadata $gitMetadata")

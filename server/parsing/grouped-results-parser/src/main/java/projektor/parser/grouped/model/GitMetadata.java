@@ -5,4 +5,5 @@ public class GitMetadata {
     public String branchName;
     public String projectName;
     public boolean isMainBranch;
+    public String commitSha;
 }

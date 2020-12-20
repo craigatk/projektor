@@ -20,6 +20,7 @@ class GitHubPullRequestCommentService(
         return if (gitHubCommentService != null && gitMetadata != null && serverBaseUrl != null) {
             val repoParts = gitMetadata.repoName?.split("/")
             val branchName = gitMetadata.branchName
+            val commitSha = gitMetadata.commitSha
 
             if (repoParts != null && repoParts.size == 2 && branchName != null) {
                 val orgName = repoParts[0]
@@ -39,7 +40,8 @@ class GitHubPullRequestCommentService(
                     git = ReportCommentGitData(
                         orgName = orgName,
                         repoName = repoName,
-                        branchName = branchName
+                        branchName = branchName,
+                        commitSha = commitSha
                     ),
                     publicId = testRunSummary.id,
                     createdDate = LocalDateTime.ofInstant(testRunSummary.createdTimestamp, ZoneId.of("Z")),
