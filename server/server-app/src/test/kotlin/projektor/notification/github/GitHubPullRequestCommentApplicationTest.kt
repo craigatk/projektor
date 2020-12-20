@@ -13,8 +13,11 @@ import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.notification.github.auth.PrivateKeyEncoder
 import projektor.parser.GroupedResultsXmlLoader
+import projektor.parser.grouped.model.CoverageFile
 import projektor.parser.grouped.model.GitMetadata
 import projektor.parser.grouped.model.ResultsMetadata
+import projektor.server.example.coverage.JacocoXmlLoader
+import projektor.server.example.coverage.JacocoXmlLoader.Companion.jacocoXmlParserLineCoveragePercentage
 import strikt.api.expectThat
 import strikt.assertions.contains
 import strikt.assertions.hasSize
@@ -113,6 +116,53 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
                 waitForTestRunSaveToComplete(response)
 
                 await until { gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber).size == 0 }
+            }
+        }
+    }
+
+    @Test
+    fun `when report includes coverage data should include it in PR comment`() {
+        val privateKeyContents = loadTextFromFile("fake_private_key.pem")
+
+        serverBaseUrl = "http://localhost:8080"
+        gitHubApiUrl = "http://localhost:${wireMockServer.port()}"
+        gitHubAppId = "12345"
+        gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(privateKeyContents)
+
+        val orgName = "craigatk"
+        val repoName = "projektor"
+        val branchName = "main"
+
+        val pullRequestNumber = 2
+        gitHubWireMockStubber.stubRepositoryRequests(orgName, repoName)
+        gitHubWireMockStubber.stubListPullRequests(orgName, repoName, listOf("another-branch", branchName))
+        gitHubWireMockStubber.stubGetIssue(orgName, repoName, pullRequestNumber)
+        gitHubWireMockStubber.stubListComments(orgName, repoName, pullRequestNumber, listOf("Some other comment"))
+        gitHubWireMockStubber.stubAddComment(orgName, repoName, pullRequestNumber)
+
+        val coverageFile = CoverageFile()
+        coverageFile.reportContents = JacocoXmlLoader().jacocoXmlParser()
+
+        val gitMetadata = GitMetadata()
+        gitMetadata.repoName = "$orgName/$repoName"
+        gitMetadata.branchName = branchName
+        gitMetadata.isMainBranch = true
+        val metadata = ResultsMetadata()
+        metadata.git = gitMetadata
+        val requestBody = GroupedResultsXmlLoader().passingResultsWithCoverage(listOf(coverageFile), metadata)
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/groupedResults") {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(requestBody)
+            }.apply {
+                val (publicId, _) = waitForTestRunSaveToComplete(response)
+
+                await until { gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber).size == 1 }
+
+                val addCommentRequestBodies = gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber)
+                expectThat(addCommentRequestBodies).hasSize(1)
+                expectThat(addCommentRequestBodies[0]).contains(jacocoXmlParserLineCoveragePercentage.toString())
             }
         }
     }

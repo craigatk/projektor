@@ -1,10 +1,7 @@
 package projektor.parser
 
 import projektor.parser.grouped.GroupedResultsParser
-import projektor.parser.grouped.model.GroupedResults
-import projektor.parser.grouped.model.GroupedTestSuites
-import projektor.parser.grouped.model.PerformanceResult
-import projektor.parser.grouped.model.ResultsMetadata
+import projektor.parser.grouped.model.*
 import java.math.BigDecimal
 
 class GroupedResultsXmlLoader {
@@ -60,5 +57,26 @@ class GroupedResultsXmlLoader {
         performanceResult.resultsBlob = performanceResultsBlob
 
         return wrapPerformanceResultsInGroup(listOf(performanceResult), metadata)
+    }
+
+    fun passingResultsWithCoverage(coverageFiles: List<CoverageFile>, metadata: ResultsMetadata? = null): String {
+        val groupedTestSuites1 = GroupedTestSuites()
+        groupedTestSuites1.groupName = "Group1"
+        groupedTestSuites1.groupLabel = "unitTest"
+        groupedTestSuites1.directory = "/test/unit"
+        groupedTestSuites1.testSuitesBlob = resultsXmlLoader.passing() + resultsXmlLoader.longOutput()
+
+        val groupedTestSuites2 = GroupedTestSuites()
+        groupedTestSuites2.groupName = "Group2"
+        groupedTestSuites2.groupLabel = "functionalTest"
+        groupedTestSuites2.directory = "/test/functional"
+        groupedTestSuites2.testSuitesBlob = resultsXmlLoader.output()
+
+        val groupedResults = GroupedResults()
+        groupedResults.groupedTestSuites = listOf(groupedTestSuites1, groupedTestSuites2)
+        groupedResults.metadata = metadata
+        groupedResults.coverageFiles = coverageFiles
+
+        return groupedResultsParser.serializeGroupedResults(groupedResults)
     }
 }

@@ -8,4 +8,5 @@ public class GroupedResults {
     public List<PerformanceResult> performanceResults;
     public ResultsMetadata metadata;
     public BigDecimal wallClockDuration;
+    public List<CoverageFile> coverageFiles;
 }

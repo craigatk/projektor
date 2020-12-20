@@ -1,5 +1,6 @@
 package projektor.notification.github.comment
 
+import java.math.BigDecimal
 import java.time.format.DateTimeFormatter
 
 object GitHubCommentCreator {
@@ -31,12 +32,40 @@ object GitHubCommentCreator {
         else
             "[${report.failedTestCount} failed](${createReportLink(report, "failed")}) / [${report.totalTestCount} total](${createReportLink(report, "all")})"
 
-        return "| [Projektor report](${createReportLink(report, "")}) | $resultText | $testText | | ${report.project ?: ""} | ${dateFormatter.format(report.createdDate)} UTC |"
+        return "| [Projektor report](${createReportLink(report, "")}) | $resultText | $testText | ${createCoverageCellValue(report)} | ${report.project ?: ""} | ${dateFormatter.format(report.createdDate)} UTC |"
     }
 
     private fun createReportLink(report: ReportCommentData, uri: String): String {
         val baseUrl = if (report.projektorServerBaseUrl.endsWith("/")) report.projektorServerBaseUrl else "${report.projektorServerBaseUrl}/"
 
         return "${baseUrl}tests/${report.publicId}/$uri"
+    }
+
+    private fun createCoverageCellValue(report: ReportCommentData): String {
+        val coverage = report.coverage
+
+        return if (coverage != null) {
+            val (lineCoveredPercentage, lineCoverageDelta) = report.coverage
+
+            val deltaString = if (lineCoverageDelta != null) {
+                when {
+                    lineCoverageDelta > BigDecimal.ZERO -> "(+$lineCoverageDelta%)"
+                    lineCoverageDelta < BigDecimal.ZERO -> "($lineCoverageDelta%)"
+                    else -> null
+                }
+            } else {
+                null
+            }
+
+            val displayValue = if (deltaString != null) {
+                "$lineCoveredPercentage% $deltaString"
+            } else {
+                "$lineCoveredPercentage%"
+            }
+
+            "[$displayValue](${createReportLink(report, "coverage")})"
+        } else {
+            ""
+        }
     }
 }
