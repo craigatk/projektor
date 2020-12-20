@@ -25,7 +25,7 @@ class GitMetadataProjectSpec extends SingleProjectSpec {
 
         when:
         def result = runSuccessfulBuildWithEnvironment(
-                ['GITHUB_REPOSITORY': 'projektor/projektor', "GITHUB_REF": "refs/head/main"],
+                ['GITHUB_REPOSITORY': 'projektor/projektor', "GITHUB_REF": "refs/head/main", "GITHUB_SHA": "ffac537e6cbbf934b08745a378932722df287a53"],
                 'test'
         )
 
@@ -43,6 +43,7 @@ class GitMetadataProjectSpec extends SingleProjectSpec {
 
         gitMetadata.repoName == "projektor/projektor"
         gitMetadata.branchName == "main"
-        gitMetadata.isMainBranch == true
+        gitMetadata.isMainBranch
+        gitMetadata.commitSha == "ffac537e6cbbf934b08745a378932722df287a53"
     }
 }

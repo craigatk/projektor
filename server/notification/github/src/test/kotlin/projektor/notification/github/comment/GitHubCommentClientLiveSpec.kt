@@ -51,7 +51,7 @@ class GitHubCommentClientLiveSpec : StringSpec() {
             val repository = commentClient.getRepository("craigatk", "projektor")
             assertNotNull(repository)
 
-            val prNumber = commentClient.findOpenPullRequestsForBranch(repository, branchName)
+            val prNumber = commentClient.findOpenPullRequests(repository, branchName, null)
             expectThat(prNumber).isNotNull().isEqualTo(expectedPrNumber)
         }
 
@@ -62,7 +62,7 @@ class GitHubCommentClientLiveSpec : StringSpec() {
             val repository = commentClient.getRepository("craigatk", "projektor")
             assertNotNull(repository)
 
-            val prNumber = commentClient.findOpenPullRequestsForBranch(repository, branchName)
+            val prNumber = commentClient.findOpenPullRequests(repository, branchName, null)
             expectThat(prNumber).isNull()
         }
 

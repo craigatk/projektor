@@ -4,5 +4,6 @@ data class GitMetadata(
     val repoName: String?,
     val projectName: String?,
     val branchName: String?,
-    val isMainBranch: Boolean
+    val isMainBranch: Boolean,
+    val commitSha: String? = null
 )

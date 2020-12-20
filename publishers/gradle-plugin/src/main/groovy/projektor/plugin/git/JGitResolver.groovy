@@ -21,12 +21,19 @@ class JGitResolver extends GitResolver {
         }
     }
 
+    @Override
     String findBranchName() {
         return repo?.getBranch()
     }
 
+    @Override
     String findRepository() {
         return getRepoName("upstream") ?: getRepoName("origin")
+    }
+
+    @Override
+    String findCommitSha() {
+        return repo?.readOrigHead()?.name()
     }
 
     private String getRepoName(String remote) {

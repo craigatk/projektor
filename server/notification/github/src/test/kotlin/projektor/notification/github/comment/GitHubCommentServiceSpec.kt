@@ -175,5 +175,59 @@ class GitHubCommentServiceSpec : StringSpec() {
             val updateCommentRequestBodies = gitHubWireMockStubber.findUpdateCommentRequestBodies(orgName, repoName, 1)
             expectThat(updateCommentRequestBodies).hasSize(0)
         }
+
+        "should find pull request by commit SHA" {
+            val gitHubApiUrl = "http://localhost:${wireMockServer.port()}/"
+            val clientConfig = GitHubClientConfig(
+                gitHubApiUrl
+            )
+            val commentClient = GitHubCommentClient(clientConfig, jwtProvider)
+            val commentService = GitHubCommentService(commentClient)
+
+            val orgName = "my-org"
+            val repoName = "my-repo"
+            val branchName = "my-branch"
+            val pullRequestNumber = 2
+            val sha = "123456789"
+            val report = ReportCommentData(
+                projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
+                git = ReportCommentGitData(
+                    orgName = orgName,
+                    repoName = repoName,
+                    branchName = branchName,
+                    commitSha = sha
+                ),
+                publicId = "V1BMYK93MTNR",
+                createdDate = LocalDateTime.of(
+                    LocalDate.of(2020, 12, 16),
+                    LocalTime.of(14, 30)
+                ),
+                passed = true,
+                failedTestCount = 0,
+                totalTestCount = 25,
+                coverage = null,
+                project = null
+            )
+
+            gitHubWireMockStubber.stubRepositoryRequests(orgName, repoName)
+            gitHubWireMockStubber.stubListPullRequests(orgName, repoName, listOf("branch-1", "branch-2"), listOf("sha1", sha))
+            gitHubWireMockStubber.stubGetIssue(orgName, repoName, pullRequestNumber)
+            gitHubWireMockStubber.stubListComments(orgName, repoName, pullRequestNumber, listOf("Some other comment"))
+            gitHubWireMockStubber.stubAddComment(orgName, repoName, pullRequestNumber)
+
+            val pullRequest = commentService.upsertReportComment(report)
+            expectThat(pullRequest).isNotNull().and {
+                get { orgName }.isEqualTo(orgName)
+                get { repoName }.isEqualTo(repoName)
+                get { branchName }.isEqualTo(branchName)
+            }
+
+            val addCommentRequestBodies = gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber)
+            expectThat(addCommentRequestBodies).hasSize(1)
+            expectThat(addCommentRequestBodies[0]).contains("V1BMYK93MTNR")
+
+            val updateCommentRequestBodies = gitHubWireMockStubber.findUpdateCommentRequestBodies(orgName, repoName, 1)
+            expectThat(updateCommentRequestBodies).hasSize(0)
+        }
     }
 }

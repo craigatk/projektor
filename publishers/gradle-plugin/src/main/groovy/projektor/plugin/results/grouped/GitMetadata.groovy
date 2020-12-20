@@ -7,4 +7,5 @@ class GitMetadata {
     String repoName
     String branchName
     boolean isMainBranch
+    String commitSha
 }
