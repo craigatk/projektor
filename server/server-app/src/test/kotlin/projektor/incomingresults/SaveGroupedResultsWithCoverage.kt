@@ -37,4 +37,34 @@ class SaveGroupedResultsWithCoverage : ApplicationTestCase() {
             }
         }
     }
+
+    @Test
+    fun `when one invalid coverage file should save the others`() {
+        val invalidCoverageFile = CoverageFile()
+        invalidCoverageFile.reportContents = JacocoXmlLoader().serverAppInvalid()
+
+        val validCoverageFile1 = CoverageFile()
+        validCoverageFile1.reportContents = JacocoXmlLoader().jacocoXmlParser()
+
+        val validCoverageFile2 = CoverageFile()
+        validCoverageFile2.reportContents = JacocoXmlLoader().junitResultsParser()
+
+        val requestBody = GroupedResultsXmlLoader().passingResultsWithCoverage(listOf(validCoverageFile1, invalidCoverageFile, validCoverageFile2))
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/groupedResults") {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(requestBody)
+            }.apply {
+                val (publicId, _) = waitForTestRunSaveToComplete(response)
+
+                await until { coverageRunDao.fetchByTestRunPublicId(publicId.id).size == 1 }
+
+                val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicId.id)
+                expectThat(coverageRuns).hasSize(1)
+
+                await until { coverageGroupDao.fetchByCodeCoverageRunId(coverageRuns[0].id).size == 2 }
+            }
+        }
+    }
 }

@@ -5,6 +5,7 @@ import projektor.plugin.BuildFileWriter
 import projektor.server.api.TestRun
 import projektor.server.api.coverage.CoverageStats
 import retrofit2.Response
+import spock.util.concurrent.PollingConditions
 
 import static projektor.plugin.CodeUnderTestWriter.writeFullCoverageSpecFile
 import static projektor.plugin.CodeUnderTestWriter.writeSourceCodeFile
@@ -44,27 +45,31 @@ class SingleProjectCoverageFunctionalSpec extends ProjektorPluginFunctionalSpeci
         String testId = extractTestId(result.output)
 
         then:
-        Response<TestRun> testRunResponse = projektorTestRunApi.testRun(testId).execute()
-        testRunResponse.successful
+        new PollingConditions().eventually {
+            Response<TestRun> testRunResponse = projektorTestRunApi.testRun(testId).execute()
+            assert testRunResponse.successful
+        }
 
         and:
-        Response<CoverageStats> overallStatsResponse = projektorTestRunApi.coverageOverallStats(testId).execute()
-        overallStatsResponse.successful
+        new PollingConditions().eventually {
+            Response<CoverageStats> overallStatsResponse = projektorTestRunApi.coverageOverallStats(testId).execute()
+            assert overallStatsResponse.successful
 
-        CoverageStats overallStats = overallStatsResponse.body()
-        overallStats.statementStat.covered == 8
-        overallStats.statementStat.missed == 4
-        overallStats.statementStat.total == 12
-        overallStats.statementStat.coveredPercentage == 66.67
+            CoverageStats overallStats = overallStatsResponse.body()
+            assert overallStats.statementStat.covered == 8
+            assert overallStats.statementStat.missed == 4
+            assert overallStats.statementStat.total == 12
+            assert overallStats.statementStat.coveredPercentage == 66.67
 
-        overallStats.lineStat.covered == 2
-        overallStats.lineStat.missed == 0
-        overallStats.lineStat.total == 2
-        overallStats.lineStat.coveredPercentage == 100.00
+            assert overallStats.lineStat.covered == 2
+            assert overallStats.lineStat.missed == 0
+            assert overallStats.lineStat.total == 2
+            assert overallStats.lineStat.coveredPercentage == 100.00
 
-        overallStats.branchStat.covered == 0
-        overallStats.branchStat.missed == 0
-        overallStats.branchStat.total == 0
-        overallStats.branchStat.coveredPercentage == 0
+            assert overallStats.branchStat.covered == 0
+            assert overallStats.branchStat.missed == 0
+            assert overallStats.branchStat.total == 0
+            assert overallStats.branchStat.coveredPercentage == 0
+        }
     }
 }

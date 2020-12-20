@@ -8,11 +8,10 @@ import org.gradle.api.invocation.Gradle
 import org.gradle.api.logging.Logger
 import projektor.plugin.attachments.AttachmentsClient
 import projektor.plugin.attachments.AttachmentsPublisher
-import projektor.plugin.client.CoverageClient
 import projektor.plugin.client.ResultsClient
 import projektor.plugin.client.ClientConfig
-import projektor.plugin.coverage.CodeCoverageFile
 import projektor.plugin.coverage.CodeCoverageTaskCollector
+import projektor.plugin.coverage.model.CoverageFilePayload
 import projektor.plugin.git.GitMetadataFinder
 import projektor.plugin.git.GitResolutionConfig
 import projektor.plugin.notification.NotificationConfig
@@ -105,6 +104,15 @@ class ProjektorBuildFinishedListener implements BuildListener {
         )
         groupedResults.wallClockDuration = projektorTaskFinishedListener.testWallClockDurationInSeconds
 
+        if (coverageEnabled) {
+            groupedResults.coverageFiles = codeCoverageTaskCollector.codeCoverageFiles.collect { coverageFile ->
+                new CoverageFilePayload(
+                        reportContents: coverageFile.reportFile.text,
+                        baseDirectoryPath: coverageFile.baseDirectoryPath
+                )
+            }
+        }
+
         ResultsClient resultsClient = new ResultsClient(clientConfig, logger)
         PublishResult publishResult = resultsClient.sendResultsToServer(groupedResults)
 
@@ -115,18 +123,6 @@ class ProjektorBuildFinishedListener implements BuildListener {
         if (attachments) {
             AttachmentsClient attachmentsClient = new AttachmentsClient(clientConfig, logger)
             new AttachmentsPublisher(attachmentsClient, logger).publishAttachments(publishResult.publicId, attachments)
-        }
-
-        if (coverageEnabled) {
-            CoverageClient coverageClient = new CoverageClient(clientConfig, logger)
-
-            List<CodeCoverageFile> codeCoverageGroups = codeCoverageTaskCollector.codeCoverageFiles
-
-            logger.info("Publishing ${codeCoverageGroups.size()} code coverage reports to Projektor server")
-
-            codeCoverageGroups.forEach { CodeCoverageFile coverageGroup ->
-                coverageClient.sendCoverageToServer(coverageGroup, publishResult.publicId)
-            }
         }
     }
 

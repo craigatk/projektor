@@ -1,7 +1,8 @@
 package projektor.plugin.testkit.version
 
-import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.util.GradleVersion
+import projektor.plugin.coverage.model.CoverageFilePayload
+import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.testkit.SingleProjectSpec
 import spock.lang.Unroll
 
@@ -30,8 +31,6 @@ class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
         String resultsId = "ABC123"
         resultsStubber.stubResultsPostSuccess(resultsId)
 
-        coverageStubber.stubCoveragePostSuccess(resultsId)
-
         File sourceDir = createSourceDirectory(projectRootDir)
         File testDir = createTestDirectory(projectRootDir)
 
@@ -49,15 +48,14 @@ class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
         verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
 
         and:
-        List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
-        resultsRequests.size() == 1
+        List<GroupedResults> resultsRequestBodies = resultsStubber.findResultsRequestBodies()
+        resultsRequestBodies.size() == 1
 
-        and:
-        List<LoggedRequest> coverageRequests = coverageStubber.findCoverageRequests(resultsId)
-        coverageRequests.size() == 1
+        List<CoverageFilePayload> coverageFilePayloads = resultsRequestBodies[0].coverageFiles
+        coverageFilePayloads.size() == 1
 
-        coverageRequests[0].bodyAsString.contains("report.dtd")
-        coverageRequests[0].bodyAsString.contains(sourceFile.name)
+        coverageFilePayloads[0].reportContents.contains("report.dtd")
+        coverageFilePayloads[0].reportContents.contains(sourceFile.name)
 
         where:
         gradleVersion                   | _
