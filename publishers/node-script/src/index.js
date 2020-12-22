@@ -85,6 +85,8 @@ async function run(args, publishToken, defaultConfigFilePath) {
       process.env.VELA_REPO_FULL_NAME ||
       process.env.GITHUB_REPOSITORY;
     const gitBranchName = findGitBranchName();
+    const gitCommitSha =
+      process.env.VELA_BUILD_COMMIT || process.env.GITHUB_SHA;
 
     const {
       resultsBlob,
@@ -100,6 +102,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
       performanceFileGlobs,
       gitRepoName,
       gitBranchName,
+      gitCommitSha,
       projectName,
       isCI,
       compressionEnabled,

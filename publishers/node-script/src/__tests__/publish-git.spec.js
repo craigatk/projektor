@@ -29,6 +29,7 @@ describe("Node script publishing with Git metadata", () => {
       null,
       "projektor/projektor",
       "main",
+      "02fea3d66fab1de935e1ac3adb008a0abb9a61f3",
       "my-proj"
     );
 
@@ -53,6 +54,9 @@ describe("Node script publishing with Git metadata", () => {
     );
     expect(parsedRequestBody.metadata.git.branchName).toEqual("main");
     expect(parsedRequestBody.metadata.git.isMainBranch).toEqual(true);
+    expect(parsedRequestBody.metadata.git.commitSha).toEqual(
+      "02fea3d66fab1de935e1ac3adb008a0abb9a61f3"
+    );
     expect(parsedRequestBody.metadata.git.projectName).toEqual("my-proj");
   });
 
@@ -72,6 +76,7 @@ describe("Node script publishing with Git metadata", () => {
       null,
       "projektor/projektor",
       "feature/branch",
+      "02fea3d66fab1de935e1ac3adb008a0abb9a61f3",
       "my-proj"
     );
 
@@ -88,6 +93,9 @@ describe("Node script publishing with Git metadata", () => {
     );
     expect(parsedRequestBody.metadata.git.branchName).toEqual("feature/branch");
     expect(parsedRequestBody.metadata.git.isMainBranch).toEqual(false);
+    expect(parsedRequestBody.metadata.git.commitSha).toEqual(
+      "02fea3d66fab1de935e1ac3adb008a0abb9a61f3"
+    );
     expect(parsedRequestBody.metadata.git.projectName).toEqual("my-proj");
   });
 });

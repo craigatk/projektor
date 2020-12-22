@@ -31,6 +31,7 @@ describe("Node script publishing with results metadata", () => {
       null,
       "projektor/projektor",
       "main",
+      "02fea3d66fab1de935e1ac3adb008a0abb9a61f3",
       "my-proj",
       isCI
     );

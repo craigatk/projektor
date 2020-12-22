@@ -19,7 +19,9 @@ const fetchCoverage = (testRunId, serverPort) =>
   axios.get(`http://localhost:${serverPort}/run/${testRunId}/coverage`);
 
 const fetchCoverageFiles = (testRunId, coverageGroupName, serverPort) =>
-    axios.get(`http://localhost:${serverPort}/run/${testRunId}/coverage/${coverageGroupName}/files`);
+  axios.get(
+    `http://localhost:${serverPort}/run/${testRunId}/coverage/${coverageGroupName}/files`
+  );
 
 const fetchResultsMetadata = (testRunId, serverPort) =>
   axios.get(`http://localhost:${serverPort}/run/${testRunId}/metadata`);

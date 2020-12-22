@@ -4,7 +4,7 @@ const { extractTestRunId } = require("../util/parse_output");
 const {
   fetchTestRunSummary,
   fetchCoverage,
-    fetchCoverageFiles,
+  fetchCoverageFiles,
 } = require("../util/projektor_client");
 const { verifyOutput } = require("../verify/cli_output_verify");
 
@@ -20,11 +20,6 @@ describe("Publishing with coverage via CLI", () => {
         expect(stdout).not.toContain(
           "No test results files found in locations"
         );
-
-        expect(stdout).toContain(
-          "Sending 1 coverage result(s) to Projektor server"
-        );
-        expect(stdout).toContain("Finished sending coverage");
 
         const testRunId = extractTestRunId(stdout);
         console.log("Test ID", testRunId);
@@ -60,11 +55,6 @@ describe("Publishing with coverage via CLI", () => {
         verifyOutput(error, stdout, stderr, serverPort);
         expect(error).toBeNull();
 
-        expect(stdout).toContain(
-          "Sending 1 coverage result(s) to Projektor server"
-        );
-        expect(stdout).toContain("Finished sending coverage");
-
         const testRunId = extractTestRunId(stdout);
         console.log("Test ID", testRunId);
 
@@ -92,39 +82,47 @@ describe("Publishing with coverage via CLI", () => {
     );
   });
 
-    it("should publish coverage with base directory path to server configured on command line", async (done) => {
-        exec(
-            `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --coverage=coverage/*.xml --baseDirectoryPath=ui results/*.xml`,
-            async (error, stdout, stderr) => {
-                verifyOutput(error, stdout, stderr, serverPort);
-                expect(error).toBeNull();
+  it("should publish coverage with base directory path to server configured on command line", async (done) => {
+    exec(
+      `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --coverage=coverage/*.xml --baseDirectoryPath=ui results/*.xml`,
+      async (error, stdout, stderr) => {
+        verifyOutput(error, stdout, stderr, serverPort);
+        expect(error).toBeNull();
 
-                expect(stdout).toContain(
-                    "Sending 1 coverage result(s) to Projektor server"
-                );
-                expect(stdout).toContain("Finished sending coverage");
+        const testRunId = extractTestRunId(stdout);
+        console.log("Test ID", testRunId);
 
-                const testRunId = extractTestRunId(stdout);
-                console.log("Test ID", testRunId);
+        await waitForExpect(async () => {
+          const coverageResponse = await fetchCoverage(testRunId, serverPort);
+          expect(coverageResponse.status).toEqual(200);
+        });
 
-                await waitForExpect(async () => {
-                    const coverageResponse = await fetchCoverage(testRunId, serverPort);
-                    expect(coverageResponse.status).toEqual(200);
-                });
+        await waitForExpect(async () => {
+          const coverageFilesResponseStatus = (
+            await fetchCoverageFiles(testRunId, "All files", serverPort)
+          ).status;
+          expect(coverageFilesResponseStatus).toEqual(200);
+        });
 
-
-                const coverageFilesResponse = await fetchCoverageFiles(testRunId, "All files", serverPort)
-                expect(coverageFilesResponse.status).toEqual(200);
-
-                const coverageFilesResponseData = coverageFilesResponse.data
-                const overallCoverageGraphsFile = coverageFilesResponseData.files.find(file => file.file_name === 'OverallCoverageGraphs.tsx')
-                expect(overallCoverageGraphsFile).toBeDefined()
-
-                expect(overallCoverageGraphsFile.directory_name).toBe("src/Coverage")
-                expect(overallCoverageGraphsFile.file_path).toBe("ui/src/Coverage/OverallCoverageGraphs.tsx")
-
-                done();
-            }
+        const coverageFilesResponse = await fetchCoverageFiles(
+          testRunId,
+          "All files",
+          serverPort
         );
-    });
+
+        const coverageFilesResponseData = coverageFilesResponse.data;
+        const overallCoverageGraphsFile = coverageFilesResponseData.files.find(
+          (file) => file.file_name === "OverallCoverageGraphs.tsx"
+        );
+        expect(overallCoverageGraphsFile).toBeDefined();
+
+        expect(overallCoverageGraphsFile.directory_name).toBe("src/Coverage");
+        expect(overallCoverageGraphsFile.file_path).toBe(
+          "ui/src/Coverage/OverallCoverageGraphs.tsx"
+        );
+
+        done();
+      }
+    );
+  }, 30000);
 });

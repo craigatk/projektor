@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const { gzip } = require("node-gzip");
 const { globsToFilePaths } = require("./file-utils");
-const { collectAndSendCoverage } = require("./publish-coverage");
+const { collectCoverage } = require("./publish-coverage");
 const { collectAndSendAttachments } = require("./publish-attachments");
 
 const collectResults = (resultsFileGlobs) => {
@@ -40,8 +40,10 @@ const sendResults = async (
   publishToken,
   resultsBlob,
   performanceResults,
+  coverageFilePayloads,
   gitRepoName,
   gitBranchName,
+  gitCommitSha,
   projectName,
   isCI,
   compressionEnabled
@@ -68,12 +70,14 @@ const sendResults = async (
   const groupedResults = {
     groupedTestSuites,
     performanceResults,
+    coverageFiles: coverageFilePayloads || [],
     metadata: {
       git: {
         repoName: gitRepoName,
         branchName: gitBranchName,
         isMainBranch: gitBranchName === "main" || gitBranchName === "master",
         projectName,
+        commitSha: gitCommitSha,
       },
       ci: isCI,
     },
@@ -105,6 +109,7 @@ const collectAndSendResults = async (
   performanceFileGlobs,
   gitRepoName,
   gitBranchName,
+  gitCommitSha,
   projectName,
   isCI,
   compressionEnabled,
@@ -116,6 +121,10 @@ const collectAndSendResults = async (
 
   const resultsBlob = collectResults(resultsFileGlobs);
   const performanceResults = collectPerformanceResults(performanceFileGlobs);
+  const coverageFilePayloads = collectCoverage(
+    coverageFileGlobs,
+    baseDirectoryPath
+  );
 
   if (resultsBlob.length > 0 || performanceResults.length > 0) {
     try {
@@ -124,8 +133,10 @@ const collectAndSendResults = async (
         publishToken,
         resultsBlob,
         performanceResults,
+        coverageFilePayloads,
         gitRepoName,
         gitBranchName,
+        gitCommitSha,
         projectName,
         isCI,
         compressionEnabled
@@ -140,15 +151,6 @@ const collectAndSendResults = async (
         publishToken,
         attachmentFileGlobs,
         publicId
-      );
-
-      await collectAndSendCoverage(
-        serverUrl,
-        publishToken,
-        coverageFileGlobs,
-        publicId,
-        baseDirectoryPath,
-        compressionEnabled
       );
 
       return { resultsBlob, publicId, reportUrl, performanceResults };
