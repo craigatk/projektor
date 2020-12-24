@@ -6,4 +6,5 @@ public class GitMetadata {
     public String projectName;
     public boolean isMainBranch;
     public String commitSha;
+    public Integer pullRequestNumber;
 }

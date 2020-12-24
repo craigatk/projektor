@@ -36,7 +36,8 @@ class GroupedResultsConverter(
                         projectName = gitMetadata.projectName,
                         branchName = gitMetadata.branchName,
                         isMainBranch = gitMetadata.isMainBranch,
-                        commitSha = gitMetadata.commitSha
+                        commitSha = gitMetadata.commitSha,
+                        pullRequestNumber = gitMetadata.pullRequestNumber
                     )
                 },
                 ci = metadata.ci

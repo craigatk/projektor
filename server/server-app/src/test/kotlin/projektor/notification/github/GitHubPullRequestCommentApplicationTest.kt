@@ -212,4 +212,45 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
             }
         }
     }
+
+    @Test
+    fun `should find pull request by pull request number and add comment to it`() {
+        val privateKeyContents = loadTextFromFile("fake_private_key.pem")
+
+        serverBaseUrl = "http://localhost:8080"
+        gitHubApiUrl = "http://localhost:${wireMockServer.port()}"
+        gitHubAppId = "12345"
+        gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(privateKeyContents)
+
+        val orgName = "craigatk"
+        val repoName = "projektor"
+        val pullRequestNumber = 2
+        gitHubWireMockStubber.stubRepositoryRequests(orgName, repoName)
+        gitHubWireMockStubber.stubGetIssue(orgName, repoName, pullRequestNumber)
+        gitHubWireMockStubber.stubListComments(orgName, repoName, pullRequestNumber, listOf("Some other comment"))
+        gitHubWireMockStubber.stubAddComment(orgName, repoName, pullRequestNumber)
+
+        val gitMetadata = GitMetadata()
+        gitMetadata.repoName = "$orgName/$repoName"
+        gitMetadata.isMainBranch = false
+        gitMetadata.pullRequestNumber = pullRequestNumber
+        val metadata = ResultsMetadata()
+        metadata.git = gitMetadata
+        val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/groupedResults") {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(requestBody)
+            }.apply {
+                val (publicId, _) = waitForTestRunSaveToComplete(response)
+
+                await until { gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber).size == 1 }
+
+                val addCommentRequestBodies = gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber)
+                expectThat(addCommentRequestBodies).hasSize(1)
+                expectThat(addCommentRequestBodies[0]).contains(publicId.id)
+            }
+        }
+    }
 }

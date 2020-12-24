@@ -70,9 +70,9 @@ class GroupedTestResultsService(
 
             testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.SUCCESS)
 
-            recordSuccessfulProcessMetrics()
-
             val coverage = groupedResults.coverageFiles?.let { saveCoverage(publicId, it) }
+
+            recordSuccessfulProcessMetrics()
 
             publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git, coverage)
         } catch (e: Exception) {

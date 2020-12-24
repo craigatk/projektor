@@ -27,6 +27,7 @@ describe("node script index", () => {
 
     const { reportUrl, publicId } = await run(
       {},
+      {},
       null,
       "src/__tests__/projektor.test.json"
     );
@@ -141,6 +142,7 @@ describe("node script index", () => {
 
     await run(
       { resultsFileGlobs, attachments, serverUrl },
+      {},
       null,
       "projektor.none.json"
     );
@@ -179,6 +181,7 @@ describe("node script index", () => {
 
     await run(
       { resultsFileGlobs, attachments, serverUrl },
+      {},
       null,
       "projektor.none.json"
     );
@@ -205,6 +208,7 @@ describe("node script index", () => {
 
     await run(
       { performance, serverUrl, compressionEnabled },
+      {},
       null,
       "projektor.none.json"
     );
