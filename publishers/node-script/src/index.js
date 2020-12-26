@@ -85,6 +85,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       repositoryName || env.VELA_REPO_FULL_NAME || env.GITHUB_REPOSITORY;
     const gitBranchName = findGitBranchName(env);
     const gitCommitSha = env.VELA_BUILD_COMMIT || env.GITHUB_SHA;
+    const gitPullRequestNumber = findGitPullRequestNumber(env);
 
     const {
       resultsBlob,
@@ -101,6 +102,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       gitRepoName,
       gitBranchName,
       gitCommitSha,
+      gitPullRequestNumber,
       projectName,
       isCI,
       compressionEnabled,
@@ -183,6 +185,16 @@ function findGitBranchName(env) {
 
     // refs/head/branch-name
     return gitBranchParts.length === 3 ? gitBranchParts[2] : null;
+  }
+}
+
+function findGitPullRequestNumber(env) {
+  const pullRequestNumberFromEnv = env.VELA_BUILD_PULL_REQUEST;
+
+  if (pullRequestNumberFromEnv) {
+    return parseInt(pullRequestNumberFromEnv);
+  } else {
+    return null;
   }
 }
 

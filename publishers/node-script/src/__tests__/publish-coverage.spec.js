@@ -73,6 +73,7 @@ describe("publish with coverage", () => {
       null,
       null,
       null,
+      null,
       false,
       "base/dir"
     );
