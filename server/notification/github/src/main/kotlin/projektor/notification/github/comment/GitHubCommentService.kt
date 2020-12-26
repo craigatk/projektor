@@ -9,22 +9,29 @@ class GitHubCommentService(private val commentClient: GitHubCommentClient) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
     fun upsertReportComment(commentData: ReportCommentData): PullRequest? {
-        val (orgName, repoName, branchName, commitSha) = commentData.git
+        val (orgName, repoName, branchName, commitSha, pullRequestNumber) = commentData.git
 
         val repository = commentClient.getRepository(orgName, repoName)
 
         return if (repository != null) {
-            val pullRequestNumber = commentClient.findOpenPullRequests(repository, branchName, commitSha)
+            val prNumber = if (pullRequestNumber != null) {
+                pullRequestNumber
+            } else if (branchName != null) {
+                commentClient.findOpenPullRequests(repository, branchName, commitSha)
+            } else {
+                logger.info("Need branch name or pull request number to find pull request in repo $orgName/$repoName")
+                null
+            }
 
-            if (pullRequestNumber != null) {
-                upsertComment(repository, pullRequestNumber, commentData)
+            if (prNumber != null) {
+                upsertComment(repository, prNumber, commentData)
                 PullRequest(
                     orgName = orgName,
                     repoName = repoName,
-                    number = pullRequestNumber
+                    number = prNumber
                 )
             } else {
-                logger.info("Could not find pull request for branch $branchName in repo $orgName/$repoName")
+                logger.info("Could not find pull request for branch $branchName or commit SHA $commitSha in repo $orgName/$repoName")
                 null
             }
         } else {

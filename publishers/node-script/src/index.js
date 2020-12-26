@@ -4,11 +4,12 @@ async function runCLI(cliArgs, publishToken, defaultConfigFilePath) {
   });
 
   parsedArgs.resultsFileGlobs = parsedArgs._;
+  const env = process.env;
 
-  return run(parsedArgs, publishToken, defaultConfigFilePath);
+  return run(parsedArgs, env, publishToken, defaultConfigFilePath);
 }
 
-async function run(args, publishToken, defaultConfigFilePath) {
+async function run(args, env, publishToken, defaultConfigFilePath) {
   const fs = require("fs");
   const { collectAndSendResults } = require("./publish");
   const { writeSlackMessageFileToDisk } = require("./slack");
@@ -79,14 +80,11 @@ async function run(args, publishToken, defaultConfigFilePath) {
   }
 
   if (resultsFileGlobs || performanceFileGlobs) {
-    const isCI = Boolean(process.env.CI) && process.env.CI !== "false";
+    const isCI = Boolean(env.CI) && env.CI !== "false";
     const gitRepoName =
-      repositoryName ||
-      process.env.VELA_REPO_FULL_NAME ||
-      process.env.GITHUB_REPOSITORY;
-    const gitBranchName = findGitBranchName();
-    const gitCommitSha =
-      process.env.VELA_BUILD_COMMIT || process.env.GITHUB_SHA;
+      repositoryName || env.VELA_REPO_FULL_NAME || env.GITHUB_REPOSITORY;
+    const gitBranchName = findGitBranchName(env);
+    const gitCommitSha = env.VELA_BUILD_COMMIT || env.GITHUB_SHA;
 
     const {
       resultsBlob,
@@ -175,12 +173,17 @@ function containsTestFailure(resultsBlob) {
   return resultsBlob.indexOf("<failure") !== -1;
 }
 
-function findGitBranchName() {
-  const gitRef = process.env.VELA_BUILD_REF || process.env.GITHUB_REF;
-  const gitBranchParts = gitRef ? gitRef.split("/") : [];
+function findGitBranchName(env) {
+  const branchName = env.VELA_PULL_REQUEST_SOURCE;
+  if (branchName) {
+    return branchName;
+  } else {
+    const gitRef = env.VELA_BUILD_REF || env.GITHUB_REF;
+    const gitBranchParts = gitRef ? gitRef.split("/") : [];
 
-  // refs/head/branch-name
-  return gitBranchParts.length === 3 ? gitBranchParts[2] : null;
+    // refs/head/branch-name
+    return gitBranchParts.length === 3 ? gitBranchParts[2] : null;
+  }
 }
 
 module.exports = {

@@ -21,8 +21,9 @@ class GitHubPullRequestCommentService(
             val repoParts = gitMetadata.repoName?.split("/")
             val branchName = gitMetadata.branchName
             val commitSha = gitMetadata.commitSha
+            val pullRequestNumber = gitMetadata.pullRequestNumber
 
-            if (repoParts != null && repoParts.size == 2 && branchName != null) {
+            if (repoParts != null && repoParts.size == 2) {
                 val orgName = repoParts[0]
                 val repoName = repoParts[1]
 
@@ -41,7 +42,8 @@ class GitHubPullRequestCommentService(
                         orgName = orgName,
                         repoName = repoName,
                         branchName = branchName,
-                        commitSha = commitSha
+                        commitSha = commitSha,
+                        pullRequestNumber = pullRequestNumber
                     ),
                     publicId = testRunSummary.id,
                     createdDate = LocalDateTime.ofInstant(testRunSummary.createdTimestamp, ZoneId.of("Z")),

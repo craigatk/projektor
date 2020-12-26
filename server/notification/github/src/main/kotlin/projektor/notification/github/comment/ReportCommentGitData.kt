@@ -3,6 +3,7 @@ package projektor.notification.github.comment
 data class ReportCommentGitData(
     val orgName: String,
     val repoName: String,
-    val branchName: String,
-    val commitSha: String? = null
+    val branchName: String?,
+    val commitSha: String? = null,
+    val pullRequestNumber: Int? = null
 )
