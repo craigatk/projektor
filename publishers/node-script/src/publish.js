@@ -44,6 +44,7 @@ const sendResults = async (
   gitRepoName,
   gitBranchName,
   gitCommitSha,
+  gitPullRequestNumber,
   projectName,
   isCI,
   compressionEnabled
@@ -78,6 +79,7 @@ const sendResults = async (
         isMainBranch: gitBranchName === "main" || gitBranchName === "master",
         projectName,
         commitSha: gitCommitSha,
+        pullRequestNumber: gitPullRequestNumber,
       },
       ci: isCI,
     },
@@ -110,6 +112,7 @@ const collectAndSendResults = async (
   gitRepoName,
   gitBranchName,
   gitCommitSha,
+  gitPullRequestNumber,
   projectName,
   isCI,
   compressionEnabled,
@@ -137,6 +140,7 @@ const collectAndSendResults = async (
         gitRepoName,
         gitBranchName,
         gitCommitSha,
+        gitPullRequestNumber,
         projectName,
         isCI,
         compressionEnabled

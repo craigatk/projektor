@@ -30,6 +30,7 @@ describe("Node script publishing with Git metadata", () => {
       "projektor/projektor",
       "main",
       "02fea3d66fab1de935e1ac3adb008a0abb9a61f3",
+      22,
       "my-proj"
     );
 
@@ -77,6 +78,7 @@ describe("Node script publishing with Git metadata", () => {
       "projektor/projektor",
       "feature/branch",
       "02fea3d66fab1de935e1ac3adb008a0abb9a61f3",
+      23,
       "my-proj"
     );
 
@@ -96,6 +98,7 @@ describe("Node script publishing with Git metadata", () => {
     expect(parsedRequestBody.metadata.git.commitSha).toEqual(
       "02fea3d66fab1de935e1ac3adb008a0abb9a61f3"
     );
+    expect(parsedRequestBody.metadata.git.pullRequestNumber).toEqual(23);
     expect(parsedRequestBody.metadata.git.projectName).toEqual("my-proj");
   });
 });

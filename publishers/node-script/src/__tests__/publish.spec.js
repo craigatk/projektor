@@ -155,6 +155,7 @@ describe("Projektor publisher", () => {
       "my-branch",
       null,
       null,
+      null,
       false,
       true
     );
@@ -190,6 +191,7 @@ describe("Projektor publisher", () => {
       null,
       "my-org/my-repo",
       "my-branch",
+      null,
       null,
       null,
       false,
