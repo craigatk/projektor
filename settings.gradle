@@ -5,6 +5,7 @@ plugins {
 include 'functional-test',
         'publishers:gradle-plugin',
         'publishers:node-script:publish-functional-test',
+        'server:notification:badge',
         'server:notification:github',
         'server:parsing:coverage-parser',
         'server:parsing:grouped-results-parser',

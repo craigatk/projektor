@@ -3,12 +3,12 @@ package projektor.coverage
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.*
-import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.coverage.Coverage
 import projektor.server.example.coverage.JacocoXmlLoader
+import projektor.util.randomOrgAndRepo
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
@@ -19,7 +19,7 @@ import kotlin.test.assertNotNull
 class ComparePreviousCoverageApplicationTest : ApplicationTestCase() {
     @Test
     fun `when coverage went down should compare coverage with previous test run`() {
-        val repoName = "${RandomStringUtils.randomAlphabetic(8)}/${RandomStringUtils.randomAlphabetic(8)}"
+        val repoName = randomOrgAndRepo()
 
         val previousPublicId = randomPublicId()
         val thisPublicId = randomPublicId()
@@ -79,7 +79,7 @@ class ComparePreviousCoverageApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when coverage went up should compare coverage with previous test run`() {
-        val repoName = "${RandomStringUtils.randomAlphabetic(8)}/${RandomStringUtils.randomAlphabetic(8)}"
+        val repoName = randomOrgAndRepo()
 
         val previousPublicId = randomPublicId()
         val thisPublicId = randomPublicId()

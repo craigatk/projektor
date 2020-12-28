@@ -27,6 +27,7 @@ group 'dev.projektor'
 version '1.0'
 
 dependencies {
+    implementation project(':server:notification:badge')
     implementation project(':server:notification:github')
     implementation project(':server:persistence:database-schema')
     implementation project(':server:server-api')

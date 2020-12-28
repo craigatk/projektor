@@ -2,15 +2,15 @@ package projektor.compare
 
 import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
-import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import org.koin.core.inject
 import projektor.DatabaseRepositoryTestCase
 import projektor.incomingresults.randomPublicId
-import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.server.example.coverage.JacocoXmlLoader
+import projektor.util.randomOrgAndRepo
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 
 @KtorExperimentalAPI
@@ -25,11 +25,13 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
         val thisPublicId = randomPublicId()
         val newerPublicId = randomPublicId()
 
-        val repoName = "${RandomStringUtils.randomAlphabetic(8)}/${RandomStringUtils.randomAlphabetic(8)}"
+        val repoName = randomOrgAndRepo()
 
-        val previousTestRun = testRunDBGenerator.createSimpleTestRun(previousPublicId)
-        testRunDBGenerator.addGitMetadata(previousTestRun, repoName, true, "main", null)
-        runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), previousPublicId) }
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            previousPublicId,
+            JacocoXmlLoader().serverApp(),
+            repoName
+        )
 
         testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
             publicId = previousWithDifferentProjectName,
@@ -39,13 +41,17 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             projectName = "other-project"
         )
 
-        val thisTestRun = testRunDBGenerator.createSimpleTestRun(thisPublicId)
-        testRunDBGenerator.addGitMetadata(thisTestRun, repoName, true, "main", null)
-        runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), thisPublicId) }
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            thisPublicId,
+            JacocoXmlLoader().serverApp(),
+            repoName
+        )
 
-        val newerTestRun = testRunDBGenerator.createSimpleTestRun(newerPublicId)
-        testRunDBGenerator.addGitMetadata(newerTestRun, repoName, true, "main", null)
-        runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), newerPublicId) }
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            newerPublicId,
+            JacocoXmlLoader().serverApp(),
+            repoName
+        )
 
         val returnedId = runBlocking { previousTestRunService.findPreviousMainBranchRunWithCoverage(thisPublicId) }
         expectThat(returnedId).isEqualTo(previousPublicId)
@@ -62,7 +68,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
         val previousWithDifferentProjectName = randomPublicId()
         val thisPublicId = randomPublicId()
 
-        val repoName = "${RandomStringUtils.randomAlphabetic(8)}/${RandomStringUtils.randomAlphabetic(8)}"
+        val repoName = randomOrgAndRepo()
 
         testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
             publicId = previousPublicId,
@@ -90,5 +96,75 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
 
         val returnedId = runBlocking { previousTestRunService.findPreviousMainBranchRunWithCoverage(thisPublicId) }
         expectThat(returnedId).isEqualTo(previousPublicId)
+    }
+
+    @Test
+    fun `should find most recent main branch run that has coverage data`() {
+        val previousTestRunService: PreviousTestRunService by inject()
+
+        val olderPublicId = randomPublicId()
+        val oldPublicId = randomPublicId()
+        val newestPublicId = randomPublicId()
+
+        val repoName = randomOrgAndRepo()
+
+        listOf(olderPublicId, oldPublicId, newestPublicId).forEach { publicId ->
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId,
+                JacocoXmlLoader().serverApp(),
+                repoName
+            )
+        }
+
+        val newerWithoutCoveragePublicId = randomPublicId()
+        testRunDBGenerator.createSimpleTestRunInRepo(
+            newerWithoutCoveragePublicId,
+            repoName,
+            true,
+            null
+        )
+
+        val mostRecentPublicId = runBlocking { previousTestRunService.findMostRecentMainBranchRunWithCoverage(repoName, null) }
+
+        expectThat(mostRecentPublicId).isNotNull().isEqualTo(newestPublicId)
+    }
+
+    @Test
+    fun `should find most recent main branch run in project that has coverage data`() {
+        val previousTestRunService: PreviousTestRunService by inject()
+
+        val previousPublicId = randomPublicId()
+        val newPublicId = randomPublicId()
+        val newerWithDifferentProjectName = randomPublicId()
+
+        val repoName = randomOrgAndRepo()
+        val projectName = "project"
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            publicId = previousPublicId,
+            coverageText = JacocoXmlLoader().serverAppReduced(),
+            repoName = repoName,
+            branchName = "main",
+            projectName = projectName
+        )
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            publicId = newPublicId,
+            coverageText = JacocoXmlLoader().serverAppReduced(),
+            repoName = repoName,
+            branchName = "main",
+            projectName = projectName
+        )
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            publicId = newerWithDifferentProjectName,
+            coverageText = JacocoXmlLoader().serverAppReduced(),
+            repoName = repoName,
+            branchName = "main",
+            projectName = "other-project"
+        )
+
+        val returnedId = runBlocking { previousTestRunService.findMostRecentMainBranchRunWithCoverage(repoName, projectName) }
+        expectThat(returnedId).isNotNull().isEqualTo(newPublicId)
     }
 }

@@ -48,5 +48,28 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
             }
         }
 
+    override suspend fun findMostRecentMainBranchRunWithCoverage(repoName: String, projectName: String?): PublicId? =
+        withContext(Dispatchers.IO) {
+            val previousPublicId = dslContext.select(TEST_RUN.PUBLIC_ID)
+                .from(TEST_RUN)
+                .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                .innerJoin(CODE_COVERAGE_RUN).on(TEST_RUN.PUBLIC_ID.eq(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID))
+                .where(
+                    GIT_METADATA.IS_MAIN_BRANCH.eq(true)
+                        .and(GIT_METADATA.REPO_NAME.eq(repoName))
+                        .let {
+                            if (projectName == null)
+                                it.and(GIT_METADATA.PROJECT_NAME.isNull)
+                            else
+                                it.and(GIT_METADATA.PROJECT_NAME.eq(projectName))
+                        }
+                )
+                .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                .limit(1)
+                .fetchOne(TEST_RUN.PUBLIC_ID)
+
+            previousPublicId?.let { PublicId(it) }
+        }
+
     data class CurrentRunInfo(val repoName: String, val createdTimestamp: LocalDateTime, val projectName: String?)
 }
