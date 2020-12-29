@@ -44,6 +44,7 @@ const RepositoryCoveragePage = ({
         <RepositoryCoverageDetails
           coverageTimeline={repositoryCoverageTimeline}
           repoName={repoName}
+          projectName={projectName}
           hideIfEmpty={hideIfEmpty}
         />
       }

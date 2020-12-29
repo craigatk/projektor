@@ -1,4 +1,5 @@
-const repositoryLinkUrlUI = (
+const repositoryLinkUrl = (
+  prefix: string,
   repoName: string,
   projectName?: string,
   uri?: string
@@ -15,7 +16,21 @@ const repositoryLinkUrlUI = (
     }
   }
 
-  return `/repository/${repoName}${projectPart}${uriPart}`;
+  const fullPrefix = prefix.startsWith("/") ? prefix : `/${prefix}`;
+
+  return `${fullPrefix}/${repoName}${projectPart}${uriPart}`;
 };
 
-export { repositoryLinkUrlUI };
+const repositoryLinkUrlUI = (
+  repoName: string,
+  projectName?: string,
+  uri?: string
+): string => repositoryLinkUrl("repository", repoName, projectName, uri);
+
+const repositoryLinkUrlAPI = (
+  repoName: string,
+  projectName?: string,
+  uri?: string
+): string => repositoryLinkUrl("repo", repoName, projectName, uri);
+
+export { repositoryLinkUrlUI, repositoryLinkUrlAPI };

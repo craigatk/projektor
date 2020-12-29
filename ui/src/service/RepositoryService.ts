@@ -29,6 +29,17 @@ const fetchRepositoryCoverageTimeline = (
   return axiosInstance.get<RepositoryCoverageTimeline>(url);
 };
 
+const fetchRepositoryCoverageBadge = (
+  repoName: string,
+  projectName?: string
+): Promise<AxiosResponse<string>> => {
+  const url = projectName
+    ? `repo/${repoName}/project/${projectName}/badge/coverage`
+    : `repo/${repoName}/badge/coverage`;
+  // @ts-ignore
+  return axiosInstance.get<string>(url);
+};
+
 const fetchRepositoryFlakyTests = (
   repoName: string,
   projectName?: string
@@ -54,6 +65,7 @@ const fetchRepositoryPerformanceTimeline = (
 export {
   fetchRepositoryTimeline,
   fetchRepositoryCoverageTimeline,
+  fetchRepositoryCoverageBadge,
   fetchRepositoryFlakyTests,
   fetchRepositoryPerformanceTimeline,
 };
