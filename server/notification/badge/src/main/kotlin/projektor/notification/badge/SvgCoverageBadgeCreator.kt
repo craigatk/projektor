@@ -1,6 +1,7 @@
 package projektor.notification.badge
 
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 /**
  * Reference:
@@ -13,9 +14,10 @@ class SvgCoverageBadgeCreator(templateFileName: String = "coverage.template.svg"
     fun createBadge(coveredPercentage: BigDecimal): String {
         val coverageLevel = CoverageLevel.of(coveredPercentage)
         val fillColor = coverageLevel.fillColor
+        val roundedCoveredPercentage = coveredPercentage.setScale(0, RoundingMode.HALF_UP)
 
         val svgText = svgTemplate
-            .replace("{coveredPercentage}", coveredPercentage.toString())
+            .replace("{coveredPercentage}", roundedCoveredPercentage.toPlainString())
             .replace("{fillColor}", fillColor)
 
         return svgText
