@@ -1,5 +1,7 @@
 # Projektor
 
+[![Code coverage percentage](https://projektorlive.herokuapp.com/repo/craigatk/projektor/badge/coverage)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/coverage)
+
 Tests failing on your machine and need help debugging them? Or tests are passing local but failing in CI and
 CI doesn't record the test report? Debugging tests in these scenarios can be time consuming and painful,
 especially if you don't have the full context of the test failure.
