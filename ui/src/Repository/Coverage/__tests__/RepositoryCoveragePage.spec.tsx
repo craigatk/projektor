@@ -10,6 +10,11 @@ import {
 import moment from "moment";
 import { createCoverageStats } from "../../../testUtils/coverageTestUtils";
 import RepositoryCoveragePage from "../RepositoryCoveragePage";
+import {
+  createHistory,
+  createMemorySource,
+  LocationProvider,
+} from "@reach/router";
 
 describe("RepositoryCoveragePage", () => {
   let mockAxios;
@@ -51,7 +56,9 @@ describe("RepositoryCoveragePage", () => {
       .reply(200, timeline);
 
     const { findByTestId } = render(
-      <RepositoryCoveragePage orgPart="my-org" repoPart="my-repo" />
+      <LocationProvider history={createHistory(createMemorySource("/ui"))}>
+        <RepositoryCoveragePage orgPart="my-org" repoPart="my-repo" />
+      </LocationProvider>
     );
 
     await findByTestId("repository-coverage-timeline-graph");
@@ -65,7 +72,9 @@ describe("RepositoryCoveragePage", () => {
       .reply(200);
 
     const { findByTestId } = render(
-      <RepositoryCoveragePage orgPart="my-org" repoPart="my-repo" />
+      <LocationProvider history={createHistory(createMemorySource("/ui"))}>
+        <RepositoryCoveragePage orgPart="my-org" repoPart="my-repo" />
+      </LocationProvider>
     );
 
     await findByTestId("repo-no-coverage");
