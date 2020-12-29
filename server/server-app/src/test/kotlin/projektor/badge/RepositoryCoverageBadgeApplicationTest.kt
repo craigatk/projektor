@@ -32,7 +32,7 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
                 expectThat(response.contentType().toString()).contains(ContentType.Image.SVG.toString())
 
-                expectThat(response.content).isNotNull().contains("95.40%")
+                expectThat(response.content).isNotNull().contains("95%")
             }
         }
     }
@@ -77,7 +77,7 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
                 expectThat(response.contentType().toString()).contains(ContentType.Image.SVG.toString())
 
-                expectThat(response.content).isNotNull().contains("95.40%")
+                expectThat(response.content).isNotNull().contains("95%")
             }
         }
     }
