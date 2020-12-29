@@ -9,6 +9,7 @@ import projektor.attachment.AttachmentDatabaseRepository
 import projektor.attachment.AttachmentRepository
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
+import projektor.badge.RepositoryCoverageBadgeService
 import projektor.compare.PreviousTestRunDatabaseRepository
 import projektor.compare.PreviousTestRunRepository
 import projektor.compare.PreviousTestRunService
@@ -130,4 +131,6 @@ fun createAppModule(
     single { RepositoryTestRunService(get()) }
 
     single { GitHubPullRequestCommentService(notificationConfig, gitHubCommentService) }
+
+    single { RepositoryCoverageBadgeService(get(), get()) }
 }
