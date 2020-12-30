@@ -25,7 +25,7 @@ import projektor.attachment.AttachmentRepository
 import projektor.attachment.AttachmentService
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
-import projektor.badge.RepositoryCoverageBadgeService
+import projektor.badge.CoverageBadgeService
 import projektor.cleanup.AttachmentCleanupService
 import projektor.cleanup.CleanupConfig
 import projektor.cleanup.CleanupScheduledJob
@@ -177,11 +177,11 @@ fun Application.main() {
 
     val performanceResultsService: PerformanceResultsService by inject()
 
-    val repositoryCoverageBadgeService: RepositoryCoverageBadgeService by inject()
+    val coverageBadgeService: CoverageBadgeService by inject()
 
     routing {
         attachments(attachmentService, authService)
-        badge(repositoryCoverageBadgeService)
+        badge(coverageBadgeService)
         config(cleanupConfig)
         coverage(authService, coverageService)
         health()
