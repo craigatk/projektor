@@ -149,6 +149,10 @@ const fetchCoverageGroupFiles = (
   // @ts-ignore
   axiosInstance.get(`/run/${publicId}/coverage/${coverageGroupName}/files`);
 
+const fetchCoverageBadge = (publicId: string): Promise<AxiosResponse<string>> =>
+  // @ts-ignore
+  axiosInstance.get(`/run/${publicId}/badge/coverage`);
+
 const fetchPerformanceResults = (
   publicId: string
 ): Promise<AxiosResponse<PerformanceResults>> =>
@@ -165,6 +169,7 @@ export {
   fetchCoverage,
   fetchCoverageExists,
   fetchCoverageGroupFiles,
+  fetchCoverageBadge,
   fetchPerformanceResults,
   fetchOverallCoverageStats,
   fetchSlowTestCases,

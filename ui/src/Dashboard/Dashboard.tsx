@@ -25,7 +25,7 @@ const Dashboard = ({
         testRunSummary={testRunSummary}
         gitMetadata={gitMetadata}
       />
-      <CoverageSummary publicId={publicId} />
+      <CoverageSummary publicId={publicId} gitMetadata={gitMetadata} />
       {testRunSummary.passed ? (
         testRunSummary.totalTestCount > 0 ? (
           <TestRunAllTests publicId={publicId} />

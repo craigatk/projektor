@@ -1,20 +1,22 @@
 import * as React from "react";
-import { fetchRepositoryCoverageBadge } from "../service/RepositoryService";
 import CoverageBadge from "./CoverageBadge";
+import { fetchCoverageBadge } from "../service/TestRunService";
 
-interface RepositoryCoverageBadgeProps {
+interface TestRunCoverageBadgeProps {
+  publicId: string;
   repoName: string;
   projectName?: string;
 }
 
-const RepositoryCoverageBadge = ({
+const TestRunCoverageBadge = ({
+  publicId,
   repoName,
   projectName,
-}: RepositoryCoverageBadgeProps) => {
+}: TestRunCoverageBadgeProps) => {
   const [badgeSvg, setBadgeSvg] = React.useState<string>(null);
 
   React.useEffect(() => {
-    fetchRepositoryCoverageBadge(repoName, projectName)
+    fetchCoverageBadge(publicId)
       .then((response) => {
         setBadgeSvg(response.data);
       })
@@ -34,4 +36,4 @@ const RepositoryCoverageBadge = ({
   }
 };
 
-export default RepositoryCoverageBadge;
+export default TestRunCoverageBadge;

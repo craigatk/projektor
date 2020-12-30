@@ -9,7 +9,7 @@ import projektor.attachment.AttachmentDatabaseRepository
 import projektor.attachment.AttachmentRepository
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
-import projektor.badge.RepositoryCoverageBadgeService
+import projektor.badge.CoverageBadgeService
 import projektor.compare.PreviousTestRunDatabaseRepository
 import projektor.compare.PreviousTestRunRepository
 import projektor.compare.PreviousTestRunService
@@ -32,6 +32,7 @@ import projektor.metadata.TestRunMetadataRepository
 import projektor.metadata.TestRunMetadataService
 import projektor.metrics.MetricsService
 import projektor.notification.NotificationConfig
+import projektor.notification.badge.SvgCoverageBadgeCreator
 import projektor.notification.github.GitHubPullRequestCommentService
 import projektor.notification.github.comment.GitHubCommentService
 import projektor.organization.coverage.OrganizationCoverageDatabaseRepository
@@ -132,5 +133,6 @@ fun createAppModule(
 
     single { GitHubPullRequestCommentService(notificationConfig, gitHubCommentService) }
 
-    single { RepositoryCoverageBadgeService(get(), get()) }
+    single { CoverageBadgeService(get(), get(), get()) }
+    single { SvgCoverageBadgeCreator() }
 }

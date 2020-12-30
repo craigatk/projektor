@@ -1,16 +1,29 @@
 import * as React from "react";
 import PageTitle from "../PageTitle";
 import LoadingState from "../Loading/LoadingState";
-import { Coverage } from "../model/TestRunModel";
+import { Coverage, TestRunGitMetadata } from "../model/TestRunModel";
 import { fetchCoverage } from "../service/TestRunService";
 import OverallCoverageGraphs from "./OverallCoverageGraphs";
 import CleanLink from "../Link/CleanLink";
+import { makeStyles } from "@material-ui/styles";
+import TestRunCoverageBadge from "../Badge/TestRunCoverageBadge";
+import { Grid, Hidden } from "@material-ui/core";
 
 interface CoverageSummaryProps {
   publicId: string;
+  gitMetadata?: TestRunGitMetadata;
 }
 
-const CoverageSummary = ({ publicId }: CoverageSummaryProps) => {
+const useStyles = makeStyles(() => ({
+  coverageBadgeSection: {
+    marginTop: "15px",
+    marginLeft: "30px",
+  },
+}));
+
+const CoverageSummary = ({ publicId, gitMetadata }: CoverageSummaryProps) => {
+  const classes = useStyles({});
+
   const [coverage, setCoverage] = React.useState<Coverage>(null);
   const [loadingState, setLoadingState] = React.useState(LoadingState.Loading);
 
@@ -26,9 +39,29 @@ const CoverageSummary = ({ publicId }: CoverageSummaryProps) => {
   if (coverage) {
     return (
       <div>
-        <CleanLink to={`/tests/${publicId}/coverage`}>
-          <PageTitle title="Coverage" testid="coverage-summary-title" />
-        </CleanLink>
+        <Grid container>
+          <Grid item sm={1} xs={12}>
+            <CleanLink to={`/tests/${publicId}/coverage`}>
+              <PageTitle title="Coverage" testid="coverage-summary-title" />
+            </CleanLink>
+          </Grid>
+          {gitMetadata && (
+            <Hidden xsDown>
+              <Grid
+                item
+                sm={4}
+                xs={12}
+                className={classes.coverageBadgeSection}
+              >
+                <TestRunCoverageBadge
+                  publicId={publicId}
+                  repoName={gitMetadata.repoName}
+                  projectName={gitMetadata.projectName}
+                />
+              </Grid>
+            </Hidden>
+          )}
+        </Grid>
         <OverallCoverageGraphs
           overallStats={coverage.overallStats}
           previousTestRunId={coverage.previousTestRunId}

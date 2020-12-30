@@ -12,6 +12,7 @@ import projektor.server.api.PublicId
 import projektor.server.api.coverage.Coverage
 import projektor.server.api.coverage.CoverageFile
 import projektor.server.api.coverage.CoverageStats
+import java.math.BigDecimal
 
 class CoverageService(
     private val coverageRepository: CoverageRepository,
@@ -108,6 +109,12 @@ class CoverageService(
             null
         }
     }
+
+    suspend fun getCoveredLinePercentage(publicId: PublicId): BigDecimal? =
+        getCoverage(publicId)
+            ?.overallStats
+            ?.lineStat
+            ?.coveredPercentage
 
     suspend fun getOverallStats(publicId: PublicId): CoverageStats? {
         val hasCoverageData = coverageExists(publicId)
