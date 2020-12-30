@@ -4,6 +4,7 @@
 | ------- | -------- |
 | Server | [![Code coverage percentage](https://projektorlive.herokuapp.com/repo/craigatk/projektor/badge/coverage)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/coverage) |
 | UI | [![Code coverage percentage](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/ui-jest/badge/coverage)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/project/ui-jest/coverage) |
+| Node publisher | [![Code coverage percentage](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/node-script/badge/coverage)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/project/node-script/coverage) |
 
 Tests failing on your machine and need help debugging them? Or tests are passing local but failing in CI and
 CI doesn't record the test report? Debugging tests in these scenarios can be time consuming and painful,
