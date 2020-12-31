@@ -36,6 +36,11 @@ class JGitResolver extends GitResolver {
         return repo?.readOrigHead()?.name()
     }
 
+    @Override
+    Integer findPullRequestNumber() {
+        return null // Not available from JGit
+    }
+
     private String getRepoName(String remote) {
         String repoUrl = repo?.getConfig()?.getString("remote", remote, "url")
 

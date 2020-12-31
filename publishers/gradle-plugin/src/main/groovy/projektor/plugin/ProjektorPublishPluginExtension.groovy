@@ -30,7 +30,9 @@ class ProjektorPublishPluginExtension {
     List<String> gitMainBranchNames = ["main", "master"]
     List<String> gitRepoEnvironmentVariables = ["VELA_REPO_FULL_NAME", "GITHUB_REPOSITORY"]
     List<String> gitRefEnvironmentVariables = ["VELA_BUILD_REF", "GITHUB_REF"]
+    List<String> gitBranchEnvironmentVariables = ["VELA_PULL_REQUEST_SOURCE"]
     List<String> gitCommitShaEnvironmentVariables = ["VELA_BUILD_COMMIT", "GITHUB_SHA"]
+    List<String> gitPullRequestNumberEnvironmentVariables = ["VELA_BUILD_PULL_REQUEST"]
 
     List<String> ciEnvironmentVariables = ["CI", "VELA", "DRONE"]
 }

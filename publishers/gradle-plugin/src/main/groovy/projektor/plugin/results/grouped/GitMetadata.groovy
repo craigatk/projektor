@@ -8,4 +8,5 @@ class GitMetadata {
     String branchName
     boolean isMainBranch
     String commitSha
+    Integer pullRequestNumber
 }
