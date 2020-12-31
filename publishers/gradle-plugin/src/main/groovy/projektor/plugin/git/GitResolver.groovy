@@ -19,6 +19,8 @@ abstract class GitResolver {
 
     abstract String findCommitSha()
 
+    abstract Integer findPullRequestNumber()
+
     boolean isMainBranch() {
         String branchName = findBranchName()
 
@@ -34,7 +36,8 @@ abstract class GitResolver {
                         repoName: findRepository(),
                         branchName: findBranchName(),
                         isMainBranch: isMainBranch(),
-                        commitSha: findCommitSha()
+                        commitSha: findCommitSha(),
+                        pullRequestNumber: findPullRequestNumber()
                 )
 
                 logger.info("Projektor sending Git metadata $gitMetadata")

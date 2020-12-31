@@ -101,4 +101,29 @@ class EnvironmentGitResolverSpec extends Specification {
         and:
         commitSha == "12345"
     }
+
+    @Unroll
+    def "should find pull request number from #pullRequestString"() {
+        given:
+        GitResolutionConfig config = new GitResolutionConfig(
+                pullRequestNumberEnvironmentVariables: ["PR_NUMBER"]
+        )
+        EnvironmentGitResolver gitResolver = new EnvironmentGitResolver(config, environmentResolver, logger)
+
+        when:
+        Integer pullRequestNumber = gitResolver.findPullRequestNumber()
+
+        then:
+        1 * environmentResolver.findFirstEnvironmentValue(["PR_NUMBER"]) >> pullRequestString
+
+        and:
+        pullRequestNumber == expectedPullRequestNumber
+
+        where:
+        pullRequestString || expectedPullRequestNumber
+        "42"              || 42
+        null              || null
+        ""                || null
+        "not a number"    || null
+    }
 }

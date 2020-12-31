@@ -12,9 +12,12 @@ class EnvironmentGitResolver extends GitResolver {
 
     @Override
     String findBranchName() {
+        String branch = environmentResolver.findFirstEnvironmentValue(config.branchEnvironmentVariables)
         String ref = environmentResolver.findFirstEnvironmentValue(config.refEnvironmentVariables)
 
-        if (ref != null) {
+        if (branch != null) {
+            return branch
+        } else if (ref != null) {
             return ref.split("/").last()
         } else {
             return null
@@ -29,5 +32,20 @@ class EnvironmentGitResolver extends GitResolver {
     @Override
     String findCommitSha() {
         return environmentResolver.findFirstEnvironmentValue(config.commitShaEnvironmentVariables)
+    }
+
+    @Override
+    Integer findPullRequestNumber() {
+        String pullRequestStr = environmentResolver.findFirstEnvironmentValue(config.pullRequestNumberEnvironmentVariables)
+
+        if (pullRequestStr) {
+            try {
+                return Integer.parseInt(pullRequestStr)
+            } catch (Exception ignored) {
+                return null
+            }
+        } else {
+            return null
+        }
     }
 }
