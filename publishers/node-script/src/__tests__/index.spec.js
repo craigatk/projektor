@@ -8,10 +8,12 @@ const { run, runCLI } = require("../index");
 describe("node script index", () => {
   let mockAxios;
   let consoleError;
+  let consoleLog;
 
   beforeEach(() => {
     mockAxios = new MockAdapter(axios);
     consoleError = jest.spyOn(console, "error").mockImplementation();
+    consoleLog = jest.spyOn(console, "log").mockImplementation();
     process.exitCode = 0;
   });
 
@@ -232,5 +234,43 @@ describe("node script index", () => {
       (file) => file.name === "perf-test-2.json"
     );
     expect(file2.resultsBlob).toBe('{"name":"perf-test-2"}');
+  });
+
+  it("should log message when no test results found", async () => {
+    const serverUrl = "http://localhost:8080";
+    const resultsFileGlobs = ["does_not_exist/*.xml"];
+    const compressionEnabled = false;
+
+    await run(
+      { resultsFileGlobs, serverUrl, compressionEnabled },
+      {},
+      null,
+      "projektor.none.json"
+    );
+
+    expect(mockAxios.history.post.length).toBe(0);
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "No test results files found in locations does_not_exist/*.xml"
+    );
+  });
+
+  it("should log message when no performance results found", async () => {
+    const serverUrl = "http://localhost:8080";
+    const performance = ["does_not_exist/*.json"];
+    const compressionEnabled = false;
+
+    await run(
+      { performance, serverUrl, compressionEnabled },
+      {},
+      null,
+      "projektor.none.json"
+    );
+
+    expect(mockAxios.history.post.length).toBe(0);
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "No performance results files found in locations does_not_exist/*.json"
+    );
   });
 });
