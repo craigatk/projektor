@@ -31,7 +31,7 @@ https://projektorlive.herokuapp.com/tests/RA1FTOGJBNKD
 To help debug failures in any environment (especially CI), Projektor gives you access
 to the system out and system err from each test:
 
-https://projektorlive.herokuapp.com/tests/PYFUDE19WISR/suite/14/systemOut
+https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/suite/65/systemOut
 
 ## Development
 
