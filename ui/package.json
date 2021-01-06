@@ -51,7 +51,7 @@
     "@types/react": "16.9.17",
     "@types/react-dom": "16.9.4",
     "@types/styled-components": "5.1.0",
-    "axios": "0.19.2",
+    "axios": "0.21.1",
     "axios-cache-adapter": "2.5.0",
     "axios-case-converter": "0.3.0",
     "material-table": "1.55.0",
