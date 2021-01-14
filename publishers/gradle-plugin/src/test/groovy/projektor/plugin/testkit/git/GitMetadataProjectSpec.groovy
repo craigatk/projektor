@@ -121,4 +121,41 @@ class GitMetadataProjectSpec extends SingleProjectSpec {
         !gitMetadata.isMainBranch
         gitMetadata.pullRequestNumber == 42
     }
+
+    def "should publish git repo and branch information for drone"() {
+        given:
+        buildFile << """
+            projektor {
+                serverUrl = '${serverUrl}'
+                alwaysPublish = true
+            }
+        """.stripIndent()
+
+        SpecWriter.createTestDirectoryWithPassingTest(projectRootDir, "SamplePassingSpec")
+
+        String resultsId = "ABC123"
+        resultsStubber.stubResultsPostSuccess(resultsId)
+
+        when:
+        def result = runSuccessfulBuildWithEnvironment(
+          ['DRONE_REPO': 'projektor/projektor', "DRONE_COMMIT_BRANCH": "feature-branch"],
+          'test'
+        )
+
+        then:
+        result.task(":test").outcome == SUCCESS
+
+        and:
+        verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
+
+        and:
+        List<GroupedResults> resultsRequests = resultsStubber.findResultsRequestBodies()
+        resultsRequests.size() == 1
+
+        GitMetadata gitMetadata = resultsRequests[0].metadata.git
+
+        gitMetadata.repoName == "projektor/projektor"
+        gitMetadata.branchName == "feature-branch"
+        !gitMetadata.isMainBranch
+    }
 }
