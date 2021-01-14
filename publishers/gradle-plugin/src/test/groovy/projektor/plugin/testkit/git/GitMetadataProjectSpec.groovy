@@ -138,7 +138,7 @@ class GitMetadataProjectSpec extends SingleProjectSpec {
 
         when:
         def result = runSuccessfulBuildWithEnvironment(
-          ['DRONE_REPO': 'projektor/projektor', "DRONE_COMMIT_BRANCH": "feature-branch"],
+          ['DRONE_REPO': 'projektor/projektor', "DRONE_COMMIT_BRANCH": "feature-branch", "DRONE_PULL_REQUEST": "123"],
           'test'
         )
 
@@ -157,5 +157,6 @@ class GitMetadataProjectSpec extends SingleProjectSpec {
         gitMetadata.repoName == "projektor/projektor"
         gitMetadata.branchName == "feature-branch"
         !gitMetadata.isMainBranch
+        gitMetadata.pullRequestNumber == 123
     }
 }
