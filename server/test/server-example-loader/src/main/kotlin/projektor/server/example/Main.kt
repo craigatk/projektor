@@ -12,6 +12,8 @@ fun main() {
     loadMultipleCoverageExample()
     loadMultipleCoverageWithPreviousRunExample()
     loadCoverageWithProjectName()
+    loadCoverage75WithGit()
+    loadCoverage85WithGit()
     loadResultsWithGitButWithoutCoverage()
     loadJestWithCoverage()
     repositoryCoverageTimeline()
