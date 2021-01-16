@@ -16,6 +16,7 @@ import io.ktor.metrics.micrometer.MicrometerMetrics
 import io.ktor.request.path
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
+import io.micrometer.core.instrument.MeterRegistry
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import org.koin.logger.SLF4JLogger
@@ -64,13 +65,13 @@ import projektor.testsuite.TestSuiteService
 import projektor.versioncontrol.VersionControlConfig
 
 @KtorExperimentalAPI
-fun Application.main() {
+fun Application.main(meterRegistry: MeterRegistry? = null) {
     val applicationConfig = environment.config
 
     val authConfig = AuthConfig.createAuthConfig(applicationConfig)
 
     val influxMetricsConfig = InfluxMetricsConfig.createInfluxMetricsConfig(applicationConfig)
-    val metricRegistry = createRegistry(influxMetricsConfig)
+    val metricRegistry = meterRegistry ?: createRegistry(influxMetricsConfig)
 
     val dataSourceConfig = DataSourceConfig.createDataSourceConfig(applicationConfig)
     val dataSource = DataSourceConfig.createDataSource(dataSourceConfig, metricRegistry)

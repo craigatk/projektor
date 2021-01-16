@@ -12,6 +12,7 @@ import io.ktor.application.Application
 import io.ktor.config.MapApplicationConfig
 import io.ktor.server.testing.*
 import io.ktor.util.KtorExperimentalAPI
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
@@ -97,6 +98,8 @@ open class ApplicationTestCase {
     protected var gitHubAppId: String? = null
     protected var gitHubPrivateKeyEncoded: String? = null
 
+    protected val meterRegistry = SimpleMeterRegistry()
+
     fun createTestApplication(application: Application) {
         val schema = databaseSchema
 
@@ -146,7 +149,9 @@ open class ApplicationTestCase {
             gitHubPrivateKeyEncoded?.let { put("ktor.notification.gitHub.privateKey", it) }
         }
 
-        application.main()
+        val meterRegistryToUse = if (metricsEnabled) null else meterRegistry
+
+        application.main(meterRegistry = meterRegistryToUse)
 
         dataSource = application.get()
         dslContext = application.get()

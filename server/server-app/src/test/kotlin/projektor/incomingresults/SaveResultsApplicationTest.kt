@@ -7,7 +7,6 @@ import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
 import org.junit.jupiter.api.*
 import projektor.ApplicationTestCase
-import projektor.metrics.MetricsStubber
 import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
 import strikt.assertions.*
@@ -17,16 +16,8 @@ import kotlin.test.assertNotNull
 @KtorExperimentalAPI
 class SaveResultsApplicationTest : ApplicationTestCase() {
 
-    @BeforeEach
-    fun reset() {
-        metricsStubber.reset()
-    }
-
     @Test
     fun `should parse request and save results for passing test`() {
-        metricsEnabled = true
-        metricsPort = metricsStubber.port()
-
         val requestBody = resultsXmlLoader.passing()
 
         withTestApplication(::createTestApplication) {
@@ -61,9 +52,8 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
                 val testFailures = testFailureDao.fetchByTestCaseId(testCases[0].id)
                 expectThat(testFailures).isEmpty()
 
-                // Removing until these verifications are less flaky
-                // waitAtMost(Duration.ofSeconds(60)) until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_success", 1).isNotEmpty() }
-                // waitAtMost(Duration.ofSeconds(30)) until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_failure", 0).isNotEmpty() }
+                expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(1.toDouble())
+                expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
             }
         }
     }
@@ -275,22 +265,6 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.BadRequest)
             }
-        }
-    }
-
-    companion object {
-        private val metricsStubber = MetricsStubber()
-
-        @BeforeAll
-        @JvmStatic
-        fun start() {
-            metricsStubber.start()
-        }
-
-        @AfterAll
-        @JvmStatic
-        fun stop() {
-            metricsStubber.stop()
         }
     }
 }
