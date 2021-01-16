@@ -6,26 +6,20 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
-import org.awaitility.Awaitility.waitAtMost
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.*
 import projektor.ApplicationTestCase
-import projektor.metrics.MetricsStubber
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.server.api.results.ResultsProcessingStatus
 import strikt.api.expectThat
 import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
-import java.time.Duration
 import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
-    @BeforeEach
-    fun reset() {
-        metricsStubber.reset()
-    }
 
     @Test
     fun `should save grouped test results`() {
@@ -63,11 +57,7 @@ class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
     }
 
     @Test
-    @Disabled // This test is just way too flaky, ignoring this until I find a more reliable way to test the metrics
     fun `should record metrics when saving grouped test results`() {
-        metricsEnabled = true
-        metricsPort = metricsStubber.port()
-
         val requestBody = GroupedResultsXmlLoader().passingGroupedResults()
 
         withTestApplication(::createTestApplication) {
@@ -77,28 +67,12 @@ class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
             }.apply {
                 waitForTestRunSaveToComplete(response)
 
-                waitAtMost(Duration.ofSeconds(30)) until { metricsStubber.verifyWriteMetricsRequestForCounterMetric("grouped_results_process_success", 1) }
-                await until { metricsStubber.verifyWriteMetricsRequestForCounterMetric("results_process_success", 1) }
+                expectThat(meterRegistry.counter("grouped_results_process_success").count()).isEqualTo(1.toDouble())
+                expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(1.toDouble())
 
-                await until { metricsStubber.findWriteMetricsRequestForCounterMetric("grouped_results_process_failure", 0).isNotEmpty() }
-                await until { metricsStubber.findWriteMetricsRequestForCounterMetric("results_process_failure", 0).isNotEmpty() }
+                expectThat(meterRegistry.counter("grouped_results_process_failure").count()).isEqualTo(0.toDouble())
+                expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
             }
-        }
-    }
-
-    companion object {
-        private val metricsStubber = MetricsStubber()
-
-        @BeforeAll
-        @JvmStatic
-        fun start() {
-            metricsStubber.start()
-        }
-
-        @AfterAll
-        @JvmStatic
-        fun stop() {
-            metricsStubber.stop()
         }
     }
 }
