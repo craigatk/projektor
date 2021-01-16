@@ -7,6 +7,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.ResultsXmlLoader
+import projektor.parser.grouped.model.CoverageFile
 import projektor.parser.grouped.model.GitMetadata
 import projektor.parser.grouped.model.ResultsMetadata
 import projektor.server.api.results.SaveResultsResponse
@@ -197,6 +198,52 @@ fun loadCoverageWithProjectName() {
     sendCoverageToServer(currentResultsResponse.id, JacocoXmlLoader().serverApp())
 
     println("View run coverage and project name at $uiBaseUrl${currentResultsResponse.uri}")
+}
+
+fun loadCoverage75WithGit() {
+    val repoName = "projektor/coverage75"
+    val branchName = "main"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+
+    val coverageFile = CoverageFile()
+    coverageFile.reportContents = JacocoXmlLoader().jacocoXmlParser75()
+
+    val resultsResponse = sendGroupedResultsToServer(
+        GroupedResultsXmlLoader().passingResultsWithCoverage(
+            coverageFiles = listOf(coverageFile),
+            metadata = resultsMetadata
+        )
+    )
+
+    println("View run 75% coverage and Git metadata at $uiBaseUrl${resultsResponse.uri}")
+}
+
+fun loadCoverage85WithGit() {
+    val repoName = "projektor/coverage75"
+    val branchName = "main"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+
+    val coverageFile = CoverageFile()
+    coverageFile.reportContents = JacocoXmlLoader().jacocoXmlParser85()
+
+    val resultsResponse = sendGroupedResultsToServer(
+        GroupedResultsXmlLoader().passingResultsWithCoverage(
+            coverageFiles = listOf(coverageFile),
+            metadata = resultsMetadata
+        )
+    )
+
+    println("View run 85% coverage and Git metadata at $uiBaseUrl${resultsResponse.uri}")
 }
 
 fun loadResultsWithGitButWithoutCoverage() {

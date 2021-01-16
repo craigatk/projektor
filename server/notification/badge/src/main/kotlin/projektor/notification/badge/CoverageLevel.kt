@@ -4,7 +4,7 @@ import java.math.BigDecimal
 
 enum class CoverageLevel(val fillColor: String) {
     GOOD("#4c1"),
-    OK("#010101"),
+    OK("#dfb317"),
     POOR("#fe7d37"),
     TERRIBLE("#e05d44");
 

@@ -5,6 +5,8 @@ import java.math.BigDecimal
 class JacocoXmlLoader : CoverageXmlLoader() {
     fun jacocoXmlParser() = loadTextFromFile("jacoco-xml-parser-jacocoTestReport.xml")
     fun jacocoXmlParserReduced() = loadTextFromFile("jacoco-xml-parser-reduced-jacocoTestReport.xml")
+    fun jacocoXmlParser75() = loadTextFromFile("jacoco-xml-parser-75-jacocoTestReport.xml")
+    fun jacocoXmlParser85() = loadTextFromFile("jacoco-xml-parser-85-jacocoTestReport.xml")
 
     fun junitResultsParser() = loadTextFromFile("junit-results-parser-jacocoTestReport.xml")
     fun junitResultsParserReduced() = loadTextFromFile("junit-results-parser-reduced-jacocoTestReport.xml")
