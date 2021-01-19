@@ -82,7 +82,10 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
   if (resultsFileGlobs || performanceFileGlobs) {
     const isCI = Boolean(env.CI) && env.CI !== "false";
     const gitRepoName =
-      repositoryName || env.VELA_REPO_FULL_NAME || env.GITHUB_REPOSITORY;
+      repositoryName ||
+      env.VELA_REPO_FULL_NAME ||
+      env.GITHUB_REPOSITORY ||
+      env.DRONE_REPO;
     const gitBranchName = findGitBranchName(env);
     const gitCommitSha = env.VELA_BUILD_COMMIT || env.GITHUB_SHA;
     const gitPullRequestNumber = findGitPullRequestNumber(env);
@@ -176,7 +179,7 @@ function containsTestFailure(resultsBlob) {
 }
 
 function findGitBranchName(env) {
-  const branchName = env.VELA_PULL_REQUEST_SOURCE;
+  const branchName = env.VELA_PULL_REQUEST_SOURCE || env.DRONE_COMMIT_BRANCH;
   if (branchName) {
     return branchName;
   } else {
@@ -189,7 +192,8 @@ function findGitBranchName(env) {
 }
 
 function findGitPullRequestNumber(env) {
-  const pullRequestNumberFromEnv = env.VELA_BUILD_PULL_REQUEST;
+  const pullRequestNumberFromEnv =
+    env.VELA_BUILD_PULL_REQUEST || env.DRONE_PULL_REQUEST;
 
   if (pullRequestNumberFromEnv) {
     return parseInt(pullRequestNumberFromEnv);
