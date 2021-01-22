@@ -38,7 +38,11 @@ class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
         writePartialCoverageSpecFile(testDir, "PartialSpec")
 
         when:
-        def result = runSuccessfulBuildInCI('test', 'jacocoTestReport')
+        def result = runSuccessfulBuildWithEnvironmentAndGradleVersion(
+                ["CI": "true"],
+                gradleVersion,
+                'test', 'jacocoTestReport'
+        )
 
         then:
         result.task(":test").outcome == SUCCESS
@@ -58,10 +62,10 @@ class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
         coverageFilePayloads[0].reportContents.contains(sourceFile.name)
 
         where:
-        gradleVersion                   | _
-        "5.0"                           | _
-        "6.0.1"                         | _
-        "6.4.1"                         | _
-        GradleVersion.current().version | _
+        gradleVersion                  | _
+        GradleVersion.version("5.0")   | _
+        GradleVersion.version("6.0.1") | _
+        GradleVersion.version("6.4.1") | _
+        GradleVersion.current()        | _
     }
 }
