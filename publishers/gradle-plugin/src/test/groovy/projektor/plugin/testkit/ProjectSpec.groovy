@@ -3,6 +3,7 @@ package projektor.plugin.testkit
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
+import org.gradle.util.GradleVersion
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import projektor.plugin.ResultsWireMockStubber
@@ -43,6 +44,24 @@ abstract class ProjectSpec extends Specification {
                 .withEnvironment(augmentedEnv)
                 .withArguments(buildArgs)
                 .withPluginClasspath()
+                .build()
+
+        println result.output
+
+        return result
+    }
+
+    BuildResult runSuccessfulBuildWithEnvironmentAndGradleVersion(Map<String, String> envMap, GradleVersion gradleVersion, String ... buildArgs) {
+        Map<String, String> currentEnv = System.getenv()
+        Map<String, String> augmentedEnv = new HashMap<>(currentEnv)
+        augmentedEnv.putAll(envMap)
+
+        BuildResult result = GradleRunner.create()
+                .withProjectDir(projectRootDir.root)
+                .withEnvironment(augmentedEnv)
+                .withArguments(buildArgs)
+                .withPluginClasspath()
+                .withGradleVersion(gradleVersion.version)
                 .build()
 
         println result.output

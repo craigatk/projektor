@@ -36,6 +36,22 @@ class ${specClassName} extends Specification {
 """
     }
 
+    static void writeSecondPartialCoverageSpecFile(File testDirectory, String specClassName) {
+        File specFile = new File(testDirectory, "${specClassName}.groovy")
+
+        specFile << """package projektor
+
+import spock.lang.Specification
+
+class ${specClassName} extends Specification {
+    void "sample test"() {
+        expect:
+        MyClass.boo() == "baz"
+    }
+}
+"""
+    }
+
     static void writeFullCoverageSpecFile(File testDirectory, String specClassName) {
         File specFile = new File(testDirectory, "${specClassName}.groovy")
 
