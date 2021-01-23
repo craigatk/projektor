@@ -26,7 +26,11 @@ class CoverageService(
         try {
             val coverageFilePayload = coveragePayloadParser.parseCoverageFilePayload(payload)
 
-            saveReportInternal(coverageFilePayload, publicId)
+            val coverageReport = CoverageParser.parseReport(coverageFilePayload.reportContents, coverageFilePayload.baseDirectoryPath)
+
+            coverageReport?.let { saveReport(coverageReport, publicId) }
+
+            coverageReport
         } catch (e: Exception) {
             logger.error("Error saving coverage report", e)
             processingFailureService.recordProcessingFailure(
@@ -38,9 +42,17 @@ class CoverageService(
             throw e
         }
 
-    suspend fun saveReport(coverageFilePayload: CoverageFilePayload, publicId: PublicId): CoverageReport? =
+    suspend fun parseAndSaveReports(coverageFilePayload: List<CoverageFilePayload>, publicId: PublicId): List<CoverageReport> {
+        return listOf()
+    }
+
+    suspend fun parseAndSaveReport(coverageFilePayload: CoverageFilePayload, publicId: PublicId): CoverageReport? =
         try {
-            saveReportInternal(coverageFilePayload, publicId)
+            val coverageReport = CoverageParser.parseReport(coverageFilePayload.reportContents, coverageFilePayload.baseDirectoryPath)
+
+            coverageReport?.let { saveReport(coverageReport, publicId) }
+
+            coverageReport
         } catch (e: Exception) {
             logger.error("Error saving coverage report", e)
             processingFailureService.recordProcessingFailure(
@@ -52,25 +64,20 @@ class CoverageService(
             throw e
         }
 
-    private suspend fun saveReportInternal(coverageFilePayload: CoverageFilePayload, publicId: PublicId): CoverageReport? {
+    private suspend fun saveReport(coverageReport: CoverageReport, publicId: PublicId) {
         val coverageRun = coverageRepository.createOrGetCoverageRun(publicId)
-        val coverageReport = CoverageParser.parseReport(coverageFilePayload.reportContents, coverageFilePayload.baseDirectoryPath)
 
-        coverageReport?.let {
-            val coverageGroup = coverageRepository.addCoverageReport(coverageRun, it)
+        val coverageGroup = coverageRepository.addCoverageReport(coverageRun, coverageReport)
 
-            val coverageFiles = coverageReport.files
+        val coverageFiles = coverageReport.files
 
-            if (coverageFiles != null && coverageFiles.isNotEmpty()) {
-                coverageRepository.insertCoverageFiles(
-                    coverageFiles,
-                    coverageRun,
-                    coverageGroup,
-                )
-            }
+        if (coverageFiles != null && coverageFiles.isNotEmpty()) {
+            coverageRepository.insertCoverageFiles(
+                coverageFiles,
+                coverageRun,
+                coverageGroup,
+            )
         }
-
-        return coverageReport
     }
 
     suspend fun getCoverage(publicId: PublicId): Coverage? {

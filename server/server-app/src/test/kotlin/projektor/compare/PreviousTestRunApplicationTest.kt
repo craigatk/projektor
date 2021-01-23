@@ -31,19 +31,19 @@ class PreviousTestRunApplicationTest : ApplicationTestCase() {
             handleRequest(HttpMethod.Get, "/run/$thisPublicId/previous") {
                 val differentTestRun = testRunDBGenerator.createSimpleTestRun(differentRepoPublicId)
                 testRunDBGenerator.addGitMetadata(differentTestRun, "projektor/different", true, "main", null)
-                runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), differentRepoPublicId) }
+                runBlocking { coverageService.parseAndSaveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), differentRepoPublicId) }
 
                 val oldestTestRun = testRunDBGenerator.createSimpleTestRun(oldestPublicId)
                 testRunDBGenerator.addGitMetadata(oldestTestRun, repoName, true, "main", null)
-                runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), oldestPublicId) }
+                runBlocking { coverageService.parseAndSaveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), oldestPublicId) }
 
                 val newerTestRun = testRunDBGenerator.createSimpleTestRun(previousPublicId)
                 testRunDBGenerator.addGitMetadata(newerTestRun, repoName, true, "main", null)
-                runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), previousPublicId) }
+                runBlocking { coverageService.parseAndSaveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), previousPublicId) }
 
                 val thisPublicTestRun = testRunDBGenerator.createSimpleTestRun(thisPublicId)
                 testRunDBGenerator.addGitMetadata(thisPublicTestRun, repoName, true, "main", null)
-                runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), thisPublicId) }
+                runBlocking { coverageService.parseAndSaveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), thisPublicId) }
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 

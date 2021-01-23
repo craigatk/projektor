@@ -30,7 +30,7 @@ fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
             val reportXml = receiveCompressedOrPlainTextPayload(call)
 
             try {
-                coverageService.saveReport(CoverageFilePayload(reportContents = reportXml), PublicId(publicId))
+                coverageService.parseAndSaveReport(CoverageFilePayload(reportContents = reportXml), PublicId(publicId))
                     ?.let { call.respond(HttpStatusCode.OK) }
                     ?: call.respond(HttpStatusCode.BadRequest)
             } catch (e: Exception) {

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE report PUBLIC "-//JACOCO//DTD Report 1.1//EN"
+        "report.dtd">
+<report name="gradle-jacoco-merge">
+    <sessioninfo id="DESKTOP-F2BATC0-beb223c3" start="1611413928724" dump="1611413930878"/>
+    <package name="example">
+        <class name="example/Example" sourcefilename="Example.groovy">
+            <method name="foo" desc="(Z)Ljava/lang/String;" line="5">
+                <counter type="INSTRUCTION" missed="2" covered="8"/>
+                <counter type="BRANCH" missed="0" covered="2"/>
+                <counter type="LINE" missed="0" covered="3"/>
+                <counter type="COMPLEXITY" missed="0" covered="2"/>
+                <counter type="METHOD" missed="0" covered="1"/>
+            </method>
+            <method name="bar" desc="(Z)Ljava/lang/String;" line="13">
+                <counter type="INSTRUCTION" missed="10" covered="0"/>
+                <counter type="BRANCH" missed="2" covered="0"/>
+                <counter type="LINE" missed="3" covered="0"/>
+                <counter type="COMPLEXITY" missed="2" covered="0"/>
+                <counter type="METHOD" missed="1" covered="0"/>
+            </method>
+            <method name="baz" desc="(Z)Ljava/lang/String;" line="21">
+                <counter type="INSTRUCTION" missed="4" covered="6"/>
+                <counter type="BRANCH" missed="1" covered="1"/>
+                <counter type="LINE" missed="1" covered="2"/>
+                <counter type="COMPLEXITY" missed="1" covered="1"/>
+                <counter type="METHOD" missed="0" covered="1"/>
+            </method>
+            <counter type="INSTRUCTION" missed="16" covered="14"/>
+            <counter type="BRANCH" missed="3" covered="3"/>
+            <counter type="LINE" missed="4" covered="5"/>
+            <counter type="COMPLEXITY" missed="3" covered="3"/>
+            <counter type="METHOD" missed="1" covered="2"/>
+            <counter type="CLASS" missed="0" covered="1"/>
+        </class>
+        <sourcefile name="Example.groovy">
+            <line nr="5" mi="0" ci="2" mb="0" cb="2"/>
+            <line nr="6" mi="0" ci="2" mb="0" cb="0"/>
+            <line nr="9" mi="2" ci="2" mb="0" cb="0"/>
+            <line nr="13" mi="2" ci="0" mb="2" cb="0"/>
+            <line nr="14" mi="2" ci="0" mb="0" cb="0"/>
+            <line nr="17" mi="4" ci="0" mb="0" cb="0"/>
+            <line nr="21" mi="0" ci="2" mb="1" cb="1"/>
+            <line nr="22" mi="0" ci="2" mb="0" cb="0"/>
+            <line nr="25" mi="4" ci="0" mb="0" cb="0"/>
+            <counter type="INSTRUCTION" missed="16" covered="14"/>
+            <counter type="BRANCH" missed="3" covered="3"/>
+            <counter type="LINE" missed="4" covered="5"/>
+            <counter type="COMPLEXITY" missed="3" covered="3"/>
+            <counter type="METHOD" missed="1" covered="2"/>
+            <counter type="CLASS" missed="0" covered="1"/>
+        </sourcefile>
+        <counter type="INSTRUCTION" missed="16" covered="14"/>
+        <counter type="BRANCH" missed="3" covered="3"/>
+        <counter type="LINE" missed="4" covered="5"/>
+        <counter type="COMPLEXITY" missed="3" covered="3"/>
+        <counter type="METHOD" missed="1" covered="2"/>
+        <counter type="CLASS" missed="0" covered="1"/>
+    </package>
+    <counter type="INSTRUCTION" missed="16" covered="14"/>
+    <counter type="BRANCH" missed="3" covered="3"/>
+    <counter type="LINE" missed="4" covered="5"/>
+    <counter type="COMPLEXITY" missed="3" covered="3"/>
+    <counter type="METHOD" missed="1" covered="2"/>
+    <counter type="CLASS" missed="0" covered="1"/>
+</report>

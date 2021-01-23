@@ -15,6 +15,9 @@ class JacocoXmlLoader : CoverageXmlLoader() {
     fun serverAppReduced() = loadTextFromFile("server-app-reduced-jacocoTestReport.xml")
     fun serverAppInvalid() = loadTextFromFile("server-app-jacocoTestReport-invalid.xml")
 
+    fun combinedIntegrationTest() = loadTextFromFile("jacoco-combined/integrationTestJacocoReport.xml")
+    fun combinedUnitTest() = loadTextFromFile("jacoco-combined/jacocoTestReport.xml")
+
     companion object {
         val jacocoXmlParserLineCoveragePercentage = BigDecimal("92.86")
 

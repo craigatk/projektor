@@ -312,8 +312,8 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
         val publicIdToRemove = randomPublicId()
         testRunDBGenerator.createTestRun(publicIdToRemove, LocalDate.now().minusDays(31), false)
 
-        runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), publicIdToRemove) }
-        runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().jacocoXmlParser()), publicIdToRemove) }
+        runBlocking { coverageService.parseAndSaveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), publicIdToRemove) }
+        runBlocking { coverageService.parseAndSaveReport(CoverageFilePayload(JacocoXmlLoader().jacocoXmlParser()), publicIdToRemove) }
 
         val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicIdToRemove.id)
         expectThat(coverageRuns).hasSize(1)

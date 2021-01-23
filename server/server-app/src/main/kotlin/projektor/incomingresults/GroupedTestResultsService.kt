@@ -85,7 +85,7 @@ class GroupedTestResultsService(
     private suspend fun saveCoverage(publicId: PublicId, coverageFiles: List<CoverageFilePayload>): Coverage? {
         coverageFiles.forEach { coverageFile ->
             try {
-                coverageService.saveReport(coverageFile, publicId)
+                coverageService.parseAndSaveReport(coverageFile, publicId)
             } catch (e: Exception) {
                 // Error is logged inside coverageService.saveReport
             }

@@ -1,6 +1,8 @@
-package projektor.plugin.functionaltest
+package projektor.plugin.functionaltest.coverage
 
 import org.apache.commons.lang3.RandomStringUtils
+import projektor.plugin.functionaltest.MultiProjectFunctionalSpecification
+import projektor.plugin.functionaltest.ProjektorPluginFunctionalSpecification
 import projektor.server.api.TestRun
 import projektor.server.api.coverage.Coverage
 import projektor.server.api.coverage.CoverageStats
@@ -35,7 +37,7 @@ class MultiProjectCoverageFunctionalSpec extends MultiProjectFunctionalSpecifica
         given:
         rootBuildFile << """
             projektor {
-                serverUrl = '${PROJEKTOR_SERVER_URL}'
+                serverUrl = '${ProjektorPluginFunctionalSpecification.PROJEKTOR_SERVER_URL}'
             }
         """.stripIndent()
 
@@ -91,7 +93,7 @@ class MultiProjectCoverageFunctionalSpec extends MultiProjectFunctionalSpecifica
         given:
         rootBuildFile << """
             projektor {
-                serverUrl = '${PROJEKTOR_SERVER_URL}'
+                serverUrl = '${ProjektorPluginFunctionalSpecification.PROJEKTOR_SERVER_URL}'
             }
         """.stripIndent()
 

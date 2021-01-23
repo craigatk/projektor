@@ -189,7 +189,7 @@ class TestRunDBGenerator(
     ): TestRunDB {
         val testRunDB = createSimpleTestRun(publicId)
         addGitMetadata(testRunDB, repoName, branchName == "main", branchName, projectName)
-        runBlocking { coverageService.saveReport(coverageFilePayload, publicId) }
+        runBlocking { coverageService.parseAndSaveReport(coverageFilePayload, publicId) }
 
         return testRunDB
     }

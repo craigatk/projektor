@@ -1,7 +1,8 @@
-package projektor.plugin.functionaltest
+package projektor.plugin.functionaltest.coverage
 
 import org.gradle.testkit.runner.TaskOutcome
 import projektor.plugin.BuildFileWriter
+import projektor.plugin.functionaltest.ProjektorPluginFunctionalSpecification
 import projektor.server.api.TestRun
 import projektor.server.api.coverage.CoverageStats
 import retrofit2.Response
@@ -35,7 +36,7 @@ class SingleProjectCoverageFunctionalSpec extends ProjektorPluginFunctionalSpeci
         writeFullCoverageSpecFile(testDir, "FullSpec")
 
         when:
-        def result = runPassingBuildInCI('test', 'jacocoTestReport', '-i')
+        def result = runPassingBuildInCI('test', 'jacocoTestReport', '-i', '--stacktrace')
 
         then:
         result.task(":test").outcome == TaskOutcome.SUCCESS
