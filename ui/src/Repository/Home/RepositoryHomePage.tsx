@@ -36,12 +36,6 @@ const RepositoryHomePage = ({
         projectName={projectName}
         hideIfEmpty={true}
       />
-      <RepositoryFlakyTestsPage
-        orgPart={orgPart}
-        repoPart={repoPart}
-        projectName={projectName}
-        hideIfEmpty={true}
-      />
     </div>
   );
 };
