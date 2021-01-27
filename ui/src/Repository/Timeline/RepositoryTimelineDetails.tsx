@@ -17,7 +17,7 @@ const RepositoryTimelineDetails = ({
 }: RepositoryTimelineDetailsProps) => {
   return (
     <div>
-      {!timeline && !hideIfEmpty ? (
+      {timeline ? (
         <PageTitle
           title="Test execution time"
           testid="repository-timeline-title"

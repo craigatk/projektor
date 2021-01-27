@@ -27,7 +27,6 @@ const RepositoryFlakyTestsDetails = ({
   if (flakyTests) {
     return (
       <div>
-        <PageTitle title="Flaky tests" testid="repository-flaky-tests-title" />
         <RepositoryFlakyTestsTable flakyTests={flakyTests} />
       </div>
     );

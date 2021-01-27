@@ -60,10 +60,15 @@ fun Route.repository(
             ?: call.respond(HttpStatusCode.NoContent)
     }
 
-    suspend fun handleFlakyTestsRequest(orgPart: String, repoPart: String, projectName: String?, call: ApplicationCall) {
+    suspend fun handleFlakyTestsRequest(
+        orgPart: String,
+        repoPart: String,
+        projectName: String?,
+        maxRuns: Int,
+        flakyThreshold: Int,
+        call: ApplicationCall
+    ) {
         val fullRepoName = "$orgPart/$repoPart"
-        val maxRuns = 50
-        val flakyThreshold = 5
 
         val flakyTests = repositoryTestRunService.fetchFlakyTests(
             repoName = fullRepoName,
@@ -89,15 +94,19 @@ fun Route.repository(
     get("/repo/{orgPart}/{repoPart}/tests/flaky") {
         val orgPart = call.parameters.getOrFail("orgPart")
         val repoPart = call.parameters.getOrFail("repoPart")
+        val maxRuns = call.request.queryParameters["max_runs"]?.toInt() ?: 50
+        val flakyThreshold = call.request.queryParameters["threshold"]?.toInt() ?: 5
 
-        handleFlakyTestsRequest(orgPart, repoPart, null, call)
+        handleFlakyTestsRequest(orgPart = orgPart, repoPart = repoPart, projectName = null, maxRuns = maxRuns, flakyThreshold = flakyThreshold, call)
     }
 
     get("/repo/{orgPart}/{repoPart}/project/{projectName}/tests/flaky") {
         val orgPart = call.parameters.getOrFail("orgPart")
         val repoPart = call.parameters.getOrFail("repoPart")
         val projectName = call.parameters.getOrFail("projectName")
+        val maxRuns = call.request.queryParameters["max_runs"]?.toInt() ?: 50
+        val flakyThreshold = call.request.queryParameters["threshold"]?.toInt() ?: 5
 
-        handleFlakyTestsRequest(orgPart, repoPart, projectName, call)
+        handleFlakyTestsRequest(orgPart = orgPart, repoPart = repoPart, projectName = projectName, maxRuns = maxRuns, flakyThreshold = flakyThreshold, call)
     }
 }
