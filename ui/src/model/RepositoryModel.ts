@@ -26,8 +26,8 @@ interface RepositoryFlakyTest {
   testCase: TestCase;
   failureCount: number;
   failurePercentage: number;
-  latestPublicId: string;
-  latestCreatedTimestamp: Date;
+  firstTestCase: TestCase;
+  latestTestCase: TestCase;
 }
 
 interface RepositoryFlakyTests {

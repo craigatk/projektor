@@ -3,12 +3,14 @@ import React from "react";
 import { getNodeText, render } from "@testing-library/react";
 import { TestCase, TestFailure } from "../../model/TestRunModel";
 import TestCaseFailurePanel from "../TestCaseFailurePanel";
+import moment from "moment";
 
 describe("TestCaseFailurePanel", () => {
   it("should render failure details link when the test case failed", () => {
     const testCase: TestCase = {
       idx: 1,
       testSuiteIdx: 2,
+      publicId: "12345",
       name: "Test Case",
       packageName: "",
       className: "",
@@ -19,6 +21,7 @@ describe("TestCaseFailurePanel", () => {
       hasSystemOut: false,
       hasSystemErr: false,
       failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
     };
 
     const { queryByTestId } = render(
@@ -35,6 +38,7 @@ describe("TestCaseFailurePanel", () => {
     const testCase: TestCase = {
       idx: 1,
       testSuiteIdx: 2,
+      publicId: "12345",
       name: "Test Case",
       packageName: "",
       className: "",
@@ -45,6 +49,7 @@ describe("TestCaseFailurePanel", () => {
       hasSystemOut: false,
       hasSystemErr: false,
       failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
     };
 
     const { queryByTestId } = render(
@@ -61,6 +66,7 @@ describe("TestCaseFailurePanel", () => {
     const testCase: TestCase = {
       idx: 1,
       testSuiteIdx: 2,
+      publicId: "12345",
       name: "Test Case",
       packageName: "",
       className: "",
@@ -71,6 +77,7 @@ describe("TestCaseFailurePanel", () => {
       hasSystemOut: true,
       hasSystemErr: false,
       failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
     };
 
     const { queryByTestId } = render(
@@ -87,6 +94,7 @@ describe("TestCaseFailurePanel", () => {
     const testCase: TestCase = {
       idx: 1,
       testSuiteIdx: 2,
+      publicId: "12345",
       name: "Test Case",
       packageName: "",
       className: "",
@@ -97,6 +105,7 @@ describe("TestCaseFailurePanel", () => {
       hasSystemOut: false,
       hasSystemErr: true,
       failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
     };
 
     const { queryByTestId } = render(
@@ -113,6 +122,7 @@ describe("TestCaseFailurePanel", () => {
     const testCase: TestCase = {
       idx: 1,
       testSuiteIdx: 2,
+      publicId: "12345",
       name: "Test Case",
       packageName: "",
       className: "",
@@ -123,6 +133,7 @@ describe("TestCaseFailurePanel", () => {
       hasSystemOut: true,
       hasSystemErr: true,
       failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
     };
 
     const { queryByTestId } = render(
@@ -181,6 +192,7 @@ describe("TestCaseFailurePanel", () => {
     return {
       idx: 1,
       testSuiteIdx: 2,
+      publicId: "12345",
       name: "Test Case",
       packageName: "",
       className: "",
@@ -190,6 +202,7 @@ describe("TestCaseFailurePanel", () => {
       skipped: false,
       hasSystemOut: true,
       hasSystemErr: true,
+      createdTimestamp: moment("2020-04-25").toDate(),
       failure,
     };
   }

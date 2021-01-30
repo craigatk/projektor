@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 context("repository flaky tests", () => {
-  it("should display flaky tests on repository home page", () => {
+  it("should display flaky tests on repository flaky test page", () => {
     const repoName = "flaky-org/flaky-repo";
 
     cy.server();
@@ -27,6 +27,20 @@ context("repository flaky tests", () => {
       "70.35%"
     );
     cy.getByTestId("flaky-test-case-failure-count-1").should("contain", "5");
+    cy.getByTestId("flaky-test-case-first-failure-1").should(
+      "contain",
+      "Sep 22nd 2020"
+    );
+    cy.getByTestId(`flaky-test-case-first-failure-1`)
+      .should("have.attr", "href")
+      .and("equal", "/tests/32FBHG6FDL89/suite/1/case/2");
+    cy.getByTestId("flaky-test-case-latest-failure-1").should(
+      "contain",
+      "Sep 30th 2020"
+    );
+    cy.getByTestId(`flaky-test-case-latest-failure-1`)
+      .should("have.attr", "href")
+      .and("equal", "/tests/32FBHG6FDL8S/suite/1/case/3");
 
     cy.getByTestId("flaky-test-case-name-2").should(
       "contain",

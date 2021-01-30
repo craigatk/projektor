@@ -132,7 +132,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
                 listOf()
             )
         )
-        0
+
         val passingPublicIds = (1..8).map { randomPublicId() }
         val passingTestSuiteDataList = listOf(
             TestSuiteData(

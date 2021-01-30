@@ -3,12 +3,14 @@ import React from "react";
 import { render } from "@testing-library/react";
 import { TestCase } from "../../../model/TestRunModel";
 import TestCaseList from "../TestCaseList";
+import moment from "moment";
 
 describe("TestCaseList", () => {
   it("should render duration column first when specified", () => {
     const testCase: TestCase = {
       idx: 1,
       testSuiteIdx: 2,
+      publicId: "12345",
       name: "Test Case",
       packageName: "",
       className: "",
@@ -19,6 +21,7 @@ describe("TestCaseList", () => {
       hasSystemOut: false,
       hasSystemErr: false,
       failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
     };
 
     const { queryAllByRole } = render(
