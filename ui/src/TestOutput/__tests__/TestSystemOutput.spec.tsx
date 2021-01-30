@@ -7,6 +7,8 @@ import { axiosInstance } from "../../service/AxiosService";
 import TestSuiteOutputType from "../../service/TestSuiteOutputType";
 import TestSystemOutput from "../TestSystemOutput";
 import { act } from "react-dom/test-utils";
+import { globalHistory } from "@reach/router";
+import { QueryParamProvider } from "use-query-params";
 
 describe("TestSystemOut", () => {
   let mockAxios;
@@ -37,11 +39,13 @@ describe("TestSystemOut", () => {
 
     await act(async () => {
       const { getByTestId, queryByTestId } = render(
-        <TestSystemOutput
-          publicId={publicId}
-          testSuiteIdx={testSuiteIdx}
-          outputType={outputType}
-        />
+        <QueryParamProvider reachHistory={globalHistory}>
+          <TestSystemOutput
+            publicId={publicId}
+            testSuiteIdx={testSuiteIdx}
+            outputType={outputType}
+          />
+        </QueryParamProvider>
       );
 
       await waitFor(() => getByTestId("code-text"));
@@ -63,11 +67,13 @@ describe("TestSystemOut", () => {
       .reply(404, {});
 
     const { getByTestId, queryByTestId } = render(
-      <TestSystemOutput
-        publicId={publicId}
-        testSuiteIdx={testSuiteIdx}
-        outputType={outputType}
-      />
+      <QueryParamProvider reachHistory={globalHistory}>
+        <TestSystemOutput
+          publicId={publicId}
+          testSuiteIdx={testSuiteIdx}
+          outputType={outputType}
+        />
+      </QueryParamProvider>
     );
 
     await waitFor(() => getByTestId("loading-section-error"));

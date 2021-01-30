@@ -5,6 +5,8 @@ import { render, waitFor, getNodeText } from "@testing-library/react";
 import { TestSuiteOutput } from "../../model/TestRunModel";
 import { axiosInstance } from "../../service/AxiosService";
 import TestSuiteSystemOut from "../TestSuiteSystemOut";
+import { globalHistory } from "@reach/router";
+import { QueryParamProvider } from "use-query-params";
 
 describe("TestSuiteSystemOut", () => {
   let mockAxios;
@@ -33,7 +35,9 @@ describe("TestSuiteSystemOut", () => {
       .reply(200, systemOut);
 
     const { findByTestId, queryByTestId } = render(
-      <TestSuiteSystemOut publicId={publicId} testSuiteIdx={testSuiteIdx} />
+      <QueryParamProvider reachHistory={globalHistory}>
+        <TestSuiteSystemOut publicId={publicId} testSuiteIdx={testSuiteIdx} />
+      </QueryParamProvider>
     );
 
     await findByTestId("code-text");

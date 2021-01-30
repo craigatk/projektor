@@ -2,12 +2,18 @@ import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import { render, getNodeText } from "@testing-library/react";
 import CodeText from "../CodeText";
+import { globalHistory } from "@reach/router";
+import { QueryParamProvider } from "use-query-params";
 
 describe("CodeText", () => {
   it("should split output into lines", async () => {
     const text = "line 1\nline 2";
 
-    const { findByTestId, queryByTestId } = render(<CodeText text={text} />);
+    const { findByTestId, queryByTestId } = render(
+      <QueryParamProvider reachHistory={globalHistory}>
+        <CodeText text={text} />
+      </QueryParamProvider>
+    );
 
     await findByTestId("code-text");
 
@@ -31,7 +37,11 @@ describe("CodeText", () => {
   it("when output is blank should not show any lines", async () => {
     const text = "";
 
-    const { findByTestId, queryByTestId } = render(<CodeText text={text} />);
+    const { findByTestId, queryByTestId } = render(
+      <QueryParamProvider reachHistory={globalHistory}>
+        <CodeText text={text} />
+      </QueryParamProvider>
+    );
 
     await findByTestId("code-text");
 
