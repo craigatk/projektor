@@ -8,6 +8,7 @@ import RepositoryFlakyTestsDetails from "./RepositoryFlakyTestsDetails";
 import { Button, TextField, Tooltip } from "@material-ui/core";
 import PageTitle from "../../PageTitle";
 import { makeStyles } from "@material-ui/styles";
+import { NumberParam, useQueryParam } from "use-query-params";
 
 interface RepositoryFlakyTestsPageProps extends RouteComponentProps {
   orgPart: string;
@@ -43,20 +44,30 @@ const RepositoryFlakyTestsPage = ({
   const [flakyTests, setFlakyTests] = React.useState<RepositoryFlakyTests>(
     null
   );
-  const [maxRuns, setMaxRuns] = React.useState<number>(50);
-  const [flakyThreshold, setFlakyThreshold] = React.useState<number>(5);
+  const [maxRuns, setMaxRuns] = useQueryParam("max", NumberParam);
+  const [flakyThreshold, setFlakyThreshold] = useQueryParam(
+    "threshold",
+    NumberParam
+  );
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
     LoadingState.Loading
   );
 
-  React.useEffect(() => {
-    fetchRepositoryFlakyTests(maxRuns, flakyThreshold, repoName, projectName)
+  const doFetch = () => {
+    fetchRepositoryFlakyTests(
+      maxRuns || 50,
+      flakyThreshold || 5,
+      repoName,
+      projectName
+    )
       .then((response) => {
         setFlakyTests(response.data);
         setLoadingState(LoadingState.Success);
       })
       .catch(() => setLoadingState(LoadingState.Error));
-  }, [setFlakyTests, setLoadingState]);
+  };
+
+  React.useEffect(doFetch, [setFlakyTests, setLoadingState]);
 
   const flakyThresholdOnChange = (e) => {
     const parsedValue = parseInt(e.target.value);
@@ -76,12 +87,7 @@ const RepositoryFlakyTestsPage = ({
 
   const search = () => {
     setLoadingState(LoadingState.Loading);
-    fetchRepositoryFlakyTests(maxRuns, flakyThreshold, repoName, projectName)
-      .then((response) => {
-        setFlakyTests(response.data);
-        setLoadingState(LoadingState.Success);
-      })
-      .catch(() => setLoadingState(LoadingState.Error));
+    doFetch();
   };
 
   return (
@@ -97,7 +103,7 @@ const RepositoryFlakyTestsPage = ({
             label="Flaky test threshold"
             data-testid="flaky-tests-threshold"
             className={classes.textField}
-            defaultValue="5"
+            defaultValue={flakyThreshold || 5}
             variant="outlined"
             size="small"
             onChange={flakyThresholdOnChange}
@@ -112,7 +118,7 @@ const RepositoryFlakyTestsPage = ({
             label="How many tests back"
             data-testid="flaky-tests-max-runs"
             className={classes.textField}
-            defaultValue="50"
+            defaultValue={maxRuns || 50}
             variant="outlined"
             size="small"
             onChange={maxRunsOnChange}

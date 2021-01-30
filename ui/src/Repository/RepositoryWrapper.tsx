@@ -1,5 +1,5 @@
 import * as React from "react";
-import { RouteComponentProps, Router } from "@reach/router";
+import { globalHistory, RouteComponentProps, Router } from "@reach/router";
 import { makeStyles } from "@material-ui/styles";
 import { AppBar, Typography } from "@material-ui/core";
 import RepositorySideMenu from "./RepositorySideMenu";
@@ -8,6 +8,7 @@ import RepositoryTimelinePage from "./Timeline/RepositoryTimelinePage";
 import RepositoryHomePage from "./Home/RepositoryHomePage";
 import RepositoryFlakyTestsPage from "./FlakyTests/RepositoryFlakyTestsPage";
 import RepositoryPerformanceTimelinePage from "./Performance/RepositoryPerformanceTimelinePage";
+import { QueryParamProvider } from "use-query-params";
 
 interface RepositoryWrapperProps extends RouteComponentProps {
   orgPart: string;
@@ -56,42 +57,44 @@ const RepositoryWrapper = ({
         projectName={projectName}
       />
       <main className={classes.content}>
-        <Router>
-          <RepositoryHomePage
-            path="/"
-            orgPart={orgPart}
-            repoPart={repoPart}
-            projectName={projectName}
-          />
-          <RepositoryCoveragePage
-            path="/coverage"
-            orgPart={orgPart}
-            repoPart={repoPart}
-            projectName={projectName}
-            hideIfEmpty={false}
-          />
-          <RepositoryPerformanceTimelinePage
-            path="/performance"
-            orgPart={orgPart}
-            repoPart={repoPart}
-            projectName={projectName}
-            hideIfEmpty={false}
-          />
-          <RepositoryTimelinePage
-            path="/timeline"
-            orgPart={orgPart}
-            repoPart={repoPart}
-            projectName={projectName}
-            hideIfEmpty={false}
-          />
-          <RepositoryFlakyTestsPage
-            path="/tests/flaky"
-            orgPart={orgPart}
-            repoPart={repoPart}
-            projectName={projectName}
-            hideIfEmpty={false}
-          />
-        </Router>
+        <QueryParamProvider reachHistory={globalHistory}>
+          <Router>
+            <RepositoryHomePage
+              path="/"
+              orgPart={orgPart}
+              repoPart={repoPart}
+              projectName={projectName}
+            />
+            <RepositoryCoveragePage
+              path="/coverage"
+              orgPart={orgPart}
+              repoPart={repoPart}
+              projectName={projectName}
+              hideIfEmpty={false}
+            />
+            <RepositoryPerformanceTimelinePage
+              path="/performance"
+              orgPart={orgPart}
+              repoPart={repoPart}
+              projectName={projectName}
+              hideIfEmpty={false}
+            />
+            <RepositoryTimelinePage
+              path="/timeline"
+              orgPart={orgPart}
+              repoPart={repoPart}
+              projectName={projectName}
+              hideIfEmpty={false}
+            />
+            <RepositoryFlakyTestsPage
+              path="/tests/flaky"
+              orgPart={orgPart}
+              repoPart={repoPart}
+              projectName={projectName}
+              hideIfEmpty={false}
+            />
+          </Router>
+        </QueryParamProvider>
       </main>
     </div>
   );

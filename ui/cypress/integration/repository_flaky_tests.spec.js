@@ -150,5 +150,35 @@ context("repository flaky tests", () => {
       "contain",
       "projektor.flaky.FlakyTest2"
     );
+
+    cy.url().should("contain", "/flaky?max=20&threshold=2");
+  });
+
+  it("should support going directly to flaky test page with params set", () => {
+    const repoName = "flaky-org/flaky-repo";
+
+    cy.server();
+
+    cy.route(
+      "GET",
+      `repo/${repoName}/tests/flaky?threshold=4&max_runs=30`,
+      "fixture:repository/flaky_tests_two_tests.json"
+    );
+
+    cy.visit(
+      `http://localhost:1234/repository/${repoName}/tests/flaky?max=30&threshold=4`
+    );
+
+    cy.testIdShouldExist("repository-flaky-tests-table");
+
+    cy.getByTestId("flaky-test-case-name-1").should(
+      "contain",
+      "projektor.flaky.FlakyTest1"
+    );
+
+    cy.getByTestId("flaky-test-case-name-2").should(
+      "contain",
+      "projektor.flaky.FlakyTest2"
+    );
   });
 });
