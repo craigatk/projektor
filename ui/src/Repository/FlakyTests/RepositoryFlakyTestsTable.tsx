@@ -37,7 +37,7 @@ const RepositoryFlakyTestsTable = ({ flakyTests }: FlakyTestsTableProps) => {
             field: "name",
             render: (rowData) => (
               <CleanLink
-                to={`/tests/${rowData.latestPublicId}/suite/${rowData.testSuiteIdx}/case/${rowData.testCaseIdx}`}
+                to={`/tests/${rowData.latestTestCase.publicId}/suite/${rowData.testSuiteIdx}/case/${rowData.testCaseIdx}`}
                 data-testid={`flaky-test-case-name-${rowData.idx}`}
               >
                 {rowData.name}
@@ -73,14 +73,30 @@ const RepositoryFlakyTestsTable = ({ flakyTests }: FlakyTestsTableProps) => {
             headerStyle,
           },
           {
+            title: "First failure",
+            field: "firstCreatedTimestamp",
+            render: (rowData) => (
+              <CleanLink
+                to={`/tests/${rowData.firstTestCase.publicId}/suite/${rowData.firstTestCase.testSuiteIdx}/case/${rowData.firstTestCase.idx}`}
+                data-testid={`flaky-test-case-first-failure-${rowData.idx}`}
+              >
+                {moment(rowData.firstTestCase.createdTimestamp).format(
+                  "MMM Do YYYY, h:mm a"
+                )}
+              </CleanLink>
+            ),
+            cellStyle,
+            headerStyle,
+          },
+          {
             title: "Latest failure",
             field: "latestCreatedTimestamp",
             render: (rowData) => (
               <CleanLink
-                to={`/tests/${rowData.latestPublicId}/suite/${rowData.testSuiteIdx}/case/${rowData.testCaseIdx}`}
+                to={`/tests/${rowData.latestTestCase.publicId}/suite/${rowData.latestTestCase.testSuiteIdx}/case/${rowData.latestTestCase.idx}`}
                 data-testid={`flaky-test-case-latest-failure-${rowData.idx}`}
               >
-                {moment(rowData.latestCreatedTimestamp).format(
+                {moment(rowData.latestTestCase.createdTimestamp).format(
                   "MMM Do YYYY, h:mm a"
                 )}
               </CleanLink>
@@ -96,8 +112,8 @@ const RepositoryFlakyTestsTable = ({ flakyTests }: FlakyTestsTableProps) => {
           testSuiteIdx: flakyTest.testCase.testSuiteIdx,
           failureCount: flakyTest.failureCount,
           failurePercentage: flakyTest.failurePercentage,
-          latestPublicId: flakyTest.latestPublicId,
-          latestCreatedTimestamp: flakyTest.latestCreatedTimestamp,
+          firstTestCase: flakyTest.firstTestCase,
+          latestTestCase: flakyTest.latestTestCase,
         }))}
       />
     </div>

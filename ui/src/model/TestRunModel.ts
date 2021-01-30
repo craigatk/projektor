@@ -76,6 +76,7 @@ interface TestFailure {
 interface TestCase {
   idx: number;
   testSuiteIdx: number;
+  publicId: string;
   name: string;
   packageName: string;
   className: string;
@@ -86,6 +87,7 @@ interface TestCase {
   failure: TestFailure;
   hasSystemOut: boolean;
   hasSystemErr: boolean;
+  createdTimestamp: Date;
 }
 
 interface TestSuite {

@@ -3,12 +3,14 @@ import React from "react";
 import { render } from "@testing-library/react";
 import { TestCase } from "../../model/TestRunModel";
 import TestCaseDetails from "../TestCaseDetails";
+import moment from "moment";
 
 describe("TestCaseDetails", () => {
   it("should render failure tab when the test case failed", () => {
     const testCase: TestCase = {
       idx: 1,
       testSuiteIdx: 2,
+      publicId: "12345",
       name: "Test Case",
       packageName: "",
       className: "",
@@ -19,6 +21,7 @@ describe("TestCaseDetails", () => {
       hasSystemOut: false,
       hasSystemErr: false,
       failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
     };
 
     const { queryByTestId } = render(
@@ -36,6 +39,7 @@ describe("TestCaseDetails", () => {
     const testCase: TestCase = {
       idx: 1,
       testSuiteIdx: 2,
+      publicId: "12345",
       name: "Test Case",
       packageName: "",
       className: "",
@@ -46,6 +50,7 @@ describe("TestCaseDetails", () => {
       hasSystemOut: false,
       hasSystemErr: false,
       failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
     };
 
     const { queryByTestId } = render(
@@ -63,6 +68,7 @@ describe("TestCaseDetails", () => {
     const testCase: TestCase = {
       idx: 1,
       testSuiteIdx: 2,
+      publicId: "12345",
       name: "Test Case",
       packageName: "",
       className: "",
@@ -73,6 +79,7 @@ describe("TestCaseDetails", () => {
       hasSystemOut: true,
       hasSystemErr: false,
       failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
     };
 
     const { queryByTestId } = render(
@@ -87,6 +94,7 @@ describe("TestCaseDetails", () => {
     const testCase: TestCase = {
       idx: 1,
       testSuiteIdx: 2,
+      publicId: "12345",
       name: "Test Case",
       packageName: "",
       className: "",
@@ -97,6 +105,7 @@ describe("TestCaseDetails", () => {
       hasSystemOut: false,
       hasSystemErr: true,
       failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
     };
 
     const { queryByTestId } = render(

@@ -48,8 +48,10 @@ class FlakyTestCalculatorTest {
         expectThat(flakyTests[0]) {
             get { failureCount }.isEqualTo(3)
             get { failurePercentage }.isEqualTo(BigDecimal("50.00"))
-            get { latestPublicId }.isEqualTo(newestTestCase.publicId)
-            get { latestCreatedTimestamp }.isEqualTo(newestTestCase.createdTimestamp)
+            get { firstTestCase.publicId }.isEqualTo(oldestTestCase.publicId)
+            get { firstTestCase.createdTimestamp }.isEqualTo(oldestTestCase.createdTimestamp)
+            get { latestTestCase.publicId }.isEqualTo(newestTestCase.publicId)
+            get { latestTestCase.createdTimestamp }.isEqualTo(newestTestCase.createdTimestamp)
         }
     }
 
@@ -126,11 +128,11 @@ class FlakyTestCalculatorTest {
         expectThat(flakyTests) {
             any {
                 get { testCase }.get { name }.isEqualTo("flaky-1")
-                get { latestPublicId }.isEqualTo("public-id-4")
+                get { latestTestCase.publicId }.isEqualTo("public-id-4")
             }
             any {
                 get { testCase }.get { name }.isEqualTo("soFlaky")
-                get { latestPublicId }.isEqualTo("public-id-3")
+                get { latestTestCase.publicId }.isEqualTo("public-id-3")
             }
         }
     }

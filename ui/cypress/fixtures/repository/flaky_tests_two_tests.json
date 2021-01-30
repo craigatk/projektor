@@ -23,8 +23,18 @@
       },
       "failure_count": 5,
       "failure_percentage": 70.35,
-      "latest_public_id": "32FBHG6FDL8S",
-      "latest_created_timestamp": "2020-09-30T17:27:39.859915"
+      "first_test_case": {
+        "public_id": "32FBHG6FDL89",
+        "created_timestamp": "2020-09-22T12:27:39.859915",
+        "idx": 1,
+        "test_suite_idx": 1
+      },
+      "latest_test_case": {
+        "public_id": "32FBHG6FDL8S",
+        "created_timestamp": "2020-09-30T12:27:39.859915",
+        "idx": 1,
+        "test_suite_idx": 1
+      }
     },
     {
       "test_case": {
@@ -49,8 +59,18 @@
       },
       "failure_count": 3,
       "failure_percentage": 50.15,
-      "latest_public_id": "AIZY8O99FJ54",
-      "latest_created_timestamp": "2020-09-30T17:27:39.783917"
+      "first_test_case": {
+        "public_id": "AIZY8O99FJ56",
+        "created_timestamp": "2020-09-23T12:27:39.783917",
+        "idx": 1,
+        "test_suite_idx": 1
+      },
+      "latest_test_case": {
+        "public_id": "AIZY8O99FJ54",
+        "created_timestamp": "2020-09-30T12:27:39.783917",
+        "idx": 1,
+        "test_suite_idx": 1
+      }
     }
   ]
 }

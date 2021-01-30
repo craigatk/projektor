@@ -11,6 +11,7 @@ class FlakyTestCalculator {
         val flakyTestCaseGroups = testCaseGroups.filter { it.value.size >= flakyFailureThreshold }
 
         val flakyTestCases = flakyTestCaseGroups.map { flakyTestCaseGroup ->
+            val firstTestCase = flakyTestCaseGroup.value.minByOrNull { it.createdTimestamp }!!
             val latestTestCase = flakyTestCaseGroup.value.maxByOrNull { it.createdTimestamp }!!
 
             val failurePercentage = calculatePercentage(
@@ -22,8 +23,8 @@ class FlakyTestCalculator {
                 testCase = flakyTestCaseGroup.value.first(),
                 failureCount = flakyTestCaseGroup.value.size,
                 failurePercentage = failurePercentage,
-                latestPublicId = latestTestCase.publicId,
-                latestCreatedTimestamp = latestTestCase.createdTimestamp
+                firstTestCase = firstTestCase,
+                latestTestCase = latestTestCase
             )
         }
 
