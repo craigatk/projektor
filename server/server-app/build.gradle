@@ -8,7 +8,7 @@ plugins {
 apply from: '../../gradle/kotlin.gradle'
 
 repositories {
-    jcenter()
+    mavenCentral()
     maven { url "https://dl.bintray.com/kotlin/ktor" }
 }
 
