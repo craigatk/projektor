@@ -5,7 +5,7 @@ import kotlinx.coroutines.runBlocking
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
 import org.junit.jupiter.api.Test
-import org.koin.core.inject
+import org.koin.test.inject
 import projektor.DatabaseRepositoryTestCase
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.ResultsXmlLoader

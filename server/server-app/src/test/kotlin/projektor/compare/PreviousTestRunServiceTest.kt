@@ -3,7 +3,7 @@ package projektor.compare
 import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import org.koin.core.inject
+import org.koin.test.inject
 import projektor.DatabaseRepositoryTestCase
 import projektor.incomingresults.randomPublicId
 import projektor.server.example.coverage.JacocoXmlLoader
@@ -18,7 +18,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
 
     @Test
     fun `should exclude test run that is newer than specified test run`() {
-        val previousTestRunService: PreviousTestRunService by inject()
+        val previousTestRunService by inject<PreviousTestRunService>()
 
         val previousPublicId = randomPublicId()
         val previousWithDifferentProjectName = randomPublicId()

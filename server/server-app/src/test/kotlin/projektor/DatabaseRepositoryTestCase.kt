@@ -152,9 +152,12 @@ open class DatabaseRepositoryTestCase : KoinTest {
     }
 
     @AfterEach
-    fun closeDataSource() {
+    fun closeKoin() {
         stopKoin()
+    }
 
+    @AfterEach
+    fun closeDataSource() {
         dataSource.close()
     }
 }

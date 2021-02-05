@@ -15,6 +15,6 @@ class TimeMillisJsonLoggingProvider : AbstractFieldJsonProvider<ILoggingEvent> {
     }
 
     companion object {
-        private const val FIELD_NAME = "timeMillis"
+        const val FIELD_NAME = "timeMillis"
     }
 }

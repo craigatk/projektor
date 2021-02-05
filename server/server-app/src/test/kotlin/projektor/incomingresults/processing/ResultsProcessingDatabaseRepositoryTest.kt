@@ -2,9 +2,8 @@ package projektor.incomingresults.processing
 
 import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.get
+import org.koin.test.inject
 import projektor.DatabaseRepositoryTestCase
 import projektor.database.generated.tables.pojos.ResultsProcessing
 import projektor.incomingresults.randomPublicId
@@ -18,12 +17,7 @@ import java.time.LocalDateTime
 
 @KtorExperimentalAPI
 class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
-    private lateinit var resultsProcessingDatabaseRepository: ResultsProcessingRepository
-
-    @BeforeEach
-    fun createRepository() {
-        resultsProcessingDatabaseRepository = get()
-    }
+    private val resultsProcessingDatabaseRepository by inject<ResultsProcessingRepository>()
 
     @Test
     fun `should create new results processing record`() {

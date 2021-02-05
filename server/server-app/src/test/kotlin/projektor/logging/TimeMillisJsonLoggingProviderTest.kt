@@ -31,7 +31,7 @@ class TimeMillisJsonLoggingProviderTest {
 
         val node: JsonNode = objectMapper.readTree(encoded)
 
-        val timeMillisNode = node.get("timeMillis")
+        val timeMillisNode = node.get(TimeMillisJsonLoggingProvider.FIELD_NAME)
 
         expectThat(timeMillisNode).isNotNull()
         expectThat(timeMillisNode.isNumber).isTrue()
