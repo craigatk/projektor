@@ -1,27 +1,22 @@
 package projektor.incomingresults
 
-import io.ktor.util.*
+import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.runBlocking
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.get
+import org.koin.test.inject
 import projektor.DatabaseRepositoryTestCase
 import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.parser.ResultsXmlLoader
 import projektor.server.api.results.ResultsProcessingStatus
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
 
 @KtorExperimentalAPI
 class TestResultsServiceTest : DatabaseRepositoryTestCase() {
-    private lateinit var testResultsService: TestResultsService
-
-    @BeforeEach
-    fun setUpService() {
-        testResultsService = get()
-    }
+    private val testResultsService by inject<TestResultsService>()
 
     @Test
     fun `when processing succeeds should record processing results`() {
@@ -43,7 +38,7 @@ class TestResultsServiceTest : DatabaseRepositoryTestCase() {
     fun `when processing fails should record processing results with error`() {
         val publicId = randomPublicId()
         val invalidXml = "<testsuites>Mismatched closing tag</testsuite>"
-        val resultsProcessingRepository: ResultsProcessingRepository = get()
+        val resultsProcessingRepository by inject<ResultsProcessingRepository>()
 
         runBlocking { resultsProcessingRepository.createResultsProcessing(publicId) }
 

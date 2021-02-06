@@ -40,7 +40,7 @@ include 'project1', 'project2', 'project3'
         rootBuildFile << """
             buildscript {
                 repositories {
-                    jcenter()
+                    mavenCentral()
                 }
             }
         """.stripIndent()
@@ -58,7 +58,7 @@ include 'project1', 'project2', 'project3'
         buildFile << """
             buildscript {
                 repositories {
-                    jcenter()
+                    mavenCentral()
                 }
             }
 
@@ -68,7 +68,7 @@ include 'project1', 'project2', 'project3'
             }
             
             repositories {
-                jcenter()
+                mavenCentral()
             }
             
             dependencies {

@@ -34,6 +34,8 @@ class SaveGroupedResultsWithCoverage : ApplicationTestCase() {
 
                 val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicId.id)
                 expectThat(coverageRuns).hasSize(1)
+
+                await until { coverageGroupDao.fetchByCodeCoverageRunId(coverageRuns[0].id).size == 1 }
             }
         }
     }

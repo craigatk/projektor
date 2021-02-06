@@ -15,7 +15,7 @@ class KotlinDslSpec extends ProjectSpec {
         buildFile << """
             buildscript {
                 repositories {
-                    jcenter()
+                    mavenCentral()
                 }
             }
 
@@ -25,7 +25,7 @@ class KotlinDslSpec extends ProjectSpec {
             }
             
             repositories {
-                jcenter()
+                mavenCentral()
             }
             
             dependencies {

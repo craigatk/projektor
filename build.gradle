@@ -1,6 +1,5 @@
 buildscript {
     repositories {
-        jcenter()
         maven { url "https://plugins.gradle.org/m2/" }
         mavenCentral()
     }
@@ -24,13 +23,13 @@ projektor {
 allprojects {
     buildscript {
         repositories {
-            jcenter()
             maven { url "https://plugins.gradle.org/m2/" }
             mavenCentral()
         }
     }
 
     repositories {
+        mavenCentral()
         jcenter()
     }
 

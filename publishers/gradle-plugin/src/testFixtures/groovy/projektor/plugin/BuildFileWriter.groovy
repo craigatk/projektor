@@ -23,7 +23,7 @@ class BuildFileWriter {
         buildFile << """
             buildscript {
                 repositories {
-                    jcenter()
+                    mavenCentral()
                 }
             }
 
@@ -34,7 +34,7 @@ class BuildFileWriter {
             }
             
             repositories {
-                jcenter()
+                mavenCentral()
             }
             
             dependencies {
@@ -52,7 +52,7 @@ class BuildFileWriter {
         rootBuildFile << """
             buildscript {
                 repositories {
-                    jcenter()
+                    mavenCentral()
                 }
             }
 

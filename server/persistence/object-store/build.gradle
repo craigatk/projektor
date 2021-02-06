@@ -1,7 +1,7 @@
 apply from: '../../../gradle/kotlin.gradle'
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
