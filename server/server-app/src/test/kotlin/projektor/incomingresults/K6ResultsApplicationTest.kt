@@ -44,7 +44,8 @@ class K6ResultsApplicationTest : ApplicationTestCase() {
                 expectThat(testSuite).isNotNull().and {
                     get { passingCount }.isEqualTo(1)
                     get { failureCount }.isEqualTo(1)
-                    get { packageName }.isNotNull().and { isEqualTo("k6/test/example.k6") }
+                    get { packageName }.isNotNull().isEqualTo("k6/test/example.k6.js")
+                    get { className }.isEqualTo("example")
                 }
 
                 val testCase1 = runBlocking { testCaseService.fetchTestCase(publicId, 1, 1) }

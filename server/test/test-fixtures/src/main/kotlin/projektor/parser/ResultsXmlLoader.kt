@@ -44,6 +44,8 @@ class ResultsXmlLoader {
 
     fun jestUi() = loadTextFromFile("jest/ui-junit.xml")
 
+    fun jestUiFilePath() = loadTextFromFile("jest/ui-file-path-junit.xml")
+
     fun pytestFailing() = loadTextFromFile("pytest/pytest-failing.xml")
 
     fun pytestPassing() = loadTextFromFile("pytest/pytest-passing.xml")

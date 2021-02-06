@@ -15,6 +15,7 @@
     "cy:run": "cypress run",
     "cy:test": "yarn clean-results && start-server-and-test start http://localhost:1234 cy:run",
     "cy:test:projektor:ci": "yarn cy:test || yarn projektor-publish --configFile=projektor.cypress.json",
+    "projektor:cypress:no-attachments": "projektor-publish --configFile=projektor.cypress.no.attachments.json",
     "projektor:cypress": "env-cmd -f ~/.env projektor-publish --configFile=projektor.cypress.json",
     "projektor:jest": "env-cmd -f ~/.env projektor-publish --configFile=projektor.jest.json",
     "clean-results": "rimraf test-results/*.xml"

@@ -1,0 +1,7 @@
+{
+  "serverUrl": "https://projektorlive.herokuapp.com",
+  "results": [
+    "test-results/*.xml"
+  ],
+  "projectName": "ui-cypress"
+}

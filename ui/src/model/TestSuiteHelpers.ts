@@ -9,13 +9,15 @@ const testSuiteHasGroupName = (testSuite: TestSuite): boolean => {
 };
 
 const fullTestSuiteName = (testSuite: TestSuite): string => {
-  let fullName = testSuite.className;
-
   if (testSuite.packageName) {
-    fullName = testSuite.packageName + "." + fullName;
+    if (testSuite.packageName.includes(testSuite.className)) {
+      return testSuite.packageName;
+    } else {
+      return testSuite.packageName + "." + testSuite.className;
+    }
+  } else {
+    return testSuite.className;
   }
-
-  return fullName;
 };
 
 export { anyTestSuiteHasGroupName, testSuiteHasGroupName, fullTestSuiteName };

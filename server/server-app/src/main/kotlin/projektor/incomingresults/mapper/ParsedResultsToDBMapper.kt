@@ -74,16 +74,30 @@ fun Failure.toDB(testCaseId: Long): TestFailureDB {
 }
 
 fun parsePackageAndClassName(classNameWithPackage: String?): Pair<String?, String?> =
-    if (classNameWithPackage != null && classNameWithPackage.contains('.')) {
-        val packageEndIndex = classNameWithPackage.lastIndexOf('.')
+    if (classNameWithPackage != null) {
+        val cleanedClassNameWithPackage = classNameWithPackage.replace("\\", "/")
 
-        // A leading forward slash messes up the URL
-        val packageStartIndex = if (classNameWithPackage.startsWith("/")) 1 else 0
+        if (cleanedClassNameWithPackage.contains("/") && cleanedClassNameWithPackage.contains(".")) {
+            val lastSlashIndex = cleanedClassNameWithPackage.lastIndexOf("/")
+            val fileNameEndIndex = cleanedClassNameWithPackage.indexOf(".", lastSlashIndex)
+            val fileName = cleanedClassNameWithPackage.substring(lastSlashIndex + 1, fileNameEndIndex)
 
-        val packageName = classNameWithPackage.substring(packageStartIndex, packageEndIndex)
-        val className = classNameWithPackage.substring(packageEndIndex + 1)
+            // A leading forward slash messes up the URL
+            val packageStartIndex = if (cleanedClassNameWithPackage.startsWith("/")) 1 else 0
 
-        Pair(packageName, className)
+            val packageName = cleanedClassNameWithPackage.substring(packageStartIndex)
+
+            Pair(packageName, fileName)
+        } else if (cleanedClassNameWithPackage.contains('.')) {
+            val packageEndIndex = cleanedClassNameWithPackage.lastIndexOf('.')
+
+            val packageName = cleanedClassNameWithPackage.substring(0, packageEndIndex)
+            val className = cleanedClassNameWithPackage.substring(packageEndIndex + 1)
+
+            Pair(packageName, className)
+        } else {
+            Pair(null, classNameWithPackage)
+        }
     } else {
         Pair(null, classNameWithPackage)
     }
