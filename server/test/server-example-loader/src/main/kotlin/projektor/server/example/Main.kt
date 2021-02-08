@@ -16,6 +16,7 @@ fun main() {
     loadCoverage85WithGit()
     loadResultsWithGitButWithoutCoverage()
     loadJestWithCoverage()
+    loadJestWithFilePaths()
     repositoryCoverageTimeline()
     repositoryFlakyTests()
     loadMultipleTestRunsFromSameRepoForTimeline()

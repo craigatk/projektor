@@ -41,7 +41,7 @@ const buildHeaderIntermediateLinks = (
   if (testCase.packageName != null && testCase.packageName !== "") {
     headerIntermediateLinks.push(
       <CleanLink
-        to={`/tests/${publicId}/suites/package/${testCase.packageName}`}
+        to={`/tests/${publicId}/suites/package?name=${testCase.packageName}`}
         data-testid={`breadcrumb-link-package-name`}
         key="package-name-link"
       >

@@ -92,9 +92,8 @@ const TestRunMenuWrapper = ({
                 testSuiteIdx={0}
               />
               <TestSuitePackagePage
-                path="/suites/package/:packageName"
+                path="/suites/package"
                 publicId={publicId}
-                packageName="default"
               />
               <TestCasePage
                 path="/suite/:testSuiteIdx/case/:testCaseIdx/*"

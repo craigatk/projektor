@@ -5,16 +5,14 @@ import LoadingState from "../Loading/LoadingState";
 import LoadingSection from "../Loading/LoadingSection";
 import { fetchTestSuitesInPackage } from "../service/TestRunService";
 import TestSuitePackageDetails from "./TestSuitePackageDetails";
+import { useQueryParam, StringParam } from "use-query-params";
 
 interface TestSuitePackagePageProps extends RouteComponentProps {
   publicId: string;
-  packageName: string;
 }
 
-const TestSuitePackagePage = ({
-  publicId,
-  packageName,
-}: TestSuitePackagePageProps) => {
+const TestSuitePackagePage = ({ publicId }: TestSuitePackagePageProps) => {
+  const [packageName, setPackageName] = useQueryParam("name", StringParam);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
     LoadingState.Loading
   );

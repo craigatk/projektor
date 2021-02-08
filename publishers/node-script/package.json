@@ -46,6 +46,8 @@
   },
   "jest-junit": {
     "outputDirectory": "testResults",
-    "includeConsoleOutput": "true"
+    "includeConsoleOutput": "true",
+    "classNameTemplate": "{classname}",
+    "usePathForSuiteName": "true"
   }
 }

@@ -92,3 +92,11 @@ jobs:
         run: |
           cd ui
           yarn cy:test:projektor:ci
+
+      - name: Projektor publish
+        if: success()
+        env:
+          PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
+        run: |
+          cd ui
+          yarn projektor:cypress:no-attachments

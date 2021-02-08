@@ -294,6 +294,12 @@ fun loadJestWithCoverage() {
     println("View run with Jest results and coverage at $uiBaseUrl${resultsResponse.uri}")
 }
 
+fun loadJestWithFilePaths() {
+    val resultsResponse = sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXml = ResultsXmlLoader().jestUiFilePath()))
+
+    println("View run with Jest results with file paths at $uiBaseUrl${resultsResponse.uri}")
+}
+
 fun loadPerformanceK6GetRun() {
     val k6Results = PerformanceResultsLoader().k6GetRun()
     val groupedResults = GroupedResultsXmlLoader().wrapPerformanceResultsInGroup("perf.json", k6Results, null)
