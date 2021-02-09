@@ -25,6 +25,10 @@ public class TestCase implements Serializable {
     private BigDecimal duration;
     private Boolean    passed;
     private Boolean    skipped;
+    private String     systemOut;
+    private String     systemErr;
+    private Boolean    hasSystemOut;
+    private Boolean    hasSystemErr;
 
     public TestCase() {}
 
@@ -38,6 +42,10 @@ public class TestCase implements Serializable {
         this.duration = value.duration;
         this.passed = value.passed;
         this.skipped = value.skipped;
+        this.systemOut = value.systemOut;
+        this.systemErr = value.systemErr;
+        this.hasSystemOut = value.hasSystemOut;
+        this.hasSystemErr = value.hasSystemErr;
     }
 
     public TestCase(
@@ -49,7 +57,11 @@ public class TestCase implements Serializable {
         String     className,
         BigDecimal duration,
         Boolean    passed,
-        Boolean    skipped
+        Boolean    skipped,
+        String     systemOut,
+        String     systemErr,
+        Boolean    hasSystemOut,
+        Boolean    hasSystemErr
     ) {
         this.id = id;
         this.testSuiteId = testSuiteId;
@@ -60,6 +72,10 @@ public class TestCase implements Serializable {
         this.duration = duration;
         this.passed = passed;
         this.skipped = skipped;
+        this.systemOut = systemOut;
+        this.systemErr = systemErr;
+        this.hasSystemOut = hasSystemOut;
+        this.hasSystemErr = hasSystemErr;
     }
 
     /**
@@ -197,6 +213,66 @@ public class TestCase implements Serializable {
         return this;
     }
 
+    /**
+     * Getter for <code>public.test_case.system_out</code>.
+     */
+    public String getSystemOut() {
+        return this.systemOut;
+    }
+
+    /**
+     * Setter for <code>public.test_case.system_out</code>.
+     */
+    public TestCase setSystemOut(String systemOut) {
+        this.systemOut = systemOut;
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.test_case.system_err</code>.
+     */
+    public String getSystemErr() {
+        return this.systemErr;
+    }
+
+    /**
+     * Setter for <code>public.test_case.system_err</code>.
+     */
+    public TestCase setSystemErr(String systemErr) {
+        this.systemErr = systemErr;
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.test_case.has_system_out</code>.
+     */
+    public Boolean getHasSystemOut() {
+        return this.hasSystemOut;
+    }
+
+    /**
+     * Setter for <code>public.test_case.has_system_out</code>.
+     */
+    public TestCase setHasSystemOut(Boolean hasSystemOut) {
+        this.hasSystemOut = hasSystemOut;
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.test_case.has_system_err</code>.
+     */
+    public Boolean getHasSystemErr() {
+        return this.hasSystemErr;
+    }
+
+    /**
+     * Setter for <code>public.test_case.has_system_err</code>.
+     */
+    public TestCase setHasSystemErr(Boolean hasSystemErr) {
+        this.hasSystemErr = hasSystemErr;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -260,6 +336,30 @@ public class TestCase implements Serializable {
         }
         else if (!skipped.equals(other.skipped))
             return false;
+        if (systemOut == null) {
+            if (other.systemOut != null)
+                return false;
+        }
+        else if (!systemOut.equals(other.systemOut))
+            return false;
+        if (systemErr == null) {
+            if (other.systemErr != null)
+                return false;
+        }
+        else if (!systemErr.equals(other.systemErr))
+            return false;
+        if (hasSystemOut == null) {
+            if (other.hasSystemOut != null)
+                return false;
+        }
+        else if (!hasSystemOut.equals(other.hasSystemOut))
+            return false;
+        if (hasSystemErr == null) {
+            if (other.hasSystemErr != null)
+                return false;
+        }
+        else if (!hasSystemErr.equals(other.hasSystemErr))
+            return false;
         return true;
     }
 
@@ -276,6 +376,10 @@ public class TestCase implements Serializable {
         result = prime * result + ((this.duration == null) ? 0 : this.duration.hashCode());
         result = prime * result + ((this.passed == null) ? 0 : this.passed.hashCode());
         result = prime * result + ((this.skipped == null) ? 0 : this.skipped.hashCode());
+        result = prime * result + ((this.systemOut == null) ? 0 : this.systemOut.hashCode());
+        result = prime * result + ((this.systemErr == null) ? 0 : this.systemErr.hashCode());
+        result = prime * result + ((this.hasSystemOut == null) ? 0 : this.hasSystemOut.hashCode());
+        result = prime * result + ((this.hasSystemErr == null) ? 0 : this.hasSystemErr.hashCode());
         return result;
     }
 
@@ -292,6 +396,10 @@ public class TestCase implements Serializable {
         sb.append(", ").append(duration);
         sb.append(", ").append(passed);
         sb.append(", ").append(skipped);
+        sb.append(", ").append(systemOut);
+        sb.append(", ").append(systemErr);
+        sb.append(", ").append(hasSystemOut);
+        sb.append(", ").append(hasSystemErr);
 
         sb.append(")");
         return sb.toString();

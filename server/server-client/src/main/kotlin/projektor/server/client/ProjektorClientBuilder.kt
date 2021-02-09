@@ -1,5 +1,6 @@
 package projektor.server.client
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -11,6 +12,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory
 object ProjektorClientBuilder {
     private val objectMapper = ObjectMapper()
         .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .registerKotlinModule()
         .registerModule(JavaTimeModule())
 

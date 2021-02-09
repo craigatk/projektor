@@ -4,7 +4,7 @@ import projektor.plugin.SpecFileConfig
 import projektor.plugin.SpecWriter
 import projektor.server.api.TestRun
 import projektor.server.api.TestSuite
-import projektor.server.api.TestSuiteOutput
+import projektor.server.api.TestOutput
 import retrofit2.Response
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
@@ -58,10 +58,10 @@ class MultiProjectResultsFunctionalSpec extends MultiProjectFunctionalSpecificat
         failingSpecWithOutputTestSuite.hasSystemOut == true
 
         and:
-        Response<TestSuiteOutput> failingSpecOutputResponse = projektorTestRunApi.testSuiteSystemOut(testId, failingSpecWithOutputTestSuite.idx).execute()
+        Response<TestOutput> failingSpecOutputResponse = projektorTestRunApi.testSuiteSystemOut(testId, failingSpecWithOutputTestSuite.idx).execute()
         failingSpecOutputResponse.successful
 
-        TestSuiteOutput failingSpecOutput = failingSpecOutputResponse.body()
+        TestOutput failingSpecOutput = failingSpecOutputResponse.body()
         List<String> outputLines = failingSpecOutput.value.readLines()
         outputLines.size() == 100
         outputLines.contains("Output line 1")

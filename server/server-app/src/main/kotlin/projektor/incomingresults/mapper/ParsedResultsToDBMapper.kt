@@ -59,6 +59,10 @@ fun TestCase.toDB(testSuiteId: Long, testCaseIdx: Int): TestCaseDB {
     testCaseDB.duration = time
     testCaseDB.passed = failure == null
     testCaseDB.skipped = skipped != null
+    testCaseDB.systemErr = systemErr
+    testCaseDB.systemOut = systemOut
+    testCaseDB.hasSystemErr = systemErr != null
+    testCaseDB.hasSystemOut = systemOut != null
 
     return testCaseDB
 }

@@ -20,6 +20,10 @@ describe("TestCaseDetails", () => {
       skipped: false,
       hasSystemOut: false,
       hasSystemErr: false,
+      hasSystemOutTestCase: false,
+      hasSystemErrTestCase: false,
+      hasSystemOutTestSuite: false,
+      hasSystemErrTestSuite: false,
       failure: null,
       createdTimestamp: moment("2020-04-25").toDate(),
     };
@@ -49,6 +53,10 @@ describe("TestCaseDetails", () => {
       skipped: false,
       hasSystemOut: false,
       hasSystemErr: false,
+      hasSystemOutTestCase: false,
+      hasSystemErrTestCase: false,
+      hasSystemOutTestSuite: false,
+      hasSystemErrTestSuite: false,
       failure: null,
       createdTimestamp: moment("2020-04-25").toDate(),
     };
@@ -78,6 +86,10 @@ describe("TestCaseDetails", () => {
       skipped: false,
       hasSystemOut: true,
       hasSystemErr: false,
+      hasSystemOutTestCase: false,
+      hasSystemErrTestCase: false,
+      hasSystemOutTestSuite: true,
+      hasSystemErrTestSuite: false,
       failure: null,
       createdTimestamp: moment("2020-04-25").toDate(),
     };
@@ -104,6 +116,10 @@ describe("TestCaseDetails", () => {
       skipped: false,
       hasSystemOut: false,
       hasSystemErr: true,
+      hasSystemOutTestCase: false,
+      hasSystemErrTestCase: false,
+      hasSystemOutTestSuite: false,
+      hasSystemErrTestSuite: true,
       failure: null,
       createdTimestamp: moment("2020-04-25").toDate(),
     };

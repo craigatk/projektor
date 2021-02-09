@@ -87,6 +87,10 @@ interface TestCase {
   failure: TestFailure;
   hasSystemOut: boolean;
   hasSystemErr: boolean;
+  hasSystemOutTestCase: boolean;
+  hasSystemErrTestCase: boolean;
+  hasSystemOutTestSuite: boolean;
+  hasSystemErrTestSuite: boolean;
   createdTimestamp: Date;
 }
 
@@ -107,7 +111,7 @@ interface TestSuite {
   groupLabel?: string;
 }
 
-interface TestSuiteOutput {
+interface TestOutput {
   value: string;
 }
 
@@ -173,7 +177,7 @@ export {
   TestRunSummary,
   TestRun,
   TestSuite,
-  TestSuiteOutput,
+  TestOutput,
   TestCase,
   TestFailure,
   TestRunGitMetadata,

@@ -31,6 +31,9 @@ class ResultsXmlLoader {
     fun invalid() = loadTextFromFile("TEST-projektor.example.spock.PassingSpec.xml")
         .replace("<testsuite", "testsuite")
 
+    fun gradleSingleTestCaseSystemOutFail() = loadTextFromFile("gradle-single-test-case-system-out-fail.xml")
+    fun gradleSingleTestCaseSystemOutPass() = loadTextFromFile("gradle-single-test-case-system-out-pass.xml")
+
     fun cypressResults(): List<String> {
         val cypressResourceList = ClassGraph()
             .whitelistPaths("cypress")

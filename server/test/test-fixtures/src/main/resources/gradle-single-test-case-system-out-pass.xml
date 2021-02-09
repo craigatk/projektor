@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="projektor.incomingresults.SaveGroupedResultsCompressedApplicationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-02-09T14:57:04" hostname="DESKTOP-F2BATC0" time="4.543">
+  <properties/>
+  <testcase name="should save compressed grouped test results()" classname="projektor.incomingresults.SaveGroupedResultsCompressedApplicationTest" time="4.543">
+    <system-out><![CDATA[08:57:04,347 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback-test.xml] at [file:/C:/Users/atkcr/projects/projektor/server/server-app/build/resources/test/logback-test.xml]
+08:57:04,465 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+08:57:04,466 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+08:57:04,482 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
+08:57:04,493 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+08:57:04,541 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [projektor.TestLogAppender]
+08:57:04,542 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [test-appender]
+08:57:04,543 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [org.jooq.tools.LoggerListener] to INFO
+08:57:04,545 |-ERROR in ch.qos.logback.core.joran.spi.Interpreter@11:36 - no applicable action for [AppenderRef], current ElementPath  is [[configuration][Logger][AppenderRef]]
+08:57:04,545 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to INFO
+08:57:04,545 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to Logger[ROOT]
+08:57:04,546 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [test-appender] to Logger[ROOT]
+08:57:04,546 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+08:57:04,547 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@2bd9d246 - Registering current configuration as safe fallback point
+
+2021-02-09 08:57:04.639 [Test worker] INFO  ktor.test - No ktor.deployment.watch patterns specified, automatic reload is not active
+2021-02-09 08:57:04.670 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2021-02-09 08:57:04.897 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2021-02-09 08:57:04.966 [Test worker] INFO  o.f.c.i.license.VersionPrinter - Flyway Community Edition 6.0.0 by Boxfuse
+2021-02-09 08:57:05.030 [Test worker] INFO  o.f.c.i.database.DatabaseFactory - Database: jdbc:postgresql://localhost:5433/projektordb (PostgreSQL 11.2)
+2021-02-09 08:57:05.108 [Test worker] INFO  o.f.core.internal.command.DbValidate - Successfully validated 30 migrations (execution time 00:00.046s)
+2021-02-09 08:57:05.123 [Test worker] INFO  o.f.c.i.s.JdbcTableSchemaHistory - Creating Schema History table "public"."flyway_schema_history" ...
+2021-02-09 08:57:05.169 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "public": << Empty Schema >>
+2021-02-09 08:57:05.181 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 1 - InitialTables
+2021-02-09 08:57:05.259 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 2 - AddTestCaseDurationIndex
+2021-02-09 08:57:05.276 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 3 - AddTestSuiteHasOutputColumns
+2021-02-09 08:57:05.293 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 4 - AddTestRunAverageDuration
+2021-02-09 08:57:05.311 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 5 - DropTestSuiteDurationNotNull
+2021-02-09 08:57:05.331 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 6 - AddResultsProcessingTable
+2021-02-09 08:57:05.350 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 7 - AddCreatedTimestamps
+2021-02-09 08:57:05.364 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 8 - ForeignKeyTypes
+2021-02-09 08:57:05.380 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 9 - AddTestSuiteGroup
+2021-02-09 08:57:05.398 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 10 - AddTestRunAttachment
+2021-02-09 08:57:05.416 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 11 - AttachmentTiedToPublicId
+2021-02-09 08:57:05.436 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 12 - AddTestRunAttributesTable
+2021-02-09 08:57:05.454 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 13 - TestRunCreatedTimestampNotNull
+2021-02-09 08:57:05.473 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 14 - AddResultsProcessingFailureTable
+2021-02-09 08:57:05.495 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 15 - ForeignKeyIndexes
+2021-02-09 08:57:05.527 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 16 - Shedlock
+2021-02-09 08:57:05.545 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 17 - InitialCodeCoverage
+2021-02-09 08:57:05.583 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 18 - GitMetadata
+2021-02-09 08:57:05.610 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 19 - GitOrg
+2021-02-09 08:57:05.632 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 20 - AddProjectName
+2021-02-09 08:57:05.650 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 21 - AddWallClockDuration
+2021-02-09 08:57:05.664 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 22 - AddResultsProcessingFailureTimestamp
+2021-02-09 08:57:05.688 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 23 - AddResultsMetadata
+2021-02-09 08:57:05.712 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 24 - AddProcessingFailureTable
+2021-02-09 08:57:05.735 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 25 - TestCaseClassNameNullable
+2021-02-09 08:57:05.749 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 26 - AddFileCoverageTable
+2021-02-09 08:57:05.771 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 27 - AddPerformanceResultsTable
+2021-02-09 08:57:05.793 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 28 - AddCoverageBaseDirectory
+2021-02-09 08:57:05.806 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 29 - AddCoverageFilePath
+2021-02-09 08:57:05.818 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version 30 - AddTestCaseSystemOutErr
+2021-02-09 08:57:05.829 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Successfully applied 30 migrations to schema "public" (execution time 00:00.671s)
+2021-02-09 08:57:07.661 [DefaultDispatcher-worker-1 @request#2] INFO  org.jooq.Constants - 
+                                      
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@  @@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@  @@  @@    @@@@@@@@@@
+@@@@@@@@@@  @@@@  @@  @@    @@@@@@@@@@
+@@@@@@@@@@        @@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@        @@        @@@@@@@@@@
+@@@@@@@@@@    @@  @@  @@@@  @@@@@@@@@@
+@@@@@@@@@@    @@  @@  @@@@  @@@@@@@@@@
+@@@@@@@@@@        @@  @  @  @@@@@@@@@@
+@@@@@@@@@@        @@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  Thank you for using jOOQ 3.14.0
+                                      
+2021-02-09 08:57:07.914 [DefaultDispatcher-worker-3 @coroutine#4] INFO  p.testrun.TestRunDatabaseRepository - Starting inserting test run Z3KBZUJCAOWU
+2021-02-09 08:57:07.962 [DefaultDispatcher-worker-3 @coroutine#4] INFO  org.jooq.impl.AbstractTable - Multiple identities      : There are multiple identity fields in table "public"."test_suite", which is not supported by jOOQ
+2021-02-09 08:57:07.977 [DefaultDispatcher-worker-3 @coroutine#4] INFO  org.jooq.impl.AbstractTable - Multiple identities      : There are multiple identity fields in table "public"."test_case", which is not supported by jOOQ
+2021-02-09 08:57:08.014 [DefaultDispatcher-worker-3 @coroutine#4] INFO  p.testrun.TestRunDatabaseRepository - Finished inserting test run Z3KBZUJCAOWU
+2021-02-09 08:57:08.160 [DefaultDispatcher-worker-1 @request#2] INFO  ktor.test - 200 OK: POST - /groupedResults
+2021-02-09 08:57:08.687 [Test worker] INFO  ktor.test - Application stopping: io.ktor.application.Application@1989494b
+2021-02-09 08:57:08.689 [Test worker] INFO  ktor.test - Application stopped: io.ktor.application.Application@1989494b
+2021-02-09 08:57:08.692 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2021-02-09 08:57:08.700 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+]]></system-out>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

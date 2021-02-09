@@ -8,8 +8,8 @@ import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables
 import projektor.database.generated.tables.records.TestSuiteRecord
 import projektor.server.api.PublicId
+import projektor.server.api.TestOutput
 import projektor.server.api.TestSuite
-import projektor.server.api.TestSuiteOutput
 import projektor.util.addPrefixToFields
 
 class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuiteRepository {
@@ -66,10 +66,10 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
             testSuites
         }
 
-    override suspend fun fetchTestSuiteSystemErr(testRunPublicId: PublicId, testSuiteIdx: Int): TestSuiteOutput =
+    override suspend fun fetchTestSuiteSystemErr(testRunPublicId: PublicId, testSuiteIdx: Int): TestOutput =
         fetchTestSuiteOutputField(testRunPublicId, testSuiteIdx, Tables.TEST_SUITE.SYSTEM_ERR)
 
-    override suspend fun fetchTestSuiteSystemOut(testRunPublicId: PublicId, testSuiteIdx: Int): TestSuiteOutput =
+    override suspend fun fetchTestSuiteSystemOut(testRunPublicId: PublicId, testSuiteIdx: Int): TestOutput =
         fetchTestSuiteOutputField(testRunPublicId, testSuiteIdx, Tables.TEST_SUITE.SYSTEM_OUT)
 
     private suspend fun fetchTestSuiteOutputField(testRunPublicId: PublicId, testSuiteIdx: Int, field: TableField<TestSuiteRecord, String>) =
@@ -81,6 +81,6 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
                 .where(Tables.TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id).and(Tables.TEST_SUITE.IDX.eq(testSuiteIdx)))
                 .fetchOne(field)
 
-            TestSuiteOutput(outputValue)
+            TestOutput(outputValue)
         }
 }

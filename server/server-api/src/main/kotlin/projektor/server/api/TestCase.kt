@@ -12,12 +12,20 @@ data class TestCase(
     val duration: BigDecimal?,
     val passed: Boolean,
     val skipped: Boolean,
-    val hasSystemOut: Boolean,
-    val hasSystemErr: Boolean,
+    val hasSystemOutTestCase: Boolean,
+    val hasSystemErrTestCase: Boolean,
+    val hasSystemOutTestSuite: Boolean,
+    val hasSystemErrTestSuite: Boolean,
     val publicId: String,
     val createdTimestamp: LocalDateTime,
     val failure: TestFailure?
 ) {
     val fullName: String
         get() = """${packageName?.let { "$it."} ?: ""}$className.$name"""
+
+    val hasSystemOut: Boolean
+        get() = hasSystemOutTestCase || hasSystemOutTestSuite
+
+    val hasSystemErr: Boolean
+        get() = hasSystemErrTestCase || hasSystemErrTestSuite
 }
