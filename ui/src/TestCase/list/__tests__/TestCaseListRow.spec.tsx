@@ -20,6 +20,10 @@ describe("TestCaseListRow", () => {
       skipped: false,
       hasSystemOut: false,
       hasSystemErr: false,
+      hasSystemOutTestCase: false,
+      hasSystemErrTestCase: false,
+      hasSystemOutTestSuite: false,
+      hasSystemErrTestSuite: false,
       createdTimestamp: moment("2020-04-25").toDate(),
       failure: null,
     };

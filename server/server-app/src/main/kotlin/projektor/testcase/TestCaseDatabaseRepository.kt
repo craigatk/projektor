@@ -5,10 +5,13 @@ import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.SelectOnConditionStep
+import org.jooq.TableField
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables.*
+import projektor.database.generated.tables.records.TestCaseRecord
 import projektor.server.api.PublicId
 import projektor.server.api.TestCase
+import projektor.server.api.TestOutput
 import projektor.util.addPrefixToFields
 import kotlin.streams.toList
 
@@ -66,8 +69,10 @@ class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseR
             dslContext
                 .select(TEST_CASE.fields().toList())
                 .select(TEST_SUITE.IDX.`as`("test_suite_idx"))
-                .select(TEST_SUITE.HAS_SYSTEM_OUT.`as`("has_system_out"))
-                .select(TEST_SUITE.HAS_SYSTEM_ERR.`as`("has_system_err"))
+                .select(TEST_CASE.HAS_SYSTEM_ERR.`as`("has_system_err_test_case"))
+                .select(TEST_CASE.HAS_SYSTEM_OUT.`as`("has_system_out_test_case"))
+                .select(TEST_SUITE.HAS_SYSTEM_ERR.`as`("has_system_err_test_suite"))
+                .select(TEST_SUITE.HAS_SYSTEM_OUT.`as`("has_system_out_test_suite"))
                 .select(TEST_SUITE.PACKAGE_NAME.`as`("package_name"))
                 .select(TEST_RUN.PUBLIC_ID.`as`("public_id"))
                 .select(TEST_RUN.CREATED_TIMESTAMP.`as`("created_timestamp"))
@@ -77,4 +82,27 @@ class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseR
                 .innerJoin(TEST_RUN).on(TEST_SUITE.TEST_RUN_ID.eq(TEST_RUN.ID))
                 .leftOuterJoin(TEST_FAILURE).on(TEST_FAILURE.TEST_CASE_ID.eq(TEST_CASE.ID))
     }
+
+    override suspend fun fetchTestCaseSystemErr(publicId: PublicId, testSuiteIdx: Int, testCaseIdx: Int): TestOutput =
+        fetchTestCaseOutputField(publicId, testSuiteIdx, testCaseIdx, TEST_CASE.SYSTEM_ERR)
+
+    override suspend fun fetchTestCaseSystemOut(publicId: PublicId, testSuiteIdx: Int, testCaseIdx: Int): TestOutput =
+        fetchTestCaseOutputField(publicId, testSuiteIdx, testCaseIdx, TEST_CASE.SYSTEM_OUT)
+
+    private suspend fun fetchTestCaseOutputField(testRunPublicId: PublicId, testSuiteIdx: Int, testCaseIdx: Int, field: TableField<TestCaseRecord, String>) =
+        withContext(Dispatchers.IO) {
+            val outputValue = dslContext
+                .select(field)
+                .from(TEST_CASE)
+                .innerJoin(TEST_SUITE).on(TEST_CASE.TEST_SUITE_ID.eq(TEST_SUITE.ID))
+                .innerJoin(TEST_RUN).on(TEST_SUITE.TEST_RUN_ID.eq(TEST_RUN.ID))
+                .where(
+                    TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
+                        .and(TEST_SUITE.IDX.eq(testSuiteIdx))
+                        .and(TEST_CASE.IDX.eq(testCaseIdx))
+                )
+                .fetchOne(field)
+
+            TestOutput(outputValue)
+        }
 }

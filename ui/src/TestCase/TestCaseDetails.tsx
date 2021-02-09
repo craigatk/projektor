@@ -17,6 +17,8 @@ import TestSuiteSystemErr from "../TestOutput/TestSuiteSystemErr";
 import { getTabCurrentValue } from "../Tabs/TabValue";
 import TestCaseSummary from "./TestCaseSummary";
 import CleanLink from "../Link/CleanLink";
+import TestCaseSystemOut from "../TestOutput/TestCaseSystemOut";
+import TestCaseSystemErr from "../TestOutput/TestCaseSystemErr";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -137,18 +139,38 @@ const TestCaseDetails = ({ publicId, testCase }: TestCaseDetailsProps) => {
               path="/failure"
               failure={testCase.failure}
             />
-            <TestSuiteSystemOut
-              path="/systemOut"
-              publicId={publicId}
-              testSuiteIdx={testCase.testSuiteIdx}
-              data-testid="test-case-system-out"
-            />
-            <TestSuiteSystemErr
-              path="/systemErr"
-              publicId={publicId}
-              testSuiteIdx={testCase.testSuiteIdx}
-              data-testid="test-case-system-err"
-            />
+            {testCase.hasSystemOutTestCase ? (
+              <TestCaseSystemOut
+                path="/systemOut"
+                publicId={publicId}
+                testSuiteIdx={testCase.testSuiteIdx}
+                testCaseIdx={testCase.idx}
+                data-testid="test-case-system-out"
+              />
+            ) : (
+              <TestSuiteSystemOut
+                path="/systemOut"
+                publicId={publicId}
+                testSuiteIdx={testCase.testSuiteIdx}
+                data-testid="test-case-system-out"
+              />
+            )}
+            {testCase.hasSystemErrTestCase ? (
+              <TestCaseSystemErr
+                path="/systemErr"
+                publicId={publicId}
+                testSuiteIdx={testCase.testSuiteIdx}
+                testCaseIdx={testCase.idx}
+                data-testid="test-case-system-err"
+              />
+            ) : (
+              <TestSuiteSystemErr
+                path="/systemErr"
+                publicId={publicId}
+                testSuiteIdx={testCase.testSuiteIdx}
+                data-testid="test-case-system-err"
+              />
+            )}
           </Router>
         </div>
       </Paper>

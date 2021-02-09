@@ -14,7 +14,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row9;
+import org.jooq.Row13;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -95,6 +95,26 @@ public class TestCase extends TableImpl<TestCaseRecord> {
      * The column <code>public.test_case.skipped</code>.
      */
     public final TableField<TestCaseRecord, Boolean> SKIPPED = createField(DSL.name("skipped"), SQLDataType.BOOLEAN.nullable(false), this, "");
+
+    /**
+     * The column <code>public.test_case.system_out</code>.
+     */
+    public final TableField<TestCaseRecord, String> SYSTEM_OUT = createField(DSL.name("system_out"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>public.test_case.system_err</code>.
+     */
+    public final TableField<TestCaseRecord, String> SYSTEM_ERR = createField(DSL.name("system_err"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>public.test_case.has_system_out</code>.
+     */
+    public final TableField<TestCaseRecord, Boolean> HAS_SYSTEM_OUT = createField(DSL.name("has_system_out"), SQLDataType.BOOLEAN.defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>public.test_case.has_system_err</code>.
+     */
+    public final TableField<TestCaseRecord, Boolean> HAS_SYSTEM_ERR = createField(DSL.name("has_system_err"), SQLDataType.BOOLEAN.defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     private TestCase(Name alias, Table<TestCaseRecord> aliased) {
         this(alias, aliased, null);
@@ -190,11 +210,11 @@ public class TestCase extends TableImpl<TestCaseRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row9 type methods
+    // Row13 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Long, Long, Integer, String, String, String, BigDecimal, Boolean, Boolean> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row13<Long, Long, Integer, String, String, String, BigDecimal, Boolean, Boolean, String, String, Boolean, Boolean> fieldsRow() {
+        return (Row13) super.fieldsRow();
     }
 }

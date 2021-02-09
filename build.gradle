@@ -37,6 +37,12 @@ allprojects {
         testLogging {
             exceptionFormat = 'full'
         }
+
+        reports {
+            junitXml {
+                outputPerTestCase = true
+            }
+        }
     }
 
     tasks.withType(JacocoReport) {

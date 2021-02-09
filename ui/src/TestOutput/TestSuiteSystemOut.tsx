@@ -1,6 +1,6 @@
 import * as React from "react";
 import TestSystemOutput from "./TestSystemOutput";
-import TestSuiteOutputType from "../service/TestSuiteOutputType";
+import TestOutputType from "../service/TestOutputType";
 import { RouteComponentProps } from "@reach/router";
 
 interface TestSuiteSystemOutProps extends RouteComponentProps {
@@ -16,7 +16,7 @@ const TestSuiteSystemOut = ({
     <TestSystemOutput
       publicId={publicId}
       testSuiteIdx={testSuiteIdx}
-      outputType={TestSuiteOutputType.SystemOut}
+      outputType={TestOutputType.SystemOut}
     />
   );
 };

@@ -61,6 +61,10 @@ describe("TestCaseFailureListPanel", () => {
       skipped: false,
       hasSystemOut: true,
       hasSystemErr: true,
+      hasSystemOutTestCase: false,
+      hasSystemErrTestCase: false,
+      hasSystemOutTestSuite: true,
+      hasSystemErrTestSuite: true,
       failure,
     } as TestCase;
   }

@@ -17,7 +17,7 @@ context("test suite system out and system err", () => {
     cy.route(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/systemOut`,
-      "fixture:test_suite_with_output_system_out.json"
+      "fixture:test_output_system_out.json"
     );
 
     cy.visit(

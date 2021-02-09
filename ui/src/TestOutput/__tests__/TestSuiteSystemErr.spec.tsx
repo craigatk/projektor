@@ -2,7 +2,7 @@ import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import MockAdapter from "axios-mock-adapter";
 import { render, waitFor, getNodeText } from "@testing-library/react";
-import { TestSuiteOutput } from "../../model/TestRunModel";
+import { TestOutput } from "../../model/TestRunModel";
 import { axiosInstance } from "../../service/AxiosService";
 import TestSuiteSystemErr from "../TestSuiteSystemErr";
 import { globalHistory } from "@reach/router";
@@ -26,7 +26,7 @@ describe("TestSuiteSystemErr", () => {
 
     const systemErr = {
       value: "My system err",
-    } as TestSuiteOutput;
+    } as TestOutput;
 
     mockAxios
       .onGet(

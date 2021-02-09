@@ -146,8 +146,10 @@ class FlakyTestCalculatorTest {
         duration = BigDecimal.ONE,
         passed = false,
         skipped = false,
-        hasSystemOut = true,
-        hasSystemErr = true,
+        hasSystemOutTestCase = false,
+        hasSystemErrTestCase = false,
+        hasSystemOutTestSuite = false,
+        hasSystemErrTestSuite = false,
         publicId = publicId,
         createdTimestamp = createdTimeStamp,
         failure = null

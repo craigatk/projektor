@@ -3,22 +3,25 @@ import TestSystemOutput from "./TestSystemOutput";
 import TestOutputType from "../service/TestOutputType";
 import { RouteComponentProps } from "@reach/router";
 
-interface TestSuiteSystemErrProps extends RouteComponentProps {
+interface TestCaseSystemOutProps extends RouteComponentProps {
   publicId: string;
   testSuiteIdx: number;
+  testCaseIdx: number;
 }
 
-const TestSuiteSystemErr = ({
+const TestCaseSystemOut = ({
   publicId,
   testSuiteIdx,
-}: TestSuiteSystemErrProps) => {
+  testCaseIdx,
+}: TestCaseSystemOutProps) => {
   return (
     <TestSystemOutput
       publicId={publicId}
       testSuiteIdx={testSuiteIdx}
-      outputType={TestOutputType.SystemErr}
+      testCaseIdx={testCaseIdx}
+      outputType={TestOutputType.SystemOut}
     />
   );
 };
 
-export default TestSuiteSystemErr;
+export default TestCaseSystemOut;

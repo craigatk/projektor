@@ -75,13 +75,13 @@ context("test run with failed test cases", () => {
     cy.route(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/systemOut`,
-      "fixture:test_suite_with_output_system_out.json"
+      "fixture:test_output_system_out.json"
     );
 
     cy.route(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/systemErr`,
-      "fixture:test_suite_with_output_system_err.json"
+      "fixture:test_output_system_err.json"
     );
 
     cy.visit(`http://localhost:1234/tests/${publicId}/failed`);

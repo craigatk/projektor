@@ -36,4 +36,22 @@ fun Route.testCases(testCaseService: TestCaseService) {
 
         call.respond(HttpStatusCode.OK, testCases)
     }
+    get("/run/{publicId}/suite/{testSuiteIdx}/case/{testCaseIdx}/systemErr") {
+        val publicId = call.parameters.getOrFail("publicId")
+        val testSuiteIdx = call.parameters.getOrFail("testSuiteIdx").toInt()
+        val testCaseIdx = call.parameters.getOrFail("testCaseIdx").toInt()
+
+        val systemErr = testCaseService.fetchTestCaseSystemErr(PublicId(publicId), testSuiteIdx, testCaseIdx)
+
+        call.respond(HttpStatusCode.OK, systemErr)
+    }
+    get("/run/{publicId}/suite/{testSuiteIdx}/case/{testCaseIdx}/systemOut") {
+        val publicId = call.parameters.getOrFail("publicId")
+        val testSuiteIdx = call.parameters.getOrFail("testSuiteIdx").toInt()
+        val testCaseIdx = call.parameters.getOrFail("testCaseIdx").toInt()
+
+        val systemOut = testCaseService.fetchTestCaseSystemOut(PublicId(publicId), testSuiteIdx, testCaseIdx)
+
+        call.respond(HttpStatusCode.OK, systemOut)
+    }
 }

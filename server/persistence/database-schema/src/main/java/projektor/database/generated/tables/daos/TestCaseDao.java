@@ -171,4 +171,60 @@ public class TestCaseDao extends DAOImpl<TestCaseRecord, projektor.database.gene
     public List<projektor.database.generated.tables.pojos.TestCase> fetchBySkipped(Boolean... values) {
         return fetch(TestCase.TEST_CASE.SKIPPED, values);
     }
+
+    /**
+     * Fetch records that have <code>system_out BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfSystemOut(String lowerInclusive, String upperInclusive) {
+        return fetchRange(TestCase.TEST_CASE.SYSTEM_OUT, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>system_out IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestCase> fetchBySystemOut(String... values) {
+        return fetch(TestCase.TEST_CASE.SYSTEM_OUT, values);
+    }
+
+    /**
+     * Fetch records that have <code>system_err BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfSystemErr(String lowerInclusive, String upperInclusive) {
+        return fetchRange(TestCase.TEST_CASE.SYSTEM_ERR, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>system_err IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestCase> fetchBySystemErr(String... values) {
+        return fetch(TestCase.TEST_CASE.SYSTEM_ERR, values);
+    }
+
+    /**
+     * Fetch records that have <code>has_system_out BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfHasSystemOut(Boolean lowerInclusive, Boolean upperInclusive) {
+        return fetchRange(TestCase.TEST_CASE.HAS_SYSTEM_OUT, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>has_system_out IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestCase> fetchByHasSystemOut(Boolean... values) {
+        return fetch(TestCase.TEST_CASE.HAS_SYSTEM_OUT, values);
+    }
+
+    /**
+     * Fetch records that have <code>has_system_err BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfHasSystemErr(Boolean lowerInclusive, Boolean upperInclusive) {
+        return fetchRange(TestCase.TEST_CASE.HAS_SYSTEM_ERR, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>has_system_err IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestCase> fetchByHasSystemErr(Boolean... values) {
+        return fetch(TestCase.TEST_CASE.HAS_SYSTEM_ERR, values);
+    }
 }

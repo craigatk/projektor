@@ -19,13 +19,13 @@ context("test case", () => {
     cy.route(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/systemOut`,
-      "fixture:test_suite_with_output_system_out.json"
+      "fixture:test_output_system_out.json"
     );
 
     cy.route(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/systemErr`,
-      "fixture:test_suite_with_output_system_err.json"
+      "fixture:test_output_system_err.json"
     );
 
     cy.visit(

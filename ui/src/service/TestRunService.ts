@@ -3,7 +3,7 @@ import {
   TestRun,
   TestCase,
   TestSuite,
-  TestSuiteOutput,
+  TestOutput,
   TestRunSummary,
   TestResultsProcessing,
   Attachments,
@@ -16,7 +16,7 @@ import {
   CoverageFiles,
   PerformanceResults,
 } from "../model/TestRunModel";
-import TestSuiteOutputType from "./TestSuiteOutputType";
+import TestOutputType from "./TestOutputType";
 import { axiosInstance, axiosInstanceWithoutCache } from "./AxiosService";
 
 const fetchTestRun = (publicId: string): Promise<AxiosResponse<TestRun>> => {
@@ -61,6 +61,21 @@ const fetchTestCaseDetails = (
   );
 };
 
+const fetchTestCaseSystemOutput = (
+  publicId: string,
+  testSuiteIdx: number,
+  testCaseIdx: number,
+  outputType: TestOutputType
+): Promise<AxiosResponse<TestOutput>> => {
+  const action =
+    outputType === TestOutputType.SystemOut ? "systemOut" : "systemErr";
+
+  // @ts-ignore
+  return axiosInstance.get<TestOutput>(
+    `/run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/${action}`
+  );
+};
+
 const fetchTestSuitesInPackage = (
   publicId: string,
   packageName: string
@@ -81,13 +96,13 @@ const fetchTestSuite = (
 const fetchTestSuiteSystemOutput = (
   publicId: string,
   testSuiteIdx: number,
-  outputType: TestSuiteOutputType
-): Promise<AxiosResponse<TestSuiteOutput>> => {
+  outputType: TestOutputType
+): Promise<AxiosResponse<TestOutput>> => {
   const action =
-    outputType === TestSuiteOutputType.SystemOut ? "systemOut" : "systemErr";
+    outputType === TestOutputType.SystemOut ? "systemOut" : "systemErr";
 
   // @ts-ignore
-  return axiosInstance.get<TestSuiteOutput>(
+  return axiosInstance.get<TestOutput>(
     `/run/${publicId}/suite/${testSuiteIdx}/${action}`
   );
 };
@@ -174,6 +189,7 @@ export {
   fetchOverallCoverageStats,
   fetchSlowTestCases,
   fetchTestCaseDetails,
+  fetchTestCaseSystemOutput,
   fetchTestSuitesInPackage,
   fetchTestSuite,
   fetchTestSuiteSystemOutput,

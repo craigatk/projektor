@@ -34,6 +34,10 @@ describe("TestCasePage", () => {
       failure: null,
       hasSystemOut: false,
       hasSystemErr: false,
+      hasSystemOutTestCase: false,
+      hasSystemErrTestCase: false,
+      hasSystemOutTestSuite: false,
+      hasSystemErrTestSuite: false,
     } as TestCase;
 
     mockAxios

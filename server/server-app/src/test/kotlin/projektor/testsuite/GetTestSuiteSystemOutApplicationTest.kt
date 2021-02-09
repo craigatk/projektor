@@ -9,7 +9,7 @@ import projektor.ApplicationTestCase
 import projektor.createTestRun
 import projektor.createTestSuite
 import projektor.incomingresults.randomPublicId
-import projektor.server.api.TestSuiteOutput
+import projektor.server.api.TestOutput
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
@@ -40,7 +40,7 @@ class GetTestSuiteSystemOutApplicationTest : ApplicationTestCase() {
                 testSuiteDB2.systemErr = "Some other system err"
                 testSuiteDao.insert(testSuiteDB2)
             }.apply {
-                val responseOutput = objectMapper.readValue(response.content, TestSuiteOutput::class.java)
+                val responseOutput = objectMapper.readValue(response.content, TestOutput::class.java)
                 assertNotNull(responseOutput)
 
                 expectThat(responseOutput.value).isEqualTo(systemOut)

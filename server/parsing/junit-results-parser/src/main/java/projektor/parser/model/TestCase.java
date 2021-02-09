@@ -20,4 +20,10 @@ public class TestCase {
     public Skipped skipped;
 
     public Failure failure;
+
+    @JsonProperty("system-out")
+    public String systemOut;
+
+    @JsonProperty("system-err")
+    public String systemErr;
 }

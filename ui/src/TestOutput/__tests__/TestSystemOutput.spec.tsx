@@ -2,9 +2,9 @@ import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import MockAdapter from "axios-mock-adapter";
 import { render, waitFor } from "@testing-library/react";
-import { TestSuiteOutput } from "../../model/TestRunModel";
+import { TestOutput } from "../../model/TestRunModel";
 import { axiosInstance } from "../../service/AxiosService";
-import TestSuiteOutputType from "../../service/TestSuiteOutputType";
+import TestOutputType from "../../service/TestOutputType";
 import TestSystemOutput from "../TestSystemOutput";
 import { act } from "react-dom/test-utils";
 import { globalHistory } from "@reach/router";
@@ -22,14 +22,14 @@ describe("TestSystemOut", () => {
     mockAxios.restore();
   });
 
-  it("should render output when fetch completes successfully", async () => {
+  it("should render output when fetching test suite output completes successfully", async () => {
     const publicId = "12345";
     const testSuiteIdx = 1;
-    const outputType = TestSuiteOutputType.SystemOut;
+    const outputType = TestOutputType.SystemOut;
 
     const testSuiteOutput = {
       value: "My output",
-    } as TestSuiteOutput;
+    } as TestOutput;
 
     mockAxios
       .onGet(
@@ -55,10 +55,80 @@ describe("TestSystemOut", () => {
     });
   });
 
+  it("should render output when fetching test case system out completes successfully", async () => {
+    const publicId = "12345";
+    const testSuiteIdx = 1;
+    const testCaseIdx = 2;
+    const outputType = TestOutputType.SystemOut;
+
+    const testCaseOutput = {
+      value: "My output",
+    } as TestOutput;
+
+    mockAxios
+      .onGet(
+        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/systemOut`
+      )
+      .reply(200, testCaseOutput);
+
+    await act(async () => {
+      const { getByTestId, queryByTestId } = render(
+        <QueryParamProvider reachHistory={globalHistory}>
+          <TestSystemOutput
+            publicId={publicId}
+            testSuiteIdx={testSuiteIdx}
+            testCaseIdx={testCaseIdx}
+            outputType={outputType}
+          />
+        </QueryParamProvider>
+      );
+
+      await waitFor(() => getByTestId("code-text"));
+
+      expect(queryByTestId("code-text")).toHaveTextContent("My output");
+      expect(queryByTestId("loading-section-error")).toBeNull();
+    });
+  });
+
+  it("should render output when fetching test case system err completes successfully", async () => {
+    const publicId = "12345";
+    const testSuiteIdx = 1;
+    const testCaseIdx = 2;
+    const outputType = TestOutputType.SystemErr;
+
+    const testCaseOutput = {
+      value: "My system err",
+    } as TestOutput;
+
+    mockAxios
+      .onGet(
+        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/systemErr`
+      )
+      .reply(200, testCaseOutput);
+
+    await act(async () => {
+      const { getByTestId, queryByTestId } = render(
+        <QueryParamProvider reachHistory={globalHistory}>
+          <TestSystemOutput
+            publicId={publicId}
+            testSuiteIdx={testSuiteIdx}
+            testCaseIdx={testCaseIdx}
+            outputType={outputType}
+          />
+        </QueryParamProvider>
+      );
+
+      await waitFor(() => getByTestId("code-text"));
+
+      expect(queryByTestId("code-text")).toHaveTextContent("My system err");
+      expect(queryByTestId("loading-section-error")).toBeNull();
+    });
+  });
+
   it("should render error when fetching output fails", async () => {
     const publicId = "12345";
     const testSuiteIdx = 1;
-    const outputType = TestSuiteOutputType.SystemOut;
+    const outputType = TestOutputType.SystemOut;
 
     mockAxios
       .onGet(
