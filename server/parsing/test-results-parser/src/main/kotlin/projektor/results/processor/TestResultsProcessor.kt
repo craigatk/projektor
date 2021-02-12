@@ -7,6 +7,8 @@ import projektor.results.processor.ResultsXmlMerger.cleanAndMergeBlob
 class TestResultsProcessor {
     private val junitResultsParser = JUnitResultsParser()
 
+    private val testSuitesPostProcessors = listOf(CypressFileNamePostProcessor())
+
     /**
      * Handles parsing results XML docs in a variety of formats, including <testsuites>
      * results docs back-to-back with <xml> declarations in between.
@@ -45,7 +47,15 @@ class TestResultsProcessor {
         return if (!resultsBlob.isNullOrEmpty()) {
             val resultsGroup = cleanAndMergeBlob(resultsBlob)
 
-            junitResultsParser.parseTestSuites(resultsGroup)
+            val testSuitesWrapper = junitResultsParser.parseTestSuitesWrapper(resultsGroup)
+
+            testSuitesPostProcessors.forEach { postProcessor ->
+                testSuitesWrapper.testSuites?.forEach { testSuites ->
+                    postProcessor.postProcess(testSuites)
+                }
+            }
+
+            testSuitesWrapper.testSuites?.flatMap { it.testSuites } ?: listOf()
         } else {
             listOf()
         }

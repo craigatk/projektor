@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="1.7300" tests="1" failures="0">
+  <testsuite name="Root Suite" timestamp="2021-02-11T14:37:47" tests="0" file="cypress\integration\test_case_system_out_err.spec.js" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="test case system out and system err" timestamp="2021-02-11T14:37:47" tests="1" time="1.7300" failures="0">
+    <testcase name="test case system out and system err should show test case system out and system err when the output is at the test case level" time="1.7300" classname="should show test case system out and system err when the output is at the test case level">
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="1.3400" tests="1" failures="0">
+  <testsuite name="Root Suite" timestamp="2021-02-11T14:38:11" tests="0" file="cypress\integration\test_suites_in_package.js" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="test run with failed test cases" timestamp="2021-02-11T14:38:11" tests="1" time="1.3400" failures="0">
+    <testcase name="test run with failed test cases should link from test case details to test suites in package" time="1.3400" classname="should link from test case details to test suites in package">
+    </testcase>
+  </testsuite>
+</testsuites>

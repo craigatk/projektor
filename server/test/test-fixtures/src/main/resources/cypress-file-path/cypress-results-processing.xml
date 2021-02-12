@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="2.1560" tests="2" failures="0">
+  <testsuite name="Root Suite" timestamp="2021-02-11T14:37:36" tests="0" file="cypress\integration\results_processing.spec.js" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="results processing" timestamp="2021-02-11T14:37:36" tests="2" time="2.1560" failures="0">
+    <testcase name="results processing when test results still processing should display message" time="1.9140" classname="when test results still processing should display message">
+    </testcase>
+    <testcase name="results processing should display error message when processing results failed" time="0.2420" classname="should display error message when processing results failed">
+    </testcase>
+  </testsuite>
+</testsuites>
