@@ -56,6 +56,12 @@ fun loadCypressExamples() {
     println("View run with Cypress tests at at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
+fun loadCypressExamplesWithFilePaths() {
+    val resultsXmlLoader = ResultsXmlLoader()
+    val saveResultsResponse = sendResultsToServer(resultsXmlLoader.cypressResultsWithFilePaths())
+    println("View run with Cypress tests with file paths at at $uiBaseUrl${saveResultsResponse.uri}")
+}
+
 fun loadPassingGroupedExample() {
     val groupedResultsXmlLoader = GroupedResultsXmlLoader()
     val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(null))

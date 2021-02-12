@@ -1,10 +1,7 @@
 {
     "reporter": "junit",
     "reporterOptions": {
-      "mochaFile": "test-results/cypress-[hash].xml",
-      "reporterOptions": {
-        "useFullSuiteTitle": true
-      }
+      "mochaFile": "test-results/cypress-[hash].xml"
     },
     "videoUploadOnPasses": false
   }

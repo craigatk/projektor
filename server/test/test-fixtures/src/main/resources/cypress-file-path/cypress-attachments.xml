@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="1.8690" tests="2" failures="0">
+  <testsuite name="Root Suite" timestamp="2021-02-11T14:36:00" tests="0" file="cypress\integration\attachments.spec.js" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="test run with attachments" timestamp="2021-02-11T14:36:00" tests="2" time="1.8690" failures="0">
+    <testcase name="test run with attachments should list attachments on attachments page" time="1.7330" classname="should list attachments on attachments page">
+    </testcase>
+    <testcase name="test run with attachments should not show attachments nav link when run has no attachments" time="0.1360" classname="should not show attachments nav link when run has no attachments">
+    </testcase>
+  </testsuite>
+</testsuites>

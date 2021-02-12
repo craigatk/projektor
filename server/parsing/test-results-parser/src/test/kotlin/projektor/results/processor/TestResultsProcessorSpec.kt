@@ -84,7 +84,7 @@ class TestResultsProcessorSpec : StringSpec({
 
     "should parse empty blob into empty list" {
         val testResultsProcessor = TestResultsProcessor()
-        val blob: String? = ""
+        val blob = ""
 
         val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
 

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import projektor.parser.model.TestSuite;
 import projektor.parser.model.TestSuites;
+import projektor.parser.model.TestSuitesWrapper;
 
 import javax.xml.stream.XMLInputFactory;
 import java.io.IOException;
@@ -57,5 +58,27 @@ public class JUnitResultsParser {
         TestSuites testSuites = mapper.readValue(testSuitesXml, TestSuites.class);
 
         return testSuites.testSuites;
+    }
+
+    /**
+     * Parses a synthetic wrapper around a list of <testsuites></testsuites>
+     *
+     * <testsuiteswrapper>
+     *     <testsuites>
+     *         <testsuite></testsuite>
+     *         <testsuite></testsuite>
+     *     </testsuites>
+     *     <testsuites>
+     *         <testsuite></testsuite>
+     *         <testsuite></testsuite>
+     *     </testsuites>
+     * </testsuiteswrapper>
+     *
+     * @param testSuitesWrapperXml
+     * @return
+     * @throws IOException
+     */
+    public TestSuitesWrapper parseTestSuitesWrapper(String testSuitesWrapperXml) throws IOException {
+        return mapper.readValue(testSuitesWrapperXml, TestSuitesWrapper.class);
     }
 }

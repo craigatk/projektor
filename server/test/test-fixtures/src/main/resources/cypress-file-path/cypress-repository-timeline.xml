@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="4.7590" tests="2" failures="0">
+  <testsuite name="Root Suite" timestamp="2021-02-11T14:37:27" tests="0" file="cypress\integration\repository_timeline.spec.js" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="repository coverage" timestamp="2021-02-11T14:37:27" tests="2" time="4.7590" failures="0">
+    <testcase name="repository coverage should display repository timeline graph and link to individual test reports" time="2.7450" classname="should display repository timeline graph and link to individual test reports">
+    </testcase>
+    <testcase name="repository coverage should display tooltip with timeline data on graph point hover" time="2.0140" classname="should display tooltip with timeline data on graph point hover">
+    </testcase>
+  </testsuite>
+</testsuites>

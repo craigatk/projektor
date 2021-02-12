@@ -20,6 +20,8 @@ public class TestSuite {
     public String hostname;
     public BigDecimal time;
 
+    public String file; // Set by Cypress on the root suite
+
     @JsonProperty("system-out")
     public String systemOut;
 

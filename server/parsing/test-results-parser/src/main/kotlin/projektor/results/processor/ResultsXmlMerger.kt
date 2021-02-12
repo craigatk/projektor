@@ -3,8 +3,19 @@ package projektor.results.processor
 object ResultsXmlMerger {
     fun cleanAndMergeBlob(resultsBlob: String): String = resultsBlob
         .let(ResultsXmlMerger::removeXmlHeader)
-        .let(ResultsXmlMerger::removeTestSuitesWrapper)
-        .let(ResultsXmlMerger::wrappedInTestSuitesXml)
+        .let(ResultsXmlMerger::conditionallyWrapInTestSuitesXml)
+        .let(ResultsXmlMerger::wrappedInTestSuitesWrapperXml)
+
+    fun conditionallyWrapInTestSuitesXml(resultsXml: String): String =
+        if (!resultsXml.contains("<testsuites")) {
+            """
+               <testsuites>
+               $resultsXml
+                </testsuites>
+            """.trimIndent()
+        } else {
+            resultsXml
+        }
 
     fun removeTestSuitesWrapper(resultsXml: String): String {
         return resultsXml
@@ -16,9 +27,9 @@ object ResultsXmlMerger {
     private fun removeXmlHeader(resultXml: String) = resultXml
         .replace(Regex("""<\?xml.*\?>"""), "")
 
-    private fun wrappedInTestSuitesXml(resultsXml: String) = """<?xml version="1.0" encoding="UTF-8"?>
-            <testsuites>
+    private fun wrappedInTestSuitesWrapperXml(resultsXml: String) = """<?xml version="1.0" encoding="UTF-8"?>
+            <testsuiteswrapper>
             $resultsXml
-            </testsuites>
+            </testsuiteswrapper>
     """.trimIndent()
 }

@@ -4,6 +4,7 @@ fun main() {
     loadPassingExample()
     loadAllExamples()
     loadCypressExamples()
+    loadCypressExamplesWithFilePaths()
     loadPassingGroupedExample()
     loadPassingGroupedExampleWithAttachments()
     loadGroupedExampleWithWallClock()

@@ -45,6 +45,19 @@ class ResultsXmlLoader {
             .map(ResultsXmlMerger::removeTestSuitesWrapper)
     }
 
+    fun cypressResultsWithFilePaths(): List<String> {
+        val cypressResourceList = ClassGraph()
+            .whitelistPaths("cypress-file-path")
+            .scan()
+            .getResourcesWithExtension("xml")
+
+        return cypressResourceList
+            .map { String(it.load()) }
+    }
+
+    fun cypressAttachmentsSpecWithFilePath() = loadTextFromFile("cypress-file-path/cypress-attachments.xml")
+    fun cypressRepositoryTimelineSpecWithFilePath() = loadTextFromFile("cypress-file-path/cypress-repository-timeline.xml")
+
     fun jestUi() = loadTextFromFile("jest/ui-junit.xml")
 
     fun jestUiFilePath() = loadTextFromFile("jest/ui-file-path-junit.xml")
