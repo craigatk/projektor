@@ -4,16 +4,23 @@ import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Timer
 
 class MetricsService(private val metricRegistry: MeterRegistry) {
+    private val coverageParseFailureCounter = metricRegistry.counter("coverage_parse_failure")
+    private val coverageProcessFailureCounter = metricRegistry.counter("coverage_process_failure")
     private val pullRequestCommentSuccessCounter = metricRegistry.counter("pull_request_comment_success")
     private val pullRequestCommentFailureCounter = metricRegistry.counter("pull_request_comment_failure")
     private val resultsProcessSuccessCounter = metricRegistry.counter("results_process_success")
     private val resultsProcessFailureCounter = metricRegistry.counter("results_process_failure")
+    private val resultsParseFailureCounter = metricRegistry.counter("results_parse_failure")
+
+    fun incrementCoverageParseFailureCounter() = coverageParseFailureCounter.increment()
+    fun incrementCoverageProcessFailureCounter() = coverageProcessFailureCounter.increment()
 
     fun incrementPullRequestCommentSuccessCounter() = pullRequestCommentSuccessCounter.increment()
     fun incrementPullRequestCommentFailureCounter() = pullRequestCommentFailureCounter.increment()
 
     fun incrementResultsProcessSuccessCounter() = resultsProcessSuccessCounter.increment()
     fun incrementResultsProcessFailureCounter() = resultsProcessFailureCounter.increment()
+    fun incrementResultsParseFailureCounter() = resultsParseFailureCounter.increment()
 
     fun createTimer(name: String): Pair<Timer, Timer.Sample> {
         val timer = metricRegistry.timer(name)

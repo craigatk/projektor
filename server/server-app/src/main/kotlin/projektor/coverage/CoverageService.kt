@@ -1,9 +1,11 @@
 package projektor.coverage
 
+import com.fasterxml.jackson.core.JsonProcessingException
 import org.slf4j.LoggerFactory
 import projektor.compare.PreviousTestRunService
 import projektor.error.FailureBodyType
 import projektor.error.ProcessingFailureService
+import projektor.metrics.MetricsService
 import projektor.parser.coverage.CoverageParser
 import projektor.parser.coverage.model.CoverageReport
 import projektor.parser.coverage.payload.CoverageFilePayload
@@ -16,6 +18,7 @@ import java.math.BigDecimal
 
 class CoverageService(
     private val coverageRepository: CoverageRepository,
+    private val metricsService: MetricsService,
     private val previousTestRunService: PreviousTestRunService,
     private val processingFailureService: ProcessingFailureService
 ) {
@@ -41,8 +44,19 @@ class CoverageService(
     suspend fun saveReport(coverageFilePayload: CoverageFilePayload, publicId: PublicId): CoverageReport? =
         try {
             saveReportInternal(coverageFilePayload, publicId)
+        } catch (e: JsonProcessingException) {
+            logger.info("Error parsing coverage report", e)
+            metricsService.incrementCoverageParseFailureCounter()
+            processingFailureService.recordProcessingFailure(
+                publicId = publicId,
+                body = coverageFilePayload.reportContents,
+                bodyType = FailureBodyType.COVERAGE,
+                e = e
+            )
+            throw e
         } catch (e: Exception) {
             logger.error("Error saving coverage report", e)
+            metricsService.incrementCoverageProcessFailureCounter()
             processingFailureService.recordProcessingFailure(
                 publicId = publicId,
                 body = coverageFilePayload.reportContents,

@@ -24,6 +24,7 @@ import projektor.database.generated.tables.daos.*
 import projektor.error.ProcessingFailureService
 import projektor.message.MessageConfig
 import projektor.metrics.InfluxMetricsConfig
+import projektor.metrics.MetricsService
 import projektor.metrics.createRegistry
 import projektor.notification.NotificationConfig
 
@@ -127,7 +128,8 @@ open class DatabaseRepositoryTestCase : KoinTest {
         val coverageRepository: CoverageRepository by inject()
         val previousTestRunService: PreviousTestRunService by inject()
         val processingFailureService: ProcessingFailureService by inject()
-        coverageService = CoverageService(coverageRepository, previousTestRunService, processingFailureService)
+        val metricsService: MetricsService by inject()
+        coverageService = CoverageService(coverageRepository, metricsService, previousTestRunService, processingFailureService)
 
         testRunDBGenerator = TestRunDBGenerator(
             testRunDao,

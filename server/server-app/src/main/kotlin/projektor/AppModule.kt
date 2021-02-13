@@ -106,11 +106,11 @@ fun createAppModule(
     single<PerformanceResultsRepository> { PerformanceResultsDatabaseRepository(get()) }
     single { PerformanceResultsService(get()) }
 
-    single { CoverageService(get(), get(), get()) }
+    single { CoverageService(get(), get(), get(), get()) }
     single { GroupedResultsParser() }
     single { PerformanceResultsParser() }
     single { GroupedResultsConverter(get(), get(), get()) }
-    single { GroupedTestResultsService(get(), get(), get(), get(), get(), get(), get(), get()) }
+    single { GroupedTestResultsService(get(), get(), get(), get(), get(), get(), get()) }
     single { MessageService(messageConfig) }
     single { PreviousTestRunService(get()) }
     single { ProcessingFailureService(get()) }

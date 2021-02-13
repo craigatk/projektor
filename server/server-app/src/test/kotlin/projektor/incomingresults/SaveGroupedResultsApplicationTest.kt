@@ -14,7 +14,6 @@ import projektor.parser.GroupedResultsXmlLoader
 import projektor.server.api.results.ResultsProcessingStatus
 import strikt.api.expectThat
 import strikt.assertions.hasSize
-import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
@@ -52,26 +51,6 @@ class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
                 expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2.id)).hasSize(1)
 
                 await until { resultsProcessingDao.fetchOneByPublicId(publicId.id).status == ResultsProcessingStatus.SUCCESS.name }
-            }
-        }
-    }
-
-    @Test
-    fun `should record metrics when saving grouped test results`() {
-        val requestBody = GroupedResultsXmlLoader().passingGroupedResults()
-
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/groupedResults") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(requestBody)
-            }.apply {
-                waitForTestRunSaveToComplete(response)
-
-                expectThat(meterRegistry.counter("grouped_results_process_success").count()).isEqualTo(1.toDouble())
-                expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(1.toDouble())
-
-                expectThat(meterRegistry.counter("grouped_results_process_failure").count()).isEqualTo(0.toDouble())
-                expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
             }
         }
     }
