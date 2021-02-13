@@ -1,7 +1,7 @@
 package projektor.incomingresults
 
+import com.fasterxml.jackson.core.JsonProcessingException
 import io.ktor.util.*
-import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,7 +25,6 @@ class GroupedTestResultsService(
     private val groupedResultsConverter: GroupedResultsConverter,
     private val testRunRepository: TestRunRepository,
     private val performanceResultsRepository: PerformanceResultsRepository,
-    private val metricRegistry: MeterRegistry,
     private val metricsService: MetricsService,
     private val gitHubPullRequestCommentService: GitHubPullRequestCommentService,
     private val coverageService: CoverageService
@@ -34,9 +33,6 @@ class GroupedTestResultsService(
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    private val resultsProcessSuccessCounter = metricRegistry.counter("grouped_results_process_success")
-    private val resultsProcessFailureCounter = metricRegistry.counter("grouped_results_process_failure")
-
     suspend fun persistTestResultsAsync(groupedResultsBlob: String): PublicId {
         val publicId = randomPublicId()
         val timer = metricsService.createTimer("persist_grouped_results")
@@ -44,10 +40,17 @@ class GroupedTestResultsService(
 
         val groupedResults = try {
             groupedResultsConverter.parseAndConvertGroupedResults(groupedResultsBlob)
-        } catch (e: Exception) {
+        } catch (e: JsonProcessingException) {
             val errorMessage = "Error parsing test results: ${e.message}"
-            handleException(publicId, groupedResultsBlob, errorMessage, e)
-            recordFailedProcessMetrics()
+            logger.info(errorMessage, e)
+            metricsService.incrementResultsParseFailureCounter()
+            testResultsProcessingService.recordResultsProcessingError(publicId, groupedResultsBlob, errorMessage)
+            throw PersistTestResultsException(publicId, errorMessage, e)
+        } catch (e: Exception) {
+            val errorMessage = "Error persisting test results: ${e.message}"
+            logger.error(errorMessage, e)
+            metricsService.incrementResultsProcessFailureCounter()
+            testResultsProcessingService.recordResultsProcessingError(publicId, groupedResultsBlob, errorMessage)
             throw PersistTestResultsException(publicId, errorMessage, e)
         }
 
@@ -72,13 +75,14 @@ class GroupedTestResultsService(
 
             val coverage = groupedResults.coverageFiles?.let { saveCoverage(publicId, it) }
 
-            recordSuccessfulProcessMetrics()
+            metricsService.incrementResultsProcessSuccessCounter()
 
             publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git, coverage)
         } catch (e: Exception) {
             val errorMessage = "Error persisting test results: ${e.message}"
-            handleException(publicId, groupedResultsBlob, errorMessage, e)
-            recordFailedProcessMetrics()
+            logger.error(errorMessage, e)
+            testResultsProcessingService.recordResultsProcessingError(publicId, groupedResultsBlob, errorMessage)
+            metricsService.incrementResultsProcessFailureCounter()
         }
     }
 
@@ -107,20 +111,5 @@ class GroupedTestResultsService(
             logger.warn("Error publishing comment to pull request for test run ${testRunSummary.id}", e)
             metricsService.incrementPullRequestCommentFailureCounter()
         }
-    }
-
-    private suspend fun handleException(publicId: PublicId, resultsBody: String, errorMessage: String, e: Exception) {
-        logger.error(errorMessage, e)
-        testResultsProcessingService.recordResultsProcessingError(publicId, resultsBody, errorMessage)
-    }
-
-    private fun recordSuccessfulProcessMetrics() {
-        resultsProcessSuccessCounter.increment()
-        metricsService.incrementResultsProcessSuccessCounter()
-    }
-
-    private fun recordFailedProcessMetrics() {
-        resultsProcessFailureCounter.increment()
-        metricsService.incrementResultsProcessFailureCounter()
     }
 }

@@ -26,6 +26,7 @@ import projektor.coverage.CoverageService
 import projektor.database.generated.tables.daos.*
 import projektor.database.generated.tables.pojos.TestRun
 import projektor.error.ProcessingFailureService
+import projektor.metrics.MetricsService
 import projektor.parser.ResultsXmlLoader
 import projektor.server.api.PublicId
 import projektor.server.api.results.ResultsProcessingStatus
@@ -175,7 +176,8 @@ open class ApplicationTestCase {
         val coverageRepository: CoverageRepository = application.get()
         val previousTestRunService: PreviousTestRunService = application.get()
         val processingFailureService: ProcessingFailureService = application.get()
-        coverageService = CoverageService(coverageRepository, previousTestRunService, processingFailureService)
+        val metricsService: MetricsService = application.get()
+        coverageService = CoverageService(coverageRepository, metricsService, previousTestRunService, processingFailureService)
 
         gitRepositoryDao = GitRepositoryDao(dslContext.configuration())
 

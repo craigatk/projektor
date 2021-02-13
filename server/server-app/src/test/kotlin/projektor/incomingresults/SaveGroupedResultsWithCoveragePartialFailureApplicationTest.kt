@@ -13,16 +13,23 @@ import projektor.server.example.coverage.JacocoXmlLoader
 import projektor.util.gzip
 import strikt.api.expectThat
 import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
 
 @KtorExperimentalAPI
-class SaveGroupedResultsWithCoverage : ApplicationTestCase() {
+class SaveGroupedResultsWithCoveragePartialFailureApplicationTest : ApplicationTestCase() {
 
     @Test
-    fun `should save grouped results with coverage`() {
-        val incomingCoverageFile = CoverageFile()
-        incomingCoverageFile.reportContents = JacocoXmlLoader().jacocoXmlParser()
+    fun `when one invalid coverage file should save the others and record parsing failed metric`() {
+        val invalidCoverageFile = CoverageFile()
+        invalidCoverageFile.reportContents = JacocoXmlLoader().serverAppInvalid()
 
-        val requestBody = GroupedResultsXmlLoader().passingResultsWithCoverage(listOf(incomingCoverageFile))
+        val validCoverageFile1 = CoverageFile()
+        validCoverageFile1.reportContents = JacocoXmlLoader().jacocoXmlParser()
+
+        val validCoverageFile2 = CoverageFile()
+        validCoverageFile2.reportContents = JacocoXmlLoader().junitResultsParser()
+
+        val requestBody = GroupedResultsXmlLoader().passingResultsWithCoverage(listOf(validCoverageFile1, invalidCoverageFile, validCoverageFile2))
         val compressedBody = gzip(requestBody)
 
         withTestApplication(::createTestApplication) {
@@ -38,7 +45,9 @@ class SaveGroupedResultsWithCoverage : ApplicationTestCase() {
                 val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicId.id)
                 expectThat(coverageRuns).hasSize(1)
 
-                await until { coverageGroupDao.fetchByCodeCoverageRunId(coverageRuns[0].id).size == 1 }
+                await until { coverageGroupDao.fetchByCodeCoverageRunId(coverageRuns[0].id).size == 2 }
+
+                expectThat(meterRegistry.counter("coverage_parse_failure").count()).isEqualTo(1.toDouble())
             }
         }
     }
