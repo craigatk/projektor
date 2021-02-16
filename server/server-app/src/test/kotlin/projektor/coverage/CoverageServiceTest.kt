@@ -34,7 +34,7 @@ class CoverageServiceTest : DatabaseRepositoryTestCase() {
         )
 
         val coverageFilePayload = CoverageFilePayload(reportContents = JacocoXmlLoader().junitResultsParser())
-        val publicId = PublicId("this-is-too-long-for-anid")
+        val publicId = PublicId("this-is-too-long-for-an-id")
 
         expectCatching {
             runBlocking { coverageService.saveReport(coverageFilePayload, publicId) }

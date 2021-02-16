@@ -45,7 +45,7 @@ class CoverageService(
         try {
             saveReportInternal(coverageFilePayload, publicId)
         } catch (e: JsonProcessingException) {
-            logger.info("Error parsing coverage report", e)
+            logger.info("Problem parsing coverage report", e)
             metricsService.incrementCoverageParseFailureCounter()
             processingFailureService.recordProcessingFailure(
                 publicId = publicId,

@@ -34,6 +34,8 @@ class ResultsXmlLoader {
     fun gradleSingleTestCaseSystemOutFail() = loadTextFromFile("gradle-single-test-case-system-out-fail.xml")
     fun gradleSingleTestCaseSystemOutPass() = loadTextFromFile("gradle-single-test-case-system-out-pass.xml")
 
+    fun cutOffResultsGradle() = loadTextFromFile("cut-off-results-gradle.xml")
+
     fun cypressResults(): List<String> {
         val cypressResourceList = ClassGraph()
             .whitelistPaths("cypress")
