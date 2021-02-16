@@ -41,7 +41,7 @@ class GroupedTestResultsService(
         val groupedResults = try {
             groupedResultsConverter.parseAndConvertGroupedResults(groupedResultsBlob)
         } catch (e: JsonProcessingException) {
-            val errorMessage = "Error parsing test results: ${e.message}"
+            val errorMessage = "Problem parsing test results: ${e.message}"
             logger.info(errorMessage, e)
             metricsService.incrementResultsParseFailureCounter()
             testResultsProcessingService.recordResultsProcessingError(publicId, groupedResultsBlob, errorMessage)

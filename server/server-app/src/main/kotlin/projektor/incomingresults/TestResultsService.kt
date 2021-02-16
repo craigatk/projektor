@@ -1,5 +1,6 @@
 package projektor.incomingresults
 
+import com.fasterxml.jackson.core.JsonProcessingException
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import projektor.metrics.MetricsService
@@ -40,6 +41,11 @@ class TestResultsService(
             testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.SUCCESS)
 
             metricsService.incrementResultsProcessSuccessCounter()
+        } catch (e: JsonProcessingException) {
+            val errorMessage = "Problem parsing test results: ${e.message}"
+            logger.info(errorMessage, e)
+            testResultsProcessingService.recordResultsProcessingError(publicId, resultsBlob, errorMessage)
+            metricsService.incrementResultsParseFailureCounter()
         } catch (e: Exception) {
             val errorMessage = "Error persisting test results: ${e.message}"
             logger.error(errorMessage, e)
