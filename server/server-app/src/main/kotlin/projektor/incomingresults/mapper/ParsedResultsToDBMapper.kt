@@ -1,5 +1,6 @@
 package projektor.incomingresults.mapper
 
+import org.slf4j.LoggerFactory
 import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedTestSuites
 import projektor.incomingresults.model.ResultsMetadata
@@ -12,6 +13,8 @@ import projektor.database.generated.tables.pojos.TestCase as TestCaseDB
 import projektor.database.generated.tables.pojos.TestFailure as TestFailureDB
 import projektor.database.generated.tables.pojos.TestSuite as TestSuiteDB
 import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
+
+private val logger = LoggerFactory.getLogger("ParsedResultsToDBMapper")
 
 fun GroupedTestSuites.toDB(testRunId: Long): TestSuiteGroupDB {
     val testSuiteGroupDB = TestSuiteGroupDB()
@@ -78,31 +81,48 @@ fun Failure.toDB(testCaseId: Long): TestFailureDB {
 }
 
 fun parsePackageAndClassName(classNameWithPackage: String?): Pair<String?, String?> =
-    if (classNameWithPackage != null) {
-        val cleanedClassNameWithPackage = classNameWithPackage.replace("\\", "/")
+    try {
+        if (classNameWithPackage != null) {
+            val cleanedClassNameWithPackage = classNameWithPackage.replace("\\", "/")
 
-        if (cleanedClassNameWithPackage.contains("/") && cleanedClassNameWithPackage.contains(".")) {
-            val lastSlashIndex = cleanedClassNameWithPackage.lastIndexOf("/")
-            val fileNameEndIndex = cleanedClassNameWithPackage.indexOf(".", lastSlashIndex)
-            val fileName = cleanedClassNameWithPackage.substring(lastSlashIndex + 1, fileNameEndIndex)
+            val isFilePath = cleanedClassNameWithPackage.contains("/") &&
+                cleanedClassNameWithPackage.contains(".") &&
+                !cleanedClassNameWithPackage.contains(" ")
 
-            // A leading forward slash messes up the URL
-            val packageStartIndex = if (cleanedClassNameWithPackage.startsWith("/")) 1 else 0
+            val isJvmPackage = cleanedClassNameWithPackage.contains('.') &&
+                !cleanedClassNameWithPackage.contains(" ")
 
-            val packageName = cleanedClassNameWithPackage.substring(packageStartIndex)
+            if (isFilePath) {
+                val lastSlashIndex = cleanedClassNameWithPackage.lastIndexOf("/")
+                val fileNameEndIndex = cleanedClassNameWithPackage.indexOf(".", lastSlashIndex)
 
-            Pair(packageName, fileName)
-        } else if (cleanedClassNameWithPackage.contains('.')) {
-            val packageEndIndex = cleanedClassNameWithPackage.lastIndexOf('.')
+                if (fileNameEndIndex > 0) {
+                    val fileName = cleanedClassNameWithPackage.substring(lastSlashIndex + 1, fileNameEndIndex)
 
-            val packageName = cleanedClassNameWithPackage.substring(0, packageEndIndex)
-            val className = cleanedClassNameWithPackage.substring(packageEndIndex + 1)
+                    // A leading forward slash messes up the URL
+                    val packageStartIndex = if (cleanedClassNameWithPackage.startsWith("/")) 1 else 0
 
-            Pair(packageName, className)
+                    val packageName = cleanedClassNameWithPackage.substring(packageStartIndex)
+
+                    Pair(packageName, fileName)
+                } else {
+                    Pair(null, cleanedClassNameWithPackage)
+                }
+            } else if (isJvmPackage) {
+                val packageEndIndex = cleanedClassNameWithPackage.lastIndexOf('.')
+
+                val packageName = cleanedClassNameWithPackage.substring(0, packageEndIndex)
+                val className = cleanedClassNameWithPackage.substring(packageEndIndex + 1)
+
+                Pair(packageName, className)
+            } else {
+                Pair(null, cleanedClassNameWithPackage)
+            }
         } else {
             Pair(null, classNameWithPackage)
         }
-    } else {
+    } catch (e: Exception) {
+        logger.warn("Failed to parse class name with package $classNameWithPackage", e)
         Pair(null, classNameWithPackage)
     }
 

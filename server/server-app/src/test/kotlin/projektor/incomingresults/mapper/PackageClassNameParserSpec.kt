@@ -14,7 +14,9 @@ class PackageClassNameParserSpec : StringSpec({
             row("Spec", null, "Spec"),
             row("/k6/test.js", "k6/test.js", "test"),
             row("src\\TestOutput\\__tests__\\TestSuiteSystemErr.spec.tsx", "src/TestOutput/__tests__/TestSuiteSystemErr.spec.tsx", "TestSuiteSystemErr"),
-            row("src/TestOutput/__tests__/TestSuiteSystemErr.spec.tsx", "src/TestOutput/__tests__/TestSuiteSystemErr.spec.tsx", "TestSuiteSystemErr")
+            row("src/TestOutput/__tests__/TestSuiteSystemErr.spec.tsx", "src/TestOutput/__tests__/TestSuiteSystemErr.spec.tsx", "TestSuiteSystemErr"),
+            row("Text description / with period . and another slash /", null, "Text description / with period . and another slash /"),
+            row("No_spaces/but./_dots/", null, "No_spaces/but./_dots/")
         ) { classAndPackage, expectedPackage, expectedClass ->
             val packageAndClass = parsePackageAndClassName(classAndPackage)
 
