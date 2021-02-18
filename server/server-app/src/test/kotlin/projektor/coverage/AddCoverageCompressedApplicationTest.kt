@@ -36,6 +36,11 @@ class AddCoverageCompressedApplicationTest : ApplicationTestCase() {
 
                 val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicId.id)
                 expectThat(coverageRuns).hasSize(1)
+
+                expectThat(meterRegistry.counter("coverage_process_start").count()).isEqualTo(1.toDouble())
+                expectThat(meterRegistry.counter("coverage_process_success").count()).isEqualTo(1.toDouble())
+                expectThat(meterRegistry.counter("coverage_process_failure").count()).isEqualTo(0.toDouble())
+                expectThat(meterRegistry.counter("coverage_parse_failure").count()).isEqualTo(0.toDouble())
             }
 
             handleRequest(HttpMethod.Get, "/run/$publicId/coverage/overall").apply {

@@ -48,6 +48,29 @@ class AddCoverageFailureApplicationTest : ApplicationTestCase() {
                     get { bodyType }.isEqualTo(FailureBodyType.COVERAGE.name)
                     get { failure }.contains("Unexpected EOF; was expecting a close tag for element <report>")
                 }
+
+                expectThat(meterRegistry.counter("coverage_parse_failure").count()).isEqualTo(1.toDouble())
+                expectThat(meterRegistry.counter("coverage_process_failure").count()).isEqualTo(0.toDouble())
+            }
+        }
+    }
+
+    @Test
+    fun `when adding malformed Jacoco report that is empty should ignore it`() {
+        val publicId = randomPublicId()
+
+        val emptyReportXml = JacocoXmlLoader().emptyReport()
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/run/$publicId/coverage") {
+                testRunDBGenerator.createSimpleTestRun(publicId)
+
+                setBody(emptyReportXml.toByteArray())
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+
+                expectThat(meterRegistry.counter("coverage_parse_failure").count()).isEqualTo(0.toDouble())
+                expectThat(meterRegistry.counter("coverage_process_failure").count()).isEqualTo(0.toDouble())
             }
         }
     }
