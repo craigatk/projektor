@@ -6,6 +6,7 @@ import projektor.compare.PreviousTestRunService
 import projektor.error.FailureBodyType
 import projektor.error.ProcessingFailureService
 import projektor.metrics.MetricsService
+import projektor.parser.coverage.CoverageParseException
 import projektor.parser.coverage.CoverageParser
 import projektor.parser.coverage.model.CoverageReport
 import projektor.parser.coverage.payload.CoverageFilePayload
@@ -44,19 +45,18 @@ class CoverageService(
     suspend fun saveReport(coverageFilePayload: CoverageFilePayload, publicId: PublicId): CoverageReport? =
         try {
             saveReportInternal(coverageFilePayload, publicId)
-        } catch (e: JsonProcessingException) {
-            logger.info("Problem parsing coverage report", e)
-            metricsService.incrementCoverageParseFailureCounter()
-            processingFailureService.recordProcessingFailure(
-                publicId = publicId,
-                body = coverageFilePayload.reportContents,
-                bodyType = FailureBodyType.COVERAGE,
-                e = e
-            )
-            throw e
         } catch (e: Exception) {
-            logger.error("Error saving coverage report", e)
-            metricsService.incrementCoverageProcessFailureCounter()
+            when (e) {
+                is JsonProcessingException, is CoverageParseException -> {
+                    logger.info("Problem parsing coverage report", e)
+                    metricsService.incrementCoverageParseFailureCounter()
+                }
+                else -> {
+                    logger.error("Error saving coverage report", e)
+                    metricsService.incrementCoverageProcessFailureCounter()
+                }
+            }
+
             processingFailureService.recordProcessingFailure(
                 publicId = publicId,
                 body = coverageFilePayload.reportContents,
@@ -67,6 +67,7 @@ class CoverageService(
         }
 
     private suspend fun saveReportInternal(coverageFilePayload: CoverageFilePayload, publicId: PublicId): CoverageReport? {
+        metricsService.incrementCoverageProcessStartCounter()
         val coverageRun = coverageRepository.createOrGetCoverageRun(publicId)
         val coverageReport = CoverageParser.parseReport(coverageFilePayload.reportContents, coverageFilePayload.baseDirectoryPath)
 
@@ -82,6 +83,8 @@ class CoverageService(
                     coverageGroup,
                 )
             }
+
+            metricsService.incrementCoverageProcessSuccessCounter()
         }
 
         return coverageReport

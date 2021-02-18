@@ -6,6 +6,8 @@ import io.micrometer.core.instrument.Timer
 class MetricsService(private val metricRegistry: MeterRegistry) {
     private val coverageParseFailureCounter = metricRegistry.counter("coverage_parse_failure")
     private val coverageProcessFailureCounter = metricRegistry.counter("coverage_process_failure")
+    private val coverageProcessSuccessCounter = metricRegistry.counter("coverage_process_success")
+    private val coverageProcessStartCounter = metricRegistry.counter("coverage_process_start")
     private val pullRequestCommentSuccessCounter = metricRegistry.counter("pull_request_comment_success")
     private val pullRequestCommentFailureCounter = metricRegistry.counter("pull_request_comment_failure")
     private val resultsProcessSuccessCounter = metricRegistry.counter("results_process_success")
@@ -14,6 +16,8 @@ class MetricsService(private val metricRegistry: MeterRegistry) {
 
     fun incrementCoverageParseFailureCounter() = coverageParseFailureCounter.increment()
     fun incrementCoverageProcessFailureCounter() = coverageProcessFailureCounter.increment()
+    fun incrementCoverageProcessSuccessCounter() = coverageProcessSuccessCounter.increment()
+    fun incrementCoverageProcessStartCounter() = coverageProcessStartCounter.increment()
 
     fun incrementPullRequestCommentSuccessCounter() = pullRequestCommentSuccessCounter.increment()
     fun incrementPullRequestCommentFailureCounter() = pullRequestCommentFailureCounter.increment()
