@@ -17,11 +17,15 @@ class CodeCoverageTaskCollector {
         this.logger = logger
 
         if (coverageEnabled) {
-            List<JacocoReport> jacocoTasks = buildResult.gradle.taskGraph.allTasks.findAll {
-                it instanceof JacocoReport
-            } as List<JacocoReport>
+           try {
+                List<JacocoReport> jacocoTasks = buildResult.gradle.taskGraph.allTasks.findAll {
+                    it instanceof JacocoReport
+                } as List<JacocoReport>
 
-            this.codeCoverageFiles = jacocoTasks.collect { coverageFileOrNull(it) }.findAll { it != null }
+                this.codeCoverageFiles = jacocoTasks.collect { coverageFileOrNull(it) }.findAll { it != null }
+            } catch (IllegalStateException e) {
+               logger.warn("Unable to read coverage files from Jacoco tasks", e)
+           }
         } else {
             this.codeCoverageFiles = []
         }

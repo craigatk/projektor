@@ -83,4 +83,25 @@ class CoverageSingleProjectSpec extends SingleProjectSpec {
         List<CoverageFilePayload> coverageFilePayloads = resultsRequestBodies[0].coverageFiles
         coverageFilePayloads.size() == 0
     }
+
+    def "can execute 'tasks' task without failing"() {
+        given:
+        buildFile << """
+            projektor {
+                serverUrl = '${serverUrl}'
+            }
+        """.stripIndent()
+
+        File sourceDir = createSourceDirectory(projectRootDir)
+        File testDir = createTestDirectory(projectRootDir)
+
+        writeSourceCodeFile(sourceDir)
+        writePartialCoverageSpecFile(testDir, "PartialSpec")
+
+        when:
+        def result = runSuccessfulBuildInCI('tasks')
+
+        then:
+        result.task(":tasks").outcome == SUCCESS
+    }
 }
