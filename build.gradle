@@ -11,7 +11,7 @@ buildscript {
 }
 
 plugins {
-    id "dev.projektor.publish" version "7.2.0"
+    id "dev.projektor.publish" version "7.2.3"
     id 'com.github.psxpaul.execfork' version '0.1.13' apply false
 }
 

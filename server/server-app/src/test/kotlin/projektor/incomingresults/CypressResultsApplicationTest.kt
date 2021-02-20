@@ -7,8 +7,11 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.ktor.ext.get
 import projektor.ApplicationTestCase
+import projektor.parser.GroupedResultsXmlLoader
+import projektor.testrun.TestRunService
 import projektor.testsuite.TestSuiteService
 import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 import strikt.assertions.isNotEmpty
 import strikt.assertions.isTrue
 import kotlin.test.assertNotNull
@@ -46,6 +49,33 @@ class CypressResultsApplicationTest : ApplicationTestCase() {
                 testSuites.forEach { testSuiteDB ->
                     val testSuiteSystemOut = runBlocking { testSuiteService.fetchTestSuiteSystemOut(publicId, testSuiteDB.idx) }
                     expectThat(testSuiteSystemOut.value.isNullOrEmpty()).isTrue()
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `when one Cypress test suite is empty should save other one`() {
+        val requestBody = GroupedResultsXmlLoader().wrapResultsXmlsInGroup(
+            listOf(
+                resultsXmlLoader.cypressEmptyTestSuites(),
+                resultsXmlLoader.cypressAttachmentsSpecWithFilePath()
+            )
+        )
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/groupedResults") {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(requestBody)
+            }.apply {
+                val (publicId, _) = waitForTestRunSaveToComplete(response)
+
+                val testRunService: TestRunService = application.get()
+
+                val testRun = runBlocking { testRunService.fetchTestRun(publicId) }
+                assertNotNull(testRun)
+                expectThat(testRun) {
+                    get { summary }.get { totalTestCount }.isEqualTo(2)
                 }
             }
         }

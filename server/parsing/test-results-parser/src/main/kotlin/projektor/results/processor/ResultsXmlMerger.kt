@@ -17,13 +17,6 @@ object ResultsXmlMerger {
             resultsXml
         }
 
-    fun removeTestSuitesWrapper(resultsXml: String): String {
-        return resultsXml
-            .replace(Regex("<testsuites.*?>"), "")
-            .replace(Regex("</testsuites>"), "")
-            .trim()
-    }
-
     private fun removeXmlHeader(resultXml: String) = resultXml
         .replace(Regex("""<\?xml.*\?>"""), "")
 

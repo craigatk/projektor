@@ -1,7 +1,6 @@
 package projektor.parser
 
 import io.github.classgraph.ClassGraph
-import projektor.results.processor.ResultsXmlMerger
 
 class ResultsXmlLoader {
     fun passing() = loadTextFromFile("TEST-projektor.example.spock.PassingSpec.xml")
@@ -44,7 +43,6 @@ class ResultsXmlLoader {
 
         return cypressResourceList
             .map { String(it.load()) }
-            .map(ResultsXmlMerger::removeTestSuitesWrapper)
     }
 
     fun cypressResultsWithFilePaths(): List<String> {
@@ -56,6 +54,8 @@ class ResultsXmlLoader {
         return cypressResourceList
             .map { String(it.load()) }
     }
+
+    fun cypressEmptyTestSuites() = loadTextFromFile("cypress/cypress-empty-test-suites.xml")
 
     fun cypressAttachmentsSpecWithFilePath() = loadTextFromFile("cypress-file-path/cypress-attachments.xml")
     fun cypressRepositoryTimelineSpecWithFilePath() = loadTextFromFile("cypress-file-path/cypress-repository-timeline.xml")
