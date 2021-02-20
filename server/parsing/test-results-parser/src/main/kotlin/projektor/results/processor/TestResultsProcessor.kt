@@ -55,7 +55,7 @@ class TestResultsProcessor {
                 }
             }
 
-            testSuitesWrapper.testSuites?.flatMap { it.testSuites } ?: listOf()
+            testSuitesWrapper.testSuites?.mapNotNull { it.testSuites }?.flatten() ?: listOf()
         } else {
             listOf()
         }

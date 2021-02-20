@@ -18,9 +18,11 @@ import kotlin.test.assertNotNull
 class CypressResultsWithFileNameApplicationTest : ApplicationTestCase() {
     @Test
     fun `should save Cypress file path as package name`() {
-        val resultsBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(
-            ResultsXmlLoader().cypressAttachmentsSpecWithFilePath() +
+        val resultsBody = GroupedResultsXmlLoader().wrapResultsXmlsInGroup(
+            listOf(
+                ResultsXmlLoader().cypressAttachmentsSpecWithFilePath(),
                 ResultsXmlLoader().cypressRepositoryTimelineSpecWithFilePath()
+            )
         )
 
         withTestApplication(::createTestApplication) {

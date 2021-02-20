@@ -36,4 +36,26 @@ class TestResultsCypressProcessorSpec : StringSpec({
             get { testCases }.isNotNull().hasSize(2)
         }
     }
+
+    "should filter out empty Cypress test suites" {
+        val testResultsProcessor = TestResultsProcessor()
+        val resultsXmlLoader = ResultsXmlLoader()
+        val blob = resultsXmlLoader.cypressEmptyTestSuites() +
+            resultsXmlLoader.cypressRepositoryTimelineSpecWithFilePath()
+
+        val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
+        expectThat(testSuiteList).hasSize(2).any {
+            get { name }.isEqualTo("cypress\\integration\\repository_timeline.spec.js")
+            get { testCases }.isNotNull().hasSize(2)
+        }
+    }
+
+    "when only one empty test suite should return empty list" {
+        val testResultsProcessor = TestResultsProcessor()
+        val resultsXmlLoader = ResultsXmlLoader()
+        val blob = resultsXmlLoader.cypressEmptyTestSuites()
+
+        val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
+        expectThat(testSuiteList).hasSize(0)
+    }
 })

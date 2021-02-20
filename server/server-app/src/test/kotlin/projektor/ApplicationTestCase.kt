@@ -10,6 +10,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.application.Application
 import io.ktor.config.MapApplicationConfig
+import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.ktor.util.KtorExperimentalAPI
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
@@ -209,6 +210,8 @@ open class ApplicationTestCase {
     }
 
     fun waitForTestRunSaveToComplete(response: TestApplicationResponse): Pair<PublicId, TestRun> {
+        expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+
         val resultsResponse = objectMapper.readValue(response.content, SaveResultsResponse::class.java)
 
         val publicId = resultsResponse.id
