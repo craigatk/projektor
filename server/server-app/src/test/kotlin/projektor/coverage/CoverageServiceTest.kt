@@ -2,7 +2,7 @@ package projektor.coverage
 
 import io.ktor.util.*
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
-import kotlinx.coroutines.runBlocking
+import org.jooq.exception.DataAccessException
 import org.junit.jupiter.api.Test
 import org.koin.test.inject
 import projektor.DatabaseRepositoryTestCase
@@ -14,6 +14,7 @@ import projektor.server.api.PublicId
 import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectCatching
 import strikt.api.expectThat
+import strikt.assertions.isA
 import strikt.assertions.isEqualTo
 import strikt.assertions.isFailure
 
@@ -36,9 +37,9 @@ class CoverageServiceTest : DatabaseRepositoryTestCase() {
         val coverageFilePayload = CoverageFilePayload(reportContents = JacocoXmlLoader().junitResultsParser())
         val publicId = PublicId("this-is-too-long-for-an-id")
 
-        expectCatching {
-            runBlocking { coverageService.saveReport(coverageFilePayload, publicId) }
-        }.isFailure()
+        expectCatching { coverageService.saveReport(coverageFilePayload, publicId) }
+            .isFailure()
+            .isA<DataAccessException>()
 
         expectThat(meterRegistry.counter("coverage_process_failure").count()).isEqualTo(1.toDouble())
         expectThat(meterRegistry.counter("coverage_parse_failure").count()).isEqualTo(0.toDouble())
