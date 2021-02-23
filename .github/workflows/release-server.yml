@@ -60,22 +60,6 @@ jobs:
           CACHE_SECRET_KEY: ${{ secrets.CACHE_SECRET_KEY }}
         run: |
           ./gradlew :server:server-app:assembleFull -PreleaseVersion=${{ env.RELEASE_VERSION }}
-      - name: cypress-common install
-        run: |
-          cd cypress-common
-          yarn install
-      - name: functional-test install
-        run: |
-          cd functional-test
-          yarn install
-
-      - name: Run functional tests
-        env:
-          DB_URL: "jdbc:postgresql://localhost:5432/projektordb"
-          CACHE_ACCESS_KEY: ${{ secrets.CACHE_ACCESS_KEY }}
-          CACHE_SECRET_KEY: ${{ secrets.CACHE_SECRET_KEY }}
-          PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
-        run: ./gradlew :functional-test:functionalTest -PreleaseVersion=${{ env.RELEASE_VERSION }}
 
       - name: Create Release
         id: create_release
