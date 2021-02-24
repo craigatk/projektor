@@ -17,6 +17,7 @@ import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.PersistTestResultsException
 import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
+import projektor.metrics.MetricsService
 import projektor.route.CompressionRequest.receiveCompressedOrPlainTextPayload
 import projektor.server.api.PublicId
 import projektor.server.api.results.SaveResultsError
@@ -28,12 +29,15 @@ fun Route.results(
     groupedTestResultsService: GroupedTestResultsService,
     testResultsProcessingService: TestResultsProcessingService,
     authService: AuthService,
-    metricRegistry: MeterRegistry
+    metricRegistry: MeterRegistry,
+    metricsService: MetricsService
 ) {
     post("/results") {
         if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
             call.respond(HttpStatusCode.Unauthorized)
         } else {
+            metricsService.incrementResultsProcessStartCounter()
+
             val resultsBlob = receiveCompressedOrPlainTextPayload(call)
 
             if (resultsBlob.isNotBlank()) {
@@ -49,6 +53,8 @@ fun Route.results(
         if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
             call.respond(HttpStatusCode.Unauthorized)
         } else {
+            metricsService.incrementResultsProcessStartCounter()
+
             val timer = metricRegistry.timer("receive_grouped_results")
             val sample = Timer.start(metricRegistry)
             val groupedResultsBlob = receiveCompressedOrPlainTextPayload(call)

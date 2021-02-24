@@ -29,6 +29,7 @@ class SaveGroupedResultsMetricsApplicationTest : ApplicationTestCase() {
             }.apply {
                 waitForTestRunSaveToComplete(response)
 
+                expectThat(meterRegistry.counter("results_process_start").count()).isEqualTo(1.toDouble())
                 expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(1.toDouble())
                 expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
                 expectThat(meterRegistry.counter("results_parse_failure").count()).isEqualTo(0.toDouble())
@@ -53,6 +54,7 @@ class SaveGroupedResultsMetricsApplicationTest : ApplicationTestCase() {
 
                 await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.ERROR.name }
 
+                expectThat(meterRegistry.counter("results_process_start").count()).isEqualTo(1.toDouble())
                 expectThat(meterRegistry.counter("results_parse_failure").count()).isEqualTo(1.toDouble())
                 expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
                 expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(0.toDouble())
@@ -77,6 +79,7 @@ class SaveGroupedResultsMetricsApplicationTest : ApplicationTestCase() {
 
                 await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.ERROR.name }
 
+                expectThat(meterRegistry.counter("results_process_start").count()).isEqualTo(1.toDouble())
                 expectThat(meterRegistry.counter("results_parse_failure").count()).isEqualTo(1.toDouble())
                 expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
                 expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(0.toDouble())
