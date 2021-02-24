@@ -52,6 +52,7 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
                 val testFailures = testFailureDao.fetchByTestCaseId(testCases[0].id)
                 expectThat(testFailures).isEmpty()
 
+                expectThat(meterRegistry.counter("results_process_start").count()).isEqualTo(1.toDouble())
                 expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(1.toDouble())
                 expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
             }

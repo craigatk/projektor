@@ -42,6 +42,7 @@ import projektor.message.MessageConfig
 import projektor.message.MessageService
 import projektor.metadata.TestRunMetadataService
 import projektor.metrics.InfluxMetricsConfig
+import projektor.metrics.MetricsService
 import projektor.metrics.createRegistry
 import projektor.notification.NotificationConfig
 import projektor.notification.github.GitHubClientConfig
@@ -180,6 +181,8 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
 
     val coverageBadgeService: CoverageBadgeService by inject()
 
+    val metricsService: MetricsService by inject()
+
     routing {
         attachments(attachmentService, authService)
         badge(coverageBadgeService)
@@ -193,7 +196,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
         previousRuns(previousTestRunService)
         repository(repositoryCoverageService, repositoryTestRunService)
         repositoryPerformance(repositoryPerformanceService)
-        results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService, metricRegistry)
+        results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService, metricRegistry, metricsService)
         testCases(testCaseService)
         testSuites(testSuiteService)
         testRuns(testRunService)
