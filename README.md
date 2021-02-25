@@ -12,7 +12,11 @@ especially if you don't have the full context of the test failure.
 
 Access and share your full test reports quickly and easily with Projektor.
 
-![alt text](images/projektor-results-dashboard.png "Projektor test report")
+![Projektor test report](images/projektor-results-dashboard.png "Projektor test report")
+
+![Projektor code coverage graph](images/projektor-code-coverage-graph.png "Projektor code coverage graph")
+
+![Projektor performance test results graph](images/projektor-performance-graph-full.png "Projektor performance test results graph")
 
 For full instructions to get started with Projektor, please see the project documentation at
 https://projektor.dev/docs/introduction/
@@ -44,3 +48,4 @@ A big thank you to the contributors to this project!
 
 * Aaron Zirbes - [aaronzirbes](https://github.com/aaronzirbes)
 * Alex Hatzenbuhler - [ahatzz11](https://github.com/ahatzz11)
+* Connor Hasting - [CodedChai](https://github.com/CodedChai)
