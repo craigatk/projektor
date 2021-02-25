@@ -116,7 +116,8 @@ const collectAndSendResults = async (
   projectName,
   isCI,
   compressionEnabled,
-  baseDirectoryPath
+  baseDirectoryPath,
+  attachmentMaxSizeMB
 ) => {
   console.log(
     `Gathering results from ${resultsFileGlobs} to send to Projektor server ${serverUrl}`
@@ -154,7 +155,8 @@ const collectAndSendResults = async (
         serverUrl,
         publishToken,
         attachmentFileGlobs,
-        publicId
+        publicId,
+        attachmentMaxSizeMB
       );
 
       return { resultsBlob, publicId, reportUrl, performanceResults };
