@@ -6,7 +6,8 @@ const sendAttachment = (
   publicId,
   publishToken,
   attachmentContents,
-  attachmentFileName
+  attachmentFileName,
+  attachmentMaxSizeMB
 ) => {
   const headers = {};
 
@@ -20,8 +21,12 @@ const sendAttachment = (
 
   const attachmentPostUrl = `${serverUrl}/run/${publicId}/attachments/${attachmentFileName}`;
 
+  const attachmentMaxSize = attachmentMaxSizeMB * 1024 * 1024;
+
   return axiosInstance
-    .post(attachmentPostUrl, attachmentContents)
+    .post(attachmentPostUrl, attachmentContents, {
+      maxBodyLength: attachmentMaxSize,
+    })
     .then((resp) => Promise.resolve(resp.data))
     .catch((err) => Promise.reject(err));
 };
@@ -30,7 +35,8 @@ const collectAndSendAttachments = (
   serverUrl,
   publishToken,
   attachmentFileGlobs,
-  publicId
+  publicId,
+  attachmentMaxSizeMB
 ) => {
   if (attachmentFileGlobs && attachmentFileGlobs.length > 0) {
     const attachments = collectFileContents(attachmentFileGlobs);
@@ -46,7 +52,8 @@ const collectAndSendAttachments = (
           publicId,
           publishToken,
           attachment.contents,
-          attachment.name
+          attachment.name,
+          attachmentMaxSizeMB
         ).catch((e) => {
           console.error(
             `Error sending attachment ${attachment.name} to Projektor server ${serverUrl}`,

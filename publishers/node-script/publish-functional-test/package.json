@@ -16,9 +16,5 @@
     "prettier": "2.1.2",
     "projektor-publish": "file:../",
     "wait-for-expect": "3.0.1"
-  },
-  "jest-junit": {
-    "outputDirectory": "testResults",
-    "includeConsoleOutput": "true"
   }
 }

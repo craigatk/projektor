@@ -28,6 +28,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
   let projectName;
   let repositoryName;
   let compressionEnabled;
+  let attachmentMaxSizeMB;
 
   const configFilePath = args.configFile || defaultConfigFilePath;
 
@@ -47,6 +48,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     repositoryName = config.repositoryName;
     projectName = config.projectName;
     compressionEnabled = config.compressionEnabled;
+    attachmentMaxSizeMB = config.attachmentMaxSizeMB;
   } else {
     serverUrl = args.serverUrl;
     resultsFileGlobs = args.resultsFileGlobs;
@@ -73,10 +75,17 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     repositoryName = args.repositoryName;
     projectName = args.projectName;
     compressionEnabled = args.compressionEnabled;
+    attachmentMaxSizeMB = args.attachmentMaxSizeMB;
   }
 
   if (_.isNil(compressionEnabled)) {
     compressionEnabled = true;
+  }
+
+  if (!_.isNil(attachmentMaxSizeMB)) {
+    attachmentMaxSizeMB = parseFloat(attachmentMaxSizeMB);
+  } else {
+    attachmentMaxSizeMB = 20;
   }
 
   if (resultsFileGlobs || performanceFileGlobs) {
@@ -109,7 +118,8 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       projectName,
       isCI,
       compressionEnabled,
-      baseDirectoryPath
+      baseDirectoryPath,
+      attachmentMaxSizeMB
     );
 
     if (!resultsBlob && !performanceFileGlobs) {

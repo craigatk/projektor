@@ -1,5 +1,5 @@
 plugins {
-    id "com.atkinsondev.object-store-cache" version "1.1.2"
+    id "com.atkinsondev.object-store-cache" version "1.2.0"
 }
 
 include 'functional-test',
