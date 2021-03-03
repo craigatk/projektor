@@ -8,6 +8,7 @@ import projektor.DatabaseRepositoryTestCase
 import projektor.database.generated.tables.pojos.ResultsProcessing
 import projektor.incomingresults.randomPublicId
 import projektor.parser.GroupedResultsXmlLoader
+import projektor.server.api.error.FailureBodyType
 import projektor.server.api.results.ResultsProcessingStatus
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
@@ -85,6 +86,8 @@ class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
             .isNotNull()
             .and {
                 get { resultsBody }.isEqualTo(resultsBody)
+                get { bodyType }.isEqualTo(FailureBodyType.TEST_RESULTS.name)
+                get { failureMessage }.isEqualTo(newErrorMessage)
                 get { createdTimestamp }.isNotNull()
             }
     }

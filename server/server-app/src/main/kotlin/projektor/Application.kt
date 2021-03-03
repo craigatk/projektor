@@ -34,6 +34,7 @@ import projektor.cleanup.TestRunCleanupService
 import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageService
 import projektor.database.DataSourceConfig
+import projektor.error.ProcessingFailureService
 import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
@@ -183,11 +184,14 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
 
     val metricsService: MetricsService by inject()
 
+    val processingFailureService: ProcessingFailureService by inject()
+
     routing {
         attachments(attachmentService, authService)
         badge(coverageBadgeService)
         config(cleanupConfig)
         coverage(authService, coverageService)
+        failure(processingFailureService)
         health()
         messages(messageService)
         metadata(testRunMetadataService, versionControlConfig)

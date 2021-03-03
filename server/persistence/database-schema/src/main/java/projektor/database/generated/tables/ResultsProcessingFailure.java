@@ -10,9 +10,10 @@ import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row3;
+import org.jooq.Row6;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -22,6 +23,7 @@ import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
+import projektor.database.generated.Indexes;
 import projektor.database.generated.Keys;
 import projektor.database.generated.Public;
 import projektor.database.generated.tables.records.ResultsProcessingFailureRecord;
@@ -63,6 +65,21 @@ public class ResultsProcessingFailure extends TableImpl<ResultsProcessingFailure
      */
     public final TableField<ResultsProcessingFailureRecord, LocalDateTime> CREATED_TIMESTAMP = createField(DSL.name("created_timestamp"), SQLDataType.LOCALDATETIME(6), this, "");
 
+    /**
+     * The column <code>public.results_processing_failure.failure_message</code>.
+     */
+    public final TableField<ResultsProcessingFailureRecord, String> FAILURE_MESSAGE = createField(DSL.name("failure_message"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>public.results_processing_failure.failure_type</code>.
+     */
+    public final TableField<ResultsProcessingFailureRecord, String> FAILURE_TYPE = createField(DSL.name("failure_type"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>public.results_processing_failure.body_type</code>.
+     */
+    public final TableField<ResultsProcessingFailureRecord, String> BODY_TYPE = createField(DSL.name("body_type"), SQLDataType.CLOB, this, "");
+
     private ResultsProcessingFailure(Name alias, Table<ResultsProcessingFailureRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -102,6 +119,11 @@ public class ResultsProcessingFailure extends TableImpl<ResultsProcessingFailure
     }
 
     @Override
+    public List<Index> getIndexes() {
+        return Arrays.<Index>asList(Indexes.RESULTS_PROCESSING_FAILURE_BODY_TYPE_IDX, Indexes.RESULTS_PROCESSING_FAILURE_CREATED_TIMESTAMP_IDX);
+    }
+
+    @Override
     public UniqueKey<ResultsProcessingFailureRecord> getPrimaryKey() {
         return Keys.RESULTS_PROCESSING_FAILURE_PKEY;
     }
@@ -109,15 +131,6 @@ public class ResultsProcessingFailure extends TableImpl<ResultsProcessingFailure
     @Override
     public List<UniqueKey<ResultsProcessingFailureRecord>> getKeys() {
         return Arrays.<UniqueKey<ResultsProcessingFailureRecord>>asList(Keys.RESULTS_PROCESSING_FAILURE_PKEY);
-    }
-
-    @Override
-    public List<ForeignKey<ResultsProcessingFailureRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ResultsProcessingFailureRecord, ?>>asList(Keys.RESULTS_PROCESSING_FAILURE__RESULTS_PROCESSING_FAILURE_PUBLIC_ID_FKEY);
-    }
-
-    public ResultsProcessing resultsProcessing() {
-        return new ResultsProcessing(this, Keys.RESULTS_PROCESSING_FAILURE__RESULTS_PROCESSING_FAILURE_PUBLIC_ID_FKEY);
     }
 
     @Override
@@ -147,11 +160,11 @@ public class ResultsProcessingFailure extends TableImpl<ResultsProcessingFailure
     }
 
     // -------------------------------------------------------------------------
-    // Row3 type methods
+    // Row6 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<String, String, LocalDateTime> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row6<String, String, LocalDateTime, String, String, String> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 }

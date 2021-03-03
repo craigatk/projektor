@@ -87,4 +87,46 @@ public class ResultsProcessingFailureDao extends DAOImpl<ResultsProcessingFailur
     public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchByCreatedTimestamp(LocalDateTime... values) {
         return fetch(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.CREATED_TIMESTAMP, values);
     }
+
+    /**
+     * Fetch records that have <code>failure_message BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchRangeOfFailureMessage(String lowerInclusive, String upperInclusive) {
+        return fetchRange(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.FAILURE_MESSAGE, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>failure_message IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchByFailureMessage(String... values) {
+        return fetch(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.FAILURE_MESSAGE, values);
+    }
+
+    /**
+     * Fetch records that have <code>failure_type BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchRangeOfFailureType(String lowerInclusive, String upperInclusive) {
+        return fetchRange(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.FAILURE_TYPE, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>failure_type IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchByFailureType(String... values) {
+        return fetch(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.FAILURE_TYPE, values);
+    }
+
+    /**
+     * Fetch records that have <code>body_type BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchRangeOfBodyType(String lowerInclusive, String upperInclusive) {
+        return fetchRange(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.BODY_TYPE, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>body_type IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchByBodyType(String... values) {
+        return fetch(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.BODY_TYPE, values);
+    }
 }

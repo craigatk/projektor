@@ -1,6 +1,8 @@
 package projektor.error
 
 import projektor.server.api.PublicId
+import projektor.server.api.error.FailureBodyType
+import projektor.server.api.error.ResultsProcessingFailure
 import java.lang.Exception
 
 class ProcessingFailureService(private val processingFailureRepository: ProcessingFailureRepository) {
@@ -10,7 +12,10 @@ class ProcessingFailureService(private val processingFailureRepository: Processi
             publicId = publicId,
             body = body,
             bodyType = bodyType,
-            failure = e.message
+            failureMessage = e.message
         )
     }
+
+    suspend fun fetchRecentProcessingFailures(failureCount: Int): List<ResultsProcessingFailure> =
+        processingFailureRepository.fetchRecentProcessingFailures(failureCount)
 }

@@ -58,7 +58,7 @@ public class TestFailure extends TableImpl<TestFailureRecord> {
     /**
      * The column <code>public.test_failure.test_case_id</code>.
      */
-    public final TableField<TestFailureRecord, Long> TEST_CASE_ID = createField(DSL.name("test_case_id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<TestFailureRecord, Long> TEST_CASE_ID = createField(DSL.name("test_case_id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.test_failure.failure_message</code>.

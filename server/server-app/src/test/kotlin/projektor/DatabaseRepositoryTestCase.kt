@@ -27,9 +27,14 @@ import projektor.metrics.InfluxMetricsConfig
 import projektor.metrics.MetricsService
 import projektor.metrics.createRegistry
 import projektor.notification.NotificationConfig
+import java.util.*
 
 @KtorExperimentalAPI
 open class DatabaseRepositoryTestCase : KoinTest {
+    init {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+    }
+
     lateinit var dataSource: HikariDataSource
     lateinit var dslContext: DSLContext
     lateinit var testRunDao: TestRunDao

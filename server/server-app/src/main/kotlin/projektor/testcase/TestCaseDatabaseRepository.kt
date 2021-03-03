@@ -76,7 +76,7 @@ class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseR
                 .select(TEST_SUITE.PACKAGE_NAME.`as`("package_name"))
                 .select(TEST_RUN.PUBLIC_ID.`as`("public_id"))
                 .select(TEST_RUN.CREATED_TIMESTAMP.`as`("created_timestamp"))
-                .select(addPrefixToFields("failure_", TEST_FAILURE.fields().toList()))
+                .select(TEST_FAILURE.addPrefixToFields("failure_"))
                 .from(TEST_CASE)
                 .innerJoin(TEST_SUITE).on(TEST_SUITE.ID.eq(TEST_CASE.TEST_SUITE_ID))
                 .innerJoin(TEST_RUN).on(TEST_SUITE.TEST_RUN_ID.eq(TEST_RUN.ID))
