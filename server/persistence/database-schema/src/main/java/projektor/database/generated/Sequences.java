@@ -61,19 +61,9 @@ public class Sequences {
     public static final Sequence<Long> TEST_CASE_ID_SEQ = Internal.createSequence("test_case_id_seq", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);
 
     /**
-     * The sequence <code>public.test_case_test_suite_id_seq</code>
-     */
-    public static final Sequence<Long> TEST_CASE_TEST_SUITE_ID_SEQ = Internal.createSequence("test_case_test_suite_id_seq", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);
-
-    /**
      * The sequence <code>public.test_failure_id_seq</code>
      */
     public static final Sequence<Long> TEST_FAILURE_ID_SEQ = Internal.createSequence("test_failure_id_seq", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);
-
-    /**
-     * The sequence <code>public.test_failure_test_case_id_seq</code>
-     */
-    public static final Sequence<Long> TEST_FAILURE_TEST_CASE_ID_SEQ = Internal.createSequence("test_failure_test_case_id_seq", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);
 
     /**
      * The sequence <code>public.test_run_attachment_id_seq</code>
@@ -94,9 +84,4 @@ public class Sequences {
      * The sequence <code>public.test_suite_id_seq</code>
      */
     public static final Sequence<Long> TEST_SUITE_ID_SEQ = Internal.createSequence("test_suite_id_seq", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);
-
-    /**
-     * The sequence <code>public.test_suite_test_run_id_seq</code>
-     */
-    public static final Sequence<Long> TEST_SUITE_TEST_RUN_ID_SEQ = Internal.createSequence("test_suite_test_run_id_seq", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);
 }

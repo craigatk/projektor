@@ -59,7 +59,7 @@ public class TestCase extends TableImpl<TestCaseRecord> {
     /**
      * The column <code>public.test_case.test_suite_id</code>.
      */
-    public final TableField<TestCaseRecord, Long> TEST_SUITE_ID = createField(DSL.name("test_suite_id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<TestCaseRecord, Long> TEST_SUITE_ID = createField(DSL.name("test_suite_id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.test_case.idx</code>.

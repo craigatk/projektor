@@ -161,8 +161,8 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
         withContext(Dispatchers.IO) {
             val resultSet = dslContext
                 .select(TEST_RUN.PUBLIC_ID.`as`("id"))
-                .select(addPrefixToFields("summary", TEST_RUN.fields().toList()))
-                .select(addPrefixToFields("test_suites_", TEST_SUITE.fields().toList()))
+                .select(TEST_RUN.addPrefixToFields("summary"))
+                .select(TEST_SUITE.addPrefixToFields("test_suites_"))
                 .select(TEST_SUITE_GROUP.GROUP_LABEL.`as`("test_suites_group_label"))
                 .select(TEST_SUITE_GROUP.GROUP_NAME.`as`("test_suites_group_name"))
                 .from(TEST_RUN)

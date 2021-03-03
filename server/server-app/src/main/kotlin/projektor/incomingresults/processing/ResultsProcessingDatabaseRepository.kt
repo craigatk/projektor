@@ -6,17 +6,19 @@ import org.jooq.DSLContext
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables
 import projektor.database.generated.tables.daos.ResultsProcessingDao
-import projektor.database.generated.tables.daos.ResultsProcessingFailureDao
-import projektor.database.generated.tables.pojos.ResultsProcessingFailure
+import projektor.error.ProcessingFailureRepository
 import projektor.server.api.PublicId
+import projektor.server.api.error.FailureBodyType
 import projektor.server.api.results.ResultsProcessing
 import projektor.server.api.results.ResultsProcessingStatus
 import java.time.LocalDateTime
 import projektor.database.generated.tables.pojos.ResultsProcessing as ResultsProcessingDB
 
-class ResultsProcessingDatabaseRepository(private val dslContext: DSLContext) : ResultsProcessingRepository {
+class ResultsProcessingDatabaseRepository(
+    private val dslContext: DSLContext,
+    private val processingFailureRepository: ProcessingFailureRepository
+) : ResultsProcessingRepository {
     private val resultsProcessingDao = ResultsProcessingDao(dslContext.configuration())
-    private val resultsProcessingFailureDao = ResultsProcessingFailureDao(dslContext.configuration())
 
     private val resultsProcessingMapper = JdbcMapperFactory.newInstance()
         .addKeys("public_id")
@@ -36,7 +38,10 @@ class ResultsProcessingDatabaseRepository(private val dslContext: DSLContext) : 
             ResultsProcessing(publicId.id, ResultsProcessingStatus.RECEIVED, createdTimestamp, null)
         }
 
-    override suspend fun updateResultsProcessingStatus(publicId: PublicId, newStatus: ResultsProcessingStatus): Boolean =
+    override suspend fun updateResultsProcessingStatus(
+        publicId: PublicId,
+        newStatus: ResultsProcessingStatus
+    ): Boolean =
         withContext(Dispatchers.IO) {
             dslContext.update(Tables.RESULTS_PROCESSING)
                 .set(Tables.RESULTS_PROCESSING.STATUS, newStatus.name)
@@ -44,7 +49,11 @@ class ResultsProcessingDatabaseRepository(private val dslContext: DSLContext) : 
                 .execute() > 0
         }
 
-    override suspend fun recordResultsProcessingError(publicId: PublicId, resultsBody: String, errorMessage: String?): Boolean =
+    override suspend fun recordResultsProcessingError(
+        publicId: PublicId,
+        resultsBody: String,
+        errorMessage: String?
+    ): Boolean =
         withContext(Dispatchers.IO) {
             val updateProcessingStatus = dslContext.update(Tables.RESULTS_PROCESSING)
                 .set(Tables.RESULTS_PROCESSING.STATUS, ResultsProcessingStatus.ERROR.name)
@@ -52,11 +61,12 @@ class ResultsProcessingDatabaseRepository(private val dslContext: DSLContext) : 
                 .where(Tables.RESULTS_PROCESSING.PUBLIC_ID.eq(publicId.id))
                 .execute() > 0
 
-            val resultsProcessingFailure = ResultsProcessingFailure()
-            resultsProcessingFailure.publicId = publicId.id
-            resultsProcessingFailure.body = resultsBody
-            resultsProcessingFailure.createdTimestamp = LocalDateTime.now()
-            resultsProcessingFailureDao.insert(resultsProcessingFailure)
+            processingFailureRepository.recordProcessingFailure(
+                publicId = publicId,
+                body = resultsBody,
+                bodyType = FailureBodyType.TEST_RESULTS,
+                failureMessage = errorMessage
+            )
 
             updateProcessingStatus
         }

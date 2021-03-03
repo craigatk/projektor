@@ -60,7 +60,7 @@ public class TestSuite extends TableImpl<TestSuiteRecord> {
     /**
      * The column <code>public.test_suite.test_run_id</code>.
      */
-    public final TableField<TestSuiteRecord, Long> TEST_RUN_ID = createField(DSL.name("test_run_id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<TestSuiteRecord, Long> TEST_RUN_ID = createField(DSL.name("test_run_id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.test_suite.idx</code>.

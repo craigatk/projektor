@@ -3,7 +3,6 @@ package projektor.coverage
 import com.fasterxml.jackson.core.JsonProcessingException
 import org.slf4j.LoggerFactory
 import projektor.compare.PreviousTestRunService
-import projektor.error.FailureBodyType
 import projektor.error.ProcessingFailureService
 import projektor.metrics.MetricsService
 import projektor.parser.coverage.CoverageParseException
@@ -15,6 +14,7 @@ import projektor.server.api.PublicId
 import projektor.server.api.coverage.Coverage
 import projektor.server.api.coverage.CoverageFile
 import projektor.server.api.coverage.CoverageStats
+import projektor.server.api.error.FailureBodyType
 import java.math.BigDecimal
 
 class CoverageService(

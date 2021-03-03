@@ -90,7 +90,7 @@ fun createAppModule(
     single<TestRunRepository> { TestRunDatabaseRepository(get()) }
     single<TestRunSystemAttributesRepository> { TestRunSystemAttributesDatabaseRepository(get()) }
     single<AttachmentRepository> { AttachmentDatabaseRepository(get()) }
-    single<ResultsProcessingRepository> { ResultsProcessingDatabaseRepository(get()) }
+    single<ResultsProcessingRepository> { ResultsProcessingDatabaseRepository(get(), get()) }
     single<PreviousTestRunRepository> { PreviousTestRunDatabaseRepository(get()) }
     single<TestRunMetadataRepository> { TestRunMetadataDatabaseRepository(get()) }
     single<ProcessingFailureRepository> { ProcessingFailureDatabaseRepository(get()) }

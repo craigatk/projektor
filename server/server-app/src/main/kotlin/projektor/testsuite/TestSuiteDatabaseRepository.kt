@@ -22,11 +22,11 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
         withContext(Dispatchers.IO) {
             val resultSet = dslContext
                 .select(Tables.TEST_SUITE.fields().toList())
-                .select(addPrefixToFields("test_cases_", Tables.TEST_CASE.fields().toList()))
+                .select(Tables.TEST_CASE.addPrefixToFields("test_cases_"))
                 .select(Tables.TEST_RUN.PUBLIC_ID.`as`("test_cases_public_id"))
                 .select(Tables.TEST_SUITE.IDX.`as`("test_cases_test_suite_idx"))
                 .select(Tables.TEST_RUN.CREATED_TIMESTAMP.`as`("test_cases_created_timestamp"))
-                .select(addPrefixToFields("test_cases_failure_", Tables.TEST_FAILURE.fields().toList()))
+                .select(Tables.TEST_FAILURE.addPrefixToFields("test_cases_failure_"))
                 .select(Tables.TEST_SUITE_GROUP.fields().toList())
                 .from(Tables.TEST_SUITE)
                 .innerJoin(Tables.TEST_RUN).on(Tables.TEST_SUITE.TEST_RUN_ID.eq(Tables.TEST_RUN.ID))

@@ -160,14 +160,11 @@ public class Public extends SchemaImpl {
             Sequences.PROCESSING_FAILURE_ID_SEQ,
             Sequences.RESULTS_METADATA_ID_SEQ,
             Sequences.TEST_CASE_ID_SEQ,
-            Sequences.TEST_CASE_TEST_SUITE_ID_SEQ,
             Sequences.TEST_FAILURE_ID_SEQ,
-            Sequences.TEST_FAILURE_TEST_CASE_ID_SEQ,
             Sequences.TEST_RUN_ATTACHMENT_ID_SEQ,
             Sequences.TEST_RUN_ID_SEQ,
             Sequences.TEST_SUITE_GROUP_ID_SEQ,
-            Sequences.TEST_SUITE_ID_SEQ,
-            Sequences.TEST_SUITE_TEST_RUN_ID_SEQ);
+            Sequences.TEST_SUITE_ID_SEQ);
     }
 
     @Override

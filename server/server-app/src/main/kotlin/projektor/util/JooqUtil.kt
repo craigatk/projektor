@@ -1,7 +1,8 @@
 package projektor.util
 
 import org.jooq.Field
+import org.jooq.impl.TableImpl
 
-fun addPrefixToFields(prefix: String, fields: List<Field<*>>): List<Field<*>> {
-    return fields.map { it.`as`("${prefix}${it.name}") }
+fun TableImpl<*>.addPrefixToFields(prefix: String): List<Field<*>> {
+    return fields().map { it.`as`("${prefix}${it.name}") }
 }

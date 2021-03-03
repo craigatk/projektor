@@ -1,0 +1,1 @@
+ALTER TABLE results_processing_failure DROP CONSTRAINT results_processing_failure_public_id_fkey;

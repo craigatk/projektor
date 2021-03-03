@@ -19,6 +19,9 @@ public class ResultsProcessingFailure implements Serializable {
     private String        publicId;
     private String        body;
     private LocalDateTime createdTimestamp;
+    private String        failureMessage;
+    private String        failureType;
+    private String        bodyType;
 
     public ResultsProcessingFailure() {}
 
@@ -26,16 +29,25 @@ public class ResultsProcessingFailure implements Serializable {
         this.publicId = value.publicId;
         this.body = value.body;
         this.createdTimestamp = value.createdTimestamp;
+        this.failureMessage = value.failureMessage;
+        this.failureType = value.failureType;
+        this.bodyType = value.bodyType;
     }
 
     public ResultsProcessingFailure(
         String        publicId,
         String        body,
-        LocalDateTime createdTimestamp
+        LocalDateTime createdTimestamp,
+        String        failureMessage,
+        String        failureType,
+        String        bodyType
     ) {
         this.publicId = publicId;
         this.body = body;
         this.createdTimestamp = createdTimestamp;
+        this.failureMessage = failureMessage;
+        this.failureType = failureType;
+        this.bodyType = bodyType;
     }
 
     /**
@@ -83,6 +95,51 @@ public class ResultsProcessingFailure implements Serializable {
         return this;
     }
 
+    /**
+     * Getter for <code>public.results_processing_failure.failure_message</code>.
+     */
+    public String getFailureMessage() {
+        return this.failureMessage;
+    }
+
+    /**
+     * Setter for <code>public.results_processing_failure.failure_message</code>.
+     */
+    public ResultsProcessingFailure setFailureMessage(String failureMessage) {
+        this.failureMessage = failureMessage;
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.results_processing_failure.failure_type</code>.
+     */
+    public String getFailureType() {
+        return this.failureType;
+    }
+
+    /**
+     * Setter for <code>public.results_processing_failure.failure_type</code>.
+     */
+    public ResultsProcessingFailure setFailureType(String failureType) {
+        this.failureType = failureType;
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.results_processing_failure.body_type</code>.
+     */
+    public String getBodyType() {
+        return this.bodyType;
+    }
+
+    /**
+     * Setter for <code>public.results_processing_failure.body_type</code>.
+     */
+    public ResultsProcessingFailure setBodyType(String bodyType) {
+        this.bodyType = bodyType;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -110,6 +167,24 @@ public class ResultsProcessingFailure implements Serializable {
         }
         else if (!createdTimestamp.equals(other.createdTimestamp))
             return false;
+        if (failureMessage == null) {
+            if (other.failureMessage != null)
+                return false;
+        }
+        else if (!failureMessage.equals(other.failureMessage))
+            return false;
+        if (failureType == null) {
+            if (other.failureType != null)
+                return false;
+        }
+        else if (!failureType.equals(other.failureType))
+            return false;
+        if (bodyType == null) {
+            if (other.bodyType != null)
+                return false;
+        }
+        else if (!bodyType.equals(other.bodyType))
+            return false;
         return true;
     }
 
@@ -120,6 +195,9 @@ public class ResultsProcessingFailure implements Serializable {
         result = prime * result + ((this.publicId == null) ? 0 : this.publicId.hashCode());
         result = prime * result + ((this.body == null) ? 0 : this.body.hashCode());
         result = prime * result + ((this.createdTimestamp == null) ? 0 : this.createdTimestamp.hashCode());
+        result = prime * result + ((this.failureMessage == null) ? 0 : this.failureMessage.hashCode());
+        result = prime * result + ((this.failureType == null) ? 0 : this.failureType.hashCode());
+        result = prime * result + ((this.bodyType == null) ? 0 : this.bodyType.hashCode());
         return result;
     }
 
@@ -130,6 +208,9 @@ public class ResultsProcessingFailure implements Serializable {
         sb.append(publicId);
         sb.append(", ").append(body);
         sb.append(", ").append(createdTimestamp);
+        sb.append(", ").append(failureMessage);
+        sb.append(", ").append(failureType);
+        sb.append(", ").append(bodyType);
 
         sb.append(")");
         return sb.toString();
