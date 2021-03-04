@@ -14,7 +14,12 @@ Cypress.Commands.add(
   "loadGroupedFixtureDataAndVisitTestRun",
   (fixtureData, visitUri = "", loadingFunc = null) =>
     cy
-      .request("POST", `http://localhost:8080/groupedResults`, fixtureData)
+      .request({
+        method: "POST",
+        url: `http://localhost:8080/groupedResults`,
+        body: fixtureData,
+        failOnStatusCode: false,
+      })
       .then((resp) => {
         const publicId = resp.body.id;
 
