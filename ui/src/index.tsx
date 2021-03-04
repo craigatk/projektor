@@ -5,11 +5,13 @@ import Welcome from "./Welcome";
 import TestRunDataWrapper from "./TestRun/TestRunDataWrapper";
 import OrganizationWrapper from "./Organization/OrganizationWrapper";
 import RepositoryWrapper from "./Repository/RepositoryWrapper";
+import AdminWrapper from "./Admin/AdminWrapper";
 
 const App = () => {
   return (
     <Router>
       <Welcome path="/" />
+      <AdminWrapper path="/admin/*" />
       <OrganizationWrapper path="/organization/:orgName/*" orgName="" />
       <RepositoryWrapper
         path="/repository/:orgPart/:repoPart/project/:projectName/*"

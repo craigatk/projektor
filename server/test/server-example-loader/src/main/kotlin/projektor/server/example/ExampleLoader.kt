@@ -382,6 +382,12 @@ fun coveragePayloadWithBaseDirectory() {
     println("View run with coverage base directory and Git metadata at $uiBaseUrl${resultsResponse.uri}")
 }
 
+fun invalidResults() {
+    sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().invalid()))
+
+    println("View admin page with results failures at $uiBaseUrl/admin")
+}
+
 fun sendResultsToServer(resultXmlList: List<String>): SaveResultsResponse =
     resultXmlList.joinToString("\n").let(::sendResultsToServer)
 

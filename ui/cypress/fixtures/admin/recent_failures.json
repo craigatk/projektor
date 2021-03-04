@@ -1,0 +1,16 @@
+[
+  {
+    "id": "SJAWN6PITO29",
+    "body": "{\"groupedTestSuites\":[{\"groupName\":\"Group1\",\"groupLabel\":\"unitTest\",\"directory\":\"/test/unit\",\"testSuitesBlob\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\r\\ntestsuite name=\\\"projektor.example.spock.PassingSpec\\\" tests=\\\"1\\\" skipped=\\\"0\\\" failures=\\\"0\\\" errors=\\\"0\\\" timestamp=\\\"2019-10-01T13:15:45\\\" hostname=\\\"Craigs-MacBook-Pro.local\\\" time=\\\"0.002\\\">\\r\\n  <properties/>\\r\\n  <testcase name=\\\"should pass\\\" classname=\\\"projektor.example.spock.PassingSpec\\\" time=\\\"0.002\\\"/>\\r\\n  <system-out><![CDATA[]]></system-out>\\r\\n  <system-err><![CDATA[]]></system-err>\\r\\n</testsuite>\\r\\n\"}],\"performanceResults\":null,\"metadata\":null,\"wallClockDuration\":null,\"coverageFiles\":null}",
+    "body_type": "TEST_RESULTS",
+    "created_timestamp": "2021-03-04T12:03:39.778Z",
+    "failure_message": "Problem saving test results: Unexpected IOException"
+  },
+  {
+    "id": "X3NFUCTIPXNV",
+    "body": "{\"groupedTestSuites\":[{\"groupName\":\"Group1\",\"groupLabel\":\"unitTest\",\"directory\":\"/test/unit\",\"testSuitesBlob\":\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\r\\ntestsuite name=\\\"projektor.example.spock.PassingSpec\\\" tests=\\\"1\\\" skipped=\\\"0\\\" failures=\\\"0\\\" errors=\\\"0\\\" timestamp=\\\"2019-10-01T13:15:45\\\" hostname=\\\"Craigs-MacBook-Pro.local\\\" time=\\\"0.002\\\">\\r\\n  <properties/>\\r\\n  <testcase name=\\\"should pass\\\" classname=\\\"projektor.example.spock.PassingSpec\\\" time=\\\"0.002\\\"/>\\r\\n  <system-out><![CDATA[]]></system-out>\\r\\n  <system-err><![CDATA[]]></system-err>\\r\\n</testsuite>\\r\\n\"}],\"performanceResults\":null,\"metadata\":null,\"wallClockDuration\":null,\"coverageFiles\":null}",
+    "body_type": "TEST_RESULTS",
+    "created_timestamp": "2021-03-04T11:58:28.306Z",
+    "failure_message": "Problem parsing test results: Unexpected IOException"
+  }
+]
