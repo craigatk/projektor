@@ -36,7 +36,8 @@ const AdminFailuresTable = ({ failures }: AdminFailuresTableProps) => {
         style={{ boxShadow: "none" }}
         options={{
           sorting: true,
-          paging: false,
+          paging: true,
+          pageSize: 10,
         }}
         columns={[
           {

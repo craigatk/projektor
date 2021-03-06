@@ -383,7 +383,9 @@ fun coveragePayloadWithBaseDirectory() {
 }
 
 fun invalidResults() {
-    sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().invalid()))
+    repeat(21) {
+        sendGroupedResultsToServer(GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().invalid()))
+    }
 
     println("View admin page with results failures at $uiBaseUrl/admin")
 }

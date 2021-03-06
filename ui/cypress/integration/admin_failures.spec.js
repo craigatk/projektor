@@ -7,7 +7,7 @@ context("admin failures", () => {
     cy.route(
       "GET",
       `failures/recent?count=10`,
-      "fixture:admin/recent_failures.json"
+      "fixture:admin/recent_failures_2.json"
     );
 
     cy.visit(`http://localhost:1234/admin`);
@@ -51,6 +51,49 @@ context("admin failures", () => {
     cy.getByTestId(`admin-failures-created-timestamp-${secondPublicId}`).should(
       "contain",
       "March"
+    );
+  });
+
+  it("should support changing the number of failures that are loaded", () => {
+    cy.server();
+
+    cy.route(
+      "GET",
+      `failures/recent?count=10`,
+      "fixture:admin/recent_failures_2.json"
+    );
+
+    cy.route(
+      "GET",
+      `failures/recent?count=20`,
+      "fixture:admin/recent_failures_20.json"
+    );
+
+    cy.visit(`http://localhost:1234/admin`);
+
+    cy.testIdShouldExist("admin-failures-title");
+    cy.testIdShouldExist("admin-failures-table");
+
+    const firstPublicIds = ["SJAWN6PITO29", "X3NFUCTIPXNV"];
+    firstPublicIds.forEach((publicId) =>
+      cy
+        .getByTestId(`admin-failures-id-${publicId}`)
+        .should("contain", publicId)
+    );
+
+    cy.getByTestId("admin-failures-count-field").type("{selectall}{backspace}20", {
+      delay: 50,
+    });
+
+    cy.getByTestId("admin-failures-load-button").click()
+
+    cy.testIdShouldExist("admin-failures-table");
+
+    const secondPublicIds = ["DCPKTZMDG2Q0", "Z8SGT2YTPLHH", "OMHJFVJMZRDL"];
+    secondPublicIds.forEach((publicId) =>
+        cy
+            .getByTestId(`admin-failures-id-${publicId}`)
+            .should("contain", publicId)
     );
   });
 });
