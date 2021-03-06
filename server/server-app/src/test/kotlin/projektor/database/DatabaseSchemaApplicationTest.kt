@@ -8,9 +8,13 @@ import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
+import org.jooq.exception.DataAccessException
 import org.junit.Test
 import projektor.ApplicationTestCase
 import projektor.server.api.results.SaveResultsResponse
+import strikt.api.expectThat
+import strikt.assertions.contains
+import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
@@ -38,9 +42,15 @@ class DatabaseSchemaApplicationTest : ApplicationTestCase() {
                     results.isNotEmpty
                 }
 
-                await until {
-                    val results = dslContext.resultQuery("select id from public.test_run where public_id = {0}", publicId).fetch()
-                    results.isEmpty()
+                try {
+                    await until {
+                        val results =
+                            dslContext.resultQuery("select id from public.test_run where public_id = {0}", publicId)
+                                .fetch()
+                        results.isEmpty()
+                    }
+                } catch (e: DataAccessException) {
+                    expectThat(e.message).isNotNull().contains("""relation "public.test_run" does not exist""")
                 }
             }
         }

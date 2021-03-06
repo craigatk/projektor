@@ -11,7 +11,6 @@ import projektor.database.generated.tables.CodeCoverageStats;
 import projektor.database.generated.tables.GitMetadata;
 import projektor.database.generated.tables.GitRepository;
 import projektor.database.generated.tables.PerformanceResults;
-import projektor.database.generated.tables.ProcessingFailure;
 import projektor.database.generated.tables.ResultsMetadata;
 import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.ResultsProcessingFailure;
@@ -64,11 +63,6 @@ public class Tables {
      * The table <code>public.performance_results</code>.
      */
     public static final PerformanceResults PERFORMANCE_RESULTS = PerformanceResults.PERFORMANCE_RESULTS;
-
-    /**
-     * The table <code>public.processing_failure</code>.
-     */
-    public static final ProcessingFailure PROCESSING_FAILURE = ProcessingFailure.PROCESSING_FAILURE;
 
     /**
      * The table <code>public.results_metadata</code>.
