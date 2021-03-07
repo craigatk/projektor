@@ -16,6 +16,7 @@ import projektor.performance.PerformanceResultsRepository
 import projektor.server.api.PublicId
 import projektor.server.api.TestRunSummary
 import projektor.server.api.coverage.Coverage
+import projektor.server.api.performance.PerformanceResult
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.testrun.TestRunRepository
 
@@ -67,7 +68,7 @@ class GroupedTestResultsService(
         try {
             val (testRunId, testRunSummary) = testRunRepository.saveGroupedTestRun(publicId, groupedResults)
 
-            groupedResults.performanceResults.forEach { performanceResult ->
+            val performanceResults = groupedResults.performanceResults.map { performanceResult ->
                 performanceResultsRepository.savePerformanceResults(testRunId, publicId, performanceResult)
             }
 
@@ -77,7 +78,7 @@ class GroupedTestResultsService(
 
             metricsService.incrementResultsProcessSuccessCounter()
 
-            publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git, coverage)
+            publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git, coverage, performanceResults)
         } catch (e: Exception) {
             val errorMessage = "Error persisting test results: ${e.message}"
             logger.error(errorMessage, e)
@@ -98,9 +99,14 @@ class GroupedTestResultsService(
         return coverageService.getCoverageWithPreviousRunComparison(publicId)
     }
 
-    private fun publishCommentToPullRequest(testRunSummary: TestRunSummary, gitMetadata: GitMetadata?, coverage: Coverage?) {
+    private fun publishCommentToPullRequest(
+        testRunSummary: TestRunSummary,
+        gitMetadata: GitMetadata?,
+        coverage: Coverage?,
+        performanceResults: List<PerformanceResult>?
+    ) {
         try {
-            val pullRequest = gitHubPullRequestCommentService.upsertComment(testRunSummary, gitMetadata, coverage)
+            val pullRequest = gitHubPullRequestCommentService.upsertComment(testRunSummary, gitMetadata, coverage, performanceResults)
 
             if (pullRequest != null) {
                 logger.info("Successfully commented on pull request ${pullRequest.number} in ${pullRequest.orgName}/${pullRequest.repoName}")

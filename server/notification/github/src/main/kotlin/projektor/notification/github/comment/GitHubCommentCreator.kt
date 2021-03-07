@@ -1,6 +1,7 @@
 package projektor.notification.github.comment
 
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.time.format.DateTimeFormatter
 
 object GitHubCommentCreator {
@@ -27,12 +28,8 @@ object GitHubCommentCreator {
 
     private fun createReportTableRow(report: ReportCommentData): String {
         val resultText = if (report.passed) "Passed" else "Failed"
-        val testText = if (report.passed)
-            "[${report.totalTestCount} total](${createReportLink(report, "all")})"
-        else
-            "[${report.failedTestCount} failed](${createReportLink(report, "failed")}) / [${report.totalTestCount} total](${createReportLink(report, "all")})"
 
-        return "| [Projektor report](${createReportLink(report, "")}) | $resultText | $testText | ${createCoverageCellValue(report)} | ${report.project ?: ""} | ${dateFormatter.format(report.createdDate)} UTC |"
+        return "| [Projektor report](${createReportLink(report, "")}) | $resultText | ${createTestsCellValue(report)} | ${createCoverageCellValue(report)} | ${report.project ?: ""} | ${dateFormatter.format(report.createdDate)} UTC |"
     }
 
     private fun createReportLink(report: ReportCommentData, uri: String): String {
@@ -40,6 +37,28 @@ object GitHubCommentCreator {
 
         return "${baseUrl}tests/${report.publicId}/$uri"
     }
+
+    private fun createTestsCellValue(report: ReportCommentData): String {
+        val performanceData = report.performance
+
+        return when {
+            !performanceData.isNullOrEmpty() -> "[${createPerformanceCellValue(performanceData)}](${createReportLink(report, "")})"
+            report.passed -> "[${report.totalTestCount} total](${createReportLink(report, "all")})"
+            else -> "[${report.failedTestCount} failed](${createReportLink(report, "failed")}) / [${report.totalTestCount} total](${createReportLink(report, "all")})"
+        }
+    }
+
+    private fun createPerformanceCellValue(performanceDataList: List<ReportCommentPerformanceData>): String =
+        if (performanceDataList.size == 1) {
+            createPerformanceRow(performanceDataList[0])
+        } else {
+            performanceDataList.joinToString("<br />") { performanceData ->
+                "${performanceData.name} - ${createPerformanceRow(performanceData)}"
+            }
+        }
+
+    private fun createPerformanceRow(performanceData: ReportCommentPerformanceData) =
+        "p95: ${performanceData.p95.setScale(0, RoundingMode.HALF_UP)} ms, RPS: ${performanceData.requestsPerSecond.setScale(0, RoundingMode.HALF_UP)}"
 
     private fun createCoverageCellValue(report: ReportCommentData): String {
         val coverage = report.coverage

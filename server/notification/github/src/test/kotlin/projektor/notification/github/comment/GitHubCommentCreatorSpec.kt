@@ -32,6 +32,7 @@ class GitHubCommentCreatorSpec : StringSpec() {
                 failedTestCount = 0,
                 totalTestCount = 25,
                 coverage = null,
+                performance = null,
                 project = null
             )
 
@@ -65,6 +66,7 @@ class GitHubCommentCreatorSpec : StringSpec() {
                 failedTestCount = 0,
                 totalTestCount = 25,
                 coverage = null,
+                performance = null,
                 project = "my-project"
             )
 
@@ -98,6 +100,7 @@ class GitHubCommentCreatorSpec : StringSpec() {
                 failedTestCount = 5,
                 totalTestCount = 30,
                 coverage = null,
+                performance = null,
                 project = null
             )
 
@@ -139,6 +142,7 @@ class GitHubCommentCreatorSpec : StringSpec() {
                         lineCoveredPercentage = coveredPercentage,
                         lineCoverageDelta = coverageDelta
                     ),
+                    performance = null,
                     project = null
                 )
 
@@ -154,6 +158,91 @@ class GitHubCommentCreatorSpec : StringSpec() {
                     """.trimIndent().trim()
                 )
             }
+        }
+
+        "should create comment with one performance result" {
+            val report = ReportCommentData(
+                projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
+                git = ReportCommentGitData(
+                    orgName = "my-org",
+                    repoName = "my-repo",
+                    branchName = "my-branch"
+                ),
+                publicId = "V1BMYK93MTNR",
+                createdDate = LocalDateTime.of(
+                    LocalDate.of(2020, 12, 16),
+                    LocalTime.of(14, 30)
+                ),
+                passed = true,
+                failedTestCount = 0,
+                totalTestCount = 0,
+                coverage = null,
+                performance = listOf(
+                    ReportCommentPerformanceData(
+                        name = "performance.json",
+                        p95 = BigDecimal("59.13"),
+                        requestsPerSecond = BigDecimal("1941.79")
+                    )
+                ),
+                project = null
+            )
+
+            val commentText = GitHubCommentCreator.createComment(report)
+
+            expectThat(commentText).isEqualTo(
+                """
+**Projektor reports**
+
+| Projektor report | Result | Tests executed | Coverage | Project | Date | 
+| ---------------- | ------ | -------------- | -------- | ------- | ---- |
+| [Projektor report](https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/) | Passed | [p95: 59 ms, RPS: 1942](https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/) |  |  | 2020-12-16 02:30 PM UTC |
+                """.trimIndent().trim()
+            )
+        }
+
+        "should create comment with two performance results" {
+            val report = ReportCommentData(
+                projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
+                git = ReportCommentGitData(
+                    orgName = "my-org",
+                    repoName = "my-repo",
+                    branchName = "my-branch"
+                ),
+                publicId = "V1BMYK93MTNR",
+                createdDate = LocalDateTime.of(
+                    LocalDate.of(2020, 12, 16),
+                    LocalTime.of(14, 30)
+                ),
+                passed = true,
+                failedTestCount = 0,
+                totalTestCount = 0,
+                coverage = null,
+                performance = listOf(
+                    ReportCommentPerformanceData(
+                        name = "performance1.json",
+                        p95 = BigDecimal("59.13"),
+                        requestsPerSecond = BigDecimal("1941.79")
+                    ),
+                    ReportCommentPerformanceData(
+                        name = "performance2.json",
+                        p95 = BigDecimal("79.13"),
+                        requestsPerSecond = BigDecimal("1945.79")
+                    )
+                ),
+                project = null
+            )
+
+            val commentText = GitHubCommentCreator.createComment(report)
+
+            expectThat(commentText).isEqualTo(
+                """
+**Projektor reports**
+
+| Projektor report | Result | Tests executed | Coverage | Project | Date | 
+| ---------------- | ------ | -------------- | -------- | ------- | ---- |
+| [Projektor report](https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/) | Passed | [performance1.json - p95: 59 ms, RPS: 1942<br />performance2.json - p95: 79 ms, RPS: 1946](https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/) |  |  | 2020-12-16 02:30 PM UTC |
+                """.trimIndent().trim()
+            )
         }
     }
 }

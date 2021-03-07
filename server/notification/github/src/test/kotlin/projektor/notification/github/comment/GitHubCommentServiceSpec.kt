@@ -52,6 +52,7 @@ class GitHubCommentServiceSpec : StringSpec() {
                 failedTestCount = 0,
                 totalTestCount = 25,
                 coverage = null,
+                performance = null,
                 project = null
             )
 
@@ -103,6 +104,7 @@ class GitHubCommentServiceSpec : StringSpec() {
                 failedTestCount = 0,
                 totalTestCount = 25,
                 coverage = null,
+                performance = null,
                 project = null
             )
 
@@ -156,6 +158,7 @@ class GitHubCommentServiceSpec : StringSpec() {
                 failedTestCount = 0,
                 totalTestCount = 25,
                 coverage = null,
+                performance = null,
                 project = null
             )
 
@@ -205,6 +208,7 @@ class GitHubCommentServiceSpec : StringSpec() {
                 failedTestCount = 0,
                 totalTestCount = 25,
                 coverage = null,
+                performance = null,
                 project = null
             )
 
@@ -259,6 +263,7 @@ class GitHubCommentServiceSpec : StringSpec() {
                 failedTestCount = 0,
                 totalTestCount = 25,
                 coverage = null,
+                performance = null,
                 project = null
             )
 

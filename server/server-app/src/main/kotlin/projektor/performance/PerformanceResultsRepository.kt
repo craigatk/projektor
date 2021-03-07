@@ -9,7 +9,7 @@ interface PerformanceResultsRepository {
         testRunId: Long,
         publicId: PublicId,
         results: IncomingPerformanceResult
-    )
+    ): PerformanceResult
 
     suspend fun fetchResults(publicId: PublicId): List<PerformanceResult>
 }

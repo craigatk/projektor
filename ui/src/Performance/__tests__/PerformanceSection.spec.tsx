@@ -57,11 +57,11 @@ describe("PerformanceSection", () => {
       "5000"
     );
     expect(getByTestId("performance-result-average-1")).toHaveTextContent(
-      "23.345"
+      "23.345 ms"
     );
     expect(getByTestId("performance-result-maximum-1")).toHaveTextContent(
-      "59.293"
+      "59.293 ms"
     );
-    expect(getByTestId("performance-result-p95-1")).toHaveTextContent("41.293");
+    expect(getByTestId("performance-result-p95-1")).toHaveTextContent("41.293 ms");
   });
 });

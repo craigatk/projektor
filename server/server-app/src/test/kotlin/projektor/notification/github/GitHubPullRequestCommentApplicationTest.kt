@@ -18,6 +18,7 @@ import projektor.parser.grouped.model.GitMetadata
 import projektor.parser.grouped.model.ResultsMetadata
 import projektor.server.example.coverage.JacocoXmlLoader
 import projektor.server.example.coverage.JacocoXmlLoader.Companion.jacocoXmlParserLineCoveragePercentage
+import projektor.server.example.performance.PerformanceResultsLoader
 import strikt.api.expectThat
 import strikt.assertions.contains
 import strikt.assertions.hasSize
@@ -156,13 +157,57 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(requestBody)
             }.apply {
-                val (publicId, _) = waitForTestRunSaveToComplete(response)
+                waitForTestRunSaveToComplete(response)
 
                 await until { gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber).size == 1 }
 
                 val addCommentRequestBodies = gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber)
                 expectThat(addCommentRequestBodies).hasSize(1)
                 expectThat(addCommentRequestBodies[0]).contains(jacocoXmlParserLineCoveragePercentage.toString())
+            }
+        }
+    }
+
+    @Test
+    fun `when results include performance data should include it in PR comment`() {
+        val privateKeyContents = loadTextFromFile("fake_private_key.pem")
+
+        serverBaseUrl = "http://localhost:8080"
+        gitHubApiUrl = "http://localhost:${wireMockServer.port()}"
+        gitHubAppId = "12345"
+        gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(privateKeyContents)
+
+        val orgName = "craigatk"
+        val repoName = "projektor"
+        val branchName = "main"
+
+        val pullRequestNumber = 2
+        gitHubWireMockStubber.stubRepositoryRequests(orgName, repoName)
+        gitHubWireMockStubber.stubListPullRequests(orgName, repoName, listOf("another-branch", branchName))
+        gitHubWireMockStubber.stubGetIssue(orgName, repoName, pullRequestNumber)
+        gitHubWireMockStubber.stubListComments(orgName, repoName, pullRequestNumber, listOf("Some other comment"))
+        gitHubWireMockStubber.stubAddComment(orgName, repoName, pullRequestNumber)
+
+        val gitMetadata = GitMetadata()
+        gitMetadata.repoName = "$orgName/$repoName"
+        gitMetadata.branchName = branchName
+        gitMetadata.isMainBranch = true
+        val metadata = ResultsMetadata()
+        metadata.git = gitMetadata
+        val requestBody = GroupedResultsXmlLoader().wrapPerformanceResultsInGroup("performance.json", PerformanceResultsLoader().k6GetRun(), metadata)
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/groupedResults") {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(requestBody)
+            }.apply {
+                waitForTestRunSaveToComplete(response)
+
+                await until { gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber).size == 1 }
+
+                val addCommentRequestBodies = gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber)
+                expectThat(addCommentRequestBodies).hasSize(1)
+                expectThat(addCommentRequestBodies[0]).contains("p95: 22 ms, RPS: 1020")
             }
         }
     }
