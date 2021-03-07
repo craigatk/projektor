@@ -48,6 +48,7 @@ class GitHubCommentServiceLiveSpec : StringSpec() {
                 failedTestCount = 0,
                 totalTestCount = 25,
                 coverage = null,
+                performance = null,
                 project = null
             )
 
@@ -73,6 +74,7 @@ class GitHubCommentServiceLiveSpec : StringSpec() {
                 failedTestCount = 0,
                 totalTestCount = 30,
                 coverage = null,
+                performance = null,
                 project = null
             )
 

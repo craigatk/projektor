@@ -20,7 +20,7 @@ class PerformanceResultsDatabaseRepository(private val dslContext: DSLContext) :
         testRunId: Long,
         publicId: PublicId,
         results: IncomingPerformanceResult
-    ) =
+    ): PerformanceResult =
         withContext(Dispatchers.IO) {
             val performanceResults = PerformanceResults()
             performanceResults.testRunId = testRunId
@@ -34,6 +34,8 @@ class PerformanceResultsDatabaseRepository(private val dslContext: DSLContext) :
             performanceResultsDao.insert(performanceResults)
 
             logger.info("Finished inserting performance result for test run $publicId")
+
+            results.toApi()
         }
 
     override suspend fun fetchResults(publicId: PublicId): List<PerformanceResult> =

@@ -45,7 +45,7 @@ const PerformanceResultsTable = ({
             field: "average",
             render: (rowData) => (
               <span data-testid={`performance-result-average-${rowData.idx}`}>
-                {rowData.average}
+                {rowData.average} ms
               </span>
             ),
             cellStyle,
@@ -56,7 +56,7 @@ const PerformanceResultsTable = ({
             field: "p95",
             render: (rowData) => (
               <span data-testid={`performance-result-p95-${rowData.idx}`}>
-                {rowData.p95}
+                {rowData.p95} ms
               </span>
             ),
             cellStyle,
@@ -67,7 +67,7 @@ const PerformanceResultsTable = ({
             field: "maximum",
             render: (rowData) => (
               <span data-testid={`performance-result-maximum-${rowData.idx}`}>
-                {rowData.maximum}
+                {rowData.maximum} ms
               </span>
             ),
             cellStyle,

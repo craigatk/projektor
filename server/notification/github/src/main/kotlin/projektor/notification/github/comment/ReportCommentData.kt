@@ -11,5 +11,6 @@ data class ReportCommentData(
     val failedTestCount: Int,
     val totalTestCount: Int,
     val coverage: ReportCoverageCommentData?,
+    val performance: List<ReportCommentPerformanceData>?,
     val project: String?
 )
