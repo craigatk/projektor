@@ -62,6 +62,8 @@ describe("PerformanceSection", () => {
     expect(getByTestId("performance-result-maximum-1")).toHaveTextContent(
       "59.293 ms"
     );
-    expect(getByTestId("performance-result-p95-1")).toHaveTextContent("41.293 ms");
+    expect(getByTestId("performance-result-p95-1")).toHaveTextContent(
+      "41.293 ms"
+    );
   });
 });

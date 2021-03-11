@@ -23,15 +23,18 @@ context("repository coverage", () => {
 
     cy.visit(`http://localhost:1234/repository/${repoName}`);
 
-    cy.testIdShouldExist("repository-coverage-timeline-graph");
+    cy.findByTestId("repository-coverage-timeline-graph").should("exist");
 
-    publicIds.forEach((publicId) =>
-      cy.roleShouldExist(`dot-lineValue-${publicId}`)
-    );
+    publicIds.forEach((publicId) => {
+      cy.findByRole(`dot-lineValue-${publicId}`).should("exist");
 
-    const publicIdToClick = publicIds[0];
-    cy.getByRole(`dot-lineValue-${publicIdToClick}`).click();
-    cy.url().should("contain", `/tests/${publicIdToClick}`);
+      cy.findByRole(`dot-branchValue-${publicId}`).should("exist");
+    });
+
+    const publicId = publicIds[0];
+    cy.findByRole(`dot-lineValue-${publicId}`).click();
+
+    cy.url().should("contain", `/tests/${publicId}`);
   });
 
   it("should display tooltip with coverage data on graph point hover", () => {
@@ -49,38 +52,38 @@ context("repository coverage", () => {
 
     cy.visit(`http://localhost:1234/repository/${repoName}`);
 
-    cy.testIdShouldExist("repository-coverage-timeline-graph");
+    cy.findByTestId("repository-coverage-timeline-graph").should("exist");
 
-    cy.getByRole(`dot-lineValue-${publicId}`).trigger("mouseover");
+    cy.findByRole(`dot-lineValue-${publicId}`).trigger("mouseover");
 
-    cy.testIdShouldExist("coverage-timeline-graph-tooltip");
+    cy.findByTestId("coverage-timeline-graph-tooltip").should("exist");
 
-    cy.getByTestId("tooltip-line-coverage-percentage").should(
+    cy.findByTestId("tooltip-line-coverage-percentage").should(
       "contain",
       "95.4%"
     );
-    cy.getByTestId("tooltip-branch-coverage-percentage").should(
+    cy.findByTestId("tooltip-branch-coverage-percentage").should(
       "contain",
       "68.95%"
     );
-    cy.getByTestId("tooltip-run-date").should("contain", "Sep 13th 2020");
+    cy.findByTestId("tooltip-run-date").should("contain", "Sep 13th 2020");
   });
 
   it("when no project name should link from repository on side nav to show repository coverage data", () => {
     const repoName = "cov-org/cov-repo";
-    const publicId = "WJIHLB2MTRAW";
+    const testId = "WJIHLB2MTRAW";
 
     cy.server();
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.route("GET", `run/${testId}/summary`, "fixture:test_run_summary.json");
 
     cy.route(
       "GET",
-      `run/${publicId}/cases/failed`,
+      `run/${testId}/cases/failed`,
       "fixture:failed_test_cases.json"
     );
 
-    cy.route("GET", `run/${publicId}/metadata/git`, {
+    cy.route("GET", `run/${testId}/metadata/git`, {
       repo_name: repoName,
       org_name: "cov-org",
       branch_name: "main",
@@ -94,12 +97,12 @@ context("repository coverage", () => {
       "fixture:repository/coverage_timeline.json"
     );
 
-    cy.visit(`http://localhost:1234/tests/${publicId}`);
+    cy.visit(`http://localhost:1234/tests/${testId}`);
 
-    cy.getByTestId("nav-link-repository").click();
+    cy.findByTestId("nav-link-repository").click();
 
-    cy.testIdShouldExist("repository-coverage-timeline-graph");
-    cy.roleShouldExist(`dot-lineValue-${publicId}`);
+    cy.findByTestId("repository-coverage-timeline-graph").should("exist");
+    cy.findByRole(`dot-lineValue-${testId}`).should("exist");
   });
 
   it("when project name should link from repository on side nav of test run page to show repository coverage data", () => {
@@ -133,10 +136,10 @@ context("repository coverage", () => {
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
-    cy.getByTestId("nav-link-repository").click();
+    cy.findByTestId("nav-link-repository").click();
 
-    cy.testIdShouldExist("repository-coverage-timeline-graph");
-    cy.roleShouldExist(`dot-lineValue-${publicId}`);
+    cy.findByTestId("repository-coverage-timeline-graph").should("exist");
+    cy.findByRole(`dot-lineValue-${publicId}`).should("exist");
   });
 
   it("when project name should link from repository on side nav of repository page", () => {
@@ -155,11 +158,11 @@ context("repository coverage", () => {
       `http://localhost:1234/repository/${repoName}/project/${projectName}`
     );
 
-    cy.testIdShouldExist("repository-coverage-timeline-graph");
+    cy.findByTestId("repository-coverage-timeline-graph").should("exist");
 
-    cy.getByTestId("nav-link-repo-coverage").click();
+    cy.findByTestId("nav-link-repo-coverage").click();
 
-    cy.testIdShouldExist("repository-coverage-timeline-graph");
+    cy.findByTestId("repository-coverage-timeline-graph").should("exist");
     cy.url().should(
       "contain",
       `/repository/${repoName}/project/${projectName}`
