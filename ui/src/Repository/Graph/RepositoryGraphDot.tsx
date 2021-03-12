@@ -10,7 +10,7 @@ const RepositoryGraphDot = (props) => {
     <Dot
       {...props}
       role={`dot-${dataKey}-${publicId}`}
-      aria-label={`dot-${dataKey}-${value}`}
+      name={`dot-${dataKey}-${value}`}
     />
   );
 };
