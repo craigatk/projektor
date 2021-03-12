@@ -15,7 +15,7 @@ import {
   createMemorySource,
   LocationProvider,
 } from "@reach/router";
-import ResizeObserver from 'resize-observer-polyfill';
+import ResizeObserver from "resize-observer-polyfill";
 
 window.ResizeObserver = ResizeObserver;
 

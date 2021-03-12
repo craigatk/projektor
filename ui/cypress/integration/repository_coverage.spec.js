@@ -4,13 +4,9 @@ context("repository coverage", () => {
   it("should display repository coverage graph and link to individual test reports", () => {
     const repoName = "cov-org/cov-repo";
 
-    cy.server();
-
-    cy.route(
-      "GET",
-      `repo/${repoName}/coverage/timeline`,
-      "fixture:repository/coverage_timeline.json"
-    );
+    cy.intercept("GET", `repo/${repoName}/coverage/timeline`, {
+      fixture: "repository/coverage_timeline.json",
+    });
 
     const publicIds = [
       "2XMM8MYQTKM0",
@@ -40,13 +36,9 @@ context("repository coverage", () => {
   it("should display tooltip with coverage data on graph point hover", () => {
     const repoName = "cov-org/cov-repo";
 
-    cy.server();
-
-    cy.route(
-      "GET",
-      `repo/${repoName}/coverage/timeline`,
-      "fixture:repository/coverage_timeline.json"
-    );
+    cy.intercept("GET", `repo/${repoName}/coverage/timeline`, {
+      fixture: "repository/coverage_timeline.json",
+    });
 
     const publicId = "WJIHLB2MTRAW";
 
@@ -73,17 +65,15 @@ context("repository coverage", () => {
     const repoName = "cov-org/cov-repo";
     const testId = "WJIHLB2MTRAW";
 
-    cy.server();
+    cy.intercept("GET", `run/${testId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route("GET", `run/${testId}/summary`, "fixture:test_run_summary.json");
+    cy.intercept("GET", `run/${testId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${testId}/cases/failed`,
-      "fixture:failed_test_cases.json"
-    );
-
-    cy.route("GET", `run/${testId}/metadata/git`, {
+    cy.intercept("GET", `run/${testId}/metadata/git`, {
       repo_name: repoName,
       org_name: "cov-org",
       branch_name: "main",
@@ -91,11 +81,9 @@ context("repository coverage", () => {
       is_main_branch: true,
     });
 
-    cy.route(
-      "GET",
-      `repo/${repoName}/coverage/timeline`,
-      "fixture:repository/coverage_timeline.json"
-    );
+    cy.intercept("GET", `repo/${repoName}/coverage/timeline`, {
+      fixture: "repository/coverage_timeline.json",
+    });
 
     cy.visit(`http://localhost:1234/tests/${testId}`);
 
@@ -110,17 +98,15 @@ context("repository coverage", () => {
     const publicId = "WJIHLB2MTRAW";
     const projectName = "cov-project";
 
-    cy.server();
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/cases/failed`,
-      "fixture:failed_test_cases.json"
-    );
-
-    cy.route("GET", `run/${publicId}/metadata/git`, {
+    cy.intercept("GET", `run/${publicId}/metadata/git`, {
       repo_name: repoName,
       org_name: "cov-org",
       branch_name: "main",
@@ -128,10 +114,10 @@ context("repository coverage", () => {
       is_main_branch: true,
     });
 
-    cy.route(
+    cy.intercept(
       "GET",
       `repo/${repoName}/project/${projectName}/coverage/timeline`,
-      "fixture:repository/coverage_timeline.json"
+      { fixture: "repository/coverage_timeline.json" }
     );
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
@@ -146,12 +132,10 @@ context("repository coverage", () => {
     const repoName = "cov-org/cov-repo";
     const projectName = "cov-project";
 
-    cy.server();
-
-    cy.route(
+    cy.intercept(
       "GET",
       `repo/${repoName}/project/${projectName}/coverage/timeline`,
-      "fixture:repository/coverage_timeline.json"
+      { fixture: "repository/coverage_timeline.json" }
     );
 
     cy.visit(

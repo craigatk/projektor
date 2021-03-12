@@ -8,7 +8,7 @@ import {
 import moment from "moment";
 import { createCoverageStats } from "../../../testUtils/coverageTestUtils";
 import RepositoryCoverageTimelineGraph from "../RepositoryCoverageTimelineGraph";
-import ResizeObserver from 'resize-observer-polyfill';
+import ResizeObserver from "resize-observer-polyfill";
 
 window.ResizeObserver = ResizeObserver;
 
