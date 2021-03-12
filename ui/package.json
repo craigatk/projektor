@@ -37,6 +37,7 @@
     "parcel-plugin-clean-dist": "0.0.6",
     "prettier": "2.1.2",
     "projektor-publish": "3.1.2",
+    "resize-observer-polyfill": "1.5.1",
     "rimraf": "3.0.2",
     "start-server-and-test": "1.10.11",
     "ts-jest": "26.5.0",
