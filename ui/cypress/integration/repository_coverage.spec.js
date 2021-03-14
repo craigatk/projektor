@@ -1,6 +1,4 @@
-/// <reference types="Cypress" />
-
-context("repository coverage", () => {
+describe("repository coverage", () => {
   it("should display repository coverage graph and link to individual test reports", () => {
     const repoName = "cov-org/cov-repo";
 
