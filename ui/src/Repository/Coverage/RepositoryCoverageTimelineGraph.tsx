@@ -20,6 +20,13 @@ interface RepositoryCoverageTimelineGraphProps {
   graphWidth?: number;
 }
 
+const xAxisTickFormatter = (value) => moment(value).format("MMM Do YYYY");
+
+const yAxisTickFormatter = (value) => `${value}%`;
+
+const legendFormatter = (value, _) =>
+  value === "lineValue" ? "Line coverage" : "Branch coverage";
+
 const RepositoryCoverageTimelineGraph = ({
   coverageTimeline,
   graphWidth,
@@ -31,10 +38,6 @@ const RepositoryCoverageTimelineGraph = ({
     lineValue: entry.coverageStats.lineStat.coveredPercentage,
     branchValue: entry.coverageStats.branchStat.coveredPercentage,
   }));
-
-  const xAxisTickFormatter = (value) => moment(value).format("MMM Do YYYY");
-
-  const yAxisTickFormatter = (value) => `${value}%`;
 
   return (
     <div data-testid="repository-coverage-timeline-graph">
@@ -51,11 +54,7 @@ const RepositoryCoverageTimelineGraph = ({
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" tickFormatter={xAxisTickFormatter} />
           <YAxis tickFormatter={yAxisTickFormatter} />
-          <Legend
-            formatter={(value, _) =>
-              value === "lineValue" ? "Line coverage" : "Branch coverage"
-            }
-          />
+          <Legend formatter={legendFormatter} />
           <Tooltip content={<RepositoryCoverageTimelineGraphTooltip />} />
           <Line
             type="monotone"
