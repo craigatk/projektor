@@ -46,12 +46,14 @@ class CypressResultsWithFileNameApplicationTest : ApplicationTestCase() {
                 assertNotNull(testSuites)
                 expectThat(testSuites).hasSize(2).and {
                     any {
-                        get { packageName }.isEqualTo("cypress/integration/attachments.spec.js")
-                        get { className }.isEqualTo("attachments")
+                        get { fileName }.isEqualTo("cypress/integration/attachments.spec.js")
+                        get { className }.isEqualTo("test run with attachments")
+                        get { packageName }.isNull()
                     }
                     any {
-                        get { packageName }.isEqualTo("cypress/integration/repository_timeline.spec.js")
-                        get { className }.isEqualTo("repository_timeline")
+                        get { fileName }.isEqualTo("cypress/integration/repository_timeline.spec.js")
+                        get { className }.isEqualTo("repository coverage")
+                        get { packageName }.isNull()
                     }
                 }
             }

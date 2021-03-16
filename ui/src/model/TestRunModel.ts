@@ -96,6 +96,7 @@ interface TestCase {
 
 interface TestSuite {
   idx: number;
+  fileName?: string;
   packageName: string;
   className: string;
   testCount: number;

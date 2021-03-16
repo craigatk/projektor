@@ -34,6 +34,7 @@ public class TestSuite implements Serializable {
     private Boolean       hasSystemOut;
     private Boolean       hasSystemErr;
     private Long          testSuiteGroupId;
+    private String        fileName;
 
     public TestSuite() {}
 
@@ -55,6 +56,7 @@ public class TestSuite implements Serializable {
         this.hasSystemOut = value.hasSystemOut;
         this.hasSystemErr = value.hasSystemErr;
         this.testSuiteGroupId = value.testSuiteGroupId;
+        this.fileName = value.fileName;
     }
 
     public TestSuite(
@@ -74,7 +76,8 @@ public class TestSuite implements Serializable {
         String        systemErr,
         Boolean       hasSystemOut,
         Boolean       hasSystemErr,
-        Long          testSuiteGroupId
+        Long          testSuiteGroupId,
+        String        fileName
     ) {
         this.id = id;
         this.testRunId = testRunId;
@@ -93,6 +96,7 @@ public class TestSuite implements Serializable {
         this.hasSystemOut = hasSystemOut;
         this.hasSystemErr = hasSystemErr;
         this.testSuiteGroupId = testSuiteGroupId;
+        this.fileName = fileName;
     }
 
     /**
@@ -350,6 +354,21 @@ public class TestSuite implements Serializable {
         return this;
     }
 
+    /**
+     * Getter for <code>public.test_suite.file_name</code>.
+     */
+    public String getFileName() {
+        return this.fileName;
+    }
+
+    /**
+     * Setter for <code>public.test_suite.file_name</code>.
+     */
+    public TestSuite setFileName(String fileName) {
+        this.fileName = fileName;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -461,6 +480,12 @@ public class TestSuite implements Serializable {
         }
         else if (!testSuiteGroupId.equals(other.testSuiteGroupId))
             return false;
+        if (fileName == null) {
+            if (other.fileName != null)
+                return false;
+        }
+        else if (!fileName.equals(other.fileName))
+            return false;
         return true;
     }
 
@@ -485,6 +510,7 @@ public class TestSuite implements Serializable {
         result = prime * result + ((this.hasSystemOut == null) ? 0 : this.hasSystemOut.hashCode());
         result = prime * result + ((this.hasSystemErr == null) ? 0 : this.hasSystemErr.hashCode());
         result = prime * result + ((this.testSuiteGroupId == null) ? 0 : this.testSuiteGroupId.hashCode());
+        result = prime * result + ((this.fileName == null) ? 0 : this.fileName.hashCode());
         return result;
     }
 
@@ -509,6 +535,7 @@ public class TestSuite implements Serializable {
         sb.append(", ").append(hasSystemOut);
         sb.append(", ").append(hasSystemErr);
         sb.append(", ").append(testSuiteGroupId);
+        sb.append(", ").append(fileName);
 
         sb.append(")");
         return sb.toString();

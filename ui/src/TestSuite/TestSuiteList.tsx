@@ -22,6 +22,8 @@ const cellStyle = {
 };
 
 const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
+  const hasFileName = testSuites.some((suite) => suite.fileName);
+
   return (
     <div data-testid="test-suite-list">
       <MaterialTable
@@ -47,6 +49,19 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
             headerStyle,
           },
           {
+            title: "Test File",
+            field: "fileName",
+            hidden: !hasFileName,
+            render: (rowData) => (
+              <CleanLink
+                to={`/tests/${publicId}/suite/${rowData.idx}/`}
+                data-testid={`test-suite-file-name-${rowData.idx}`}
+              >
+                {rowData.fileName}
+              </CleanLink>
+            ),
+          },
+          {
             title: "Group",
             field: "group",
             hidden: !anyTestSuiteHasGroupName(testSuites),
@@ -63,6 +78,7 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
           { title: "Duration", field: "duration", cellStyle, headerStyle },
         ]}
         data={testSuites.map((testSuite) => ({
+          fileName: testSuite.fileName,
           name: fullTestSuiteName(testSuite),
           group: testSuite.groupName || "",
           passed: testSuite.passingCount,

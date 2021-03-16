@@ -15,7 +15,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row17;
+import org.jooq.Row18;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -137,6 +137,11 @@ public class TestSuite extends TableImpl<TestSuiteRecord> {
      */
     public final TableField<TestSuiteRecord, Long> TEST_SUITE_GROUP_ID = createField(DSL.name("test_suite_group_id"), SQLDataType.BIGINT, this, "");
 
+    /**
+     * The column <code>public.test_suite.file_name</code>.
+     */
+    public final TableField<TestSuiteRecord, String> FILE_NAME = createField(DSL.name("file_name"), SQLDataType.CLOB, this, "");
+
     private TestSuite(Name alias, Table<TestSuiteRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -235,11 +240,11 @@ public class TestSuite extends TableImpl<TestSuiteRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row17 type methods
+    // Row18 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row17<Long, Long, Integer, String, String, Integer, Integer, Integer, Integer, LocalDateTime, String, BigDecimal, String, String, Boolean, Boolean, Long> fieldsRow() {
-        return (Row17) super.fieldsRow();
+    public Row18<Long, Long, Integer, String, String, Integer, Integer, Integer, Integer, LocalDateTime, String, BigDecimal, String, String, Boolean, Boolean, Long, String> fieldsRow() {
+        return (Row18) super.fieldsRow();
     }
 }

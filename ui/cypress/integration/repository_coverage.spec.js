@@ -83,6 +83,14 @@ describe("repository coverage", () => {
       fixture: "repository/coverage_timeline.json",
     });
 
+    cy.intercept("GET", `repo/${repoName}/timeline`, {
+      fixture: "repository/timeline.json",
+    });
+
+    cy.intercept("GET", `repo/${repoName}/performance/timeline`, {
+      fixture: "repository/performance_timeline.json",
+    });
+
     cy.visit(`http://localhost:1234/tests/${testId}`);
 
     cy.findByTestId("nav-link-repository").click();

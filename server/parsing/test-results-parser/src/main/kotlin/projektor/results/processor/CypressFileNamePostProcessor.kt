@@ -10,7 +10,12 @@ class CypressFileNamePostProcessor : TestSuitesPostProcessor {
             val testSuiteWithFileName = testSuiteList.find { it.file != null }
 
             if (testSuiteWithFileName != null && testSuiteList.size > 1) {
-                testSuiteList.forEach { testSuite -> testSuite.name = testSuiteWithFileName.file }
+                // Apply the file name from the first test suite
+                testSuiteList.forEach { testSuite -> testSuite.file = testSuiteWithFileName.file }
+
+                if (testSuiteWithFileName.name.toLowerCase() != "root suite") {
+                    testSuiteList.forEach { testSuite -> testSuite.name = testSuiteWithFileName.name }
+                }
             }
 
             testSuites

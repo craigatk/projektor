@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context("repository coverage", () => {
+context("repository timeline", () => {
   it("should display repository timeline graph and link to individual test reports", () => {
     const repoName = "timeline-org/timeline-repo";
 

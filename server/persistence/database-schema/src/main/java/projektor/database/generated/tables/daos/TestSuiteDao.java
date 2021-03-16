@@ -284,4 +284,18 @@ public class TestSuiteDao extends DAOImpl<TestSuiteRecord, projektor.database.ge
     public List<projektor.database.generated.tables.pojos.TestSuite> fetchByTestSuiteGroupId(Long... values) {
         return fetch(TestSuite.TEST_SUITE.TEST_SUITE_GROUP_ID, values);
     }
+
+    /**
+     * Fetch records that have <code>file_name BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestSuite> fetchRangeOfFileName(String lowerInclusive, String upperInclusive) {
+        return fetchRange(TestSuite.TEST_SUITE.FILE_NAME, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>file_name IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.TestSuite> fetchByFileName(String... values) {
+        return fetch(TestSuite.TEST_SUITE.FILE_NAME, values);
+    }
 }

@@ -59,6 +59,7 @@ class ResultsXmlLoader {
 
     fun cypressAttachmentsSpecWithFilePath() = loadTextFromFile("cypress-file-path/cypress-attachments.xml")
     fun cypressRepositoryTimelineSpecWithFilePath() = loadTextFromFile("cypress-file-path/cypress-repository-timeline.xml")
+    fun cypressWithFilePathAndRootSuiteNameSet() = loadTextFromFile("cypress-file-path/cypress-root-suite-name.xml")
 
     fun jestUi() = loadTextFromFile("jest/ui-junit.xml")
 
