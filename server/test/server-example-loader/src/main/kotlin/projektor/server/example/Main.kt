@@ -5,6 +5,8 @@ fun main() {
     loadAllExamples()
     loadCypressExamples()
     loadCypressExamplesWithFilePaths()
+    loadCypressAndJestExamplesWithFilePaths()
+    loadCypressWithFilePathAndRootSuiteNameSet()
     loadPassingGroupedExample()
     loadPassingGroupedExampleWithAttachments()
     loadGroupedExampleWithWallClock()

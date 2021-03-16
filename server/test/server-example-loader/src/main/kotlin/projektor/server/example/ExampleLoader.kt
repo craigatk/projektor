@@ -27,7 +27,7 @@ fun loadPassingExample() {
     val testResults = listOf(resultsXmlLoader.passing())
 
     val saveResultsResponse = sendResultsToServer(testResults)
-    println("View run with only passing tests at at $uiBaseUrl${saveResultsResponse.uri}")
+    println("View run with only passing tests at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
 fun loadAllExamples() {
@@ -47,19 +47,48 @@ fun loadAllExamples() {
     )
 
     val saveResultsResponse = sendResultsToServer(testResults)
-    println("View run with all tests at at $uiBaseUrl${saveResultsResponse.uri}")
+    println("View run with all tests at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
 fun loadCypressExamples() {
     val resultsXmlLoader = ResultsXmlLoader()
     val saveResultsResponse = sendResultsToServer(resultsXmlLoader.cypressResults())
-    println("View run with Cypress tests at at $uiBaseUrl${saveResultsResponse.uri}")
+    println("View run with Cypress tests at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
 fun loadCypressExamplesWithFilePaths() {
     val resultsXmlLoader = ResultsXmlLoader()
     val saveResultsResponse = sendResultsToServer(resultsXmlLoader.cypressResultsWithFilePaths())
-    println("View run with Cypress tests with file paths at at $uiBaseUrl${saveResultsResponse.uri}")
+    println("View run with Cypress tests with file paths at $uiBaseUrl${saveResultsResponse.uri}")
+}
+
+fun loadCypressAndJestExamplesWithFilePaths() {
+    val resultsXmlLoader = ResultsXmlLoader()
+    val groupedResultsXmlLoader = GroupedResultsXmlLoader()
+    val groupedResults = groupedResultsXmlLoader.wrapResultsXmlsInGroup(
+        listOf(
+            resultsXmlLoader.cypressAttachmentsSpecWithFilePath(),
+            resultsXmlLoader.cypressRepositoryTimelineSpecWithFilePath(),
+            resultsXmlLoader.cypressWithFilePathAndRootSuiteNameSet(),
+            resultsXmlLoader.jestUiFilePath()
+        )
+    )
+
+    val saveResultsResponse = sendGroupedResultsToServer(groupedResults)
+    println("View run with Cypress and Jest tests with file paths at $uiBaseUrl${saveResultsResponse.uri}")
+}
+
+fun loadCypressWithFilePathAndRootSuiteNameSet() {
+    val resultsXmlLoader = ResultsXmlLoader()
+    val groupedResultsXmlLoader = GroupedResultsXmlLoader()
+    val groupedResults = groupedResultsXmlLoader.wrapResultsXmlsInGroup(
+        listOf(
+            resultsXmlLoader.cypressWithFilePathAndRootSuiteNameSet()
+        )
+    )
+
+    val saveResultsResponse = sendGroupedResultsToServer(groupedResults)
+    println("View run with Cypress tests with file path and root suite name set at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
 fun loadPassingGroupedExample() {

@@ -33,6 +33,7 @@ fun TestSuite.toDB(testRunId: Long, testGroupId: Long?, testSuiteIdx: Int): Test
     testSuiteDB.testRunId = testRunId
     testSuiteDB.testSuiteGroupId = testGroupId
     testSuiteDB.idx = testSuiteIdx
+    testSuiteDB.fileName = normalizeFilePath(file)
     testSuiteDB.packageName = packageAndClassName.first
     testSuiteDB.className = packageAndClassName.second
     testSuiteDB.testCount = tests
@@ -125,6 +126,8 @@ fun parsePackageAndClassName(classNameWithPackage: String?): Pair<String?, Strin
         logger.warn("Failed to parse class name with package $classNameWithPackage", e)
         Pair(null, classNameWithPackage)
     }
+
+fun normalizeFilePath(fileName: String?) = fileName?.replace("\\", "/")
 
 fun ResultsMetadata.toDB(testRunId: Long): ResultsMetadataDB {
     val resultsMetadataDB = ResultsMetadataDB()

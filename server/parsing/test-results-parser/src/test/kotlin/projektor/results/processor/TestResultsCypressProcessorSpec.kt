@@ -16,7 +16,8 @@ class TestResultsCypressProcessorSpec : StringSpec({
 
         val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
         expectThat(testSuiteList).hasSize(2).any {
-            get { name }.isEqualTo("cypress\\integration\\attachments.spec.js")
+            get { file }.isEqualTo("cypress\\integration\\attachments.spec.js")
+            get { name }.isEqualTo("test run with attachments")
             get { testCases }.isNotNull().hasSize(2)
         }
     }
@@ -29,10 +30,25 @@ class TestResultsCypressProcessorSpec : StringSpec({
 
         val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
         expectThat(testSuiteList).hasSize(4).any {
-            get { name }.isEqualTo("cypress\\integration\\attachments.spec.js")
+            get { file }.isEqualTo("cypress\\integration\\attachments.spec.js")
+            get { name }.isEqualTo("test run with attachments")
             get { testCases }.isNotNull().hasSize(2)
         }.any {
-            get { name }.isEqualTo("cypress\\integration\\repository_timeline.spec.js")
+            get { file }.isEqualTo("cypress\\integration\\repository_timeline.spec.js")
+            get { name }.isEqualTo("repository coverage")
+            get { testCases }.isNotNull().hasSize(2)
+        }
+    }
+
+    "should parse single Cypress test result with file name and test suite name in separate suite" {
+        val testResultsProcessor = TestResultsProcessor()
+        val resultsXmlLoader = ResultsXmlLoader()
+        val blob = resultsXmlLoader.cypressWithFilePathAndRootSuiteNameSet()
+
+        val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
+        expectThat(testSuiteList).hasSize(2).any {
+            get { file }.isEqualTo("cypress\\integration\\repository_timeline.spec.js")
+            get { name }.isEqualTo("repository coverage suite")
             get { testCases }.isNotNull().hasSize(2)
         }
     }
@@ -45,7 +61,8 @@ class TestResultsCypressProcessorSpec : StringSpec({
 
         val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
         expectThat(testSuiteList).hasSize(2).any {
-            get { name }.isEqualTo("cypress\\integration\\repository_timeline.spec.js")
+            get { file }.isEqualTo("cypress\\integration\\repository_timeline.spec.js")
+            get { name }.isEqualTo("repository coverage")
             get { testCases }.isNotNull().hasSize(2)
         }
     }

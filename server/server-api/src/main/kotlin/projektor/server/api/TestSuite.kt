@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 
 data class TestSuite(
     val idx: Int,
+    val fileName: String?,
     val packageName: String?,
     val className: String,
     val testCount: Int,

@@ -3,5 +3,6 @@
     "reporterOptions": {
       "mochaFile": "test-results/cypress-[hash].xml"
     },
-    "videoUploadOnPasses": false
+    "videoUploadOnPasses": false,
+    "defaultCommandTimeout": 10000
   }

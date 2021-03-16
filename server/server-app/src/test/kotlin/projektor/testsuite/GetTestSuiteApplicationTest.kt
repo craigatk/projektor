@@ -7,18 +7,22 @@ import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
+import projektor.parser.GroupedResultsXmlLoader
+import projektor.parser.ResultsXmlLoader
+import projektor.server.api.PublicId
 import projektor.server.api.TestSuite
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
+import strikt.assertions.isNull
 import kotlin.test.assertNotNull
 import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 
 @KtorExperimentalAPI
 class GetTestSuiteApplicationTest : ApplicationTestCase() {
     @Test
-    fun shouldFetchTestSuiteFromDatabase() {
+    fun `should fetch test suites from database`() {
         val publicId = randomPublicId()
         val testSuiteIdx = 1
 
@@ -47,6 +51,8 @@ class GetTestSuiteApplicationTest : ApplicationTestCase() {
 
                 val responseSuite = objectMapper.readValue(responseContent, TestSuite::class.java)
                 assertNotNull(responseSuite)
+
+                expectThat(responseSuite.fileName).isNull()
 
                 val testCases = responseSuite.testCases
                 assertNotNull(testCases)
@@ -109,6 +115,46 @@ class GetTestSuiteApplicationTest : ApplicationTestCase() {
                     .isNotNull()
                     .and {
                         get { groupName }.isEqualTo("MyGroup")
+                    }
+            }
+        }
+    }
+
+    @Test
+    fun `should get test suite with file name`() {
+        val resultsBody = GroupedResultsXmlLoader().wrapResultsXmlsInGroup(
+            listOf(
+                ResultsXmlLoader().cypressWithFilePathAndRootSuiteNameSet()
+            )
+        )
+
+        val testSuiteIdx = 1
+
+        var publicId: PublicId
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/groupedResults") {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(resultsBody)
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+
+                publicId = waitForTestRunSaveToComplete(response).first
+            }
+
+            handleRequest(HttpMethod.Get, "/run/$publicId/suite/$testSuiteIdx").apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+
+                val responseContent = response.content
+                assertNotNull(responseContent)
+
+                val responseSuite = objectMapper.readValue(responseContent, TestSuite::class.java)
+
+                expectThat(responseSuite)
+                    .isNotNull()
+                    .and {
+                        get { fileName }.isEqualTo("cypress/integration/repository_timeline.spec.js")
+                        get { className }.isEqualTo("repository coverage suite")
                     }
             }
         }
