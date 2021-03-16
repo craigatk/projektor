@@ -5,6 +5,12 @@ describe("repository coverage", () => {
     cy.intercept("GET", `repo/${repoName}/coverage/timeline`, {
       fixture: "repository/coverage_timeline.json",
     });
+    cy.intercept("GET", `repo/${repoName}/timeline`, {
+      fixture: "repository/timeline.json",
+    });
+    cy.intercept("GET", `repo/${repoName}/performance/timeline`, {
+      fixture: "repository/performance_timeline.json",
+    });
 
     const publicIds = [
       "2XMM8MYQTKM0",
@@ -37,6 +43,12 @@ describe("repository coverage", () => {
     cy.intercept("GET", `repo/${repoName}/coverage/timeline`, {
       fixture: "repository/coverage_timeline.json",
     });
+    cy.intercept("GET", `repo/${repoName}/timeline`, {
+      fixture: "repository/timeline.json",
+    });
+    cy.intercept("GET", `repo/${repoName}/performance/timeline`, {
+      fixture: "repository/performance_timeline.json",
+    });
 
     const publicId = "WJIHLB2MTRAW";
 
@@ -66,11 +78,9 @@ describe("repository coverage", () => {
     cy.intercept("GET", `run/${testId}/summary`, {
       fixture: "test_run_summary.json",
     });
-
     cy.intercept("GET", `run/${testId}/cases/failed`, {
       fixture: "failed_test_cases.json",
     });
-
     cy.intercept("GET", `run/${testId}/metadata/git`, {
       repo_name: repoName,
       org_name: "cov-org",
@@ -78,15 +88,17 @@ describe("repository coverage", () => {
       project_name: null,
       is_main_branch: true,
     });
+    cy.intercept("GET", `run/${testId}/coverage`, {
+      fixture: "coverage/coverage-three-groups.json",
+    });
+    cy.intercept("GET", `run/${testId}/messages`, { messages: [] });
 
     cy.intercept("GET", `repo/${repoName}/coverage/timeline`, {
       fixture: "repository/coverage_timeline.json",
     });
-
     cy.intercept("GET", `repo/${repoName}/timeline`, {
       fixture: "repository/timeline.json",
     });
-
     cy.intercept("GET", `repo/${repoName}/performance/timeline`, {
       fixture: "repository/performance_timeline.json",
     });
@@ -107,11 +119,9 @@ describe("repository coverage", () => {
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "test_run_summary.json",
     });
-
     cy.intercept("GET", `run/${publicId}/cases/failed`, {
       fixture: "failed_test_cases.json",
     });
-
     cy.intercept("GET", `run/${publicId}/metadata/git`, {
       repo_name: repoName,
       org_name: "cov-org",
@@ -119,11 +129,25 @@ describe("repository coverage", () => {
       project_name: projectName,
       is_main_branch: true,
     });
+    cy.intercept("GET", `run/${publicId}/coverage`, {
+      fixture: "coverage/coverage-three-groups.json",
+    });
+    cy.intercept("GET", `run/${publicId}/messages`, { messages: [] });
 
     cy.intercept(
       "GET",
       `repo/${repoName}/project/${projectName}/coverage/timeline`,
       { fixture: "repository/coverage_timeline.json" }
+    );
+    cy.intercept("GET", `repo/${repoName}/project/${projectName}/timeline`, {
+      fixture: "repository/timeline.json",
+    });
+    cy.intercept(
+      "GET",
+      `repo/${repoName}/project/${projectName}/performance/timeline`,
+      {
+        fixture: "repository/performance_timeline.json",
+      }
     );
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
