@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import { getNodeText, render } from "@testing-library/react";
-import { TestCase, TestFailure } from "../../model/TestRunModel";
+import { Attachment, TestCase, TestFailure } from "../../model/TestRunModel";
 import TestCaseFailurePanel from "../TestCaseFailurePanel";
 import moment from "moment";
 
@@ -206,6 +206,47 @@ describe("TestCaseFailurePanel", () => {
     expect(getNodeText(getByTestId("test-case-failure-text-2-1"))).toContain(
       "My failure text"
     );
+  });
+
+  it("should show attachment screenshot when one exists", () => {
+    const failure: TestFailure = {
+      failureMessage: "My failure message",
+      failureText: "My failure text",
+      failureType: "",
+    };
+
+    const attachment: Attachment = {
+      fileName: "screenshot.png",
+      objectName: "screenshot-object",
+    };
+
+    const testCase: TestCase = {
+      idx: 1,
+      testSuiteIdx: 2,
+      publicId: "12345",
+      name: "Test Case",
+      packageName: "",
+      className: "",
+      fullName: "Test Case",
+      duration: 1.2,
+      passed: false,
+      skipped: false,
+      hasSystemOut: false,
+      hasSystemErr: false,
+      hasSystemOutTestCase: false,
+      hasSystemErrTestCase: false,
+      hasSystemOutTestSuite: false,
+      hasSystemErrTestSuite: false,
+      failure: failure,
+      createdTimestamp: moment("2020-04-25").toDate(),
+      attachments: [attachment],
+    };
+
+    const { queryByTestId } = render(
+      <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+    );
+
+    expect(queryByTestId("test-case-failure-screenshot-2-1")).not.toBeNull();
   });
 
   function createTestCaseWithFailure(failure: TestFailure): TestCase {

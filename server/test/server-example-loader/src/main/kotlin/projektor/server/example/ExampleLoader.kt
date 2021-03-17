@@ -91,6 +91,24 @@ fun loadCypressWithFilePathAndRootSuiteNameSet() {
     println("View run with Cypress tests with file path and root suite name set at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
+fun loadFailingCypressTestWithAttachment() {
+    val resultsXmlLoader = ResultsXmlLoader()
+    val groupedResultsXmlLoader = GroupedResultsXmlLoader()
+    val resultsBody = groupedResultsXmlLoader.wrapResultsXmlsInGroup(
+        listOf(
+            resultsXmlLoader.cypressFailingAttachmentsTestWithScreenshot(),
+            resultsXmlLoader.cypressFailingDashboardTestWithScreenshots()
+        )
+    )
+
+    val saveResultsResponse = sendGroupedResultsToServer(resultsBody)
+    sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/dashboard -- should show failed test case summaries on dashboard page (failed).png")
+    sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/dashboard -- should show test run summary data on dashboard page (failed).png")
+    sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/test run with attachments -- should list attachments on attachments page (failed).png")
+
+    println("View run with failing Cypress test with attachment screenshot at $uiBaseUrl${saveResultsResponse.uri}")
+}
+
 fun loadPassingGroupedExample() {
     val groupedResultsXmlLoader = GroupedResultsXmlLoader()
     val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(null))

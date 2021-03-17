@@ -1,5 +1,6 @@
 package projektor.server.api
 
+import projektor.server.api.attachments.Attachment
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
@@ -28,4 +29,6 @@ data class TestCase(
 
     val hasSystemErr: Boolean
         get() = hasSystemErrTestCase || hasSystemErrTestSuite
+
+    var attachments: List<Attachment>? = null
 }

@@ -92,6 +92,7 @@ interface TestCase {
   hasSystemOutTestSuite: boolean;
   hasSystemErrTestSuite: boolean;
   createdTimestamp: Date;
+  attachments?: Attachment[];
 }
 
 interface TestSuite {

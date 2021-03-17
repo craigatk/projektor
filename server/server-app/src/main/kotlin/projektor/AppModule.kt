@@ -7,6 +7,7 @@ import org.jooq.DSLContext
 import org.koin.dsl.module
 import projektor.attachment.AttachmentDatabaseRepository
 import projektor.attachment.AttachmentRepository
+import projektor.attachment.AttachmentService
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
 import projektor.badge.CoverageBadgeService
@@ -76,7 +77,8 @@ fun createAppModule(
     metricRegistry: MeterRegistry,
     messageConfig: MessageConfig,
     notificationConfig: NotificationConfig,
-    gitHubCommentService: GitHubCommentService?
+    gitHubCommentService: GitHubCommentService?,
+    attachmentService: AttachmentService?
 ) = module {
     single { dataSource }
     single { TestResultsProcessor() }
@@ -114,7 +116,7 @@ fun createAppModule(
     single { MessageService(messageConfig) }
     single { PreviousTestRunService(get()) }
     single { ProcessingFailureService(get()) }
-    single { TestCaseService(get()) }
+    single { TestCaseService(get(), attachmentService) }
     single { TestSuiteService(get()) }
     single { TestResultsProcessingService(get()) }
     single { TestResultsService(get(), get(), get(), get()) }
