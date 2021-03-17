@@ -109,6 +109,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
                     createRegistry(metricsConfig),
                     MessageConfig(listOf()),
                     NotificationConfig(null),
+                    null,
                     null
                 )
             )

@@ -20,6 +20,9 @@ const useStyles = makeStyles(() => ({
     overflowX: "auto",
     fontSize: "0.9em",
   },
+  failureScreenshot: {
+    maxWidth: "100%",
+  },
 }));
 
 interface TestCaseFailurePanelProps {
@@ -54,6 +57,15 @@ const TestCaseFailurePanel = ({
                 ? testCase.failure.failureText
                 : testCase.failure.failureMessage}
             </pre>
+
+            {testCase.attachments && testCase.attachments.length === 1 && (
+              <img
+                src={`/run/${publicId}/attachments/${testCase.attachments[0].fileName}`}
+                data-testid={`test-case-failure-screenshot-${testCaseIdentifier}`}
+                className={classes.failureScreenshot}
+                alt={`Failure screenshot for test ${testCase.name}`}
+              />
+            )}
           </div>
         )}
       </ExpansionPanelDetails>

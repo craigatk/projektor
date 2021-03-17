@@ -22,6 +22,7 @@ import org.koin.ktor.ext.inject
 import org.koin.logger.SLF4JLogger
 import org.slf4j.event.Level
 import projektor.attachment.AttachmentConfig
+import projektor.attachment.AttachmentDatabaseRepository
 import projektor.attachment.AttachmentRepository
 import projektor.attachment.AttachmentService
 import projektor.auth.AuthConfig
@@ -89,6 +90,10 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     val notificationConfig = NotificationConfig.createNotificationConfig(applicationConfig)
     val gitHubCommentService = conditionallyCreateGitHubCommentService(applicationConfig)
 
+    val attachmentRepository: AttachmentRepository = AttachmentDatabaseRepository(dslContext)
+    val attachmentService = conditionallyCreateAttachmentService(applicationConfig, attachmentRepository)
+    attachmentService?.conditionallyCreateBucketIfNotExists()
+
     val appModule = createAppModule(
         dataSource = dataSource,
         authConfig = authConfig,
@@ -96,7 +101,8 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
         metricRegistry = metricRegistry,
         messageConfig = messageConfig,
         notificationConfig = notificationConfig,
-        gitHubCommentService = gitHubCommentService
+        gitHubCommentService = gitHubCommentService,
+        attachmentService = attachmentService
     )
 
     install(CORS) {
@@ -158,10 +164,6 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     val testRunSystemAttributesService: TestRunSystemAttributesService by inject()
     val testRunRepository: TestRunRepository by inject()
     val resultsProcessingRepository: ResultsProcessingRepository by inject()
-
-    val attachmentRepository: AttachmentRepository by inject()
-    val attachmentService = conditionallyCreateAttachmentService(applicationConfig, attachmentRepository)
-    attachmentService?.conditionallyCreateBucketIfNotExists()
 
     val coverageService: CoverageService by inject()
 

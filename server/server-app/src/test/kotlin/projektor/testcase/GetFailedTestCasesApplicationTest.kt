@@ -1,6 +1,7 @@
 package projektor.testcase
 
 import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.http.HttpMethod
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
@@ -53,6 +54,52 @@ class GetFailedTestCasesApplicationTest : ApplicationTestCase() {
                 expectThat(failedTestCases)
                     .map(TestCase::failure)
                     .all { isNotNull() }
+            }
+        }
+    }
+
+    @Test
+    fun `should include attachment when test case has one`() {
+        val publicId = randomPublicId()
+
+        attachmentsEnabled = true
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Get, "/run/${publicId.id}/cases/failed") {
+                testRunDBGenerator.createTestRun(
+                    publicId,
+                    listOf(
+                        TestSuiteData(
+                            "testSuite1",
+                            listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
+                            listOf("testSuite1 FailedTestCase 1", "testSuite1 FailedTestCase 2"),
+                            listOf()
+                        ),
+                    )
+                )
+
+                testRunDBGenerator.addAttachment(publicId, "object-1", "testSuite1 FailedTestCase 1.png")
+                testRunDBGenerator.addAttachment(publicId, "object-2", "testSuite1 FailedTestCase 2.png")
+            }.apply {
+                val failedTestCases: List<TestCase> = objectMapper.readValue(response.content!!)
+
+                expectThat(failedTestCases)
+                    .hasSize(2)
+
+                val failedTestCase1 = failedTestCases.find { it.name == "testSuite1 FailedTestCase 1" }
+                expectThat(failedTestCase1).isNotNull().and {
+                    get { attachments }.isNotNull()
+                        .hasSize(1)
+                        .any { get { fileName }.isEqualTo("testSuite1 FailedTestCase 1.png") }
+                }
+
+                val failedTestCase2 = failedTestCases.find { it.name == "testSuite1 FailedTestCase 2" }
+                expectThat(failedTestCase2).isNotNull().and {
+                    get { attachments }
+                        .isNotNull()
+                        .hasSize(1)
+                        .any { get { fileName }.isEqualTo("testSuite1 FailedTestCase 2.png") }
+                }
             }
         }
     }

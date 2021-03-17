@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="0.6420" tests="4" failures="2">
+  <testsuite name="Root Suite" timestamp="2021-03-17T01:21:56" tests="0" file="cypress\integration\dashboard.spec.js" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="dashboard" timestamp="2021-03-17T01:21:56" tests="4" time="0.6420" failures="2">
+    <testcase name="dashboard should show test run summary data on dashboard page" time="0.0000" classname="should show test run summary data on dashboard page">
+      <failure message="The following error originated from your application code, not from Cypress.
+
+  &gt; The following error originated from your application code, not from Cypress.
+
+  &gt; Cannot read property &apos;length&apos; of undefined
+
+When Cypress detects uncaught errors originating from your application it will automatically fail the current test.
+
+This behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.
+
+When Cypress detects uncaught errors originating from your application it will automatically fail the current test.
+
+This behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.
+
+https://on.cypress.io/uncaught-exception-from-application" type="TypeError"><![CDATA[TypeError: The following error originated from your application code, not from Cypress.
+
+  > The following error originated from your application code, not from Cypress.
+
+  > Cannot read property 'length' of undefined
+
+When Cypress detects uncaught errors originating from your application it will automatically fail the current test.
+
+This behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.
+
+When Cypress detects uncaught errors originating from your application it will automatically fail the current test.
+
+This behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.
+
+https://on.cypress.io/uncaught-exception-from-application
+    at TestCaseFailurePanel (http://localhost:1234/src.f69400ca.js:138963:143)
+    at renderWithHooks (http://localhost:1234/src.f69400ca.js:20241:22)
+    at mountIndeterminateComponent (http://localhost:1234/src.f69400ca.js:22724:17)
+    at beginWork$1 (http://localhost:1234/src.f69400ca.js:24073:20)
+    at HTMLUnknownElement.callCallback (http://localhost:1234/src.f69400ca.js:4261:18)
+    at Object.invokeGuardedCallbackDev (http://localhost:1234/src.f69400ca.js:4310:20)
+    at invokeGuardedCallback (http://localhost:1234/src.f69400ca.js:4363:35)
+    at beginWork$$1 (http://localhost:1234/src.f69400ca.js:29692:11)
+    at performUnitOfWork (http://localhost:1234/src.f69400ca.js:28609:16)
+    at workLoopSync (http://localhost:1234/src.f69400ca.js:28582:26)]]></failure>
+    </testcase>
+    <testcase name="dashboard should show failed test case summaries on dashboard page" time="0.0000" classname="should show failed test case summaries on dashboard page">
+      <failure message="The following error originated from your application code, not from Cypress.
+
+  &gt; The following error originated from your application code, not from Cypress.
+
+  &gt; Cannot read property &apos;length&apos; of undefined
+
+When Cypress detects uncaught errors originating from your application it will automatically fail the current test.
+
+This behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.
+
+When Cypress detects uncaught errors originating from your application it will automatically fail the current test.
+
+This behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.
+
+https://on.cypress.io/uncaught-exception-from-application" type="TypeError"><![CDATA[TypeError: The following error originated from your application code, not from Cypress.
+
+  > The following error originated from your application code, not from Cypress.
+
+  > Cannot read property 'length' of undefined
+
+When Cypress detects uncaught errors originating from your application it will automatically fail the current test.
+
+This behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.
+
+When Cypress detects uncaught errors originating from your application it will automatically fail the current test.
+
+This behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.
+
+https://on.cypress.io/uncaught-exception-from-application
+    at TestCaseFailurePanel (http://localhost:1234/src.f69400ca.js:138963:143)
+    at renderWithHooks (http://localhost:1234/src.f69400ca.js:20241:22)
+    at mountIndeterminateComponent (http://localhost:1234/src.f69400ca.js:22724:17)
+    at beginWork$1 (http://localhost:1234/src.f69400ca.js:24073:20)
+    at HTMLUnknownElement.callCallback (http://localhost:1234/src.f69400ca.js:4261:18)
+    at Object.invokeGuardedCallbackDev (http://localhost:1234/src.f69400ca.js:4310:20)
+    at invokeGuardedCallback (http://localhost:1234/src.f69400ca.js:4363:35)
+    at beginWork$$1 (http://localhost:1234/src.f69400ca.js:29692:11)
+    at performUnitOfWork (http://localhost:1234/src.f69400ca.js:28609:16)
+    at workLoopSync (http://localhost:1234/src.f69400ca.js:28582:26)]]></failure>
+    </testcase>
+    <testcase name="dashboard when tests all passed should show test suite list on dashboard" time="0.3570" classname="when tests all passed should show test suite list on dashboard">
+    </testcase>
+    <testcase name="dashboard when fetching test run fails should render error message" time="0.2850" classname="when fetching test run fails should render error message">
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -1,0 +1,20 @@
+{
+  "groupedTestSuites": [
+    {
+      "groupName": "Group1",
+      "groupLabel": "unitTest",
+      "directory": "/test/unit",
+      "testSuitesBlob": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<testsuites name=\"Mocha Tests\" time=\"0.6050\" tests=\"2\" failures=\"1\">\n  <testsuite name=\"Root Suite\" timestamp=\"2021-03-17T00:33:11\" tests=\"0\" file=\"cypress\\integration\\attachments.spec.js\" time=\"0.0000\" failures=\"0\">\n  </testsuite>\n  <testsuite name=\"test run with attachments\" timestamp=\"2021-03-17T00:33:11\" tests=\"2\" time=\"0.6050\" failures=\"1\">\n    <testcase name=\"test run with attachments should list attachments on attachments page\" time=\"0.0000\" classname=\"should list attachments on attachments page\">\n      <failure message=\"Timed out retrying after 10000ms: Expected to find element: `[data-testid=&quot;nav-link-attachments1&quot;]`, but never found it.\" type=\"AssertionError\"><![CDATA[AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-testid=\"nav-link-attachments1\"]`, but never found it.\n    at Context.eval (http://localhost:1234/__cypress/tests?p=cypress\\support\\index.js:1230:13)]]></failure>\n    </testcase>\n    <testcase name=\"test run with attachments should not show attachments nav link when run has no attachments\" time=\"0.6050\" classname=\"should not show attachments nav link when run has no attachments\">\n    </testcase>\n  </testsuite>\n</testsuites>"
+    }
+  ],
+  "metadata": {
+    "git": {
+      "repoName": "flaky-org/flaky-repo",
+      "branchName": "main",
+      "projectName": null,
+      "isMainBranch": true
+    },
+    "ci": true
+  },
+  "wallClockDuration": null
+}
