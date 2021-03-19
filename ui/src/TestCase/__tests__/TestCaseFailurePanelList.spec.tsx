@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
-import { getNodeText, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { TestCase, TestFailure } from "../../model/TestRunModel";
 import TestCaseFailurePanelList from "../TestCaseFailurePanelList";
 
@@ -20,7 +20,7 @@ describe("TestCaseFailureListPanel", () => {
       <TestCaseFailurePanelList failedTestCases={testCases} publicId="12345" />
     );
 
-    expect(getNodeText(getByTestId("test-case-failure-text-2-1"))).toContain(
+    expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
       "My longer and more descriptive failure text"
     );
   });
@@ -40,7 +40,7 @@ describe("TestCaseFailureListPanel", () => {
       <TestCaseFailurePanelList failedTestCases={testCases} publicId="12345" />
     );
 
-    expect(getNodeText(getByTestId("test-case-failure-text-2-1"))).toContain(
+    expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
       "My failure message"
     );
   });

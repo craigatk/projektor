@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
-import { getNodeText, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { Attachment, TestCase, TestFailure } from "../../model/TestRunModel";
 import TestCaseFailurePanel from "../TestCaseFailurePanel";
 import moment from "moment";
@@ -181,7 +181,7 @@ describe("TestCaseFailurePanel", () => {
       <TestCaseFailurePanel testCase={testCase} publicId="12345" />
     );
 
-    expect(getNodeText(getByTestId("test-case-failure-text-2-1"))).toContain(
+    expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
       "My failure message"
     );
   });
@@ -203,7 +203,7 @@ describe("TestCaseFailurePanel", () => {
       />
     );
 
-    expect(getNodeText(getByTestId("test-case-failure-text-2-1"))).toContain(
+    expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
       "My failure text"
     );
   });
