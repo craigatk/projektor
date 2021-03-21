@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { TestCase } from "../model/TestRunModel";
 import { Typography } from "@material-ui/core";
 import CleanLink from "../Link/CleanLink";
+import { ExpandCollapseState } from "./ExpandCollapseState";
 
 const useStyles = makeStyles(() => ({
   panelActions: {
@@ -28,20 +29,37 @@ const useStyles = makeStyles(() => ({
 interface TestCaseFailurePanelProps {
   testCase: TestCase;
   publicId: string;
+  expandCollapseAll?: ExpandCollapseState;
   showFullFailure?: boolean;
 }
 
 const TestCaseFailurePanel = ({
   testCase,
   publicId,
+  expandCollapseAll,
   showFullFailure,
 }: TestCaseFailurePanelProps) => {
   const classes = useStyles({});
+
   const testCaseIdentifier = `${testCase.testSuiteIdx}-${testCase.idx}`;
+
+  const defaultExpanded =
+    expandCollapseAll !== ExpandCollapseState.COLLAPSE_ALL;
+
+  const [expanded, setExpanded] = React.useState<boolean>(defaultExpanded);
+
+  React.useEffect(() => {
+    setExpanded(defaultExpanded);
+  }, [setExpanded, defaultExpanded]);
+
+  const expansionPanelOnClick = () => {
+    setExpanded(!expanded);
+  };
 
   return (
     <ExpansionPanel
-      defaultExpanded
+      expanded={expanded}
+      onClick={expansionPanelOnClick}
       data-testid={`test-case-summary-${testCaseIdentifier}`}
     >
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>

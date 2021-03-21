@@ -109,6 +109,24 @@ fun loadFailingCypressTestWithAttachment() {
     println("View run with failing Cypress test with attachment screenshot at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
+fun loadSixFailingTests() {
+    val resultsXmlLoader = ResultsXmlLoader()
+    val groupedResultsXmlLoader = GroupedResultsXmlLoader()
+    val resultsBody = groupedResultsXmlLoader.wrapResultsXmlsInGroup(
+        listOf(
+            resultsXmlLoader.failing(),
+            resultsXmlLoader.failingLongFailureMessage(),
+            resultsXmlLoader.someIgnoredSomeFailing(),
+            resultsXmlLoader.gradleSingleTestCaseSystemOutFail(),
+            resultsXmlLoader.failingAnother()
+        )
+    )
+
+    val saveResultsResponse = sendGroupedResultsToServer(resultsBody)
+
+    println("View run with six failing test cases at $uiBaseUrl${saveResultsResponse.uri}")
+}
+
 fun loadPassingGroupedExample() {
     val groupedResultsXmlLoader = GroupedResultsXmlLoader()
     val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(null))

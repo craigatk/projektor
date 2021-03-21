@@ -6,6 +6,7 @@ class ResultsXmlLoader {
     fun passing() = loadTextFromFile("TEST-projektor.example.spock.PassingSpec.xml")
 
     fun failing() = loadTextFromFile("TEST-projektor.example.spock.FailingSpec.xml")
+    fun failingAnother() = loadTextFromFile("TEST-projektor.example.spock.AnotherFailingSpec.xml")
 
     fun failingLongFailureMessage() = loadTextFromFile("TEST-projektor.testsuite.GetTestSuiteApplicationTest-long-failure-output.xml")
 

@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context("test run with failed test cases", () => {
+describe("test run with failed test cases", () => {
   it("should show failed test case summaries on failed tests page", () => {
     const publicId = "12345";
 
@@ -99,5 +99,43 @@ context("test run with failed test cases", () => {
     ).click();
 
     cy.getCodeText().should("contain", "System err line 1");
+  });
+
+  it("should show test cases collapsed initially when 6 failed test cases", () => {
+    const publicId = "12345";
+
+    const testCaseIndexes = [1, 2, 3, 4, 5, 6];
+
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
+
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases_6.json",
+    });
+
+    cy.visit(`http://localhost:1234/tests/${publicId}`);
+
+    cy.findByTestId("test-failure-collapse-all-link").should("not.exist");
+    testCaseIndexes.forEach((testCaseIdx) => {
+      cy.findByTestId(`test-case-failure-text-1-${testCaseIdx}`).should(
+        "not.exist"
+      );
+    });
+
+    cy.findByTestId("test-failure-expand-all-link").click();
+    testCaseIndexes.forEach((testCaseIdx) => {
+      cy.findByTestId(`test-case-failure-text-1-${testCaseIdx}`).should(
+        "exist"
+      );
+    });
+
+    cy.findByTestId("test-failure-collapse-all-link").click();
+
+    cy.findByTestId(`test-case-summary-1-2`).click();
+    cy.findByTestId(`test-case-failure-text-1-2`).should(
+      "contain",
+      "Condition not satisfied2"
+    );
   });
 });
