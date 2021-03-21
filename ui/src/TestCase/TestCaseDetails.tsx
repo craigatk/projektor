@@ -1,17 +1,17 @@
 import * as React from "react";
 import {
   Link,
-  Router,
   Location,
-  Redirect,
   LocationContext,
+  Redirect,
+  Router,
 } from "@reach/router";
 import { makeStyles } from "@material-ui/core/styles";
-import { TestCase } from "../model/TestRunModel";
+import { AttachmentType, TestCase } from "../model/TestRunModel";
 import BreadcrumbPageHeader from "../BreadcrumbPageHeader";
 import Paper from "@material-ui/core/Paper";
 import TestCaseFailureDetails from "./TestCaseFailureDetails";
-import { Tabs, Tab } from "@material-ui/core";
+import { Tab, Tabs } from "@material-ui/core";
 import TestSuiteSystemOut from "../TestOutput/TestSuiteSystemOut";
 import TestSuiteSystemErr from "../TestOutput/TestSuiteSystemErr";
 import { getTabCurrentValue } from "../Tabs/TabValue";
@@ -19,6 +19,9 @@ import TestCaseSummary from "./TestCaseSummary";
 import CleanLink from "../Link/CleanLink";
 import TestCaseSystemOut from "../TestOutput/TestCaseSystemOut";
 import TestCaseSystemErr from "../TestOutput/TestCaseSystemErr";
+import TestCaseFailureVideo from "./TestCaseFailureVideo";
+import { findAttachmentOfType } from "./testCaseHelpers";
+import TestCaseFailureScreenshot from "./TestCaseFailureScreenshot";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -79,6 +82,15 @@ const TestCaseDetails = ({ publicId, testCase }: TestCaseDetailsProps) => {
     testCase
   );
 
+  const hasScreenshotAttachment = !!findAttachmentOfType(
+    testCase,
+    AttachmentType.IMAGE
+  );
+  const hasVideoAttachment = !!findAttachmentOfType(
+    testCase,
+    AttachmentType.VIDEO
+  );
+
   return (
     <div data-testid="test-case-details">
       <BreadcrumbPageHeader
@@ -127,6 +139,24 @@ const TestCaseDetails = ({ publicId, testCase }: TestCaseDetailsProps) => {
                   to={`${linkBase}/systemErr`}
                 />
               )}
+              {hasScreenshotAttachment && (
+                <Tab
+                  value="/screenshot"
+                  label="Screenshot"
+                  data-testid="test-case-tab-screenshot"
+                  component={Link}
+                  to={`${linkBase}/screenshot`}
+                />
+              )}
+              {hasVideoAttachment && (
+                <Tab
+                  value="/video"
+                  label="Video"
+                  data-testid="test-case-tab-video"
+                  component={Link}
+                  to={`${linkBase}/video`}
+                />
+              )}
             </Tabs>
           )}
         </Location>
@@ -171,6 +201,16 @@ const TestCaseDetails = ({ publicId, testCase }: TestCaseDetailsProps) => {
                 data-testid="test-case-system-err"
               />
             )}
+            <TestCaseFailureScreenshot
+              path="/screenshot"
+              testCase={testCase}
+              publicId={publicId}
+            />
+            <TestCaseFailureVideo
+              path="/video"
+              testCase={testCase}
+              publicId={publicId}
+            />
           </Router>
         </div>
       </Paper>

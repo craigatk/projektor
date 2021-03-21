@@ -73,6 +73,7 @@ class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseR
                 .select(TEST_CASE.HAS_SYSTEM_OUT.`as`("has_system_out_test_case"))
                 .select(TEST_SUITE.HAS_SYSTEM_ERR.`as`("has_system_err_test_suite"))
                 .select(TEST_SUITE.HAS_SYSTEM_OUT.`as`("has_system_out_test_suite"))
+                .select(TEST_SUITE.FILE_NAME.`as`("file_name"))
                 .select(TEST_SUITE.PACKAGE_NAME.`as`("package_name"))
                 .select(TEST_RUN.PUBLIC_ID.`as`("public_id"))
                 .select(TEST_RUN.CREATED_TIMESTAMP.`as`("created_timestamp"))

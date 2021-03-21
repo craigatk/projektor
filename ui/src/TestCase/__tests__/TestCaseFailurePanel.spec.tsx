@@ -1,7 +1,12 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import { render } from "@testing-library/react";
-import { Attachment, TestCase, TestFailure } from "../../model/TestRunModel";
+import {
+  Attachment,
+  AttachmentType,
+  TestCase,
+  TestFailure,
+} from "../../model/TestRunModel";
 import TestCaseFailurePanel from "../TestCaseFailurePanel";
 import moment from "moment";
 
@@ -218,6 +223,7 @@ describe("TestCaseFailurePanel", () => {
     const attachment: Attachment = {
       fileName: "screenshot.png",
       objectName: "screenshot-object",
+      attachmentType: AttachmentType.IMAGE,
     };
 
     const testCase: TestCase = {

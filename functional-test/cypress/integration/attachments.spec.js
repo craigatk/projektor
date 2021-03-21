@@ -2,10 +2,14 @@
 
 context("attachments", () => {
   it("can load and view attachments", () => {
-    cy.loadGroupedFixtureWithAttachment(
+    cy.loadGroupedFixtureWithAttachments(
       "cypress/fixtures/grouped-passing-tests.json",
-      "cypress/fixtures/test-attachment.txt",
-      "test-attachment.txt"
+      [
+        {
+          attachmentPath: "cypress/fixtures/test-attachment.txt",
+          attachmentName: "test-attachment.txt",
+        },
+      ]
     );
 
     cy.getByTestId("test-suite-group-name-1").should("contain", "Group1");

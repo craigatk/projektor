@@ -10,6 +10,7 @@ data class TestCase(
     val name: String,
     val packageName: String?,
     val className: String?,
+    val fileName: String?,
     val duration: BigDecimal?,
     val passed: Boolean,
     val skipped: Boolean,
@@ -19,7 +20,7 @@ data class TestCase(
     val hasSystemErrTestSuite: Boolean,
     val publicId: String,
     val createdTimestamp: LocalDateTime,
-    val failure: TestFailure?
+    val failure: TestFailure?,
 ) {
     val fullName: String
         get() = """${packageName?.let { "$it."} ?: ""}$className.$name"""
