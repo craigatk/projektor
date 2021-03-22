@@ -1,7 +1,14 @@
+enum AttachmentType {
+  IMAGE = "IMAGE",
+  VIDEO = "VIDEO",
+  OTHER = "OTHER",
+}
+
 interface Attachment {
   fileName: string;
   objectName: string;
   fileSize?: number;
+  attachmentType?: AttachmentType;
 }
 
 interface Attachments {
@@ -166,6 +173,7 @@ interface TestRunSystemAttributes {
 export {
   Attachment,
   Attachments,
+  AttachmentType,
   Coverage,
   CoverageExists,
   CoverageFile,

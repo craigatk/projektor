@@ -143,6 +143,7 @@ class FlakyTestCalculatorTest {
         name = testCaseName,
         className = className,
         packageName = packageName,
+        fileName = null,
         duration = BigDecimal.ONE,
         passed = false,
         skipped = false,

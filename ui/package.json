@@ -13,7 +13,7 @@
     "projektor:jest:ci": "yarn projektor-publish --configFile=projektor.jest.json",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "cy:run:single": "cypress run -s cypress/integration/coverage.spec.js",
+    "cy:run:single": "cypress run -s cypress/integration/attachments.spec.js",
     "cy:test": "yarn clean-results && start-server-and-test start http://localhost:1234 cy:run",
     "cy:test:projektor:ci": "yarn cy:test || yarn projektor-publish --configFile=projektor.cypress.json",
     "projektor:cypress:no-attachments": "projektor-publish --configFile=projektor.cypress.no.attachments.json",

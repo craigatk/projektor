@@ -45,6 +45,7 @@ class TestRunDBGenerator(
             testSuite.passingCount = testSuiteData.passingTestCaseNames.size
             testSuite.failureCount = testSuiteData.failingTestCaseNames.size
             testSuite.skippedCount = testSuiteData.skippedTestCaseNames.size
+            testSuite.fileName = testSuiteData.fileName
             testSuiteDao.insert(testSuite)
 
             testSuiteData.passingTestCaseNames.forEach { testCaseName ->
@@ -229,7 +230,8 @@ data class TestSuiteData(
     val packageAndClassName: String,
     val passingTestCaseNames: List<String>,
     val failingTestCaseNames: List<String>,
-    val skippedTestCaseNames: List<String>
+    val skippedTestCaseNames: List<String>,
+    val fileName: String? = null
 )
 
 fun createTestRun(publicId: PublicId, totalTestCount: Int, cumulativeDuration: BigDecimal = BigDecimal("30.000")): TestRunDB = TestRunDB()

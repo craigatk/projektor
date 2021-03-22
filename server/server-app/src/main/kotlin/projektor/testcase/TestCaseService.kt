@@ -12,8 +12,26 @@ class TestCaseService(
     private val attachmentService: AttachmentService?
 ) {
 
-    suspend fun fetchTestCase(testRunPublicId: PublicId, testSuiteIdx: Int, testCaseIdx: Int): TestCase? =
-        testCaseRepository.fetchTestCase(testRunPublicId, testSuiteIdx, testCaseIdx)
+    private val attachmentMatchers = listOf(
+        CypressScreenshotAttachmentMatcher(),
+        CypressVideoAttachmentMatcher()
+    )
+
+    suspend fun fetchTestCase(testRunPublicId: PublicId, testSuiteIdx: Int, testCaseIdx: Int): TestCase? {
+        val testCase = testCaseRepository.fetchTestCase(testRunPublicId, testSuiteIdx, testCaseIdx)
+
+        if (testCase?.passed == false) {
+            val attachments = attachmentService?.listAttachments(testRunPublicId)
+
+            val testCaseAttachments = attachmentMatchers.mapNotNull { attachmentMatcher ->
+                attachmentMatcher.findAttachment(testCase, attachments)
+            }
+
+            testCase.attachments = testCaseAttachments
+        }
+
+        return testCase
+    }
 
     suspend fun fetchFailedTestCases(publicId: PublicId): List<TestCase> {
         val failedTestCases = testCaseRepository.fetchFailedTestCases(publicId)
@@ -22,15 +40,11 @@ class TestCaseService(
             val attachments = attachmentService?.listAttachments(publicId)
 
             failedTestCases.forEach { testCase ->
-                val testCaseAttachment = attachments?.find { attachment ->
-                    val testCaseNameWords = testCase.name.split(" ")
-
-                    testCaseNameWords.all { word -> attachment.fileName.contains(word) }
+                val testCaseAttachments = attachmentMatchers.mapNotNull { attachmentMatcher ->
+                    attachmentMatcher.findAttachment(testCase, attachments)
                 }
 
-                if (testCaseAttachment != null) {
-                    testCase.attachments = listOf(testCaseAttachment)
-                }
+                testCase.attachments = testCaseAttachments
             }
         }
 

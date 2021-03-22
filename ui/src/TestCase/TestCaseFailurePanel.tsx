@@ -7,10 +7,15 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
-import { TestCase } from "../model/TestRunModel";
+import { AttachmentType, TestCase } from "../model/TestRunModel";
 import { Typography } from "@material-ui/core";
 import CleanLink from "../Link/CleanLink";
 import { ExpandCollapseState } from "./ExpandCollapseState";
+import TestCaseFailureScreenshot from "./TestCaseFailureScreenshot";
+import {
+  findAttachmentOfType,
+  createTestCaseIdentifier,
+} from "./testCaseHelpers";
 
 const useStyles = makeStyles(() => ({
   panelActions: {
@@ -20,9 +25,6 @@ const useStyles = makeStyles(() => ({
     backgroundColor: "#EDEDED",
     overflowX: "auto",
     fontSize: "0.9em",
-  },
-  failureScreenshot: {
-    maxWidth: "100%",
   },
 }));
 
@@ -41,7 +43,7 @@ const TestCaseFailurePanel = ({
 }: TestCaseFailurePanelProps) => {
   const classes = useStyles({});
 
-  const testCaseIdentifier = `${testCase.testSuiteIdx}-${testCase.idx}`;
+  const testCaseIdentifier = createTestCaseIdentifier(testCase);
 
   const defaultExpanded =
     expandCollapseAll !== ExpandCollapseState.COLLAPSE_ALL;
@@ -55,6 +57,12 @@ const TestCaseFailurePanel = ({
   const expansionPanelOnClick = () => {
     setExpanded(!expanded);
   };
+
+  const screenshotAttachment = findAttachmentOfType(
+    testCase,
+    AttachmentType.IMAGE
+  );
+  const videoAttachment = findAttachmentOfType(testCase, AttachmentType.VIDEO);
 
   return (
     <ExpansionPanel
@@ -76,14 +84,10 @@ const TestCaseFailurePanel = ({
                 : testCase.failure.failureMessage}
             </pre>
 
-            {testCase.attachments && testCase.attachments.length === 1 && (
-              <img
-                src={`/run/${publicId}/attachments/${testCase.attachments[0].fileName}`}
-                data-testid={`test-case-failure-screenshot-${testCaseIdentifier}`}
-                className={classes.failureScreenshot}
-                alt={`Failure screenshot for test ${testCase.name}`}
-              />
-            )}
+            <TestCaseFailureScreenshot
+              testCase={testCase}
+              publicId={publicId}
+            />
           </div>
         )}
       </ExpansionPanelDetails>
@@ -116,6 +120,26 @@ const TestCaseFailurePanel = ({
               data-testid={`test-case-summary-system-err-link-${testCaseIdentifier}`}
             >
               System Err
+            </CleanLink>
+          </Button>
+        )}
+        {screenshotAttachment && (
+          <Button>
+            <CleanLink
+              to={`/tests/${publicId}/suite/${testCase.testSuiteIdx}/case/${testCase.idx}/screenshot`}
+              data-testid={`test-case-screenshot-link-${testCaseIdentifier}`}
+            >
+              Screenshot
+            </CleanLink>
+          </Button>
+        )}
+        {videoAttachment && (
+          <Button>
+            <CleanLink
+              to={`/tests/${publicId}/suite/${testCase.testSuiteIdx}/case/${testCase.idx}/video`}
+              data-testid={`test-case-video-link-${testCaseIdentifier}`}
+            >
+              Video
             </CleanLink>
           </Button>
         )}
