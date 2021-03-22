@@ -1,0 +1,16 @@
+{
+  "attachments": [
+    {
+      "file_name": "test run with attachments -- should list attachments on attachments page (failed).png",
+      "object_name": "VYTYOM74ZQRP-test-attachment.png",
+      "file_size": 30,
+      "attachment_type": "IMAGE"
+    },
+    {
+      "file_name": "attachments.spec.js.mp4",
+      "object_name": "VYTYOM74ZQRQ-attachments.spec.js.mp4",
+      "file_size": 32215,
+      "attachment_type": "VIDEO"
+    }
+  ]
+}

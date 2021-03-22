@@ -21,15 +21,16 @@ const TestRunMessages = ({ publicId }: TestRunMessagesProps) => {
 
   return (
     <div data-testid="test-run-messages">
-      {messages.map((message, idx) => (
-        <Alert
-          severity="info"
-          data-testid={`test-run-message-${idx + 1}`}
-          key={`test-run0message-${idx + 1}`}
-        >
-          {message}
-        </Alert>
-      ))}
+      {messages &&
+        messages.map((message, idx) => (
+          <Alert
+            severity="info"
+            data-testid={`test-run-message-${idx + 1}`}
+            key={`test-run0message-${idx + 1}`}
+          >
+            {message}
+          </Alert>
+        ))}
     </div>
   );
 };

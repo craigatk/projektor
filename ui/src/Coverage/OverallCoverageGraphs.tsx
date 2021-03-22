@@ -23,42 +23,46 @@ const OverallCoverageGraphs = ({
 }: OverallCoverageGraphsProps) => {
   const classes = useStyles({});
 
-  return (
-    <Grid container className={classes.graphGrid}>
-      <Grid item sm={4} xs={12} data-testid="overall-coverage-section-line">
-        <CoverageGraph
-          type="Line"
-          coverageStat={overallStats.lineStat}
-          height={25}
-          inline={false}
-          previousTestRunId={previousTestRunId}
-        />
+  if (overallStats) {
+    return (
+      <Grid container className={classes.graphGrid}>
+        <Grid item sm={4} xs={12} data-testid="overall-coverage-section-line">
+          <CoverageGraph
+            type="Line"
+            coverageStat={overallStats.lineStat}
+            height={25}
+            inline={false}
+            previousTestRunId={previousTestRunId}
+          />
+        </Grid>
+        <Grid item sm={4} xs={12} data-testid="overall-coverage-section-branch">
+          <CoverageGraph
+            type="Branch"
+            coverageStat={overallStats.branchStat}
+            height={25}
+            inline={false}
+            previousTestRunId={previousTestRunId}
+          />
+        </Grid>
+        <Grid
+          item
+          sm={4}
+          xs={12}
+          data-testid="overall-coverage-section-statement"
+        >
+          <CoverageGraph
+            type="Statement"
+            coverageStat={overallStats.statementStat}
+            height={25}
+            inline={false}
+            previousTestRunId={previousTestRunId}
+          />
+        </Grid>
       </Grid>
-      <Grid item sm={4} xs={12} data-testid="overall-coverage-section-branch">
-        <CoverageGraph
-          type="Branch"
-          coverageStat={overallStats.branchStat}
-          height={25}
-          inline={false}
-          previousTestRunId={previousTestRunId}
-        />
-      </Grid>
-      <Grid
-        item
-        sm={4}
-        xs={12}
-        data-testid="overall-coverage-section-statement"
-      >
-        <CoverageGraph
-          type="Statement"
-          coverageStat={overallStats.statementStat}
-          height={25}
-          inline={false}
-          previousTestRunId={previousTestRunId}
-        />
-      </Grid>
-    </Grid>
-  );
+    );
+  } else {
+    return null;
+  }
 };
 
 export default OverallCoverageGraphs;
