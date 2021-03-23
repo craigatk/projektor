@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 context("test run messages", () => {
-  it("when one messages should show it on dashboard page", () => {
+  it("when one message should show it on dashboard page", () => {
     const publicId = "12345";
 
     cy.server();

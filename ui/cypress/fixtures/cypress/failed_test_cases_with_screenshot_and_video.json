@@ -1,0 +1,37 @@
+[
+  {
+    "idx": 2,
+    "test_suite_idx": 1,
+    "name": "should fail with screenshot and video",
+    "package_name": null,
+    "class_name": "failing test",
+    "file_name": "failing.spec.js",
+    "duration": 0.044,
+    "passed": false,
+    "has_system_out": true,
+    "has_system_err": true,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_suite": true,
+    "has_system_out_test_case": false,
+    "has_system_err_test_case": false,
+    "failure": {
+      "failure_message": "Condition not satisfied:\n\nactual \u003d\u003d 3\n|      |\n1      false\n",
+      "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
+      "failure_text": "Condition not satisfied:\n\nactual \u003d\u003d 3\n|      |\n1      false\n\n\tat projektor.example.spock.FailingSpec.should fail with output(FailingSpec.groovy:22)\n"
+    },
+    "attachments": [
+      {
+        "file_name": "test run with attachments -- should list attachments on attachments page (failed).png",
+        "object_name": "VYTYOM74ZQRP-test-attachment.png",
+        "file_size": 30,
+        "attachment_type": "IMAGE"
+      },
+      {
+        "file_name": "attachments.spec.js.mp4",
+        "object_name": "VYTYOM74ZQRQ-attachments.spec.js.mp4",
+        "file_size": 32215,
+        "attachment_type": "VIDEO"
+      }
+    ]
+  }
+]

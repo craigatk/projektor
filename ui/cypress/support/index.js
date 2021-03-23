@@ -13,9 +13,29 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-// Import commands.js using ES2015 syntax:
 import "../../../cypress-common/support/commands";
 import "@testing-library/cypress/add-commands";
 
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
+Cypress.Commands.add("interceptTestRunBasicRequests", (publicId) => {
+  cy.intercept("GET", `run/${publicId}/metadata/git`, {
+    fixture: "metadata/git-metadata-with-github-base-url.json",
+  });
+
+  cy.intercept("GET", "config", {});
+
+  cy.intercept("GET", `run/${publicId}/coverage/exists`, {
+    fixture: "coverage/coverage-does-not-exist.json",
+  });
+
+  cy.intercept("GET", `run/${publicId}/coverage`, {
+    fixture: "coverage/coverage-three-groups.json",
+  });
+
+  cy.intercept("GET", `run/${publicId}/messages`, {
+    fixture: "messages/one_message.json",
+  });
+
+  cy.intercept("GET", `run/${publicId}/badge/coverage`, "");
+
+  cy.intercept("GET", `run/${publicId}/performance`, {});
+});
