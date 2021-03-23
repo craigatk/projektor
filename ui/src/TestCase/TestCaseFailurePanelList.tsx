@@ -61,7 +61,7 @@ const TestCaseFailurePanelList = ({
               className={classes.expandCollapseLink}
               data-testid="test-failure-expand-all-link"
             >
-              <UnfoldLessOutlinedIcon className={classes.expandCollapseIcon} />
+              <UnfoldMoreOutlinedIcon className={classes.expandCollapseIcon} />
               <span className={classes.expandCollapseLabel}>
                 Expand all failure details
               </span>
@@ -72,7 +72,7 @@ const TestCaseFailurePanelList = ({
               className={classes.expandCollapseLink}
               data-testid="test-failure-collapse-all-link"
             >
-              <UnfoldMoreOutlinedIcon className={classes.expandCollapseIcon} />
+              <UnfoldLessOutlinedIcon className={classes.expandCollapseIcon} />
               <span className={classes.expandCollapseLabel}>
                 Collapse all failure details
               </span>
