@@ -4,7 +4,8 @@
     "test-results/*.xml"
   ],
   "attachments": [
-    "cypress/screenshots/**/*.png"
+    "cypress/screenshots/**/*.png",
+    "cypress/videos/**/*.mp4"
   ],
   "exitWithFailure": true,
   "projectName": "ui-cypress"

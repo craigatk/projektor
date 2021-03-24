@@ -1,8 +1,9 @@
 {
-    "reporter": "junit",
-    "reporterOptions": {
-      "mochaFile": "test-results/cypress-[hash].xml"
-    },
-    "videoUploadOnPasses": false,
-    "defaultCommandTimeout": 10000
-  }
+  "reporter": "junit",
+  "reporterOptions": {
+    "mochaFile": "test-results/cypress-[hash].xml"
+  },
+  "videoUploadOnPasses": false,
+  "defaultCommandTimeout": 10000,
+  "experimentalRunEvents": true
+}
