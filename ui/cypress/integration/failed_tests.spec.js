@@ -114,6 +114,8 @@ describe("test run with failed test cases", () => {
       fixture: "failed_test_cases_6.json",
     });
 
+    cy.interceptTestRunBasicRequests(publicId);
+
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
     cy.findByTestId("test-failure-collapse-all-link").should("not.exist");
