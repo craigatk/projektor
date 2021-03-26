@@ -26,7 +26,7 @@ context("test run with coverage data", () => {
 
     cy.getByTestId("coverage-graph-title-line").should(
       "contain",
-      "Line 97.31%"
+      "Line 98.31%"
     );
     cy.getByTestId("coverage-graph-title-statement").should(
       "contain",
