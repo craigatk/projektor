@@ -67,7 +67,7 @@ is-fullwidth-code-point@^2.0.0:
   resolved "https://registry.yarnpkg.com/is-fullwidth-code-point/-/is-fullwidth-code-point-2.0.0.tgz#a3b30a5c4f199183167aaab93beefae3ddfb654f"
   integrity sha1-o7MKXE8ZkYMWeqq5O+764937ZU8=
 
-k6-to-junit@^1.0.3:
+k6-to-junit@1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/k6-to-junit/-/k6-to-junit-1.0.3.tgz#401d30cae4a0cca6425fef6e76696cbe9906d105"
   integrity sha512-NeWT0ln+A38+R0gGEI+Knxcg+/gTjX5fNCMf8WYA4b0RqIRKfJubvbakLym0PAOZn0FUrM4lYQMla7QX4C4CUQ==
@@ -164,9 +164,9 @@ xmlbuilder@^13.0.2:
   integrity sha512-Eux0i2QdDYKbdbA6AM6xE4m6ZTZr4G4xF9kahI2ukSEMCzwce2eX9WlTI5J3s+NU7hpasFsr8hWIONae7LluAQ==
 
 y18n@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/y18n/-/y18n-4.0.0.tgz#95ef94f85ecc81d007c264e190a120f0a3c8566b"
-  integrity sha512-r9S/ZyXu/Xu9q1tYlpsLIsa3EeLXXk0VwlxqTcFRfg9EhMW+17kbt9G0NrgCmhGb5vT2hyhJZLfDGx+7+5Uj/w==
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/y18n/-/y18n-4.0.1.tgz#8db2b83c31c5d75099bb890b23f3094891e247d4"
+  integrity sha512-wNcy4NvjMYL8gogWWYAO7ZFWFfHcbdbE57tZO8e4cbpj8tfUcwrwqSl3ad8HxpYWCdXcJUCeKKZS62Av1affwQ==
 
 yargs-parser@^15.0.1:
   version "15.0.1"
