@@ -1,10 +1,9 @@
 package projektor.plugin.client
 
+import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.http.HttpHeader
-import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.api.logging.Logger
-import org.junit.Rule
 import projektor.plugin.ResultsWireMockStubber
 import projektor.plugin.PublishResult
 import projektor.plugin.results.grouped.GroupedResults
@@ -15,12 +14,19 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 
 class ResultsClientSpec extends Specification {
 
-    @Rule
-    WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort())
+    WireMockServer wireMockServer = new WireMockServer(wireMockConfig().dynamicPort())
 
-    ResultsWireMockStubber resultsStubber = new ResultsWireMockStubber(wireMockRule)
+    ResultsWireMockStubber resultsStubber = new ResultsWireMockStubber(wireMockServer)
 
     Logger logger = Mock()
+
+    def setup() {
+        wireMockServer.start()
+    }
+
+    def cleanup() {
+        wireMockServer.stop()
+    }
 
     void "should send results to server without token in header"() {
         given:

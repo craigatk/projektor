@@ -1,12 +1,13 @@
 package projektor.plugin.file
 
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 class DirectoryUtilSpec extends Specification {
-    @Rule
-    TemporaryFolder baseDir = new TemporaryFolder()
+    File baseDir
+
+    def setup() {
+        baseDir
+    }
 
     def "should find subdirectory path for one level deep"() {
         given:

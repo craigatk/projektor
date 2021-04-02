@@ -1,10 +1,8 @@
 package projektor.plugin
 
-import org.junit.rules.TemporaryFolder
-
 class AttachmentsWriter {
-    static File createAttachmentsDir(TemporaryFolder projectDir, String dirName) {
-        projectDir.newFolder(dirName)
+    static File createAttachmentsDir(TempDirectory projectDir, String dirName) {
+        projectDir.newDirectory(dirName)
     }
 
     static File createAttachmentsDir(File projectDir, String dirName) {

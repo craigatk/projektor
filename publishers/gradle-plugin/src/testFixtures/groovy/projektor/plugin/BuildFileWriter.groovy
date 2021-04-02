@@ -1,10 +1,8 @@
 package projektor.plugin
 
-import org.junit.rules.TemporaryFolder
-
 class BuildFileWriter {
     static File createProjectBuildFile(
-            TemporaryFolder projectDir,
+            TempDirectory projectDir,
             boolean includeProjektorPlugin = true,
             boolean includeJacocoPlugin = false
     ) {
@@ -47,7 +45,7 @@ class BuildFileWriter {
         """.stripIndent()
     }
 
-    static File createRootBuildFile(TemporaryFolder projectRootDir) {
+    static File createRootBuildFile(TempDirectory projectRootDir) {
         File rootBuildFile = projectRootDir.newFile('build.gradle')
         rootBuildFile << """
             buildscript {

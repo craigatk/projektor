@@ -12,7 +12,7 @@ class ProjektorResultsCollector {
     String createResultsBlobFromJunitXmlResultsInDirectory(File junitXmlResultsDirectory) {
         List<File> junitXmlFiles =  findJunitXmlReportsInDirectory(junitXmlResultsDirectory)
 
-        logger.info("Found ${junitXmlFiles.size()} JUnit XML results files in ${junitXmlResultsDirectory.name} directory")
+        logger.info("Found ${junitXmlFiles.size()} JUnit XML results files in ${junitXmlResultsDirectory.getName()} directory")
 
         String resultsBlob = createResultsBlob(junitXmlFiles)
 
@@ -29,7 +29,7 @@ class ProjektorResultsCollector {
     }
 
     private static String createResultsBlob(List<File> resultsFiles) {
-        def texts = resultsFiles.collect { it.text }
+        def texts = resultsFiles.collect { it.getText() }
         return texts.join("\n")
     }
 }

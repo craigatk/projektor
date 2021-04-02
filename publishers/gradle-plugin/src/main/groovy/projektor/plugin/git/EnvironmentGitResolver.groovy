@@ -12,8 +12,8 @@ class EnvironmentGitResolver extends GitResolver {
 
     @Override
     String findBranchName() {
-        String branch = environmentResolver.findFirstEnvironmentValue(config.branchEnvironmentVariables)
-        String ref = environmentResolver.findFirstEnvironmentValue(config.refEnvironmentVariables)
+        String branch = environmentResolver.findFirstEnvironmentValue(config.getBranchEnvironmentVariables())
+        String ref = environmentResolver.findFirstEnvironmentValue(config.getRefEnvironmentVariables())
 
         if (branch != null) {
             return branch
@@ -26,17 +26,17 @@ class EnvironmentGitResolver extends GitResolver {
 
     @Override
     String findRepository() {
-        return environmentResolver.findFirstEnvironmentValue(config.repoEnvironmentVariables)
+        return environmentResolver.findFirstEnvironmentValue(config.getRepoEnvironmentVariables())
     }
 
     @Override
     String findCommitSha() {
-        return environmentResolver.findFirstEnvironmentValue(config.commitShaEnvironmentVariables)
+        return environmentResolver.findFirstEnvironmentValue(config.getCommitShaEnvironmentVariables())
     }
 
     @Override
     Integer findPullRequestNumber() {
-        String pullRequestStr = environmentResolver.findFirstEnvironmentValue(config.pullRequestNumberEnvironmentVariables)
+        String pullRequestStr = environmentResolver.findFirstEnvironmentValue(config.getPullRequestNumberEnvironmentVariables())
 
         if (pullRequestStr) {
             try {

@@ -69,7 +69,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
 
         List<TestGroup> testGroupsFromAdditionalDirs = TestDirectoryGroup.listFromDirPaths(projectDir, additionalResultsDirs)
         ProjectTestResultsCollector projectTestResultsCollector = new ProjectTestResultsCollector(
-                this.projektorTaskFinishedListener.testGroups + testGroupsFromAdditionalDirs,
+                this.projektorTaskFinishedListener.getTestGroups() + testGroupsFromAdditionalDirs,
                 logger
         )
 
@@ -102,7 +102,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
                 git: GitMetadataFinder.findGitMetadata(gitResolutionConfig, logger),
                 ci: isCI
         )
-        groupedResults.wallClockDuration = projektorTaskFinishedListener.testWallClockDurationInSeconds
+        groupedResults.wallClockDuration = projektorTaskFinishedListener.getTestWallClockDurationInSeconds()
 
         if (coverageEnabled) {
             groupedResults.coverageFiles = codeCoverageTaskCollector.codeCoverageFiles.collect { coverageFile ->
@@ -152,8 +152,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
 
     // Don't need to listen to the other methods
 
-    // TODO: Remove when Gradle 7.0 is released
-    @Override
+    // Needed for Gradle versions < 7
     void buildStarted(Gradle gradle) { }
 
     @Override

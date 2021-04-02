@@ -1,13 +1,11 @@
 package projektor.plugin.results
 
 import org.gradle.api.logging.Logger
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
+import projektor.plugin.TempDirectory
 import spock.lang.Specification
 
 class ProjektorResultsCollectorSpec extends Specification {
-    @Rule TemporaryFolder tempFolder1
-    @Rule TemporaryFolder tempFolder2
+    TempDirectory tempFolder = new TempDirectory()
 
     Logger logger = Mock()
     ProjektorResultsCollector resultsCollector = new ProjektorResultsCollector(logger)
@@ -17,22 +15,22 @@ class ProjektorResultsCollectorSpec extends Specification {
         String resultsXmlFile1Content = """file1line1
 file1line2
 file1line3"""
-        File resultsXmlFile1 = tempFolder1.newFile("results1.xml")
+        File resultsXmlFile1 = tempFolder.newFile("results1.xml")
         resultsXmlFile1.text = resultsXmlFile1Content
 
         String resultsXmlFile2Content = """file2line1
 file2line2"""
-        File resultsXmlFile2 = tempFolder1.newFile("results2.xml")
+        File resultsXmlFile2 = tempFolder.newFile("results2.xml")
         resultsXmlFile2.text = resultsXmlFile2Content
 
         String otherFileContent = """Some other
 text lines
 In another file"""
-        File otherFile = tempFolder1.newFile("results.txt")
+        File otherFile = tempFolder.newFile("results.txt")
         otherFile.text = otherFileContent
 
         when:
-        String resultsBlob = resultsCollector.createResultsBlobFromJunitXmlResultsInDirectory(tempFolder1.root)
+        String resultsBlob = resultsCollector.createResultsBlobFromJunitXmlResultsInDirectory(tempFolder.root)
 
         then:
         resultsBlob.contains(resultsXmlFile1Content)

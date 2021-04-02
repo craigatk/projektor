@@ -1,7 +1,5 @@
 package projektor.plugin
 
-import org.junit.rules.TemporaryFolder
-
 import static projektor.plugin.ProjectDirectoryWriter.createTestDirectory
 
 class SpecWriter {
@@ -38,17 +36,17 @@ class ${specClassName} extends Specification {
 """
     }
 
-    static File createTestDirectoryWithFailingTest(TemporaryFolder projectDir,  String specClassName) {
+    static File createTestDirectoryWithFailingTest(TempDirectory projectDir,  String specClassName) {
         return createTestDirectoryWithFailingTests(projectDir, [specClassName])
     }
 
-    static File createTestDirectoryWithFailingTests(TemporaryFolder projectDir,  List<String> specClassNames) {
+    static File createTestDirectoryWithFailingTests(TempDirectory projectDir,  List<String> specClassNames) {
         File testDirectory = createTestDirectory(projectDir)
         specClassNames.each { writeFailingSpecFile(testDirectory, it) }
         return testDirectory
     }
 
-    static File createTestDirectoryWithPassingTest(TemporaryFolder projectDir,  String specClassName) {
+    static File createTestDirectoryWithPassingTest(TempDirectory projectDir,  String specClassName) {
         File testDirectory = createTestDirectory(projectDir)
         writePassingSpecFile(testDirectory, specClassName)
         return testDirectory

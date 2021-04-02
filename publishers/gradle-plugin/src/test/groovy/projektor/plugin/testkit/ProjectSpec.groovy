@@ -1,29 +1,32 @@
 package projektor.plugin.testkit
 
-import com.github.tomakehurst.wiremock.junit.WireMockRule
+import com.github.tomakehurst.wiremock.WireMockServer
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.util.GradleVersion
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import projektor.plugin.ResultsWireMockStubber
+import projektor.plugin.TempDirectory
 import spock.lang.Specification
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 
 abstract class ProjectSpec extends Specification {
-    @Rule
-    TemporaryFolder projectRootDir = new TemporaryFolder()
+    TempDirectory projectRootDir = new TempDirectory()
 
-    @Rule
-    WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort())
+    WireMockServer wireMockServer = new WireMockServer(wireMockConfig().dynamicPort())
 
-    ResultsWireMockStubber resultsStubber = new ResultsWireMockStubber(wireMockRule)
+    ResultsWireMockStubber resultsStubber = new ResultsWireMockStubber(wireMockServer)
 
     String serverUrl
 
     def setup() {
+        wireMockServer.start()
+
         serverUrl = resultsStubber.serverUrl
+    }
+
+    def cleanup() {
+        wireMockServer.stop()
     }
 
     BuildResult runSuccessfulLocalBuild(String... buildArgs) {

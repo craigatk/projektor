@@ -12,7 +12,7 @@ class ProjectTestResultsCollector {
     private final Logger logger
     private final ProjektorResultsCollector resultsCollector
 
-    ProjectTestResultsCollector(Collection<TestTaskGroup> testGroups, Logger logger) {
+    ProjectTestResultsCollector(Collection<TestGroup> testGroups, Logger logger) {
         this.testGroups = testGroups
         this.logger = logger
         this.resultsCollector = new ProjektorResultsCollector(logger)
@@ -30,8 +30,9 @@ class ProjectTestResultsCollector {
                 projectDir,
                 additionalResultsDirs
         )
+        Collection<TestGroup> allTestGroups = (testGroups + additionalTestGroups) as Collection<TestGroup>
 
-        return new ProjectTestResultsCollector(testGroups + additionalTestGroups, logger)
+        return new ProjectTestResultsCollector(allTestGroups, logger)
     }
 
     boolean hasTestGroups() {
@@ -43,14 +44,16 @@ class ProjectTestResultsCollector {
     }
 
     GroupedResults createGroupedResults() {
-        List<GroupedTestSuites> groupedTestSuites = testGroups.collect {
-            File junitXmlResultsDirectory = it.resultsDir
+        ProjektorResultsCollector collector = this.resultsCollector
 
-            String resultsBlob = resultsCollector.createResultsBlobFromJunitXmlResultsInDirectory(junitXmlResultsDirectory)
+        List<GroupedTestSuites> groupedTestSuites = this.testGroups.collect {
+            File junitXmlResultsDirectory = it.getResultsDir()
+
+            String resultsBlob = collector.createResultsBlobFromJunitXmlResultsInDirectory(junitXmlResultsDirectory)
 
             new GroupedTestSuites(
-                    groupName: it.name,
-                    groupLabel: it.label,
+                    groupName: it.getName(),
+                    groupLabel: it.getLabel(),
                     testSuitesBlob: resultsBlob
             )
         }

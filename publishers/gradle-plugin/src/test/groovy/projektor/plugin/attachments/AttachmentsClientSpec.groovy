@@ -1,11 +1,9 @@
 package projektor.plugin.attachments
 
+import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.http.HttpHeader
-import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
-import okhttp3.OkHttpClient
 import org.gradle.api.logging.Logger
-import org.junit.Rule
 import projektor.plugin.AttachmentsWireMockStubber
 import projektor.plugin.client.ClientConfig
 import projektor.plugin.client.ClientToken
@@ -15,12 +13,20 @@ import spock.lang.Unroll
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 
 class AttachmentsClientSpec extends Specification {
-    @Rule
-    WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort())
 
-    AttachmentsWireMockStubber attachmentsStubber = new AttachmentsWireMockStubber(wireMockRule)
+    WireMockServer wireMockServer = new WireMockServer(wireMockConfig().dynamicPort())
+
+    AttachmentsWireMockStubber attachmentsStubber = new AttachmentsWireMockStubber(wireMockServer)
 
     Logger logger = Mock()
+
+    def setup() {
+        wireMockServer.start()
+    }
+
+    def cleanup() {
+        wireMockServer.stop()
+    }
 
     @Unroll
     void "should send attachment to server token in header #expectedTokenPresent"() {

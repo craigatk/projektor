@@ -28,7 +28,7 @@ abstract class GitResolver {
     }
 
     GitMetadata createMetadata() {
-        if (config.enabled) {
+        if (config.isEnabled()) {
             String repoName = findRepository()
 
             if (repoName != null) {

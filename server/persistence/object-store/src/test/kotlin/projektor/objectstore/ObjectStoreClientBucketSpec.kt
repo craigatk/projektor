@@ -4,8 +4,8 @@ import io.kotest.core.spec.style.StringSpec
 import projektor.objectstore.bucket.BucketCreationException
 import strikt.api.expectCatching
 import strikt.api.expectThat
-import strikt.assertions.failed
 import strikt.assertions.isA
+import strikt.assertions.isFailure
 import strikt.assertions.isTrue
 
 class ObjectStoreClientBucketSpec : StringSpec() {
@@ -25,7 +25,7 @@ class ObjectStoreClientBucketSpec : StringSpec() {
             val bucketName = "wrongaccessbucket"
 
             expectCatching { ObjectStoreClient(configWithWrongAccessKey).createBucketIfNotExists(bucketName) }
-                .failed()
+                .isFailure()
                 .isA<BucketCreationException>()
         }
     }

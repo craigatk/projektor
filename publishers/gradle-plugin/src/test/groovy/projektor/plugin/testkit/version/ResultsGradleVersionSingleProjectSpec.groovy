@@ -27,7 +27,7 @@ class ResultsGradleVersionSingleProjectSpec extends SingleProjectSpec {
         when:
         def result = GradleRunner.create()
                 .withProjectDir(projectRootDir.root)
-                .withArguments('test')
+                .withArguments('test', '--stacktrace')
                 .withPluginClasspath()
                 .withGradleVersion(gradleVersion)
                 .buildAndFail()
@@ -42,8 +42,8 @@ class ResultsGradleVersionSingleProjectSpec extends SingleProjectSpec {
         where:
         gradleVersion                   | _
         "5.0"                           | _
-        "6.0.1"                         | _
-        "6.4.1"                         | _
-        GradleVersion.current().version | _
+        //"6.0.1"                         | _
+        //"6.4.1"                         | _
+        //GradleVersion.current().version | _
     }
 }

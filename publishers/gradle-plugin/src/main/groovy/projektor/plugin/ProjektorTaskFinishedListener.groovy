@@ -10,9 +10,9 @@ import java.time.Duration
 import java.time.LocalDateTime
 
 class ProjektorTaskFinishedListener implements TaskExecutionListener {
-    List<TestTaskGroup> testGroups = []
-    LocalDateTime testsStarted
-    LocalDateTime testsFinished
+    private List<TestTaskGroup> testGroups = []
+    private LocalDateTime testsStarted
+    private LocalDateTime testsFinished
 
     private final DateProvider dateProvider
     private final Logger logger
@@ -20,6 +20,10 @@ class ProjektorTaskFinishedListener implements TaskExecutionListener {
     ProjektorTaskFinishedListener(DateProvider dateProvider, Logger logger) {
         this.dateProvider = dateProvider
         this.logger = logger
+    }
+
+    List<TestTaskGroup> getTestGroups() {
+        return this.testGroups
     }
 
     @Override
