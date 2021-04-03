@@ -43,12 +43,15 @@ const fetchRepositoryCoverageBadge = (
 const fetchRepositoryFlakyTests = (
   maxRuns: number,
   flakyThreshold: number,
+  branchType: string,
   repoName: string,
   projectName?: string
 ): Promise<AxiosResponse<RepositoryFlakyTests>> => {
+  const branchTypeValue = branchType.toUpperCase();
+
   const url = projectName
-    ? `repo/${repoName}/project/${projectName}/tests/flaky?threshold=${flakyThreshold}&max_runs=${maxRuns}`
-    : `repo/${repoName}/tests/flaky?threshold=${flakyThreshold}&max_runs=${maxRuns}`;
+    ? `repo/${repoName}/project/${projectName}/tests/flaky?threshold=${flakyThreshold}&max_runs=${maxRuns}&branch_type=${branchTypeValue}`
+    : `repo/${repoName}/tests/flaky?threshold=${flakyThreshold}&max_runs=${maxRuns}&branch_type=${branchTypeValue}`;
   // @ts-ignore
   return axiosInstance.get<RepositoryFlakyTests>(url);
 };

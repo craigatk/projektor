@@ -5,10 +5,18 @@ import { RepositoryFlakyTests } from "../../model/RepositoryModel";
 import { fetchRepositoryFlakyTests } from "../../service/RepositoryService";
 import LoadingSection from "../../Loading/LoadingSection";
 import RepositoryFlakyTestsDetails from "./RepositoryFlakyTestsDetails";
-import { Button, TextField, Tooltip } from "@material-ui/core";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Tooltip,
+} from "@material-ui/core";
 import PageTitle from "../../PageTitle";
 import { makeStyles } from "@material-ui/styles";
-import { NumberParam, useQueryParam } from "use-query-params";
+import { NumberParam, StringParam, useQueryParam } from "use-query-params";
 
 interface RepositoryFlakyTestsPageProps extends RouteComponentProps {
   orgPart: string;
@@ -25,6 +33,19 @@ const useStyles = makeStyles(() => ({
   textField: {
     margin: "5px",
     width: "180px",
+  },
+  selectControl: {
+    width: "180px",
+    margin: "5px",
+  },
+  selectLabel: {
+    marginTop: "-7px",
+  },
+  selectOption: {
+    paddingTop: "10px",
+    paddingBottom: "10px",
+    paddingLeft: "10px",
+    width: "100%",
   },
   searchButton: {
     margin: "5px",
@@ -49,6 +70,7 @@ const RepositoryFlakyTestsPage = ({
     "threshold",
     NumberParam
   );
+  const [branchType, setBranchType] = useQueryParam("branch_type", StringParam);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
     LoadingState.Loading
   );
@@ -57,6 +79,7 @@ const RepositoryFlakyTestsPage = ({
     fetchRepositoryFlakyTests(
       maxRuns || 50,
       flakyThreshold || 5,
+      branchType || "mainline",
       repoName,
       projectName
     )
@@ -83,6 +106,10 @@ const RepositoryFlakyTestsPage = ({
     if (parsedValue > 0) {
       setMaxRuns(parsedValue);
     }
+  };
+
+  const handleBranchTypeChange = (e) => {
+    setBranchType(e.target.value);
   };
 
   const search = () => {
@@ -124,6 +151,28 @@ const RepositoryFlakyTestsPage = ({
             onChange={maxRunsOnChange}
           />
         </Tooltip>
+
+        <FormControl className={classes.selectControl} variant="outlined">
+          <InputLabel className={classes.selectLabel}>
+            In which branches
+          </InputLabel>
+          <Select
+            data-testid="flaky-tests-branch-type"
+            value={branchType || "mainline"}
+            onChange={handleBranchTypeChange}
+            SelectDisplayProps={{ className: classes.selectOption }}
+          >
+            <MenuItem
+              value="mainline"
+              data-testid="flaky-tests-branch-type-mainline"
+            >
+              Mainline only
+            </MenuItem>
+            <MenuItem value="all" data-testid="flaky-tests-branch-type-all">
+              All branches
+            </MenuItem>
+          </Select>
+        </FormControl>
 
         <Button
           variant="contained"

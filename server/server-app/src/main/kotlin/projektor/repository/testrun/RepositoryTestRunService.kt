@@ -1,5 +1,6 @@
 package projektor.repository.testrun
 
+import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.RepositoryFlakyTest
 import kotlin.math.min
 
