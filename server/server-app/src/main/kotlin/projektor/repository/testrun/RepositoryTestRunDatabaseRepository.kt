@@ -45,7 +45,12 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
             if (timelineEntries.isNotEmpty()) RepositoryTestRunTimeline(timelineEntries) else null
         }
 
-    override suspend fun fetchRepositoryFailingTestCases(repoName: String, projectName: String?, maxRuns: Int): List<TestCase> =
+    override suspend fun fetchRepositoryFailingTestCases(
+        repoName: String,
+        projectName: String?,
+        maxRuns: Int,
+        branchType: BranchType
+    ): List<TestCase> =
         withContext(Dispatchers.IO) {
 
             val resultSet = selectTestCase(dslContext)
@@ -54,6 +59,7 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                 .where(
                     runInCIFromRepo(repoName, projectName)
                         .and(TEST_CASE.PASSED.eq(false))
+                        .and(withBranchType(branchType))
                         .and(
                             TEST_RUN.CREATED_TIMESTAMP.ge(
                                 dslContext
@@ -64,7 +70,7 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                                                 .from(TEST_RUN)
                                                 .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
                                                 .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
-                                                .where(runInCIFromRepo(repoName, projectName))
+                                                .where(runInCIFromRepo(repoName, projectName).and(withBranchType(branchType)))
                                                 .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
                                                 .limit(maxRuns)
                                             ).asTable("x")
@@ -113,5 +119,11 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                 else
                     it.and(GIT_METADATA.PROJECT_NAME.eq(projectName))
             }.and(RESULTS_METADATA.CI.eq(true))
+
+        fun withBranchType(branchType: BranchType): Condition =
+            when (branchType) {
+                BranchType.MAINLINE -> GIT_METADATA.IS_MAIN_BRANCH.isTrue
+                else -> noCondition()
+            }
     }
 }

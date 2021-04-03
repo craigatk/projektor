@@ -6,6 +6,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.util.*
 import projektor.repository.coverage.RepositoryCoverageService
+import projektor.repository.testrun.BranchType
 import projektor.repository.testrun.RepositoryTestRunService
 import projektor.server.api.repository.RepositoryFlakyTests
 
@@ -66,6 +67,7 @@ fun Route.repository(
         projectName: String?,
         maxRuns: Int,
         flakyThreshold: Int,
+        branchType: BranchType,
         call: ApplicationCall
     ) {
         val fullRepoName = "$orgPart/$repoPart"
@@ -74,7 +76,8 @@ fun Route.repository(
             repoName = fullRepoName,
             projectName = projectName,
             maxRuns = maxRuns,
-            flakyFailureThreshold = flakyThreshold
+            flakyFailureThreshold = flakyThreshold,
+            branchType = branchType
         )
 
         if (flakyTests.isNotEmpty()) {
@@ -96,8 +99,17 @@ fun Route.repository(
         val repoPart = call.parameters.getOrFail("repoPart")
         val maxRuns = call.request.queryParameters["max_runs"]?.toInt() ?: 50
         val flakyThreshold = call.request.queryParameters["threshold"]?.toInt() ?: 5
+        val branchType: BranchType = BranchType.valueOf(call.request.queryParameters["branch_type"] ?: "ALL")
 
-        handleFlakyTestsRequest(orgPart = orgPart, repoPart = repoPart, projectName = null, maxRuns = maxRuns, flakyThreshold = flakyThreshold, call)
+        handleFlakyTestsRequest(
+            orgPart = orgPart,
+            repoPart = repoPart,
+            projectName = null,
+            maxRuns = maxRuns,
+            flakyThreshold = flakyThreshold,
+            branchType = branchType,
+            call
+        )
     }
 
     get("/repo/{orgPart}/{repoPart}/project/{projectName}/tests/flaky") {
@@ -106,7 +118,16 @@ fun Route.repository(
         val projectName = call.parameters.getOrFail("projectName")
         val maxRuns = call.request.queryParameters["max_runs"]?.toInt() ?: 50
         val flakyThreshold = call.request.queryParameters["threshold"]?.toInt() ?: 5
+        val branchType: BranchType = BranchType.valueOf(call.request.queryParameters["branch_type"] ?: "ALL")
 
-        handleFlakyTestsRequest(orgPart = orgPart, repoPart = repoPart, projectName = projectName, maxRuns = maxRuns, flakyThreshold = flakyThreshold, call)
+        handleFlakyTestsRequest(
+            orgPart = orgPart,
+            repoPart = repoPart,
+            projectName = projectName,
+            maxRuns = maxRuns,
+            flakyThreshold = flakyThreshold,
+            branchType = branchType,
+            call
+        )
     }
 }
