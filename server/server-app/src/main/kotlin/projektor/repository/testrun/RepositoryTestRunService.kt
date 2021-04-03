@@ -9,8 +9,14 @@ class RepositoryTestRunService(private val repositoryTestRunRepository: Reposito
     suspend fun fetchRepositoryTestRunTimeline(repoName: String, projectName: String?) =
         repositoryTestRunRepository.fetchRepositoryTestRunTimeline(repoName, projectName)
 
-    suspend fun fetchFlakyTests(repoName: String, projectName: String?, maxRuns: Int, flakyFailureThreshold: Int): List<RepositoryFlakyTest> {
-        val failingTestCases = repositoryTestRunRepository.fetchRepositoryFailingTestCases(repoName, projectName, maxRuns)
+    suspend fun fetchFlakyTests(
+        repoName: String,
+        projectName: String?,
+        maxRuns: Int,
+        flakyFailureThreshold: Int,
+        branchType: BranchType
+    ): List<RepositoryFlakyTest> {
+        val failingTestCases = repositoryTestRunRepository.fetchRepositoryFailingTestCases(repoName, projectName, maxRuns, branchType)
         val totalTestRunCount = repositoryTestRunRepository.fetchTestRunCount(repoName, projectName)
         val testRunCount = min(maxRuns.toLong(), totalTestRunCount)
 

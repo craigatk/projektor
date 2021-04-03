@@ -81,11 +81,12 @@ class TestRunDBGenerator(
         testSuiteDataList: List<TestSuiteData>,
         repoName: String,
         ci: Boolean,
-        projectName: String?
+        projectName: String?,
+        branchName: String = "main"
     ): TestRunDB {
         val testRunDB = createTestRun(publicId, testSuiteDataList)
         addResultsMetadata(testRunDB, ci)
-        addGitMetadata(testRunDB, repoName, true, "main", projectName)
+        addGitMetadata(testRunDB, repoName, branchName == "main", branchName, projectName)
         return testRunDB
     }
 
