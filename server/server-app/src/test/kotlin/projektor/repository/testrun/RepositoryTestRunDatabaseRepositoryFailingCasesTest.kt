@@ -8,6 +8,7 @@ import projektor.DatabaseRepositoryTestCase
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.TestCase
+import projektor.server.api.repository.BranchType
 import strikt.api.expectThat
 import strikt.assertions.*
 

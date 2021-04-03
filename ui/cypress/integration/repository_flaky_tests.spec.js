@@ -8,7 +8,7 @@ context("repository flaky tests", () => {
 
     cy.route(
       "GET",
-      `repo/${repoName}/tests/flaky?threshold=5&max_runs=50`,
+      `repo/${repoName}/tests/flaky?threshold=5&max_runs=50&branch_type=MAINLINE`,
       "fixture:repository/flaky_tests.json"
     );
 
@@ -70,7 +70,7 @@ context("repository flaky tests", () => {
 
     cy.route(
       "GET",
-      `repo/${repoName}/tests/flaky?threshold=5&max_runs=50`,
+      `repo/${repoName}/tests/flaky?threshold=5&max_runs=50&branch_type=MAINLINE`,
       "fixture:repository/flaky_tests.json"
     );
 
@@ -100,58 +100,62 @@ context("repository flaky tests", () => {
     );
   });
 
-  it("should support changing max runs and flaky threshold", () => {
+  it("should support changing max runs, flaky threshold and branch type", () => {
     const repoName = "flaky-org/flaky-repo";
 
     cy.server();
 
     cy.route(
       "GET",
-      `repo/${repoName}/tests/flaky?threshold=5&max_runs=50`,
+      `repo/${repoName}/tests/flaky?threshold=5&max_runs=50&branch_type=MAINLINE`,
       "fixture:repository/flaky_tests.json"
     );
 
     cy.visit(`http://localhost:1234/repository/${repoName}`);
 
-    cy.getByTestId("nav-link-repo-flaky-tests").click();
+    cy.findByTestId("nav-link-repo-flaky-tests").click();
 
     cy.testIdShouldExist("repository-flaky-tests-table");
 
-    cy.getByTestId("flaky-test-case-name-1").should(
+    cy.findByTestId("flaky-test-case-name-1").should(
       "contain",
       "projektor.testsuite.GetTestSuiteApplicationTest.should fetch grouped test suite from database"
     );
 
-    cy.getByTestId("flaky-test-case-name-2").should(
+    cy.findByTestId("flaky-test-case-name-2").should(
       "contain",
       "projektor.example.spock.FailingSpec.should fail with output"
     );
 
     cy.route(
       "GET",
-      `repo/${repoName}/tests/flaky?threshold=2&max_runs=20`,
+      `repo/${repoName}/tests/flaky?threshold=2&max_runs=20&branch_type=ALL`,
       "fixture:repository/flaky_tests_two_tests.json"
     );
 
-    cy.getByTestId("flaky-tests-threshold").type("{selectall}{backspace}2", {
+    cy.findByTestId("flaky-tests-threshold").type("{selectall}{backspace}2", {
       delay: 50,
     });
-    cy.getByTestId("flaky-tests-max-runs").type("{selectall}{backspace}20", {
+    cy.findByTestId("flaky-tests-max-runs").type("{selectall}{backspace}20", {
       delay: 50,
     });
-    cy.getByTestId("flaky-tests-search-button").click();
+    cy.findByTestId("flaky-tests-branch-type").click();
+    cy.findByTestId("flaky-tests-branch-type-all").click();
+    cy.findByTestId("flaky-tests-search-button").click();
 
-    cy.getByTestId("flaky-test-case-name-1").should(
+    cy.findByTestId("flaky-test-case-name-1").should(
       "contain",
       "projektor.flaky.FlakyTest1"
     );
 
-    cy.getByTestId("flaky-test-case-name-2").should(
+    cy.findByTestId("flaky-test-case-name-2").should(
       "contain",
       "projektor.flaky.FlakyTest2"
     );
 
-    cy.url().should("contain", "/flaky?max=20&threshold=2");
+    cy.url().should("contain", "max=20");
+    cy.url().should("contain", "threshold=2");
+    cy.url().should("contain", "branch_type=all");
   });
 
   it("should support going directly to flaky test page with params set", () => {
@@ -161,12 +165,12 @@ context("repository flaky tests", () => {
 
     cy.route(
       "GET",
-      `repo/${repoName}/tests/flaky?threshold=4&max_runs=30`,
+      `repo/${repoName}/tests/flaky?threshold=4&max_runs=30&branch_type=ALL`,
       "fixture:repository/flaky_tests_two_tests.json"
     );
 
     cy.visit(
-      `http://localhost:1234/repository/${repoName}/tests/flaky?max=30&threshold=4`
+      `http://localhost:1234/repository/${repoName}/tests/flaky?max=30&threshold=4&branch_type=all`
     );
 
     cy.testIdShouldExist("repository-flaky-tests-table");

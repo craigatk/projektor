@@ -7,11 +7,11 @@ then makes them available in an API to the UI.
 
 ### Running locally
 
-First, start up a local Postgres database.
+First, start up a local Postgres database and Minio object store server.
 There is a `docker-compose.yml` file in the root of the repo
 that includes one, you can start it with `docker-compose up`
 
-Then start the ktor app with `../gradlew run`
+Then start the ktor app with `../../gradlew run`
 This will start the app on `http://localhost:8080`
 
 ## Stack

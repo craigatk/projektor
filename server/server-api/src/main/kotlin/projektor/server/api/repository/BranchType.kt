@@ -1,4 +1,4 @@
-package projektor.repository.testrun
+package projektor.server.api.repository
 
 enum class BranchType {
     MAINLINE,

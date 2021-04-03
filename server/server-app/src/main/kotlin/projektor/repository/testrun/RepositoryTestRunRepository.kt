@@ -2,6 +2,7 @@ package projektor.repository.testrun
 
 import projektor.server.api.PublicId
 import projektor.server.api.TestCase
+import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.RepositoryTestRunTimeline
 
 interface RepositoryTestRunRepository {

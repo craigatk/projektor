@@ -337,25 +337,33 @@ fun loadResultsWithGitButWithoutCoverage() {
 
 fun repositoryFlakyTests() {
     val repoName = "flaky-org/flaky-repo"
-    val branchName = "main"
-    val gitMetadata = GitMetadata()
-    gitMetadata.repoName = repoName
-    gitMetadata.branchName = branchName
-    gitMetadata.isMainBranch = true
-    val resultsMetadata = ResultsMetadata()
-    resultsMetadata.git = gitMetadata
-    resultsMetadata.ci = true
+
+    val mainGitMetadata = GitMetadata()
+    mainGitMetadata.repoName = repoName
+    mainGitMetadata.branchName = "main"
+    mainGitMetadata.isMainBranch = true
+    val mainResultsMetadata = ResultsMetadata()
+    mainResultsMetadata.git = mainGitMetadata
+    mainResultsMetadata.ci = true
+
+    val branchGitMetadata = GitMetadata()
+    branchGitMetadata.repoName = repoName
+    branchGitMetadata.branchName = "my-branch"
+    branchGitMetadata.isMainBranch = false
+    val branchResultsMetadata = ResultsMetadata()
+    branchResultsMetadata.git = branchGitMetadata
+    branchResultsMetadata.ci = true
 
     repeat(5) {
-        sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.failing(), metadata = resultsMetadata))
+        sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.failing(), metadata = mainResultsMetadata))
     }
 
     repeat(6) {
-        sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.failingLongFailureMessage(), metadata = resultsMetadata))
+        sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.failingLongFailureMessage(), metadata = branchResultsMetadata))
     }
 
     repeat(2) {
-        sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.passing(), metadata = resultsMetadata))
+        sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.passing(), metadata = mainResultsMetadata))
     }
 
     println("View repository with flaky tests at $uiBaseUrl/repository/$repoName/tests/flaky")

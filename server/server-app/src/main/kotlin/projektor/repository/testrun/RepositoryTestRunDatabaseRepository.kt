@@ -9,6 +9,7 @@ import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables.*
 import projektor.server.api.PublicId
 import projektor.server.api.TestCase
+import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.RepositoryTestRunTimeline
 import projektor.server.api.repository.RepositoryTestRunTimelineEntry
 import projektor.testcase.TestCaseDatabaseRepository
