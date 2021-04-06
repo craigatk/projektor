@@ -80,7 +80,7 @@ const RepositoryFlakyTestsTable = ({ flakyTests }: FlakyTestsTableProps) => {
                 to={`/tests/${rowData.firstTestCase.publicId}/suite/${rowData.firstTestCase.testSuiteIdx}/case/${rowData.firstTestCase.idx}`}
                 data-testid={`flaky-test-case-first-failure-${rowData.idx}`}
               >
-                {moment(rowData.firstTestCase.createdTimestamp).format(
+                {moment(rowData.firstCreatedTimestamp).format(
                   "MMM Do YYYY, h:mm a"
                 )}
               </CleanLink>
@@ -96,7 +96,7 @@ const RepositoryFlakyTestsTable = ({ flakyTests }: FlakyTestsTableProps) => {
                 to={`/tests/${rowData.latestTestCase.publicId}/suite/${rowData.latestTestCase.testSuiteIdx}/case/${rowData.latestTestCase.idx}`}
                 data-testid={`flaky-test-case-latest-failure-${rowData.idx}`}
               >
-                {moment(rowData.latestTestCase.createdTimestamp).format(
+                {moment(rowData.latestCreatedTimestamp).format(
                   "MMM Do YYYY, h:mm a"
                 )}
               </CleanLink>
@@ -113,7 +113,9 @@ const RepositoryFlakyTestsTable = ({ flakyTests }: FlakyTestsTableProps) => {
           failureCount: flakyTest.failureCount,
           failurePercentage: flakyTest.failurePercentage,
           firstTestCase: flakyTest.firstTestCase,
+          firstCreatedTimestamp: flakyTest.firstTestCase.createdTimestamp,
           latestTestCase: flakyTest.latestTestCase,
+          latestCreatedTimestamp: flakyTest.latestTestCase.createdTimestamp,
         }))}
       />
     </div>
