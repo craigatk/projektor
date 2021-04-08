@@ -15,7 +15,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 14
 
       - name: Get Yarn cache directory path
         id: yarn-cache-dir-path
@@ -61,7 +61,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 14
 
       - name: Get Yarn cache directory path
         id: yarn-cache-dir-path
