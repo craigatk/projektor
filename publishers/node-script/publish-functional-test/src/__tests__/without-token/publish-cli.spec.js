@@ -59,4 +59,20 @@ describe("Publishing via CLI", () => {
       "No test results files found in locations does-not-exist/*.xml"
     );
   });
+
+  it("should log error message if results above max size", async (done) => {
+    exec(
+      `yarn projektor-publish --resultsMaxSizeMB=0.01 --serverUrl=http://localhost:${serverPort} results-large/*.xml`,
+      async (error, stdout, stderr) => {
+        expect(stderr).toContain(
+          `Error publishing results to Projektor server http://localhost:${serverPort}`
+        );
+        expect(stderr).toContain(
+          "Request body larger than maxBodyLength limit"
+        );
+
+        done();
+      }
+    );
+  });
 });

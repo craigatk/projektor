@@ -203,6 +203,58 @@ describe("node script index", () => {
     );
   });
 
+  it("should default to results max body length of 20MB", async () => {
+    const resultsFileGlobs = ["src/__tests__/resultsDir1/*.xml"];
+    const serverUrl = "http://localhost:8080";
+
+    mockAxios
+      .onPost("http://localhost:8080/groupedResults")
+      .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
+
+    await run(
+      {
+        resultsFileGlobs,
+        attachments: null,
+        serverUrl,
+        resultsMaxSizeMB: "20",
+      },
+      {},
+      null,
+      "projektor.none.json"
+    );
+
+    expect(mockAxios.history.post.length).toBe(1);
+
+    const postMaxBodyLength = mockAxios.history.post[0].maxBodyLength;
+    expect(postMaxBodyLength).toEqual(20971520);
+  });
+
+  it("should support customizable results max body length", async () => {
+    const resultsFileGlobs = ["src/__tests__/resultsDir1/*.xml"];
+    const serverUrl = "http://localhost:8080";
+
+    mockAxios
+      .onPost("http://localhost:8080/groupedResults")
+      .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
+
+    await run(
+      {
+        resultsFileGlobs,
+        attachments: null,
+        serverUrl,
+        resultsMaxSizeMB: "30",
+      },
+      {},
+      null,
+      "projektor.none.json"
+    );
+
+    expect(mockAxios.history.post.length).toBe(1);
+
+    const postMaxBodyLength = mockAxios.history.post[0].maxBodyLength;
+    expect(postMaxBodyLength).toEqual(31457280);
+  });
+
   it("should send performance results", async () => {
     const serverUrl = "http://localhost:8080";
     const performance = ["src/__tests__/performanceResults/*.json"];

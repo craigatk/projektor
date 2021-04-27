@@ -211,4 +211,36 @@ describe("Projektor publisher", () => {
     );
     expect(parsedResultsPostData.metadata.git.branchName).toEqual("my-branch");
   });
+
+  it("should include max body length", async () => {
+    const fileGlob = "src/__tests__/resultsDir1/*.xml";
+    const serverUrl = "http://localhost:8080";
+
+    mockAxios
+      .onPost("http://localhost:8080/groupedResults")
+      .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
+
+    await collectAndSendResults(
+      serverUrl,
+      null,
+      [fileGlob],
+      [],
+      [],
+      null,
+      "my-org/my-repo",
+      "my-branch",
+      null,
+      null,
+      null,
+      false,
+      false,
+      null,
+      20
+    );
+
+    expect(mockAxios.history.post.length).toBe(1);
+
+    const postMaxBodyLength = mockAxios.history.post[0].maxBodyLength;
+    expect(postMaxBodyLength).toEqual(20971520);
+  });
 });

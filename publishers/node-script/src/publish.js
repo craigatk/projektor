@@ -47,7 +47,8 @@ const sendResults = async (
   gitPullRequestNumber,
   projectName,
   isCI,
-  compressionEnabled
+  compressionEnabled,
+  resultsMaxSizeMB
 ) => {
   const headers = {};
 
@@ -85,18 +86,24 @@ const sendResults = async (
     },
   };
 
-  const compressionConfig = {
-    headers: {
-      "Content-Encoding": "gzip",
-    },
+  const resultsMaxSize = resultsMaxSizeMB * 1024 * 1024;
+
+  const resultsPostConfig = {
+    maxBodyLength: resultsMaxSize,
   };
+
+  if (compressionEnabled) {
+    resultsPostConfig.headers = {
+      "Content-Encoding": "gzip",
+    };
+  }
 
   const resp = await axiosInstance.post(
     `${serverUrl}/groupedResults`,
     compressionEnabled
       ? await gzip(JSON.stringify(groupedResults))
       : groupedResults,
-    compressionEnabled ? compressionConfig : null
+    resultsPostConfig
   );
 
   return resp.data;
@@ -117,6 +124,7 @@ const collectAndSendResults = async (
   isCI,
   compressionEnabled,
   baseDirectoryPath,
+  resultsMaxSizeMB,
   attachmentMaxSizeMB
 ) => {
   console.log(
@@ -144,7 +152,8 @@ const collectAndSendResults = async (
         gitPullRequestNumber,
         projectName,
         isCI,
-        compressionEnabled
+        compressionEnabled,
+        resultsMaxSizeMB
       );
 
       const publicId = resultsResponseData.id;
