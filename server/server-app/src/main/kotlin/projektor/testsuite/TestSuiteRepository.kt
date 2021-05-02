@@ -10,7 +10,11 @@ interface TestSuiteRepository {
 
     suspend fun fetchTestSuites(testRunPublicId: PublicId, searchCriteria: TestSuiteSearchCriteria): List<TestSuite>
 
+    suspend fun fetchTestSuitesWithCases(testRunPublicId: PublicId): List<TestSuite>
+
     suspend fun fetchTestSuiteSystemErr(testRunPublicId: PublicId, testSuiteIdx: Int): TestOutput
 
     suspend fun fetchTestSuiteSystemOut(testRunPublicId: PublicId, testSuiteIdx: Int): TestOutput
+
+    suspend fun fetchHighestTestSuiteIndex(testRunPublicId: PublicId): Int?
 }

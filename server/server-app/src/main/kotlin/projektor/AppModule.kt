@@ -20,10 +20,7 @@ import projektor.coverage.CoverageService
 import projektor.error.ProcessingFailureDatabaseRepository
 import projektor.error.ProcessingFailureRepository
 import projektor.error.ProcessingFailureService
-import projektor.incomingresults.GroupedResultsConverter
-import projektor.incomingresults.GroupedTestResultsService
-import projektor.incomingresults.TestResultsProcessingService
-import projektor.incomingresults.TestResultsService
+import projektor.incomingresults.*
 import projektor.incomingresults.processing.ResultsProcessingDatabaseRepository
 import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.message.MessageConfig
@@ -108,11 +105,12 @@ fun createAppModule(
     single<PerformanceResultsRepository> { PerformanceResultsDatabaseRepository(get()) }
     single { PerformanceResultsService(get()) }
 
+    single { AppendTestResultsService(get(), get()) }
     single { CoverageService(get(), get(), get(), get()) }
     single { GroupedResultsParser() }
     single { PerformanceResultsParser() }
     single { GroupedResultsConverter(get(), get(), get()) }
-    single { GroupedTestResultsService(get(), get(), get(), get(), get(), get(), get()) }
+    single { GroupedTestResultsService(get(), get(), get(), get(), get(), get(), get(), get()) }
     single { MessageService(messageConfig) }
     single { PreviousTestRunService(get()) }
     single { ProcessingFailureService(get()) }

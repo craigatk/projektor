@@ -28,7 +28,8 @@ class GroupedTestResultsService(
     private val performanceResultsRepository: PerformanceResultsRepository,
     private val metricsService: MetricsService,
     private val gitHubPullRequestCommentService: GitHubPullRequestCommentService,
-    private val coverageService: CoverageService
+    private val coverageService: CoverageService,
+    private val appendTestResultsService: AppendTestResultsService
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
@@ -55,13 +56,21 @@ class GroupedTestResultsService(
             throw PersistTestResultsException(publicId, errorMessage, e)
         }
 
+        val group = groupedResults.metadata?.group
+        val repoAndOrgName = groupedResults.metadata?.git?.repoName
+        val existingPublicIdWithGroup = appendTestResultsService.findExistingTestRunWithGroup(group, repoAndOrgName)
+
         coroutineScope.launch {
-            doPersistTestResults(publicId, groupedResults, groupedResultsBlob)
+            if (existingPublicIdWithGroup != null) {
+                doAppendTestResults(existingPublicIdWithGroup, groupedResults, groupedResultsBlob)
+            } else {
+                doPersistTestResults(publicId, groupedResults, groupedResultsBlob)
+            }
         }
 
         metricsService.stopTimer(timer)
 
-        return publicId
+        return existingPublicIdWithGroup ?: publicId
     }
 
     suspend fun doPersistTestResults(publicId: PublicId, groupedResults: GroupedResults, groupedResultsBlob: String) {
@@ -81,6 +90,21 @@ class GroupedTestResultsService(
             publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git, coverage, performanceResults)
         } catch (e: Exception) {
             val errorMessage = "Error persisting test results: ${e.message}"
+            logger.error(errorMessage, e)
+            testResultsProcessingService.recordResultsProcessingError(publicId, groupedResultsBlob, errorMessage)
+            metricsService.incrementResultsProcessFailureCounter()
+        }
+    }
+
+    suspend fun doAppendTestResults(publicId: PublicId, groupedResults: GroupedResults, groupedResultsBlob: String) {
+        try {
+            val (_, testRunSummary) = appendTestResultsService.appendGroupedTestRun(publicId, groupedResults)
+
+            metricsService.incrementResultsProcessSuccessCounter()
+
+            publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git, null, null)
+        } catch (e: Exception) {
+            val errorMessage = "Error appending test results: ${e.message}"
             logger.error(errorMessage, e)
             testResultsProcessingService.recordResultsProcessingError(publicId, groupedResultsBlob, errorMessage)
             metricsService.incrementResultsProcessFailureCounter()

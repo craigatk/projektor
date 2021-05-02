@@ -13,7 +13,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row3;
+import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -64,6 +64,11 @@ public class ResultsMetadata extends TableImpl<ResultsMetadataRecord> {
      * The column <code>public.results_metadata.ci</code>.
      */
     public final TableField<ResultsMetadataRecord, Boolean> CI = createField(DSL.name("ci"), SQLDataType.BOOLEAN, this, "");
+
+    /**
+     * The column <code>public.results_metadata.group</code>.
+     */
+    public final TableField<ResultsMetadataRecord, String> GROUP = createField(DSL.name("group"), SQLDataType.CLOB, this, "");
 
     private ResultsMetadata(Name alias, Table<ResultsMetadataRecord> aliased) {
         this(alias, aliased, null);
@@ -159,11 +164,11 @@ public class ResultsMetadata extends TableImpl<ResultsMetadataRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row3 type methods
+    // Row4 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<Long, Long, Boolean> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row4<Long, Long, Boolean, String> fieldsRow() {
+        return (Row4) super.fieldsRow();
     }
 }
