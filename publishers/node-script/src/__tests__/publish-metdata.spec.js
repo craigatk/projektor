@@ -34,7 +34,8 @@ describe("Node script publishing with results metadata", () => {
       "02fea3d66fab1de935e1ac3adb008a0abb9a61f3",
       42,
       "my-proj",
-      isCI
+      isCI,
+      "MyGroup"
     );
 
     expect(mockAxios.history.post.length).toBe(1);
@@ -47,5 +48,6 @@ describe("Node script publishing with results metadata", () => {
     expect(parsedRequestBody.groupedTestSuites.length).toBe(1);
 
     expect(parsedRequestBody.metadata.ci).toBe(true);
+    expect(parsedRequestBody.metadata.group).toBe("MyGroup");
   });
 });

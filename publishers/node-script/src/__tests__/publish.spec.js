@@ -157,6 +157,7 @@ describe("Projektor publisher", () => {
       null,
       null,
       false,
+      null,
       true
     );
 
@@ -195,6 +196,7 @@ describe("Projektor publisher", () => {
       null,
       null,
       false,
+      null,
       false
     );
 
@@ -233,6 +235,7 @@ describe("Projektor publisher", () => {
       null,
       null,
       false,
+      null,
       false,
       null,
       20

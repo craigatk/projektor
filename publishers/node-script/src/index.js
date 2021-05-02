@@ -30,6 +30,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
   let compressionEnabled;
   let resultsMaxSizeMB;
   let attachmentMaxSizeMB;
+  let groupResults;
 
   const configFilePath = args.configFile || defaultConfigFilePath;
 
@@ -51,6 +52,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     compressionEnabled = config.compressionEnabled;
     resultsMaxSizeMB = config.resultsMaxSizeMB;
     attachmentMaxSizeMB = config.attachmentMaxSizeMB;
+    groupResults = config.groupResults;
   } else {
     serverUrl = args.serverUrl;
     resultsFileGlobs = args.resultsFileGlobs;
@@ -79,6 +81,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     compressionEnabled = args.compressionEnabled;
     resultsMaxSizeMB = args.resultsMaxSizeMB;
     attachmentMaxSizeMB = args.attachmentMaxSizeMB;
+    groupResults = args.groupResults;
   }
 
   if (_.isNil(compressionEnabled)) {
@@ -98,6 +101,9 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
   }
 
   if (resultsFileGlobs || performanceFileGlobs) {
+    // https://go-vela.github.io/docs/concepts/pipeline/steps/environment/
+    // https://docs.github.com/en/actions/reference/environment-variables
+
     const isCI = Boolean(env.CI) && env.CI !== "false";
     const gitRepoName =
       repositoryName ||
@@ -107,6 +113,13 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     const gitBranchName = findGitBranchName(env);
     const gitCommitSha = env.VELA_BUILD_COMMIT || env.GITHUB_SHA;
     const gitPullRequestNumber = findGitPullRequestNumber(env);
+    const buildNumber = env.VELA_BUILD_NUMBER || env.GITHUB_RUN_NUMBER;
+
+    let group = null;
+
+    if (groupResults && buildNumber) {
+      group = buildNumber;
+    }
 
     const {
       resultsBlob,
@@ -126,6 +139,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       gitPullRequestNumber,
       projectName,
       isCI,
+      group,
       compressionEnabled,
       baseDirectoryPath,
       resultsMaxSizeMB,
