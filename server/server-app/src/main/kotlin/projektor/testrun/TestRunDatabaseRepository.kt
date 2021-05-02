@@ -10,16 +10,21 @@ import projektor.database.generated.Tables.*
 import projektor.database.generated.tables.daos.*
 import projektor.incomingresults.mapper.toDB
 import projektor.incomingresults.mapper.toTestRunSummary
+import projektor.incomingresults.mapper.toTestRunSummaryFromApi
 import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedResults
+import projektor.incomingresults.model.GroupedTestSuites
 import projektor.incomingresults.model.ResultsMetadata
 import projektor.server.api.PublicId
 import projektor.server.api.TestRun
 import projektor.server.api.TestRunSummary
+import projektor.server.api.TestSuite
 import projektor.util.addPrefixToFields
+import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 import projektor.parser.model.TestSuite as ParsedTestSuite
 
 class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRepository {
@@ -82,6 +87,64 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
             logger.info("Finished inserting test run $publicId")
 
             Pair(testRunDB.id, testRunSummary)
+        }
+
+    override suspend fun appendTestSuites(publicId: PublicId, startingIdx: Int, groupedTestSuites: List<GroupedTestSuites>): Long =
+        withContext(Dispatchers.IO) {
+            var testRunId: Long = 0
+            logger.info("Starting appending test suites to $publicId")
+
+            var testSuiteStartingIndex = startingIdx
+
+            dslContext.transaction { configuration ->
+                val testRunDao = TestRunDao(configuration)
+                val testSuiteGroupDao = TestSuiteGroupDao(configuration)
+
+                val testRunDB = testRunDao.fetchOneByPublicId(publicId.id)
+
+                groupedTestSuites.forEach { groupedTestSuites ->
+                    val existingTestSuiteDB = fetchTestSuiteGroup(testRunDB.id, groupedTestSuites.groupName)
+
+                    val testSuiteGroupDB = if (existingTestSuiteDB != null) {
+                        existingTestSuiteDB
+                    } else {
+                        val newTestSuiteGroupDB = groupedTestSuites.toDB(testRunDB.id)
+                        testSuiteGroupDao.insert(newTestSuiteGroupDB)
+                        newTestSuiteGroupDB
+                    }
+
+                    saveTestSuites(groupedTestSuites.testSuites, testRunDB.id, testSuiteGroupDB.id, testSuiteStartingIndex, configuration)
+
+                    testSuiteStartingIndex += groupedTestSuites.testSuites.size
+                }
+
+                testRunId = testRunDB.id
+            }
+
+            testRunId
+        }
+
+    override suspend fun updateTestRunSummary(testRunId: Long, testSuites: List<TestSuite>, wallClockDuration: BigDecimal?): TestRunSummary =
+        withContext(Dispatchers.IO) {
+            val testRunDao = TestRunDao(dslContext.configuration())
+            val existingTestRun = testRunDao.fetchOneById(testRunId)
+
+            val updatedWallClockDuration: BigDecimal = (existingTestRun.wallClockDuration ?: BigDecimal.ZERO) + (wallClockDuration ?: BigDecimal.ZERO)
+
+            val testRunSummary = toTestRunSummaryFromApi(PublicId(existingTestRun.publicId), testSuites, updatedWallClockDuration)
+            existingTestRun.averageDuration = testRunSummary.averageDuration
+            existingTestRun.cumulativeDuration = testRunSummary.cumulativeDuration
+            existingTestRun.passed = testRunSummary.passed
+            existingTestRun.slowestTestCaseDuration = testRunSummary.slowestTestCaseDuration
+            existingTestRun.totalFailureCount = testRunSummary.totalFailureCount
+            existingTestRun.totalPassingCount = testRunSummary.totalPassingCount
+            existingTestRun.totalSkippedCount = testRunSummary.totalSkippedCount
+            existingTestRun.totalTestCount = testRunSummary.totalTestCount
+            existingTestRun.wallClockDuration = testRunSummary.wallClockDuration
+
+            testRunDao.update(existingTestRun)
+
+            testRunSummary
         }
 
     private fun saveTestSuites(
@@ -157,6 +220,13 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
         }
     }
 
+    private fun fetchTestSuiteGroup(testRunId: Long, groupName: String?): TestSuiteGroupDB? =
+        dslContext
+            .select(TEST_SUITE_GROUP.fields().toList())
+            .from(TEST_SUITE_GROUP)
+            .where(TEST_SUITE_GROUP.TEST_RUN_ID.eq(testRunId).and(TEST_SUITE_GROUP.GROUP_NAME.eq(groupName)))
+            .fetchOneInto(TestSuiteGroupDB::class.java)
+
     override suspend fun fetchTestRun(publicId: PublicId): TestRun? =
         withContext(Dispatchers.IO) {
             val resultSet = dslContext
@@ -208,6 +278,19 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
 
     override suspend fun findTestRunsCreatedBeforeAndNotPinnedWithAttachments(createdBefore: LocalDate): List<PublicId> =
         findTestRunsCreatedBeforeAndNotPinned(createdBefore, true)
+
+    override suspend fun findTestRunWithGroup(group: String, repoName: String): PublicId? =
+        withContext(Dispatchers.IO) {
+            dslContext
+                .select(TEST_RUN.PUBLIC_ID)
+                .from(TEST_RUN)
+                .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
+                .where(GIT_METADATA.REPO_NAME.eq(repoName).and(RESULTS_METADATA.GROUP.eq(group)))
+                .limit(1)
+                .fetchOneInto(String::class.java)
+                ?.let { PublicId(it) }
+        }
 
     private suspend fun findTestRunsCreatedBeforeAndNotPinned(createdBefore: LocalDate, withAttachmentsOnly: Boolean): List<PublicId> =
         withContext(Dispatchers.IO) {

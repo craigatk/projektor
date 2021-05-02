@@ -133,6 +133,7 @@ fun ResultsMetadata.toDB(testRunId: Long): ResultsMetadataDB {
     val resultsMetadataDB = ResultsMetadataDB()
     resultsMetadataDB.testRunId = testRunId
     resultsMetadataDB.ci = ci
+    resultsMetadataDB.group = group
 
     return resultsMetadataDB
 }

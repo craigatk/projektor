@@ -1,0 +1,1 @@
+ALTER TABLE results_metadata ADD COLUMN "group" TEXT;

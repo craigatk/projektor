@@ -5,6 +5,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.apache.commons.lang3.RandomStringUtils
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.ResultsXmlLoader
 import projektor.parser.grouped.model.CoverageFile
@@ -456,6 +457,24 @@ fun coveragePayloadWithBaseDirectory() {
     sendCoveragePayloadToServer(publicId, createCoverageFilePayload(JacocoXmlLoader().serverApp(), "server/server-app/src/main/kotlin"))
 
     println("View run with coverage base directory and Git metadata at $uiBaseUrl${resultsResponse.uri}")
+}
+
+fun appendTwoAdditionalTestRuns() {
+    val repoName = "craigatk/${RandomStringUtils.randomAlphabetic(12)}"
+    val branchName = "master"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+    resultsMetadata.group = "B12"
+
+    val resultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata))
+    sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXmlLoader.failing(), metadata = resultsMetadata))
+    sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXmlLoader.someIgnored(), metadata = resultsMetadata))
+
+    println("View run with two additional runs appended at $uiBaseUrl${resultsResponse.uri}")
 }
 
 fun invalidResults() {

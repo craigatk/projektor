@@ -18,6 +18,7 @@ public class ResultsMetadata implements Serializable {
     private Long    id;
     private Long    testRunId;
     private Boolean ci;
+    private String  group;
 
     public ResultsMetadata() {}
 
@@ -25,16 +26,19 @@ public class ResultsMetadata implements Serializable {
         this.id = value.id;
         this.testRunId = value.testRunId;
         this.ci = value.ci;
+        this.group = value.group;
     }
 
     public ResultsMetadata(
         Long    id,
         Long    testRunId,
-        Boolean ci
+        Boolean ci,
+        String  group
     ) {
         this.id = id;
         this.testRunId = testRunId;
         this.ci = ci;
+        this.group = group;
     }
 
     /**
@@ -82,6 +86,21 @@ public class ResultsMetadata implements Serializable {
         return this;
     }
 
+    /**
+     * Getter for <code>public.results_metadata.group</code>.
+     */
+    public String getGroup() {
+        return this.group;
+    }
+
+    /**
+     * Setter for <code>public.results_metadata.group</code>.
+     */
+    public ResultsMetadata setGroup(String group) {
+        this.group = group;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -109,6 +128,12 @@ public class ResultsMetadata implements Serializable {
         }
         else if (!ci.equals(other.ci))
             return false;
+        if (group == null) {
+            if (other.group != null)
+                return false;
+        }
+        else if (!group.equals(other.group))
+            return false;
         return true;
     }
 
@@ -119,6 +144,7 @@ public class ResultsMetadata implements Serializable {
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.testRunId == null) ? 0 : this.testRunId.hashCode());
         result = prime * result + ((this.ci == null) ? 0 : this.ci.hashCode());
+        result = prime * result + ((this.group == null) ? 0 : this.group.hashCode());
         return result;
     }
 
@@ -129,6 +155,7 @@ public class ResultsMetadata implements Serializable {
         sb.append(id);
         sb.append(", ").append(testRunId);
         sb.append(", ").append(ci);
+        sb.append(", ").append(group);
 
         sb.append(")");
         return sb.toString();

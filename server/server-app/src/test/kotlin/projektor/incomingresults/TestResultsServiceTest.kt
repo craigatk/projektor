@@ -3,6 +3,7 @@ package projektor.incomingresults
 import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.runBlocking
 import org.awaitility.kotlin.await
+import org.awaitility.kotlin.untilAsserted
 import org.awaitility.kotlin.untilNotNull
 import org.junit.jupiter.api.Test
 import org.koin.test.inject
@@ -26,12 +27,14 @@ class TestResultsServiceTest : DatabaseRepositoryTestCase() {
 
         await untilNotNull { testRunDao.fetchOneByPublicId(publicId.id) }
 
-        val resultsProcessing = resultsProcessingDao.fetchOneByPublicId(publicId.id)
-        expectThat(resultsProcessing)
-            .isNotNull()
-            .and {
-                get { status }.isEqualTo(ResultsProcessingStatus.SUCCESS.name)
-            }
+        await untilAsserted {
+            val resultsProcessing = resultsProcessingDao.fetchOneByPublicId(publicId.id)
+            expectThat(resultsProcessing)
+                .isNotNull()
+                .and {
+                    get { status }.isEqualTo(ResultsProcessingStatus.SUCCESS.name)
+                }
+        }
     }
 
     @Test
@@ -44,10 +47,12 @@ class TestResultsServiceTest : DatabaseRepositoryTestCase() {
 
         runBlocking { testResultsService.doPersistTestResults(publicId, invalidXml) }
 
-        val resultsProcessing = resultsProcessingDao.fetchOneByPublicId(publicId.id)
+        await untilAsserted {
+            val resultsProcessing = resultsProcessingDao.fetchOneByPublicId(publicId.id)
 
-        expectThat(resultsProcessing)
-            .isNotNull()
-            .get { status }.isEqualTo(ResultsProcessingStatus.ERROR.name)
+            expectThat(resultsProcessing)
+                .isNotNull()
+                .get { status }.isEqualTo(ResultsProcessingStatus.ERROR.name)
+        }
     }
 }

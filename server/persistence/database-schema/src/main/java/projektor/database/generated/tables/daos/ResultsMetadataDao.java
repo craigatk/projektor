@@ -86,4 +86,18 @@ public class ResultsMetadataDao extends DAOImpl<ResultsMetadataRecord, projektor
     public List<projektor.database.generated.tables.pojos.ResultsMetadata> fetchByCi(Boolean... values) {
         return fetch(ResultsMetadata.RESULTS_METADATA.CI, values);
     }
+
+    /**
+     * Fetch records that have <code>group BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.ResultsMetadata> fetchRangeOfGroup(String lowerInclusive, String upperInclusive) {
+        return fetchRange(ResultsMetadata.RESULTS_METADATA.GROUP, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>group IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.ResultsMetadata> fetchByGroup(String... values) {
+        return fetch(ResultsMetadata.RESULTS_METADATA.GROUP, values);
+    }
 }

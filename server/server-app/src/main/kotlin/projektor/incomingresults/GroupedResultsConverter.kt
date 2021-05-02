@@ -40,7 +40,8 @@ class GroupedResultsConverter(
                         pullRequestNumber = gitMetadata.pullRequestNumber
                     )
                 },
-                ci = metadata.ci
+                ci = metadata.ci,
+                group = metadata.group
             )
         }
 
