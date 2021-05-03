@@ -1,4 +1,4 @@
-const { exec } = require("child_process");
+const { exec, execSync } = require("child_process");
 const waitForExpect = require("wait-for-expect");
 const {
   fetchTestRunSummary,
@@ -75,4 +75,45 @@ describe("publish results metadata functional spec", () => {
       }
     );
   });
+
+  it("when group results is true and build number set should append results", async () => {
+    const stdout = execSync(
+      `env-cmd -f .build-number-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} --groupResults=true "results/*.xml"`
+    ).toString();
+
+    const testRunId = extractTestRunId(stdout);
+    console.log("Test ID", testRunId);
+
+    await waitForExpect(async () => {
+      const testRunSummaryResponse = await fetchTestRunSummary(
+        testRunId,
+        serverPort
+      );
+      expect(testRunSummaryResponse.status).toEqual(200);
+    });
+
+    const testRunSummaryResponse = await fetchTestRunSummary(
+      testRunId,
+      serverPort
+    );
+    const initialTotalTestCount = testRunSummaryResponse.data.total_test_count;
+
+    const secondStdout = execSync(
+      `env-cmd -f .build-number-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} --groupResults=true results/*.xml`
+    ).toString();
+
+    const secondTestRunId = extractTestRunId(secondStdout);
+    expect(secondTestRunId).toEqual(testRunId);
+
+    await waitForExpect(async () => {
+      const testRunSummaryResponse = await fetchTestRunSummary(
+        testRunId,
+        serverPort
+      );
+      expect(testRunSummaryResponse.status).toEqual(200);
+      expect(testRunSummaryResponse.data.total_test_count).toBeGreaterThan(
+        initialTotalTestCount
+      );
+    });
+  }, 15000);
 });

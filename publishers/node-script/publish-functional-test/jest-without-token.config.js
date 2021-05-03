@@ -6,7 +6,7 @@ module.exports = {
     "reporters": [ "default", [ "jest-junit",
         {
             "outputName": "junit-without-token.xml",
-            "includeConsoleOutput": true,
+            "includeConsoleOutput": "true",
             "outputDirectory": "testResults",
             "classNameTemplate": "{classname}",
             "usePathForSuiteName": "true"
