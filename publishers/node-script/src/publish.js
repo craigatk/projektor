@@ -47,6 +47,7 @@ const sendResults = async (
   gitPullRequestNumber,
   projectName,
   isCI,
+  group,
   compressionEnabled,
   resultsMaxSizeMB
 ) => {
@@ -83,6 +84,7 @@ const sendResults = async (
         pullRequestNumber: gitPullRequestNumber,
       },
       ci: isCI,
+      group,
     },
   };
 
@@ -122,6 +124,7 @@ const collectAndSendResults = async (
   gitPullRequestNumber,
   projectName,
   isCI,
+  group,
   compressionEnabled,
   baseDirectoryPath,
   resultsMaxSizeMB,
@@ -152,6 +155,7 @@ const collectAndSendResults = async (
         gitPullRequestNumber,
         projectName,
         isCI,
+        group,
         compressionEnabled,
         resultsMaxSizeMB
       );
