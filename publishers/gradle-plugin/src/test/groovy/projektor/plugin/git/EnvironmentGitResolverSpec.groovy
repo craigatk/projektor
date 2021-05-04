@@ -1,6 +1,7 @@
 package projektor.plugin.git
 
 import org.gradle.api.logging.Logger
+import projektor.plugin.EnvironmentResolver
 import spock.lang.Specification
 import spock.lang.Unroll
 

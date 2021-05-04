@@ -24,7 +24,8 @@ import projektor.plugin.results.ResultsLogger
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.results.grouped.ResultsMetadata
 
-import static projektor.plugin.ShouldPublishCalculator.isCI
+import static projektor.plugin.MetadataResolver.findBuildNumber
+import static projektor.plugin.MetadataResolver.isCI
 
 class ProjektorBuildFinishedListener implements BuildListener {
 
@@ -93,14 +94,17 @@ class ProjektorBuildFinishedListener implements BuildListener {
             ProjectTestResultsCollector projectTestResultsCollector,
             CodeCoverageTaskCollector codeCoverageTaskCollector
     ) {
+        String buildNumber = findBuildNumber(System.getenv(), extension)
         boolean isCI = isCI(System.getenv(), extension)
+        String group = extension.groupResults ? buildNumber : null
 
         logger.info("Build finished, gathering and publishing Projektor test reports from " +
                 "${projectTestResultsCollector.testGroupsCount()} test tasks")
         GroupedResults groupedResults = projectTestResultsCollector.createGroupedResults()
         groupedResults.metadata = new ResultsMetadata(
                 git: GitMetadataFinder.findGitMetadata(gitResolutionConfig, logger),
-                ci: isCI
+                ci: isCI,
+                group: group
         )
         groupedResults.wallClockDuration = projektorTaskFinishedListener.testWallClockDurationInSeconds
 
