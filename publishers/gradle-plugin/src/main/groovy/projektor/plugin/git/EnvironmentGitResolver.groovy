@@ -1,6 +1,7 @@
 package projektor.plugin.git
 
 import org.gradle.api.logging.Logger
+import projektor.plugin.EnvironmentResolver
 
 class EnvironmentGitResolver extends GitResolver {
     private final EnvironmentResolver environmentResolver

@@ -2,6 +2,8 @@ package projektor.plugin
 
 import org.gradle.BuildResult
 
+import static projektor.plugin.MetadataResolver.isCI
+
 class ShouldPublishCalculator {
     static boolean shouldPublishResults(
             ProjektorPublishPluginExtension extension,
@@ -19,12 +21,6 @@ class ShouldPublishCalculator {
                     (!ci && extension.publishOnLocalFailure && buildFailed && resultsDataExists)
         } else {
             return false
-        }
-    }
-
-    static boolean isCI(Map<String, String> environment, ProjektorPublishPluginExtension extension) {
-        return extension.ciEnvironmentVariables.any {envVariable ->
-            environment.get(envVariable) != null && environment.get(envVariable) != "false"
         }
     }
 }

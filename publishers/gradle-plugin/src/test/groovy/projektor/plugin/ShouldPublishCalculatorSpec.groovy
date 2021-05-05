@@ -82,20 +82,4 @@ class ShouldPublishCalculatorSpec extends Specification {
                 [:]
         )
     }
-
-    @Unroll
-    def "should be CI #shouldBeCI with environment #environment"() {
-        expect:
-        ShouldPublishCalculator.isCI(environment, new ProjektorPublishPluginExtension()) == shouldBeCI
-
-        where:
-        environment                     || shouldBeCI
-        ["CI": "true"]                  || true
-        ["CI": "VELA"]                  || true
-        ["CI": "false"]                 || false
-        [:]                             || false
-        ["DRONE": "true"]               || true
-        ["VELA": "true"]                || true
-        ["CI": "false", "VELA": "true"] || true
-    }
 }

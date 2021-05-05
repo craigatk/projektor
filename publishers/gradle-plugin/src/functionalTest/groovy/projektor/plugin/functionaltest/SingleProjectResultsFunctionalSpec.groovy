@@ -71,5 +71,4 @@ class SingleProjectResultsFunctionalSpec extends ProjektorPluginFunctionalSpecif
             assert testSuites.find { it.className == expectedClassName }
         }
     }
-
 }

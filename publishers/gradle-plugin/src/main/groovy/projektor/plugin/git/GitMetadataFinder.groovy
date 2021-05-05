@@ -1,6 +1,7 @@
 package projektor.plugin.git
 
 import org.gradle.api.logging.Logger
+import projektor.plugin.EnvironmentResolver
 import projektor.plugin.results.grouped.GitMetadata
 
 class GitMetadataFinder {

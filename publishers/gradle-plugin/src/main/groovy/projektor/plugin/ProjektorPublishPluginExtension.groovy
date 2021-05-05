@@ -13,6 +13,7 @@ class ProjektorPublishPluginExtension {
     List<String> additionalResultsDirs = []
     List<FileTree> attachments = []
     boolean compressionEnabled = true
+    boolean groupResults = false
 
     int publishRetryMaxAttempts = 3
     long publishRetryInterval = 100
@@ -34,5 +35,6 @@ class ProjektorPublishPluginExtension {
     List<String> gitCommitShaEnvironmentVariables = ["VELA_BUILD_COMMIT", "GITHUB_SHA"]
     List<String> gitPullRequestNumberEnvironmentVariables = ["VELA_BUILD_PULL_REQUEST", "DRONE_PULL_REQUEST"]
 
+    List<String> buildNumberEnvironmentVariables = ["VELA_BUILD_NUMBER", "GITHUB_RUN_NUMBER"]
     List<String> ciEnvironmentVariables = ["CI", "VELA", "DRONE"]
 }
