@@ -3,10 +3,10 @@ package projektor.coverage
 import projektor.database.generated.tables.pojos.CodeCoverageGroup
 import projektor.database.generated.tables.pojos.CodeCoverageRun
 import projektor.parser.coverage.model.CoverageReport
-import projektor.parser.coverage.model.CoverageReportFile
 import projektor.parser.coverage.model.CoverageReportStats
 import projektor.server.api.PublicId
 import projektor.server.api.coverage.CoverageFile
+import projektor.server.api.coverage.CoverageStat
 
 interface CoverageRepository {
     suspend fun createOrGetCoverageRun(publicId: PublicId): CodeCoverageRun
@@ -16,8 +16,20 @@ interface CoverageRepository {
         coverageReport: CoverageReport
     ): CodeCoverageGroup
 
+    suspend fun upsertCoverageGroup(
+        coverageRun: CodeCoverageRun,
+        coverageReport: CoverageReport,
+        newLineStat: CoverageStat
+    ): CodeCoverageGroup
+
     suspend fun insertCoverageFiles(
-        coverageReportFiles: List<CoverageReportFile>,
+        coverageReportFiles: List<CoverageFile>,
+        coverageRun: CodeCoverageRun,
+        coverageGroup: CodeCoverageGroup
+    )
+
+    suspend fun upsertCoverageFiles(
+        coverageReportFiles: List<CoverageFile>,
         coverageRun: CodeCoverageRun,
         coverageGroup: CodeCoverageGroup
     )

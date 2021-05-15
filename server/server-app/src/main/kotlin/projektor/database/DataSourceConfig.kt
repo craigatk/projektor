@@ -15,13 +15,20 @@ import org.jooq.impl.DSL
 import javax.sql.DataSource
 
 @KtorExperimentalAPI
-data class DataSourceConfig(val jdbcUrl: String, val username: String, val password: String, val schema: String) {
+data class DataSourceConfig(
+    val jdbcUrl: String,
+    val username: String,
+    val password: String,
+    val schema: String,
+    val maximumPoolSize: Int
+) {
     companion object {
         fun createDataSourceConfig(applicationConfig: ApplicationConfig) = DataSourceConfig(
             applicationConfig.property("ktor.datasource.jdbcUrl").getString(),
             applicationConfig.property("ktor.datasource.username").getString(),
             applicationConfig.property("ktor.datasource.password").getString(),
-            applicationConfig.property("ktor.datasource.schema").getString()
+            applicationConfig.property("ktor.datasource.schema").getString(),
+            applicationConfig.property("ktor.datasource.maximumPoolSize").getString().toInt()
         )
 
         fun createDataSource(dataSourceConfig: DataSourceConfig, metricRegistry: MeterRegistry): HikariDataSource {
@@ -30,7 +37,7 @@ data class DataSourceConfig(val jdbcUrl: String, val username: String, val passw
             hikariConfig.password = dataSourceConfig.password
             hikariConfig.jdbcUrl = dataSourceConfig.jdbcUrl
             hikariConfig.schema = dataSourceConfig.schema
-            hikariConfig.maximumPoolSize = 10
+            hikariConfig.maximumPoolSize = dataSourceConfig.maximumPoolSize
 
             val dataSource = HikariDataSource(hikariConfig)
             dataSource.metricRegistry = metricRegistry

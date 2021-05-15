@@ -93,4 +93,23 @@ class GroupedResultsXmlLoader {
 
         return groupedResultsParser.serializeGroupedResults(groupedResults)
     }
+
+    fun resultsWithCoverage(resultsXmls: List<String>, coverageXmls: List<String>, metadata: ResultsMetadata? = null): String {
+        val groupedTestSuites = GroupedTestSuites()
+        groupedTestSuites.groupName = "All files"
+        groupedTestSuites.directory = "/src"
+        groupedTestSuites.testSuitesBlob = resultsXmls.joinToString("")
+
+        val groupedResults = GroupedResults()
+        groupedResults.groupedTestSuites = listOf(groupedTestSuites)
+        groupedResults.metadata = metadata
+        groupedResults.coverageFiles = coverageXmls.map { coverageXml ->
+            val coverageFile = CoverageFile()
+            coverageFile.reportContents = coverageXml
+            coverageFile.baseDirectoryPath = "/src"
+            coverageFile
+        }
+
+        return groupedResultsParser.serializeGroupedResults(groupedResults)
+    }
 }

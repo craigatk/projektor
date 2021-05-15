@@ -1,6 +1,8 @@
 package projektor.coverage
 
 import com.fasterxml.jackson.core.JsonProcessingException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.slf4j.LoggerFactory
 import projektor.compare.PreviousTestRunService
 import projektor.error.ProcessingFailureService
@@ -11,9 +13,7 @@ import projektor.parser.coverage.model.CoverageReport
 import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.parser.coverage.payload.CoveragePayloadParser
 import projektor.server.api.PublicId
-import projektor.server.api.coverage.Coverage
-import projektor.server.api.coverage.CoverageFile
-import projektor.server.api.coverage.CoverageStats
+import projektor.server.api.coverage.*
 import projektor.server.api.error.FailureBodyType
 import java.math.BigDecimal
 
@@ -78,7 +78,7 @@ class CoverageService(
 
             if (coverageFiles != null && coverageFiles.isNotEmpty()) {
                 coverageRepository.insertCoverageFiles(
-                    coverageFiles,
+                    coverageFiles.map { file -> file.toCoverageFile() },
                     coverageRun,
                     coverageGroup,
                 )
@@ -153,4 +153,41 @@ class CoverageService(
 
     suspend fun getCoverageGroupFiles(publicId: PublicId, groupName: String): List<CoverageFile> =
         coverageRepository.fetchCoverageFiles(publicId, groupName)
+
+    suspend fun parseReport(coverageFilePayload: CoverageFilePayload): Pair<CoverageReport, List<CoverageFile>>? =
+        withContext(Dispatchers.IO) {
+            val coverageReport = CoverageParser.parseReport(coverageFilePayload.reportContents, coverageFilePayload.baseDirectoryPath)
+
+            coverageReport?.let { report ->
+                val coverageFiles = report.files?.let { fileList ->
+                    fileList.map { it.toCoverageFile() }
+                } ?: listOf()
+
+                Pair(coverageReport, coverageFiles)
+            }
+        }
+
+    suspend fun appendCoverage(publicId: PublicId, coverageFiles: List<CoverageFilePayload>) {
+        val coverageRun = coverageRepository.createOrGetCoverageRun(publicId)
+
+        coverageFiles.forEach { coverageFilePayload ->
+            val parsedReport = parseReport(coverageFilePayload)
+
+            if (parsedReport != null) {
+                val (incomingCoverageReport, incomingCoverageFiles) = parsedReport
+
+                val existingCoverageFiles = coverageRepository.fetchCoverageFiles(publicId, incomingCoverageReport.name)
+
+                val combinedCoverageFiles = combineCoverageFiles(existingCoverageFiles, incomingCoverageFiles)
+
+                val coveredLines = combinedCoverageFiles.sumBy { it.stats.lineStat.covered }
+                val missedLines = combinedCoverageFiles.sumBy { it.stats.lineStat.missed }
+                val newLineStat = CoverageStat(covered = coveredLines, missed = missedLines, coveredPercentageDelta = null)
+
+                val coverageGroup = coverageRepository.upsertCoverageGroup(coverageRun, incomingCoverageReport, newLineStat)
+
+                coverageRepository.upsertCoverageFiles(combinedCoverageFiles, coverageRun, coverageGroup)
+            }
+        }
+    }
 }

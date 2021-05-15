@@ -32,6 +32,7 @@ import projektor.parser.ResultsXmlLoader
 import projektor.server.api.PublicId
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.server.api.results.SaveResultsResponse
+import projektor.server.example.coverage.CloverXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import java.math.BigDecimal
@@ -39,6 +40,7 @@ import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
 open class ApplicationTestCase {
+    val cloverXmlLoader = CloverXmlLoader()
     val resultsXmlLoader = ResultsXmlLoader()
 
     val objectMapper: ObjectMapper = ObjectMapper()
@@ -110,6 +112,7 @@ open class ApplicationTestCase {
             put("ktor.datasource.password", System.getenv("DB_PASSWORD") ?: "testpass")
             put("ktor.datasource.jdbcUrl", System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5433/projektordb")
             put("ktor.datasource.schema", schema)
+            put("ktor.datasource.maximumPoolSize", "3")
 
             publishToken?.let { put("ktor.auth.publishToken", it) }
 

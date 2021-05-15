@@ -23,7 +23,7 @@ public class CoverageLine {
     public Integer falseCount;
 
     public LineType lineCoverageType() {
-        if ("stmt".equals(lineType) && count == 0) {
+        if (("cond".equals(lineType) || "stmt".equals(lineType)) && count == 0) {
             return LineType.MISSED;
         } else if ("cond".equals(lineType) && (trueCount == 0 || falseCount == 0)) {
             return LineType.PARTIAL;
