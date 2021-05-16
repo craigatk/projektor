@@ -22,6 +22,7 @@ fun main() {
     loadCoverage85WithGit()
     loadResultsWithGitButWithoutCoverage()
     loadJestWithCoverage()
+    loadJestWithCoverageManyMissedLines()
     loadJestWithFilePaths()
     repositoryCoverageTimeline()
     repositoryFlakyTests()

@@ -377,6 +377,13 @@ fun loadJestWithCoverage() {
     println("View run with Jest results and coverage at $uiBaseUrl${resultsResponse.uri}")
 }
 
+fun loadJestWithCoverageManyMissedLines() {
+    val resultsResponse = sendResultsToServer(resultsXmlLoader.jestUi())
+    sendCoverageToServer(resultsResponse.id, CloverXmlLoader().uiCloverManyMissedLines())
+
+    println("View run with Jest results and coverage with many missed lines at $uiBaseUrl${resultsResponse.uri}")
+}
+
 fun loadJestWithFilePaths() {
     val resultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.jestUiFilePath()))
 
