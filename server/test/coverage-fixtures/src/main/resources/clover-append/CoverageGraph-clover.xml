@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1620477523922" clover="3.2.0">
+  <project timestamp="1620477523922" name="All files">
+    <metrics statements="53" coveredstatements="53" conditionals="22" coveredconditionals="19" methods="5" coveredmethods="5" elements="80" coveredelements="77" complexity="0" loc="53" ncloc="53" packages="2" files="4" classes="4"/>
+    <package name="Coverage">
+      <metrics statements="49" coveredstatements="49" conditionals="18" coveredconditionals="17" methods="4" coveredmethods="4"/>
+      <file name="CoverageGraph.tsx" path="/Users/craigatkinson/projects/projektor/ui/src/Coverage/CoverageGraph.tsx">
+        <metrics statements="20" coveredstatements="20" conditionals="10" coveredconditionals="10" methods="2" coveredmethods="2"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="7" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="31" count="7" type="stmt"/>
+        <line num="32" count="7" type="stmt"/>
+        <line num="33" count="7" type="stmt"/>
+        <line num="34" count="7" type="stmt"/>
+        <line num="35" count="7" type="stmt"/>
+        <line num="36" count="7" type="stmt"/>
+        <line num="37" count="7" type="stmt"/>
+        <line num="39" count="7" type="stmt"/>
+        <line num="41" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="42" count="6" type="stmt"/>
+        <line num="82" count="1" type="stmt"/>
+        <line num="86" count="1" type="stmt"/>
+      </file>
+      <file name="CoverageGraphImpl.tsx" path="/Users/craigatkinson/projects/projektor/ui/src/Coverage/CoverageGraphImpl.tsx">
+        <metrics statements="15" coveredstatements="15" conditionals="4" coveredconditionals="3" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="6" type="stmt"/>
+        <line num="16" count="6" type="stmt"/>
+        <line num="17" count="6" type="stmt"/>
+        <line num="18" count="6" type="stmt"/>
+        <line num="19" count="6" type="stmt"/>
+        <line num="21" count="6" type="stmt"/>
+        <line num="35" count="6" type="stmt"/>
+        <line num="43" count="6" type="cond" truecount="1" falsecount="1"/>
+        <line num="46" count="6" type="stmt"/>
+        <line num="54" count="6" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+      </file>
+      <file name="CoveragePercentage.tsx" path="/Users/craigatkinson/projects/projektor/ui/src/Coverage/CoveragePercentage.tsx">
+        <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="35" count="6" type="stmt"/>
+        <line num="36" count="6" type="stmt"/>
+        <line num="37" count="6" type="stmt"/>
+        <line num="39" count="6" type="stmt"/>
+        <line num="41" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="42" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="80" count="4" type="stmt"/>
+        <line num="84" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="Link">
+      <metrics statements="4" coveredstatements="4" conditionals="4" coveredconditionals="2" methods="1" coveredmethods="1"/>
+      <file name="CleanLink.tsx" path="/Users/craigatkinson/projects/projektor/ui/src/Link/CleanLink.tsx">
+        <metrics statements="4" coveredstatements="4" conditionals="4" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

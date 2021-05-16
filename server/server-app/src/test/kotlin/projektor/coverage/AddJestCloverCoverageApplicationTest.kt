@@ -11,7 +11,7 @@ import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.coverage.CoverageFiles
 import projektor.server.api.coverage.CoverageStats
-import projektor.server.example.coverage.JestXmlLoader
+import projektor.server.example.coverage.CloverXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
@@ -24,7 +24,7 @@ class AddJestCloverCoverageApplicationTest : ApplicationTestCase() {
     fun `should add Jest coverage to test run then get it`() {
         val publicId = randomPublicId()
 
-        val reportXmlBytes = JestXmlLoader().uiClover().toByteArray()
+        val reportXmlBytes = CloverXmlLoader().uiClover().toByteArray()
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/coverage") {
@@ -71,7 +71,7 @@ class AddJestCloverCoverageApplicationTest : ApplicationTestCase() {
     fun `should add Jest coverage and get its files`() {
         val publicId = randomPublicId()
 
-        val reportXmlBytes = JestXmlLoader().uiClover2().toByteArray()
+        val reportXmlBytes = CloverXmlLoader().uiClover2().toByteArray()
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/coverage") {

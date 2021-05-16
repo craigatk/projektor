@@ -4,7 +4,7 @@ import projektor.parser.jacoco.model.Counter
 import projektor.parser.jacoco.model.CounterType
 import projektor.parser.jacoco.model.Report
 import projektor.server.example.coverage.JacocoXmlLoader
-import projektor.server.example.coverage.JestXmlLoader
+import projektor.server.example.coverage.CloverXmlLoader
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -46,7 +46,7 @@ class JacocoXmlReportParserSpec extends Specification {
         reportXml                               || shouldBeJacoco
         new JacocoXmlLoader().serverApp()       || true
         new JacocoXmlLoader().jacocoXmlParser() || true
-        new JestXmlLoader().uiClover() || false
+        new CloverXmlLoader().uiClover() || false
     }
 
     private static void verifyCounter(List<Counter> counters, CounterType type, int expectedMissed, int expectedCovered) {

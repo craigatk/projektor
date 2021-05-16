@@ -1,8 +1,8 @@
 package projektor.parser.coverage
 
 import io.kotest.core.spec.style.StringSpec
+import projektor.server.example.coverage.CloverXmlLoader
 import projektor.server.example.coverage.JacocoXmlLoader
-import projektor.server.example.coverage.JestXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
@@ -36,7 +36,7 @@ class CoverageParserSpec : StringSpec({
     }
 
     "should parse Jest test report" {
-        val jestReportXml = JestXmlLoader().uiClover()
+        val jestReportXml = CloverXmlLoader().uiClover()
 
         val coverageReport = CoverageParser.parseReport(jestReportXml, null)
 

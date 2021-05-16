@@ -12,9 +12,9 @@ import projektor.parser.grouped.model.CoverageFile
 import projektor.parser.grouped.model.GitMetadata
 import projektor.parser.grouped.model.ResultsMetadata
 import projektor.server.api.results.SaveResultsResponse
+import projektor.server.example.coverage.CloverXmlLoader
 import projektor.server.example.coverage.CoverageFileWrapper.createCoverageFilePayload
 import projektor.server.example.coverage.JacocoXmlLoader
-import projektor.server.example.coverage.JestXmlLoader
 import projektor.server.example.performance.PerformanceResultsLoader
 import java.io.File
 import java.math.BigDecimal
@@ -372,7 +372,7 @@ fun repositoryFlakyTests() {
 
 fun loadJestWithCoverage() {
     val resultsResponse = sendResultsToServer(resultsXmlLoader.jestUi())
-    sendCoverageToServer(resultsResponse.id, JestXmlLoader().uiClover())
+    sendCoverageToServer(resultsResponse.id, CloverXmlLoader().uiClover())
 
     println("View run with Jest results and coverage at $uiBaseUrl${resultsResponse.uri}")
 }

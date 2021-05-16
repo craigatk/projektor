@@ -75,14 +75,15 @@ open class DatabaseRepositoryTestCase : KoinTest {
             System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5433/projektordb",
             System.getenv("DB_USERNAME") ?: "testuser",
             System.getenv("DB_PASSWORD") ?: "testpass",
-            "public"
+            "public",
+            3
         )
 
         hikariConfig.username = dataSourceConfig.username
         hikariConfig.password = dataSourceConfig.password
         hikariConfig.jdbcUrl = dataSourceConfig.jdbcUrl
         hikariConfig.schema = dataSourceConfig.schema
-        hikariConfig.maximumPoolSize = 3
+        hikariConfig.maximumPoolSize = dataSourceConfig.maximumPoolSize
 
         dataSource = HikariDataSource(hikariConfig)
         DataSourceConfig.flywayMigrate(dataSource, dataSourceConfig)

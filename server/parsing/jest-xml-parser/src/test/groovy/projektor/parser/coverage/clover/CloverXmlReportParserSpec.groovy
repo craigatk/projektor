@@ -2,14 +2,14 @@ package projektor.parser.coverage.clover
 
 
 import projektor.server.example.coverage.JacocoXmlLoader
-import projektor.server.example.coverage.JestXmlLoader
+import projektor.server.example.coverage.CloverXmlLoader
 import spock.lang.Specification
 import spock.lang.Unroll
 
 class CloverXmlReportParserSpec extends Specification {
     def "should parse Jest XML report"() {
         given:
-        String reportXml = new JestXmlLoader().uiClover()
+        String reportXml = new CloverXmlLoader().uiClover()
 
         when:
         projektor.parser.coverage.clover.model.Coverage report = new CloverXmlReportParser().parseReport(reportXml)
@@ -36,7 +36,7 @@ class CloverXmlReportParserSpec extends Specification {
 
         where:
         reportXml                               || shouldBeJest
-        new JestXmlLoader().uiClover() || true
+        new CloverXmlLoader().uiClover() || true
         new JacocoXmlLoader().jacocoXmlParser() || false
     }
 }

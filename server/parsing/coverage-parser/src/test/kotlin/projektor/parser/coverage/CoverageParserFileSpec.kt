@@ -1,8 +1,8 @@
 package projektor.parser.coverage
 
 import io.kotest.core.spec.style.StringSpec
+import projektor.server.example.coverage.CloverXmlLoader
 import projektor.server.example.coverage.JacocoXmlLoader
-import projektor.server.example.coverage.JestXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.*
 import java.math.BigDecimal
@@ -59,7 +59,7 @@ class CoverageParserFileSpec : StringSpec({
     }
 
     "should parse file-level stats from Jest Clover coverage report" {
-        val reportXml = JestXmlLoader().uiClover2()
+        val reportXml = CloverXmlLoader().uiClover2()
 
         val coverageReport = CoverageParser.parseReport(reportXml, null)
         assertNotNull(coverageReport)
@@ -80,7 +80,7 @@ class CoverageParserFileSpec : StringSpec({
     }
 
     "should set file path in Clover results when base directory path set" {
-        val reportXml = JestXmlLoader().uiClover2()
+        val reportXml = CloverXmlLoader().uiClover2()
 
         val coverageReport = CoverageParser.parseReport(reportXml, "ui")
         assertNotNull(coverageReport)
@@ -96,7 +96,7 @@ class CoverageParserFileSpec : StringSpec({
     }
 
     "should not show any partial lines in Clover stats because they aren't accurate" {
-        val jacocoReportXml = JestXmlLoader().uiClover2()
+        val jacocoReportXml = CloverXmlLoader().uiClover2()
 
         val coverageReport = CoverageParser.parseReport(jacocoReportXml, null)
         assertNotNull(coverageReport)

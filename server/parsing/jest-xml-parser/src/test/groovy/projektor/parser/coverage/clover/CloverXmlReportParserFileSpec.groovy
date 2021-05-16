@@ -5,13 +5,13 @@ import projektor.parser.coverage.clover.model.CoverageFile
 import projektor.parser.coverage.clover.model.CoverageLine
 import projektor.parser.coverage.clover.model.CoveragePackage
 import projektor.parser.coverage.clover.model.LineType
-import projektor.server.example.coverage.JestXmlLoader
+import projektor.server.example.coverage.CloverXmlLoader
 import spock.lang.Specification
 
 class CloverXmlReportParserFileSpec extends Specification {
     def "should parse file-level coverage details"() {
         given:
-        String reportXml = new JestXmlLoader().uiClover()
+        String reportXml = new CloverXmlLoader().uiClover()
 
         when:
         Coverage coverage = new CloverXmlReportParser().parseReport(reportXml)

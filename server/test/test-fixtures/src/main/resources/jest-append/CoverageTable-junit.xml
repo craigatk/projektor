@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="130" failures="0" errors="0" time="3.952">
+  <testsuite name="src/TestCase/__tests__/TestCaseFailurePanel.spec.tsx" errors="0" failures="0" skipped="8" timestamp="2021-05-08T12:52:03" time="1.333" tests="8">
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should render failure details link when the test case failed" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should not render failure details link when the test case passed" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should render system out link when the test case has system out" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should render system err link when the test case has system err" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should render both system out and err links when the test case has both" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should render failure message when flag to show full failure is false" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should render failure text when flag to show full failure is true" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should show attachment screenshot when one exists" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Dashboard/__tests__/TestRunCleanupDate.spec.tsx" errors="0" failures="0" skipped="3" timestamp="2021-05-08T12:52:03" time="1.4" tests="3">
+    <testcase classname="TestRunCleanupDate" name="TestRunCleanupDate when cleanup enabled and not pinned should toggle to pinned" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestRunCleanupDate" name="TestRunCleanupDate when cleanup enabled and pinned should toggle to unpinned" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestRunCleanupDate" name="TestRunCleanupDate when cleanup not enabled should not display anything" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Repository/FlakyTests/__tests__/RepositoryFlakyTestsTable.spec.tsx" errors="0" failures="0" skipped="3" timestamp="2021-05-08T12:52:03" time="1.496" tests="3">
+    <testcase classname="RepositoryFlakyTestsTable" name="RepositoryFlakyTestsTable should format last timestamp in local timezone" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="RepositoryFlakyTestsTable" name="RepositoryFlakyTestsTable should sort by first failure" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="RepositoryFlakyTestsTable" name="RepositoryFlakyTestsTable should sort by latest failure" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestOutput/__tests__/TestSystemOutput.spec.tsx" errors="0" failures="0" skipped="4" timestamp="2021-05-08T12:52:03" time="1.484" tests="4">
+    <testcase classname="TestSystemOut" name="TestSystemOut should render output when fetching test suite output completes successfully" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestSystemOut" name="TestSystemOut should render output when fetching test case system out completes successfully" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestSystemOut" name="TestSystemOut should render output when fetching test case system err completes successfully" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestSystemOut" name="TestSystemOut should render error when fetching output fails" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestCase/__tests__/TestCaseDetails.spec.tsx" errors="0" failures="0" skipped="6" timestamp="2021-05-08T12:52:03" time="1.523" tests="6">
+    <testcase classname="TestCaseDetails" name="TestCaseDetails should render failure tab when the test case failed" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestCaseDetails" name="TestCaseDetails should not render failure tab when the test case passed" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestCaseDetails" name="TestCaseDetails should system out tab when test case has system out" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestCaseDetails" name="TestCaseDetails should system err tab when test case has system err" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestCaseDetails" name="TestCaseDetails should show screenshot tab when test case has screenshot attachment" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestCaseDetails" name="TestCaseDetails should show video tab when test case has video attachment" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Dashboard/__tests__/DashboardSummary.spec.tsx" errors="0" failures="0" skipped="6" timestamp="2021-05-08T12:52:03" time="1.568" tests="6">
+    <testcase classname="Dashboard summary" name="Dashboard summary should display project name when it exists" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Dashboard summary" name="Dashboard summary should not display project name when it does not exists" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Dashboard summary" name="Dashboard summary should display branch name when it exists" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Dashboard summary" name="Dashboard summary should not display branch name when it does not exists" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Dashboard summary" name="Dashboard summary should display duration when it is set" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Dashboard summary" name="Dashboard summary should not display duration section when average duration is 0" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestResults/__tests__/TestResultsProcessingCheck.spec.tsx" errors="0" failures="0" skipped="5" timestamp="2021-05-08T12:52:04" time="0.274" tests="5">
+    <testcase classname="TestResultsProcessingCheck" name="TestResultsProcessingCheck should display message when results still processing" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestResultsProcessingCheck" name="TestResultsProcessingCheck should refresh status when still processing up to max timeout" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestResultsProcessingCheck" name="TestResultsProcessingCheck should display failure message when results processing failed" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestResultsProcessingCheck" name="TestResultsProcessingCheck should display message when results were deleted" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestResultsProcessingCheck" name="TestResultsProcessingCheck should call success function when results successfully processed" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Repository/__tests__/RepositoryLink.spec.tsx" errors="0" failures="0" skipped="10" timestamp="2021-05-08T12:52:04" time="0.081" tests="10">
+    <testcase classname="RepositoryLink repositoryLinkUrlUI" name="RepositoryLink repositoryLinkUrlUI when repo name only should create link" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlUI" name="RepositoryLink repositoryLinkUrlUI when repo name and uri should create link" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlUI" name="RepositoryLink repositoryLinkUrlUI when uri doesn&apos;t start with forward slash should add it" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlUI" name="RepositoryLink repositoryLinkUrlUI when repo name and project name should create link" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlUI" name="RepositoryLink repositoryLinkUrlUI when repo name, project name, and uri should create link" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlAPI" name="RepositoryLink repositoryLinkUrlAPI when repo name only should create link" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlAPI" name="RepositoryLink repositoryLinkUrlAPI when repo name and uri should create link" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlAPI" name="RepositoryLink repositoryLinkUrlAPI when uri doesn&apos;t start with forward slash should add it" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlAPI" name="RepositoryLink repositoryLinkUrlAPI when repo name and project name should create link" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlAPI" name="RepositoryLink repositoryLinkUrlAPI when repo name, project name, and uri should create link" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/VersionControl/__tests__/VersionControlHelpers.spec.ts" errors="0" failures="0" skipped="6" timestamp="2021-05-08T12:52:04" time="0.057" tests="6">
+    <testcase classname="VersionControlHelpers" name="VersionControlHelpers should create GitHub URL when base URL does not end in slash" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="VersionControlHelpers" name="VersionControlHelpers should create GitHub URL when base URL ends in slash" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="VersionControlHelpers" name="VersionControlHelpers should create GitHub URL when line number set" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="VersionControlHelpers" name="VersionControlHelpers should return null for GitHub URL when base URL not set" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="VersionControlHelpers" name="VersionControlHelpers should return null for GitHub URL when no Git metadata" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="VersionControlHelpers" name="VersionControlHelpers should return null for GitHub URL when file path not set" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Organization/Coverage/__tests__/OrganizationCoveragePage.spec.tsx" errors="0" failures="0" skipped="3" timestamp="2021-05-08T12:52:03" time="1.774" tests="3">
+    <testcase classname="OrganizationCoveragePage" name="OrganizationCoveragePage when three repos in org should display their coverage" time="0.001">
+      <skipped/>
+    </testcase>
+    <testcase classname="OrganizationCoveragePage" name="OrganizationCoveragePage should display project name when it is set" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="OrganizationCoveragePage" name="OrganizationCoveragePage should not display coverage data when the organization doesn&apos;t have any repos with coverage" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestSuite/__tests__/TestSuiteList.spec.tsx" errors="0" failures="0" skipped="4" timestamp="2021-05-08T12:52:04" time="0.393" tests="4">
+    <testcase classname="TestSuiteList" name="TestSuiteList should render group name when a test suite is grouped" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestSuiteList" name="TestSuiteList should not display group name when test suite has no groups" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestSuiteList" name="TestSuiteList should display file name column when suite has a file name set" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestSuiteList" name="TestSuiteList should not display file name column when no suite has a file name set" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Loading/__tests__/LoadingSection.spec.tsx" errors="0" failures="0" skipped="4" timestamp="2021-05-08T12:52:05" time="0.214" tests="4">
+    <testcase classname="LoadingSection" name="LoadingSection should display progress bar when loading" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="LoadingSection" name="LoadingSection should display success section when successful" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="LoadingSection" name="LoadingSection should display error section when errored" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="LoadingSection" name="LoadingSection should display custom error component when there is one passed in" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Repository/Coverage/__tests__/RepositoryCoverageTimelineGraph.spec.tsx" errors="0" failures="0" skipped="1" timestamp="2021-05-08T12:52:04" time="0.408" tests="1">
+    <testcase classname="RepositoryCoverageTimelineGraph" name="RepositoryCoverageTimelineGraph should display coverage timeline graph" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/CodeText/__tests__/CodeTestProgressiveRender.spec.tsx" errors="0" failures="0" skipped="1" timestamp="2021-05-08T12:52:05" time="0.122" tests="1">
+    <testcase classname="CodeTextProgressiveRender" name="CodeTextProgressiveRender should render lines progressively" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Pin/__tests__/PinSideMenuItem.spec.tsx" errors="0" failures="0" skipped="3" timestamp="2021-05-08T12:52:04" time="0.46" tests="3">
+    <testcase classname="PinSideMenuItem" name="PinSideMenuItem when cleanup enabled and not pinned should toggle to pinned" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="PinSideMenuItem" name="PinSideMenuItem when cleanup enabled and pinned should toggle to unpinned" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="PinSideMenuItem" name="PinSideMenuItem when cleanup not enabled should not display anything" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Repository/Timeline/__tests__/RepositoryTimelineGraphTooltip.spec.tsx" errors="0" failures="0" skipped="2" timestamp="2021-05-08T12:52:05" time="0.152" tests="2">
+    <testcase classname="RepositoryTimelineGraphTooltip" name="RepositoryTimelineGraphTooltip should display total and average test durations" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="RepositoryTimelineGraphTooltip" name="RepositoryTimelineGraphTooltip should display run date in local timezone" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestCase/__tests__/TestCasePage.spec.tsx" errors="0" failures="0" skipped="2" timestamp="2021-05-08T12:52:05" time="0.32" tests="2">
+    <testcase classname="TestCasePage" name="TestCasePage should render test case when fetch completes successfully" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestCasePage" name="TestCasePage should render error when fetching test case fails" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestCase/__tests__/TestCaseFailurePanelList.spec.tsx" errors="0" failures="0" skipped="2" timestamp="2021-05-08T12:52:05" time="0.213" tests="2">
+    <testcase classname="TestCaseFailureListPanel" name="TestCaseFailureListPanel should render longer failure text when less than 5 failures" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestCaseFailureListPanel" name="TestCaseFailureListPanel should render shorter failure message when more than 5 failures" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/SideMenu/__tests__/SideMenu.spec.tsx" errors="0" failures="0" skipped="4" timestamp="2021-05-08T12:52:05" time="0.223" tests="4">
+    <testcase classname="SideMenu" name="SideMenu when attachments should show attachments link" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="SideMenu" name="SideMenu when no attachments should not show attachments link" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="SideMenu" name="SideMenu when coverage should show coverage link" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="SideMenu" name="SideMenu when no coverage should not show coverage link" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Repository/Coverage/__tests__/RepositoryCoveragePage.spec.tsx" errors="0" failures="0" skipped="2" timestamp="2021-05-08T12:52:05" time="0.556" tests="2">
+    <testcase classname="RepositoryCoveragePage" name="RepositoryCoveragePage should display coverage timeline graph when no project name" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="RepositoryCoveragePage" name="RepositoryCoveragePage should display message when no coverage timeline" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Performance/__tests__/PerformanceSection.spec.tsx" errors="0" failures="0" skipped="1" timestamp="2021-05-08T12:52:05" time="0.243" tests="1">
+    <testcase classname="PerformanceSection" name="PerformanceSection should fetch performance results and render them" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestCase/list/__tests__/TestCaseList.spec.tsx" errors="0" failures="0" skipped="1" timestamp="2021-05-08T12:52:05" time="0.179" tests="1">
+    <testcase classname="TestCaseList" name="TestCaseList should render duration column first when specified" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestRun/__tests__/TestRunDataWrapper.spec.tsx" errors="0" failures="0" skipped="2" timestamp="2021-05-08T12:52:04" time="0.791" tests="2">
+    <testcase classname="TestRunDataWrapper" name="TestRunDataWrapper should render wrapper when fetch completes successfully" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestRunDataWrapper" name="TestRunDataWrapper should render processing message when fetching test summary fails and results are still processing" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestSuite/__tests__/sort.spec.ts" errors="0" failures="0" skipped="1" timestamp="2021-05-08T12:52:05" time="0.039" tests="1">
+    <testcase classname="test suite sort util" name="test suite sort util should sort failed test cases first, then passed, then skipped" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Badge/__tests__/TestRunCoverageBadge.spec.tsx" errors="0" failures="0" skipped="1" timestamp="2021-05-08T12:52:05" time="0.189" tests="1">
+    <testcase classname="TestRunCoverageBadge" name="TestRunCoverageBadge should display coverage badge" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/dateUtils/__tests__/dateUtils.spec.ts" errors="0" failures="0" skipped="9" timestamp="2021-05-08T12:52:05" time="0.039" tests="9">
+    <testcase classname="dateUtils formatSecondsDuration" name="dateUtils formatSecondsDuration should format duration less than 1 second" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDuration" name="dateUtils formatSecondsDuration should format duration less than 1 minute with MS threshold of 1" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDuration" name="dateUtils formatSecondsDuration should format duration less than 1 minute" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDuration" name="dateUtils formatSecondsDuration should format duration over 1 minute and less than 1 hour" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDuration" name="dateUtils formatSecondsDuration should format duration over 1 hour" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDuration" name="dateUtils formatSecondsDuration should format 0 seconds without any milliseconds" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDurationWithoutMS" name="dateUtils formatSecondsDurationWithoutMS should format duration less than 1 minute" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDurationWithoutMS" name="dateUtils formatSecondsDurationWithoutMS should format duration over 1 minute and less than 1 hour" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDurationWithoutMS" name="dateUtils formatSecondsDurationWithoutMS should format duration over 10 minutes and less than 1 hour" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestSuite/__tests__/TestSuitePage.spec.tsx" errors="0" failures="0" skipped="2" timestamp="2021-05-08T12:52:05" time="0.319" tests="2">
+    <testcase classname="TestSuitePage" name="TestSuitePage should render test suite when fetch completes successfully" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestSuitePage" name="TestSuitePage should render error when fetching test suite fails" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Dashboard/__tests__/Dashboard.spec.tsx" errors="0" failures="0" skipped="2" timestamp="2021-05-08T12:52:05" time="0.541" tests="2">
+    <testcase classname="Dashboard" name="Dashboard should show all tests when they passed and there is at least one test" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="Dashboard" name="Dashboard should not show all tests when they passed and there are no tests" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Repository/Coverage/__tests__/RepositoryCoverageTimelineGraphTooltip.spec.tsx" errors="0" failures="0" skipped="2" timestamp="2021-05-08T12:52:05" time="0.149" tests="2">
+    <testcase classname="RepositoryCoverageTimelineGraphTooltip" name="RepositoryCoverageTimelineGraphTooltip should render covered percentages and run date" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="RepositoryCoverageTimelineGraphTooltip" name="RepositoryCoverageTimelineGraphTooltip when no payload should render empty span" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Badge/__tests__/RepositoryCoverageBadge.spec.tsx" errors="0" failures="0" skipped="1" timestamp="2021-05-08T12:52:05" time="0.214" tests="1">
+    <testcase classname="RepositoryCoverageBadge" name="RepositoryCoverageBadge should display coverage badge" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestSuite/__tests__/TestSuiteDetails.spec.tsx" errors="0" failures="0" skipped="2" timestamp="2021-05-08T12:52:05" time="0.181" tests="2">
+    <testcase classname="TestSuiteDetails" name="TestSuiteDetails should display system out tab if test suite has it" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestSuiteDetails" name="TestSuiteDetails should display system err tab if test suite has it" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestRun/__tests__/TestRunAllTests.spec.tsx" errors="0" failures="0" skipped="2" timestamp="2021-05-08T12:52:05" time="0.411" tests="2">
+    <testcase classname="TestRunAllTests" name="TestRunAllTests should render all tests when fetch completes successfully" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestRunAllTests" name="TestRunAllTests should render error when fetching all tests fails" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Dashboard/__tests__/TestRunDuration.spec.tsx" errors="0" failures="0" skipped="2" timestamp="2021-05-08T12:52:05" time="0.177" tests="2">
+    <testcase classname="TestRunDuration" name="TestRunDuration should display wall clock duration when it is set" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestRunDuration" name="TestRunDuration should not display wall clock duration when it is not set" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/model/__tests__/TestSuiteHelpers.spec.ts" errors="0" failures="0" skipped="3" timestamp="2021-05-08T12:52:06" time="0.056" tests="3">
+    <testcase classname="TestSuiteHelpers fullTestSuiteName" name="TestSuiteHelpers fullTestSuiteName should return class name when no package name" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestSuiteHelpers fullTestSuiteName" name="TestSuiteHelpers fullTestSuiteName should return package name and class name when package name set and it does not include class name" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="TestSuiteHelpers fullTestSuiteName" name="TestSuiteHelpers fullTestSuiteName should return package name when package name set and it does include class name" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestOutput/__tests__/TestSuiteSystemOut.spec.tsx" errors="0" failures="0" skipped="1" timestamp="2021-05-08T12:52:05" time="0.204" tests="1">
+    <testcase classname="TestSuiteSystemOut" name="TestSuiteSystemOut should fetch and render system out" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/CodeText/__tests__/CodeText.spec.tsx" errors="0" failures="0" skipped="2" timestamp="2021-05-08T12:52:05" time="0.215" tests="2">
+    <testcase classname="CodeText" name="CodeText should split output into lines" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="CodeText" name="CodeText when output is blank should not show any lines" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestOutput/__tests__/TestSuiteSystemErr.spec.tsx" errors="0" failures="0" skipped="1" timestamp="2021-05-08T12:52:05" time="0.241" tests="1">
+    <testcase classname="TestSuiteSystemErr" name="TestSuiteSystemErr should fetch and render system err" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestCase/list/__tests__/TestCaseListRow.spec.tsx" errors="0" failures="0" skipped="1" timestamp="2021-05-08T12:52:06" time="0.178" tests="1">
+    <testcase classname="TestCaseListRow" name="TestCaseListRow should render test case list row" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Attachments/__tests__/AttachmentsPage.spec.tsx" errors="0" failures="0" skipped="1" timestamp="2021-05-08T12:52:05" time="0.237" tests="1">
+    <testcase classname="AttachmentsPage" name="AttachmentsPage should fetch attachments and render list" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Repository/Graph/__tests__/RepositoryGraphActiveDot.spec.tsx" errors="0" failures="0" skipped="1" timestamp="2021-05-08T12:52:06" time="0.172" tests="1">
+    <testcase classname="RepositoryGraphActiveDot" name="RepositoryGraphActiveDot should link to test run" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/CodeText/__tests__/CodeTextLine.spec.tsx" errors="0" failures="0" skipped="1" timestamp="2021-05-08T12:52:06" time="0.099" tests="1">
+    <testcase classname="Code text line" name="Code text line should call line click handler when line is clicked" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Dashboard/__tests__/GitRepoListItem.spec.tsx" errors="0" failures="0" skipped="2" timestamp="2021-05-08T12:52:06" time="0.187" tests="2">
+    <testcase classname="GitRepoListItem" name="GitRepoListItem should display org link" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="GitRepoListItem" name="GitRepoListItem should display repo link" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Coverage/__tests__/CoverageFilesTable.spec.tsx" errors="0" failures="0" skipped="2" timestamp="2021-05-08T12:52:06" time="0.15" tests="2">
+    <testcase classname="CoverageFilesTable" name="CoverageFilesTable should filter out files without any lines" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="CoverageFilesTable" name="CoverageFilesTable should sort by line covered percentage least to highest" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Coverage/__tests__/CoverageGraph.spec.tsx" errors="0" failures="0" skipped="7" timestamp="2021-05-08T12:52:06" time="0.152" tests="7">
+    <testcase classname="CoverageGraph" name="CoverageGraph should display coverage data when not inline" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="CoverageGraph" name="CoverageGraph should display positive previous coverage" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="CoverageGraph" name="CoverageGraph should display negative previous coverage" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="CoverageGraph" name="CoverageGraph should not display title when inline" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="CoverageGraph" name="CoverageGraph should not display coverage data when there isn&apos;t any" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="CoverageGraph" name="CoverageGraph graph should have link when specified" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="CoverageGraph" name="CoverageGraph graph should not have link when not specified" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Coverage/__tests__/CoverageTable.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-05-08T12:52:06" time="0.329" tests="1">
+    <testcase classname="CoverageTable" name="CoverageTable should allow sorting by line, branch, or statement covered percentage" time="0.175">
+    </testcase>
+  </testsuite>
+</testsuites>

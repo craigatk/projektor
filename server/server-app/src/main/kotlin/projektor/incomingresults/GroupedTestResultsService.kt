@@ -102,7 +102,13 @@ class GroupedTestResultsService(
 
             metricsService.incrementResultsProcessSuccessCounter()
 
-            publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git, null, null)
+            val coverage = groupedResults.coverageFiles?.let {
+                coverageService.appendCoverage(publicId, it)
+
+                coverageService.getCoverage(publicId)
+            }
+
+            publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git, coverage, null)
         } catch (e: Exception) {
             val errorMessage = "Error appending test results: ${e.message}"
             logger.error(errorMessage, e)

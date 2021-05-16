@@ -66,8 +66,11 @@ class ResultsXmlLoader {
     fun cypressFailingAttachmentsTestWithScreenshot() = loadTextFromFile("cypress-file-path/cypress-failing-attachments-test-with-screenshot.xml")
 
     fun jestUi() = loadTextFromFile("jest/ui-junit.xml")
-
     fun jestUiFilePath() = loadTextFromFile("jest/ui-file-path-junit.xml")
+
+    fun jestCoverageFilesTable() = loadTextFromFile("jest-append/CoverageFilesTable-junit.xml")
+    fun jestCoverageGraph() = loadTextFromFile("jest-append/CoverageGraph-junit.xml")
+    fun jestCoverageTable() = loadTextFromFile("jest-append/CoverageTable-junit.xml")
 
     fun pytestFailing() = loadTextFromFile("pytest/pytest-failing.xml")
 
