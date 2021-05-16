@@ -4,6 +4,7 @@ import { CoverageFiles, TestRunGitMetadata } from "../model/TestRunModel";
 import CoverageGraph from "./CoverageGraph";
 import { Typography } from "@material-ui/core";
 import GitHubFileLink from "../VersionControl/GitHubFileLink";
+import CoverageFileMissedLines from "./CoverageFileMissedLines";
 
 interface CoverageFilesTableProps {
   coverageFiles: CoverageFiles;
@@ -117,23 +118,12 @@ const CoverageFilesTable = ({
               title: "Missed lines",
               field: "missedLines",
               render: (rowData) => (
-                <Typography
-                  data-testid={`coverage-file-missed-lines-${rowData.idx}`}
-                  variant="caption"
-                >
-                  {rowData.missedLines.map((missedLine, idx) => (
-                    <span>
-                      <GitHubFileLink
-                        gitMetadata={gitMetadata}
-                        filePath={rowData.filePath}
-                        linkText={missedLine.toString()}
-                        lineNumber={missedLine}
-                        testId={`coverage-file-${rowData.idx}-missed-line-link-${missedLine}`}
-                      />
-                      {idx < rowData.missedLines.length - 1 && <span>, </span>}
-                    </span>
-                  ))}
-                </Typography>
+                <CoverageFileMissedLines
+                  missedLines={rowData.missedLines}
+                  filePath={rowData.filePath}
+                  fileIdx={rowData.idx}
+                  gitMetadata={gitMetadata}
+                />
               ),
               cellStyle,
               headerStyle,
