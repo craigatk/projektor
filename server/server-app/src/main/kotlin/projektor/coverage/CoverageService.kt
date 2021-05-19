@@ -171,22 +171,47 @@ class CoverageService(
         val coverageRun = coverageRepository.createOrGetCoverageRun(publicId)
 
         coverageFiles.forEach { coverageFilePayload ->
-            val parsedReport = parseReport(coverageFilePayload)
+            val parsedReport = try {
+                parseReport(coverageFilePayload)
+            } catch (e: Exception) {
+                logger.info("Problem parsing coverage report", e)
+                metricsService.incrementCoverageParseFailureCounter()
+
+                processingFailureService.recordProcessingFailure(
+                    publicId = publicId,
+                    body = coverageFilePayload.reportContents,
+                    bodyType = FailureBodyType.COVERAGE,
+                    e = e
+                )
+                null
+            }
 
             if (parsedReport != null) {
                 val (incomingCoverageReport, incomingCoverageFiles) = parsedReport
 
-                val existingCoverageFiles = coverageRepository.fetchCoverageFiles(publicId, incomingCoverageReport.name)
+                try {
+                    val existingCoverageFiles = coverageRepository.fetchCoverageFiles(publicId, incomingCoverageReport.name)
 
-                val combinedCoverageFiles = combineCoverageFiles(existingCoverageFiles, incomingCoverageFiles)
+                    val combinedCoverageFiles = combineCoverageFiles(existingCoverageFiles, incomingCoverageFiles)
 
-                val coveredLines = combinedCoverageFiles.sumBy { it.stats.lineStat.covered }
-                val missedLines = combinedCoverageFiles.sumBy { it.stats.lineStat.missed }
-                val newLineStat = CoverageStat(covered = coveredLines, missed = missedLines, coveredPercentageDelta = null)
+                    val coveredLines = combinedCoverageFiles.sumBy { it.stats.lineStat.covered }
+                    val missedLines = combinedCoverageFiles.sumBy { it.stats.lineStat.missed }
+                    val newLineStat = CoverageStat(covered = coveredLines, missed = missedLines, coveredPercentageDelta = null)
 
-                val coverageGroup = coverageRepository.upsertCoverageGroup(coverageRun, incomingCoverageReport, newLineStat)
+                    val coverageGroup = coverageRepository.upsertCoverageGroup(coverageRun, incomingCoverageReport, newLineStat)
 
-                coverageRepository.upsertCoverageFiles(combinedCoverageFiles, coverageRun, coverageGroup)
+                    coverageRepository.upsertCoverageFiles(combinedCoverageFiles, coverageRun, coverageGroup)
+                } catch (e: Exception) {
+                    logger.error("Error saving coverage report", e)
+                    metricsService.incrementCoverageProcessFailureCounter()
+
+                    processingFailureService.recordProcessingFailure(
+                        publicId = publicId,
+                        body = coverageFilePayload.reportContents,
+                        bodyType = FailureBodyType.COVERAGE,
+                        e = e
+                    )
+                }
             }
         }
     }
