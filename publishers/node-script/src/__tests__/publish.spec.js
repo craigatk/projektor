@@ -11,13 +11,16 @@ const {
 
 describe("Projektor publisher", () => {
   let mockAxios;
+  let consoleLog;
 
   beforeEach(() => {
     mockAxios = new MockAdapter(axios);
+    consoleLog = jest.spyOn(console, "log").mockImplementation();
   });
 
   afterEach(() => {
     mockAxios.restore();
+    consoleLog.mockRestore();
   });
 
   it("should gather results from one directory and send it to server", (done) => {
@@ -96,6 +99,10 @@ describe("Projektor publisher", () => {
 
     expect(postData).toContain("resultsDir1-results1");
     expect(postData).toContain("resultsDir1-results2");
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "Gathering results from src/__tests__/resultsDir1/*.xml to send to Projektor server http://localhost:8080"
+    );
   });
 
   it("should include publish token in header when specified", async () => {

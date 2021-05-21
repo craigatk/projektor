@@ -4,13 +4,16 @@ const { collectAndSendResults } = require("../publish");
 
 describe("publish with coverage", () => {
   let mockAxios;
+  let consoleLog;
 
   beforeEach(() => {
     mockAxios = new MockAdapter(axios);
+    consoleLog = jest.spyOn(console, "log").mockImplementation();
   });
 
   afterEach(() => {
     mockAxios.restore();
+    consoleLog.mockRestore();
   });
 
   it("should publish results with coverage to server all with token", async () => {
@@ -55,10 +58,6 @@ describe("publish with coverage", () => {
       .onPost("http://localhost:8080/groupedResults")
       .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
 
-    mockAxios
-      .onPost("http://localhost:8080/run/ABC123/coverageFile")
-      .reply(200);
-
     const publishToken = "myPublishToken";
 
     await collectAndSendResults(
@@ -88,6 +87,49 @@ describe("publish with coverage", () => {
     expect(resultsPostBody.coverageFiles.length).toBe(1);
     expect(resultsPostBody.coverageFiles[0].baseDirectoryPath).toEqual(
       "base/dir"
+    );
+  });
+
+  it("should log message with coverage file globs", async () => {
+    const fileGlob = "src/__tests__/resultsDir1/*.xml";
+    const coverageGlobs = [
+      "src/__tests__/coverageDir1/*.xml",
+      "src/__tests__/coverageDir2/*.xml",
+    ];
+    const serverUrl = "http://localhost:8080";
+
+    mockAxios
+      .onPost("http://localhost:8080/groupedResults")
+      .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
+
+    await collectAndSendResults(
+      serverUrl,
+      null,
+      [fileGlob],
+      null,
+      coverageGlobs,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      false,
+      null
+    );
+
+    const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
+      postRequest.url.includes("groupedResults")
+    );
+    const resultsPostData = resultsPostRequest.data;
+    const resultsPostBody = JSON.parse(resultsPostData);
+
+    expect(resultsPostBody.coverageFiles.length).toBe(2);
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "Gathering results from src/__tests__/resultsDir1/*.xml and coverage from src/__tests__/coverageDir1/*.xml,src/__tests__/coverageDir2/*.xml to send to Projektor server http://localhost:8080"
     );
   });
 });
