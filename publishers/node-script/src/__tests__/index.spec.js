@@ -20,6 +20,7 @@ describe("node script index", () => {
   afterEach(() => {
     mockAxios.restore();
     consoleError.mockRestore();
+    consoleLog.mockRestore();
   });
 
   it("should use settings from projektor.json if there is one", async () => {

@@ -111,6 +111,22 @@ const sendResults = async (
   return resp.data;
 };
 
+const createResultsLogMessage = (
+  resultsFileGlobs,
+  coverageFileGlobs,
+  serverUrl
+) => {
+  let message = `Gathering results from ${resultsFileGlobs}`;
+
+  if (coverageFileGlobs) {
+    message += ` and coverage from ${coverageFileGlobs}`;
+  }
+
+  message += ` to send to Projektor server ${serverUrl}`;
+
+  return message;
+};
+
 const collectAndSendResults = async (
   serverUrl,
   publishToken,
@@ -131,7 +147,7 @@ const collectAndSendResults = async (
   attachmentMaxSizeMB
 ) => {
   console.log(
-    `Gathering results from ${resultsFileGlobs} to send to Projektor server ${serverUrl}`
+    createResultsLogMessage(resultsFileGlobs, coverageFileGlobs, serverUrl)
   );
 
   const resultsBlob = collectResults(resultsFileGlobs);
