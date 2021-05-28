@@ -67,6 +67,7 @@ open class ApplicationTestCase {
 
     lateinit var coverageRunDao: CodeCoverageRunDao
     lateinit var coverageGroupDao: CodeCoverageGroupDao
+    lateinit var coverageFileDao: CodeCoverageFileDao
     lateinit var coverageStatsDao: CodeCoverageStatsDao
     lateinit var coverageService: CoverageService
 
@@ -173,6 +174,7 @@ open class ApplicationTestCase {
 
         coverageRunDao = CodeCoverageRunDao(dslContext.configuration())
         coverageGroupDao = CodeCoverageGroupDao(dslContext.configuration())
+        coverageFileDao = CodeCoverageFileDao(dslContext.configuration())
         coverageStatsDao = CodeCoverageStatsDao(dslContext.configuration())
 
         val coverageRepository: CoverageRepository = application.get()

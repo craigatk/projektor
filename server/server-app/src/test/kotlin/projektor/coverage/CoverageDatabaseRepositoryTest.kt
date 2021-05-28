@@ -263,10 +263,11 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
         val newLineStat = CoverageStat(covered = 8, missed = 1)
 
-        val newCoverageGroup = runBlocking { coverageDatabaseRepository.upsertCoverageGroup(coverageRun, coverageReport, newLineStat) }
+        val (newCoverageGroup, coverageGroupStatus) = runBlocking { coverageDatabaseRepository.upsertCoverageGroup(coverageRun, coverageReport, newLineStat) }
         expectThat(newCoverageGroup) {
             get { name }.isEqualTo("my-report")
         }
+        expectThat(coverageGroupStatus).isEqualTo(CoverageGroupStatus.NEW)
 
         val newCoverageGroupsFromDB = runBlocking { coverageGroupDao.fetchByCodeCoverageRunId(coverageRun.id) }
         expectThat(newCoverageGroupsFromDB).hasSize(1).any {

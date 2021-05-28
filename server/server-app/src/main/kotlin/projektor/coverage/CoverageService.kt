@@ -198,9 +198,17 @@ class CoverageService(
                     val missedLines = combinedCoverageFiles.sumBy { it.stats.lineStat.missed }
                     val newLineStat = CoverageStat(covered = coveredLines, missed = missedLines, coveredPercentageDelta = null)
 
-                    val coverageGroup = coverageRepository.upsertCoverageGroup(coverageRun, incomingCoverageReport, newLineStat)
+                    val (coverageGroup, coverageGroupStatus) = coverageRepository.upsertCoverageGroup(coverageRun, incomingCoverageReport, newLineStat)
 
-                    coverageRepository.upsertCoverageFiles(combinedCoverageFiles, coverageRun, coverageGroup)
+                    if (coverageGroupStatus == CoverageGroupStatus.NEW) {
+                        coverageRepository.insertCoverageFiles(
+                            incomingCoverageFiles,
+                            coverageRun,
+                            coverageGroup,
+                        )
+                    } else {
+                        coverageRepository.upsertCoverageFiles(combinedCoverageFiles, coverageRun, coverageGroup)
+                    }
                 } catch (e: Exception) {
                     logger.error("Error saving coverage report", e)
                     metricsService.incrementCoverageProcessFailureCounter()

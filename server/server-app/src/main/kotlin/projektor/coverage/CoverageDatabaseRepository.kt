@@ -89,7 +89,7 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
         coverageRun: CodeCoverageRun,
         coverageReport: CoverageReport,
         newLineStat: CoverageStat
-    ): CodeCoverageGroup = withContext(Dispatchers.IO) {
+    ): Pair<CodeCoverageGroup, CoverageGroupStatus> = withContext(Dispatchers.IO) {
         val existingCoverageGroup = dslContext
             .selectFrom(CODE_COVERAGE_GROUP)
             .where(
@@ -99,7 +99,7 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
             .fetchOneInto(CodeCoverageGroup::class.java)
 
         if (existingCoverageGroup == null) {
-            addCoverageReport(coverageRun, coverageReport)
+            Pair(addCoverageReport(coverageRun, coverageReport), CoverageGroupStatus.NEW)
         } else {
             val codeCoverageStatsDao = CodeCoverageStatsDao(dslContext.configuration())
             val existingGroupStats = codeCoverageStatsDao.fetchOneById(existingCoverageGroup.statsId)
@@ -112,7 +112,7 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
             existingGroupStats.statementMissed = 0
             codeCoverageStatsDao.update(existingGroupStats)
 
-            existingCoverageGroup
+            Pair(existingCoverageGroup, CoverageGroupStatus.EXISTING)
         }
     }
 

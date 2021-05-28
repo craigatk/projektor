@@ -20,7 +20,7 @@ interface CoverageRepository {
         coverageRun: CodeCoverageRun,
         coverageReport: CoverageReport,
         newLineStat: CoverageStat
-    ): CodeCoverageGroup
+    ): Pair<CodeCoverageGroup, CoverageGroupStatus>
 
     suspend fun insertCoverageFiles(
         coverageReportFiles: List<CoverageFile>,

@@ -15,6 +15,8 @@ import projektor.util.ungzip
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
+import strikt.assertions.isNull
 import kotlin.test.assertNotNull
 
 @KtorExperimentalAPI
@@ -42,6 +44,7 @@ class GetTestRunCompressionApplicationTest : ApplicationTestCase() {
                 addHeader(HttpHeaders.AcceptEncoding, "gzip")
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+                expectThat(response.headers[HttpHeaders.ContentLength]).isNull()
 
                 val responseBytes = response.byteContent
                 assertNotNull(responseBytes)
@@ -64,10 +67,10 @@ class GetTestRunCompressionApplicationTest : ApplicationTestCase() {
     fun `when gzip accept header included but request tiny should not compress test run response`() {
         val publicId = randomPublicId()
 
-        val testSuiteCount = 2
+        val testSuiteCount = 1
 
         withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/run/$publicId") {
+            val result = handleRequest(HttpMethod.Get, "/run/$publicId") {
                 testRunDBGenerator.createTestRun(
                     publicId,
                     (1..testSuiteCount).map {
@@ -81,18 +84,21 @@ class GetTestRunCompressionApplicationTest : ApplicationTestCase() {
                 )
 
                 addHeader(HttpHeaders.AcceptEncoding, "gzip")
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
-
-                val responseRun = objectMapper.readValue(response.content, TestRun::class.java)
-                assertNotNull(responseRun)
-
-                expectThat(responseRun.id).isEqualTo(publicId.id)
-
-                val testSuites = responseRun.testSuites
-                assertNotNull(testSuites)
-                expectThat(testSuites).hasSize(testSuiteCount)
             }
+
+            val response = result.response
+
+            expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+            expectThat(response.headers[HttpHeaders.ContentLength]).isNotNull()
+
+            val responseRun = objectMapper.readValue(response.content, TestRun::class.java)
+            assertNotNull(responseRun)
+
+            expectThat(responseRun.id).isEqualTo(publicId.id)
+
+            val testSuites = responseRun.testSuites
+            assertNotNull(testSuites)
+            expectThat(testSuites).hasSize(testSuiteCount)
         }
     }
 }
