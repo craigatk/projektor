@@ -11,7 +11,6 @@ import strikt.assertions.get
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
-@KtorExperimentalAPI
 class AttachmentDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
     @Test

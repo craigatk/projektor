@@ -8,7 +8,6 @@ import io.ktor.util.*
 import projektor.badge.CoverageBadgeService
 import projektor.server.api.PublicId
 
-@KtorExperimentalAPI
 fun Route.badge(coverageBadgeService: CoverageBadgeService) {
     get("/run/{publicId}/badge/coverage") {
         val publicId = call.parameters.getOrFail("publicId")

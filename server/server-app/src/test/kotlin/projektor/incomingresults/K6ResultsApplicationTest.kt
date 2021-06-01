@@ -16,7 +16,6 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
-@KtorExperimentalAPI
 class K6ResultsApplicationTest : ApplicationTestCase() {
     @Test
     fun `should save results from k6 run to database`() {

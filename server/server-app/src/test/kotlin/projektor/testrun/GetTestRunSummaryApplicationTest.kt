@@ -2,7 +2,6 @@ package projektor.testrun
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -15,7 +14,6 @@ import java.time.LocalDateTime
 import kotlin.test.assertNotNull
 import projektor.database.generated.tables.pojos.TestRun as TestRunDB
 
-@KtorExperimentalAPI
 class GetTestRunSummaryApplicationTest : ApplicationTestCase() {
     @Test
     fun shouldFetchTestRunSummaryFromDatabase() {

@@ -15,7 +15,6 @@ import strikt.assertions.isEqualTo
 import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class RepositoryTestRunTimelineApplicationTest : ApplicationTestCase() {
     @Test
     fun `should fetch test run timeline without project name`() {

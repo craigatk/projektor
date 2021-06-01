@@ -12,7 +12,6 @@ import io.ktor.application.Application
 import io.ktor.config.MapApplicationConfig
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.KtorExperimentalAPI
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
@@ -38,7 +37,6 @@ import strikt.assertions.isEqualTo
 import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 open class ApplicationTestCase {
     val cloverXmlLoader = CloverXmlLoader()
     val resultsXmlLoader = ResultsXmlLoader()

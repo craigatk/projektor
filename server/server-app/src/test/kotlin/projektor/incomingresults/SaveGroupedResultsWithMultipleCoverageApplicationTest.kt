@@ -16,7 +16,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import java.math.BigDecimal
 
-@KtorExperimentalAPI
 class SaveGroupedResultsWithMultipleCoverageApplicationTest : ApplicationTestCase() {
 
     @Test

@@ -14,7 +14,6 @@ import strikt.api.expectThat
 import strikt.assertions.*
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class CypressResultsWithFileNameApplicationTest : ApplicationTestCase() {
     @Test
     fun `should save Cypress file path as package name`() {

@@ -3,14 +3,12 @@ package projektor.metrics
 import io.ktor.http.HttpMethod
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.*
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
 
-@KtorExperimentalAPI
 class MetricsApplicationTest : ApplicationTestCase() {
 
     @BeforeEach

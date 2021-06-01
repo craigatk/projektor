@@ -15,7 +15,6 @@ import strikt.assertions.isEqualTo
 import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class ComparePreviousCoverageApplicationTest : ApplicationTestCase() {
     @Test
     fun `when coverage went down should compare coverage with previous test run`() {

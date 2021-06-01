@@ -12,7 +12,6 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import java.math.BigDecimal
 
-@KtorExperimentalAPI
 class PerformanceResultsDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
     @Test

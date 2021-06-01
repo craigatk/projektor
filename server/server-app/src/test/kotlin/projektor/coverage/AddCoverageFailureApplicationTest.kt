@@ -15,7 +15,6 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
-@KtorExperimentalAPI
 class AddCoverageFailureApplicationTest : ApplicationTestCase() {
     @Test
     fun `when adding coverage fails should record failure`() {

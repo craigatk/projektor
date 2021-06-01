@@ -11,7 +11,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isFalse
 import strikt.assertions.isTrue
 
-@KtorExperimentalAPI
 class PythonResultsApplicationTest : ApplicationTestCase() {
     @Test
     fun `should save passing pytest results`() {

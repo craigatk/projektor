@@ -16,7 +16,6 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 import java.time.LocalDateTime
 
-@KtorExperimentalAPI
 class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     private val resultsProcessingDatabaseRepository by inject<ResultsProcessingRepository>()
 

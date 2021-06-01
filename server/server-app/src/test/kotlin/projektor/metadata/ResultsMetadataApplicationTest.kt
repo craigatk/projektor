@@ -12,7 +12,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isTrue
 
-@KtorExperimentalAPI
 class ResultsMetadataApplicationTest : ApplicationTestCase() {
     @Test
     fun `should get results metadata`() {

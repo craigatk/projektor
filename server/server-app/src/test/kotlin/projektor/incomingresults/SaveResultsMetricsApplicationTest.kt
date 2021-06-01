@@ -13,7 +13,6 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class SaveResultsMetricsApplicationTest : ApplicationTestCase() {
     @Test
     fun `should record success metric when saving grouped test results succeeds`() {

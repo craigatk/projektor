@@ -4,7 +4,6 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.database.generated.tables.pojos.TestRunSystemAttributes
@@ -16,7 +15,6 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isTrue
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
     @Test
     fun `should fetch test run attributes`() {

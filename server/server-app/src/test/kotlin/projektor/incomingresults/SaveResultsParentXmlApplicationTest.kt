@@ -2,7 +2,6 @@ package projektor.incomingresults
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import strikt.api.expectThat
@@ -10,7 +9,6 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class SaveResultsParentXmlApplicationTest : ApplicationTestCase() {
     @Test
     fun shouldParseRequestAndSaveResultsWithMultipleResultsWrappedInParentXmlTest() {

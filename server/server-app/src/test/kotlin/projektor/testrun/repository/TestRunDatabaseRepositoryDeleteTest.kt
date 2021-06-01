@@ -13,7 +13,6 @@ import strikt.assertions.doesNotContain
 import strikt.assertions.isNull
 import java.time.LocalDate
 
-@KtorExperimentalAPI
 class TestRunDatabaseRepositoryDeleteTest : DatabaseRepositoryTestCase() {
 
     @Test

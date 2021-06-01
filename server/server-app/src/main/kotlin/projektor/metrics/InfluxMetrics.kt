@@ -1,12 +1,10 @@
 package projektor.metrics
 
-import io.ktor.util.KtorExperimentalAPI
 import io.micrometer.core.instrument.Clock
 import io.micrometer.influx.InfluxConfig
 import io.micrometer.influx.InfluxMeterRegistry
 import java.time.Duration
 
-@KtorExperimentalAPI
 fun createRegistry(config: InfluxMetricsConfig): InfluxMeterRegistry {
 
     val registryConfig: InfluxConfig = object : InfluxConfig {

@@ -3,7 +3,6 @@ package projektor.versioncontrol
 import io.ktor.config.*
 import io.ktor.util.*
 
-@KtorExperimentalAPI
 data class VersionControlConfig(
     val gitHubBaseUrl: String?
 ) {

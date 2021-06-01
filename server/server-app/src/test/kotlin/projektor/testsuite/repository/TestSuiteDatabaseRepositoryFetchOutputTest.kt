@@ -11,7 +11,6 @@ import projektor.testsuite.TestSuiteDatabaseRepository
 import strikt.api.expectThat
 import strikt.assertions.*
 
-@KtorExperimentalAPI
 class TestSuiteDatabaseRepositoryFetchOutputTest : DatabaseRepositoryTestCase() {
 
     @Test

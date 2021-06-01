@@ -13,7 +13,6 @@ import strikt.assertions.contains
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
-@KtorExperimentalAPI
 class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
     @Test
     fun `should create coverage badge for repository`() {

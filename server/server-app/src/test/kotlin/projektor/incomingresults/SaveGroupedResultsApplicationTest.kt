@@ -5,7 +5,6 @@ import io.ktor.http.HttpMethod
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.*
@@ -17,7 +16,6 @@ import strikt.assertions.hasSize
 import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
 
     @Test

@@ -17,7 +17,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class AddCoverageFileCompressedApplicationTest : ApplicationTestCase() {
     private val coveragePayloadParser = CoveragePayloadParser()
 

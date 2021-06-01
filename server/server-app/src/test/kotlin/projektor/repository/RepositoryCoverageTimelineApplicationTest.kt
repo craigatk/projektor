@@ -19,7 +19,6 @@ import java.time.ZoneOffset
 import java.util.*
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
     init {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"))

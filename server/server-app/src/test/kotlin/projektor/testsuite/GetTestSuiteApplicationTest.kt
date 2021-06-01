@@ -2,7 +2,6 @@ package projektor.testsuite
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -19,7 +18,6 @@ import strikt.assertions.isNull
 import kotlin.test.assertNotNull
 import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 
-@KtorExperimentalAPI
 class GetTestSuiteApplicationTest : ApplicationTestCase() {
     @Test
     fun `should fetch test suites from database`() {

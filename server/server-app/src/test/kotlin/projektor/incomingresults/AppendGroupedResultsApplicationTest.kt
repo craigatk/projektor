@@ -5,7 +5,6 @@ import io.ktor.http.*
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.apache.commons.lang3.RandomStringUtils
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
@@ -25,7 +24,6 @@ import strikt.assertions.isFalse
 import strikt.assertions.isTrue
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class AppendGroupedResultsApplicationTest : ApplicationTestCase() {
 
     @Test

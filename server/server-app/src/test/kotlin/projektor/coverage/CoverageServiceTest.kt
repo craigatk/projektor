@@ -19,7 +19,6 @@ import strikt.api.expectThat
 import strikt.assertions.*
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class CoverageServiceTest : DatabaseRepositoryTestCase() {
     @Test
     fun `when saving coverage fails should record metric`() {

@@ -13,7 +13,6 @@ import strikt.api.expectThat
 import strikt.assertions.isNotEmpty
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class GroupedTestResultsServiceTest : DatabaseRepositoryTestCase() {
 
     @Test

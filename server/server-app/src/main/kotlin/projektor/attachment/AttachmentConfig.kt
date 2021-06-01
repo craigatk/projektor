@@ -1,10 +1,8 @@
 package projektor.attachment
 
 import io.ktor.config.ApplicationConfig
-import io.ktor.util.KtorExperimentalAPI
 import java.math.BigDecimal
 
-@KtorExperimentalAPI
 data class AttachmentConfig(
     val url: String,
     val bucketName: String,

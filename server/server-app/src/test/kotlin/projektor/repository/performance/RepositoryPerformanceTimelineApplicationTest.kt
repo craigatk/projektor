@@ -20,7 +20,6 @@ import java.math.BigDecimal
 import java.util.*
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class RepositoryPerformanceTimelineApplicationTest : ApplicationTestCase() {
     init {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"))

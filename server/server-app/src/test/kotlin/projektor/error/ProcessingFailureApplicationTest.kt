@@ -17,7 +17,6 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class ProcessingFailureApplicationTest : ApplicationTestCase() {
 
     @Test

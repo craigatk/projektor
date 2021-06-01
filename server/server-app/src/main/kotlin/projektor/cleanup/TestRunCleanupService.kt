@@ -1,6 +1,5 @@
 package projektor.cleanup
 
-import io.ktor.util.KtorExperimentalAPI
 import org.slf4j.LoggerFactory
 import projektor.attachment.AttachmentService
 import projektor.coverage.CoverageService
@@ -11,7 +10,6 @@ import projektor.testrun.TestRunRepository
 import java.lang.Exception
 import java.time.LocalDate
 
-@KtorExperimentalAPI
 class TestRunCleanupService(
     private val cleanupConfig: CleanupConfig,
     private val testRunRepository: TestRunRepository,

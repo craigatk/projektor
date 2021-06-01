@@ -5,7 +5,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -19,7 +18,6 @@ import strikt.assertions.isNotNull
 import java.io.File
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class ListAttachmentsApplicationTest : ApplicationTestCase() {
     @Test
     fun `should add attachments to test run then list them`() {

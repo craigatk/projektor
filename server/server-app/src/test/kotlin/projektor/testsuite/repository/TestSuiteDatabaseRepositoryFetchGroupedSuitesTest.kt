@@ -12,7 +12,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 
-@KtorExperimentalAPI
 class TestSuiteDatabaseRepositoryFetchGroupedSuitesTest : DatabaseRepositoryTestCase() {
 
     @Test

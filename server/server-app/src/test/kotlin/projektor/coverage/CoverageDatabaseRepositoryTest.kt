@@ -17,7 +17,6 @@ import strikt.assertions.*
 import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
     @Test

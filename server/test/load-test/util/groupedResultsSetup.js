@@ -4,7 +4,7 @@ import { sleep } from "k6";
 
 export const createSetup = (resultsPayload, sleepTime) => () => {
     const resultsResponse = http.post(
-        `http://localhost:8080/groupedResults/`,
+        `http://localhost:8080/groupedResults`,
         resultsPayload,
         resultsParams
     );

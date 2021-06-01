@@ -1,9 +1,7 @@
 package projektor.cleanup
 
 import io.ktor.config.ApplicationConfig
-import io.ktor.util.KtorExperimentalAPI
 
-@KtorExperimentalAPI
 data class CleanupConfig(
     val maxReportAgeDays: Int?,
     val maxAttachmentAgeDays: Int?,

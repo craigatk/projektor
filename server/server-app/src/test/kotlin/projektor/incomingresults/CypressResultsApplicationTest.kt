@@ -2,7 +2,6 @@ package projektor.incomingresults
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.ktor.ext.get
@@ -16,7 +15,6 @@ import strikt.assertions.isNotEmpty
 import strikt.assertions.isTrue
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class CypressResultsApplicationTest : ApplicationTestCase() {
     @Test
     fun shouldSaveCypressResultsAndReadThemBackFromDatabase() {

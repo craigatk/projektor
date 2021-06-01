@@ -13,7 +13,6 @@ import strikt.assertions.isEqualTo
 import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class RepositoryTestRunDatabaseRepositoryTimelineTest : DatabaseRepositoryTestCase() {
 
     @Test

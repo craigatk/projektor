@@ -14,7 +14,6 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
-@KtorExperimentalAPI
 class JestResultsWithFilePathApplicationTest : ApplicationTestCase() {
     @Test
     fun `should parse readable package and class names from Jest results when they include the file path`() {

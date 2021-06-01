@@ -2,7 +2,6 @@ package projektor.incomingresults
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.KtorExperimentalAPI
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
@@ -16,7 +15,6 @@ import strikt.assertions.*
 import java.time.LocalDateTime
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class GetProcessingResultsApplicationTest : ApplicationTestCase() {
     @Test
     fun `should get processing results after parsing saving test results`() {

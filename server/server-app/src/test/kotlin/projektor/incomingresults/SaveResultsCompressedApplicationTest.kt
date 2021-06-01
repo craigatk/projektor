@@ -2,7 +2,6 @@ package projektor.incomingresults
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.util.gzip
@@ -10,7 +9,6 @@ import strikt.api.expectThat
 import strikt.assertions.*
 import java.math.BigDecimal
 
-@KtorExperimentalAPI
 class SaveResultsCompressedApplicationTest : ApplicationTestCase() {
     @Test
     fun `should uncompress gzipped results and save them`() {

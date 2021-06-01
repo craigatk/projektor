@@ -13,7 +13,6 @@ import strikt.assertions.isNotNull
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
-@KtorExperimentalAPI
 class TestRunDatabaseRepositoryFetchSummaryTest : DatabaseRepositoryTestCase() {
 
     @Test

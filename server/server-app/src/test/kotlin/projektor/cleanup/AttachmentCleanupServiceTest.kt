@@ -13,7 +13,6 @@ import strikt.assertions.hasSize
 import strikt.assertions.isNotNull
 import java.time.LocalDate
 
-@KtorExperimentalAPI
 class AttachmentCleanupServiceTest : DatabaseRepositoryTestCase() {
 
     init {

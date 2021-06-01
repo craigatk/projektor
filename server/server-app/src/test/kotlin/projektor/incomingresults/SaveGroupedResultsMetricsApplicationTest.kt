@@ -15,7 +15,6 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class SaveGroupedResultsMetricsApplicationTest : ApplicationTestCase() {
 
     @Test

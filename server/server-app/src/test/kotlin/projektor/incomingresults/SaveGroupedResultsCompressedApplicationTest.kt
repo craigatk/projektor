@@ -5,7 +5,6 @@ import io.ktor.http.HttpMethod
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.parser.GroupedResultsXmlLoader
@@ -13,7 +12,6 @@ import projektor.util.gzip
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 
-@KtorExperimentalAPI
 class SaveGroupedResultsCompressedApplicationTest : ApplicationTestCase() {
     @Test
     fun `should save compressed grouped test results`() {

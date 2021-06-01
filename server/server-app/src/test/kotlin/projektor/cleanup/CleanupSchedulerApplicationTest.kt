@@ -1,7 +1,6 @@
 package projektor.cleanup
 
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import org.koin.ktor.ext.get
 import projektor.ApplicationTestCase
@@ -17,7 +16,6 @@ import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class CleanupSchedulerApplicationTest : ApplicationTestCase() {
     @Test
     fun `when report cleanup enabled should schedule cleanup job`() {

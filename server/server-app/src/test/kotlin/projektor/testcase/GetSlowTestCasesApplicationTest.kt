@@ -5,7 +5,6 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.*
 import projektor.incomingresults.randomPublicId
@@ -17,7 +16,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.map
 import java.math.BigDecimal
 
-@KtorExperimentalAPI
 class GetSlowTestCasesApplicationTest : ApplicationTestCase() {
     @Test
     fun `should fetch slow test cases from database`() {

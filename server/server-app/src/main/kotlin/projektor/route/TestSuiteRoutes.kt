@@ -5,13 +5,11 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
-import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.getOrFail
 import projektor.server.api.PublicId
 import projektor.testsuite.TestSuiteSearchCriteria
 import projektor.testsuite.TestSuiteService
 
-@KtorExperimentalAPI
 fun Route.testSuites(testSuiteService: TestSuiteService) {
     get("/run/{publicId}/suite/{testSuiteIdx}/systemErr") {
         val publicId = call.parameters.getOrFail("publicId")

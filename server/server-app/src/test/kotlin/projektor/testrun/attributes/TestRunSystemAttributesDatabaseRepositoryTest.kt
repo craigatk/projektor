@@ -12,7 +12,6 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 import strikt.assertions.isTrue
 
-@KtorExperimentalAPI
 class TestRunSystemAttributesDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
     @Test

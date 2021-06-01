@@ -17,7 +17,6 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 import projektor.incomingresults.model.PerformanceResult as IncomingPerformanceResult
 
-@KtorExperimentalAPI
 class GetPerformanceResultsApplicationTest : ApplicationTestCase() {
     @Test
     fun `when performance results should return them`() {

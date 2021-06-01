@@ -20,7 +20,6 @@ import strikt.api.expectThat
 import strikt.assertions.*
 import java.math.BigDecimal
 
-@KtorExperimentalAPI
 class AppendCoverageApplicationTest : ApplicationTestCase() {
     @Test
     fun `should append three Jest test runs with coverage`() {

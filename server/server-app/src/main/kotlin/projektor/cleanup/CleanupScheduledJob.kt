@@ -1,6 +1,5 @@
 package projektor.cleanup
 
-import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import projektor.schedule.ScheduleDelay
@@ -8,7 +7,6 @@ import projektor.schedule.ScheduledJob
 import projektor.schedule.Scheduler
 import java.util.concurrent.TimeUnit
 
-@KtorExperimentalAPI
 class CleanupScheduledJob(
     private val testRunCleanupService: TestRunCleanupService,
     private val attachmentCleanupService: AttachmentCleanupService?

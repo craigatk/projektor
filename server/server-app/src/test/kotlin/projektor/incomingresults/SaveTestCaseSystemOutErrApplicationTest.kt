@@ -15,7 +15,6 @@ import projektor.testsuite.TestSuiteService
 import strikt.api.expectThat
 import strikt.assertions.*
 
-@KtorExperimentalAPI
 class SaveTestCaseSystemOutErrApplicationTest : ApplicationTestCase() {
     @Test
     fun `should save system out and err at the test case level`() {

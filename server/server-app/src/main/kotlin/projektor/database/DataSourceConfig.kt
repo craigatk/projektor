@@ -3,7 +3,6 @@ package projektor.database
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.config.ApplicationConfig
-import io.ktor.util.KtorExperimentalAPI
 import io.micrometer.core.instrument.MeterRegistry
 import org.flywaydb.core.Flyway
 import org.jooq.DSLContext
@@ -14,7 +13,6 @@ import org.jooq.conf.Settings
 import org.jooq.impl.DSL
 import javax.sql.DataSource
 
-@KtorExperimentalAPI
 data class DataSourceConfig(
     val jdbcUrl: String,
     val username: String,
