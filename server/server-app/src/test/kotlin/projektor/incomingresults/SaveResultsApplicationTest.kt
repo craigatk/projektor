@@ -2,7 +2,6 @@ package projektor.incomingresults
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.KtorExperimentalAPI
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
 import org.junit.jupiter.api.*
@@ -13,7 +12,6 @@ import strikt.assertions.*
 import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class SaveResultsApplicationTest : ApplicationTestCase() {
 
     @Test

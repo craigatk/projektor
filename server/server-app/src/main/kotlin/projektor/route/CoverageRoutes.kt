@@ -7,7 +7,6 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
-import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.getOrFail
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
@@ -19,7 +18,6 @@ import projektor.server.api.coverage.CoverageExists
 import projektor.server.api.coverage.CoverageFiles
 import projektor.server.api.coverage.SaveCoverageError
 
-@KtorExperimentalAPI
 fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
     post("/run/{publicId}/coverage") {
         val publicId = call.parameters.getOrFail("publicId")

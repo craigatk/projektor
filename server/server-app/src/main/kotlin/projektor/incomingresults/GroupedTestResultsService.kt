@@ -1,7 +1,6 @@
 package projektor.incomingresults
 
 import com.fasterxml.jackson.core.JsonProcessingException
-import io.ktor.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +19,6 @@ import projektor.server.api.performance.PerformanceResult
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.testrun.TestRunRepository
 
-@KtorExperimentalAPI
 class GroupedTestResultsService(
     private val testResultsProcessingService: TestResultsProcessingService,
     private val groupedResultsConverter: GroupedResultsConverter,

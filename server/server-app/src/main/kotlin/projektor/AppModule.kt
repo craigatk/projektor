@@ -1,7 +1,6 @@
 package projektor
 
 import com.zaxxer.hikari.HikariDataSource
-import io.ktor.util.KtorExperimentalAPI
 import io.micrometer.core.instrument.MeterRegistry
 import org.jooq.DSLContext
 import org.koin.dsl.module
@@ -66,7 +65,6 @@ import projektor.testsuite.TestSuiteDatabaseRepository
 import projektor.testsuite.TestSuiteRepository
 import projektor.testsuite.TestSuiteService
 
-@KtorExperimentalAPI
 fun createAppModule(
     dataSource: HikariDataSource,
     authConfig: AuthConfig,

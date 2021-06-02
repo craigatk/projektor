@@ -19,7 +19,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class OrganizationCoverageApplicationTest : ApplicationTestCase() {
     @Test
     fun `when three repos in org should find their coverage data`() {

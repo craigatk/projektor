@@ -15,7 +15,6 @@ import strikt.assertions.isEqualTo
 import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class AddCoverageCompressedApplicationTest : ApplicationTestCase() {
     @Test
     fun `should save compressed coverage results`() {

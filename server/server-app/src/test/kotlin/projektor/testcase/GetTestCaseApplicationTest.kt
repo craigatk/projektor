@@ -2,7 +2,6 @@ package projektor.testcase
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.*
 import projektor.incomingresults.randomPublicId
@@ -13,7 +12,6 @@ import strikt.assertions.isFalse
 import strikt.assertions.isNotNull
 import strikt.assertions.isTrue
 
-@KtorExperimentalAPI
 class GetTestCaseApplicationTest : ApplicationTestCase() {
     @Test
     fun `should fetch test case from database`() {

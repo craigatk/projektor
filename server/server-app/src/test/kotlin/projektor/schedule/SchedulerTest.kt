@@ -14,7 +14,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
 @ExperimentalTime
-@KtorExperimentalAPI
+
 class SchedulerTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should run scheduled job`() {

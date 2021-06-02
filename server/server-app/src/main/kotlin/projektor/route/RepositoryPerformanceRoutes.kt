@@ -7,7 +7,6 @@ import io.ktor.routing.*
 import io.ktor.util.*
 import projektor.repository.performance.RepositoryPerformanceService
 
-@KtorExperimentalAPI
 fun Route.repositoryPerformance(repositoryPerformanceService: RepositoryPerformanceService) {
     get("/repo/{orgPart}/{repoPart}/performance/timeline") {
         val orgPart = call.parameters.getOrFail("orgPart")

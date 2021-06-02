@@ -12,7 +12,6 @@ import projektor.server.api.repository.BranchType
 import strikt.api.expectThat
 import strikt.assertions.*
 
-@KtorExperimentalAPI
 class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTestCase() {
 
     @Test

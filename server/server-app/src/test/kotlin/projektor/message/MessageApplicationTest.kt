@@ -4,7 +4,6 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -15,7 +14,6 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class MessageApplicationTest : ApplicationTestCase() {
 
     @Test

@@ -5,12 +5,10 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
-import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.getOrFail
 import projektor.message.MessageService
 import projektor.server.api.PublicId
 
-@KtorExperimentalAPI
 fun Route.messages(messageService: MessageService) {
     get("/run/{publicId}/messages") {
         val publicId = call.parameters.getOrFail("publicId")

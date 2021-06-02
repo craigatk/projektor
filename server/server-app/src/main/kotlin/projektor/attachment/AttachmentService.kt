@@ -1,6 +1,5 @@
 package projektor.attachment
 
-import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import projektor.objectstore.ObjectStoreClient
@@ -11,7 +10,6 @@ import projektor.server.api.attachments.Attachment
 import java.io.InputStream
 import java.math.BigDecimal
 
-@KtorExperimentalAPI
 class AttachmentService(
     private val config: AttachmentConfig,
     private val attachmentRepository: AttachmentRepository

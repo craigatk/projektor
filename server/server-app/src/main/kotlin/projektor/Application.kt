@@ -15,7 +15,6 @@ import io.ktor.jackson.jackson
 import io.ktor.metrics.micrometer.MicrometerMetrics
 import io.ktor.request.path
 import io.ktor.routing.routing
-import io.ktor.util.KtorExperimentalAPI
 import io.micrometer.core.instrument.MeterRegistry
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
@@ -60,6 +59,7 @@ import projektor.repository.performance.RepositoryPerformanceService
 import projektor.repository.testrun.RepositoryTestRunService
 import projektor.route.*
 import projektor.schedule.Scheduler
+import projektor.telemetry.OpenTelemetryRoute
 import projektor.testcase.TestCaseService
 import projektor.testrun.TestRunRepository
 import projektor.testrun.TestRunService
@@ -67,7 +67,6 @@ import projektor.testrun.attributes.TestRunSystemAttributesService
 import projektor.testsuite.TestSuiteService
 import projektor.versioncontrol.VersionControlConfig
 
-@KtorExperimentalAPI
 fun Application.main(meterRegistry: MeterRegistry? = null) {
     val applicationConfig = environment.config
 
@@ -148,9 +147,9 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     install(Compression) {
         gzip {
             matchContentType(ContentType.Application.Json, ContentType.Application.JavaScript)
-            minimumSize(1024)
         }
     }
+    install(OpenTelemetryRoute)
 
     val authService: AuthService by inject()
     val messageService: MessageService by inject()
@@ -212,14 +211,12 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     }
 }
 
-@KtorExperimentalAPI
 private fun conditionallyCreateAttachmentService(applicationConfig: ApplicationConfig, attachmentRepository: AttachmentRepository): AttachmentService? =
     if (AttachmentConfig.attachmentsEnabled(applicationConfig))
         AttachmentService(AttachmentConfig.createAttachmentConfig(applicationConfig), attachmentRepository)
     else
         null
 
-@KtorExperimentalAPI
 private fun conditionallyCreateGitHubCommentService(applicationConfig: ApplicationConfig): GitHubCommentService? {
     val gitHubNotificationConfig = GitHubNotificationConfig.createGitHubNotificationConfig(applicationConfig)
     val (gitHubApiUrl, gitHubAppId, privateKey) = gitHubNotificationConfig

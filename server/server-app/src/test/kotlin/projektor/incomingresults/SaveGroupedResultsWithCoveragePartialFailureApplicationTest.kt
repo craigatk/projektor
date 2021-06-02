@@ -15,7 +15,6 @@ import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
-@KtorExperimentalAPI
 class SaveGroupedResultsWithCoveragePartialFailureApplicationTest : ApplicationTestCase() {
 
     @Test

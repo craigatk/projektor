@@ -2,7 +2,6 @@ package projektor.testrun
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -15,7 +14,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class GetTestRunApplicationTest : ApplicationTestCase() {
     @Test
     fun `should fetch test run from database`() {

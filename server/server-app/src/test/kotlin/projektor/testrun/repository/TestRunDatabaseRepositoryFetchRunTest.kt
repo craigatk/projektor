@@ -16,7 +16,6 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
 
     @Test

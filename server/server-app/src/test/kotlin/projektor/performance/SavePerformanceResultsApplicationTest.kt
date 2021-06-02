@@ -17,7 +17,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import java.math.BigDecimal
 
-@KtorExperimentalAPI
 class SavePerformanceResultsApplicationTest : ApplicationTestCase() {
     @Test
     fun `should save results with no test results and two performance results`() {

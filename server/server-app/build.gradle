@@ -3,6 +3,7 @@ plugins {
     id "com.heroku.sdk.heroku-gradle" version "1.0.4"
     id "application"
     id 'jacoco'
+    id "project-report"
 }
 
 apply from: '../../gradle/kotlin.gradle'
@@ -58,6 +59,11 @@ dependencies {
 
     implementation "org.apache.commons:commons-lang3:3.8.1"
 
+    implementation platform("io.opentelemetry:opentelemetry-bom:1.2.0")
+    implementation 'io.opentelemetry:opentelemetry-api'
+    implementation 'io.opentelemetry:opentelemetry-extension-kotlin'
+    implementation 'io.opentelemetry:opentelemetry-extension-annotations'
+
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
 
     testImplementation(testFixtures(project(":server:notification:github")))
@@ -110,7 +116,7 @@ task assembleFull(dependsOn: ['copyUI', 'shadowJar'])
 task stage(dependsOn: 'assembleFull')
 
 heroku {
-    includes = ["${projectDir}/build/libs/server-app-1.0-all.jar"]
+    includes = ["${projectDir}/build/libs/server-app-1.0-all.jar", "${projectDir}/opentelemetry/opentelemetry-javaagent-all"]
     includeBuildDir = false
     appName = "projektorlive"
     jdkVersion = "11"

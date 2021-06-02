@@ -7,7 +7,6 @@ import io.ktor.routing.*
 import io.ktor.util.*
 import projektor.organization.coverage.OrganizationCoverageService
 
-@KtorExperimentalAPI
 fun Route.organization(organizationCoverageService: OrganizationCoverageService) {
     get("/org/{orgName}/coverage") {
         val orgName = call.parameters.getOrFail("orgName")

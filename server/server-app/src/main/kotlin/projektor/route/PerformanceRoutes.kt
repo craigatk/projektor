@@ -9,7 +9,6 @@ import projektor.performance.PerformanceResultsService
 import projektor.server.api.PublicId
 import projektor.server.api.performance.PerformanceResults
 
-@KtorExperimentalAPI
 fun Route.performance(performanceResultsService: PerformanceResultsService) {
     get("/run/{publicId}/performance") {
         val publicId = call.parameters.getOrFail("publicId")

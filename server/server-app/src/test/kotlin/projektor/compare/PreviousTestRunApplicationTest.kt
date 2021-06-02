@@ -15,7 +15,6 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 @ExperimentalStdlibApi
 class PreviousTestRunApplicationTest : ApplicationTestCase() {
     @Test

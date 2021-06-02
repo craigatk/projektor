@@ -10,7 +10,6 @@ import projektor.repository.testrun.RepositoryTestRunService
 import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.RepositoryFlakyTests
 
-@KtorExperimentalAPI
 fun Route.repository(
     repositoryCoverageService: RepositoryCoverageService,
     repositoryTestRunService: RepositoryTestRunService

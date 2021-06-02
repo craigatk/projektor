@@ -6,12 +6,10 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
-import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.getOrFail
 import projektor.server.api.PublicId
 import projektor.testrun.attributes.TestRunSystemAttributesService
 
-@KtorExperimentalAPI
 fun Route.testRunSystemAttributes(testRunSystemAttributesService: TestRunSystemAttributesService) {
     get("/run/{publicId}/attributes") {
         val publicId = call.parameters.getOrFail("publicId")

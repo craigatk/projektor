@@ -11,7 +11,6 @@ import strikt.api.expectThat
 import strikt.assertions.*
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class GitMetadataApplicationTest : ApplicationTestCase() {
     @Test
     fun `should get Git metadata for test run`() {

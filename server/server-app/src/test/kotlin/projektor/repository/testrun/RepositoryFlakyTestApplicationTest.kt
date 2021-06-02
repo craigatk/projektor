@@ -16,7 +16,6 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
 
     @Test

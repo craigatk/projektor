@@ -12,7 +12,6 @@ import strikt.assertions.any
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
-@KtorExperimentalAPI
 class TestSuiteDatabaseRepositoryFetchSuiteTest : DatabaseRepositoryTestCase() {
 
     @Test

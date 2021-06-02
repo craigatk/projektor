@@ -14,7 +14,6 @@ import strikt.api.expectThat
 import strikt.assertions.*
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class GetFailedTestCasesAttachmentsApplicationTest : ApplicationTestCase() {
 
     @Test

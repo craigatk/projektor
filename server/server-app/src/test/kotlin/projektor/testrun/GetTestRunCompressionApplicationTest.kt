@@ -5,7 +5,6 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -15,11 +14,9 @@ import projektor.util.ungzip
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
-import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class GetTestRunCompressionApplicationTest : ApplicationTestCase() {
     @Test
     fun `when gzip accept header included should compress test run response`() {
@@ -60,45 +57,6 @@ class GetTestRunCompressionApplicationTest : ApplicationTestCase() {
                 assertNotNull(testSuites)
                 expectThat(testSuites).hasSize(testSuiteCount)
             }
-        }
-    }
-
-    @Test
-    fun `when gzip accept header included but request tiny should not compress test run response`() {
-        val publicId = randomPublicId()
-
-        val testSuiteCount = 1
-
-        withTestApplication(::createTestApplication) {
-            val result = handleRequest(HttpMethod.Get, "/run/$publicId") {
-                testRunDBGenerator.createTestRun(
-                    publicId,
-                    (1..testSuiteCount).map {
-                        TestSuiteData(
-                            "shortTestSuite$it",
-                            listOf("testSuite${it}TestCase1", "testSuite${it}TestCase2"),
-                            listOf(),
-                            listOf()
-                        )
-                    }
-                )
-
-                addHeader(HttpHeaders.AcceptEncoding, "gzip")
-            }
-
-            val response = result.response
-
-            expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
-            expectThat(response.headers[HttpHeaders.ContentLength]).isNotNull()
-
-            val responseRun = objectMapper.readValue(response.content, TestRun::class.java)
-            assertNotNull(responseRun)
-
-            expectThat(responseRun.id).isEqualTo(publicId.id)
-
-            val testSuites = responseRun.testSuites
-            assertNotNull(testSuites)
-            expectThat(testSuites).hasSize(testSuiteCount)
         }
     }
 }

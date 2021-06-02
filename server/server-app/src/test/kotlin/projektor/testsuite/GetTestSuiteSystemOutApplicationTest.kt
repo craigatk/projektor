@@ -3,7 +3,6 @@ package projektor.testsuite
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.createTestRun
@@ -14,7 +13,6 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class GetTestSuiteSystemOutApplicationTest : ApplicationTestCase() {
     @Test
     fun shouldFetchTestSuiteSystemOutFromDatabase() {

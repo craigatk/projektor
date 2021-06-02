@@ -1,6 +1,5 @@
 package projektor.notification.github
 
-import io.ktor.util.*
 import projektor.incomingresults.model.GitMetadata
 import projektor.notification.NotificationConfig
 import projektor.notification.github.comment.*
@@ -10,7 +9,6 @@ import projektor.server.api.performance.PerformanceResult
 import java.time.LocalDateTime
 import java.time.ZoneId
 
-@KtorExperimentalAPI
 class GitHubPullRequestCommentService(
     private val notificationConfig: NotificationConfig,
     private val gitHubCommentService: GitHubCommentService?

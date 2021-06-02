@@ -23,7 +23,6 @@ import strikt.api.expectThat
 import strikt.assertions.contains
 import strikt.assertions.hasSize
 
-@KtorExperimentalAPI
 class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
     private val wireMockServer = WireMockServer(wireMockConfig().dynamicPort())
     private val gitHubWireMockStubber = GitHubWireMockStubber(wireMockServer)

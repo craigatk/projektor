@@ -12,7 +12,6 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import java.time.temporal.ChronoUnit
 
-@KtorExperimentalAPI
 class ProcessingFailureDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
     @Test

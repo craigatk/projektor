@@ -4,7 +4,6 @@ package projektor.testsuite
 import com.fasterxml.jackson.core.type.TypeReference
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.Test
 import projektor.ApplicationTestCase
 import projektor.createTestRun
@@ -16,7 +15,6 @@ import strikt.assertions.contains
 import strikt.assertions.hasSize
 import strikt.assertions.map
 
-@KtorExperimentalAPI
 class GetTestSuitesByPackageApplicationTest : ApplicationTestCase() {
     @Test
     fun `should get test suites by package`() {

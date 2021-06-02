@@ -5,7 +5,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -18,7 +17,6 @@ import strikt.assertions.isFalse
 import strikt.assertions.isTrue
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 @ExperimentalStdlibApi
 class CoverageExistsApplicationTest : ApplicationTestCase() {
 

@@ -13,7 +13,6 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import strikt.assertions.isTrue
 
-@KtorExperimentalAPI
 class SaveGroupedResultsWithMetadataApplicationTest : ApplicationTestCase() {
     @Test
     fun `should save grouped test results with Git metadata`() {

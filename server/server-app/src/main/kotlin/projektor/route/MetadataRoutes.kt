@@ -9,7 +9,6 @@ import projektor.metadata.TestRunMetadataService
 import projektor.server.api.PublicId
 import projektor.versioncontrol.VersionControlConfig
 
-@KtorExperimentalAPI
 fun Route.metadata(
     testRunMetadataService: TestRunMetadataService,
     versionControlConfig: VersionControlConfig

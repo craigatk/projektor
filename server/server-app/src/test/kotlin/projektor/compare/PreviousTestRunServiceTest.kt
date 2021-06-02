@@ -13,7 +13,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 
-@KtorExperimentalAPI
 class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
 
     @Test

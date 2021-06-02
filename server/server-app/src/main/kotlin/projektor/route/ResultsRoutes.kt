@@ -7,7 +7,6 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
-import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.getOrFail
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Timer
@@ -23,7 +22,6 @@ import projektor.server.api.PublicId
 import projektor.server.api.results.SaveResultsError
 import projektor.server.api.results.SaveResultsResponse
 
-@KtorExperimentalAPI
 fun Route.results(
     testResultsService: TestResultsService,
     groupedTestResultsService: GroupedTestResultsService,

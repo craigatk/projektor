@@ -10,7 +10,6 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 import java.time.LocalDate
 
-@KtorExperimentalAPI
 class CleanupJobTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should execute test report cleanup`() {

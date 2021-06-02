@@ -11,7 +11,6 @@ import strikt.api.expectThat
 import strikt.assertions.*
 import java.math.BigDecimal
 
-@KtorExperimentalAPI
 class TestCaseDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should fetch failed test cases from multiple test suites`() {

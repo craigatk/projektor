@@ -5,7 +5,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -18,7 +17,6 @@ import strikt.assertions.isNotNull
 import java.io.File
 import java.math.BigDecimal
 
-@KtorExperimentalAPI
 class AddAttachmentMaxSizeApplicationTest : ApplicationTestCase() {
     @Test
     fun `when attachment max size configured and attachment size is over max allowed size should return error`() {

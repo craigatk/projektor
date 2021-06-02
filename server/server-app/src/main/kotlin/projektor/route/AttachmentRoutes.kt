@@ -9,8 +9,9 @@ import io.ktor.response.respondBytes
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
-import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.getOrFail
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import projektor.attachment.AddAttachmentResult
 import projektor.attachment.AttachmentService
 import projektor.auth.AuthConfig
@@ -20,7 +21,6 @@ import projektor.server.api.attachments.AddAttachmentError
 import projektor.server.api.attachments.AddAttachmentResponse
 import projektor.server.api.attachments.Attachments
 
-@KtorExperimentalAPI
 fun Route.attachments(
     attachmentService: AttachmentService?,
     authService: AuthService
@@ -28,7 +28,9 @@ fun Route.attachments(
     post("/run/{publicId}/attachments/{attachmentName}") {
         val publicId = call.parameters.getOrFail("publicId")
         val attachmentName = call.parameters.getOrFail("attachmentName")
-        val attachmentStream = call.receiveStream()
+        val attachmentStream = withContext(Dispatchers.IO) {
+            call.receiveStream()
+        }
 
         val contentLengthInBytes = call.request.header("content-length")?.toLong()
 

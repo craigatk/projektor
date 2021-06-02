@@ -13,7 +13,6 @@ import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
-@KtorExperimentalAPI
 class SingleQuoteXmlDeclarationApplicationTest : ApplicationTestCase() {
     @Test
     fun `should save results with single-quoted XML declaration`() {

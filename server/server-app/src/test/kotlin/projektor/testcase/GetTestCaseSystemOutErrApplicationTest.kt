@@ -13,7 +13,6 @@ import strikt.api.expectThat
 import strikt.assertions.*
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class GetTestCaseSystemOutErrApplicationTest : ApplicationTestCase() {
     @Test
     fun `should get system out and err at the test case level`() {

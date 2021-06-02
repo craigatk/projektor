@@ -11,7 +11,6 @@ import projektor.testsuite.TestSuiteSearchCriteria
 import strikt.api.expectThat
 import strikt.assertions.*
 
-@KtorExperimentalAPI
 class TestSuiteDatabaseRepositoryFetchSuitesTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should fetch test suites with specific package name`() {

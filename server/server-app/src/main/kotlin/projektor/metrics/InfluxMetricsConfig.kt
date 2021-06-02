@@ -1,9 +1,7 @@
 package projektor.metrics
 
 import io.ktor.config.ApplicationConfig
-import io.ktor.util.KtorExperimentalAPI
 
-@KtorExperimentalAPI
 data class InfluxMetricsConfig(
     val enabled: Boolean,
     val dbName: String,

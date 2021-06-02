@@ -13,7 +13,6 @@ import strikt.api.expectThat
 import strikt.assertions.hasSize
 import java.math.BigDecimal
 
-@KtorExperimentalAPI
 class RepositoryPerformanceDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
     @Test

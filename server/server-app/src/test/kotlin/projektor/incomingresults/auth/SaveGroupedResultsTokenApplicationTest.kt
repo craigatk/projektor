@@ -6,7 +6,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.auth.AuthConfig
@@ -16,7 +15,6 @@ import strikt.api.expectThat
 import strikt.assertions.*
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class SaveGroupedResultsTokenApplicationTest : ApplicationTestCase() {
     @Test
     fun `when token set and valid token included in header should save results`() {

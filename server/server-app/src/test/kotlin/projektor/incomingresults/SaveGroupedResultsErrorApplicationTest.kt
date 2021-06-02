@@ -6,7 +6,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
@@ -21,7 +20,6 @@ import strikt.assertions.contains
 import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class SaveGroupedResultsErrorApplicationTest : ApplicationTestCase() {
     @Test
     fun `when results fail to parse should return error response code`() {

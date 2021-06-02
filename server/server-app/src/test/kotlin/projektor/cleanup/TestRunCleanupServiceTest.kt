@@ -1,6 +1,5 @@
 package projektor.cleanup
 
-import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.test.get
@@ -22,7 +21,6 @@ import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-@KtorExperimentalAPI
 class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
 
     @Test

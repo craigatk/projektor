@@ -1,5 +1,9 @@
 package projektor.testrun
 
+import io.opentelemetry.api.GlobalOpenTelemetry
+import io.opentelemetry.api.trace.Span
+import io.opentelemetry.api.trace.Tracer
+import io.opentelemetry.context.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.Configuration
@@ -34,6 +38,8 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
         .addKeys("id", "test_suites_id")
         .ignorePropertyNotFound()
         .newMapper(TestRun::class.java)
+
+    val tracer: Tracer = GlobalOpenTelemetry.getTracer("projektor.TestRunDatabaseRepository")
 
     override suspend fun saveTestRun(publicId: PublicId, testSuites: List<ParsedTestSuite>) =
         withContext(Dispatchers.IO) {
@@ -229,6 +235,10 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
 
     override suspend fun fetchTestRun(publicId: PublicId): TestRun? =
         withContext(Dispatchers.IO) {
+            val span = tracer.spanBuilder("projektor.fetchTestRun")
+                .setParent(Context.current().with(Span.current()))
+                .startSpan()
+
             val resultSet = dslContext
                 .select(TEST_RUN.PUBLIC_ID.`as`("id"))
                 .select(TEST_RUN.addPrefixToFields("summary"))
@@ -242,21 +252,37 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
                 .orderBy(TEST_RUN.ID)
                 .fetchResultSet()
 
+            val mapperSpan = tracer.spanBuilder("projektor.fetchTestRun.mapper")
+                .setParent(Context.current().with(Span.current()))
+                .startSpan()
+
             val testRun: TestRun? = resultSet.use {
                 testRunMapper.stream(resultSet).findFirst().orElse(null)
             }
+
+            mapperSpan.end()
+
+            span.end()
 
             testRun
         }
 
     override suspend fun fetchTestRunSummary(publicId: PublicId): TestRunSummary? =
         withContext(Dispatchers.IO) {
-            dslContext
+            val span = tracer.spanBuilder("projektor.fetchTestRunSummary")
+                .setParent(Context.current().with(Span.current()))
+                .startSpan()
+
+            val testRunSummary = dslContext
                 .select(TEST_RUN.PUBLIC_ID.`as`("id"))
                 .select(TEST_RUN.fields().filterNot { it.name == "id" }.toList())
                 .from(TEST_RUN)
                 .where(TEST_RUN.PUBLIC_ID.eq(publicId.id))
                 .fetchOneInto(TestRunSummary::class.java)
+
+            span.end()
+
+            testRunSummary
         }
 
     override suspend fun deleteTestRun(publicId: PublicId) {

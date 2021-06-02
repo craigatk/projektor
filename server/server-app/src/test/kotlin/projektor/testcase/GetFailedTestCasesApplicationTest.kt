@@ -4,7 +4,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.http.*
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -14,7 +13,6 @@ import strikt.api.expectThat
 import strikt.assertions.*
 import kotlin.test.assertNotNull
 
-@KtorExperimentalAPI
 class GetFailedTestCasesApplicationTest : ApplicationTestCase() {
     @Test
     fun `should fetch failed test cases from database`() {

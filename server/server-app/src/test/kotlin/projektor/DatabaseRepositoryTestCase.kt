@@ -2,7 +2,6 @@ package projektor
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import io.ktor.util.KtorExperimentalAPI
 import org.jooq.DSLContext
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
@@ -29,7 +28,6 @@ import projektor.metrics.createRegistry
 import projektor.notification.NotificationConfig
 import java.util.*
 
-@KtorExperimentalAPI
 open class DatabaseRepositoryTestCase : KoinTest {
     init {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
@@ -66,7 +64,6 @@ open class DatabaseRepositoryTestCase : KoinTest {
     var attachmentsEnabled = false
     lateinit var attachmentService: AttachmentService
 
-    @KtorExperimentalAPI
     @BeforeEach
     fun setup() {
         val hikariConfig = HikariConfig()

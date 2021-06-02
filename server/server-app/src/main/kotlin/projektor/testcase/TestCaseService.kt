@@ -1,12 +1,10 @@
 package projektor.testcase
 
-import io.ktor.util.*
 import projektor.attachment.AttachmentService
 import projektor.server.api.PublicId
 import projektor.server.api.TestCase
 import projektor.server.api.TestOutput
 
-@KtorExperimentalAPI
 class TestCaseService(
     private val testCaseRepository: TestCaseRepository,
     private val attachmentService: AttachmentService?

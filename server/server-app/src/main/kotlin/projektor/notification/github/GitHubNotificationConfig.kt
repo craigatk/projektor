@@ -1,10 +1,8 @@
 package projektor.notification.github
 
 import io.ktor.config.*
-import io.ktor.util.*
 import projektor.notification.github.auth.PrivateKeyEncoder
 
-@KtorExperimentalAPI
 data class GitHubNotificationConfig(
     val gitHubApiUrl: String?,
     val gitHubAppId: String?,

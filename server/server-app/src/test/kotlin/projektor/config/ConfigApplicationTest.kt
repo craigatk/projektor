@@ -4,7 +4,6 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.server.api.config.ServerConfig
@@ -14,7 +13,6 @@ import strikt.assertions.isFalse
 import strikt.assertions.isNull
 import strikt.assertions.isTrue
 
-@KtorExperimentalAPI
 class ConfigApplicationTest : ApplicationTestCase() {
     @Test
     fun `should return cleanup age in days when it is configured`() {

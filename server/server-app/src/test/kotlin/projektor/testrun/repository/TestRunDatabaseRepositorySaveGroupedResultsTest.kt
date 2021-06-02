@@ -16,7 +16,6 @@ import kotlin.test.assertNotNull
 import projektor.parser.model.TestCase as ParsedTestCase
 import projektor.parser.model.TestSuite as ParsedTestSuite
 
-@KtorExperimentalAPI
 class TestRunDatabaseRepositorySaveGroupedResultsTest : DatabaseRepositoryTestCase() {
 
     @Test
