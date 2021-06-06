@@ -8,7 +8,7 @@ import io.opentelemetry.api.trace.Span
 class OpenTelemetryRoute {
 
     class Configuration {
-        var includeMethod: Boolean = false
+        var includeHttpMethod: Boolean = false
     }
 
     companion object Feature : ApplicationFeature<Application, Configuration, OpenTelemetryRoute> {
@@ -20,17 +20,16 @@ class OpenTelemetryRoute {
             pipeline.environment.monitor.subscribe(Routing.RoutingCallStarted) { call ->
                 val routeWithMethod = call.route.toString()
 
-                val routeAttribute = if (configuration.includeMethod) {
-                    routeWithMethod
-                } else {
-                    val routeWithoutMethod = routeWithMethod.substring(0, routeWithMethod.indexOf("("))
-                    routeWithoutMethod
-                }
+                // By default, Ktor's route value includes the HTTP method such as "/run/{publicId}/(method: 'GET')"
+                // Conditionally remove the method part of the route so the attribute is "/run/{publicId}/" instead and easier to query by
+                val routeAttribute = if (configuration.includeHttpMethod) routeWithMethod else extractRouteWithoutMethod(routeWithMethod)
 
                 Span.current()?.setAttribute("ktor.route", routeAttribute)
             }
 
             return OpenTelemetryRoute()
         }
+
+        private fun extractRouteWithoutMethod(routeWithMethod: String) = routeWithMethod.substring(0, routeWithMethod.indexOf("("))
     }
 }

@@ -39,7 +39,7 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
         .ignorePropertyNotFound()
         .newMapper(TestRun::class.java)
 
-    val tracer: Tracer = GlobalOpenTelemetry.getTracer("projektor.TestRunDatabaseRepository")
+    private val tracer: Tracer = GlobalOpenTelemetry.getTracer("projektor.TestRunDatabaseRepository")
 
     override suspend fun saveTestRun(publicId: PublicId, testSuites: List<ParsedTestSuite>) =
         withContext(Dispatchers.IO) {
