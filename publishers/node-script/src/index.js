@@ -166,7 +166,8 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       writeSlackMessageFileToDisk(
         reportUrl,
         slackMessageFileName || "projektor_failure_message.json",
-        projectName
+        projectName,
+        containsTestFailure(resultsBlob)
       );
     }
 
