@@ -5,9 +5,11 @@ const {
 const fs = require("fs");
 
 describe("slack messages", () => {
+  const slackMessageFileName = "projektor_failure_message.json";
+
   afterEach(() => {
-    if (fs.existsSync("projektor_failure_message.json")) {
-      fs.unlinkSync("projektor_failure_message.json");
+    if (fs.existsSync(slackMessageFileName)) {
+      fs.unlinkSync(slackMessageFileName);
     }
   });
 
@@ -72,11 +74,11 @@ describe("slack messages", () => {
 
     writeSlackMessageFileToDisk(
       reportUrl,
-      "projektor_failure_message.json",
+      slackMessageFileName,
       projectName,
       testsFailed
     );
 
-    expect(fs.existsSync("projektor_failure_message.json")).toBeTruthy();
+    expect(fs.existsSync(slackMessageFileName)).toBeTruthy();
   });
 });
