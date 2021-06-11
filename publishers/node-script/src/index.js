@@ -25,6 +25,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
   let exitWithFailure;
   let writeSlackMessageFile;
   let slackMessageFileName;
+  let slackProjectName;
   let projectName;
   let repositoryName;
   let compressionEnabled;
@@ -47,6 +48,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     exitWithFailure = config.exitWithFailure;
     writeSlackMessageFile = config.writeSlackMessageFile;
     slackMessageFileName = config.slackMessageFileName;
+    slackProjectName = config.slackProjectName;
     repositoryName = config.repositoryName;
     projectName = config.projectName;
     compressionEnabled = config.compressionEnabled;
@@ -76,6 +78,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     exitWithFailure = args.exitWithFailure;
     writeSlackMessageFile = args.writeSlackMessageFile;
     slackMessageFileName = args.slackMessageFileName;
+    slackProjectName = args.slackProjectName;
     repositoryName = args.repositoryName;
     projectName = args.projectName;
     compressionEnabled = args.compressionEnabled;
@@ -121,30 +124,26 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       group = buildNumber;
     }
 
-    const {
-      resultsBlob,
-      performanceResults,
-      reportUrl,
-      publicId,
-    } = await collectAndSendResults(
-      serverUrl,
-      publishToken,
-      resultsFileGlobs,
-      attachmentFileGlobs,
-      coverageFileGlobs,
-      performanceFileGlobs,
-      gitRepoName,
-      gitBranchName,
-      gitCommitSha,
-      gitPullRequestNumber,
-      projectName,
-      isCI,
-      group,
-      compressionEnabled,
-      baseDirectoryPath,
-      resultsMaxSizeMB,
-      attachmentMaxSizeMB
-    );
+    const { resultsBlob, performanceResults, reportUrl, publicId } =
+      await collectAndSendResults(
+        serverUrl,
+        publishToken,
+        resultsFileGlobs,
+        attachmentFileGlobs,
+        coverageFileGlobs,
+        performanceFileGlobs,
+        gitRepoName,
+        gitBranchName,
+        gitCommitSha,
+        gitPullRequestNumber,
+        projectName,
+        isCI,
+        group,
+        compressionEnabled,
+        baseDirectoryPath,
+        resultsMaxSizeMB,
+        attachmentMaxSizeMB
+      );
 
     if (!resultsBlob && !performanceFileGlobs) {
       console.log(
@@ -166,7 +165,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       writeSlackMessageFileToDisk(
         reportUrl,
         slackMessageFileName || "projektor_failure_message.json",
-        projectName,
+        slackProjectName || projectName,
         containsTestFailure(resultsBlob)
       );
     }
