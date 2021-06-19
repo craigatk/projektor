@@ -2,5 +2,6 @@ package projektor.parser.coverage.model
 
 enum class CoverageReportType {
     JACOCO,
-    CLOVER
+    CLOVER,
+    COBERTURA
 }

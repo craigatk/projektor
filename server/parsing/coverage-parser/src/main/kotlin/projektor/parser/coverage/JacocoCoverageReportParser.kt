@@ -9,8 +9,8 @@ import projektor.parser.jacoco.model.Counter
 import projektor.parser.jacoco.model.CounterType
 import projektor.parser.jacoco.model.LineType
 
-class JacocoCoverageReportParser {
-    fun parseReport(reportXml: String, baseDirectoryPath: String?): CoverageReport =
+class JacocoCoverageReportParser : CoverageReportParser {
+    override fun parseReport(reportXml: String, baseDirectoryPath: String?): CoverageReport =
         try {
             val parsedReport = JacocoXmlReportParser().parseReport(reportXml)
 

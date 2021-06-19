@@ -8,8 +8,8 @@ import projektor.parser.coverage.model.CoverageReportFile
 import projektor.parser.coverage.model.CoverageReportStat
 import projektor.parser.coverage.model.CoverageReportStats
 
-class CloverCoverageReportParser {
-    fun parseReport(reportXml: String, baseDirectoryPath: String?): CoverageReport {
+class CloverCoverageReportParser : CoverageReportParser {
+    override fun parseReport(reportXml: String, baseDirectoryPath: String?): CoverageReport {
         val parsedReport = CloverXmlReportParser().parseReport(reportXml)
 
         val files = parsedReport.project.packages.flatMap { pkg ->

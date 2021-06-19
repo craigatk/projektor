@@ -2,15 +2,17 @@ package projektor.parser.coverage
 
 import io.kotest.core.spec.style.StringSpec
 import projektor.server.example.coverage.CloverXmlLoader
+import projektor.server.example.coverage.CoberturaXmlLoader
 import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 import java.math.BigDecimal
+import kotlin.test.assertNotNull
 
 class CoverageParserSpec : StringSpec({
-    "should parse Jacoco test report" {
+    "should parse Jacoco coverage report" {
         val jacocoReportXml = JacocoXmlLoader().serverApp()
 
         val coverageReport = CoverageParser.parseReport(jacocoReportXml, null)
@@ -35,10 +37,10 @@ class CoverageParserSpec : StringSpec({
         }
     }
 
-    "should parse Jest test report" {
-        val jestReportXml = CloverXmlLoader().uiClover()
+    "should parse Clover coverage report" {
+        val cloverReportXml = CloverXmlLoader().uiClover()
 
-        val coverageReport = CoverageParser.parseReport(jestReportXml, null)
+        val coverageReport = CoverageParser.parseReport(cloverReportXml, null)
 
         expectThat(coverageReport).isNotNull().and {
             get { name }.isEqualTo("All files")
@@ -56,6 +58,25 @@ class CoverageParserSpec : StringSpec({
             get { totalStats.statementStat.covered }.isEqualTo(0)
             get { totalStats.statementStat.missed }.isEqualTo(0)
             get { totalStats.statementStat.total }.isEqualTo(0)
+        }
+    }
+
+    "should parse Cobertura coverage report" {
+        val coberturaReportXml = CoberturaXmlLoader().nodeScriptCobertura()
+
+        val coverageReport = CoverageParser.parseReport(coberturaReportXml, null)
+        assertNotNull(coverageReport)
+
+        expectThat(coverageReport.totalStats.lineStat) {
+            get { covered }.isEqualTo(231)
+            get { total }.isEqualTo(234)
+            get { percentCovered }.isEqualTo(BigDecimal("98.72"))
+        }
+
+        expectThat(coverageReport.totalStats.branchStat) {
+            get { covered }.isEqualTo(120)
+            get { total }.isEqualTo(128)
+            get { percentCovered }.isEqualTo(BigDecimal("93.75"))
         }
     }
 

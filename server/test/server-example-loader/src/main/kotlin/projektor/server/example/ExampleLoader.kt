@@ -13,6 +13,7 @@ import projektor.parser.grouped.model.GitMetadata
 import projektor.parser.grouped.model.ResultsMetadata
 import projektor.server.api.results.SaveResultsResponse
 import projektor.server.example.coverage.CloverXmlLoader
+import projektor.server.example.coverage.CoberturaXmlLoader
 import projektor.server.example.coverage.CoverageFileWrapper.createCoverageFilePayload
 import projektor.server.example.coverage.JacocoXmlLoader
 import projektor.server.example.performance.PerformanceResultsLoader
@@ -200,6 +201,12 @@ fun loadMultipleCoverageWithPreviousRunExample() {
     sendCoverageToServer(currentResultsResponse.id, JacocoXmlLoader().jacocoXmlParserReduced())
 
     println("View run with multiple coverage results and previous results at $uiBaseUrl${currentResultsResponse.uri}")
+}
+
+fun loadCoberturaCoverageUi() {
+    val currentResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.resultsWithCoverage(resultsXmls = listOf(resultsXmlLoader.jestUi()), coverageXmls = listOf(CoberturaXmlLoader().uiCobertura())))
+
+    println("View run with Cobertura coverage and UI results at $uiBaseUrl${currentResultsResponse.uri}")
 }
 
 fun loadMultipleTestRunsFromSameRepoForTimeline() {
