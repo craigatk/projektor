@@ -4,6 +4,7 @@ on:
   push:
     paths-ignore:
       - 'functional-test/**'
+      - 'publishers/node-script/**'
       - 'ui/**'
 
 jobs:
