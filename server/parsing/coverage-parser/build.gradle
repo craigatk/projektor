@@ -5,6 +5,7 @@ plugins {
 apply from: "../../../gradle/kotlin.gradle"
 
 dependencies {
+    implementation project(':server:parsing:cobertura-xml-parser')
     implementation project(':server:parsing:jacoco-xml-parser')
     implementation project(':server:parsing:jest-xml-parser')
 

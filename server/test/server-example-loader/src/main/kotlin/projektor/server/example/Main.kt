@@ -24,6 +24,7 @@ fun main() {
     loadJestWithCoverage()
     loadJestWithCoverageManyMissedLines()
     loadJestWithFilePaths()
+    loadCoberturaCoverageUi()
     repositoryCoverageTimeline()
     repositoryFlakyTests()
     loadMultipleTestRunsFromSameRepoForTimeline()
