@@ -6,7 +6,8 @@ module.exports = {
   testMatch: ['**/*.spec.{ts,tsx}'],
   "reporters": [ "default", "jest-junit" ],
   collectCoverage: true,
-  coverageReporters: ["clover", "text"]
+  coverageReporters: ["clover", "text"],
+  "testEnvironment": "jsdom"
 }
 
 process.env = Object.assign(process.env, { API_BASE_URL: 'http://localhost:8080/' });

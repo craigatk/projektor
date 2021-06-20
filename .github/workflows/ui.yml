@@ -86,6 +86,10 @@ jobs:
           cd cypress-common
           yarn install
 
+      - name: Increase file watchers
+        run: |
+          sudo sysctl fs.inotify.max_user_watches=1048576
+
       - name: UI Cypress run
         env:
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}

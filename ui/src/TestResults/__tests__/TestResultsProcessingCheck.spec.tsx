@@ -53,7 +53,7 @@ describe("TestResultsProcessingCheck", () => {
     expect(succeededFunc).not.toHaveBeenCalled();
   });
 
-  it("should refresh status when still processing up to max timeout", async (done) => {
+  it("should refresh status when still processing up to max timeout", async () => {
     const succeededFunc = jest.fn();
 
     mockProcessingStatus(TestResultsProcessingStatus.PROCESSING);
@@ -73,9 +73,8 @@ describe("TestResultsProcessingCheck", () => {
       expect(mockAxios.history.get.length).toBeGreaterThan(1)
     );
 
-    setTimeout(() => {
+    return setTimeout(() => {
       expect(mockAxios.history.get.length).toBeLessThanOrEqual(5);
-      done();
     }, 1000);
   });
 
