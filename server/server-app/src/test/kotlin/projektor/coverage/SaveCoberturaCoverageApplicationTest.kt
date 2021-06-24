@@ -49,8 +49,12 @@ class SaveCoberturaCoverageApplicationTest : ApplicationTestCase() {
                 val coverageGroup = coverage.groups[0]
                 expectThat(coverageGroup.name).isEqualTo("Coverage")
 
+                await untilAsserted {
+                    val coverageFiles = runBlocking { coverageService.getCoverageGroupFiles(publicId, "Coverage") }
+                    expectThat(coverageFiles).hasSize(113)
+                }
+
                 val coverageFiles = runBlocking { coverageService.getCoverageGroupFiles(publicId, "Coverage") }
-                expectThat(coverageFiles).hasSize(113)
 
                 expectThat(coverageFiles)
                     .any {
