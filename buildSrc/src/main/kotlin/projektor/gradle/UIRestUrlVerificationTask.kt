@@ -23,6 +23,8 @@ open class UIRestUrlVerificationTask : DefaultTask(), VerificationTask {
         val jsBundleFile = jsDistDir.walk().filter { it.extension == "js" }.firstOrNull()
 
         if (jsBundleFile != null) {
+            logger.error("Verifying JS bundle file [${jsBundleFile.path}] does not contain localhost")
+
             val jsBundleFileContents = jsBundleFile.readText()
 
             if (jsBundleFileContents.contains("http://localhost:8080/")) {

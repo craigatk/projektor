@@ -4,6 +4,5 @@
     "mochaFile": "test-results/cypress-[hash].xml"
   },
   "videoUploadOnPasses": false,
-  "defaultCommandTimeout": 10000,
-  "experimentalRunEvents": true
+  "defaultCommandTimeout": 10000
 }

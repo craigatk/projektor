@@ -4,6 +4,7 @@ dist/
 dev-dist/
 
 .cache/
+.parcel-cache/
 
 jestResults/
 
