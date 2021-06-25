@@ -12,6 +12,10 @@ const collectResults = (resultsFileGlobs) => {
   const resultsFilePaths = globsToFilePaths(resultsFileGlobs);
 
   if (resultsFilePaths.length > 0) {
+    console.log(
+      `Found ${resultsFilePaths.length} test results file(s) in ${resultsFileGlobs}`
+    );
+
     resultsFilePaths.forEach((filePath) => {
       const fileContents = fs.readFileSync(filePath);
       resultsBlob = resultsBlob + fileContents + "\n";

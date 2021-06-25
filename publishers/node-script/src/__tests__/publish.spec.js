@@ -103,6 +103,10 @@ describe("Projektor publisher", () => {
     expect(consoleLog).toHaveBeenCalledWith(
       "Gathering results from src/__tests__/resultsDir1/*.xml to send to Projektor server http://localhost:8080"
     );
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "Found 2 test results file(s) in src/__tests__/resultsDir1/*.xml"
+    );
   });
 
   it("should include publish token in header when specified", async () => {

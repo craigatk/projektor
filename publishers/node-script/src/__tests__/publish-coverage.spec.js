@@ -131,5 +131,9 @@ describe("publish with coverage", () => {
     expect(consoleLog).toHaveBeenCalledWith(
       "Gathering results from src/__tests__/resultsDir1/*.xml and coverage from src/__tests__/coverageDir1/*.xml,src/__tests__/coverageDir2/*.xml to send to Projektor server http://localhost:8080"
     );
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "Found 2 coverage file(s) in src/__tests__/coverageDir1/*.xml,src/__tests__/coverageDir2/*.xml"
+    );
   });
 });
