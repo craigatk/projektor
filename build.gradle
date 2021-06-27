@@ -48,4 +48,10 @@ allprojects {
     tasks.withType(JacocoReport) {
         dependsOn(test)
     }
+
+    plugins.withType(JacocoPlugin) {
+        jacoco {
+            toolVersion = "0.8.7"
+        }
+    }
 }

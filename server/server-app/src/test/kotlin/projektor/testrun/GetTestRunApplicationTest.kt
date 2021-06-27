@@ -15,6 +15,7 @@ import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
 class GetTestRunApplicationTest : ApplicationTestCase() {
+
     @Test
     fun `should fetch test run from database`() {
         val publicId = randomPublicId()
@@ -39,6 +40,8 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
                     )
                 )
             }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+
                 val responseRun = objectMapper.readValue(response.content, TestRun::class.java)
                 assertNotNull(responseRun)
 
@@ -53,6 +56,38 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
 
                 val testSuite2 = testSuites.find { it.className == "testSuite2" }
                 assertNotNull(testSuite2)
+            }
+        }
+    }
+
+    @Test
+    fun `should fetch test run from database when URL has trailing slash`() {
+        val publicId = randomPublicId()
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Get, "/run/$publicId/") {
+                testRunDBGenerator.createTestRun(
+                    publicId,
+                    listOf(
+                        TestSuiteData(
+                            "testSuite1",
+                            listOf("testSuite1TestCase1", "testSuite1TestCase2"),
+                            listOf(),
+                            listOf()
+                        )
+                    )
+                )
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+
+                val responseRun = objectMapper.readValue(response.content, TestRun::class.java)
+                assertNotNull(responseRun)
+
+                expectThat(responseRun.id).isEqualTo(publicId.id)
+
+                val testSuites = responseRun.testSuites
+                assertNotNull(testSuites)
+                expectThat(testSuites).hasSize(1)
             }
         }
     }
