@@ -59,10 +59,11 @@ dependencies {
 
     implementation "org.apache.commons:commons-lang3:3.8.1"
 
-    implementation platform("io.opentelemetry:opentelemetry-bom:1.2.0")
+    implementation platform("io.opentelemetry:opentelemetry-bom:$opentelemetry_version")
     implementation 'io.opentelemetry:opentelemetry-api'
     implementation 'io.opentelemetry:opentelemetry-extension-kotlin'
-    implementation 'io.opentelemetry:opentelemetry-extension-annotations'
+    testImplementation("io.opentelemetry:opentelemetry-sdk")
+    testImplementation("io.opentelemetry:opentelemetry-sdk-testing")
 
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
 
