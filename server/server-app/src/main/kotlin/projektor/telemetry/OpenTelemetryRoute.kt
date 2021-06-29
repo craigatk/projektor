@@ -24,7 +24,8 @@ class OpenTelemetryRoute {
                 // Conditionally remove the method part of the route so the attribute is "/run/{publicId}/" instead and easier to query by
                 val routeAttribute = if (configuration.includeHttpMethod) routeWithMethod else extractRouteWithoutMethod(routeWithMethod)
 
-                Span.current()?.setAttribute("ktor.route", routeAttribute)
+                val currentSpan = Span.current()
+                currentSpan?.setAttribute("ktor.route", routeAttribute)
             }
 
             return OpenTelemetryRoute()
