@@ -209,6 +209,28 @@ fun loadCoberturaCoverageUi() {
     println("View run with Cobertura coverage and UI results at $uiBaseUrl${currentResultsResponse.uri}")
 }
 
+fun loadCloverCoverageLarge() {
+    val repoName = "large-org/large-repo"
+    val branchName = "main"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+    resultsMetadata.ci = true
+
+    val currentResultsResponse = sendGroupedResultsToServer(
+        groupedResultsXmlLoader.resultsWithCoverage(
+            resultsXmls = listOf(resultsXmlLoader.jestUi()),
+            coverageXmls = listOf(CloverXmlLoader().uiCloverLarge()),
+            metadata = resultsMetadata
+        )
+    )
+
+    println("View run with large Clover coverage and UI results at $uiBaseUrl${currentResultsResponse.uri}")
+}
+
 fun loadMultipleTestRunsFromSameRepoForTimeline() {
     val repoName = "timeline-org/timeline-repo"
     val branchName = "main"
