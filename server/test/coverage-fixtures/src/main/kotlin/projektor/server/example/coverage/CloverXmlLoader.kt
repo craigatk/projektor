@@ -3,6 +3,7 @@ package projektor.server.example.coverage
 class CloverXmlLoader : CoverageXmlLoader() {
     fun uiClover() = loadTextFromFile("ui-clover.xml")
     fun uiClover2() = loadTextFromFile("ui-clover-2.xml")
+    fun uiCloverLarge() = loadTextFromFile("ui-clover-large.xml")
     fun uiCloverManyMissedLines() = loadTextFromFile("ui-clover-many-missed-lines.xml")
 
     fun coverageFilesTable() = loadTextFromFile("clover-append/CoverageFilesTable-clover.xml")

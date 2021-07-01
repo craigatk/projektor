@@ -1,6 +1,7 @@
 import * as React from "react";
 import { CoverageStat } from "../model/TestRunModel";
-import { makeStyles, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
+import styled from "styled-components";
 import CoveragePercentage from "./CoveragePercentage";
 import CleanLink from "../Link/CleanLink";
 import CoverageGraphImpl from "./CoverageGraphImpl";
@@ -15,17 +16,19 @@ interface CoverageGraphProps {
   testIdPrefix?: string;
 }
 
-const useStyles = makeStyles({
-  wrapper: (props) => ({
-    // @ts-ignore
-    marginRight: props.inline ? "10px" : "50px",
-    display: "inline-block",
-  }),
-  label: {
-    marginBottom: "10px",
-    display: "inline-block",
-  },
-});
+interface CoverageGraphStyleProps {
+  inline: boolean;
+}
+
+const CoverageGraphWrapper = styled.div<CoverageGraphStyleProps>`
+  margin-right: ${({ inline }) => (inline ? "10px" : "50px")};
+  display: "inline-block";
+`;
+
+const CoverageGraphLabel = styled(Typography)`
+  margin-bottom: "10px";
+  display: "inline-block";
+`;
 
 const CoverageGraph = ({
   coverageStat,
@@ -36,14 +39,11 @@ const CoverageGraph = ({
   previousTestRunId,
   testIdPrefix,
 }: CoverageGraphProps) => {
-  const classes = useStyles({ inline });
-
   if (coverageStat.total > 0) {
     return (
-      <div className={classes.wrapper}>
+      <CoverageGraphWrapper inline={inline}>
         {!inline && (
-          <Typography
-            className={classes.label}
+          <CoverageGraphLabel
             data-testid={`coverage-graph-title-${type.toLowerCase()}`}
           >
             {type}{" "}
@@ -51,7 +51,7 @@ const CoverageGraph = ({
               coverageStat={coverageStat}
               previousTestRunId={previousTestRunId}
             />
-          </Typography>
+          </CoverageGraphLabel>
         )}
         {coveredPercentageLink && (
           <CleanLink
@@ -76,7 +76,7 @@ const CoverageGraph = ({
             testIdPrefix={testIdPrefix}
           />
         )}
-      </div>
+      </CoverageGraphWrapper>
     );
   } else {
     return null;
