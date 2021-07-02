@@ -1,39 +1,42 @@
 package projektor.plugin.coverage
 
-import org.gradle.BuildResult
+import org.gradle.api.Task
 import org.gradle.api.logging.Logger
 import org.gradle.api.reporting.SingleFileReport
 import org.gradle.testing.jacoco.tasks.JacocoReport
+import projektor.plugin.coverage.model.CoverageFilePayload
 import projektor.plugin.file.DirectoryUtil
 
 class CodeCoverageTaskCollector {
     final List<CodeCoverageFile> codeCoverageFiles
 
     private final Logger logger
-    private final BuildResult buildResult
 
-    CodeCoverageTaskCollector(BuildResult buildResult, boolean coverageEnabled, Logger logger) {
-        this.buildResult = buildResult
+    CodeCoverageTaskCollector(Collection<Task> allTasks, boolean coverageEnabled, Logger logger) {
         this.logger = logger
-        this.codeCoverageFiles = collectCodeCoverageFiles(coverageEnabled)
+        this.codeCoverageFiles = collectCodeCoverageFiles(allTasks, coverageEnabled)
     }
 
     boolean hasCodeCoverageData() {
         return !codeCoverageFiles.empty
     }
 
-    private List<CodeCoverageFile> collectCodeCoverageFiles( boolean coverageEnabled) {
-        if (coverageEnabled) {
-            try {
-                List<JacocoReport> jacocoTasks = buildResult.gradle.taskGraph.allTasks.findAll {
-                    it instanceof JacocoReport
-                } as List<JacocoReport>
+    List<CoverageFilePayload> getCoverageFilePayloads() {
+        codeCoverageFiles.collect { coverageFile ->
+            new CoverageFilePayload(
+                    reportContents: coverageFile.reportFile.text,
+                    baseDirectoryPath: coverageFile.baseDirectoryPath
+            )
+        }
+    }
 
-                return jacocoTasks.collect { coverageFileOrNull(it) }.findAll { it != null }
-            } catch (IllegalStateException e) {
-                logger.warn("Unable to read coverage files from Jacoco tasks", e)
-                return []
-            }
+    private List<CodeCoverageFile> collectCodeCoverageFiles(Collection<Task> allTasks, boolean coverageEnabled) {
+        if (coverageEnabled) {
+            List<JacocoReport> jacocoTasks = allTasks.findAll {
+                it instanceof JacocoReport
+            } as List<JacocoReport>
+
+            return jacocoTasks.collect { coverageFileOrNull(it) }.findAll { it != null }
         } else {
             return []
         }

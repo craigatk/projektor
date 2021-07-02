@@ -2,6 +2,7 @@ package projektor.plugin
 
 import org.gradle.BuildResult
 import org.gradle.api.invocation.Gradle
+import org.gradle.api.logging.Logger
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -9,6 +10,9 @@ import spock.lang.Unroll
 class ShouldPublishCalculatorSpec extends Specification {
     @Shared
     Gradle gradle = Mock()
+
+    @Shared
+    Logger logger = Mock()
 
     @Shared
     BuildResult passingBuild = new BuildResult(gradle, null)
@@ -24,7 +28,8 @@ class ShouldPublishCalculatorSpec extends Specification {
                 passingBuild,
                 resultsDataExists,
                 false,
-                environment
+                environment,
+                logger
         ) == shouldPublishResults
 
         where:
@@ -44,7 +49,8 @@ class ShouldPublishCalculatorSpec extends Specification {
                 buildResult,
                 resultsDataExists,
                 false,
-                [:]
+                [:],
+                logger
         ) == shouldPublishResults
 
         where:
@@ -62,7 +68,8 @@ class ShouldPublishCalculatorSpec extends Specification {
                 passingBuild,
                 false,
                 coverageTasksExecuted,
-                environment
+                environment,
+                logger
         ) == shouldPublishResults
 
         where:
@@ -79,7 +86,8 @@ class ShouldPublishCalculatorSpec extends Specification {
                 passingBuild,
                 false,
                 true,
-                [:]
+                [:],
+                logger
         )
     }
 }

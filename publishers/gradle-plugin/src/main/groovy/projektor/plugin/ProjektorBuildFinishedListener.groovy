@@ -2,6 +2,7 @@ package projektor.plugin
 
 import org.gradle.BuildListener
 import org.gradle.BuildResult
+import org.gradle.api.Task
 import org.gradle.api.file.FileTree
 import org.gradle.api.initialization.Settings
 import org.gradle.api.invocation.Gradle
@@ -11,7 +12,6 @@ import projektor.plugin.attachments.AttachmentsPublisher
 import projektor.plugin.client.ResultsClient
 import projektor.plugin.client.ClientConfig
 import projektor.plugin.coverage.CodeCoverageTaskCollector
-import projektor.plugin.coverage.model.CoverageFilePayload
 import projektor.plugin.git.GitMetadataFinder
 import projektor.plugin.git.GitResolutionConfig
 import projektor.plugin.notification.NotificationConfig
@@ -62,8 +62,16 @@ class ProjektorBuildFinishedListener implements BuildListener {
 
     @Override
     void buildFinished(BuildResult buildResult) {
+        Collection<Task> allTasks = []
+
+        try {
+            allTasks = buildResult.gradle.taskGraph.allTasks
+        } catch (IllegalStateException e) {
+            logger.warn("Task graph is not ready", e)
+        }
+
         CodeCoverageTaskCollector codeCoverageTaskCollector = new CodeCoverageTaskCollector(
-                buildResult,
+                allTasks,
                 coverageEnabled,
                 logger
         )
@@ -79,7 +87,8 @@ class ProjektorBuildFinishedListener implements BuildListener {
                 buildResult,
                 projectTestResultsCollector.hasTestGroups(),
                 codeCoverageTaskCollector.hasCodeCoverageData(),
-                System.getenv()
+                System.getenv(),
+                logger
         )
 
         if (shouldPublish) {
@@ -109,12 +118,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
         groupedResults.wallClockDuration = projektorTaskFinishedListener.testWallClockDurationInSeconds
 
         if (coverageEnabled) {
-            groupedResults.coverageFiles = codeCoverageTaskCollector.codeCoverageFiles.collect { coverageFile ->
-                new CoverageFilePayload(
-                        reportContents: coverageFile.reportFile.text,
-                        baseDirectoryPath: coverageFile.baseDirectoryPath
-                )
-            }
+            groupedResults.coverageFiles = codeCoverageTaskCollector.coverageFilePayloads
         }
 
         ResultsClient resultsClient = new ResultsClient(clientConfig, logger)

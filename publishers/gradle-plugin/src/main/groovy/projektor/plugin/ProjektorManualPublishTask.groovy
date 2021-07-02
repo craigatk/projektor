@@ -1,6 +1,7 @@
 package projektor.plugin
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.Task
 import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
@@ -10,6 +11,7 @@ import projektor.plugin.attachments.AttachmentsClient
 import projektor.plugin.attachments.AttachmentsPublisher
 import projektor.plugin.client.ResultsClient
 import projektor.plugin.client.ClientConfig
+import projektor.plugin.coverage.CodeCoverageTaskCollector
 import projektor.plugin.results.ResultsLogger
 import projektor.plugin.results.grouped.GroupedResults
 
@@ -32,6 +34,10 @@ class ProjektorManualPublishTask extends DefaultTask {
 
     @Input
     @Optional
+    Boolean codeCoveragePublish = true
+
+    @Input
+    @Optional
     Boolean compressionEnabled = true
 
     @Input
@@ -49,8 +55,10 @@ class ProjektorManualPublishTask extends DefaultTask {
     @TaskAction
     void publish() {
         File projectDir = project.projectDir
+        Collection<Task> allTasks = project.getAllTasks(false).get(project)
+
         ProjectTestResultsCollector projectTestTaskResultsCollector = ProjectTestResultsCollector.fromAllTasks(
-                project.getAllTasks(false).get(project),
+                allTasks,
                 projectDir,
                 additionalResultsDirs,
                 logger
@@ -66,6 +74,13 @@ class ProjektorManualPublishTask extends DefaultTask {
                     publishTimeout
             )
             GroupedResults groupedResults = projectTestTaskResultsCollector.createGroupedResults()
+
+            CodeCoverageTaskCollector codeCoverageTaskCollector = new CodeCoverageTaskCollector(
+                    allTasks,
+                    codeCoveragePublish,
+                    logger
+            )
+            groupedResults.coverageFiles = codeCoverageTaskCollector.coverageFilePayloads
 
             ResultsClient resultsClient = new ResultsClient(
                     clientConfig,
