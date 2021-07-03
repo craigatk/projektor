@@ -1,10 +1,8 @@
-package projektor.plugin.testkit.version
+package projektor.plugin.testkit.task
 
-import org.gradle.util.GradleVersion
 import projektor.plugin.coverage.model.CoverageFilePayload
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.testkit.SingleProjectSpec
-import spock.lang.Unroll
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static projektor.plugin.CodeUnderTestWriter.writePartialCoverageSpecFile
@@ -13,14 +11,14 @@ import static projektor.plugin.PluginOutput.verifyOutputContainsReportLink
 import static projektor.plugin.ProjectDirectoryWriter.createSourceDirectory
 import static projektor.plugin.ProjectDirectoryWriter.createTestDirectory
 
-class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
+class PublishResultsTaskCoverageSpec extends SingleProjectSpec {
+
     @Override
     boolean includeJacocoPlugin() {
         return true
     }
 
-    @Unroll
-    def "should publish results and coverage with Gradle version #gradleVersion"() {
+    def "should publish results and coverage with publish task"() {
         given:
         buildFile << """
             projektor {
@@ -28,45 +26,44 @@ class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
             }
         """.stripIndent()
 
-        String resultsId = "ABC123"
-        resultsStubber.stubResultsPostSuccess(resultsId)
+        String publicId = "COV123"
+        resultsStubber.stubResultsPostSuccess(publicId)
 
         File sourceDir = createSourceDirectory(projectRootDir)
         File testDir = createTestDirectory(projectRootDir)
 
-        File sourceFile = writeSourceCodeFile(sourceDir)
+        writeSourceCodeFile(sourceDir)
         writePartialCoverageSpecFile(testDir, "PartialSpec")
 
         when:
-        def result = runSuccessfulBuildWithEnvironmentAndGradleVersion(
-                ["CI": "true"],
-                gradleVersion,
-                'test', 'jacocoTestReport', '--info'
-        )
+        def testResult = runSuccessfulLocalBuild('test', 'jacocoTestReport')
 
         then:
-        result.task(":test").outcome == SUCCESS
-        result.task(":jacocoTestReport").outcome == SUCCESS
+        testResult.task(":test").outcome == SUCCESS
+        testResult.task(":jacocoTestReport").outcome == SUCCESS
 
         and:
-        verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
+        resultsStubber.findResultsRequests().size() == 0
+
+        when:
+        def publishResults = runSuccessfulLocalBuild('publishResults')
+
+        then:
+        publishResults.task(":publishResults").outcome == SUCCESS
+
+        and:
+        verifyOutputContainsReportLink(publishResults.output, serverUrl, publicId)
 
         and:
         List<GroupedResults> resultsRequestBodies = resultsStubber.findResultsRequestBodies()
         resultsRequestBodies.size() == 1
 
+        resultsRequestBodies[0].groupedTestSuites.size() == 1
+        resultsRequestBodies[0].groupedTestSuites[0].testSuitesBlob.contains("PartialSpec")
+
         List<CoverageFilePayload> coverageFilePayloads = resultsRequestBodies[0].coverageFiles
         coverageFilePayloads.size() == 1
 
-        coverageFilePayloads[0].reportContents.contains("report.dtd")
-        coverageFilePayloads[0].reportContents.contains(sourceFile.name)
-
-        where:
-        gradleVersion                  | _
-        GradleVersion.version("5.0")   | _
-        GradleVersion.version("6.0.1") | _
-        GradleVersion.version("6.4.1") | _
-        GradleVersion.version("7.0")   | _
-        GradleVersion.current()        | _
+        coverageFilePayloads[0].reportContents.contains("MyClass")
     }
 }

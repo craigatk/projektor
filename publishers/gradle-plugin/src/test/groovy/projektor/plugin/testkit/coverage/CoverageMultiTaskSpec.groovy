@@ -93,6 +93,7 @@ class CoverageMultiTaskSpec extends SingleProjectSpec {
         GradleVersion.version("5.0")   | _
         GradleVersion.version("6.0.1") | _
         GradleVersion.version("6.4.1") | _
+        GradleVersion.version("7.0")   | _
         GradleVersion.current()        | _
     }
 }
