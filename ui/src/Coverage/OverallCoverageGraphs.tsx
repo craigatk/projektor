@@ -10,8 +10,7 @@ interface OverallCoverageGraphsProps {
 
 const useStyles = makeStyles({
   graphGrid: {
-    marginLeft: "10px",
-    paddingLeft: "5px",
+    paddingLeft: "15px",
     paddingRight: "20px",
     marginBottom: "15px",
   },
