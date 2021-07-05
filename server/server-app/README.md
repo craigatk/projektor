@@ -1,6 +1,6 @@
 # Server
 
-The backend server that parses the incoming JUnit XML files, persists them,
+The backend server that parses the incoming JUnit XML files & code coverage reports, persists them,
 then makes them available in an API to the UI.
 
 ## Development

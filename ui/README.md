@@ -1,11 +1,17 @@
 # Projektor UI
 
+[![Code coverage percentage](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/ui-jest/badge/coverage)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/project/ui-jest/coverage)
+
 The Projektor UI is a [React](https://reactjs.org/) app written with Typescript/Javascript,
 built by [Parcel](https://parceljs.org/) with [Yarn](https://yarnpkg.com)
 
 ## Development
 
-To start the dev server, run `yarn start`
+To start the dev server:
+
+1. Install Yarn if you don't already have it 
+2. Download and install the project's dependencies with `yarn install`
+3. Start the dev server with `yarn start`
 
 This will start the server on `http://localhost:1234`
 
