@@ -27,16 +27,9 @@ To build the package execute:
 
 ### Heroku
 
-The easiest way I've found to deploy this app to Heroku is using Docker.
+The server app project has the Heroku Gradle plugin and config
+to deploy the app to Heroku using the JVM buildpack.
 
-Follow the steps on this page in the Heroku UI: Deployment -> Container Registry (Heroku CLI)
+First, change the app name in the `heroku` block in `server/server-app/build.gradle` to your Heroku app name.
 
-* Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
-* Then login in on the command line 
-  * `heroku login`
-* Then log in to the container registry
-  * `heroku container:login`
-* Next push the Docker image to the registry
-  * `heroku container:push web`
-* And finally deploy the Docker container
-  * `heroku container:release web` 
+Then run the deployment with `./gradlew :server:server-app:deployHeroku`
