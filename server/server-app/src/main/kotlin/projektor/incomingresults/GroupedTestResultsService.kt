@@ -1,6 +1,7 @@
 package projektor.incomingresults
 
 import com.fasterxml.jackson.core.JsonProcessingException
+import io.opentelemetry.api.GlobalOpenTelemetry
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,6 +18,7 @@ import projektor.server.api.TestRunSummary
 import projektor.server.api.coverage.Coverage
 import projektor.server.api.performance.PerformanceResult
 import projektor.server.api.results.ResultsProcessingStatus
+import projektor.telemetry.startSpanWithParent
 import projektor.testrun.TestRunRepository
 
 class GroupedTestResultsService(
@@ -33,10 +35,14 @@ class GroupedTestResultsService(
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
+    private val tracer = GlobalOpenTelemetry.getTracer("projektor.GroupedTestResultsService")
+
     suspend fun persistTestResultsAsync(groupedResultsBlob: String): PublicId {
         val publicId = randomPublicId()
         val timer = metricsService.createTimer("persist_grouped_results")
         testResultsProcessingService.createResultsProcessing(publicId)
+
+        val span = tracer.startSpanWithParent("projektor.parseGroupedResults")
 
         val groupedResults = try {
             groupedResultsConverter.parseAndConvertGroupedResults(groupedResultsBlob)
@@ -52,6 +58,8 @@ class GroupedTestResultsService(
             metricsService.incrementResultsProcessFailureCounter()
             testResultsProcessingService.recordResultsProcessingError(publicId, groupedResultsBlob, errorMessage)
             throw PersistTestResultsException(publicId, errorMessage, e)
+        } finally {
+            span.end()
         }
 
         val group = groupedResults.metadata?.group

@@ -13,11 +13,17 @@ import io.ktor.config.MapApplicationConfig
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
+import io.opentelemetry.api.GlobalOpenTelemetry
+import io.opentelemetry.sdk.OpenTelemetrySdk
+import io.opentelemetry.sdk.testing.exporter.InMemorySpanExporter
+import io.opentelemetry.sdk.trace.SdkTracerProvider
+import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
 import org.jooq.DSLContext
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.koin.ktor.ext.get
 import org.slf4j.LoggerFactory
 import projektor.compare.PreviousTestRunService
@@ -47,6 +53,12 @@ open class ApplicationTestCase {
         .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+
+    val exporter = InMemorySpanExporter.create()
+    val tracerProvider = SdkTracerProvider
+        .builder()
+        .addSpanProcessor(SimpleSpanProcessor.create(exporter))
+        .build()
 
     lateinit var dataSource: HikariDataSource
     lateinit var dslContext: DSLContext
@@ -101,6 +113,17 @@ open class ApplicationTestCase {
     protected var gitHubPrivateKeyEncoded: String? = null
 
     protected val meterRegistry = SimpleMeterRegistry()
+
+    @BeforeEach
+    fun setupTelemetry() {
+        // Needed when running the full test suite as the global telemetry
+        // instance may be set by another test and it can only be set once.
+        GlobalOpenTelemetry.resetForTest()
+
+        OpenTelemetrySdk.builder()
+            .setTracerProvider(tracerProvider)
+            .buildAndRegisterGlobal()
+    }
 
     fun createTestApplication(application: Application) {
         val schema = databaseSchema
