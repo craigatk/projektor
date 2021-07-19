@@ -14,7 +14,7 @@ import io.ktor.http.content.CachingOptions
 import io.ktor.jackson.jackson
 import io.ktor.metrics.micrometer.MicrometerMetrics
 import io.ktor.request.path
-import io.ktor.routing.routing
+import io.ktor.routing.*
 import io.micrometer.core.instrument.MeterRegistry
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
@@ -150,6 +150,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
         }
     }
     install(OpenTelemetryRoute)
+    install(IgnoreTrailingSlash) // Needed to treat /tests/ and /tests as the same URL
 
     val authService: AuthService by inject()
     val messageService: MessageService by inject()
