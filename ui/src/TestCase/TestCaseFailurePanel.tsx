@@ -70,7 +70,10 @@ const TestCaseFailurePanel = ({
       onClick={expansionPanelOnClick}
       data-testid={`test-case-summary-${testCaseIdentifier}`}
     >
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+      <ExpansionPanelSummary
+        expandIcon={<ExpandMoreIcon />}
+        style={{ userSelect: "text" }}
+      >
         <Typography variant="subtitle2" data-testid="test-case-title">
           {testCase.packageName}.{testCase.className} {testCase.name}
         </Typography>
