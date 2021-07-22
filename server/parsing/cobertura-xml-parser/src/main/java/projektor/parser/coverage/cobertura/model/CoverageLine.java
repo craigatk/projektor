@@ -15,7 +15,7 @@ public class CoverageLine {
 
     @JsonIgnore
     public Boolean isPartial() {
-        return branch && conditionCoverage != null && !conditionCoverage.contains("100%");
+        return branch != null && branch && conditionCoverage != null && !conditionCoverage.contains("100%");
     }
 
     @JsonIgnore

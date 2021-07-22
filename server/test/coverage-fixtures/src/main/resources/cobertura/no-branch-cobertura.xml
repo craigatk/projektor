@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
+<coverage lines-valid="234" lines-covered="231" line-rate="0.9872" branches-valid="128" branches-covered="120" branch-rate="0.9375" timestamp="1623929275225" complexity="0" version="0.1">
+  <sources>
+    <source>/Users/craigatkinson/projects/projektor/publishers/node-script</source>
+  </sources>
+  <packages>
+    <package name="src" line-rate="0.9868000000000001" branch-rate="0.9375">
+      <classes>
+        <class name="file-utils.js" filename="src/file-utils.js" line-rate="1" branch-rate="1">
+          <methods>
+            <method name="(anonymous_0)" hits="100" signature="()V">
+              <lines>
+                <line number="6" hits="100"/>
+              </lines>
+            </method>
+            <method name="(anonymous_1)" hits="123" signature="()V">
+              <lines>
+                <line number="8" hits="123"/>
+              </lines>
+            </method>
+            <method name="(anonymous_2)" hits="52" signature="()V">
+              <lines>
+                <line number="15" hits="52"/>
+              </lines>
+            </method>
+            <method name="(anonymous_3)" hits="100" signature="()V">
+              <lines>
+                <line number="22" hits="100"/>
+              </lines>
+            </method>
+            <method name="(anonymous_4)" hits="43" signature="()V">
+              <lines>
+                <line number="25" hits="43"/>
+              </lines>
+            </method>
+            <method name="(anonymous_5)" hits="15" signature="()V">
+              <lines>
+                <line number="28" hits="15"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="1" hits="10" />
+            <line number="2" hits="10" />
+            <line number="3" hits="10" />
+            <line number="4" hits="10" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>

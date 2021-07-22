@@ -70,4 +70,22 @@ class CoberturaXmlReportParserSpec extends Specification {
         "UI Cobertura"          | new CoberturaXmlLoader().uiCobertura()         || true
         "Jacoco"                | new JacocoXmlLoader().jacocoXmlParser()        || false
     }
+
+    def "should parse Cobertura report without branch field on line elements"() {
+        given:
+        String reportXml = new CoberturaXmlLoader().noBranchCobertura()
+
+        when:
+        Coverage coverage = new CoberturaXmlReportParser().parseReport(reportXml)
+
+        then:
+        coverage != null
+
+        List<Pkg> packages = coverage.packages.packages
+        List<CoverageClass> classes = packages.classes.clazz
+        List<CoverageLine> lines = classes.collect { it.lines.lines }.flatten()
+
+        lines.size() == 4
+        lines.every { !it.isPartial() }
+    }
 }
