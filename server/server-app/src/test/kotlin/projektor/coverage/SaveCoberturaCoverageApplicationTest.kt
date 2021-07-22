@@ -68,4 +68,28 @@ class SaveCoberturaCoverageApplicationTest : ApplicationTestCase() {
             }
         }
     }
+
+    @Test
+    fun `should save Cobertura coverage without branch field on line and test results`() {
+        val requestBody = GroupedResultsXmlLoader().resultsWithCoverage(
+            resultsXmls = listOf(ResultsXmlLoader().jestUi()),
+            coverageXmls = listOf(CoberturaXmlLoader().noBranchCobertura())
+        )
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Post, "/groupedResults") {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(requestBody)
+            }.apply {
+                val (publicId, _) = waitForTestRunSaveToComplete(response)
+
+                await untilAsserted {
+                    expectThat(coverageRunDao.fetchByTestRunPublicId(publicId.id)).hasSize(1)
+                }
+
+                val coverage = runBlocking { coverageService.getCoverage(publicId) }
+                assertNotNull(coverage)
+            }
+        }
+    }
 }
