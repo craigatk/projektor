@@ -4,7 +4,7 @@ import { render, fireEvent } from "@testing-library/react";
 import CodeTextLine from "../CodeTextLine";
 
 describe("Code text line", () => {
-  it("should call line click handler when line is clicked", () => {
+  it("should call line click handler when line number is clicked", () => {
     const line = "Code line";
     const idx = 2;
     const highlighted = false;
@@ -18,7 +18,7 @@ describe("Code text line", () => {
       />
     );
 
-    fireEvent.click(getByTestId("code-text-line-2-false"));
+    fireEvent.click(getByTestId("code-text-line-number-2"));
 
     expect(handleLineClick).toHaveBeenCalled();
   });
