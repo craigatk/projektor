@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import LinkOutlinedIcon from "@material-ui/icons/LinkOutlined";
 
 interface CodeTextLineProps {
   line: string;
@@ -13,26 +14,42 @@ interface CodeTextLineStyleProps {
 }
 
 const Line = styled.div<CodeTextLineStyleProps>`
-  cursor: default;
   background-color: ${({ highlighted }) =>
     highlighted ? "#F9F9F9" : "inherit"};
   font-size: 0.9em;
   display: inline-block;
   width: 100%;
   padding-right: 10px;
+  &:hover {
+    background-color: lightgrey;
+  }
+`;
+
+const LinkIcon = styled(LinkOutlinedIcon)`
+  visibility: hidden;
+  color: blue;
+  height: 0.8em;
+  vertical-align: middle;
+  padding-left: 5px;
 `;
 
 const LineNumber = styled.span`
   cursor: pointer;
   user-select: none;
-  min-width: 40px;
   display: inline-block;
-  text-align: right;
   padding-right: 15px;
   &:hover {
-    text-decoration: underline;
-    background-color: lightgrey;
+    color: blue;
+    & ${LinkIcon} {
+      visibility: visible;
+    }
   }
+`;
+
+const LineNumberValue = styled.span`
+  text-align: right;
+  display: inline-block;
+  min-width: 30px;
 `;
 
 const CodeTextLine = ({
@@ -54,7 +71,8 @@ const CodeTextLine = ({
         data-testid={`code-text-line-number-${idx}`}
         onClick={handleClick}
       >
-        {idx}
+        <LinkIcon fontSize="small" />
+        <LineNumberValue>{idx}</LineNumberValue>
       </LineNumber>
       <span data-testid={`code-text-line-content-${idx}`}>{line}</span>
     </Line>
