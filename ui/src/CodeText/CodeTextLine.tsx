@@ -13,6 +13,14 @@ interface CodeTextLineStyleProps {
   highlighted: boolean;
 }
 
+const LinkIcon = styled(LinkOutlinedIcon)`
+  visibility: hidden;
+  color: blue;
+  height: 0.8em;
+  vertical-align: middle;
+  padding-left: 5px;
+`;
+
 const Line = styled.div<CodeTextLineStyleProps>`
   background-color: ${({ highlighted }) =>
     highlighted ? "#F9F9F9" : "inherit"};
@@ -22,15 +30,11 @@ const Line = styled.div<CodeTextLineStyleProps>`
   padding-right: 10px;
   &:hover {
     background-color: lightgrey;
-  }
-`;
 
-const LinkIcon = styled(LinkOutlinedIcon)`
-  visibility: hidden;
-  color: blue;
-  height: 0.8em;
-  vertical-align: middle;
-  padding-left: 5px;
+    & ${LinkIcon} {
+      visibility: visible;
+    }
+  }
 `;
 
 const LineNumber = styled.span`
@@ -40,9 +44,6 @@ const LineNumber = styled.span`
   padding-right: 15px;
   &:hover {
     color: blue;
-    & ${LinkIcon} {
-      visibility: visible;
-    }
   }
 `;
 
