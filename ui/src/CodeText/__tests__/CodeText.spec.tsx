@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
-import { render, getNodeText } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import CodeText from "../CodeText";
 import { globalHistory } from "@reach/router";
 import { QueryParamProvider } from "use-query-params";
@@ -17,17 +17,17 @@ describe("CodeText", () => {
 
     await findByTestId("code-text");
 
-    expect(getNodeText(await findByTestId("code-text-line-content-1"))).toBe(
+    expect(await findByTestId("code-text-line-content-1")).toHaveTextContent(
       "line 1"
     );
-    expect(getNodeText(await findByTestId("code-text-line-number-1"))).toBe(
+    expect(await findByTestId("code-text-line-number-1")).toHaveTextContent(
       "1"
     );
 
-    expect(getNodeText(await findByTestId("code-text-line-content-2"))).toBe(
+    expect(await findByTestId("code-text-line-content-2")).toHaveTextContent(
       "line 2"
     );
-    expect(getNodeText(await findByTestId("code-text-line-number-2"))).toBe(
+    expect(await findByTestId("code-text-line-number-2")).toHaveTextContent(
       "2"
     );
 
