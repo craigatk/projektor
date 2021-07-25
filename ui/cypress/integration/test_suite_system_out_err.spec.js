@@ -32,16 +32,16 @@ context("test suite system out and system err", () => {
     cy.getByTestId("test-case-tab-system-out").click();
     cy.getCodeText().should("contain", "System out line 1");
 
-    cy.getCodeTextLineNotHighlighted(2).click();
+    cy.getCodeTextLineNumber(2).click();
     cy.codeLineShouldBeHighlighted(2);
     cy.codeLineShouldNotBeHighlighted(1);
     cy.codeLineShouldNotBeHighlighted(3);
 
-    cy.getCodeTextLineNotHighlighted(9).click();
+    cy.getCodeTextLineNumber(9).click();
     cy.codeLineShouldBeHighlighted(9);
     cy.codeLineShouldNotBeHighlighted(2);
 
-    cy.getCodeTextLineHighlighted(9).click();
+    cy.getCodeTextLineNumber(9).click();
     cy.codeLineShouldNotBeHighlighted(9);
   });
 });

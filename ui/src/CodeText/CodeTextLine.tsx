@@ -16,9 +16,6 @@ const Line = styled.div<CodeTextLineStyleProps>`
   cursor: default;
   background-color: ${({ highlighted }) =>
     highlighted ? "#F9F9F9" : "inherit"};
-  &:hover {
-    background-color: lightgrey;
-  }
   font-size: 0.9em;
   display: inline-block;
   width: 100%;
@@ -26,11 +23,16 @@ const Line = styled.div<CodeTextLineStyleProps>`
 `;
 
 const LineNumber = styled.span`
+  cursor: pointer;
   user-select: none;
   min-width: 40px;
   display: inline-block;
   text-align: right;
   padding-right: 15px;
+  &:hover {
+    text-decoration: underline;
+    background-color: lightgrey;
+  }
 `;
 
 const CodeTextLine = ({
@@ -45,11 +47,13 @@ const CodeTextLine = ({
 
   return (
     <Line
-      onClick={handleClick}
       data-testid={`code-text-line-${idx}-${highlighted}`}
       highlighted={highlighted}
     >
-      <LineNumber data-testid={`code-text-line-number-${idx}`}>
+      <LineNumber
+        data-testid={`code-text-line-number-${idx}`}
+        onClick={handleClick}
+      >
         {idx}
       </LineNumber>
       <span data-testid={`code-text-line-content-${idx}`}>{line}</span>

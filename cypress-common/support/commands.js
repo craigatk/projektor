@@ -40,6 +40,9 @@ Cypress.Commands.add("getCodeText", () => cy.getByTestId("code-text"));
 Cypress.Commands.add("getCodeTextLine", (lineIdx, highlighted) =>
   cy.getByTestId(`code-text-line-${lineIdx}-${highlighted}`)
 );
+Cypress.Commands.add("getCodeTextLineNumber", (lineIdx) =>
+    cy.getByTestId(`code-text-line-number-${lineIdx}`)
+);
 Cypress.Commands.add("getCodeTextLineNotHighlighted", (lineIdx) =>
     cy.getCodeTextLine(lineIdx, false)
 );
