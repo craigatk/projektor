@@ -8,8 +8,8 @@ import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.coverage.toCoverageStats
 import projektor.database.generated.Tables.*
 import projektor.parser.coverage.model.CoverageReportStats
-import projektor.server.api.repository.RepositoryCoverageTimeline
-import projektor.server.api.repository.RepositoryCoverageTimelineEntry
+import projektor.server.api.repository.coverage.RepositoryCoverageTimeline
+import projektor.server.api.repository.coverage.RepositoryCoverageTimelineEntry
 import java.time.Instant
 import kotlin.streams.toList
 

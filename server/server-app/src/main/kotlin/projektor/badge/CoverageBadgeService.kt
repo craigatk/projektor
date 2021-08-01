@@ -14,7 +14,7 @@ class CoverageBadgeService(
 
         val mostRecentMainBranchRunWithCoverage = previousTestRunService.findMostRecentMainBranchRunWithCoverage(fullRepoName, projectName)
 
-        val coveredPercentage = mostRecentMainBranchRunWithCoverage?.let { publicId ->
+        val coveredPercentage = mostRecentMainBranchRunWithCoverage?.publicId?.let { publicId ->
             coverageService.getCoveredLinePercentage(publicId)
         }
 
