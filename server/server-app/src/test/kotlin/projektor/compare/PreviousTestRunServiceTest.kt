@@ -1,6 +1,5 @@
 package projektor.compare
 
-import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.test.inject
@@ -12,6 +11,7 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
+import java.time.ZoneOffset
 
 class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
 
@@ -123,9 +123,11 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             null
         )
 
-        val mostRecentPublicId = runBlocking { previousTestRunService.findMostRecentMainBranchRunWithCoverage(repoName, null) }
+        val mostRecentTestRun = runBlocking { previousTestRunService.findMostRecentMainBranchRunWithCoverage(repoName, null) }
 
-        expectThat(mostRecentPublicId).isNotNull().isEqualTo(newestPublicId)
+        expectThat(mostRecentTestRun).isNotNull().and {
+            get { publicId }.isEqualTo(newestPublicId)
+        }
     }
 
     @Test
@@ -147,7 +149,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             projectName = projectName
         )
 
-        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+        val newTestRun = testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
             publicId = newPublicId,
             coverageText = JacocoXmlLoader().serverAppReduced(),
             repoName = repoName,
@@ -163,7 +165,10 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             projectName = "other-project"
         )
 
-        val returnedId = runBlocking { previousTestRunService.findMostRecentMainBranchRunWithCoverage(repoName, projectName) }
-        expectThat(returnedId).isNotNull().isEqualTo(newPublicId)
+        val recentTestRun = runBlocking { previousTestRunService.findMostRecentMainBranchRunWithCoverage(repoName, projectName) }
+        expectThat(recentTestRun).isNotNull().and {
+            get { publicId }.isEqualTo(newPublicId)
+            get { createdTimestamp }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC))
+        }
     }
 }

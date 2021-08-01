@@ -2,7 +2,6 @@ package projektor.repository.performance
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
@@ -17,13 +16,9 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import java.math.BigDecimal
-import java.util.*
 import kotlin.test.assertNotNull
 
 class RepositoryPerformanceTimelineApplicationTest : ApplicationTestCase() {
-    init {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
-    }
 
     @Test
     fun `should fetch performance timeline for repository without project name`() {

@@ -6,6 +6,7 @@ import org.jooq.DSLContext
 import projektor.database.generated.Tables.*
 import projektor.server.api.PublicId
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : PreviousTestRunRepository {
     override suspend fun findPreviousMainBranchRunWithCoverage(publicId: PublicId): PublicId? =
@@ -48,9 +49,9 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
             }
         }
 
-    override suspend fun findMostRecentMainBranchRunWithCoverage(repoName: String, projectName: String?): PublicId? =
+    override suspend fun findMostRecentMainBranchRunWithCoverage(repoName: String, projectName: String?): RecentTestRun? =
         withContext(Dispatchers.IO) {
-            val previousPublicId = dslContext.select(TEST_RUN.PUBLIC_ID)
+            val recentTestRun = dslContext.select(TEST_RUN.PUBLIC_ID, TEST_RUN.CREATED_TIMESTAMP)
                 .from(TEST_RUN)
                 .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
                 .innerJoin(CODE_COVERAGE_RUN).on(TEST_RUN.PUBLIC_ID.eq(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID))
@@ -66,9 +67,14 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
                 )
                 .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
                 .limit(1)
-                .fetchOne(TEST_RUN.PUBLIC_ID)
+                .fetchOne()
 
-            previousPublicId?.let { PublicId(it) }
+            recentTestRun?.let {
+                RecentTestRun(
+                    publicId = PublicId(it.component1()),
+                    createdTimestamp = it.component2().toInstant(ZoneOffset.UTC)
+                )
+            }
         }
 
     data class CurrentRunInfo(val repoName: String, val createdTimestamp: LocalDateTime, val projectName: String?)

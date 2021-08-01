@@ -1,4 +1,4 @@
-package projektor.server.api.repository
+package projektor.server.api.repository.coverage
 
 import projektor.server.api.coverage.CoverageStats
 import java.time.Instant

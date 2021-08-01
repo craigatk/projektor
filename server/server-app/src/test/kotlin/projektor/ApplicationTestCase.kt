@@ -41,9 +41,14 @@ import projektor.server.example.coverage.CloverXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import java.math.BigDecimal
+import java.util.*
 import kotlin.test.assertNotNull
 
 open class ApplicationTestCase {
+    init {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+    }
+
     val cloverXmlLoader = CloverXmlLoader()
     val resultsXmlLoader = ResultsXmlLoader()
 
