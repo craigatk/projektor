@@ -53,7 +53,8 @@ const sendResults = async (
   isCI,
   group,
   compressionEnabled,
-  resultsMaxSizeMB
+  resultsMaxSizeMB,
+  gitMainBranchNames
 ) => {
   const headers = {};
 
@@ -82,7 +83,10 @@ const sendResults = async (
       git: {
         repoName: gitRepoName,
         branchName: gitBranchName,
-        isMainBranch: gitBranchName === "main" || gitBranchName === "master",
+        isMainBranch:
+          gitBranchName &&
+          gitMainBranchNames &&
+          gitMainBranchNames.includes(gitBranchName),
         projectName,
         commitSha: gitCommitSha,
         pullRequestNumber: gitPullRequestNumber,
@@ -148,7 +152,8 @@ const collectAndSendResults = async (
   compressionEnabled,
   baseDirectoryPath,
   resultsMaxSizeMB,
-  attachmentMaxSizeMB
+  attachmentMaxSizeMB,
+  gitMainBranchNames
 ) => {
   console.log(
     createResultsLogMessage(resultsFileGlobs, coverageFileGlobs, serverUrl)
@@ -177,7 +182,8 @@ const collectAndSendResults = async (
         isCI,
         group,
         compressionEnabled,
-        resultsMaxSizeMB
+        resultsMaxSizeMB,
+        gitMainBranchNames
       );
 
       const publicId = resultsResponseData.id;

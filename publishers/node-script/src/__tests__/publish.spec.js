@@ -169,7 +169,8 @@ describe("Projektor publisher", () => {
       null,
       false,
       null,
-      true
+      true,
+      null
     );
 
     const uncompressedPostData = await extractUncompressedResultsPostData(

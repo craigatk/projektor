@@ -32,6 +32,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
   let resultsMaxSizeMB;
   let attachmentMaxSizeMB;
   let groupResults;
+  let gitMainBranchNames;
 
   const configFilePath = args.configFile || defaultConfigFilePath;
 
@@ -55,6 +56,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     resultsMaxSizeMB = config.resultsMaxSizeMB;
     attachmentMaxSizeMB = config.attachmentMaxSizeMB;
     groupResults = config.groupResults;
+    gitMainBranchNames = config.gitMainBranchNames;
   } else {
     serverUrl = args.serverUrl;
     resultsFileGlobs = args.resultsFileGlobs;
@@ -85,6 +87,12 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     resultsMaxSizeMB = args.resultsMaxSizeMB;
     attachmentMaxSizeMB = args.attachmentMaxSizeMB;
     groupResults = args.groupResults;
+
+    if (args.gitMainBranchNames) {
+      gitMainBranchNames = Array.isArray(args.gitMainBranchNames)
+        ? args.gitMainBranchNames
+        : args.gitMainBranchNames.split(",");
+    }
   }
 
   if (_.isNil(compressionEnabled)) {
@@ -101,6 +109,10 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     resultsMaxSizeMB = parseFloat(resultsMaxSizeMB);
   } else {
     resultsMaxSizeMB = 20;
+  }
+
+  if (_.isNil(gitMainBranchNames)) {
+    gitMainBranchNames = ["main", "master"];
   }
 
   if (resultsFileGlobs || performanceFileGlobs) {
@@ -142,7 +154,8 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
         compressionEnabled,
         baseDirectoryPath,
         resultsMaxSizeMB,
-        attachmentMaxSizeMB
+        attachmentMaxSizeMB,
+        gitMainBranchNames
       );
 
     if (!resultsBlob && !performanceFileGlobs) {

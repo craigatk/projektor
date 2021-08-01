@@ -47,4 +47,37 @@ describe("publish Git metadata functional spec", () => {
       }
     );
   });
+
+    it("should allow configuring the mainline branch names", async (done) => {
+        exec(
+            `env-cmd -f .git-develop-branch-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} --projectName=my-project --gitMainBranchNames=main,develop results/*.xml`,
+            async (error, stdout, stderr) => {
+                verifyOutput(error, stdout, stderr, serverPort);
+                expect(error).toBeNull();
+
+                const testRunId = extractTestRunId(stdout);
+                console.log("Test ID", testRunId);
+
+                await waitForExpect(async () => {
+                    const testRunSummaryResponse = await fetchTestRunSummary(
+                        testRunId,
+                        serverPort
+                    );
+                    expect(testRunSummaryResponse.status).toEqual(200);
+                });
+
+                const gitMetadataResponse = await fetchGitMetadata(
+                    testRunId,
+                    serverPort
+                );
+                expect(gitMetadataResponse.status).toEqual(200);
+                console.log("Git metadata response", gitMetadataResponse.data);
+
+                expect(gitMetadataResponse.data.branch_name).toEqual("develop");
+                expect(gitMetadataResponse.data.is_main_branch).toEqual(true);
+
+                done();
+            }
+        );
+    });
 });
