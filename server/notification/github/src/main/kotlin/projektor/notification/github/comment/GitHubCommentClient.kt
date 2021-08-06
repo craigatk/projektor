@@ -28,15 +28,17 @@ class GitHubCommentClient(
         comment.update(newText)
     }
 
-    fun findOpenPullRequests(repository: GHRepository, branchName: String, commitSha: String?): Int? {
+    fun findOpenPullRequests(repository: GHRepository, branchName: String?, commitSha: String?): Int? {
         val pullRequestsResults = repository
             .queryPullRequests()
             .state(GHIssueState.OPEN)
             .list()
             .toList()
 
-        val pullRequestForBranch = pullRequestsResults
-            .firstOrNull { it.head.ref.endsWith(branchName) }
+        val pullRequestForBranch = branchName?.let {
+            pullRequestsResults
+                .firstOrNull { it.head.ref.endsWith(branchName) }
+        }
 
         return if (pullRequestForBranch != null) {
             pullRequestForBranch.number

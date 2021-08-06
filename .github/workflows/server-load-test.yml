@@ -1,11 +1,6 @@
 name: Server load test
 
-on:
-  push:
-    paths-ignore:
-      - 'functional-test/**'
-      - 'publishers/**'
-      - 'ui/**'
+on: workflow_dispatch
 
 jobs:
   gradle-build:
