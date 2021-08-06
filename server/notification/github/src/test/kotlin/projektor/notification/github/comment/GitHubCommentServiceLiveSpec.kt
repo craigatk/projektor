@@ -52,7 +52,7 @@ class GitHubCommentServiceLiveSpec : StringSpec() {
                 project = null
             )
 
-            commentService.upsertReportComment(commentData)
+            commentService.upsertReportComment(commentData, "12345")
         }
 
         "should update comment when one already exists" {
@@ -78,7 +78,7 @@ class GitHubCommentServiceLiveSpec : StringSpec() {
                 project = null
             )
 
-            commentService.upsertReportComment(newCommentData)
+            commentService.upsertReportComment(newCommentData, "12345")
         }
     }
 

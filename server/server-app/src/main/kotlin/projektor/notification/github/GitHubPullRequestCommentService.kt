@@ -67,7 +67,7 @@ class GitHubPullRequestCommentService(
                     project = gitMetadata.projectName
                 )
 
-                gitHubCommentService.upsertReportComment(commentData)
+                gitHubCommentService.upsertReportComment(commentData, testRunSummary.id)
             } else {
                 null
             }
