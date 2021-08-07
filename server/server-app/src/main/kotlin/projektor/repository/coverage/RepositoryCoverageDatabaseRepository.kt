@@ -8,6 +8,8 @@ import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.coverage.toCoverageStats
 import projektor.database.generated.Tables.*
 import projektor.parser.coverage.model.CoverageReportStats
+import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withBranchType
+import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.coverage.RepositoryCoverageTimeline
 import projektor.server.api.repository.coverage.RepositoryCoverageTimelineEntry
 import java.time.Instant
@@ -19,7 +21,7 @@ class RepositoryCoverageDatabaseRepository(private val dslContext: DSLContext) :
         .ignorePropertyNotFound()
         .newMapper(ReportTimelineEntry::class.java)
 
-    override suspend fun fetchRepositoryCoverageTimeline(repoName: String, projectName: String?): RepositoryCoverageTimeline? =
+    override suspend fun fetchRepositoryCoverageTimeline(branchType: BranchType, repoName: String, projectName: String?): RepositoryCoverageTimeline? =
         withContext(Dispatchers.IO) {
             val resultSet = dslContext.select(
                 TEST_RUN.PUBLIC_ID,
@@ -37,7 +39,7 @@ class RepositoryCoverageDatabaseRepository(private val dslContext: DSLContext) :
                 .innerJoin(CODE_COVERAGE_STATS).on(CODE_COVERAGE_STATS.CODE_COVERAGE_RUN_ID.eq(CODE_COVERAGE_RUN.ID))
                 .where(
                     GIT_METADATA.REPO_NAME.eq(repoName)
-                        .and(GIT_METADATA.IS_MAIN_BRANCH.eq(true))
+                        .and(withBranchType(branchType))
                         .let {
                             if (projectName == null)
                                 it.and(GIT_METADATA.PROJECT_NAME.isNull)

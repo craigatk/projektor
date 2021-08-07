@@ -16,12 +16,15 @@ fun Route.repositoryCoverage(
     previousTestRunService: PreviousTestRunService,
     repositoryCoverageService: RepositoryCoverageService,
 ) {
+    fun findBranchType(call: ApplicationCall) = BranchType.valueOf(call.request.queryParameters["branch"]?.toUpperCase() ?: "MAINLINE")
+
     get("/repo/{orgPart}/{repoPart}/coverage/timeline") {
         val orgPart = call.parameters.getOrFail("orgPart")
         val repoPart = call.parameters.getOrFail("repoPart")
         val fullRepoName = "$orgPart/$repoPart"
+        val branchType = findBranchType(call)
 
-        val coverageTimeline = repositoryCoverageService.fetchRepositoryCoverageTimeline(fullRepoName, null)
+        val coverageTimeline = repositoryCoverageService.fetchRepositoryCoverageTimeline(branchType, fullRepoName, null)
 
         coverageTimeline?.let { call.respond(HttpStatusCode.OK, it) }
             ?: call.respond(HttpStatusCode.NoContent)
@@ -32,8 +35,9 @@ fun Route.repositoryCoverage(
         val repoPart = call.parameters.getOrFail("repoPart")
         val fullReposName = "$orgPart/$repoPart"
         val projectName = call.parameters.getOrFail("projectName")
+        val branchType = findBranchType(call)
 
-        val coverageTimeline = repositoryCoverageService.fetchRepositoryCoverageTimeline(fullReposName, projectName)
+        val coverageTimeline = repositoryCoverageService.fetchRepositoryCoverageTimeline(branchType, fullReposName, projectName)
 
         coverageTimeline?.let { call.respond(HttpStatusCode.OK, it) }
             ?: call.respond(HttpStatusCode.NoContent)
