@@ -2,7 +2,6 @@ package projektor.badge
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -15,23 +14,55 @@ import strikt.assertions.isNotNull
 
 class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
     @Test
-    fun `should create coverage badge for repository`() {
+    fun `should create coverage badge for repository mainline branch by default`() {
         val repoName = randomOrgAndRepo()
 
-        val thisPublicId = randomPublicId()
+        val mainlinePublicId = randomPublicId()
+        val featureBranchPublicId = randomPublicId()
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/badge/coverage") {
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = thisPublicId,
+                    publicId = mainlinePublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
-                    repoName = repoName
+                    repoName = repoName,
+                    branchName = "main"
+                )
+
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                    publicId = featureBranchPublicId,
+                    coverageText = JacocoXmlLoader().serverApp(),
+                    repoName = repoName,
+                    branchName = "feature/dev"
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
                 expectThat(response.contentType().toString()).contains(ContentType.Image.SVG.toString())
 
                 expectThat(response.content).isNotNull().contains("95%")
+            }
+        }
+    }
+
+    @Test
+    fun `when no coverage in mainline should create coverage badge for repository with data from all branches`() {
+        val repoName = randomOrgAndRepo()
+
+        val featureBranchPublicId = randomPublicId()
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Get, "/repo/$repoName/badge/coverage") {
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                    publicId = featureBranchPublicId,
+                    coverageText = JacocoXmlLoader().serverApp(),
+                    repoName = repoName,
+                    branchName = "feature/dev"
+                )
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+                expectThat(response.contentType().toString()).contains(ContentType.Image.SVG.toString())
+
+                expectThat(response.content).isNotNull().contains("97%")
             }
         }
     }

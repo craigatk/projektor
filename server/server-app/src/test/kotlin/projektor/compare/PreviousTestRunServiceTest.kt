@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.koin.test.inject
 import projektor.DatabaseRepositoryTestCase
 import projektor.incomingresults.randomPublicId
+import projektor.server.api.repository.BranchType
 import projektor.server.example.coverage.JacocoXmlLoader
 import projektor.util.randomOrgAndRepo
 import strikt.api.expectThat
@@ -103,17 +104,26 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
 
         val olderPublicId = randomPublicId()
         val oldPublicId = randomPublicId()
-        val newestPublicId = randomPublicId()
+        val newestMainlineWithCoveragePublicId = randomPublicId()
+        val newerFeatureBranchWithCoveragePublicId = randomPublicId()
 
         val repoName = randomOrgAndRepo()
 
-        listOf(olderPublicId, oldPublicId, newestPublicId).forEach { publicId ->
+        listOf(olderPublicId, oldPublicId, newestMainlineWithCoveragePublicId).forEach { publicId ->
             testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                 publicId,
                 JacocoXmlLoader().serverApp(),
-                repoName
+                repoName,
+                branchName = "main"
             )
         }
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            newerFeatureBranchWithCoveragePublicId,
+            JacocoXmlLoader().serverApp(),
+            repoName,
+            branchName = "feature/dev"
+        )
 
         val newerWithoutCoveragePublicId = randomPublicId()
         testRunDBGenerator.createSimpleTestRunInRepo(
@@ -123,10 +133,52 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             null
         )
 
-        val mostRecentTestRun = runBlocking { previousTestRunService.findMostRecentMainBranchRunWithCoverage(repoName, null) }
+        val mostRecentTestRun = runBlocking { previousTestRunService.findMostRecentMainBranchRunWithCoverage(BranchType.MAINLINE, repoName, null) }
 
         expectThat(mostRecentTestRun).isNotNull().and {
-            get { publicId }.isEqualTo(newestPublicId)
+            get { publicId }.isEqualTo(newestMainlineWithCoveragePublicId)
+        }
+    }
+
+    @Test
+    fun `should find most recent run in all branches that has coverage data`() {
+        val previousTestRunService: PreviousTestRunService by inject()
+
+        val olderPublicId = randomPublicId()
+        val oldPublicId = randomPublicId()
+        val newestMainlineWithCoveragePublicId = randomPublicId()
+        val newerFeatureBranchWithCoveragePublicId = randomPublicId()
+
+        val repoName = randomOrgAndRepo()
+
+        listOf(olderPublicId, oldPublicId, newestMainlineWithCoveragePublicId).forEach { publicId ->
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId,
+                JacocoXmlLoader().serverApp(),
+                repoName,
+                branchName = "main"
+            )
+        }
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            newerFeatureBranchWithCoveragePublicId,
+            JacocoXmlLoader().serverApp(),
+            repoName,
+            branchName = "feature/dev"
+        )
+
+        val newerWithoutCoveragePublicId = randomPublicId()
+        testRunDBGenerator.createSimpleTestRunInRepo(
+            newerWithoutCoveragePublicId,
+            repoName,
+            true,
+            null
+        )
+
+        val mostRecentTestRun = runBlocking { previousTestRunService.findMostRecentMainBranchRunWithCoverage(BranchType.ALL, repoName, null) }
+
+        expectThat(mostRecentTestRun).isNotNull().and {
+            get { publicId }.isEqualTo(newerFeatureBranchWithCoveragePublicId)
         }
     }
 
@@ -165,7 +217,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             projectName = "other-project"
         )
 
-        val recentTestRun = runBlocking { previousTestRunService.findMostRecentMainBranchRunWithCoverage(repoName, projectName) }
+        val recentTestRun = runBlocking { previousTestRunService.findMostRecentMainBranchRunWithCoverage(BranchType.MAINLINE, repoName, projectName) }
         expectThat(recentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newPublicId)
             get { createdTimestamp }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC))

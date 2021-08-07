@@ -8,6 +8,7 @@ import io.ktor.util.*
 import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageService
 import projektor.repository.coverage.RepositoryCoverageService
+import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.coverage.RepositoryCurrentCoverage
 
 fun Route.repositoryCoverage(
@@ -46,7 +47,7 @@ fun Route.repositoryCoverage(
     ) {
         val fullRepoName = "$orgPart/$repoPart"
 
-        val mostRecentTestRun = previousTestRunService.findMostRecentMainBranchRunWithCoverage(fullRepoName, projectName)
+        val mostRecentTestRun = previousTestRunService.findMostRecentMainBranchRunWithCoverage(BranchType.MAINLINE, fullRepoName, projectName)
         val coveredPercentage = mostRecentTestRun?.publicId?.let { publicId -> coverageService.getCoveredLinePercentage(publicId) }
 
         if (mostRecentTestRun != null && coveredPercentage != null) {
