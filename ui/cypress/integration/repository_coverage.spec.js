@@ -37,6 +37,44 @@ describe("repository coverage", () => {
     cy.url().should("contain", `/tests/${publicId}`);
   });
 
+  it("should support finding coverage from all branches", () => {
+    const repoName = "cov-org/cov-repo-all";
+
+    cy.intercept("GET", `repo/${repoName}/badge/coverage`, {
+      statusCode: 404,
+    });
+
+    cy.intercept("GET", `repo/${repoName}/coverage/timeline?branch=ALL`, {
+      fixture: "repository/coverage_timeline.json",
+    });
+    cy.intercept("GET", `repo/${repoName}/coverage/timeline`, {
+      fixture: "repository/coverage_timeline_empty.json",
+    });
+
+    const publicIds = [
+      "2XMM8MYQTKM0",
+      "3RZRSBCSALZ2",
+      "WJIHLB2MTRAW",
+      "BYYUCDMQ5WJ6",
+      "KRXBI9GH213D",
+      "XPF0IHDJBLOO",
+    ];
+
+    cy.visit(`http://localhost:1234/repository/${repoName}/coverage`);
+
+    cy.findByTestId("repository-coverage-branch-type").click();
+    cy.findByTestId("repository-coverage-branch-type-all").click();
+    cy.findByTestId("repository-coverage-search-button").click();
+
+    cy.findByTestId("repository-coverage-timeline-graph").should("exist");
+
+    publicIds.forEach((publicId) => {
+      cy.findByRole(`dot-lineValue-${publicId}`).should("exist");
+
+      cy.findByRole(`dot-branchValue-${publicId}`).should("exist");
+    });
+  });
+
   it("should display tooltip with coverage data on graph point hover", () => {
     const repoName = "cov-org/cov-repo";
 

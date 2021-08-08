@@ -13,9 +13,11 @@ import RepositoryCoveragePage from "../RepositoryCoveragePage";
 import {
   createHistory,
   createMemorySource,
+  globalHistory,
   LocationProvider,
 } from "@reach/router";
 import ResizeObserver from "resize-observer-polyfill";
+import { QueryParamProvider } from "use-query-params";
 
 window.ResizeObserver = ResizeObserver;
 
@@ -31,7 +33,7 @@ describe("RepositoryCoveragePage", () => {
     mockAxios.restore();
   });
 
-  it("should display coverage timeline graph when no project name", async () => {
+  it("should display coverage timeline graph from mainline when no project name", async () => {
     const repoName = "my-org/my-repo";
 
     const timeline = {
@@ -60,7 +62,9 @@ describe("RepositoryCoveragePage", () => {
 
     const { findByTestId } = render(
       <LocationProvider history={createHistory(createMemorySource("/ui"))}>
-        <RepositoryCoveragePage orgPart="my-org" repoPart="my-repo" />
+        <QueryParamProvider reachHistory={globalHistory}>
+          <RepositoryCoveragePage orgPart="my-org" repoPart="my-repo" />
+        </QueryParamProvider>
       </LocationProvider>
     );
 
@@ -76,7 +80,9 @@ describe("RepositoryCoveragePage", () => {
 
     const { findByTestId } = render(
       <LocationProvider history={createHistory(createMemorySource("/ui"))}>
-        <RepositoryCoveragePage orgPart="my-org" repoPart="my-repo" />
+        <QueryParamProvider reachHistory={globalHistory}>
+          <RepositoryCoveragePage orgPart="my-org" repoPart="my-repo" />
+        </QueryParamProvider>
       </LocationProvider>
     );
 

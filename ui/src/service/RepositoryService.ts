@@ -20,11 +20,17 @@ const fetchRepositoryTimeline = (
 
 const fetchRepositoryCoverageTimeline = (
   repoName: string,
-  projectName?: string
+  projectName?: string,
+  branchType?: string
 ): Promise<AxiosResponse<RepositoryCoverageTimeline>> => {
-  const url = projectName
+  let url = projectName
     ? `repo/${repoName}/project/${projectName}/coverage/timeline`
     : `repo/${repoName}/coverage/timeline`;
+
+  if (branchType) {
+    url += `?branch=${branchType.toUpperCase()}`;
+  }
+
   // @ts-ignore
   return axiosInstance.get<RepositoryCoverageTimeline>(url);
 };

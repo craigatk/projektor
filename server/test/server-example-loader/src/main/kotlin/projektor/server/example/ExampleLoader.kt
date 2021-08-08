@@ -477,6 +477,33 @@ fun repositoryCoverageTimeline() {
     println("View repository coverage timeline at $uiBaseUrl/repository/$repoName")
 }
 
+fun repositoryCoverageTimelineDifferentBranches() {
+    val repoName = "cov-org/cov-repo-diff"
+
+    val gitMetadataMain = GitMetadata()
+    gitMetadataMain.repoName = repoName
+    gitMetadataMain.branchName = "main"
+    gitMetadataMain.isMainBranch = true
+    val resultsMetadataMain = ResultsMetadata()
+    resultsMetadataMain.git = gitMetadataMain
+
+    val gitMetadataBranch = GitMetadata()
+    gitMetadataBranch.repoName = repoName
+    gitMetadataBranch.branchName = "feature/branch"
+    gitMetadataBranch.isMainBranch = false
+    val resultsMetadataBranch = ResultsMetadata()
+    resultsMetadataBranch.git = gitMetadataBranch
+
+    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataMain)).id, JacocoXmlLoader().jacocoXmlParser())
+    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataMain)).id, JacocoXmlLoader().jacocoXmlParserReduced())
+    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataMain)).id, JacocoXmlLoader().serverAppReduced())
+    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataBranch)).id, JacocoXmlLoader().serverApp())
+    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataBranch)).id, JacocoXmlLoader().junitResultsParser())
+    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataBranch)).id, JacocoXmlLoader().junitResultsParserReduced())
+
+    println("View repository coverage timeline with different branches at $uiBaseUrl/repository/$repoName")
+}
+
 fun coveragePayloadWithBaseDirectory() {
     val repoName = "craigatk/projektor"
     val branchName = "master"
