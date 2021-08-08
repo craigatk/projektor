@@ -27,6 +27,7 @@ fun main() {
     loadCoberturaCoverageUi()
     loadCloverCoverageLarge()
     repositoryCoverageTimeline()
+    repositoryCoverageTimelineDifferentBranches()
     repositoryFlakyTests()
     loadMultipleTestRunsFromSameRepoForTimeline()
     loadMultipleShortTestRunsFromSameRepoForTimeline()

@@ -33,10 +33,6 @@ const RepositoryCoverageDetails = ({
   if (coverageTimeline) {
     return (
       <div>
-        <PageTitle
-          title="Coverage over time"
-          testid="repository-coverage-title"
-        />
         <RepositoryCoverageTimelineGraph coverageTimeline={coverageTimeline} />
         <div className={classes.coverageBadgeSection}>
           <RepositoryCoverageBadge
