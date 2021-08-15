@@ -1,6 +1,5 @@
 package projektor.repository.performance
 
-import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
@@ -26,7 +25,7 @@ class RepositoryPerformanceDatabaseRepositoryTest : DatabaseRepositoryTestCase()
 
         val testRunDB = testRunDBGenerator.createSimpleTestRun(publicId)
         testRunDBGenerator.addResultsMetadata(testRunDB, false)
-        testRunDBGenerator.addGitMetadata(testRunDB, repoName, false, null, null)
+        testRunDBGenerator.addGitMetadata(testRunDB, repoName, false, null, null, null, null)
 
         val savedPerfResult1 = PerformanceResult(
             name = "perf1",

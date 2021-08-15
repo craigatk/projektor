@@ -13,7 +13,7 @@ import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.Row9;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -84,6 +84,16 @@ public class GitMetadata extends TableImpl<GitMetadataRecord> {
      * The column <code>public.git_metadata.project_name</code>.
      */
     public final TableField<GitMetadataRecord, String> PROJECT_NAME = createField(DSL.name("project_name"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>public.git_metadata.pull_request_number</code>.
+     */
+    public final TableField<GitMetadataRecord, Integer> PULL_REQUEST_NUMBER = createField(DSL.name("pull_request_number"), SQLDataType.INTEGER, this, "");
+
+    /**
+     * The column <code>public.git_metadata.commit_sha</code>.
+     */
+    public final TableField<GitMetadataRecord, String> COMMIT_SHA = createField(DSL.name("commit_sha"), SQLDataType.CLOB, this, "");
 
     private GitMetadata(Name alias, Table<GitMetadataRecord> aliased) {
         this(alias, aliased, null);
@@ -179,11 +189,11 @@ public class GitMetadata extends TableImpl<GitMetadataRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row9 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<Long, Long, String, Boolean, String, String, String> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row9<Long, Long, String, Boolean, String, String, String, Integer, String> fieldsRow() {
+        return (Row9) super.fieldsRow();
     }
 }

@@ -22,6 +22,8 @@ public class GitMetadata implements Serializable {
     private String  branchName;
     private String  orgName;
     private String  projectName;
+    private Integer pullRequestNumber;
+    private String  commitSha;
 
     public GitMetadata() {}
 
@@ -33,6 +35,8 @@ public class GitMetadata implements Serializable {
         this.branchName = value.branchName;
         this.orgName = value.orgName;
         this.projectName = value.projectName;
+        this.pullRequestNumber = value.pullRequestNumber;
+        this.commitSha = value.commitSha;
     }
 
     public GitMetadata(
@@ -42,7 +46,9 @@ public class GitMetadata implements Serializable {
         Boolean isMainBranch,
         String  branchName,
         String  orgName,
-        String  projectName
+        String  projectName,
+        Integer pullRequestNumber,
+        String  commitSha
     ) {
         this.id = id;
         this.testRunId = testRunId;
@@ -51,6 +57,8 @@ public class GitMetadata implements Serializable {
         this.branchName = branchName;
         this.orgName = orgName;
         this.projectName = projectName;
+        this.pullRequestNumber = pullRequestNumber;
+        this.commitSha = commitSha;
     }
 
     /**
@@ -158,6 +166,36 @@ public class GitMetadata implements Serializable {
         return this;
     }
 
+    /**
+     * Getter for <code>public.git_metadata.pull_request_number</code>.
+     */
+    public Integer getPullRequestNumber() {
+        return this.pullRequestNumber;
+    }
+
+    /**
+     * Setter for <code>public.git_metadata.pull_request_number</code>.
+     */
+    public GitMetadata setPullRequestNumber(Integer pullRequestNumber) {
+        this.pullRequestNumber = pullRequestNumber;
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.git_metadata.commit_sha</code>.
+     */
+    public String getCommitSha() {
+        return this.commitSha;
+    }
+
+    /**
+     * Setter for <code>public.git_metadata.commit_sha</code>.
+     */
+    public GitMetadata setCommitSha(String commitSha) {
+        this.commitSha = commitSha;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -209,6 +247,18 @@ public class GitMetadata implements Serializable {
         }
         else if (!projectName.equals(other.projectName))
             return false;
+        if (pullRequestNumber == null) {
+            if (other.pullRequestNumber != null)
+                return false;
+        }
+        else if (!pullRequestNumber.equals(other.pullRequestNumber))
+            return false;
+        if (commitSha == null) {
+            if (other.commitSha != null)
+                return false;
+        }
+        else if (!commitSha.equals(other.commitSha))
+            return false;
         return true;
     }
 
@@ -223,6 +273,8 @@ public class GitMetadata implements Serializable {
         result = prime * result + ((this.branchName == null) ? 0 : this.branchName.hashCode());
         result = prime * result + ((this.orgName == null) ? 0 : this.orgName.hashCode());
         result = prime * result + ((this.projectName == null) ? 0 : this.projectName.hashCode());
+        result = prime * result + ((this.pullRequestNumber == null) ? 0 : this.pullRequestNumber.hashCode());
+        result = prime * result + ((this.commitSha == null) ? 0 : this.commitSha.hashCode());
         return result;
     }
 
@@ -237,6 +289,8 @@ public class GitMetadata implements Serializable {
         sb.append(", ").append(branchName);
         sb.append(", ").append(orgName);
         sb.append(", ").append(projectName);
+        sb.append(", ").append(pullRequestNumber);
+        sb.append(", ").append(commitSha);
 
         sb.append(")");
         return sb.toString();

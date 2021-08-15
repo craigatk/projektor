@@ -31,16 +31,16 @@ class RepositoryTestRunDatabaseRepositoryTimelineTest : DatabaseRepositoryTestCa
         val firstTestRun = createTestRun(firstRunCITruePublicId, 20, BigDecimal("25.000"))
         testRunDao.insert(firstTestRun)
         testRunDBGenerator.addResultsMetadata(firstTestRun, true)
-        testRunDBGenerator.addGitMetadata(firstTestRun, repoName, true, "main", projectName)
+        testRunDBGenerator.addGitMetadata(firstTestRun, repoName, true, "main", projectName, null, null)
 
         val secondTestRun = createTestRun(secondRunCINullPublicId, 30, BigDecimal("35.000"))
         testRunDao.insert(secondTestRun)
-        testRunDBGenerator.addGitMetadata(secondTestRun, repoName, true, "main", projectName)
+        testRunDBGenerator.addGitMetadata(secondTestRun, repoName, true, "main", projectName, null, null)
 
         val nonCITestRun = createTestRun(nonCIPublicId, 20, BigDecimal("25.000"))
         testRunDao.insert(nonCITestRun)
         testRunDBGenerator.addResultsMetadata(nonCITestRun, false)
-        testRunDBGenerator.addGitMetadata(nonCITestRun, repoName, true, "main", projectName)
+        testRunDBGenerator.addGitMetadata(nonCITestRun, repoName, true, "main", projectName, null, null)
 
         val timeline = runBlocking { repositoryTestRunDatabaseRepository.fetchRepositoryTestRunTimeline(repoName, projectName) }
         assertNotNull(timeline)
@@ -69,12 +69,12 @@ class RepositoryTestRunDatabaseRepositoryTimelineTest : DatabaseRepositoryTestCa
         val testRunWithoutProjectName = createTestRun(runWithoutProjectNamePublicId, 20, BigDecimal("25.000"))
         testRunDao.insert(testRunWithoutProjectName)
         testRunDBGenerator.addResultsMetadata(testRunWithoutProjectName, true)
-        testRunDBGenerator.addGitMetadata(testRunWithoutProjectName, repoName, true, "main", projectName)
+        testRunDBGenerator.addGitMetadata(testRunWithoutProjectName, repoName, true, "main", projectName, null, null)
 
         val testRunWithProjectName = createTestRun(runWithProjectNamePublicId, 30, BigDecimal("35.000"))
         testRunDao.insert(testRunWithProjectName)
         testRunDBGenerator.addResultsMetadata(testRunWithProjectName, true)
-        testRunDBGenerator.addGitMetadata(testRunWithProjectName, repoName, true, "main", "other-project")
+        testRunDBGenerator.addGitMetadata(testRunWithProjectName, repoName, true, "main", "other-project", null, null)
 
         val timeline = runBlocking { repositoryTestRunDatabaseRepository.fetchRepositoryTestRunTimeline(repoName, projectName) }
         assertNotNull(timeline)
@@ -101,17 +101,17 @@ class RepositoryTestRunDatabaseRepositoryTimelineTest : DatabaseRepositoryTestCa
         val testRunWithoutProjectName = createTestRun(runWithoutProjectNamePublicId, 20, BigDecimal("25.000"))
         testRunDao.insert(testRunWithoutProjectName)
         testRunDBGenerator.addResultsMetadata(testRunWithoutProjectName, true)
-        testRunDBGenerator.addGitMetadata(testRunWithoutProjectName, repoName, true, "main", null)
+        testRunDBGenerator.addGitMetadata(testRunWithoutProjectName, repoName, true, "main", null, null, null)
 
         val testRunWithProjectName = createTestRun(runWithProjectNamePublicId, 30, BigDecimal("35.000"))
         testRunDao.insert(testRunWithProjectName)
         testRunDBGenerator.addResultsMetadata(testRunWithProjectName, true)
-        testRunDBGenerator.addGitMetadata(testRunWithProjectName, repoName, true, "main", projectName)
+        testRunDBGenerator.addGitMetadata(testRunWithProjectName, repoName, true, "main", projectName, null, null)
 
         val testRunWithDifferentProjectName = createTestRun(runWithDifferentProjectNamePublicId, 40, BigDecimal("45.000"))
         testRunDao.insert(testRunWithDifferentProjectName)
         testRunDBGenerator.addResultsMetadata(testRunWithDifferentProjectName, true)
-        testRunDBGenerator.addGitMetadata(testRunWithDifferentProjectName, repoName, true, "main", "other-project")
+        testRunDBGenerator.addGitMetadata(testRunWithDifferentProjectName, repoName, true, "main", "other-project", null, null)
 
         val timeline = runBlocking { repositoryTestRunDatabaseRepository.fetchRepositoryTestRunTimeline(repoName, projectName) }
         assertNotNull(timeline)
