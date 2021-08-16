@@ -1,7 +1,7 @@
 import * as React from "react";
 import { TestRunGitMetadata } from "../model/TestRunModel";
 import { Link } from "@material-ui/core";
-import { createGitHubUrl } from "./VersionControlHelpers";
+import { createGitHubFileUrl } from "./VersionControlHelpers";
 
 interface GitHubFileLinkProps {
   gitMetadata: TestRunGitMetadata;
@@ -18,7 +18,7 @@ const GitHubFileLink = ({
   linkText,
   testId,
 }: GitHubFileLinkProps) => {
-  const linkUrl = createGitHubUrl(gitMetadata, filePath, lineNumber);
+  const linkUrl = createGitHubFileUrl(gitMetadata, filePath, lineNumber);
 
   if (linkUrl) {
     return (

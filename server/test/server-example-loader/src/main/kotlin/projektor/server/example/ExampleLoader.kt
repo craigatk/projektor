@@ -286,6 +286,23 @@ fun slowTimeline() {
     println("View repository slow tests run timeline at $uiBaseUrl/repository/$repoName")
 }
 
+fun gitMetadataWithPullRequestNumberAndCommitSha() {
+    val repoName = "craigatk/projektor"
+    val branchName = "master"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    gitMetadata.pullRequestNumber = 397
+    gitMetadata.commitSha = "64b3b45b9300d728a784b7a1a938f17348ab99f8"
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+
+    val currentResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata))
+
+    println("View run with Git metadata including pull request number and commit SHA at $uiBaseUrl${currentResultsResponse.uri}")
+}
+
 fun loadCoverageWithProjectName() {
     val repoName = "projektor/projektor"
     val branchName = "main"
