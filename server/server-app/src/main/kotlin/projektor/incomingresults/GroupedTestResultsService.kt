@@ -99,9 +99,11 @@ class GroupedTestResultsService(
             val pullRequest = publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git, coverage, performanceResults)
 
             if (groupedResults.metadata?.git != null) {
+                val pullRequestNumber = groupedResults.metadata.git.pullRequestNumber ?: pullRequest?.number
+
                 testRunMetadataRepository.updateGitMetadata(
                     testRunId = testRunId,
-                    pullRequestNumber = pullRequest?.number,
+                    pullRequestNumber = pullRequestNumber,
                     commitSha = groupedResults.metadata.git.commitSha
                 )
             }

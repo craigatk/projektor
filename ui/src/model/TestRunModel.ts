@@ -131,6 +131,8 @@ interface TestRunGitMetadata {
   branchName?: string;
   isMainBranch: boolean;
   gitHubBaseUrl?: string;
+  pullRequestNumber?: number;
+  commitSha?: string;
 }
 
 interface TestRunSummary {

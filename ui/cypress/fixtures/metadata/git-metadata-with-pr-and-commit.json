@@ -1,0 +1,9 @@
+{
+  "repo_name": "craigatk/projektor",
+  "org_name": "craigatk",
+  "branch_name": "main",
+  "is_main_branch": true,
+  "git_hub_base_url": "http://localhost:1234",
+  "pull_request_number": 42,
+  "commit_sha": "d7efb34a60091f0d9516660a371c290092a6638c"
+}

@@ -9,6 +9,9 @@ import TestRunCleanupDate from "./TestRunCleanupDate";
 import TestRunMessages from "../TestRunMessages/TestRunMessages";
 import GitRepoListItem from "./GitRepoListItem";
 import DashboardSummaryItem from "./DashboardSummaryItem";
+import CleanLink from "../Link/CleanLink";
+import { createGitHubUrl } from "../VersionControl/VersionControlHelpers";
+import CleanLinkText from "../Link/CleanLinkText";
 
 interface DashboardSummaryProps {
   publicId: string;
@@ -95,6 +98,44 @@ const DashboardSummary = ({
                 label="Branch"
                 testId="dashboard-summary-branch-name"
                 value={gitMetadata.branchName}
+              />
+            )}
+            {gitMetadata &&
+              gitMetadata.gitHubBaseUrl &&
+              gitMetadata.pullRequestNumber && (
+                <DashboardSummaryItem
+                  label="Pull request"
+                  testId="dashboard-summary-pull-request-number"
+                  value={
+                    <CleanLinkText
+                      href={createGitHubUrl(
+                        gitMetadata,
+                        `/pull/${gitMetadata.pullRequestNumber}`
+                      )}
+                      data-testid="dashboard-summary-pull-request-link"
+                    >
+                      {gitMetadata.pullRequestNumber}
+                    </CleanLinkText>
+                  }
+                />
+              )}
+            {gitMetadata && gitMetadata.gitHubBaseUrl && gitMetadata.commitSha && (
+              <DashboardSummaryItem
+                label="Commit"
+                testId="dashboard-summary-commit-sha"
+                value={
+                  <CleanLinkText
+                    href={createGitHubUrl(
+                      gitMetadata,
+                      `/commit/${gitMetadata.commitSha}`
+                    )}
+                    data-testid="dashboard-summary-commit-sha-link"
+                  >
+                    {gitMetadata.commitSha.substring(
+                      gitMetadata.commitSha.length - 7
+                    )}
+                  </CleanLinkText>
+                }
               />
             )}
             {gitMetadata && gitMetadata.projectName && (

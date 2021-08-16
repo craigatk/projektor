@@ -14,6 +14,7 @@ fun main() {
     loadPassingGroupedExampleWithAttachments()
     loadGroupedExampleWithWallClock()
     loadK6Examples()
+    gitMetadataWithPullRequestNumberAndCommitSha()
     loadSingleCoverageExample()
     loadMultipleCoverageExample()
     loadMultipleCoverageWithPreviousRunExample()
