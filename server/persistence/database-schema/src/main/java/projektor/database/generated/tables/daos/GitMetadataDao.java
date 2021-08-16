@@ -142,4 +142,32 @@ public class GitMetadataDao extends DAOImpl<GitMetadataRecord, projektor.databas
     public List<projektor.database.generated.tables.pojos.GitMetadata> fetchByProjectName(String... values) {
         return fetch(GitMetadata.GIT_METADATA.PROJECT_NAME, values);
     }
+
+    /**
+     * Fetch records that have <code>pull_request_number BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.GitMetadata> fetchRangeOfPullRequestNumber(Integer lowerInclusive, Integer upperInclusive) {
+        return fetchRange(GitMetadata.GIT_METADATA.PULL_REQUEST_NUMBER, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>pull_request_number IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.GitMetadata> fetchByPullRequestNumber(Integer... values) {
+        return fetch(GitMetadata.GIT_METADATA.PULL_REQUEST_NUMBER, values);
+    }
+
+    /**
+     * Fetch records that have <code>commit_sha BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.GitMetadata> fetchRangeOfCommitSha(String lowerInclusive, String upperInclusive) {
+        return fetchRange(GitMetadata.GIT_METADATA.COMMIT_SHA, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>commit_sha IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.GitMetadata> fetchByCommitSha(String... values) {
+        return fetch(GitMetadata.GIT_METADATA.COMMIT_SHA, values);
+    }
 }

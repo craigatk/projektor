@@ -2,7 +2,6 @@ package projektor.repository.testrun
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.*
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
@@ -29,17 +28,17 @@ class RepositoryTestRunTimelineApplicationTest : ApplicationTestCase() {
             handleRequest(HttpMethod.Get, "/repo/$repoName/timeline") {
                 val firstTestRun = createTestRun(firstRunPublicId, 20, BigDecimal("10.001"))
                 testRunDao.insert(firstTestRun)
-                testRunDBGenerator.addGitMetadata(firstTestRun, repoName, true, "main", null)
+                testRunDBGenerator.addGitMetadata(firstTestRun, repoName, true, "main", null, null, null)
                 testRunDBGenerator.addResultsMetadata(firstTestRun, true)
 
                 val secondTestRun = createTestRun(secondRunPublicId, 30, BigDecimal("15.001"))
                 testRunDao.insert(secondTestRun)
-                testRunDBGenerator.addGitMetadata(secondTestRun, repoName, true, "main", null)
+                testRunDBGenerator.addGitMetadata(secondTestRun, repoName, true, "main", null, null, null)
                 testRunDBGenerator.addResultsMetadata(secondTestRun, true)
 
                 val thirdTestRun = createTestRun(thirdRunPublicId, 45, BigDecimal("25.001"))
                 testRunDao.insert(thirdTestRun)
-                testRunDBGenerator.addGitMetadata(thirdTestRun, repoName, true, "main", null)
+                testRunDBGenerator.addGitMetadata(thirdTestRun, repoName, true, "main", null, null, null)
                 testRunDBGenerator.addResultsMetadata(thirdTestRun, true)
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -90,17 +89,17 @@ class RepositoryTestRunTimelineApplicationTest : ApplicationTestCase() {
             handleRequest(HttpMethod.Get, "/repo/$repoName/project/$projectName/timeline") {
                 val firstTestRun = createTestRun(firstRunPublicId, 20, BigDecimal("10.001"))
                 testRunDao.insert(firstTestRun)
-                testRunDBGenerator.addGitMetadata(firstTestRun, repoName, true, "main", projectName)
+                testRunDBGenerator.addGitMetadata(firstTestRun, repoName, true, "main", projectName, null, null)
                 testRunDBGenerator.addResultsMetadata(firstTestRun, true)
 
                 val secondTestRun = createTestRun(secondRunPublicId, 30, BigDecimal("15.001"))
                 testRunDao.insert(secondTestRun)
-                testRunDBGenerator.addGitMetadata(secondTestRun, repoName, true, "main", projectName)
+                testRunDBGenerator.addGitMetadata(secondTestRun, repoName, true, "main", projectName, null, null)
                 testRunDBGenerator.addResultsMetadata(secondTestRun, true)
 
                 val thirdTestRun = createTestRun(thirdRunPublicId, 45, BigDecimal("25.001"))
                 testRunDao.insert(thirdTestRun)
-                testRunDBGenerator.addGitMetadata(thirdTestRun, repoName, true, "main", projectName)
+                testRunDBGenerator.addGitMetadata(thirdTestRun, repoName, true, "main", projectName, null, null)
                 testRunDBGenerator.addResultsMetadata(thirdTestRun, true)
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)

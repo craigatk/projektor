@@ -2,7 +2,6 @@ package projektor.compare
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
@@ -29,19 +28,19 @@ class PreviousTestRunApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$thisPublicId/previous") {
                 val differentTestRun = testRunDBGenerator.createSimpleTestRun(differentRepoPublicId)
-                testRunDBGenerator.addGitMetadata(differentTestRun, "projektor/different", true, "main", null)
+                testRunDBGenerator.addGitMetadata(differentTestRun, "projektor/different", true, "main", null, null, null)
                 runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), differentRepoPublicId) }
 
                 val oldestTestRun = testRunDBGenerator.createSimpleTestRun(oldestPublicId)
-                testRunDBGenerator.addGitMetadata(oldestTestRun, repoName, true, "main", null)
+                testRunDBGenerator.addGitMetadata(oldestTestRun, repoName, true, "main", null, null, null)
                 runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), oldestPublicId) }
 
                 val newerTestRun = testRunDBGenerator.createSimpleTestRun(previousPublicId)
-                testRunDBGenerator.addGitMetadata(newerTestRun, repoName, true, "main", null)
+                testRunDBGenerator.addGitMetadata(newerTestRun, repoName, true, "main", null, null, null)
                 runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), previousPublicId) }
 
                 val thisPublicTestRun = testRunDBGenerator.createSimpleTestRun(thisPublicId)
-                testRunDBGenerator.addGitMetadata(thisPublicTestRun, repoName, true, "main", null)
+                testRunDBGenerator.addGitMetadata(thisPublicTestRun, repoName, true, "main", null, null, null)
                 runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), thisPublicId) }
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -62,7 +61,7 @@ class PreviousTestRunApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/previous") {
                 val differentTestRun = testRunDBGenerator.createSimpleTestRun(publicId)
-                testRunDBGenerator.addGitMetadata(differentTestRun, repoName, true, "main", null)
+                testRunDBGenerator.addGitMetadata(differentTestRun, repoName, true, "main", null, null, null)
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.NoContent)
             }

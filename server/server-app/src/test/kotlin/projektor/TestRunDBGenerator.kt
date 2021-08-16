@@ -86,7 +86,7 @@ class TestRunDBGenerator(
     ): TestRunDB {
         val testRunDB = createTestRun(publicId, testSuiteDataList)
         addResultsMetadata(testRunDB, ci)
-        addGitMetadata(testRunDB, repoName, branchName == "main", branchName, projectName)
+        addGitMetadata(testRunDB, repoName, branchName == "main", branchName, projectName, null, null)
         return testRunDB
     }
 
@@ -95,7 +95,9 @@ class TestRunDBGenerator(
         repoName: String,
         isMainBranch: Boolean,
         branchName: String?,
-        projectName: String?
+        projectName: String?,
+        pullRequestNumber: Int?,
+        commitSha: String?
     ): GitMetadataDB {
         val gitMetadata = GitMetadataDB()
         gitMetadata.testRunId = testRunDB.id
@@ -104,6 +106,8 @@ class TestRunDBGenerator(
         gitMetadata.isMainBranch = isMainBranch
         gitMetadata.branchName = branchName
         gitMetadata.projectName = projectName
+        gitMetadata.pullRequestNumber = pullRequestNumber
+        gitMetadata.commitSha = commitSha
         gitMetadataDao.insert(gitMetadata)
 
         return gitMetadata
@@ -146,14 +150,14 @@ class TestRunDBGenerator(
             listOf()
         )
         addResultsMetadata(testRunDB, ci)
-        addGitMetadata(testRunDB, repoName, true, "main", projectName)
+        addGitMetadata(testRunDB, repoName, true, "main", projectName, null, null)
         return testRunDB
     }
 
     fun createSimpleTestRunInRepo(publicId: PublicId, repoName: String, ci: Boolean, projectName: String?): TestRunDB {
         val testRunDB = createSimpleTestRun(publicId)
         addResultsMetadata(testRunDB, ci)
-        addGitMetadata(testRunDB, repoName, true, "main", projectName)
+        addGitMetadata(testRunDB, repoName, true, "main", projectName, null, null)
         return testRunDB
     }
 
@@ -190,7 +194,7 @@ class TestRunDBGenerator(
         projectName: String? = null
     ): TestRunDB {
         val testRunDB = createSimpleTestRun(publicId)
-        addGitMetadata(testRunDB, repoName, branchName == "main", branchName, projectName)
+        addGitMetadata(testRunDB, repoName, branchName == "main", branchName, projectName, null, null)
         runBlocking { coverageService.saveReport(coverageFilePayload, publicId) }
 
         return testRunDB

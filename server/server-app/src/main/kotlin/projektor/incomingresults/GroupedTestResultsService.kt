@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory
 import projektor.coverage.CoverageService
 import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedResults
+import projektor.metadata.TestRunMetadataRepository
 import projektor.metrics.MetricsService
 import projektor.notification.github.GitHubPullRequestCommentService
+import projektor.notification.github.comment.PullRequest
 import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.performance.PerformanceResultsRepository
 import projektor.server.api.PublicId
@@ -25,6 +27,7 @@ class GroupedTestResultsService(
     private val testResultsProcessingService: TestResultsProcessingService,
     private val groupedResultsConverter: GroupedResultsConverter,
     private val testRunRepository: TestRunRepository,
+    private val testRunMetadataRepository: TestRunMetadataRepository,
     private val performanceResultsRepository: PerformanceResultsRepository,
     private val metricsService: MetricsService,
     private val gitHubPullRequestCommentService: GitHubPullRequestCommentService,
@@ -93,7 +96,15 @@ class GroupedTestResultsService(
 
             metricsService.incrementResultsProcessSuccessCounter()
 
-            publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git, coverage, performanceResults)
+            val pullRequest = publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git, coverage, performanceResults)
+
+            if (groupedResults.metadata?.git != null) {
+                testRunMetadataRepository.updateGitMetadata(
+                    testRunId = testRunId,
+                    pullRequestNumber = pullRequest?.number,
+                    commitSha = groupedResults.metadata.git.commitSha
+                )
+            }
         } catch (e: Exception) {
             val errorMessage = "Error persisting test results: ${e.message}"
             logger.error(errorMessage, e)
@@ -102,7 +113,7 @@ class GroupedTestResultsService(
         }
     }
 
-    suspend fun doAppendTestResults(publicId: PublicId, groupedResults: GroupedResults, groupedResultsBlob: String) {
+    private suspend fun doAppendTestResults(publicId: PublicId, groupedResults: GroupedResults, groupedResultsBlob: String) {
         try {
             val (_, testRunSummary) = appendTestResultsService.appendGroupedTestRun(publicId, groupedResults)
 
@@ -134,7 +145,7 @@ class GroupedTestResultsService(
         gitMetadata: GitMetadata?,
         coverage: Coverage?,
         performanceResults: List<PerformanceResult>?
-    ) {
+    ): PullRequest? =
         try {
             val pullRequest = gitHubPullRequestCommentService.upsertComment(testRunSummary, gitMetadata, coverage, performanceResults)
 
@@ -143,9 +154,11 @@ class GroupedTestResultsService(
 
                 metricsService.incrementPullRequestCommentSuccessCounter()
             }
+
+            pullRequest
         } catch (e: Exception) {
             logger.warn("Error publishing comment to pull request for test run ${testRunSummary.id}", e)
             metricsService.incrementPullRequestCommentFailureCounter()
+            null
         }
-    }
 }
