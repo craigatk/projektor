@@ -23,6 +23,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
   let performanceFileGlobs;
   let baseDirectoryPath;
   let exitWithFailure;
+  let failOnPublishError;
   let writeSlackMessageFile;
   let slackMessageFileName;
   let slackProjectName;
@@ -46,7 +47,10 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     coverageFileGlobs = config.coverage;
     performanceFileGlobs = config.performance;
     baseDirectoryPath = config.baseDirectoryPath;
+
     exitWithFailure = config.exitWithFailure;
+    failOnPublishError = config.failOnPublishError;
+
     writeSlackMessageFile = config.writeSlackMessageFile;
     slackMessageFileName = config.slackMessageFileName;
     slackProjectName = config.slackProjectName;
@@ -77,7 +81,10 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
         : [args.performance];
     }
     baseDirectoryPath = args.baseDirectoryPath;
+
     exitWithFailure = args.exitWithFailure;
+    failOnPublishError = args.failOnPublishError;
+
     writeSlackMessageFile = args.writeSlackMessageFile;
     slackMessageFileName = args.slackMessageFileName;
     slackProjectName = args.slackProjectName;
@@ -136,27 +143,32 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       group = buildNumber;
     }
 
-    const { resultsBlob, performanceResults, reportUrl, publicId } =
-      await collectAndSendResults(
-        serverUrl,
-        publishToken,
-        resultsFileGlobs,
-        attachmentFileGlobs,
-        coverageFileGlobs,
-        performanceFileGlobs,
-        gitRepoName,
-        gitBranchName,
-        gitCommitSha,
-        gitPullRequestNumber,
-        projectName,
-        isCI,
-        group,
-        compressionEnabled,
-        baseDirectoryPath,
-        resultsMaxSizeMB,
-        attachmentMaxSizeMB,
-        gitMainBranchNames
-      );
+    const {
+      resultsBlob,
+      performanceResults,
+      reportUrl,
+      publicId,
+      error: publishError,
+    } = await collectAndSendResults(
+      serverUrl,
+      publishToken,
+      resultsFileGlobs,
+      attachmentFileGlobs,
+      coverageFileGlobs,
+      performanceFileGlobs,
+      gitRepoName,
+      gitBranchName,
+      gitCommitSha,
+      gitPullRequestNumber,
+      projectName,
+      isCI,
+      group,
+      compressionEnabled,
+      baseDirectoryPath,
+      resultsMaxSizeMB,
+      attachmentMaxSizeMB,
+      gitMainBranchNames
+    );
 
     if (!resultsBlob && !performanceFileGlobs) {
       console.log(
@@ -181,6 +193,10 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
         slackProjectName || projectName,
         containsTestFailure(resultsBlob)
       );
+    }
+
+    if (publishError && failOnPublishError) {
+      process.exitCode = 1;
     }
 
     if (exitWithFailure && containsTestFailure(resultsBlob)) {

@@ -84,48 +84,6 @@ describe("node script index", () => {
     );
   });
 
-  it("should exit with non-zero exit code when a test failure and configured via CLI", async () => {
-    mockAxios
-      .onPost("http://localhost:8080/groupedResults")
-      .reply(200, { id: "FOO123", uri: "/tests/FOO123" });
-
-    await runCLI(
-      [
-        "--serverUrl=http://localhost:8080",
-        "--exitWithFailure",
-        "src/__tests__/resultsWithFailure/*.xml",
-      ],
-      null,
-      "projektor.none.json"
-    );
-
-    expect(process.exitCode).toBe(1);
-
-    const postData = await extractUncompressedResultsPostData(mockAxios);
-    expect(postData).toContain("side nav");
-  });
-
-  it("should not exit with non-zero exit code when all tests passed and configured via CLI", async () => {
-    mockAxios
-      .onPost("http://localhost:8080/groupedResults")
-      .reply(200, { id: "FOO345", uri: "/tests/FOO345" });
-
-    await runCLI(
-      [
-        "--serverUrl=http://localhost:8080",
-        "--exitWithFailure",
-        "src/__tests__/resultsDir1/*.xml",
-      ],
-      null,
-      "projektor.none.json"
-    );
-
-    expect(process.exitCode).not.toBe(1);
-
-    const postData = await extractUncompressedResultsPostData(mockAxios);
-    expect(postData).toContain("resultsDir1-results1");
-  });
-
   it("should send results and single attachment directory", async () => {
     const resultsFileGlobs = ["src/__tests__/resultsDir1/*.xml"];
     const attachments = "src/__tests__/attachmentsDir1/*.txt";

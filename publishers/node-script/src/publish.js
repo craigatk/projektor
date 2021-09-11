@@ -213,6 +213,7 @@ const collectAndSendResults = async (
         performanceResults,
         publicId: null,
         reportUrl: null,
+        error: e,
       };
     }
   } else {
