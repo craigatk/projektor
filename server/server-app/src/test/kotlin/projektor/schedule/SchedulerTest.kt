@@ -33,7 +33,7 @@ class SchedulerTest : DatabaseRepositoryTestCase() {
             await until { schedulerCalled }
         }
 
-        expectThat(scheduleDuration.inSeconds).isGreaterThanOrEqualTo(4.toDouble())
+        expectThat(scheduleDuration.inWholeSeconds).isGreaterThanOrEqualTo(4)
 
         expectThat(scheduler.findScheduledJob("my_job")).isNotNull().and {
             get { name }.isEqualTo("my_job")

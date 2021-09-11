@@ -7,6 +7,6 @@ class PreviousTestRunService(private val previousTestRunRepository: PreviousTest
     suspend fun findPreviousMainBranchRunWithCoverage(publicId: PublicId): PublicId? =
         previousTestRunRepository.findPreviousMainBranchRunWithCoverage(publicId)
 
-    suspend fun findMostRecentMainBranchRunWithCoverage(branchType: BranchType, repoName: String, projectName: String?): RecentTestRun? =
+    suspend fun findMostRecentRunWithCoverage(branchType: BranchType, repoName: String, projectName: String?): RecentTestRun? =
         previousTestRunRepository.findMostRecentRunWithCoverage(branchType, repoName, projectName)
 }

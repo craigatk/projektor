@@ -71,9 +71,9 @@ context("dashboard", () => {
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
-    cy.getByTestId("test-run-all-tests-title").should("contain", "All tests");
+    cy.findByTestId("test-run-all-tests-title").should("contain", "All tests");
 
-    cy.getByTestId("test-suite-class-name-1").should(
+    cy.findByTestId("test-suite-class-name-1").should(
       "contain",
       "projektor.example.spock.PassingSpec"
     );
@@ -98,9 +98,9 @@ context("dashboard", () => {
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
-    cy.getByTestId("test-run-all-tests-title").should("contain", "All tests");
+    cy.findByTestId("test-run-all-tests-title").should("contain", "All tests");
 
-    cy.getByTestId("loading-section-error").should(
+    cy.findByTestId("loading-section-error").should(
       "contain",
       "Error loading data from server"
     );

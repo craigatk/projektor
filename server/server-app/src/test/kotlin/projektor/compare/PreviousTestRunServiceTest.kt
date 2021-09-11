@@ -133,7 +133,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             null
         )
 
-        val mostRecentTestRun = runBlocking { previousTestRunService.findMostRecentMainBranchRunWithCoverage(BranchType.MAINLINE, repoName, null) }
+        val mostRecentTestRun = runBlocking { previousTestRunService.findMostRecentRunWithCoverage(BranchType.MAINLINE, repoName, null) }
 
         expectThat(mostRecentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newestMainlineWithCoveragePublicId)
@@ -175,7 +175,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             null
         )
 
-        val mostRecentTestRun = runBlocking { previousTestRunService.findMostRecentMainBranchRunWithCoverage(BranchType.ALL, repoName, null) }
+        val mostRecentTestRun = runBlocking { previousTestRunService.findMostRecentRunWithCoverage(BranchType.ALL, repoName, null) }
 
         expectThat(mostRecentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newerFeatureBranchWithCoveragePublicId)
@@ -217,7 +217,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             projectName = "other-project"
         )
 
-        val recentTestRun = runBlocking { previousTestRunService.findMostRecentMainBranchRunWithCoverage(BranchType.MAINLINE, repoName, projectName) }
+        val recentTestRun = runBlocking { previousTestRunService.findMostRecentRunWithCoverage(BranchType.MAINLINE, repoName, projectName) }
         expectThat(recentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newPublicId)
             get { createdTimestamp }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC))

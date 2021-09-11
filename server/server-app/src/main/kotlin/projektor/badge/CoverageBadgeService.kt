@@ -13,11 +13,11 @@ class CoverageBadgeService(
 ) {
     suspend fun createCoverageBadge(fullRepoName: String, projectName: String?): String? {
 
-        val mostRecentRunWithCoverage = previousTestRunService.findMostRecentMainBranchRunWithCoverage(
+        val mostRecentRunWithCoverage = previousTestRunService.findMostRecentRunWithCoverage(
             BranchType.MAINLINE,
             fullRepoName,
             projectName
-        ) ?: previousTestRunService.findMostRecentMainBranchRunWithCoverage(
+        ) ?: previousTestRunService.findMostRecentRunWithCoverage(
             BranchType.ALL,
             fullRepoName,
             projectName
