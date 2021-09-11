@@ -16,7 +16,10 @@ fun Route.repositoryCoverage(
     previousTestRunService: PreviousTestRunService,
     repositoryCoverageService: RepositoryCoverageService,
 ) {
-    fun findBranchType(call: ApplicationCall) = BranchType.valueOf(call.request.queryParameters["branch"]?.toUpperCase() ?: "MAINLINE")
+    fun findBranchType(call: ApplicationCall): BranchType {
+        val branchTypeString = (call.request.queryParameters["branch"] ?: "MAINLINE").uppercase()
+        return BranchType.valueOf(branchTypeString)
+    }
 
     get("/repo/{orgPart}/{repoPart}/coverage/timeline") {
         val orgPart = call.parameters.getOrFail("orgPart")
@@ -51,7 +54,7 @@ fun Route.repositoryCoverage(
     ) {
         val fullRepoName = "$orgPart/$repoPart"
 
-        val mostRecentTestRun = previousTestRunService.findMostRecentMainBranchRunWithCoverage(BranchType.MAINLINE, fullRepoName, projectName)
+        val mostRecentTestRun = previousTestRunService.findMostRecentRunWithCoverage(BranchType.MAINLINE, fullRepoName, projectName)
         val coveredPercentage = mostRecentTestRun?.publicId?.let { publicId -> coverageService.getCoveredLinePercentage(publicId) }
 
         if (mostRecentTestRun != null && coveredPercentage != null) {

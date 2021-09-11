@@ -100,9 +100,8 @@ fun parsePackageAndClassName(classNameWithPackage: String?): Pair<String?, Strin
                 if (fileNameEndIndex > 0) {
                     val fileName = cleanedClassNameWithPackage.substring(lastSlashIndex + 1, fileNameEndIndex)
 
-                    // A leading forward slash messes up the URL
+                    // A leading forward slash messes up the URL when deep-linking to the page in the UI
                     val packageStartIndex = if (cleanedClassNameWithPackage.startsWith("/")) 1 else 0
-
                     val packageName = cleanedClassNameWithPackage.substring(packageStartIndex)
 
                     Pair(packageName, fileName)
