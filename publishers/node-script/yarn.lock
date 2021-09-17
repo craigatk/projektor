@@ -1040,13 +1040,6 @@ axios-mock-adapter@1.17.0:
   dependencies:
     deep-equal "^1.0.1"
 
-axios@0.21.1:
-  version "0.21.1"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
-  integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
-  dependencies:
-    follow-redirects "^1.10.0"
-
 axios@0.21.2:
   version "0.21.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.2.tgz#21297d5084b2aeeb422f5d38e7be4fbb82239017"
@@ -1519,7 +1512,7 @@ find-up@^4.0.0, find-up@^4.1.0:
     locate-path "^5.0.0"
     path-exists "^4.0.0"
 
-follow-redirects@^1.10.0, follow-redirects@^1.14.0:
+follow-redirects@^1.14.0:
   version "1.14.3"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.3.tgz#6ada78118d8d24caee595595accdc0ac6abd022e"
   integrity sha512-3MkHxknWMUtb23apkgz/83fDoe+y+qr0TdgacGIA7bew+QLBo3vdgEN2xEsuXNivpFy4CyDhBBZnNZOtalmenw==
@@ -2530,12 +2523,12 @@ pretty-format@^27.0.2:
     ansi-styles "^5.0.0"
     react-is "^17.0.1"
 
-projektor-publish@3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/projektor-publish/-/projektor-publish-3.5.0.tgz#b6343002712df541e14e6295abfe929fbe9d9012"
-  integrity sha512-62cm37wByQnpAMi3ek59YrCIOmqNmB5yYUhP1Yqz8mMx00m3mTfKB9H2AGRwr5cz8bUQXk2+3R5w2WxJ0p0JOA==
+projektor-publish@3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/projektor-publish/-/projektor-publish-3.7.0.tgz#ab369132d7467ed2f7f10804fc05b94419df7209"
+  integrity sha512-z42oziRQFYwECXjZF7FuGFNtQTYZUmI+DXbXlOZy9GJGghQTGf0XIFqksoWFwOQgpQ4Y1AiJFUJ/SnZn2kkXpg==
   dependencies:
-    axios "0.21.1"
+    axios "0.21.2"
     glob "7.1.4"
     lodash "4.17.21"
     minimist "1.2.5"
