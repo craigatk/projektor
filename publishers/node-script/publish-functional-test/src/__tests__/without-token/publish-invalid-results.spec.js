@@ -4,7 +4,7 @@ describe("publishing invalid test results", () => {
   const serverPort = "8082";
   const serverUrl = `http://localhost:${serverPort}`;
 
-  it("should log error message from server when publishing invalid test results", async (done) => {
+  it("should log error message from server when publishing invalid test results", (done) => {
     exec(
       `yarn projektor-publish --serverUrl=${serverUrl} results-invalid/*.xml`,
       async (error, stdout, stderr) => {

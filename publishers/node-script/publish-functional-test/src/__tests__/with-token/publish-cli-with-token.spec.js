@@ -11,7 +11,7 @@ const { verifyOutput } = require("../verify/cli_output_verify");
 describe("Publishing via CLI with token", () => {
   const serverPort = "8083";
 
-  it("should publish to server when executed via CLI with token", async (done) => {
+  it("should publish to server when executed via CLI with token", (done) => {
     exec(
       `env-cmd -f .token-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} results/*.xml`,
       async (error, stdout, stderr) => {
@@ -33,9 +33,9 @@ describe("Publishing via CLI with token", () => {
         done();
       }
     );
-  });
+  }, 15000);
 
-  it("should publish to server with attachments when executed via CLI with token", async (done) => {
+  it("should publish to server with attachments when executed via CLI with token", (done) => {
     exec(
       `env-cmd -f .token-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} --attachments="attachments/*" results/*.xml`,
       async (error, stdout, stderr) => {

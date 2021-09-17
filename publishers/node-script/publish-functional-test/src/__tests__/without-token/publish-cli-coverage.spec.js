@@ -11,7 +11,7 @@ const { verifyOutput } = require("../verify/cli_output_verify");
 describe("Publishing with coverage via CLI", () => {
   const serverPort = "8082";
 
-  it("should publish results and coverage to server configured in config file", async (done) => {
+  it("should publish results and coverage to server configured in config file", (done) => {
     exec(
       `yarn projektor-publish --configFile=src/__tests__/without-token/projektor-coverage.json`,
       async (error, stdout, stderr) => {
@@ -48,7 +48,7 @@ describe("Publishing with coverage via CLI", () => {
     );
   });
 
-  it("should publish results and coverage to server configured on command line", async (done) => {
+  it("should publish results and coverage to server configured on command line", (done) => {
     exec(
       `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --coverage=coverage/*.xml results/*.xml`,
       async (error, stdout, stderr) => {
@@ -82,7 +82,7 @@ describe("Publishing with coverage via CLI", () => {
     );
   });
 
-  it("should publish coverage with base directory path to server configured on command line", async (done) => {
+  it("should publish coverage with base directory path to server configured on command line", (done) => {
     exec(
       `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --coverage=coverage/*.xml --baseDirectoryPath=ui results/*.xml`,
       async (error, stdout, stderr) => {
