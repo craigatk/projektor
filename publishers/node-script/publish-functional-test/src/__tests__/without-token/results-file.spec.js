@@ -14,7 +14,7 @@ describe("results file functional spec", () => {
     }
   });
 
-  it("should write results file to disk when running in CI", async (done) => {
+  it("should write results file to disk when running in CI", (done) => {
     exec(
       `env-cmd -f .ci-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} results/*.xml`,
       async (error, stdout, stderr) => {
@@ -41,7 +41,7 @@ describe("results file functional spec", () => {
     );
   });
 
-  it("should not write results file to disk when not running in CI", async (done) => {
+  it("should not write results file to disk when not running in CI", (done) => {
     exec(
       `env-cmd -f .no-ci-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} results/*.xml`,
       async (error, stdout, stderr) => {

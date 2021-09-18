@@ -14,7 +14,7 @@ describe("Publishing and writing Slack message file via CLI", () => {
     }
   });
 
-  it("should publish to server and write Slack message file when executed via CLI", async (done) => {
+  it("should publish to server and write Slack message file when executed via CLI", (done) => {
     exec(
       `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --writeSlackMessageFile --projectName=the-project results/*.xml`,
       async (error, stdout, stderr) => {

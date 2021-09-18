@@ -10,7 +10,7 @@ const { verifyOutput } = require("../verify/cli_output_verify");
 describe("publish results metadata functional spec", () => {
   const serverPort = "8082";
 
-  it("should publish CI=true when running in CI", async (done) => {
+  it("should publish CI=true when running in CI", (done) => {
     exec(
       `env-cmd -f .ci-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} results/*.xml`,
       async (error, stdout, stderr) => {
@@ -43,7 +43,7 @@ describe("publish results metadata functional spec", () => {
     );
   });
 
-  it("should publish CI=false when running in CI", async (done) => {
+  it("should publish CI=false when running in CI", (done) => {
     exec(
       `env-cmd -f .no-ci-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} results/*.xml`,
       async (error, stdout, stderr) => {

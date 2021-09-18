@@ -10,7 +10,7 @@ const { verifyOutput } = require("../verify/cli_output_verify");
 describe("publish Git metadata functional spec", () => {
   const serverPort = "8082";
 
-  it("should publish Git metadata along with results", async (done) => {
+  it("should publish Git metadata along with results", (done) => {
     exec(
       `env-cmd -f .git-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} --projectName=my-project results/*.xml`,
       async (error, stdout, stderr) => {
@@ -48,36 +48,36 @@ describe("publish Git metadata functional spec", () => {
     );
   });
 
-    it("should allow configuring the mainline branch names", async (done) => {
-        exec(
-            `env-cmd -f .git-develop-branch-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} --projectName=my-project --gitMainBranchNames=main,develop results/*.xml`,
-            async (error, stdout, stderr) => {
-                verifyOutput(error, stdout, stderr, serverPort);
-                expect(error).toBeNull();
+  it("should allow configuring the mainline branch names", (done) => {
+    exec(
+      `env-cmd -f .git-develop-branch-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} --projectName=my-project --gitMainBranchNames=main,develop results/*.xml`,
+      async (error, stdout, stderr) => {
+        verifyOutput(error, stdout, stderr, serverPort);
+        expect(error).toBeNull();
 
-                const testRunId = extractTestRunId(stdout);
-                console.log("Test ID", testRunId);
+        const testRunId = extractTestRunId(stdout);
+        console.log("Test ID", testRunId);
 
-                await waitForExpect(async () => {
-                    const testRunSummaryResponse = await fetchTestRunSummary(
-                        testRunId,
-                        serverPort
-                    );
-                    expect(testRunSummaryResponse.status).toEqual(200);
-                });
+        await waitForExpect(async () => {
+          const testRunSummaryResponse = await fetchTestRunSummary(
+            testRunId,
+            serverPort
+          );
+          expect(testRunSummaryResponse.status).toEqual(200);
+        });
 
-                const gitMetadataResponse = await fetchGitMetadata(
-                    testRunId,
-                    serverPort
-                );
-                expect(gitMetadataResponse.status).toEqual(200);
-                console.log("Git metadata response", gitMetadataResponse.data);
-
-                expect(gitMetadataResponse.data.branch_name).toEqual("develop");
-                expect(gitMetadataResponse.data.is_main_branch).toEqual(true);
-
-                done();
-            }
+        const gitMetadataResponse = await fetchGitMetadata(
+          testRunId,
+          serverPort
         );
-    });
+        expect(gitMetadataResponse.status).toEqual(200);
+        console.log("Git metadata response", gitMetadataResponse.data);
+
+        expect(gitMetadataResponse.data.branch_name).toEqual("develop");
+        expect(gitMetadataResponse.data.is_main_branch).toEqual(true);
+
+        done();
+      }
+    );
+  });
 });

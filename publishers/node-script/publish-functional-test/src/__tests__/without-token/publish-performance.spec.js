@@ -11,7 +11,7 @@ const { verifyOutput } = require("../verify/cli_output_verify");
 describe("Publishing performance results via CLI", () => {
   const serverPort = "8082";
 
-  it("should publish performance results", async (done) => {
+  it("should publish performance results", (done) => {
     exec(
       `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --performance=performance/getRun.json`,
       async (error, stdout, stderr) => {
@@ -37,7 +37,7 @@ describe("Publishing performance results via CLI", () => {
     );
   });
 
-  it("should publish performance results with repository name", async (done) => {
+  it("should publish performance results with repository name", (done) => {
     exec(
       `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --performance=performance/getRun.json --repositoryName=projektor/projektor-app`,
       async (error, stdout, stderr) => {
@@ -75,7 +75,7 @@ describe("Publishing performance results via CLI", () => {
     );
   });
 
-  it("when no performance results should log message", async (done) => {
+  it("when no performance results should log message", (done) => {
     exec(
       `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --performance=performance/doesNotExist.json`,
       async (error, stdout, stderr) => {
