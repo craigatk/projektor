@@ -8,6 +8,7 @@ import projektor.database.generated.tables.CodeCoverageFile;
 import projektor.database.generated.tables.CodeCoverageGroup;
 import projektor.database.generated.tables.CodeCoverageRun;
 import projektor.database.generated.tables.CodeCoverageStats;
+import projektor.database.generated.tables.CodeQualityReport;
 import projektor.database.generated.tables.GitMetadata;
 import projektor.database.generated.tables.GitRepository;
 import projektor.database.generated.tables.PerformanceResults;
@@ -48,6 +49,11 @@ public class Tables {
      * The table <code>public.code_coverage_stats</code>.
      */
     public static final CodeCoverageStats CODE_COVERAGE_STATS = CodeCoverageStats.CODE_COVERAGE_STATS;
+
+    /**
+     * The table <code>public.code_quality_report</code>.
+     */
+    public static final CodeQualityReport CODE_QUALITY_REPORT = CodeQualityReport.CODE_QUALITY_REPORT;
 
     /**
      * The table <code>public.git_metadata</code>.

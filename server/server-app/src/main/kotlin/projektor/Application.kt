@@ -54,6 +54,7 @@ import projektor.notification.github.comment.GitHubCommentClient
 import projektor.notification.github.comment.GitHubCommentService
 import projektor.organization.coverage.OrganizationCoverageService
 import projektor.performance.PerformanceResultsService
+import projektor.quality.CodeQualityReportRepository
 import projektor.repository.coverage.RepositoryCoverageService
 import projektor.repository.performance.RepositoryPerformanceService
 import projektor.repository.testrun.RepositoryTestRunService
@@ -188,9 +189,12 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
 
     val processingFailureService: ProcessingFailureService by inject()
 
+    val codeQualityReportRepository: CodeQualityReportRepository by inject()
+
     routing {
         attachments(attachmentService, authService)
         badge(coverageBadgeService)
+        codeQuality(codeQualityReportRepository)
         config(cleanupConfig)
         coverage(authService, coverageService)
         failure(processingFailureService)
