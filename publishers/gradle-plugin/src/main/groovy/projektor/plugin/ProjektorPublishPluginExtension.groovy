@@ -15,6 +15,8 @@ class ProjektorPublishPluginExtension {
     boolean compressionEnabled = true
     boolean groupResults = false
 
+    List<FileTree> codeQualityReports = []
+
     int publishRetryMaxAttempts = 3
     long publishRetryInterval = 100
     long publishTimeout = 10_000

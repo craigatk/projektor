@@ -7,6 +7,7 @@ import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.parser.grouped.GroupedResultsParser
 import projektor.parser.performance.PerformanceResultsParser
 import projektor.results.processor.TestResultsProcessor
+import projektor.server.api.quality.CodeQualityReport
 
 class GroupedResultsConverter(
     private val groupedResultsParser: GroupedResultsParser,
@@ -67,6 +68,13 @@ class GroupedResultsConverter(
                 CoverageFilePayload(
                     reportContents = incomingCoverageFile.reportContents,
                     baseDirectoryPath = incomingCoverageFile.baseDirectoryPath
+                )
+            },
+            codeQualityReports = incomingGroupedResults.codeQualityFiles?.map {
+                CodeQualityReport(
+                    contents = it.contents,
+                    fileName = it.fileName,
+                    groupName = it.groupName
                 )
             }
         )

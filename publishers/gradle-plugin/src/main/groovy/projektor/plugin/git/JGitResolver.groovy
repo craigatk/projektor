@@ -16,7 +16,7 @@ class JGitResolver extends GitResolver {
                         .findGitDir()
                         .build()
             } catch (Exception e) {
-                logger.info("Error setting up JGit repository in Projektor", e)
+                logger.debug("Error setting up JGit repository in Projektor", e)
             }
         }
     }

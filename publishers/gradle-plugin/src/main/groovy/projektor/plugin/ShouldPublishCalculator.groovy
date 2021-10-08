@@ -11,20 +11,25 @@ class ShouldPublishCalculator {
             BuildResult buildResult,
             boolean resultsDataExists,
             boolean coverageTasksExecuted,
+            boolean codeQualityReportsExist,
             Map<String, String> environment,
             Logger logger
     ) {
         boolean ci = isCI(environment, extension)
         boolean buildFailed = buildResult.failure != null
 
-        logger.info("Should publish calculation: CI=$ci, buildFailed=$buildFailed, resultsDataExists=$resultsDataExists, coverageTasksExecuted=$coverageTasksExecuted")
+        boolean shouldPublish = false
 
-        if (resultsDataExists || coverageTasksExecuted) {
-            return extension.alwaysPublish ||
+        if (codeQualityReportsExist && (buildFailed || ci)) {
+            shouldPublish = true
+        } else if (resultsDataExists || coverageTasksExecuted) {
+            shouldPublish = extension.alwaysPublish ||
                     (ci && extension.alwaysPublishInCI) ||
                     (!ci && extension.publishOnLocalFailure && buildFailed && resultsDataExists)
-        } else {
-            return false
         }
+
+        logger.info("Should publish calculation $shouldPublish : CI=$ci, buildFailed=$buildFailed, resultsDataExists=$resultsDataExists, coverageTasksExecuted=$coverageTasksExecuted, codeQualityReportsExist=$codeQualityReportsExist")
+
+        return shouldPublish
     }
 }

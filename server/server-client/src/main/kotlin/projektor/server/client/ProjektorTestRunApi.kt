@@ -4,6 +4,7 @@ import projektor.server.api.*
 import projektor.server.api.coverage.Coverage
 import projektor.server.api.coverage.CoverageExists
 import projektor.server.api.coverage.CoverageStats
+import projektor.server.api.quality.CodeQualityReports
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -41,4 +42,7 @@ interface ProjektorTestRunApi {
 
     @GET("/run/{publicId}/previous")
     fun previousTestRun(@Path("publicId") publicId: String): Call<PublicId>
+
+    @GET("/run/{publicId}/quality")
+    fun codeQualityReports(@Path("publicId") publicId: String): Call<CodeQualityReports>
 }

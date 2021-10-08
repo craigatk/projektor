@@ -6,11 +6,17 @@ class BuildFileWriter {
     static File createProjectBuildFile(
             TemporaryFolder projectDir,
             boolean includeProjektorPlugin = true,
-            boolean includeJacocoPlugin = false
+            boolean includeJacocoPlugin = false,
+            boolean includeCodeNarcPlugin = false
     ) {
         File buildFile = projectDir.newFile('build.gradle')
 
-        writeBuildFileContents(buildFile, includeProjektorPlugin, includeJacocoPlugin)
+        writeBuildFileContents(
+                buildFile,
+                includeProjektorPlugin,
+                includeJacocoPlugin,
+                includeCodeNarcPlugin
+        )
 
         return buildFile
     }
@@ -18,7 +24,8 @@ class BuildFileWriter {
     static void writeBuildFileContents(
             File buildFile,
             boolean includeProjektorPlugin = true,
-            boolean includeJacocoPlugin = false
+            boolean includeJacocoPlugin = false,
+            boolean includeCodeNarcPlugin = false
     ) {
         buildFile << """
             buildscript {
@@ -31,6 +38,7 @@ class BuildFileWriter {
                 id 'groovy'
                 ${includeProjektorPlugin ? "id 'dev.projektor.publish'" : ""}
                 ${includeJacocoPlugin ? "id 'jacoco'" : ""}
+                ${includeCodeNarcPlugin ? "id 'codenarc'" : ""}
             }
             
             repositories {
@@ -44,6 +52,8 @@ class BuildFileWriter {
             }
 
             ${includeJacocoPlugin ? "jacocoTestReport { dependsOn test }": ""}
+
+            ${includeCodeNarcPlugin ? "codenarc { reportFormat 'text' }": ""}
         """.stripIndent()
     }
 

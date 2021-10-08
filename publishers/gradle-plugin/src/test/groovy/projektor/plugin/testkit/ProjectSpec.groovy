@@ -70,7 +70,7 @@ abstract class ProjectSpec extends Specification {
     }
 
     BuildResult runFailedBuildInCI(String... buildArgs) {
-        runSuccessfulBuildWithEnvironment(["CI": "true"], buildArgs)
+        runFailedBuildWithEnvironment(["CI": "true"], buildArgs)
     }
 
     BuildResult runFailedBuildWithEnvironment(Map<String, String> envMap, String... buildArgs) {
@@ -95,6 +95,10 @@ abstract class ProjectSpec extends Specification {
     }
 
     boolean includeJacocoPlugin() {
+        return false
+    }
+
+    boolean includeCodenarcPlugin() {
         return false
     }
 }

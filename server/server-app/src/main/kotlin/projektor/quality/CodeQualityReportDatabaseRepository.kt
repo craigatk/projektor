@@ -6,16 +6,32 @@ import org.jooq.DSLContext
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables.CODE_QUALITY_REPORT
 import projektor.database.generated.Tables.TEST_RUN
+import projektor.database.generated.tables.daos.CodeQualityReportDao
 import projektor.server.api.PublicId
 import projektor.server.api.quality.CodeQualityReport
 import kotlin.streams.toList
+import projektor.database.generated.tables.pojos.CodeQualityReport as CodeQualityReportDB
 
 class CodeQualityReportDatabaseRepository(private val dslContext: DSLContext) : CodeQualityReportRepository {
+
+    private val codeQualityReportDao = CodeQualityReportDao(dslContext.configuration())
 
     private val codeQualityMapper = JdbcMapperFactory.newInstance()
         .addKeys("id")
         .ignorePropertyNotFound()
         .newMapper(CodeQualityReport::class.java)
+
+    override suspend fun insertCodeQualityReports(testRunId: Long, codeQualityReports: List<CodeQualityReport>) {
+        codeQualityReports.forEach { codeQualityReport ->
+            val codeQualityReportDB = CodeQualityReportDB()
+            codeQualityReportDB.testRunId = testRunId
+            codeQualityReportDB.contents = codeQualityReport.contents
+            codeQualityReportDB.fileName = codeQualityReport.fileName
+            codeQualityReportDB.groupName = codeQualityReport.groupName
+
+            codeQualityReportDao.insert(codeQualityReportDB)
+        }
+    }
 
     override suspend fun fetchCodeQualityReports(publicId: PublicId): List<CodeQualityReport> =
         withContext(Dispatchers.IO) {

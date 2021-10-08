@@ -15,6 +15,7 @@ import projektor.notification.github.GitHubPullRequestCommentService
 import projektor.notification.github.comment.PullRequest
 import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.performance.PerformanceResultsRepository
+import projektor.quality.CodeQualityReportRepository
 import projektor.server.api.PublicId
 import projektor.server.api.TestRunSummary
 import projektor.server.api.coverage.Coverage
@@ -32,7 +33,8 @@ class GroupedTestResultsService(
     private val metricsService: MetricsService,
     private val gitHubPullRequestCommentService: GitHubPullRequestCommentService,
     private val coverageService: CoverageService,
-    private val appendTestResultsService: AppendTestResultsService
+    private val appendTestResultsService: AppendTestResultsService,
+    private val codeQualityReportRepository: CodeQualityReportRepository
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
@@ -94,6 +96,10 @@ class GroupedTestResultsService(
 
             val coverage = groupedResults.coverageFiles?.let { saveCoverage(publicId, it) }
 
+            groupedResults.codeQualityReports?.let {
+                codeQualityReportRepository.insertCodeQualityReports(testRunId, it)
+            }
+
             metricsService.incrementResultsProcessSuccessCounter()
 
             val pullRequest = publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git, coverage, performanceResults)
@@ -117,7 +123,7 @@ class GroupedTestResultsService(
 
     private suspend fun doAppendTestResults(publicId: PublicId, groupedResults: GroupedResults, groupedResultsBlob: String) {
         try {
-            val (_, testRunSummary) = appendTestResultsService.appendGroupedTestRun(publicId, groupedResults)
+            val (testRunId, testRunSummary) = appendTestResultsService.appendGroupedTestRun(publicId, groupedResults)
 
             metricsService.incrementResultsProcessSuccessCounter()
 
@@ -125,6 +131,10 @@ class GroupedTestResultsService(
                 coverageService.appendCoverage(publicId, it)
 
                 coverageService.getCoverage(publicId)
+            }
+
+            groupedResults.codeQualityReports?.let {
+                codeQualityReportRepository.insertCodeQualityReports(testRunId, it)
             }
 
             publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git, coverage, null)
