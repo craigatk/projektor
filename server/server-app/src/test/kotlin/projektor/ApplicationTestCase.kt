@@ -88,6 +88,8 @@ open class ApplicationTestCase {
 
     lateinit var gitRepositoryDao: GitRepositoryDao
 
+    lateinit var codeQualityReportDao: CodeQualityReportDao
+
     lateinit var application: Application
 
     protected var databaseSchema: String = "public"
@@ -210,6 +212,8 @@ open class ApplicationTestCase {
         coverageService = CoverageService(coverageRepository, metricsService, previousTestRunService, processingFailureService)
 
         gitRepositoryDao = GitRepositoryDao(dslContext.configuration())
+
+        codeQualityReportDao = CodeQualityReportDao(dslContext.configuration())
 
         testRunDBGenerator = TestRunDBGenerator(
             testRunDao,

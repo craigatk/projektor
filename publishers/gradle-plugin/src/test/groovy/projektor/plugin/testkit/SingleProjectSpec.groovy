@@ -9,7 +9,8 @@ abstract class SingleProjectSpec extends ProjectSpec {
         buildFile = BuildFileWriter.createProjectBuildFile(
                 projectRootDir,
                 true,
-                includeJacocoPlugin()
+                includeJacocoPlugin(),
+                includeCodenarcPlugin()
         )
     }
 }

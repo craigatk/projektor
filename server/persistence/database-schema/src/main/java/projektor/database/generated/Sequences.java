@@ -36,6 +36,11 @@ public class Sequences {
     public static final Sequence<Long> CODE_COVERAGE_STATS_ID_SEQ = Internal.createSequence("code_coverage_stats_id_seq", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);
 
     /**
+     * The sequence <code>public.code_quality_report_id_seq</code>
+     */
+    public static final Sequence<Long> CODE_QUALITY_REPORT_ID_SEQ = Internal.createSequence("code_quality_report_id_seq", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);
+
+    /**
      * The sequence <code>public.git_metadata_id_seq</code>
      */
     public static final Sequence<Long> GIT_METADATA_ID_SEQ = Internal.createSequence("git_metadata_id_seq", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);

@@ -26,6 +26,9 @@ test {
 ktlint {
     version = "0.39.0"
     disabledRules = ["no-wildcard-imports"]
+    reporters {
+        reporter "plain"
+    }
 }
 
 task format(dependsOn: ktlintFormat)

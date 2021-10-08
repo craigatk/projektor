@@ -16,6 +16,7 @@ import projektor.database.generated.tables.CodeCoverageFile;
 import projektor.database.generated.tables.CodeCoverageGroup;
 import projektor.database.generated.tables.CodeCoverageRun;
 import projektor.database.generated.tables.CodeCoverageStats;
+import projektor.database.generated.tables.CodeQualityReport;
 import projektor.database.generated.tables.GitMetadata;
 import projektor.database.generated.tables.GitRepository;
 import projektor.database.generated.tables.PerformanceResults;
@@ -63,6 +64,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.code_coverage_stats</code>.
      */
     public final CodeCoverageStats CODE_COVERAGE_STATS = CodeCoverageStats.CODE_COVERAGE_STATS;
+
+    /**
+     * The table <code>public.code_quality_report</code>.
+     */
+    public final CodeQualityReport CODE_QUALITY_REPORT = CodeQualityReport.CODE_QUALITY_REPORT;
 
     /**
      * The table <code>public.git_metadata</code>.
@@ -149,6 +155,7 @@ public class Public extends SchemaImpl {
             Sequences.CODE_COVERAGE_GROUP_ID_SEQ,
             Sequences.CODE_COVERAGE_RUN_ID_SEQ,
             Sequences.CODE_COVERAGE_STATS_ID_SEQ,
+            Sequences.CODE_QUALITY_REPORT_ID_SEQ,
             Sequences.GIT_METADATA_ID_SEQ,
             Sequences.PERFORMANCE_RESULTS_ID_SEQ,
             Sequences.RESULTS_METADATA_ID_SEQ,
@@ -167,6 +174,7 @@ public class Public extends SchemaImpl {
             CodeCoverageGroup.CODE_COVERAGE_GROUP,
             CodeCoverageRun.CODE_COVERAGE_RUN,
             CodeCoverageStats.CODE_COVERAGE_STATS,
+            CodeQualityReport.CODE_QUALITY_REPORT,
             GitMetadata.GIT_METADATA,
             GitRepository.GIT_REPOSITORY,
             PerformanceResults.PERFORMANCE_RESULTS,

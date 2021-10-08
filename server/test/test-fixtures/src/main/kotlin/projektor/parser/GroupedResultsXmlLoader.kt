@@ -94,6 +94,13 @@ class GroupedResultsXmlLoader {
         return groupedResultsParser.serializeGroupedResults(groupedResults)
     }
 
+    fun codeQualityResults(codeQualityReports: List<CodeQualityReport>): String {
+        val groupedResults = GroupedResults()
+        groupedResults.codeQualityFiles = codeQualityReports
+
+        return groupedResultsParser.serializeGroupedResults(groupedResults)
+    }
+
     fun resultsWithCoverage(resultsXmls: List<String>, coverageXmls: List<String>, metadata: ResultsMetadata? = null): String {
         val groupedTestSuites = GroupedTestSuites()
         groupedTestSuites.groupName = "All files"

@@ -40,6 +40,8 @@ import projektor.parser.performance.PerformanceResultsParser
 import projektor.performance.PerformanceResultsDatabaseRepository
 import projektor.performance.PerformanceResultsRepository
 import projektor.performance.PerformanceResultsService
+import projektor.quality.CodeQualityReportDatabaseRepository
+import projektor.quality.CodeQualityReportRepository
 import projektor.repository.coverage.RepositoryCoverageDatabaseRepository
 import projektor.repository.coverage.RepositoryCoverageRepository
 import projektor.repository.coverage.RepositoryCoverageService
@@ -108,7 +110,7 @@ fun createAppModule(
     single { GroupedResultsParser() }
     single { PerformanceResultsParser() }
     single { GroupedResultsConverter(get(), get(), get()) }
-    single { GroupedTestResultsService(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    single { GroupedTestResultsService(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     single { MessageService(messageConfig) }
     single { PreviousTestRunService(get()) }
     single { ProcessingFailureService(get()) }
@@ -128,6 +130,8 @@ fun createAppModule(
     single { RepositoryCoverageService(get()) }
     single { RepositoryPerformanceService(get()) }
     single { RepositoryTestRunService(get()) }
+
+    single<CodeQualityReportRepository> { CodeQualityReportDatabaseRepository(get()) }
 
     single { GitHubPullRequestCommentService(notificationConfig, gitHubCommentService) }
 

@@ -9,4 +9,5 @@ public class GroupedResults {
     public ResultsMetadata metadata;
     public BigDecimal wallClockDuration;
     public List<CoverageFile> coverageFiles;
+    public List<CodeQualityReport> codeQualityFiles;
 }

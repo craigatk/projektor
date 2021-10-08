@@ -28,6 +28,7 @@ class ShouldPublishCalculatorSpec extends Specification {
                 passingBuild,
                 resultsDataExists,
                 false,
+                false,
                 environment,
                 logger
         ) == shouldPublishResults
@@ -49,6 +50,7 @@ class ShouldPublishCalculatorSpec extends Specification {
                 buildResult,
                 resultsDataExists,
                 false,
+                false,
                 [:],
                 logger
         ) == shouldPublishResults
@@ -68,6 +70,7 @@ class ShouldPublishCalculatorSpec extends Specification {
                 passingBuild,
                 false,
                 coverageTasksExecuted,
+                false,
                 environment,
                 logger
         ) == shouldPublishResults
@@ -84,6 +87,33 @@ class ShouldPublishCalculatorSpec extends Specification {
         !ShouldPublishCalculator.shouldPublishResults(
                 new ProjektorPublishPluginExtension(),
                 passingBuild,
+                false,
+                true,
+                false,
+                [:],
+                logger
+        )
+    }
+
+    def "should publish when code quality reports exist and in CI"() {
+        expect:
+        ShouldPublishCalculator.shouldPublishResults(
+                new ProjektorPublishPluginExtension(),
+                passingBuild,
+                false,
+                false,
+                true,
+                ["CI": "true"],
+                logger
+        )
+    }
+
+    def "should not publish when code quality reports exist and not in CI"() {
+        expect:
+        !ShouldPublishCalculator.shouldPublishResults(
+                new ProjektorPublishPluginExtension(),
+                passingBuild,
+                false,
                 false,
                 true,
                 [:],

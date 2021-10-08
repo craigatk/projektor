@@ -20,6 +20,8 @@ import projektor.plugin.notification.link.LinkModel
 import projektor.plugin.notification.slack.SlackMessageBuilder
 import projektor.plugin.notification.slack.SlackMessageWriter
 import projektor.plugin.notification.slack.message.SlackAttachmentsMessage
+import projektor.plugin.quality.CodeQualityCollector
+import projektor.plugin.quality.CodeQualityFilePayload
 import projektor.plugin.results.ResultsLogger
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.results.grouped.ResultsMetadata
@@ -82,17 +84,26 @@ class ProjektorBuildFinishedListener implements BuildListener {
                 logger
         )
 
+        CodeQualityCollector codeQualityCollector = new CodeQualityCollector()
+        List<CodeQualityFilePayload> codeQualityFiles = codeQualityCollector.collectCodeQualityFiles(extension.codeQualityReports)
+
         boolean shouldPublish = ShouldPublishCalculator.shouldPublishResults(
                 extension,
                 buildResult,
                 projectTestResultsCollector.hasTestGroups(),
                 codeCoverageTaskCollector.hasCodeCoverageData(),
+                !codeQualityFiles.empty,
                 System.getenv(),
                 logger
         )
 
         if (shouldPublish) {
-            collectAndPublishResults(buildResult, projectTestResultsCollector, codeCoverageTaskCollector)
+            collectAndPublishResults(
+                    buildResult,
+                    projectTestResultsCollector,
+                    codeCoverageTaskCollector,
+                    codeQualityFiles
+            )
         } else {
             logger.info("Projektor set to auto-publish only on failure and tests passed")
         }
@@ -101,7 +112,8 @@ class ProjektorBuildFinishedListener implements BuildListener {
     private void collectAndPublishResults(
             BuildResult buildResult,
             ProjectTestResultsCollector projectTestResultsCollector,
-            CodeCoverageTaskCollector codeCoverageTaskCollector
+            CodeCoverageTaskCollector codeCoverageTaskCollector,
+            List<CodeQualityFilePayload> codeQualityFiles
     ) {
         String buildNumber = findBuildNumber(System.getenv(), extension)
         boolean isCI = isCI(System.getenv(), extension)
@@ -119,6 +131,10 @@ class ProjektorBuildFinishedListener implements BuildListener {
 
         if (coverageEnabled) {
             groupedResults.coverageFiles = codeCoverageTaskCollector.coverageFilePayloads
+        }
+
+        if (codeQualityFiles) {
+            groupedResults.codeQualityFiles = codeQualityFiles
         }
 
         ResultsClient resultsClient = new ResultsClient(clientConfig, logger)
