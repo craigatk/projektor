@@ -5,10 +5,11 @@ on:
     paths:
       - 'cypress-common/**'
       - 'ui/**'
+      - '.github/workflows/ui.yml'
 
 jobs:
   ui-test:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v1
 
@@ -52,7 +53,7 @@ jobs:
           yarn projektor:jest:ci
 
   ui-cypress-test:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v1
       - name: Install Cypress dependencies
