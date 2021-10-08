@@ -11,6 +11,7 @@ on:
       - 'build.gradle'
       - 'gradle.properties'
       - 'settings.gradle'
+      - '.github/workflows/server-ui-functional-test.yml'
 
 jobs:
   assemble-and-functional-test:

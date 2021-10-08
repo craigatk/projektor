@@ -5,6 +5,7 @@ on:
     paths:
       - 'cypress-common/**'
       - 'ui/**'
+      - '.github/workflows/ui.yml'
 
 jobs:
   ui-test:
