@@ -16,6 +16,7 @@ import AttachmentsPage from "../Attachments/AttachmentsPage";
 import { PinState } from "../Pin/PinState";
 import CoveragePage from "../Coverage/CoveragePage";
 import CoverageGroupFilesPage from "../Coverage/CoverageGroupFilesPage";
+import CodeQualityReportsPage from "../Quality/CodeQualityReportsPage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -108,6 +109,7 @@ const TestRunMenuWrapper = ({
                 coverageGroupName=""
               />
               <CoveragePage path="/coverage" publicId={publicId} />
+              <CodeQualityReportsPage path="/quality/*" publicId={publicId} />
             </Router>
           </QueryParamProvider>
         </main>

@@ -71,22 +71,19 @@ const CodeText = ({ text }: CodeTextProps) => {
     const lineIdx = idx + 1;
     const highlighted = lineIdx === highlightedLine;
 
-    return React.useMemo(
-      () => (
-        <Element
-          name={`line-${lineIdx}-${highlighted}`}
-          key={`line-element-${lineIdx}-${highlighted}`}
-        >
-          <CodeTextLine
-            key={`code-line-${lineIdx}-${highlighted}`}
-            line={line}
-            idx={lineIdx}
-            highlighted={highlighted}
-            handleLineClick={handleLineClick}
-          />
-        </Element>
-      ),
-      [lineIdx, highlighted]
+    return (
+      <Element
+        name={`line-${lineIdx}-${highlighted}`}
+        key={`line-element-${lineIdx}-${highlighted}`}
+      >
+        <CodeTextLine
+          key={`code-line-${lineIdx}-${highlighted}`}
+          line={line}
+          idx={lineIdx}
+          highlighted={highlighted}
+          handleLineClick={handleLineClick}
+        />
+      </Element>
     );
   });
 

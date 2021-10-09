@@ -1,0 +1,14 @@
+{
+  "reports": [
+    {
+      "contents": "github-line-1\ngithub-line-2\n",
+      "file_name": "notifications-github-ktlint.txt",
+      "group_name": null
+    },
+    {
+      "contents": "server-app-line-1\nserver-app-line-2\n",
+      "file_name": "server-app-ktlint.txt",
+      "group_name": null
+    }
+  ]
+}

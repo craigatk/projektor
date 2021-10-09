@@ -15,6 +15,7 @@ import {
   TestRunGitMetadata,
   CoverageFiles,
   PerformanceResults,
+  CodeQualityReports,
 } from "../model/TestRunModel";
 import TestOutputType from "./TestOutputType";
 import { axiosInstance, axiosInstanceWithoutCache } from "./AxiosService";
@@ -174,8 +175,15 @@ const fetchPerformanceResults = (
   // @ts-ignore
   axiosInstance.get(`/run/${publicId}/performance`);
 
+const fetchCodeQualityReports = (
+  publicId: string
+): Promise<AxiosResponse<CodeQualityReports>> =>
+  // @ts-ignore
+  axiosInstance.get(`/run/${publicId}/quality`);
+
 export {
   fetchAttachments,
+  fetchCodeQualityReports,
   fetchMessages,
   fetchTestRun,
   fetchTestRunSummary,

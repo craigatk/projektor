@@ -8,6 +8,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.apache.commons.lang3.RandomStringUtils
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.ResultsXmlLoader
+import projektor.parser.grouped.model.CodeQualityReport
 import projektor.parser.grouped.model.CoverageFile
 import projektor.parser.grouped.model.GitMetadata
 import projektor.parser.grouped.model.ResultsMetadata
@@ -539,6 +540,28 @@ fun coveragePayloadWithBaseDirectory() {
     println("View run with coverage base directory and Git metadata at $uiBaseUrl${resultsResponse.uri}")
 }
 
+fun codeQualityTwoReports() {
+    val repoName = "craigatk/projektor"
+    val branchName = "master"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+
+    val codeQualityReport1 = CodeQualityReport()
+    codeQualityReport1.contents = readFileContents("quality/notifications-github-ktlint.txt")
+    codeQualityReport1.fileName = "notifications-github-ktlint.txt"
+
+    val codeQualityReport2 = CodeQualityReport()
+    codeQualityReport2.contents = readFileContents("quality/server-app-ktlint.txt")
+    codeQualityReport2.fileName = "server-app-ktlint.txt"
+
+    val resultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.codeQualityResults(listOf(codeQualityReport1, codeQualityReport2), metadata = resultsMetadata))
+    println("View run with two code quality reports at $uiBaseUrl${resultsResponse.uri}")
+}
+
 fun appendTwoAdditionalTestRuns() {
     val repoName = "craigatk/${RandomStringUtils.randomAlphabetic(12)}"
     val branchName = "master"
@@ -582,6 +605,11 @@ fun sendResultsToServer(resultsBlob: String): SaveResultsResponse {
     val response = client.newCall(request).execute()
     val responseString = response.body?.string()
     return Gson().fromJson(responseString, SaveResultsResponse::class.java)
+}
+
+fun readFileContents(resourcesRelativePath: String): String {
+    val file = File("src/main/resources/$resourcesRelativePath")
+    return file.readText()
 }
 
 fun sendAttachmentToServer(publicId: String, attachmentFilePath: String) {
