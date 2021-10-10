@@ -17,6 +17,8 @@ import "../../../cypress-common/support/commands";
 import "@testing-library/cypress/add-commands";
 
 Cypress.Commands.add("interceptTestRunBasicRequests", (publicId) => {
+  cy.intercept("GET", `results/${publicId}/status`, { status: "SUCCESS" });
+
   cy.intercept("GET", `run/${publicId}/metadata/git`, {
     fixture: "metadata/git-metadata-with-github-base-url.json",
   });
