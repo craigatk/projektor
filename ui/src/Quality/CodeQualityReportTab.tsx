@@ -1,11 +1,11 @@
 import * as React from "react";
 import CodeText from "../CodeText/CodeText";
 import { RouteComponentProps } from "@reach/router";
-import { CodeQualityReports } from "../model/TestRunModel";
+import { CodeQualityReport } from "../model/TestRunModel";
 import { makeStyles } from "@material-ui/core/styles";
 
 interface CodeQualityReportTabProps extends RouteComponentProps {
-  codeQualityReports: CodeQualityReports;
+  codeQualityReportsWithContents: CodeQualityReport[];
   reportFileName: string;
 }
 
@@ -21,12 +21,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 const CodeQualityReportTab = ({
-  codeQualityReports,
+  codeQualityReportsWithContents,
   reportFileName,
 }: CodeQualityReportTabProps) => {
   const classes = useStyles({});
 
-  const codeQualityReport = codeQualityReports.reports.find(
+  const codeQualityReport = codeQualityReportsWithContents.find(
     (report) => report.fileName === reportFileName
   );
   const reportContents = codeQualityReport ? codeQualityReport.contents : "";

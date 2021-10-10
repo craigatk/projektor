@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CodeQualityReports } from "../model/TestRunModel";
+import { CodeQualityReport } from "../model/TestRunModel";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Link,
@@ -14,7 +14,7 @@ import CodeQualityReportTab from "./CodeQualityReportTab";
 
 interface CodeQualityReportTabsProps {
   publicId: string;
-  codeQualityReports: CodeQualityReports;
+  codeQualityReportsWithContents: CodeQualityReport[];
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -32,53 +32,49 @@ const useStyles = makeStyles((theme) => ({
 
 const CodeQualityReportTabs = ({
   publicId,
-  codeQualityReports,
+  codeQualityReportsWithContents,
 }: CodeQualityReportTabsProps) => {
   const classes = useStyles({});
   const linkBase = `/tests/${publicId}/quality/report`;
 
-  if (codeQualityReports && codeQualityReports.reports) {
-    const defaultTab = "/" + codeQualityReports.reports[0].fileName;
+  const defaultTab = "/" + codeQualityReportsWithContents[0].fileName;
 
-    return (
-      <div data-testid="code-quality-reports-tabs">
-        <Paper elevation={1} className={classes.paper}>
-          <Location>
-            {({ location }: LocationContext) => (
-              <Tabs
-                value={getTabCurrentValue(location, defaultTab)}
-                indicatorColor="primary"
-                textColor="primary"
-              >
-                {codeQualityReports.reports.map((codeQualityReport) => (
-                  <Tab
-                    className={classes.tab}
-                    label={codeQualityReport.fileName}
-                    value={"/" + codeQualityReport.fileName}
-                    data-testid={`code-quality-tab-${codeQualityReport.fileName}`}
-                    component={Link}
-                    to={`${linkBase}/${codeQualityReport.fileName}`}
-                    key={`tab-${codeQualityReport.fileName}`}
-                  />
-                ))}
-              </Tabs>
-            )}
-          </Location>
+  return (
+    <div data-testid="code-quality-reports-tabs">
+      <Paper elevation={1} className={classes.paper}>
+        <Location>
+          {({ location }: LocationContext) => (
+            <Tabs
+              value={getTabCurrentValue(location, defaultTab)}
+              indicatorColor="primary"
+              textColor="primary"
+            >
+              {codeQualityReportsWithContents.map((codeQualityReport) => (
+                <Tab
+                  className={classes.tab}
+                  label={codeQualityReport.fileName}
+                  value={"/" + codeQualityReport.fileName}
+                  data-testid={`code-quality-tab-${codeQualityReport.fileName}`}
+                  component={Link}
+                  to={`${linkBase}/${codeQualityReport.fileName}`}
+                  key={`tab-${codeQualityReport.fileName}`}
+                />
+              ))}
+            </Tabs>
+          )}
+        </Location>
 
-          <Router>
-            <Redirect from="/" to={`${linkBase}${defaultTab}`} noThrow={true} />
-            <CodeQualityReportTab
-              path="/report/:reportFileName"
-              codeQualityReports={codeQualityReports}
-              reportFileName=""
-            />
-          </Router>
-        </Paper>
-      </div>
-    );
-  } else {
-    return <div></div>;
-  }
+        <Router>
+          <Redirect from="/" to={`${linkBase}${defaultTab}`} noThrow={true} />
+          <CodeQualityReportTab
+            path="/report/:reportFileName"
+            codeQualityReportsWithContents={codeQualityReportsWithContents}
+            reportFileName=""
+          />
+        </Router>
+      </Paper>
+    </div>
+  );
 };
 
 export default CodeQualityReportTabs;
