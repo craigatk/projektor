@@ -94,8 +94,9 @@ class GroupedResultsXmlLoader {
         return groupedResultsParser.serializeGroupedResults(groupedResults)
     }
 
-    fun codeQualityResults(codeQualityReports: List<CodeQualityReport>): String {
+    fun codeQualityResults(codeQualityReports: List<CodeQualityReport>, metadata: ResultsMetadata? = null): String {
         val groupedResults = GroupedResults()
+        groupedResults.metadata = metadata
         groupedResults.codeQualityFiles = codeQualityReports
 
         return groupedResultsParser.serializeGroupedResults(groupedResults)

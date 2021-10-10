@@ -13,6 +13,7 @@ import CoverageIcon from "../Icons/CoverageIcon";
 import OrganizationIcon from "../Icons/OrganizationIcon";
 import RepositoryIcon from "../Icons/RepositoryIcon";
 import { repositoryLinkUrlUI } from "../Repository/RepositoryLink";
+import CodeQualityIcon from "../Icons/CodeQualityIcon";
 
 interface SideMenuProps {
   publicId: string;
@@ -104,6 +105,12 @@ const SideMenu = ({
             linkTestId="nav-link-attachments"
           />
         ) : null}
+        <SideMenuLink
+          linkTo={`/tests/${publicId}/quality`}
+          icon={<CodeQualityIcon />}
+          linkText="Code quality"
+          linkTestId="nav-link-code-quality"
+        />
         {gitMetadata && gitMetadata.repoName && (
           <SideMenuLink
             linkTo={repositoryLinkUrlUI(

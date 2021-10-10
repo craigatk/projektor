@@ -1,0 +1,3 @@
+[90m/Users/craigatkinson/projects/projektor/server/notification/github/src/main/kotlin/projektor/notification/github/auth/[0mJwtProvider.kt[90m:[0m12[90m:1:[0m Wildcard import (cannot be auto-corrected)
+[90m/Users/craigatkinson/projects/projektor/server/notification/github/src/main/kotlin/projektor/notification/github/auth/[0mPrivateKeyEncoder.kt[90m:[0m3[90m:1:[0m Wildcard import (cannot be auto-corrected)
+[90m/Users/craigatkinson/projects/projektor/server/notification/github/src/main/kotlin/projektor/notification/github/comment/[0mGitHubCommentClient.kt[90m:[0m3[90m:1:[0m Wildcard import (cannot be auto-corrected)

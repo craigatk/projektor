@@ -80,4 +80,15 @@ const CodeTextLine = ({
   );
 };
 
-export default CodeTextLine;
+function linesAreEqual(
+  prevLine: CodeTextLineProps,
+  nextLine: CodeTextLineProps
+) {
+  return (
+    prevLine.idx === nextLine.idx &&
+    prevLine.line === nextLine.line &&
+    prevLine.highlighted === nextLine.highlighted
+  );
+}
+
+export default React.memo(CodeTextLine, linesAreEqual);

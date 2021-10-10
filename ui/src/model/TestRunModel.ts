@@ -172,10 +172,22 @@ interface TestRunSystemAttributes {
   pinned: boolean;
 }
 
+interface CodeQualityReport {
+  contents: string;
+  fileName: string;
+  groupName?: string;
+}
+
+interface CodeQualityReports {
+  reports: CodeQualityReport[];
+}
+
 export {
   Attachment,
   Attachments,
   AttachmentType,
+  CodeQualityReport,
+  CodeQualityReports,
   Coverage,
   CoverageExists,
   CoverageFile,
