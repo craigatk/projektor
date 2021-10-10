@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "40px",
     marginBottom: "20px",
   },
+  line: {
+    paddingRight: "10px"
+  }
 }));
 
 const CodeText = ({ text }: CodeTextProps) => {
@@ -75,6 +78,7 @@ const CodeText = ({ text }: CodeTextProps) => {
       <Element
         name={`line-${lineIdx}-${highlighted}`}
         key={`line-element-${lineIdx}-${highlighted}`}
+        className={classes.line}
       >
         <CodeTextLine
           key={`code-line-${lineIdx}-${highlighted}`}
