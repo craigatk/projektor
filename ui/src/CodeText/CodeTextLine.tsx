@@ -27,7 +27,6 @@ const Line = styled.div<CodeTextLineStyleProps>`
   font-size: 0.9em;
   display: inline-block;
   width: 100%;
-  padding-right: 10px;
   &:hover {
     background-color: lightgrey;
 
