@@ -84,7 +84,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
                 logger
         )
 
-        CodeQualityCollector codeQualityCollector = new CodeQualityCollector()
+        CodeQualityCollector codeQualityCollector = new CodeQualityCollector(logger)
         List<CodeQualityFilePayload> codeQualityFiles = codeQualityCollector.collectCodeQualityFiles(extension.codeQualityReports)
 
         boolean shouldPublish = ShouldPublishCalculator.shouldPublishResults(
