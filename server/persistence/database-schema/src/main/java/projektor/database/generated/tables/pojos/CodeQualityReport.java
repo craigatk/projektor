@@ -15,11 +15,12 @@ public class CodeQualityReport implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long   id;
-    private Long   testRunId;
-    private String contents;
-    private String fileName;
-    private String groupName;
+    private Long    id;
+    private Long    testRunId;
+    private String  contents;
+    private String  fileName;
+    private String  groupName;
+    private Integer idx;
 
     public CodeQualityReport() {}
 
@@ -29,20 +30,23 @@ public class CodeQualityReport implements Serializable {
         this.contents = value.contents;
         this.fileName = value.fileName;
         this.groupName = value.groupName;
+        this.idx = value.idx;
     }
 
     public CodeQualityReport(
-        Long   id,
-        Long   testRunId,
-        String contents,
-        String fileName,
-        String groupName
+        Long    id,
+        Long    testRunId,
+        String  contents,
+        String  fileName,
+        String  groupName,
+        Integer idx
     ) {
         this.id = id;
         this.testRunId = testRunId;
         this.contents = contents;
         this.fileName = fileName;
         this.groupName = groupName;
+        this.idx = idx;
     }
 
     /**
@@ -120,6 +124,21 @@ public class CodeQualityReport implements Serializable {
         return this;
     }
 
+    /**
+     * Getter for <code>public.code_quality_report.idx</code>.
+     */
+    public Integer getIdx() {
+        return this.idx;
+    }
+
+    /**
+     * Setter for <code>public.code_quality_report.idx</code>.
+     */
+    public CodeQualityReport setIdx(Integer idx) {
+        this.idx = idx;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -159,6 +178,12 @@ public class CodeQualityReport implements Serializable {
         }
         else if (!groupName.equals(other.groupName))
             return false;
+        if (idx == null) {
+            if (other.idx != null)
+                return false;
+        }
+        else if (!idx.equals(other.idx))
+            return false;
         return true;
     }
 
@@ -171,6 +196,7 @@ public class CodeQualityReport implements Serializable {
         result = prime * result + ((this.contents == null) ? 0 : this.contents.hashCode());
         result = prime * result + ((this.fileName == null) ? 0 : this.fileName.hashCode());
         result = prime * result + ((this.groupName == null) ? 0 : this.groupName.hashCode());
+        result = prime * result + ((this.idx == null) ? 0 : this.idx.hashCode());
         return result;
     }
 
@@ -183,6 +209,7 @@ public class CodeQualityReport implements Serializable {
         sb.append(", ").append(contents);
         sb.append(", ").append(fileName);
         sb.append(", ").append(groupName);
+        sb.append(", ").append(idx);
 
         sb.append(")");
         return sb.toString();

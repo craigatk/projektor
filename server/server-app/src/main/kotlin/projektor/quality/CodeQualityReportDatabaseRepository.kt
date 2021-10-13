@@ -25,6 +25,7 @@ class CodeQualityReportDatabaseRepository(private val dslContext: DSLContext) : 
         codeQualityReports.forEach { codeQualityReport ->
             val codeQualityReportDB = CodeQualityReportDB()
             codeQualityReportDB.testRunId = testRunId
+            codeQualityReportDB.idx = codeQualityReport.idx
             codeQualityReportDB.contents = codeQualityReport.contents
             codeQualityReportDB.fileName = codeQualityReport.fileName
             codeQualityReportDB.groupName = codeQualityReport.groupName

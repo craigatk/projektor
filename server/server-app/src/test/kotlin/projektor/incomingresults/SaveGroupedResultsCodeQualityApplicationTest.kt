@@ -31,17 +31,19 @@ class SaveGroupedResultsCodeQualityApplicationTest : ApplicationTestCase() {
                 addHeader(HttpHeaders.ContentEncoding, "gzip")
                 setBody(compressedBody)
             }.apply {
-                val (publicId, testRun) = waitForTestRunSaveToComplete(response)
+                val (_, testRun) = waitForTestRunSaveToComplete(response)
 
                 val codeQualityReportDBs = codeQualityReportDao.fetchByTestRunId(testRun.id)
 
                 expectThat(codeQualityReportDBs)
                     .hasSize(2)
                     .any {
+                        get { idx }.isEqualTo(1)
                         get { contents }.isEqualTo("Report contents 1")
                         get { fileName }.isEqualTo("quality_1.txt")
                     }
                     .any {
+                        get { idx }.isEqualTo(2)
                         get { contents }.isEqualTo("Report contents 2")
                         get { fileName }.isEqualTo("quality_2.txt")
                     }

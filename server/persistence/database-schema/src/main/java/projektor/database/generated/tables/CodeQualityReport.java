@@ -12,7 +12,7 @@ import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Row6;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -72,6 +72,11 @@ public class CodeQualityReport extends TableImpl<CodeQualityReportRecord> {
      * The column <code>public.code_quality_report.group_name</code>.
      */
     public final TableField<CodeQualityReportRecord, String> GROUP_NAME = createField(DSL.name("group_name"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>public.code_quality_report.idx</code>.
+     */
+    public final TableField<CodeQualityReportRecord, Integer> IDX = createField(DSL.name("idx"), SQLDataType.INTEGER, this, "");
 
     private CodeQualityReport(Name alias, Table<CodeQualityReportRecord> aliased) {
         this(alias, aliased, null);
@@ -162,11 +167,11 @@ public class CodeQualityReport extends TableImpl<CodeQualityReportRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row6 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Long, Long, String, String, String> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row6<Long, Long, String, String, String, Integer> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 }

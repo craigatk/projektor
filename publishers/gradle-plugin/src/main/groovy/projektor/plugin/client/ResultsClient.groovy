@@ -41,7 +41,7 @@ class ResultsClient extends AbstractClient {
                 publishResult.reportUrl = reportUrl
             } else {
                 String responseCode = response ? "- response code ${response.code()}" : ""
-                logger.warn("Failed to upload Projektor report to ${config.serverUrl} ${responseCode}")
+                logger.warn("Failed to upload Projektor report to ${config.serverUrl} ${responseCode} ${response.body()}")
             }
         } catch (Exception e) {
             logger.error("Error publishing results to Projektor server ${config.serverUrl} - run with --info to get full stacktrace of the error.")
