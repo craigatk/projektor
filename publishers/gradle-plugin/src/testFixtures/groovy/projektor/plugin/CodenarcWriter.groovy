@@ -3,10 +3,23 @@ package projektor.plugin
 import org.junit.rules.TemporaryFolder
 
 class CodenarcWriter {
-    static File writeCodenarcConfigFile(TemporaryFolder projectDir) {
-        File configDirectory = projectDir.newFolder("config", "codenarc")
+    static File writeCodenarcConfigFile(File projectDir) {
+        File configDir = new File(projectDir, "config")
+        configDir.mkdir()
+        File codenarcConfigDir = new File(configDir, "codenarc")
+        codenarcConfigDir.mkdir()
 
-        File configFile = new File(configDirectory, "codenarc.xml")
+        return writeCodenarcConfigFileInDirectory(codenarcConfigDir)
+    }
+
+    static File writeCodenarcConfigFile(TemporaryFolder projectDir) {
+        File codenarcConfigDir = projectDir.newFolder("config", "codenarc")
+
+        return writeCodenarcConfigFileInDirectory(codenarcConfigDir)
+    }
+
+    private static File writeCodenarcConfigFileInDirectory(File codenarcConfigDir) {
+        File configFile = new File(codenarcConfigDir, "codenarc.xml")
         configFile.createNewFile()
 
         configFile.text = """
@@ -55,6 +68,8 @@ class CodenarcWriter {
 
 </ruleset>
 """
+
+        println("Wrote Codenarc config directory to ${configFile.absolutePath}")
 
         return configFile
     }

@@ -70,11 +70,12 @@ class GroupedResultsConverter(
                     baseDirectoryPath = incomingCoverageFile.baseDirectoryPath
                 )
             },
-            codeQualityReports = incomingGroupedResults.codeQualityFiles?.map {
+            codeQualityReports = incomingGroupedResults.codeQualityFiles?.mapIndexed { idx, codeQualityReport ->
                 CodeQualityReport(
-                    contents = it.contents,
-                    fileName = it.fileName,
-                    groupName = it.groupName
+                    idx = idx + 1,
+                    contents = codeQualityReport.contents,
+                    fileName = codeQualityReport.fileName,
+                    groupName = codeQualityReport.groupName
                 )
             }
         )

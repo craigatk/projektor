@@ -36,9 +36,9 @@ include 'project1', 'project2', 'project3'
 
         rootBuildFile = BuildFileWriter.createRootBuildFile(projectRootDir)
 
-        BuildFileWriter.writeBuildFileContents(buildFileProject1, false, includeJacocoPlugin())
-        BuildFileWriter.writeBuildFileContents(buildFileProject2, false, includeJacocoPlugin())
-        BuildFileWriter.writeBuildFileContents(buildFileProject3, false, includeJacocoPlugin())
+        BuildFileWriter.writeBuildFileContents(buildFileProject1, false, includeJacocoPlugin(), includeCodenarcPlugin())
+        BuildFileWriter.writeBuildFileContents(buildFileProject2, false, includeJacocoPlugin(), includeCodenarcPlugin())
+        BuildFileWriter.writeBuildFileContents(buildFileProject3, false, includeJacocoPlugin(), includeCodenarcPlugin())
 
         testDirectory1 = createTestDirectory(projectDir1)
         testDirectory2 = createTestDirectory(projectDir2)

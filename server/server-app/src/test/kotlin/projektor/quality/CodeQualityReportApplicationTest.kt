@@ -9,6 +9,7 @@ import projektor.database.generated.tables.pojos.CodeQualityReport
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.quality.CodeQualityReports
 import strikt.api.expectThat
+import strikt.assertions.any
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
@@ -31,6 +32,7 @@ class CodeQualityReportApplicationTest : ApplicationTestCase() {
                     codeQualityReport.contents = "Report contents $idx"
                     codeQualityReport.fileName = "code_quality_$idx.txt"
                     codeQualityReport.groupName = "group_$idx"
+                    codeQualityReport.idx = idx
 
                     codeQualityReport
                 }
@@ -45,7 +47,23 @@ class CodeQualityReportApplicationTest : ApplicationTestCase() {
             val codeQualityReports: CodeQualityReports = objectMapper.readValue(responseContent)
             assertNotNull(codeQualityReports)
 
-            expectThat(codeQualityReports.reports).hasSize(3)
+            expectThat(codeQualityReports.reports)
+                .hasSize(3)
+                .any {
+                    get { contents }.isEqualTo("Report contents 1")
+                    get { fileName }.isEqualTo("code_quality_1.txt")
+                    get { idx }.isEqualTo(1)
+                }
+                .any {
+                    get { contents }.isEqualTo("Report contents 2")
+                    get { fileName }.isEqualTo("code_quality_2.txt")
+                    get { idx }.isEqualTo(2)
+                }
+                .any {
+                    get { contents }.isEqualTo("Report contents 3")
+                    get { fileName }.isEqualTo("code_quality_3.txt")
+                    get { idx }.isEqualTo(3)
+                }
         }
     }
 

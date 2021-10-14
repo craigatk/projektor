@@ -17,7 +17,7 @@ import spock.util.concurrent.PollingConditions
 
 class ProjektorPluginFunctionalSpecification extends Specification {
 
-    static final String PROJEKTOR_SERVER_URL = "http://localhost:8084"
+    static final String PROJEKTOR_SERVER_URL = "http://localhost:8092"
 
     @Rule
     TemporaryFolder projectRootDir = new TemporaryFolder()

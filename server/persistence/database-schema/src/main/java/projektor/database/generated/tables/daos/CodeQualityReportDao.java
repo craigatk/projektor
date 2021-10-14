@@ -114,4 +114,18 @@ public class CodeQualityReportDao extends DAOImpl<CodeQualityReportRecord, proje
     public List<projektor.database.generated.tables.pojos.CodeQualityReport> fetchByGroupName(String... values) {
         return fetch(CodeQualityReport.CODE_QUALITY_REPORT.GROUP_NAME, values);
     }
+
+    /**
+     * Fetch records that have <code>idx BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<projektor.database.generated.tables.pojos.CodeQualityReport> fetchRangeOfIdx(Integer lowerInclusive, Integer upperInclusive) {
+        return fetchRange(CodeQualityReport.CODE_QUALITY_REPORT.IDX, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>idx IN (values)</code>
+     */
+    public List<projektor.database.generated.tables.pojos.CodeQualityReport> fetchByIdx(Integer... values) {
+        return fetch(CodeQualityReport.CODE_QUALITY_REPORT.IDX, values);
+    }
 }
