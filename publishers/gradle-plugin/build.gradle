@@ -99,7 +99,7 @@ task startServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {
     waitForOutput = 'Application started'
     timeout = 120
     environment = [
-            'PORT': '8084',
+            'PORT': '8092',
             "ATTACHMENT_URL": "http://localhost:9000",
             "ATTACHMENT_BUCKET_NAME": "functionaltest",
             "ATTACHMENT_AUTO_CREATE_BUCKET": "true",
