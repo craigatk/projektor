@@ -6,6 +6,7 @@ import { RouteComponentProps } from "@reach/router";
 import TestRunAllTests from "../TestRun/TestRunAllTests";
 import CoverageSummary from "../Coverage/CoverageSummary";
 import PerformanceSection from "../Performance/PerformanceSection";
+import CodeQualityDashboardSummary from "../Quality/CodeQualityDashboardSummary";
 
 interface DashboardProps extends RouteComponentProps {
   publicId: string;
@@ -34,6 +35,7 @@ const Dashboard = ({
         <FailedTestCases publicId={publicId} />
       )}
       <PerformanceSection publicId={publicId} />
+      <CodeQualityDashboardSummary publicId={publicId} />
     </div>
   );
 };

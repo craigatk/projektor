@@ -34,6 +34,27 @@ context("code quality", () => {
     );
   });
 
+  it("should show code quality reports on dashboard", () => {
+    const publicId = "12345";
+
+    cy.intercept("GET", `run/${publicId}/quality`, {
+      fixture: "quality/code_quality_reports.json",
+    });
+
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
+    cy.interceptTestRunBasicRequests(publicId);
+
+    cy.visit(`http://localhost:1234/tests/${publicId}`);
+
+    cy.findByText("server-app-ktlint.txt").click();
+    cy.findByTestId("code-text-line-content-1").should(
+      "contain",
+      "server-app-line-1"
+    );
+  });
+
   it("should go directly to specific code quality report", () => {
     const publicId = "12345";
 
