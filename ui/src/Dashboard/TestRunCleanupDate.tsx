@@ -9,12 +9,8 @@ interface TestRunCleanupDateProps {
 }
 
 const TestRunCleanupDate = ({ createdTimestamp }: TestRunCleanupDateProps) => {
-  const {
-    togglePinned,
-    pinned,
-    cleanupEnabled,
-    maxReportAgeInDays,
-  } = React.useContext(PinContext);
+  const { togglePinned, pinned, cleanupEnabled, maxReportAgeInDays } =
+    React.useContext(PinContext);
 
   if (cleanupEnabled) {
     let displayValue;

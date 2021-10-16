@@ -20,14 +20,12 @@ const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
     LoadingState.Loading
   );
-  const [testRunSummary, setTestRunSummary] = React.useState<TestRunSummary>(
-    null
-  );
+  const [testRunSummary, setTestRunSummary] =
+    React.useState<TestRunSummary>(null);
   const [hasAttachments, setHasAttachments] = React.useState<boolean>(false);
   const [hasCoverage, setHasCoverage] = React.useState<boolean>(false);
-  const [gitMetadata, setGitMetadata] = React.useState<TestRunGitMetadata>(
-    null
-  );
+  const [gitMetadata, setGitMetadata] =
+    React.useState<TestRunGitMetadata>(null);
 
   const loadTestRunSummary = () => {
     fetchTestRunSummary(publicId)

@@ -10,9 +10,8 @@ interface PerformanceSectionProps {
 }
 
 const PerformanceSection = ({ publicId }: PerformanceSectionProps) => {
-  const [performanceResults, setPerformanceResults] = React.useState<
-    PerformanceResults
-  >(null);
+  const [performanceResults, setPerformanceResults] =
+    React.useState<PerformanceResults>(null);
   const [testRunLoadingState, setTestRunLoadingState] = React.useState(
     LoadingState.Loading
   );

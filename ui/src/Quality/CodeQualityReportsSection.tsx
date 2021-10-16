@@ -4,6 +4,7 @@ import CodeQualityReportTabs from "./CodeQualityReportTabs";
 import { CodeQualityReports } from "../model/TestRunModel";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
+import CleanLinkText from "../Link/CleanLinkText";
 
 interface CodeQualityReportsSectionProps {
   publicId: string;
@@ -14,6 +15,10 @@ const useStyles = makeStyles(() => ({
   noReports: {
     marginTop: "20px",
     marginLeft: "15px",
+    textAlign: "center",
+  },
+  noReportsDocSection: {
+    marginTop: "20px",
   },
 }));
 
@@ -29,8 +34,15 @@ const CodeQualityReportsSection = ({
           (report) => report.contents && report.contents.length > 0
         )
       : [];
-
   const hasReportsWithContents = reportsWithContents.length > 0;
+
+  const reportsWithoutContents =
+    codeQualityReports && codeQualityReports.reports
+      ? codeQualityReports.reports.filter(
+          (report) => !report.contents || report.contents.length === 0
+        )
+      : [];
+  const hasReportsWithoutContents = reportsWithoutContents.length > 0;
 
   return (
     <div>
@@ -43,12 +55,28 @@ const CodeQualityReportsSection = ({
         />
       )}
 
-      {!hasReportsWithContents && (
+      {!hasReportsWithContents && hasReportsWithoutContents && (
+        <Typography
+          data-testid="code-quality-reports-all-passed"
+          className={classes.noReports}
+        >
+          <div>All code quality reports passed!</div>
+        </Typography>
+      )}
+
+      {!hasReportsWithContents && !hasReportsWithoutContents && (
         <Typography
           data-testid="code-quality-reports-not-found"
           className={classes.noReports}
         >
-          No code quality reports found
+          <div>No code quality reports included as part of this report.</div>
+          <div className={classes.noReportsDocSection}>
+            To include code quality reports in your report,{" "}
+            <CleanLinkText href="https://projektor.dev/docs/code-quality/">
+              please see the Projektor code quality docs
+            </CleanLinkText>
+            .
+          </div>
         </Typography>
       )}
     </div>

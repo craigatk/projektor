@@ -17,8 +17,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "20px",
   },
   line: {
-    paddingRight: "10px"
-  }
+    paddingRight: "10px",
+  },
 }));
 
 const CodeText = ({ text }: CodeTextProps) => {

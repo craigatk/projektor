@@ -20,9 +20,8 @@ const RepositoryTimelinePage = ({
   hideIfEmpty,
 }: RepositoryTimelinePageProps) => {
   const repoName = `${orgPart}/${repoPart}`;
-  const [repositoryTimeline, setRepositoryTimeline] = React.useState<
-    RepositoryTimeline
-  >(null);
+  const [repositoryTimeline, setRepositoryTimeline] =
+    React.useState<RepositoryTimeline>(null);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
     LoadingState.Loading
   );

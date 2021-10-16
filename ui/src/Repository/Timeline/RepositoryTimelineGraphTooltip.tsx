@@ -23,12 +23,8 @@ const RepositoryTimelineGraphTooltip = (props) => {
   const classes = useStyles({});
 
   if (props.payload && props.payload.length >= 1) {
-    const {
-      createdTimestamp,
-      duration,
-      totalTestCount,
-      testAverageDuration,
-    } = props.payload[0].payload;
+    const { createdTimestamp, duration, totalTestCount, testAverageDuration } =
+      props.payload[0].payload;
 
     return (
       <div className={classes.box} data-testid="timeline-graph-tooltip">

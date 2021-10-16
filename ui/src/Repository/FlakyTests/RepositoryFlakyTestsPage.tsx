@@ -62,9 +62,8 @@ const RepositoryFlakyTestsPage = ({
 
   const repoName = `${orgPart}/${repoPart}`;
 
-  const [flakyTests, setFlakyTests] = React.useState<RepositoryFlakyTests>(
-    null
-  );
+  const [flakyTests, setFlakyTests] =
+    React.useState<RepositoryFlakyTests>(null);
   const [maxRuns, setMaxRuns] = useQueryParam("max", NumberParam);
   const [flakyThreshold, setFlakyThreshold] = useQueryParam(
     "threshold",

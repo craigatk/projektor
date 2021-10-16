@@ -59,10 +59,8 @@ const RepositoryCoveragePage = ({
   const classes = useStyles({});
 
   const repoName = `${orgPart}/${repoPart}`;
-  const [
-    repositoryCoverageTimeline,
-    setRepositoryCoverageTimeline,
-  ] = React.useState<RepositoryCoverageTimeline>(null);
+  const [repositoryCoverageTimeline, setRepositoryCoverageTimeline] =
+    React.useState<RepositoryCoverageTimeline>(null);
   const [branchType, setBranchType] = useQueryParam("branch", StringParam);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
     LoadingState.Loading
