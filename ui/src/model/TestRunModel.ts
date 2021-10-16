@@ -173,6 +173,7 @@ interface TestRunSystemAttributes {
 }
 
 interface CodeQualityReport {
+  idx: number;
   contents: string;
   fileName: string;
   groupName?: string;

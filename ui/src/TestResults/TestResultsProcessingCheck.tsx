@@ -52,9 +52,8 @@ const TestResultsProcessingCheck = ({
   const classes = useStyles({});
   let totalWaitTime = 0;
 
-  const [resultsProcessing, setResultsProcessing] = React.useState<
-    TestResultsProcessing
-  >(null);
+  const [resultsProcessing, setResultsProcessing] =
+    React.useState<TestResultsProcessing>(null);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
     LoadingState.Loading
   );

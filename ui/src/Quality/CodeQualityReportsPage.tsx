@@ -14,9 +14,8 @@ const CodeQualityReportsPage = ({ publicId }: CodeQualityReportsPageProps) => {
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
     LoadingState.Loading
   );
-  const [codeQualityReports, setCodeQualityReports] = React.useState<
-    CodeQualityReports
-  >(null);
+  const [codeQualityReports, setCodeQualityReports] =
+    React.useState<CodeQualityReports>(null);
 
   React.useEffect(() => {
     fetchCodeQualityReports(publicId)

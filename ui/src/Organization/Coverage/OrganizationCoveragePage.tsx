@@ -13,9 +13,8 @@ interface OrganizationCoveragePageProps extends RouteComponentProps {
 const OrganizationCoveragePage = ({
   orgName,
 }: OrganizationCoveragePageProps) => {
-  const [organizationCoverage, setOrganizationCoverage] = React.useState<
-    OrganizationCoverage
-  >(null);
+  const [organizationCoverage, setOrganizationCoverage] =
+    React.useState<OrganizationCoverage>(null);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
     LoadingState.Loading
   );

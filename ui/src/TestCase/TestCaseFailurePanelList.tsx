@@ -40,9 +40,8 @@ const TestCaseFailurePanelList = ({
     failedTestCases.length <= showFullFailureMaxFailureCount
       ? ExpandCollapseState.EXPAND_ALL
       : ExpandCollapseState.COLLAPSE_ALL;
-  const [expandCollapseAll, setExpandCollapseState] = React.useState<
-    ExpandCollapseState
-  >(initialExpandCollapseState);
+  const [expandCollapseAll, setExpandCollapseState] =
+    React.useState<ExpandCollapseState>(initialExpandCollapseState);
 
   const expandCollapseOnClick = () => {
     if (expandCollapseAll === ExpandCollapseState.COLLAPSE_ALL) {

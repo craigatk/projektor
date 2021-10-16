@@ -22,11 +22,8 @@ const RepositoryCoverageTimelineGraphTooltip = (props) => {
   const classes = useStyles({});
 
   if (props.payload && props.payload.length >= 1) {
-    const {
-      createdTimestamp,
-      lineValue,
-      branchValue,
-    } = props.payload[0].payload;
+    const { createdTimestamp, lineValue, branchValue } =
+      props.payload[0].payload;
 
     return (
       <div

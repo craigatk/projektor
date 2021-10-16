@@ -37,7 +37,7 @@ const CodeQualityReportTabs = ({
   const classes = useStyles({});
   const linkBase = `/tests/${publicId}/quality/report`;
 
-  const defaultTab = "/" + codeQualityReportsWithContents[0].fileName;
+  const defaultTab = "/" + codeQualityReportsWithContents[0].idx;
 
   return (
     <div data-testid="code-quality-reports-tabs">
@@ -53,11 +53,11 @@ const CodeQualityReportTabs = ({
                 <Tab
                   className={classes.tab}
                   label={codeQualityReport.fileName}
-                  value={"/" + codeQualityReport.fileName}
-                  data-testid={`code-quality-tab-${codeQualityReport.fileName}`}
+                  value={"/" + codeQualityReport.idx}
+                  data-testid={`code-quality-tab-${codeQualityReport.idx}`}
                   component={Link}
-                  to={`${linkBase}/${codeQualityReport.fileName}`}
-                  key={`tab-${codeQualityReport.fileName}`}
+                  to={`${linkBase}/${codeQualityReport.idx}`}
+                  key={`code-quality-tab-${codeQualityReport.idx}`}
                 />
               ))}
             </Tabs>
@@ -67,9 +67,9 @@ const CodeQualityReportTabs = ({
         <Router>
           <Redirect from="/" to={`${linkBase}${defaultTab}`} noThrow={true} />
           <CodeQualityReportTab
-            path="/report/:reportFileName"
+            path="/report/:idx"
             codeQualityReportsWithContents={codeQualityReportsWithContents}
-            reportFileName=""
+            idx="0"
           />
         </Router>
       </Paper>

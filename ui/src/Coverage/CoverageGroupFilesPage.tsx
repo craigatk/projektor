@@ -23,9 +23,8 @@ const CoverageGroupFilesPage = ({
     LoadingState.Loading
   );
   const [coverageFiles, setCoverageFiles] = React.useState<CoverageFiles>(null);
-  const [gitMetadata, setGitMetadata] = React.useState<TestRunGitMetadata>(
-    null
-  );
+  const [gitMetadata, setGitMetadata] =
+    React.useState<TestRunGitMetadata>(null);
 
   React.useEffect(() => {
     fetchCoverageGroupFiles(publicId, coverageGroupName)

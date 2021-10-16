@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 interface CodeQualityReportTabProps extends RouteComponentProps {
   codeQualityReportsWithContents: CodeQualityReport[];
-  reportFileName: string;
+  idx: string;
 }
 
 const useStyles = makeStyles(() => ({
@@ -22,12 +22,12 @@ const useStyles = makeStyles(() => ({
 
 const CodeQualityReportTab = ({
   codeQualityReportsWithContents,
-  reportFileName,
+  idx,
 }: CodeQualityReportTabProps) => {
   const classes = useStyles({});
 
   const codeQualityReport = codeQualityReportsWithContents.find(
-    (report) => report.fileName === reportFileName
+    (report) => report.idx === parseInt(idx)
   );
   const reportContents = codeQualityReport ? codeQualityReport.contents : "";
 

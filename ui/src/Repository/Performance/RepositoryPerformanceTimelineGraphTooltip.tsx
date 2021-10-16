@@ -22,13 +22,8 @@ const RepositoryPerformanceTimelineGraphTooltip = (props) => {
   const classes = useStyles({});
 
   if (props.payload && props.payload.length >= 1) {
-    const {
-      createdTimestamp,
-      average,
-      p95,
-      maximum,
-      requestsPerSecond,
-    } = props.payload[0].payload;
+    const { createdTimestamp, average, p95, maximum, requestsPerSecond } =
+      props.payload[0].payload;
 
     return (
       <div

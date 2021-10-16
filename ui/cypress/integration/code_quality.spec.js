@@ -46,9 +46,7 @@ context("code quality", () => {
     });
     cy.interceptTestRunBasicRequests(publicId);
 
-    cy.visit(
-      `http://localhost:1234/tests/${publicId}/quality/report/server-app-ktlint.txt`
-    );
+    cy.visit(`http://localhost:1234/tests/${publicId}/quality/report/2`);
 
     cy.findByTestId("code-text-line-content-1").should(
       "contain",

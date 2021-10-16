@@ -17,9 +17,8 @@ interface PinContextProps {
 export const PinContext = React.createContext<PinContextProps>(null);
 
 export const PinState = ({ publicId, children }) => {
-  const [cleanupConfig, setCleanupConfig] = React.useState<ServerCleanupConfig>(
-    null
-  );
+  const [cleanupConfig, setCleanupConfig] =
+    React.useState<ServerCleanupConfig>(null);
   const [pinned, setPinned] = React.useState<boolean>(false);
 
   React.useEffect(() => {
