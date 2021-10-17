@@ -14,6 +14,8 @@ import OrganizationIcon from "../Icons/OrganizationIcon";
 import RepositoryIcon from "../Icons/RepositoryIcon";
 import { repositoryLinkUrlUI } from "../Repository/RepositoryLink";
 import CodeQualityIcon from "../Icons/CodeQualityIcon";
+import SideMenuExternalLink from "./SideMenuExternalLink";
+import DocsIcon from "../Icons/DocsIcon";
 
 interface SideMenuProps {
   publicId: string;
@@ -132,6 +134,12 @@ const SideMenu = ({
           />
         )}
         <PinSideMenuItem />
+        <SideMenuExternalLink
+          linkTo="https://projektor.dev/docs/"
+          icon={<DocsIcon />}
+          linkText="Docs"
+          linkTestId="nav-link-docs"
+        />
       </List>
     </Drawer>
   );

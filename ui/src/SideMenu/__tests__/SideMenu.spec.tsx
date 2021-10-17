@@ -79,4 +79,19 @@ describe("SideMenu", () => {
 
     expect(queryByTestId("nav-link-coverage")).toBeNull();
   });
+
+  it("should display link to docs", () => {
+    const { queryByTestId } = render(
+      <PinState publicId={publicId}>
+        <SideMenu
+          publicId={publicId}
+          testRunSummary={testRunSummary}
+          hasAttachments={false}
+          hasCoverage={false}
+        />
+      </PinState>
+    );
+
+    expect(queryByTestId("nav-link-docs")).toHaveTextContent("Docs");
+  });
 });
