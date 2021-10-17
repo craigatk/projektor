@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Link } from "@reach/router";
 import { makeStyles } from "@material-ui/styles";
 import SideMenuItem from "./SideMenuItem";
+import { Link } from "@material-ui/core";
 
-interface SideMenuLinkProps {
+interface SideMenuExternalLinkProps {
   linkTo: string;
   icon: any;
   linkText: string;
@@ -14,25 +14,22 @@ const useStyles = makeStyles((theme) => ({
   sideNavLink: {
     color: "white",
     textDecoration: "none",
-    "&:hover": {
-      textDecoration: "underline",
-    },
   },
 }));
 
-const SideMenuLink = ({
+const SideMenuExternalLink = ({
   linkTo,
   icon,
   linkText,
   linkTestId,
-}: SideMenuLinkProps) => {
+}: SideMenuExternalLinkProps) => {
   const classes = useStyles({});
 
   return (
-    <Link to={linkTo} className={classes.sideNavLink}>
+    <Link href={linkTo} className={classes.sideNavLink}>
       <SideMenuItem icon={icon} text={linkText} testId={linkTestId} />
     </Link>
   );
 };
 
-export default SideMenuLink;
+export default SideMenuExternalLink;
