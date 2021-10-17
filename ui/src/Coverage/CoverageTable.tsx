@@ -1,17 +1,9 @@
 import * as React from "react";
-import { CoverageStats } from "../model/TestRunModel";
 import MaterialTable from "material-table";
 import CoverageGraph from "./CoverageGraph";
 import { makeStyles, Typography } from "@material-ui/core";
 import CleanLink from "../Link/CleanLink";
-
-interface CoverageTableRow {
-  name: string;
-  stats: CoverageStats;
-  coveredPercentageLink?: string;
-  previousTestRunId?: string;
-  nameLinkUrl?: string;
-}
+import CoverageTableRow from "./CoverageTableRow";
 
 interface CoverageTableProps {
   rows: CoverageTableRow[];
@@ -150,5 +142,3 @@ const CoverageTable = ({
 };
 
 export default CoverageTable;
-
-export { CoverageTableRow };

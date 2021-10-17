@@ -1,7 +1,8 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import { render } from "@testing-library/react";
-import CoverageTable, { CoverageTableRow } from "../CoverageTable";
+import CoverageTable from "../CoverageTable";
+import CoverageTableRow from "../CoverageTableRow";
 import { CoverageStat, CoverageStats } from "../../model/TestRunModel";
 
 describe("CoverageTable", () => {
