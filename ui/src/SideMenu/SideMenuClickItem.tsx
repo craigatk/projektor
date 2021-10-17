@@ -12,6 +12,9 @@ interface SideMenuClickItemProps {
 const useStyles = makeStyles((theme) => ({
   sideNavLink: {
     color: "white",
+    "&:hover": {
+      textDecoration: "underline",
+    },
   },
 }));
 
