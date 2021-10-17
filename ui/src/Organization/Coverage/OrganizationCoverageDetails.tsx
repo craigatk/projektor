@@ -1,6 +1,7 @@
 import * as React from "react";
 import { OrganizationCoverage } from "../../model/OrganizationModel";
-import CoverageTable, { CoverageTableRow } from "../../Coverage/CoverageTable";
+import CoverageTable from "../../Coverage/CoverageTable";
+import CoverageTableRow from "../../Coverage/CoverageTableRow";
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { repositoryLinkUrlUI } from "../../Repository/RepositoryLink";

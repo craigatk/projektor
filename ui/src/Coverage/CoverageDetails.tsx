@@ -2,7 +2,8 @@ import * as React from "react";
 import { Coverage } from "../model/TestRunModel";
 import { makeStyles, Typography } from "@material-ui/core";
 import OverallCoverageGraphs from "./OverallCoverageGraphs";
-import CoverageTable, { CoverageTableRow } from "./CoverageTable";
+import CoverageTable from "./CoverageTable";
+import CoverageTableRow from "./CoverageTableRow";
 
 interface CoverageDetailsProps {
   coverage: Coverage;
