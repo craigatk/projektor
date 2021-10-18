@@ -1,3 +1,5 @@
+import "@testing-library/cypress/add-commands";
+
 Cypress.Commands.add("loadFixture", (fixturePath, visitUri = "") =>
   cy.readFile(fixturePath).then((resultsBlob) =>
     cy
