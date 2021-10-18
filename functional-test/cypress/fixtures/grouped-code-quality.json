@@ -1,0 +1,13 @@
+{
+  "groupedTestSuites": [],
+  "codeQualityFiles": [
+    {
+      "fileName": "code_quality.txt",
+      "contents": "Code quality line 1\nCode quality line 2"
+    },
+    {
+      "fileName": "linter.txt",
+      "contents": "Linter line 1\nLinter line 2"
+    }
+  ]
+}
