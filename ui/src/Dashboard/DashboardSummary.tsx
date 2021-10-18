@@ -42,12 +42,17 @@ const DashboardSummary = ({
     !!cumulativeDuration &&
     cumulativeDuration > 0;
 
+  const hasTests = totalTestCount > 0;
+
   return (
     <div>
-      <PageTitle title="Tests" testid="dashboard-summary-title" />
+      <PageTitle
+        title={hasTests ? "Tests" : "Summary"}
+        testid="dashboard-summary-title"
+      />
       <TestRunMessages publicId={publicId} />
       <Grid container>
-        {totalTestCount > 0 ? (
+        {hasTests ? (
           <Grid
             item
             sm={3}
