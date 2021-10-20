@@ -7,8 +7,9 @@ import {
   TestCase,
   TestFailure,
 } from "../../model/TestRunModel";
-import TestCaseFailurePanel from "../TestCaseFailurePanel";
 import moment from "moment";
+import waitForExpect from "wait-for-expect";
+import TestCaseFailurePanel from "../TestCaseFailurePanel";
 
 describe("TestCaseFailurePanel", () => {
   it("should render failure details link when the test case failed", () => {
@@ -210,6 +211,58 @@ describe("TestCaseFailurePanel", () => {
 
     expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
       "My failure text"
+    );
+  });
+
+  it("should collapse panel when clicking on test case title", async () => {
+    const failure: TestFailure = {
+      failureMessage: "My failure message",
+      failureText: "My failure text",
+      failureType: "",
+    };
+
+    const testCase = createTestCaseWithFailure(failure);
+
+    const { getByTestId } = render(
+      <TestCaseFailurePanel
+        testCase={testCase}
+        publicId="12345"
+        showFullFailure={true}
+      />
+    );
+
+    getByTestId("test-case-summary-header-2-1").click();
+
+    await waitForExpect(() =>
+      expect(getByTestId("test-case-summary-header-2-1")).toHaveAttribute(
+        "aria-expanded",
+        "false"
+      )
+    );
+  });
+
+  it("should not collapse panel when clicking on failure body text", () => {
+    const failure: TestFailure = {
+      failureMessage: "My failure message",
+      failureText: "My failure text",
+      failureType: "",
+    };
+
+    const testCase = createTestCaseWithFailure(failure);
+
+    const { getByTestId } = render(
+      <TestCaseFailurePanel
+        testCase={testCase}
+        publicId="12345"
+        showFullFailure={true}
+      />
+    );
+
+    getByTestId("test-case-failure-text-2-1").click();
+
+    expect(getByTestId("test-case-summary-header-2-1")).toHaveAttribute(
+      "aria-expanded",
+      "true"
     );
   });
 
