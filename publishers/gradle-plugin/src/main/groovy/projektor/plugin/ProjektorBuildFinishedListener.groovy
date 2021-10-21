@@ -69,7 +69,7 @@ class ProjektorBuildFinishedListener implements BuildListener {
         try {
             allTasks = buildResult.gradle.taskGraph.allTasks
         } catch (IllegalStateException e) {
-            logger.warn("Task graph is not ready", e)
+            logger.info("Task graph is not ready", e)
         }
 
         CodeCoverageTaskCollector codeCoverageTaskCollector = new CodeCoverageTaskCollector(
