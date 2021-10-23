@@ -170,7 +170,9 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       gitMainBranchNames
     );
 
-    if (!resultsBlob && !performanceFileGlobs) {
+    const hasResults = resultsBlob || performanceFileGlobs;
+
+    if (!hasResults) {
       console.log(
         `No test results files found in locations ${resultsFileGlobs}`
       );
@@ -186,7 +188,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       writeResultsFileToDisk(publicId, reportUrl, "projektor_report.json");
     }
 
-    if (writeSlackMessageFile) {
+    if (writeSlackMessageFile && hasResults) {
       writeSlackMessageFileToDisk(
         reportUrl,
         slackMessageFileName || "projektor_failure_message.json",
