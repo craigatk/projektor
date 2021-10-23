@@ -115,4 +115,29 @@ describe("index Slack message file", () => {
       `Tests passed in project ${slackProjectName}`
     );
   });
+
+  it("should not write Slack message file when there were no results", async () => {
+    const resultsFileGlobs = ["src/doesNotExist/*.xml"];
+    const serverUrl = "http://localhost:8080";
+    const writeSlackMessageFile = true;
+    const slackProjectName = "my-slack-project";
+
+    mockAxios
+      .onPost("http://localhost:8080/groupedResults")
+      .reply(200, { id: "ABC123", uri: "/tests/ABC123" });
+
+    await run(
+      {
+        resultsFileGlobs,
+        serverUrl,
+        slackProjectName,
+        writeSlackMessageFile,
+      },
+      {},
+      null,
+      "projektor.none.json"
+    );
+
+    expect(fs.existsSync(slackMessageFileName)).toBeFalsy();
+  });
 });
