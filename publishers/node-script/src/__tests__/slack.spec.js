@@ -1,6 +1,8 @@
 const {
   writeSlackMessageFileToDisk,
   createSlackMessageJson,
+  writeNoResultsSlackMessageFileToDisk,
+  createNoResultsSlackMessageJson,
 } = require("../slack");
 const fs = require("fs");
 
@@ -78,6 +80,26 @@ describe("slack messages", () => {
       projectName,
       testsFailed
     );
+
+    expect(fs.existsSync(slackMessageFileName)).toBeTruthy();
+  });
+
+  it("should create no-results message", () => {
+    const projectName = "my-project";
+    const currentTimestamp = 1596674144044;
+
+    const messageJson = createNoResultsSlackMessageJson(
+      projectName,
+      currentTimestamp
+    );
+
+    expect(messageJson).toEqual(
+      '{"attachments":[{"fallback":"Projektor test report","color":"#FFFF00","pretext":"No test results found","title":"Projektor test report","text":"No test results found to publish in project my-project","footer":"Projektor","ts":1596674144044}]}'
+    );
+  });
+
+  it("should write no-results file to disk", () => {
+    writeNoResultsSlackMessageFileToDisk(slackMessageFileName, "no results");
 
     expect(fs.existsSync(slackMessageFileName)).toBeTruthy();
   });

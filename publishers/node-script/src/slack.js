@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 function writeSlackMessageFileToDisk(
   reportUrl,
   slackMessageFileName,
@@ -45,7 +47,40 @@ function createSlackMessageJson(
   return JSON.stringify(message);
 }
 
+function writeNoResultsSlackMessageFileToDisk(
+  slackMessageFileName,
+  projectName
+) {
+  const fs = require("fs");
+
+  const messageJson = createNoResultsSlackMessageJson(projectName);
+
+  fs.writeFileSync(slackMessageFileName, messageJson);
+}
+
+function createNoResultsSlackMessageJson(projectName, currentTimestamp) {
+  const projectNameToDisplay = projectName || "";
+
+  const message = {
+    attachments: [
+      {
+        fallback: "Projektor test report",
+        color: "#FFFF00",
+        pretext: "No test results found",
+        title: "Projektor test report",
+        text: `No test results found to publish in project ${projectNameToDisplay}`,
+        footer: "Projektor",
+        ts: currentTimestamp || new Date().getTime(),
+      },
+    ],
+  };
+
+  return JSON.stringify(message);
+}
+
 module.exports = {
   writeSlackMessageFileToDisk,
   createSlackMessageJson,
+  writeNoResultsSlackMessageFileToDisk,
+  createNoResultsSlackMessageJson,
 };

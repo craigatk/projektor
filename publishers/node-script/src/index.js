@@ -1,3 +1,5 @@
+const { writeNoResultsSlackMessageFileToDisk } = require("./slack");
+
 async function runCLI(cliArgs, publishToken, defaultConfigFilePath) {
   const parsedArgs = require("minimist")(cliArgs, {
     boolean: "exitWithFailure",
@@ -188,13 +190,24 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       writeResultsFileToDisk(publicId, reportUrl, "projektor_report.json");
     }
 
-    if (writeSlackMessageFile && hasResults) {
-      writeSlackMessageFileToDisk(
-        reportUrl,
-        slackMessageFileName || "projektor_failure_message.json",
-        slackProjectName || projectName,
-        containsTestFailure(resultsBlob)
-      );
+    if (writeSlackMessageFile) {
+      const messageFileName =
+        slackMessageFileName || "projektor_failure_message.json";
+      const messageProjectName = slackProjectName || projectName;
+
+      if (hasResults) {
+        writeSlackMessageFileToDisk(
+          reportUrl,
+          messageFileName,
+          messageProjectName,
+          containsTestFailure(resultsBlob)
+        );
+      } else {
+        writeNoResultsSlackMessageFileToDisk(
+          messageFileName,
+          messageProjectName
+        );
+      }
     }
 
     if (publishError && failOnPublishError) {
