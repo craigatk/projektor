@@ -116,7 +116,7 @@ describe("index Slack message file", () => {
     );
   });
 
-  it("should not write Slack message file when there were no results", async () => {
+  it("should write no-results Slack message file when there were no results", async () => {
     const resultsFileGlobs = ["src/doesNotExist/*.xml"];
     const serverUrl = "http://localhost:8080";
     const writeSlackMessageFile = true;
@@ -138,6 +138,16 @@ describe("index Slack message file", () => {
       "projektor.none.json"
     );
 
-    expect(fs.existsSync(slackMessageFileName)).toBeFalsy();
+    expect(fs.existsSync(slackMessageFileName)).toBeTruthy();
+
+    const messageFileContents = fs
+      .readFileSync(slackMessageFileName)
+      .toString();
+    const parsedMessage = JSON.parse(messageFileContents);
+    const message = parsedMessage.attachments[0];
+    expect(message.pretext).toBe("No test results found");
+    expect(message.text).toBe(
+      `No test results found to publish in project ${slackProjectName}`
+    );
   });
 });
