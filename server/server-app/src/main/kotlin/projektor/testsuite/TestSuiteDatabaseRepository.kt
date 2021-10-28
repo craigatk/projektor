@@ -103,9 +103,11 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
         }
 
     companion object {
+        val testSuiteFieldsToSelect = TEST_SUITE.fields().toList().minus(listOf(TEST_SUITE.SYSTEM_ERR, TEST_SUITE.SYSTEM_OUT))
+
         fun selectTestSuite(dslContext: DSLContext): SelectOnConditionStep<Record> =
             dslContext
-                .select(TEST_SUITE.fields().toList())
+                .select(testSuiteFieldsToSelect)
                 .select(Tables.TEST_CASE.addPrefixToFields("test_cases_"))
                 .select(TEST_RUN.PUBLIC_ID.`as`("test_cases_public_id"))
                 .select(TEST_SUITE.IDX.`as`("test_cases_test_suite_idx"))
