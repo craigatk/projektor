@@ -37,17 +37,19 @@ class SaveCoberturaCoverageApplicationTest : ApplicationTestCase() {
                     expectThat(coverageRunDao.fetchByTestRunPublicId(publicId.id)).hasSize(1)
                 }
 
-                val coverage = runBlocking { coverageService.getCoverage(publicId) }
-                assertNotNull(coverage)
+                await untilAsserted {
+                    val coverage = runBlocking { coverageService.getCoverage(publicId) }
+                    assertNotNull(coverage)
 
-                expectThat(coverage.overallStats) {
-                    get { lineStat.coveredPercentage }.isEqualTo(BigDecimal("91.30"))
-                    get { branchStat.coveredPercentage }.isEqualTo(BigDecimal("81.47"))
+                    expectThat(coverage.overallStats) {
+                        get { lineStat.coveredPercentage }.isEqualTo(BigDecimal("91.30"))
+                        get { branchStat.coveredPercentage }.isEqualTo(BigDecimal("81.47"))
+                    }
+
+                    expectThat(coverage.groups).hasSize(1)
+                    val coverageGroup = coverage.groups[0]
+                    expectThat(coverageGroup.name).isEqualTo("Coverage")
                 }
-
-                expectThat(coverage.groups).hasSize(1)
-                val coverageGroup = coverage.groups[0]
-                expectThat(coverageGroup.name).isEqualTo("Coverage")
 
                 await untilAsserted {
                     val coverageFiles = runBlocking { coverageService.getCoverageGroupFiles(publicId, "Coverage") }
