@@ -23,6 +23,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
   let attachmentFileGlobs;
   let coverageFileGlobs;
   let performanceFileGlobs;
+  let codeQualityFileGlobs;
   let baseDirectoryPath;
   let exitWithFailure;
   let failOnPublishError;
@@ -48,6 +49,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     attachmentFileGlobs = config.attachments;
     coverageFileGlobs = config.coverage;
     performanceFileGlobs = config.performance;
+    codeQualityFileGlobs = config.codeQuality;
     baseDirectoryPath = config.baseDirectoryPath;
 
     exitWithFailure = config.exitWithFailure;
@@ -81,6 +83,11 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       performanceFileGlobs = Array.isArray(args.performance)
         ? args.performance
         : [args.performance];
+    }
+    if (args.codeQuality) {
+      codeQualityFileGlobs = Array.isArray(args.codeQuality)
+        ? args.codeQuality
+        : [args.codeQuality];
     }
     baseDirectoryPath = args.baseDirectoryPath;
 
@@ -124,7 +131,10 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     gitMainBranchNames = ["main", "master"];
   }
 
-  if (resultsFileGlobs || performanceFileGlobs) {
+  const shouldPublish =
+    resultsFileGlobs || performanceFileGlobs || codeQualityFileGlobs;
+
+  if (shouldPublish) {
     // https://go-vela.github.io/docs/concepts/pipeline/steps/environment/
     // https://docs.github.com/en/actions/reference/environment-variables
 
@@ -158,6 +168,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       attachmentFileGlobs,
       coverageFileGlobs,
       performanceFileGlobs,
+      codeQualityFileGlobs,
       gitRepoName,
       gitBranchName,
       gitCommitSha,

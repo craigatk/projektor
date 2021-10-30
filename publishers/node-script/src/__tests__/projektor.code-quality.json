@@ -1,0 +1,10 @@
+{
+  "serverUrl": "http://localhost:8080",
+  "results": [
+    "src/__tests__/resultsDir1/*.xml"
+  ],
+  "codeQuality": [
+    "src/__tests__/codeQualityReports1/*.txt",
+    "src/__tests__/codeQualityReports2/*.txt"
+  ]
+}

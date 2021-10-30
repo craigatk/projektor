@@ -74,6 +74,7 @@ describe("publish with coverage", () => {
       null,
       null,
       null,
+      null,
       false,
       "base/dir"
     );
@@ -108,6 +109,7 @@ describe("publish with coverage", () => {
       [fileGlob],
       null,
       coverageGlobs,
+      null,
       null,
       null,
       null,
