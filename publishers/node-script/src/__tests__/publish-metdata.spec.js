@@ -29,6 +29,7 @@ describe("Node script publishing with results metadata", () => {
       null,
       null,
       null,
+      null,
       "projektor/projektor",
       "main",
       "02fea3d66fab1de935e1ac3adb008a0abb9a61f3",

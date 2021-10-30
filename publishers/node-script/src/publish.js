@@ -39,12 +39,27 @@ const collectPerformanceResults = (performanceFileGlobs) => {
   });
 };
 
+const collectCodeQualityReports = (codeQualityFileGlobs) => {
+  const codeQualityFilePaths = globsToFilePaths(codeQualityFileGlobs);
+
+  return codeQualityFilePaths.map((filePath) => {
+    const fileContents = fs.readFileSync(filePath).toString();
+    const fileName = path.basename(filePath);
+
+    return {
+      fileName,
+      contents: fileContents,
+    };
+  });
+};
+
 const sendResults = async (
   serverUrl,
   publishToken,
   resultsBlob,
   performanceResults,
   coverageFilePayloads,
+  codeQualityFilePayloads,
   gitRepoName,
   gitBranchName,
   gitCommitSha,
@@ -79,6 +94,7 @@ const sendResults = async (
     groupedTestSuites,
     performanceResults,
     coverageFiles: coverageFilePayloads || [],
+    codeQualityFiles: codeQualityFilePayloads || [],
     metadata: {
       git: {
         repoName: gitRepoName,
@@ -142,6 +158,7 @@ const collectAndSendResults = async (
   attachmentFileGlobs,
   coverageFileGlobs,
   performanceFileGlobs,
+  codeQualityFileGlobs,
   gitRepoName,
   gitBranchName,
   gitCommitSha,
@@ -165,8 +182,15 @@ const collectAndSendResults = async (
     coverageFileGlobs,
     baseDirectoryPath
   );
+  const codeQualityFilePayloads =
+    collectCodeQualityReports(codeQualityFileGlobs);
 
-  if (resultsBlob.length > 0 || performanceResults.length > 0) {
+  const shouldPublish =
+    resultsBlob.length > 0 ||
+    performanceResults.length > 0 ||
+    codeQualityFilePayloads.length > 0;
+
+  if (shouldPublish) {
     try {
       const resultsResponseData = await sendResults(
         serverUrl,
@@ -174,6 +198,7 @@ const collectAndSendResults = async (
         resultsBlob,
         performanceResults,
         coverageFilePayloads,
+        codeQualityFilePayloads,
         gitRepoName,
         gitBranchName,
         gitCommitSha,
@@ -198,7 +223,13 @@ const collectAndSendResults = async (
         attachmentMaxSizeMB
       );
 
-      return { resultsBlob, publicId, reportUrl, performanceResults };
+      return {
+        resultsBlob,
+        publicId,
+        reportUrl,
+        performanceResults,
+        codeQualityFilePayloads,
+      };
     } catch (e) {
       console.error(
         `Error publishing results to Projektor server ${serverUrl}`,
@@ -211,13 +242,20 @@ const collectAndSendResults = async (
       return {
         resultsBlob,
         performanceResults,
+        codeQualityFilePayloads,
         publicId: null,
         reportUrl: null,
         error: e,
       };
     }
   } else {
-    return { resultsBlob, performanceResults, publicId: null, reportUrl: null };
+    return {
+      resultsBlob,
+      performanceResults,
+      codeQualityFilePayloads,
+      publicId: null,
+      reportUrl: null,
+    };
   }
 };
 

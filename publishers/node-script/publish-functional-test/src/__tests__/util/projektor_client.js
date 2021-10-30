@@ -32,6 +32,9 @@ const fetchGitMetadata = (testRunId, serverPort) =>
 const fetchPerformanceResults = (testRunId, serverPort) =>
   axios.get(`http://localhost:${serverPort}/run/${testRunId}/performance`);
 
+const fetchCodeQuality = (testRunId, serverPort) =>
+  axios.get(`http://localhost:${serverPort}/run/${testRunId}/quality`);
+
 module.exports = {
   fetchTestRunSummary,
   fetchAttachments,
@@ -41,4 +44,5 @@ module.exports = {
   fetchResultsMetadata,
   fetchGitMetadata,
   fetchPerformanceResults,
+  fetchCodeQuality,
 };
