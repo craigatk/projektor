@@ -16,7 +16,15 @@ class CodeCoverageTaskConfigurator {
             jacocoTestReportTasks.each { task ->
                 if (task instanceof JacocoReport) {
                     logger.info("Projektor enabling XML report for task ${task.name} in project ${project.name}")
-                    task.reports.xml.enabled = true
+
+                    // Report.enabled is going to be replaced with Report.required in Gradle 8.0,
+                    // so use Report.required if it is available
+                    if (task.reports.xml.hasProperty("required")) {
+                        task.reports.xml.required = true
+                    } else {
+                        task.reports.xml.enabled = true
+                    }
+
                 }
             }
         }

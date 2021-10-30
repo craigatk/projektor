@@ -16,7 +16,13 @@ class TestTaskGroup implements TestGroup {
 
     @Override
     File getResultsDir() {
-        return task.reports.junitXml.destination
+        // Report.destination is going to be replaced with Report.outputLocation in Gradle 8.0,
+        // so use Report.outputLocation if it is available
+        if (task.reports.junitXml.hasProperty("outputLocation")) {
+            return task.reports.junitXml.outputLocation.asFile.get()
+        } else {
+            return task.reports.junitXml.destination
+        }
     }
 
     @Override
