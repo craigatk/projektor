@@ -25,6 +25,7 @@ class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
         buildFile << """
             projektor {
                 serverUrl = '${serverUrl}'
+                alwaysPublish = true
             }
         """.stripIndent()
 
@@ -41,7 +42,7 @@ class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
         def result = runSuccessfulBuildWithEnvironmentAndGradleVersion(
                 ["CI": "true"],
                 gradleVersion,
-                'test', 'jacocoTestReport', '--info'
+                'test', 'jacocoTestReport', '--info', '--warning-mode', 'all'
         )
 
         then:
@@ -50,6 +51,9 @@ class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
 
         and:
         verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
+
+        and:
+        !result.output.contains("scheduled to be removed in Gradle 8.0")
 
         and:
         List<GroupedResults> resultsRequestBodies = resultsStubber.findResultsRequestBodies()
@@ -67,6 +71,7 @@ class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
         GradleVersion.version("6.0.1") | _
         GradleVersion.version("6.4.1") | _
         GradleVersion.version("7.0")   | _
+        GradleVersion.version("7.2")   | _
         GradleVersion.current()        | _
     }
 }

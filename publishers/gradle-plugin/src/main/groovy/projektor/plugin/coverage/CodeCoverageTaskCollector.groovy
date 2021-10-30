@@ -43,9 +43,7 @@ class CodeCoverageTaskCollector {
     }
 
     private CodeCoverageFile coverageFileOrNull(JacocoReport reportTask) {
-        SingleFileReport xmlReport = reportTask.reports.xml
-
-        File xmlReportFile = xmlReport.destination
+        File xmlReportFile = extractReportFile(reportTask)
 
         if (xmlReportFile.exists()) {
             String baseDirectoryPath = findBaseDirectoryPath(reportTask)
@@ -57,6 +55,18 @@ class CodeCoverageTaskCollector {
             logger.info("Projektor found no XML report for Jacoco task ${reportTask.name} in project ${reportTask.project.name}")
 
             return null
+        }
+    }
+
+    private static File extractReportFile(JacocoReport reportTask) {
+        SingleFileReport xmlReport = reportTask.reports.xml
+
+        // Report.destination is going to be replaced with Report.outputLocation in Gradle 8.0,
+        // so use Report.outputLocation if it is available
+        if (xmlReport.hasProperty("outputLocation")) {
+            return xmlReport.outputLocation.asFile.get()
+        } else {
+            return xmlReport.destination
         }
     }
 
