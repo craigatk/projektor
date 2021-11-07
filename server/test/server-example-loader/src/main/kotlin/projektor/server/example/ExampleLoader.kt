@@ -52,6 +52,18 @@ fun loadAllExamples() {
     println("View run with all tests at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
+fun loadLargeOutputExamples() {
+    val testResults = listOf(
+        resultsXmlLoader.reallyLongOutput(),
+        resultsXmlLoader.reallyLongOutput5000(),
+        resultsXmlLoader.reallyLongOutput10000(),
+        resultsXmlLoader.reallyLongOutput100k(),
+    )
+
+    val saveResultsResponse = sendResultsToServer(testResults)
+    println("View run with large output at $uiBaseUrl${saveResultsResponse.uri}")
+}
+
 fun loadCypressExamples() {
     val saveResultsResponse = sendResultsToServer(resultsXmlLoader.cypressResults())
     println("View run with Cypress tests at $uiBaseUrl${saveResultsResponse.uri}")
