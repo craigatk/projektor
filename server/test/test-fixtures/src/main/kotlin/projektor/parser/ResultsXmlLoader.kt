@@ -18,6 +18,8 @@ class ResultsXmlLoader {
 
     fun reallyLongOutput10000() = loadTextFromFile("TEST-projektor.example.spock.ReallyLongOutput10000Spec.xml")
 
+    fun reallyLongOutput100k() = loadTextFromFile("TEST-projektor.example.spock.ReallyLongOutput100kSpec.xml")
+
     fun output() = loadTextFromFile("TEST-projektor.example.spock.OutputSpec.xml")
 
     fun someIgnored() = loadTextFromFile("TEST-projektor.example.spock.IgnoreSomeMethodsSpec.xml")

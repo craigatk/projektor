@@ -40,4 +40,5 @@ fun main() {
     codeQualityTwoReports()
     appendTwoAdditionalTestRuns()
     invalidResults()
+    loadLargeOutputExamples()
 }

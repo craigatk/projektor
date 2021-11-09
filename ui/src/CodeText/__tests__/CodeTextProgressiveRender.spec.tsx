@@ -13,18 +13,14 @@ describe("CodeTextProgressiveRender", () => {
       </div>
     ));
 
-    const renderProgress = jest.fn();
-    const renderComplete = jest.fn();
-
     jest.useFakeTimers();
 
     const { findByTestId, queryByTestId } = render(
       <CodeTextProgressiveRender
         listElements={listElements}
-        renderProgress={renderProgress}
-        renderComplete={renderComplete}
         pageSize={2}
         lineHeight={14}
+        highlightedLine={2}
       />
     );
 
@@ -44,8 +40,6 @@ describe("CodeTextProgressiveRender", () => {
     expect(queryByTestId("line-5")).toBeNull();
     expect(queryByTestId("line-6")).toBeNull();
 
-    expect(renderProgress).toHaveBeenCalled();
-
     act(() => jest.runOnlyPendingTimers());
 
     expect(getNodeText(await findByTestId("line-1"))).toBe("line1");
@@ -56,7 +50,5 @@ describe("CodeTextProgressiveRender", () => {
     expect(getNodeText(await findByTestId("line-6"))).toBe("line6");
 
     act(() => jest.runOnlyPendingTimers());
-
-    expect(renderComplete).toHaveBeenCalled();
   });
 });
