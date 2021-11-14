@@ -1,11 +1,11 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { scroller } from "react-scroll";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import CodeTextProgressBar from "./CodeTextProgressBar";
 
 interface CodeTextProgressiveRenderProps {
-  listElements: any[];
-  pageSize: number;
+  lineChunks: any[];
+  lineCount: number;
   lineHeight: number;
   highlightedLine: number;
 }
@@ -33,17 +33,13 @@ const useStyles = makeStyles({
 });
 
 const CodeTextProgressiveRender = ({
-  listElements,
-  pageSize,
+  lineChunks,
+  lineCount,
   lineHeight,
   highlightedLine,
 }: CodeTextProgressiveRenderProps) => {
-  const [currentRenderLimit, setCurrentRenderLimit] = React.useState(pageSize);
+  const [chunkIdx, setChunkIdx] = React.useState(1);
   const [rendered, setRendered] = React.useState(false);
-  const [renderProgress, setRenderProgress] = React.useState(0);
-
-  const lineCount = listElements.length;
-  const maxRenderSize = lineCount - 1;
 
   const classes = useStyles({
     lineCount,
@@ -51,54 +47,41 @@ const CodeTextProgressiveRender = ({
   });
 
   const renderComplete = () => {
-    if (highlightedLine != null && !rendered) {
-      scroller.scrollTo(`line-${highlightedLine}-true`, {
-        duration: 0,
-        delay: 0,
-        offset: -45,
-        smooth: "easeInOutQuart",
-      });
+    if (!rendered) {
+      if (highlightedLine != null) {
+        scroller.scrollTo(`line-${highlightedLine}-true`, {
+          duration: 0,
+          delay: 0,
+          offset: -45,
+          smooth: "easeInOutQuart",
+        });
+      }
+
+      setRendered(true);
     }
-
-    setRendered(true);
-  };
-
-  const renderProgressUpdate = (progress: number) => {
-    setRenderProgress(progress);
   };
 
   const renderNextPage = () => {
-    if (currentRenderLimit < maxRenderSize) {
-      setCurrentRenderLimit(currentRenderLimit + pageSize);
-
-      const renderProgressPercentage = Math.floor(
-        (currentRenderLimit / maxRenderSize) * 100
-      );
-      renderProgressUpdate(renderProgressPercentage);
+    if (chunkIdx < lineChunks.length) {
+      setChunkIdx(chunkIdx + 1);
     } else {
       renderComplete();
     }
   };
 
-  if ("requestIdleCallback" in window) {
-    // @ts-ignore
-    window.requestIdleCallback(renderNextPage);
-  } else {
+  if (!rendered) {
     setTimeout(renderNextPage);
   }
 
   return (
     <div>
-      {!rendered && listElements.length > 1000 ? (
-        <LinearProgress
-          variant="determinate"
-          value={renderProgress}
-          className={classes.renderIndicator}
+      {!rendered && lineChunks.length > 2 && (
+        <CodeTextProgressBar
+          currentValue={chunkIdx}
+          maxValue={lineChunks.length}
         />
-      ) : null}
-      <div className={classes.wrapper}>
-        {listElements.slice(0, currentRenderLimit)}
-      </div>
+      )}
+      <div className={classes.wrapper}>{lineChunks.slice(0, chunkIdx)}</div>
     </div>
   );
 };

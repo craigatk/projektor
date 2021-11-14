@@ -4,6 +4,8 @@ import { Element } from "react-scroll";
 import CodeTextProgressiveRender from "./CodeTextProgressiveRender";
 import CodeTextLine from "./CodeTextLine";
 import styled from "styled-components";
+import _ from "lodash";
+import CodeTextLinesChunk from "./CodeTextLinesChunk";
 
 interface CodeTextProps {
   text: string;
@@ -42,7 +44,7 @@ const CodeText = ({ text }: CodeTextProps) => {
     };
   }, [setHighlightedLine]);
 
-  const listElements = textLines.map((line, idx) => {
+  const lineElements = textLines.map((line, idx) => {
     const lineIdx = idx + 1;
     const highlighted = lineIdx === highlightedLine;
 
@@ -62,13 +64,19 @@ const CodeText = ({ text }: CodeTextProps) => {
     );
   });
 
+  const lineCount = lineElements.length;
+  const pageSize = 1000;
+  const lineChunks = _.chunk(lineElements, pageSize).map((lines, idx) => (
+    <CodeTextLinesChunk lines={lines} key={`chunk-${idx}`} />
+  ));
+
   const lineHeight = 17.3594;
 
   return (
     <pre data-testid="code-text">
       <CodeTextProgressiveRender
-        listElements={listElements}
-        pageSize={500}
+        lineCount={lineCount}
+        lineChunks={lineChunks}
         lineHeight={lineHeight}
         highlightedLine={highlightedLine}
       />
