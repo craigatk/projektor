@@ -187,6 +187,7 @@ const collectAndSendResults = async (
 
   const shouldPublish =
     resultsBlob.length > 0 ||
+    coverageFilePayloads.length > 0 ||
     performanceResults.length > 0 ||
     codeQualityFilePayloads.length > 0;
 
@@ -229,6 +230,7 @@ const collectAndSendResults = async (
         reportUrl,
         performanceResults,
         codeQualityFilePayloads,
+        coverageFilePayloads,
       };
     } catch (e) {
       console.error(
@@ -243,6 +245,7 @@ const collectAndSendResults = async (
         resultsBlob,
         performanceResults,
         codeQualityFilePayloads,
+        coverageFilePayloads,
         publicId: null,
         reportUrl: null,
         error: e,
@@ -253,6 +256,7 @@ const collectAndSendResults = async (
       resultsBlob,
       performanceResults,
       codeQualityFilePayloads,
+      coverageFilePayloads,
       publicId: null,
       reportUrl: null,
     };

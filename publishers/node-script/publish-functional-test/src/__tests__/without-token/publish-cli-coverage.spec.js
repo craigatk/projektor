@@ -82,6 +82,40 @@ describe("Publishing with coverage via CLI", () => {
     );
   });
 
+  it("should publish coverage alone without results when configured on command line", (done) => {
+    exec(
+      `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --coverage=coverage/*.xml`,
+      async (error, stdout, stderr) => {
+        verifyOutput(error, stdout, stderr, serverPort);
+        expect(error).toBeNull();
+
+        const testRunId = extractTestRunId(stdout);
+        console.log("Test ID", testRunId);
+
+        await waitForExpect(async () => {
+          const testRunSummaryResponse = await fetchTestRunSummary(
+            testRunId,
+            serverPort
+          );
+          expect(testRunSummaryResponse.status).toEqual(200);
+        });
+
+        await waitForExpect(async () => {
+          const coverageResponse = await fetchCoverage(testRunId, serverPort);
+          expect(coverageResponse.status).toEqual(200);
+
+          console.log("Coverage data", coverageResponse.data);
+
+          expect(
+            coverageResponse.data.overall_stats.line_stat.covered_percentage
+          ).toBe(90.5);
+        });
+
+        done();
+      }
+    );
+  });
+
   it("should publish coverage with base directory path to server configured on command line", (done) => {
     exec(
       `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --coverage=coverage/*.xml --baseDirectoryPath=ui results/*.xml`,
