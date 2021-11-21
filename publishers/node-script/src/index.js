@@ -132,7 +132,10 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
   }
 
   const shouldPublish =
-    resultsFileGlobs || performanceFileGlobs || codeQualityFileGlobs;
+    resultsFileGlobs ||
+    coverageFileGlobs ||
+    performanceFileGlobs ||
+    codeQualityFileGlobs;
 
   if (shouldPublish) {
     // https://go-vela.github.io/docs/concepts/pipeline/steps/environment/
@@ -158,6 +161,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     const {
       resultsBlob,
       performanceResults,
+      coverageFilePayloads,
       reportUrl,
       publicId,
       error: publishError,
@@ -183,15 +187,23 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       gitMainBranchNames
     );
 
-    const hasResults = resultsBlob || performanceFileGlobs;
+    const hasTestResults = resultsBlob;
+    const hasCoverageResults =
+      coverageFilePayloads && coverageFilePayloads.length > 0;
+    const hasPerformanceResults =
+      performanceResults && performanceResults.length > 0;
 
-    if (!hasResults) {
+    if (resultsFileGlobs && resultsFileGlobs.length > 0 && !hasTestResults) {
       console.log(
         `No test results files found in locations ${resultsFileGlobs}`
       );
     }
 
-    if (performanceFileGlobs && performanceResults.length === 0) {
+    if (
+      performanceFileGlobs &&
+      performanceFileGlobs.length > 0 &&
+      !hasPerformanceResults
+    ) {
       console.log(
         `No performance results files found in locations ${performanceFileGlobs}`
       );
@@ -205,6 +217,9 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       const messageFileName =
         slackMessageFileName || "projektor_failure_message.json";
       const messageProjectName = slackProjectName || projectName;
+
+      const hasResults =
+        hasTestResults || hasCoverageResults || hasPerformanceResults;
 
       if (hasResults) {
         writeSlackMessageFileToDisk(
