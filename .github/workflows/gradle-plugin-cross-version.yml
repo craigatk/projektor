@@ -1,0 +1,33 @@
+name: Gradle plugin cross-version testing
+
+on:
+  push:
+    paths:
+      - 'publishers/gradle-plugin/**'
+
+jobs:
+  gradle-plugin-java-17:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches/modules-2
+          key: ${{ runner.os }}-gradle-modules-${{ hashFiles('**/*gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-modules-
+      - name: Build with Gradle
+        env:
+          PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
+        run: ./gradlew test --no-build-cache
+
+      - name: Projektor report URL
+        uses: craigatk/projektor-action@v10
+        if: failure() || success()
+        with:
+          print-link: true
