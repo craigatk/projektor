@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 class ClientFactory {
     static OkHttpClient createClient(ClientConfig clientConfig) {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
-        okHttpClientBuilder.retryOnConnectionFailure = false
+        okHttpClientBuilder.retryOnConnectionFailure(false)
         okHttpClientBuilder.callTimeout(clientConfig.timeout, TimeUnit.MILLISECONDS)
         okHttpClientBuilder.readTimeout(clientConfig.timeout, TimeUnit.MILLISECONDS)
         okHttpClientBuilder.connectTimeout(clientConfig.timeout, TimeUnit.MILLISECONDS)
@@ -25,7 +25,7 @@ class ClientFactory {
                 .maxAttempts(clientConfig.retryMaxAttempts)
                 .waitDuration(Duration.ofMillis(clientConfig.retryInterval))
                 .retryOnResult({ Response response -> !response.successful && response.code() != 401 })
-                .retryOnException({ Throwable e -> true })
+                .retryExceptions(Throwable.class)
                 .build()
 
         RetryRegistry registry = RetryRegistry.of(retryConfig)
