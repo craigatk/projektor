@@ -141,6 +141,7 @@ class FlakyTestCalculatorTest {
         idx = 1,
         testSuiteIdx = 1,
         name = testCaseName,
+        testSuiteName = null,
         className = className,
         packageName = packageName,
         fileName = null,

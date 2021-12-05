@@ -9,6 +9,7 @@ import org.koin.ktor.ext.get
 import projektor.ApplicationTestCase
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.ResultsXmlLoader
+import projektor.testcase.TestCaseService
 import projektor.testrun.TestRunService
 import strikt.api.expectThat
 import strikt.assertions.*
@@ -54,6 +55,17 @@ class CypressResultsWithFileNameApplicationTest : ApplicationTestCase() {
                         get { className }.isEqualTo("repository coverage")
                         get { packageName }.isNull()
                     }
+                }
+
+                val attachmentsTestSuite = testSuites.find { it.className == "test run with attachments" }
+                assertNotNull(attachmentsTestSuite)
+
+                val testCaseService: TestCaseService = application.get()
+
+                val testCase1 = runBlocking { testCaseService.fetchTestCase(publicId, attachmentsTestSuite.idx, 1) }
+                expectThat(testCase1).isNotNull().and {
+                    get { name }.isEqualTo("test run with attachments should list attachments on attachments page")
+                    get { testSuiteName }.isEqualTo("test run with attachments")
                 }
             }
         }

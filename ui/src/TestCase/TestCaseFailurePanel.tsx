@@ -75,8 +75,14 @@ const TestCaseFailurePanel = ({
         onClick={expansionPanelOnClick}
         data-testid={`test-case-summary-header-${testCaseIdentifier}`}
       >
-        <Typography variant="subtitle2" data-testid="test-case-title">
-          {testCase.packageName}.{testCase.className} {testCase.name}
+        <Typography
+          variant="subtitle2"
+          data-testid={`test-case-title-${testCaseIdentifier}`}
+        >
+          <span data-testid="test-case-title">
+            {testCase.packageName || testCase.testSuiteName || ""}.
+            {testCase.className} {testCase.name}
+          </span>
         </Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails className={classes.failureMessage}>

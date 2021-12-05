@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="144" failures="3" errors="0" time="19.289">
+  <testsuite name="src/CodeText/__tests__/CodeTextProgressiveRender.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:08:57" time="7.764" tests="2">
+    <testcase classname="CodeTextProgressiveRender" name="CodeTextProgressiveRender should render lines progressively" time="0.124">
+    </testcase>
+    <testcase classname="CodeTextProgressiveRender" name="CodeTextProgressiveRender should not render progress bar when only 1 chunk" time="0.006">
+    </testcase>
+    <system-out><![CDATA[[
+  {
+    "message": "target Element not found",
+    "origin": "    at Object.scrollTo (/Users/craigatkinson/projects/projektor/ui/node_modules/react-scroll/modules/mixins/scroller.js:57:15)\n    at renderComplete (/Users/craigatkinson/projects/projektor/ui/src/CodeText/CodeTextProgressiveRender.tsx:52:18)\n    at renderNextPage (/Users/craigatkinson/projects/projektor/ui/src/CodeText/CodeTextProgressiveRender.tsx:68:7)\n    at callTimer (/Users/craigatkinson/projects/projektor/ui/node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:719:24)\n    at doTickInner (/Users/craigatkinson/projects/projektor/ui/node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:1235:29)\n    at doTick (/Users/craigatkinson/projects/projektor/ui/node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:1316:20)\n    at Object.tick (/Users/craigatkinson/projects/projektor/ui/node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:1324:20)\n    at Object.runToLast (/Users/craigatkinson/projects/projektor/ui/node_modules/@sinonjs/fake-timers/src/fake-timers-src.js:1480:26)",
+    "type": "warn"
+  }
+]]]></system-out>
+  </testsuite>
+  <testsuite name="src/Repository/FlakyTests/__tests__/RepositoryFlakyTestsTable.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:08:57" time="8.825" tests="3">
+    <testcase classname="RepositoryFlakyTestsTable" name="RepositoryFlakyTestsTable should format last timestamp in local timezone" time="0.252">
+    </testcase>
+    <testcase classname="RepositoryFlakyTestsTable" name="RepositoryFlakyTestsTable should sort by first failure" time="0.155">
+    </testcase>
+    <testcase classname="RepositoryFlakyTestsTable" name="RepositoryFlakyTestsTable should sort by latest failure" time="0.188">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/VersionControl/__tests__/VersionControlHelpers.spec.ts" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:05" time="0.306" tests="8">
+    <testcase classname="VersionControlHelpers GitHub URL" name="VersionControlHelpers GitHub URL should create GitHub URL when URI does not start with slash" time="0">
+    </testcase>
+    <testcase classname="VersionControlHelpers GitHub URL" name="VersionControlHelpers GitHub URL should create GitHub URL when URI does starts with slash" time="0">
+    </testcase>
+    <testcase classname="VersionControlHelpers GitHub file URL" name="VersionControlHelpers GitHub file URL should create GitHub file URL when base URL does not end in slash" time="0">
+    </testcase>
+    <testcase classname="VersionControlHelpers GitHub file URL" name="VersionControlHelpers GitHub file URL should create GitHub file URL when base URL ends in slash" time="0">
+    </testcase>
+    <testcase classname="VersionControlHelpers GitHub file URL" name="VersionControlHelpers GitHub file URL should create GitHub file URL when line number set" time="0">
+    </testcase>
+    <testcase classname="VersionControlHelpers GitHub file URL" name="VersionControlHelpers GitHub file URL should return null for GitHub file URL when base URL not set" time="0">
+    </testcase>
+    <testcase classname="VersionControlHelpers GitHub file URL" name="VersionControlHelpers GitHub file URL should return null for GitHub file URL when no Git metadata" time="0">
+    </testcase>
+    <testcase classname="VersionControlHelpers GitHub file URL" name="VersionControlHelpers GitHub file URL should return null for GitHub file URL when file path not set" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestCase/__tests__/TestCaseFailurePanel.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:08:57" time="10.296" tests="10">
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should render failure details link when the test case failed" time="0.147">
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should not render failure details link when the test case passed" time="0.046">
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should render system out link when the test case has system out" time="0.04">
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should render system err link when the test case has system err" time="0.081">
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should render both system out and err links when the test case has both" time="0.057">
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should render failure message when flag to show full failure is false" time="0.057">
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should render failure text when flag to show full failure is true" time="0.075">
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should collapse panel when clicking on test case title" time="0.067">
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should not collapse panel when clicking on failure body text" time="0.055">
+    </testcase>
+    <testcase classname="TestCaseFailurePanel" name="TestCaseFailurePanel should show attachment screenshot when one exists" time="0.025">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Coverage/__tests__/CoverageGraph.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:04" time="2.865" tests="7">
+    <testcase classname="CoverageGraph" name="CoverageGraph should display coverage data when not inline" time="0.03">
+    </testcase>
+    <testcase classname="CoverageGraph" name="CoverageGraph should display positive previous coverage" time="0.031">
+    </testcase>
+    <testcase classname="CoverageGraph" name="CoverageGraph should display negative previous coverage" time="0.035">
+    </testcase>
+    <testcase classname="CoverageGraph" name="CoverageGraph should not display title when inline" time="0.006">
+    </testcase>
+    <testcase classname="CoverageGraph" name="CoverageGraph should not display coverage data when there isn&apos;t any" time="0.002">
+    </testcase>
+    <testcase classname="CoverageGraph" name="CoverageGraph graph should have link when specified" time="0.017">
+    </testcase>
+    <testcase classname="CoverageGraph" name="CoverageGraph graph should not have link when not specified" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Organization/Coverage/__tests__/OrganizationCoveragePage.spec.tsx" errors="0" failures="1" skipped="0" timestamp="2021-12-04T20:08:57" time="11.108" tests="3">
+    <testcase classname="OrganizationCoveragePage" name="OrganizationCoveragePage when three repos in org should display their coverage" time="0.345">
+      <failure>Error: expect(element).toHaveTextContent()
+
+Expected element to have text content:
+  92.12%
+Received:
+  92.11%
+    at /Users/craigatkinson/projects/projektor/ui/src/Organization/Coverage/__tests__/OrganizationCoveragePage.spec.tsx:146:7
+    at Generator.next (&lt;anonymous&gt;)
+    at fulfilled (/Users/craigatkinson/projects/projektor/ui/src/Organization/Coverage/__tests__/OrganizationCoveragePage.spec.tsx:5:58)</failure>
+    </testcase>
+    <testcase classname="OrganizationCoveragePage" name="OrganizationCoveragePage should display project name when it is set" time="0.182">
+    </testcase>
+    <testcase classname="OrganizationCoveragePage" name="OrganizationCoveragePage should not display coverage data when the organization doesn&apos;t have any repos with coverage" time="0.047">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Dashboard/__tests__/DashboardSummary.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:08:57" time="11.221" tests="6">
+    <testcase classname="Dashboard summary" name="Dashboard summary should display project name when it exists" time="0.163">
+    </testcase>
+    <testcase classname="Dashboard summary" name="Dashboard summary should not display project name when it does not exists" time="0.055">
+    </testcase>
+    <testcase classname="Dashboard summary" name="Dashboard summary should display branch name when it exists" time="0.057">
+    </testcase>
+    <testcase classname="Dashboard summary" name="Dashboard summary should not display branch name when it does not exists" time="0.057">
+    </testcase>
+    <testcase classname="Dashboard summary" name="Dashboard summary should display duration when it is set" time="0.036">
+    </testcase>
+    <testcase classname="Dashboard summary" name="Dashboard summary should not display duration section when average duration is 0" time="0.034">
+    </testcase>
+    <system-out><![CDATA[[
+  {
+    "message": "Warning: toBeEmpty has been deprecated and will be removed in future updates. Please use instead toBeEmptyDOMElement for finding empty nodes in the DOM.",
+    "origin": "    at deprecate (/Users/craigatkinson/projects/projektor/ui/node_modules/@testing-library/jest-dom/dist/utils.js:154:11)\n    at Object.toBeEmpty (/Users/craigatkinson/projects/projektor/ui/node_modules/@testing-library/jest-dom/dist/to-be-empty.js:11:24)\n    at __EXTERNAL_MATCHER_TRAP__ (/Users/craigatkinson/projects/projektor/ui/node_modules/expect/build/index.js:386:30)\n    at Object.throwingMatcher [as toBeEmpty] (/Users/craigatkinson/projects/projektor/ui/node_modules/expect/build/index.js:387:15)\n    at Object.<anonymous> (/Users/craigatkinson/projects/projektor/ui/src/Dashboard/__tests__/DashboardSummary.spec.tsx:170:63)\n    at Promise.then.completed (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/utils.js:390:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/utils.js:315:10)",
+    "type": "warn"
+  }
+]]]></system-out>
+  </testsuite>
+  <testsuite name="src/TestOutput/__tests__/TestSystemOutput.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:08:57" time="11.377" tests="4">
+    <testcase classname="TestSystemOut" name="TestSystemOut should render output when fetching test suite output completes successfully" time="0.122">
+    </testcase>
+    <testcase classname="TestSystemOut" name="TestSystemOut should render output when fetching test case system out completes successfully" time="0.036">
+    </testcase>
+    <testcase classname="TestSystemOut" name="TestSystemOut should render output when fetching test case system err completes successfully" time="0.033">
+    </testcase>
+    <testcase classname="TestSystemOut" name="TestSystemOut should render error when fetching output fails" time="0.041">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Coverage/__tests__/CoverageTable.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:07" time="1.061" tests="1">
+    <testcase classname="CoverageTable" name="CoverageTable should allow sorting by line, branch, or statement covered percentage" time="0.402">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Dashboard/__tests__/TestRunCleanupDate.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:06" time="3.038" tests="3">
+    <testcase classname="TestRunCleanupDate" name="TestRunCleanupDate when cleanup enabled and not pinned should toggle to pinned" time="0.077">
+    </testcase>
+    <testcase classname="TestRunCleanupDate" name="TestRunCleanupDate when cleanup enabled and pinned should toggle to unpinned" time="0.072">
+    </testcase>
+    <testcase classname="TestRunCleanupDate" name="TestRunCleanupDate when cleanup not enabled should not display anything" time="0.004">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestCase/__tests__/TestCaseDetails.spec.tsx" errors="0" failures="1" skipped="0" timestamp="2021-12-04T20:08:57" time="12.196" tests="6">
+    <testcase classname="TestCaseDetails" name="TestCaseDetails should render failure tab when the test case failed" time="0.116">
+    </testcase>
+    <testcase classname="TestCaseDetails" name="TestCaseDetails should not render failure tab when the test case passed" time="0.061">
+    </testcase>
+    <testcase classname="TestCaseDetails" name="TestCaseDetails should system out tab when test case has system out" time="0.09">
+      <failure>Error: expect(received).not.toBeNull()
+
+Received: null
+    at Object.&lt;anonymous&gt; (/Users/craigatkinson/projects/projektor/ui/src/TestCase/__tests__/TestCaseDetails.spec.tsx:101:61)
+    at Promise.then.completed (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/utils.js:390:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/utils.js:315:10)
+    at _callCircusTest (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/run.js:218:40)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at _runTest (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/run.js:155:3)
+    at _runTestsForDescribeBlock (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/run.js:66:9)
+    at _runTestsForDescribeBlock (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/run.js:60:9)
+    at run (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/run.js:25:3)
+    at runAndTransformResultsToJestFormat (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:167:21)
+    at jestAdapter (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+    at runTestInternal (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-runner/build/runTest.js:389:16)
+    at runTest (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-runner/build/runTest.js:475:34)
+    at Object.worker (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
+    </testcase>
+    <testcase classname="TestCaseDetails" name="TestCaseDetails should system err tab when test case has system err" time="0.027">
+    </testcase>
+    <testcase classname="TestCaseDetails" name="TestCaseDetails should show screenshot tab when test case has screenshot attachment" time="0.075">
+    </testcase>
+    <testcase classname="TestCaseDetails" name="TestCaseDetails should show video tab when test case has video attachment" time="0.021">
+    </testcase>
+    <system-out><![CDATA[[
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:238:24\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:398:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:326:25\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:402:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:238:24\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:398:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:326:25\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:402:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemOut.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:238:24\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:398:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemOut.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:326:25\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:402:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemOut.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:238:24\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:398:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemOut.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:326:25\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:402:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemErr.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:238:24\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:398:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemErr.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:326:25\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:402:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemErr.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:238:24\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:398:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemErr.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:326:25\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:402:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemErr, /screenshot.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:238:24\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:398:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemErr, /screenshot.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:326:25\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:402:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemErr, /screenshot.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:238:24\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:398:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/failure`.\nYou can provide one of the following values: /summary, /systemErr, /screenshot.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:326:25\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:402:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/screenshot`.\nYou can provide one of the following values: /summary, /systemErr, /video.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:238:24\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:398:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/screenshot`.\nYou can provide one of the following values: /summary, /systemErr, /video.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:326:25\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:402:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/screenshot`.\nYou can provide one of the following values: /summary, /systemErr, /video.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:238:24\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:398:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  },
+  {
+    "message": "Material-UI: The value provided to the Tabs component is invalid.\nNone of the Tabs' children match with `/screenshot`.\nYou can provide one of the following values: /summary, /systemErr, /video.",
+    "origin": "    at getTabsMeta (/Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:221:21)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:326:25\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/utils/useEventCallback.js:25:29\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/@material-ui/core/Tabs/Tabs.js:402:5\n    at commitHookEffectList (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22030:26)\n    at commitPassiveHookEffects (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:22064:11)\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  }
+]]]></system-out>
+  </testsuite>
+  <testsuite name="src/Repository/__tests__/RepositoryLink.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:09" time="0.224" tests="10">
+    <testcase classname="RepositoryLink repositoryLinkUrlUI" name="RepositoryLink repositoryLinkUrlUI when repo name only should create link" time="0.001">
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlUI" name="RepositoryLink repositoryLinkUrlUI when repo name and uri should create link" time="0">
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlUI" name="RepositoryLink repositoryLinkUrlUI when uri doesn&apos;t start with forward slash should add it" time="0">
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlUI" name="RepositoryLink repositoryLinkUrlUI when repo name and project name should create link" time="0">
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlUI" name="RepositoryLink repositoryLinkUrlUI when repo name, project name, and uri should create link" time="0.001">
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlAPI" name="RepositoryLink repositoryLinkUrlAPI when repo name only should create link" time="0">
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlAPI" name="RepositoryLink repositoryLinkUrlAPI when repo name and uri should create link" time="0">
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlAPI" name="RepositoryLink repositoryLinkUrlAPI when uri doesn&apos;t start with forward slash should add it" time="0">
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlAPI" name="RepositoryLink repositoryLinkUrlAPI when repo name and project name should create link" time="0">
+    </testcase>
+    <testcase classname="RepositoryLink repositoryLinkUrlAPI" name="RepositoryLink repositoryLinkUrlAPI when repo name, project name, and uri should create link" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestSuite/__tests__/TestSuiteList.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:08" time="1.596" tests="4">
+    <testcase classname="TestSuiteList" name="TestSuiteList should render group name when a test suite is grouped" time="0.158">
+    </testcase>
+    <testcase classname="TestSuiteList" name="TestSuiteList should not display group name when test suite has no groups" time="0.076">
+    </testcase>
+    <testcase classname="TestSuiteList" name="TestSuiteList should display file name column when suite has a file name set" time="0.069">
+    </testcase>
+    <testcase classname="TestSuiteList" name="TestSuiteList should not display file name column when no suite has a file name set" time="0.138">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestResults/__tests__/TestResultsProcessingCheck.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:07" time="2.553" tests="5">
+    <testcase classname="TestResultsProcessingCheck" name="TestResultsProcessingCheck should display message when results still processing" time="0.018">
+    </testcase>
+    <testcase classname="TestResultsProcessingCheck" name="TestResultsProcessingCheck should refresh status when still processing up to max timeout" time="0.141">
+    </testcase>
+    <testcase classname="TestResultsProcessingCheck" name="TestResultsProcessingCheck should display failure message when results processing failed" time="0.018">
+    </testcase>
+    <testcase classname="TestResultsProcessingCheck" name="TestResultsProcessingCheck should display message when results were deleted" time="0.016">
+    </testcase>
+    <testcase classname="TestResultsProcessingCheck" name="TestResultsProcessingCheck should call success function when results successfully processed" time="0.006">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Loading/__tests__/LoadingSection.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:10" time="0.725" tests="4">
+    <testcase classname="LoadingSection" name="LoadingSection should display progress bar when loading" time="0.012">
+    </testcase>
+    <testcase classname="LoadingSection" name="LoadingSection should display success section when successful" time="0.008">
+    </testcase>
+    <testcase classname="LoadingSection" name="LoadingSection should display error section when errored" time="0.027">
+    </testcase>
+    <testcase classname="LoadingSection" name="LoadingSection should display custom error component when there is one passed in" time="0.009">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Pin/__tests__/PinSideMenuItem.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:08" time="2.585" tests="3">
+    <testcase classname="PinSideMenuItem" name="PinSideMenuItem when cleanup enabled and not pinned should toggle to pinned" time="0.051">
+    </testcase>
+    <testcase classname="PinSideMenuItem" name="PinSideMenuItem when cleanup enabled and pinned should toggle to unpinned" time="0.033">
+    </testcase>
+    <testcase classname="PinSideMenuItem" name="PinSideMenuItem when cleanup not enabled should not display anything" time="0.061">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestCase/__tests__/TestCasePage.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:10" time="0.654" tests="2">
+    <testcase classname="TestCasePage" name="TestCasePage should render test case when fetch completes successfully" time="0.045">
+    </testcase>
+    <testcase classname="TestCasePage" name="TestCasePage should render error when fetching test case fails" time="0.015">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Repository/Coverage/__tests__/RepositoryCoveragePage.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:08" time="3.183" tests="2">
+    <testcase classname="RepositoryCoveragePage" name="RepositoryCoveragePage should display coverage timeline graph from mainline when no project name" time="0.136">
+    </testcase>
+    <testcase classname="RepositoryCoveragePage" name="RepositoryCoveragePage should display message when no coverage timeline" time="0.044">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Coverage/__tests__/CoverageFilesTable.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:09" time="2.415" tests="2">
+    <testcase classname="CoverageFilesTable" name="CoverageFilesTable should filter out files without any lines" time="0.111">
+    </testcase>
+    <testcase classname="CoverageFilesTable" name="CoverageFilesTable should sort by line covered percentage least to highest" time="0.078">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/SideMenu/__tests__/SideMenu.spec.tsx" errors="0" failures="1" skipped="0" timestamp="2021-12-04T20:09:09" time="2.948" tests="5">
+    <testcase classname="SideMenu" name="SideMenu when attachments should show attachments link" time="0.09">
+    </testcase>
+    <testcase classname="SideMenu" name="SideMenu when no attachments should not show attachments link" time="0.044">
+    </testcase>
+    <testcase classname="SideMenu" name="SideMenu when coverage should show coverage link" time="0.051">
+    </testcase>
+    <testcase classname="SideMenu" name="SideMenu when no coverage should not show coverage link" time="0.049">
+      <failure>Error: expect(received).not.toBeNull()
+
+Received: null
+    at Object.&lt;anonymous&gt; (/Users/craigatkinson/projects/projektor/ui/src/SideMenu/__tests__/SideMenu.spec.tsx:80:52)
+    at Promise.then.completed (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/utils.js:390:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/utils.js:315:10)
+    at _callCircusTest (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/run.js:218:40)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at _runTest (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/run.js:155:3)
+    at _runTestsForDescribeBlock (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/run.js:66:9)
+    at _runTestsForDescribeBlock (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/run.js:60:9)
+    at run (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/run.js:25:3)
+    at runAndTransformResultsToJestFormat (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:167:21)
+    at jestAdapter (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+    at runTestInternal (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-runner/build/runTest.js:389:16)
+    at runTest (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-runner/build/runTest.js:475:34)
+    at Object.worker (/Users/craigatkinson/projects/projektor/ui/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
+    </testcase>
+    <testcase classname="SideMenu" name="SideMenu should display link to docs" time="0.059">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Repository/Coverage/__tests__/RepositoryCoverageTimelineGraph.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:09" time="3.321" tests="1">
+    <testcase classname="RepositoryCoverageTimelineGraph" name="RepositoryCoverageTimelineGraph should display coverage timeline graph" time="1.938">
+    </testcase>
+    <system-out><![CDATA[[
+  {
+    "message": "The width(500) and height(300) are both fixed numbers,\n       maybe you don't need to use a ResponsiveContainer.",
+    "origin": "    at warn (/Users/craigatkinson/projects/projektor/ui/node_modules/recharts/lib/util/LogUtils.js:26:17)\n    at ResponsiveContainer.renderChart (/Users/craigatkinson/projects/projektor/ui/node_modules/recharts/lib/component/ResponsiveContainer.js:145:26)\n    at ResponsiveContainer.render (/Users/craigatkinson/projects/projektor/ui/node_modules/recharts/lib/component/ResponsiveContainer.js:201:16)\n    at finishClassComponent (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:18470:31)\n    at updateClassComponent (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:18423:24)\n    at beginWork$1 (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:20186:16)\n    at beginWork$$1 (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:25756:14)\n    at performUnitOfWork (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:24698:12)",
+    "type": "warn"
+  }
+]]]></system-out>
+  </testsuite>
+  <testsuite name="src/Repository/Timeline/__tests__/RepositoryTimelineGraphTooltip.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:12" time="0.525" tests="2">
+    <testcase classname="RepositoryTimelineGraphTooltip" name="RepositoryTimelineGraphTooltip should display total and average test durations" time="0.015">
+    </testcase>
+    <testcase classname="RepositoryTimelineGraphTooltip" name="RepositoryTimelineGraphTooltip should display run date in local timezone" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestCase/list/__tests__/TestCaseList.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:12" time="0.412" tests="1">
+    <testcase classname="TestCaseList" name="TestCaseList should render duration column first when specified" time="0.069">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestSuite/__tests__/TestSuitePage.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:12" time="0.626" tests="2">
+    <testcase classname="TestSuitePage" name="TestSuitePage should render test suite when fetch completes successfully" time="0.047">
+    </testcase>
+    <testcase classname="TestSuitePage" name="TestSuitePage should render error when fetching test suite fails" time="0.011">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Quality/__tests__/CodeQualityReportsSection.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:11" time="2.215" tests="3">
+    <testcase classname="CodeQualityReportsSection" name="CodeQualityReportsSection should filter out reports that are empty" time="0.037">
+    </testcase>
+    <testcase classname="CodeQualityReportsSection" name="CodeQualityReportsSection should show message when only passing (empty) reports found" time="0.008">
+    </testcase>
+    <testcase classname="CodeQualityReportsSection" name="CodeQualityReportsSection should show message when no code quality reports found" time="0.009">
+    </testcase>
+    <system-out><![CDATA[[
+  {
+    "message": "Warning: validateDOMNesting(...): <div> cannot appear as a descendant of <p>.\n    in div (created by CodeQualityReportsSection)\n    in p (created by ForwardRef(Typography))\n    in ForwardRef(Typography) (created by WithStyles(ForwardRef(Typography)))\n    in WithStyles(ForwardRef(Typography)) (created by CodeQualityReportsSection)\n    in div (created by CodeQualityReportsSection)\n    in CodeQualityReportsSection",
+    "origin": "    at warningWithoutStack (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:530:32)\n    at validateDOMNesting (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:9336:7)\n    at createInstance (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:9458:5)\n    at completeWork (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:21079:28)\n    at completeUnitOfWork (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:24730:16)\n    at performUnitOfWork (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:24706:12)\n    at workLoopSync (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:24671:22)\n    at performSyncWorkOnRoot (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:24270:11)",
+    "type": "error"
+  }
+]]]></system-out>
+  </testsuite>
+  <testsuite name="src/TestRun/__tests__/TestRunAllTests.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:13" time="0.578" tests="2">
+    <testcase classname="TestRunAllTests" name="TestRunAllTests should render all tests when fetch completes successfully" time="0.118">
+    </testcase>
+    <testcase classname="TestRunAllTests" name="TestRunAllTests should render error when fetching all tests fails" time="0.026">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Performance/__tests__/PerformanceSection.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:12" time="0.993" tests="1">
+    <testcase classname="PerformanceSection" name="PerformanceSection should fetch performance results and render them" time="0.134">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Dashboard/__tests__/Dashboard.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:11" time="2.57" tests="2">
+    <testcase classname="Dashboard" name="Dashboard should show all tests when they passed and there is at least one test" time="0.237">
+    </testcase>
+    <testcase classname="Dashboard" name="Dashboard should not show all tests when they passed and there are no tests" time="0.042">
+    </testcase>
+    <system-out><![CDATA[[
+  {
+    "message": "Warning: An update to CoverageSummary inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act\n    in CoverageSummary (created by Dashboard)\n    in div (created by Dashboard)\n    in Dashboard\n    in PinState",
+    "origin": "    at warningWithoutStack (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:530:32)\n    at warnIfNotCurrentlyActingUpdatesInDEV (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:25848:7)\n    at dispatchAction (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:17072:9)\n    at /Users/craigatkinson/projects/projektor/ui/src/Coverage/CoverageSummary.tsx:36:20",
+    "type": "error"
+  },
+  {
+    "message": "Warning: An update to PerformanceSection inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act\n    in PerformanceSection (created by Dashboard)\n    in div (created by Dashboard)\n    in Dashboard\n    in PinState",
+    "origin": "    at warningWithoutStack (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:530:32)\n    at warnIfNotCurrentlyActingUpdatesInDEV (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:25848:7)\n    at dispatchAction (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:17072:9)\n    at /Users/craigatkinson/projects/projektor/ui/src/Performance/PerformanceSection.tsx:25:20",
+    "type": "error"
+  }
+]]]></system-out>
+  </testsuite>
+  <testsuite name="src/TestCase/__tests__/TestCaseFailurePanelList.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:11" time="2.093" tests="2">
+    <testcase classname="TestCaseFailureListPanel" name="TestCaseFailureListPanel should render longer failure text when less than 5 failures" time="0.145">
+    </testcase>
+    <testcase classname="TestCaseFailureListPanel" name="TestCaseFailureListPanel should render shorter failure message when more than 5 failures" time="0.14">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Quality/__tests__/CodeQualityDashboardSummary.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:13" time="0.355" tests="2">
+    <testcase classname="CodeQualityDashboardSummary" name="CodeQualityDashboardSummary should show code quality links when there are reports" time="0.018">
+    </testcase>
+    <testcase classname="CodeQualityDashboardSummary" name="CodeQualityDashboardSummary should not show code quality section when there are no code quality reports" time="0.011">
+    </testcase>
+    <system-out><![CDATA[[
+  {
+    "message": "Warning: An update to CodeQualityDashboardSummary inside a test was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://fb.me/react-wrap-tests-with-act\n    in CodeQualityDashboardSummary",
+    "origin": "    at warningWithoutStack (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:530:32)\n    at warnIfNotCurrentlyActingUpdatesInDEV (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:25848:7)\n    at dispatchAction (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:17072:9)\n    at /Users/craigatkinson/projects/projektor/ui/src/Quality/CodeQualityDashboardSummary.tsx:21:9",
+    "type": "error"
+  }
+]]]></system-out>
+  </testsuite>
+  <testsuite name="src/TestSuite/__tests__/sort.spec.ts" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:13" time="0.208" tests="1">
+    <testcase classname="test suite sort util" name="test suite sort util should sort failed test cases first, then passed, then skipped" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/dateUtils/__tests__/dateUtils.spec.ts" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:13" time="0.177" tests="9">
+    <testcase classname="dateUtils formatSecondsDuration" name="dateUtils formatSecondsDuration should format duration less than 1 second" time="0">
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDuration" name="dateUtils formatSecondsDuration should format duration less than 1 minute with MS threshold of 1" time="0">
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDuration" name="dateUtils formatSecondsDuration should format duration less than 1 minute" time="0">
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDuration" name="dateUtils formatSecondsDuration should format duration over 1 minute and less than 1 hour" time="0">
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDuration" name="dateUtils formatSecondsDuration should format duration over 1 hour" time="0">
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDuration" name="dateUtils formatSecondsDuration should format 0 seconds without any milliseconds" time="0.001">
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDurationWithoutMS" name="dateUtils formatSecondsDurationWithoutMS should format duration less than 1 minute" time="0">
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDurationWithoutMS" name="dateUtils formatSecondsDurationWithoutMS should format duration over 1 minute and less than 1 hour" time="0.001">
+    </testcase>
+    <testcase classname="dateUtils formatSecondsDurationWithoutMS" name="dateUtils formatSecondsDurationWithoutMS should format duration over 10 minutes and less than 1 hour" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Repository/Coverage/__tests__/RepositoryCoverageTimelineGraphTooltip.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:13" time="0.33" tests="2">
+    <testcase classname="RepositoryCoverageTimelineGraphTooltip" name="RepositoryCoverageTimelineGraphTooltip should render covered percentages and run date" time="0.007">
+    </testcase>
+    <testcase classname="RepositoryCoverageTimelineGraphTooltip" name="RepositoryCoverageTimelineGraphTooltip when no payload should render empty span" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Badge/__tests__/TestRunCoverageBadge.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:13" time="0.495" tests="1">
+    <testcase classname="TestRunCoverageBadge" name="TestRunCoverageBadge should display coverage badge" time="0.043">
+    </testcase>
+    <system-out><![CDATA[[
+  {
+    "message": "Error: Not implemented: window.prompt\n    at module.exports (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:9:17)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/browser/Window.js:866:7\n    at copy (/Users/craigatkinson/projects/projektor/ui/node_modules/copy-to-clipboard/index.js:93:14)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/react-copy-to-clipboard/lib/Component.js:69:52\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)\n    at innerInvokeEventListeners (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:338:25)\n    at invokeEventListeners (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:274:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:221:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:94:17) undefined",
+    "origin": "    at VirtualConsole.<anonymous> (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/virtual-console.js:29:45)\n    at VirtualConsole.emit (node:events:394:28)\n    at module.exports (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:12:26)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/browser/Window.js:866:7\n    at copy (/Users/craigatkinson/projects/projektor/ui/node_modules/copy-to-clipboard/index.js:93:14)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/react-copy-to-clipboard/lib/Component.js:69:52\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  }
+]]]></system-out>
+  </testsuite>
+  <testsuite name="src/Badge/__tests__/RepositoryCoverageBadge.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:13" time="0.599" tests="1">
+    <testcase classname="RepositoryCoverageBadge" name="RepositoryCoverageBadge should display coverage badge" time="0.057">
+    </testcase>
+    <system-out><![CDATA[[
+  {
+    "message": "Error: Not implemented: window.prompt\n    at module.exports (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:9:17)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/browser/Window.js:866:7\n    at copy (/Users/craigatkinson/projects/projektor/ui/node_modules/copy-to-clipboard/index.js:93:14)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/react-copy-to-clipboard/lib/Component.js:69:52\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)\n    at innerInvokeEventListeners (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:338:25)\n    at invokeEventListeners (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:274:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:221:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:94:17) undefined",
+    "origin": "    at VirtualConsole.<anonymous> (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/virtual-console.js:29:45)\n    at VirtualConsole.emit (node:events:394:28)\n    at module.exports (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:12:26)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/browser/Window.js:866:7\n    at copy (/Users/craigatkinson/projects/projektor/ui/node_modules/copy-to-clipboard/index.js:93:14)\n    at /Users/craigatkinson/projects/projektor/ui/node_modules/react-copy-to-clipboard/lib/Component.js:69:52\n    at HTMLUnknownElement.callCallback (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:336:14)\n    at HTMLUnknownElement.callTheUserObjectsOperation (/Users/craigatkinson/projects/projektor/ui/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)",
+    "type": "error"
+  }
+]]]></system-out>
+  </testsuite>
+  <testsuite name="src/Dashboard/__tests__/TestRunDuration.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:13" time="0.42" tests="2">
+    <testcase classname="TestRunDuration" name="TestRunDuration should display wall clock duration when it is set" time="0.029">
+    </testcase>
+    <testcase classname="TestRunDuration" name="TestRunDuration should not display wall clock duration when it is not set" time="0.015">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestOutput/__tests__/TestSuiteSystemErr.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:14" time="0.425" tests="1">
+    <testcase classname="TestSuiteSystemErr" name="TestSuiteSystemErr should fetch and render system err" time="0.026">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestSuite/__tests__/TestSuiteDetails.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:13" time="0.675" tests="2">
+    <testcase classname="TestSuiteDetails" name="TestSuiteDetails should display system out tab if test suite has it" time="0.063">
+    </testcase>
+    <testcase classname="TestSuiteDetails" name="TestSuiteDetails should display system err tab if test suite has it" time="0.03">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestOutput/__tests__/TestSuiteSystemOut.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:14" time="0.453" tests="1">
+    <testcase classname="TestSuiteSystemOut" name="TestSuiteSystemOut should fetch and render system out" time="0.035">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/model/__tests__/TestSuiteHelpers.spec.ts" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:14" time="0.153" tests="3">
+    <testcase classname="TestSuiteHelpers fullTestSuiteName" name="TestSuiteHelpers fullTestSuiteName should return class name when no package name" time="0.002">
+    </testcase>
+    <testcase classname="TestSuiteHelpers fullTestSuiteName" name="TestSuiteHelpers fullTestSuiteName should return package name and class name when package name set and it does not include class name" time="0.001">
+    </testcase>
+    <testcase classname="TestSuiteHelpers fullTestSuiteName" name="TestSuiteHelpers fullTestSuiteName should return package name when package name set and it does include class name" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/CodeText/__tests__/CodeText.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:14" time="0.502" tests="2">
+    <testcase classname="CodeText" name="CodeText should split output into lines" time="0.045">
+    </testcase>
+    <testcase classname="CodeText" name="CodeText when output is blank should not show any lines" time="0.017">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestCase/list/__tests__/TestCaseListRow.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:14" time="0.336" tests="1">
+    <testcase classname="TestCaseListRow" name="TestCaseListRow should render test case list row" time="0.011">
+    </testcase>
+    <system-out><![CDATA[[
+  {
+    "message": "Warning: validateDOMNesting(...): <tr> cannot appear as a child of <div>.\n    in tr (created by ForwardRef(TableRow))\n    in ForwardRef(TableRow) (created by WithStyles(ForwardRef(TableRow)))\n    in WithStyles(ForwardRef(TableRow)) (created by TestCaseListRow)\n    in TestCaseListRow",
+    "origin": "    at warningWithoutStack (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:530:32)\n    at validateDOMNesting (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:9334:7)\n    at createInstance (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:9458:5)\n    at completeWork (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:21079:28)\n    at completeUnitOfWork (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:24730:16)\n    at performUnitOfWork (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:24706:12)\n    at workLoopSync (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:24671:22)\n    at performSyncWorkOnRoot (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:24270:11)",
+    "type": "error"
+  }
+]]]></system-out>
+  </testsuite>
+  <testsuite name="src/Attachments/__tests__/AttachmentsPage.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:14" time="0.586" tests="1">
+    <testcase classname="AttachmentsPage" name="AttachmentsPage should fetch attachments and render list" time="0.099">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/TestRun/__tests__/TestRunDataWrapper.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:08" time="5.28" tests="2">
+    <testcase classname="TestRunDataWrapper" name="TestRunDataWrapper should render wrapper when fetch completes successfully" time="0.169">
+    </testcase>
+    <testcase classname="TestRunDataWrapper" name="TestRunDataWrapper should render processing message when fetching test summary fails and results are still processing" time="0.086">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Quality/__tests__/CodeQualityReportTab.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:14" time="0.41" tests="1">
+    <testcase classname="CodeQualityReportTab" name="CodeQualityReportTab should show report contents for given report index" time="0.009">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Dashboard/__tests__/GitRepoListItem.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:14" time="0.405" tests="2">
+    <testcase classname="GitRepoListItem" name="GitRepoListItem should display org link" time="0.021">
+    </testcase>
+    <testcase classname="GitRepoListItem" name="GitRepoListItem should display repo link" time="0.006">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/Repository/Graph/__tests__/RepositoryGraphActiveDot.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:14" time="0.491" tests="1">
+    <testcase classname="RepositoryGraphActiveDot" name="RepositoryGraphActiveDot should link to test run" time="0.013">
+    </testcase>
+    <system-out><![CDATA[[
+  {
+    "message": "Warning: The tag <circle> is unrecognized in this browser. If you meant to render a React component, start its name with an uppercase letter.\n    in circle (created by Dot)\n    in Dot (created by RepositoryGraphActiveDot)\n    in RepositoryGraphActiveDot",
+    "origin": "    at warningWithoutStack (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:530:32)\n    at warning (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:1018:27)\n    at createElement (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:7846:9)\n    at createInstance (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:9469:20)\n    at completeWork (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:21079:28)\n    at completeUnitOfWork (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:24730:16)\n    at performUnitOfWork (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:24706:12)\n    at workLoopSync (/Users/craigatkinson/projects/projektor/ui/node_modules/react-dom/cjs/react-dom.development.js:24671:22)",
+    "type": "error"
+  }
+]]]></system-out>
+  </testsuite>
+  <testsuite name="src/Coverage/__tests__/CoverageFileMissedLines.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:14" time="1.007" tests="2">
+    <testcase classname="CoverageFileMissedLines" name="CoverageFileMissedLines should show all lines when exactly 10" time="0.009">
+    </testcase>
+    <testcase classname="CoverageFileMissedLines" name="CoverageFileMissedLines should only show first 10 lines when more than 10" time="0.014">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/CodeText/__tests__/CodeTextLine.spec.tsx" errors="0" failures="0" skipped="0" timestamp="2021-12-04T20:09:14" time="0.52" tests="1">
+    <testcase classname="Code text line" name="Code text line should call line click handler when line number is clicked" time="0.007">
+    </testcase>
+  </testsuite>
+</testsuites>

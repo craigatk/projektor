@@ -9,6 +9,7 @@ data class TestCase(
     val testSuiteIdx: Int,
     val name: String,
     val packageName: String?,
+    val testSuiteName: String?,
     val className: String?,
     val fileName: String?,
     val duration: BigDecimal?,

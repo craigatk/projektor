@@ -12,6 +12,7 @@ describe("TestCaseListRow", () => {
       testSuiteIdx: 2,
       publicId: "12345",
       name: "this is a test method",
+      testSuiteName: "",
       packageName: "dev.projektor",
       className: "dev.projektor.TestCase",
       fullName: "Test Case",

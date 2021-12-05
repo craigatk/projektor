@@ -18,6 +18,7 @@ describe("TestCaseFailurePanel", () => {
       testSuiteIdx: 2,
       publicId: "12345",
       name: "Test Case",
+      testSuiteName: "",
       packageName: "",
       className: "",
       fullName: "Test Case",
@@ -50,6 +51,7 @@ describe("TestCaseFailurePanel", () => {
       testSuiteIdx: 2,
       publicId: "12345",
       name: "Test Case",
+      testSuiteName: "",
       packageName: "",
       className: "",
       fullName: "Test Case",
@@ -82,6 +84,7 @@ describe("TestCaseFailurePanel", () => {
       testSuiteIdx: 2,
       publicId: "12345",
       name: "Test Case",
+      testSuiteName: "",
       packageName: "",
       className: "",
       fullName: "Test Case",
@@ -114,6 +117,7 @@ describe("TestCaseFailurePanel", () => {
       testSuiteIdx: 2,
       publicId: "12345",
       name: "Test Case",
+      testSuiteName: "",
       packageName: "",
       className: "",
       fullName: "Test Case",
@@ -146,6 +150,7 @@ describe("TestCaseFailurePanel", () => {
       testSuiteIdx: 2,
       publicId: "12345",
       name: "Test Case",
+      testSuiteName: "",
       packageName: "",
       className: "",
       fullName: "Test Case",
@@ -284,6 +289,7 @@ describe("TestCaseFailurePanel", () => {
       testSuiteIdx: 2,
       publicId: "12345",
       name: "Test Case",
+      testSuiteName: "",
       packageName: "",
       className: "",
       fullName: "Test Case",
@@ -308,12 +314,77 @@ describe("TestCaseFailurePanel", () => {
     expect(queryByTestId("test-case-failure-screenshot-2-1")).not.toBeNull();
   });
 
+  it("should show test suite name when no package name", () => {
+    const testCase: TestCase = {
+      idx: 1,
+      testSuiteIdx: 2,
+      publicId: "12345",
+      name: "Test Case",
+      testSuiteName: "My Test Suite",
+      packageName: null,
+      className: "",
+      fullName: "Test Case",
+      duration: 1.2,
+      passed: false,
+      skipped: false,
+      hasSystemOut: true,
+      hasSystemErr: true,
+      hasSystemOutTestCase: false,
+      hasSystemErrTestCase: false,
+      hasSystemOutTestSuite: true,
+      hasSystemErrTestSuite: true,
+      failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
+    };
+
+    const { queryByTestId } = render(
+      <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+    );
+
+    expect(queryByTestId("test-case-title-2-1")).toHaveTextContent(
+      "My Test Suite. Test Case"
+    );
+  });
+
+  it("should show package name in title when package name present", () => {
+    const testCase: TestCase = {
+      idx: 1,
+      testSuiteIdx: 2,
+      publicId: "12345",
+      name: "Test Case",
+      testSuiteName: "My Test Suite",
+      packageName: "The Tests",
+      className: "",
+      fullName: "Test Case",
+      duration: 1.2,
+      passed: false,
+      skipped: false,
+      hasSystemOut: true,
+      hasSystemErr: true,
+      hasSystemOutTestCase: false,
+      hasSystemErrTestCase: false,
+      hasSystemOutTestSuite: true,
+      hasSystemErrTestSuite: true,
+      failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
+    };
+
+    const { queryByTestId } = render(
+      <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+    );
+
+    expect(queryByTestId("test-case-title-2-1")).toHaveTextContent(
+      "The Tests. Test Case"
+    );
+  });
+
   function createTestCaseWithFailure(failure: TestFailure): TestCase {
     return {
       idx: 1,
       testSuiteIdx: 2,
       publicId: "12345",
       name: "Test Case",
+      testSuiteName: "",
       packageName: "",
       className: "",
       fullName: "Test Case",

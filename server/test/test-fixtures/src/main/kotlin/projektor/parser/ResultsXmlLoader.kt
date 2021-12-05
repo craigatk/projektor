@@ -69,6 +69,7 @@ class ResultsXmlLoader {
 
     fun jestUi() = loadTextFromFile("jest/ui-junit.xml")
     fun jestUiFilePath() = loadTextFromFile("jest/ui-file-path-junit.xml")
+    fun jestUiFailures() = loadTextFromFile("jest/ui-junit-failures.xml")
 
     fun jestCoverageFilesTable() = loadTextFromFile("jest-append/CoverageFilesTable-junit.xml")
     fun jestCoverageGraph() = loadTextFromFile("jest-append/CoverageGraph-junit.xml")
