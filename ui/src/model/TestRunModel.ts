@@ -85,6 +85,7 @@ interface TestCase {
   testSuiteIdx: number;
   publicId: string;
   name: string;
+  testSuiteName: string;
   packageName: string;
   className: string;
   fullName: string;

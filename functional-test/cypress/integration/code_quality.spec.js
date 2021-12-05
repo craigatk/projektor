@@ -6,12 +6,15 @@ context("code quality reports", () => {
       }
     );
 
-    cy.findByTestId("code-quality-summary-title").should("contain", "Code quality")
+    cy.findByTestId("code-quality-summary-title").should(
+      "contain",
+      "Code quality"
+    );
 
     cy.findByText("code_quality.txt");
     cy.findByText("linter.txt").click();
 
-    cy.findByTestId("code-quality-title").should("contain", "Code quality")
+    cy.findByTestId("code-quality-title").should("contain", "Code quality");
 
     cy.findByText("Linter line 1");
     cy.findByText("Linter line 2");

@@ -12,6 +12,7 @@ describe("TestCaseList", () => {
       testSuiteIdx: 2,
       publicId: "12345",
       name: "Test Case",
+      testSuiteName: "",
       packageName: "",
       className: "",
       fullName: "Test Case",
