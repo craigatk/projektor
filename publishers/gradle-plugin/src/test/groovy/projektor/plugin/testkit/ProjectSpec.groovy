@@ -98,6 +98,10 @@ abstract class ProjectSpec extends Specification {
         return false
     }
 
+    boolean includeKoverPlugin() {
+        return false
+    }
+
     boolean includeCodenarcPlugin() {
         return false
     }

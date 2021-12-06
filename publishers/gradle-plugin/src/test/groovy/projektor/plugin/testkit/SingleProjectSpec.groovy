@@ -10,6 +10,7 @@ abstract class SingleProjectSpec extends ProjectSpec {
                 projectRootDir,
                 true,
                 includeJacocoPlugin(),
+                includeKoverPlugin(),
                 includeCodenarcPlugin()
         )
     }

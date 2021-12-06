@@ -36,9 +36,9 @@ include 'project1', 'project2', 'project3'
 
         rootBuildFile = BuildFileWriter.createRootBuildFile(projectRootDir)
 
-        BuildFileWriter.writeBuildFileContents(buildFileProject1, false, includeJacocoPlugin())
-        BuildFileWriter.writeBuildFileContents(buildFileProject2, false, includeJacocoPlugin())
-        BuildFileWriter.writeBuildFileContents(buildFileProject3, false, includeJacocoPlugin())
+        BuildFileWriter.writeBuildFileContents(buildFileProject1, false, includeJacocoPlugin(), includeKoverPlugin())
+        BuildFileWriter.writeBuildFileContents(buildFileProject2, false, includeJacocoPlugin(), includeKoverPlugin())
+        BuildFileWriter.writeBuildFileContents(buildFileProject3, false, includeJacocoPlugin(), includeKoverPlugin())
 
         testDirectory1 = createTestDirectory(projectDir1)
         testDirectory2 = createTestDirectory(projectDir2)
@@ -46,6 +46,10 @@ include 'project1', 'project2', 'project3'
     }
 
     boolean includeJacocoPlugin() {
+        return false
+    }
+
+    boolean includeKoverPlugin() {
         return false
     }
 }
