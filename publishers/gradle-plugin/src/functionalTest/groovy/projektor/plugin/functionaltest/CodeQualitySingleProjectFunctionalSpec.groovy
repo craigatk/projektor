@@ -22,6 +22,7 @@ class CodeQualitySingleProjectFunctionalSpec extends ProjektorPluginFunctionalSp
                 projectRootDir,
                 true,
                 false,
+                false,
                 true
         )
     }
