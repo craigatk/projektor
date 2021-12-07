@@ -87,4 +87,5 @@ A big thank you to the contributors to this project!
 
 * Aaron Zirbes - [aaronzirbes](https://github.com/aaronzirbes)
 * Alex Hatzenbuhler - [ahatzz11](https://github.com/ahatzz11)
+* Andy Rudge - [arudge](https://github.com/arudge)
 * Connor Hasting - [CodedChai](https://github.com/CodedChai)
