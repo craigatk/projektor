@@ -39,7 +39,7 @@ https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/suite/65/systemOut
 ## Code coverage stats
 
 Projektor can capture and visualize code coverage stats from any project that can output code coverage data in 
-Jacoco (Gradle, sbt, etc.), Clover (Jest, Cypress, etc.), and Cobertura formats.
+Jacoco (Gradle, sbt, etc.), Kover, Clover (Jest, Cypress, etc.), and Cobertura formats.
 
 Projektor calculates overall code coverage stats for the project as well as per-module coverage breakdowns
 for Gradle multi-project builds:

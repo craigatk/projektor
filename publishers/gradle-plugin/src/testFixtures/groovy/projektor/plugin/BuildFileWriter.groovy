@@ -7,6 +7,7 @@ class BuildFileWriter {
             TemporaryFolder projectDir,
             boolean includeProjektorPlugin = true,
             boolean includeJacocoPlugin = false,
+            boolean includeKoverPlugin = false,
             boolean includeCodeNarcPlugin = false
     ) {
         File buildFile = projectDir.newFile('build.gradle')
@@ -15,6 +16,7 @@ class BuildFileWriter {
                 buildFile,
                 includeProjektorPlugin,
                 includeJacocoPlugin,
+                includeKoverPlugin,
                 includeCodeNarcPlugin
         )
 
@@ -25,6 +27,7 @@ class BuildFileWriter {
             File buildFile,
             boolean includeProjektorPlugin = true,
             boolean includeJacocoPlugin = false,
+            boolean includeKoverPlugin = false,
             boolean includeCodeNarcPlugin = false
     ) {
         buildFile << """
@@ -38,6 +41,7 @@ class BuildFileWriter {
                 id 'groovy'
                 ${includeProjektorPlugin ? "id 'dev.projektor.publish'" : ""}
                 ${includeJacocoPlugin ? "id 'jacoco'" : ""}
+                ${includeKoverPlugin ? "id 'org.jetbrains.kotlinx.kover' version '0.4.4'" : ""}
                 ${includeCodeNarcPlugin ? "id 'codenarc'" : ""}
             }
             
@@ -52,6 +56,9 @@ class BuildFileWriter {
             }
 
             ${includeJacocoPlugin ? "jacocoTestReport { dependsOn test }": ""}
+            
+            ${includeKoverPlugin ? "test { kover { enabled = true } }": ""}
+            ${includeKoverPlugin ? "kover { coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO) }": ""}
 
             ${includeCodeNarcPlugin ? "codenarc { reportFormat 'text' }": ""}
         """.stripIndent()

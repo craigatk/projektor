@@ -31,6 +31,31 @@ class CodeCoverageTaskCollector {
     }
 
     private List<CodeCoverageFile> collectCodeCoverageFiles(Collection<Task> allTasks, boolean coverageEnabled) {
+        return collectJacocoCodeCoverageFiles(coverageEnabled, allTasks) + collectKoverCodeCoverageFiles(coverageEnabled, allTasks)
+    }
+
+    private List<CodeCoverageFile> collectKoverCodeCoverageFiles(boolean coverageEnabled, Collection<Task> allTasks) {
+        if (coverageEnabled) {
+            Collection<Task> koverXmlReportTasks = allTasks.findAll { it.name.contains("koverXmlReport") }
+            return koverXmlReportTasks.collect { koverCoverageFileOrNull(it) }.findAll { it != null }
+        } else {
+            return []
+        }
+    }
+
+    private CodeCoverageFile koverCoverageFileOrNull(Task koverXmlReportTask) {
+        if (!koverXmlReportTask.xmlReportFile.isPresent() || !koverXmlReportTask.outputDirs.isPresent()) {
+            logger.info("Unable to set Projektor Kover coverage: Found no source files or source directories.")
+            return null
+        } else {
+            return new CodeCoverageFile(
+                    koverXmlReportTask.xmlReportFile.get().getAsFile(),
+                    koverXmlReportTask.outputDirs.get().asPath
+            )
+        }
+    }
+
+    private List<CodeCoverageFile> collectJacocoCodeCoverageFiles(boolean coverageEnabled, Collection<Task> allTasks) {
         if (coverageEnabled) {
             List<JacocoReport> jacocoTasks = allTasks.findAll {
                 it instanceof JacocoReport
