@@ -1,3 +1,7 @@
+buildscript {
+    apply from: '../../../dependencies.gradle'
+}
+
 plugins {
     id 'java-library'
     id 'groovy'
@@ -8,7 +12,7 @@ group 'dev.projektor'
 version '1.0-SNAPSHOT'
 
 dependencies {
-    implementation "com.fasterxml.jackson.core:jackson-core:2.9.7"
+    implementation projectDependencies.jacksonCore
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.9"
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8'
     implementation 'com.fasterxml.woodstox:woodstox-core:5.1.0'
