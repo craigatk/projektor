@@ -1,7 +1,0 @@
-ext {
-    jacksonCoreVersion = "2.9.7"
-
-    projectDependencies = [
-            jacksonCore: "com.fasterxml.jackson.core:jackson-core:${jacksonCoreVersion}"
-    ]
-}
