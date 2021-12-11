@@ -219,7 +219,7 @@ describe("TestCaseFailurePanel", () => {
     );
   });
 
-  it("should collapse panel when clicking on test case title", async () => {
+  it("should not collapse panel when clicking on test case title", async () => {
     const failure: TestFailure = {
       failureMessage: "My failure message",
       failureText: "My failure text",
@@ -237,6 +237,33 @@ describe("TestCaseFailurePanel", () => {
     );
 
     getByTestId("test-case-summary-header-2-1").click();
+
+    await waitForExpect(() =>
+      expect(getByTestId("test-case-summary-header-2-1")).toHaveAttribute(
+        "aria-expanded",
+        "true"
+      )
+    );
+  });
+
+  it("should collapse panel when clicking on expand/collapse icon", async () => {
+    const failure: TestFailure = {
+      failureMessage: "My failure message",
+      failureText: "My failure text",
+      failureType: "",
+    };
+
+    const testCase = createTestCaseWithFailure(failure);
+
+    const { getByTestId } = render(
+      <TestCaseFailurePanel
+        testCase={testCase}
+        publicId="12345"
+        showFullFailure={true}
+      />
+    );
+
+    getByTestId("test-case-expand-collapse-icon-2-1").click();
 
     await waitForExpect(() =>
       expect(getByTestId("test-case-summary-header-2-1")).toHaveAttribute(
