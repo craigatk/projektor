@@ -4,7 +4,6 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.util.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.AfterEach
