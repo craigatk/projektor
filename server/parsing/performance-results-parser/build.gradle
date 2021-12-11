@@ -7,7 +7,7 @@ apply from: "../../../gradle/kotlin.gradle"
 dependencies {
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.11.3"
 
-    implementation "ch.qos.logback:logback-classic:1.2.3"
+    implementation "ch.qos.logback:logback-classic:1.2.7"
 
     testImplementation(project(':server:test:performance-fixtures'))
 }
