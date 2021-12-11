@@ -10,8 +10,6 @@ apply from: '../../gradle/kotlin.gradle'
 
 repositories {
     mavenCentral()
-    jcenter()
-    maven { url "https://dl.bintray.com/kotlin/ktor" }
 }
 
 mainClassName = 'io.ktor.server.netty.EngineMain'
@@ -43,8 +41,8 @@ dependencies {
     implementation "io.ktor:ktor-jackson:$ktor_version"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9"
-    implementation "org.koin:koin-ktor:${koin_version}"
-    implementation "org.koin:koin-logger-slf4j:${koin_version}"
+    implementation "io.insert-koin:koin-ktor:$koin_version"
+    implementation "io.insert-koin:koin-logger-slf4j:$koin_version"
 
     implementation "io.ktor:ktor-metrics-micrometer:$ktor_version"
     implementation 'io.micrometer:micrometer-registry-influx:1.4.0'
@@ -74,11 +72,10 @@ dependencies {
 
     testImplementation 'org.awaitility:awaitility-kotlin:4.0.3'
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.5.2"
-    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.5.2"
 
-    testImplementation "org.koin:koin-test:${koin_version}"
+    testImplementation "io.insert-koin:koin-test:$koin_version"
 
-    testImplementation "com.github.tomakehurst:wiremock-jre8:2.27.2"
+    testImplementation "com.github.tomakehurst:wiremock-jre8:$wiremockVersion"
 }
 
 task cleanStaticResources(type: Delete) {
