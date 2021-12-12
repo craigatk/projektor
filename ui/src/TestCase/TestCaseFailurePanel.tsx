@@ -26,6 +26,10 @@ const useStyles = makeStyles(() => ({
     overflowX: "auto",
     fontSize: "0.9em",
   },
+  panelSummary: {
+    userSelect: "text",
+    "-webkit-user-select": "text",
+  },
 }));
 
 interface TestCaseFailurePanelProps {
@@ -70,9 +74,16 @@ const TestCaseFailurePanel = ({
       data-testid={`test-case-summary-${testCaseIdentifier}`}
     >
       <ExpansionPanelSummary
-        expandIcon={<ExpandMoreIcon />}
-        style={{ userSelect: "text" }}
-        onClick={expansionPanelOnClick}
+        expandIcon={
+          <span
+            onClick={expansionPanelOnClick}
+            data-testid={`test-case-expand-collapse-icon-${testCaseIdentifier}`}
+          >
+            <ExpandMoreIcon />
+          </span>
+        }
+        className={classes.panelSummary}
+        style={{ cursor: "auto" }}
         data-testid={`test-case-summary-header-${testCaseIdentifier}`}
       >
         <Typography
