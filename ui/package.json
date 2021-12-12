@@ -25,7 +25,7 @@
     "@testing-library/jest-dom": "5.16.1",
     "@testing-library/react": "11.2.7",
     "@types/jest": "26.0.24",
-    "axios-mock-adapter": "1.17.0",
+    "axios-mock-adapter": "1.20.0",
     "chai-colors": "1.0.1",
     "css-mediaquery": "0.1.2",
     "cypress": "6.7.1",
