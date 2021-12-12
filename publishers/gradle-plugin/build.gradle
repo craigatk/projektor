@@ -51,7 +51,7 @@ dependencies {
 
     implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
 
-    implementation "io.github.resilience4j:resilience4j-retry:1.7.0"
+    implementation "io.github.resilience4j:resilience4j-retry:1.7.1"
 
     implementation "org.eclipse.jgit:org.eclipse.jgit:5.8.1.202007141445-r"
 
