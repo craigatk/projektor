@@ -4,7 +4,7 @@ dependencies {
     api(project(":server:server-api"))
 
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0"
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0"
 
     api "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     implementation "com.squareup.retrofit2:converter-jackson:${retrofitVersion}"
