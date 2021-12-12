@@ -24,7 +24,7 @@
     "node-gzip": "1.1.2"
   },
   "devDependencies": {
-    "axios-mock-adapter": "1.17.0",
+    "axios-mock-adapter": "1.20.0",
     "env-cmd": "10.1.0",
     "jest": "27.4.4",
     "jest-junit": "13.0.0",
