@@ -7,7 +7,7 @@ apply from: "../../../gradle/kotlin.gradle"
 
 dependencies {
     // https://github-api.kohsuke.org/
-    api "org.kohsuke:github-api:1.117"
+    api "org.kohsuke:github-api:1.301"
 
     implementation "com.auth0:java-jwt:3.18.2"
     implementation "org.bouncycastle:bcprov-jdk15on:1.70"
