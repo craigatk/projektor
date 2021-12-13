@@ -5,7 +5,7 @@ plugins {
 apply from: "../../../gradle/kotlin.gradle"
 
 dependencies {
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.11.3"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
 
     implementation "ch.qos.logback:logback-classic:1.2.7"
 
