@@ -40,7 +40,8 @@ public class PerformanceResultsDao extends DAOImpl<PerformanceResultsRecord, pro
     }
 
     /**
-     * Fetch records that have <code>id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.PerformanceResults> fetchRangeOfId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(PerformanceResults.PERFORMANCE_RESULTS.ID, lowerInclusive, upperInclusive);
@@ -61,7 +62,8 @@ public class PerformanceResultsDao extends DAOImpl<PerformanceResultsRecord, pro
     }
 
     /**
-     * Fetch records that have <code>test_run_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>test_run_id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.PerformanceResults> fetchRangeOfTestRunId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(PerformanceResults.PERFORMANCE_RESULTS.TEST_RUN_ID, lowerInclusive, upperInclusive);
@@ -75,7 +77,8 @@ public class PerformanceResultsDao extends DAOImpl<PerformanceResultsRecord, pro
     }
 
     /**
-     * Fetch records that have <code>test_run_public_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>test_run_public_id BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.PerformanceResults> fetchRangeOfTestRunPublicId(String lowerInclusive, String upperInclusive) {
         return fetchRange(PerformanceResults.PERFORMANCE_RESULTS.TEST_RUN_PUBLIC_ID, lowerInclusive, upperInclusive);
@@ -89,7 +92,8 @@ public class PerformanceResultsDao extends DAOImpl<PerformanceResultsRecord, pro
     }
 
     /**
-     * Fetch records that have <code>name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.PerformanceResults> fetchRangeOfName(String lowerInclusive, String upperInclusive) {
         return fetchRange(PerformanceResults.PERFORMANCE_RESULTS.NAME, lowerInclusive, upperInclusive);
@@ -103,7 +107,8 @@ public class PerformanceResultsDao extends DAOImpl<PerformanceResultsRecord, pro
     }
 
     /**
-     * Fetch records that have <code>request_count BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>request_count BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.PerformanceResults> fetchRangeOfRequestCount(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(PerformanceResults.PERFORMANCE_RESULTS.REQUEST_COUNT, lowerInclusive, upperInclusive);
@@ -117,7 +122,8 @@ public class PerformanceResultsDao extends DAOImpl<PerformanceResultsRecord, pro
     }
 
     /**
-     * Fetch records that have <code>requests_per_second BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>requests_per_second BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.PerformanceResults> fetchRangeOfRequestsPerSecond(BigDecimal lowerInclusive, BigDecimal upperInclusive) {
         return fetchRange(PerformanceResults.PERFORMANCE_RESULTS.REQUESTS_PER_SECOND, lowerInclusive, upperInclusive);
@@ -131,7 +137,8 @@ public class PerformanceResultsDao extends DAOImpl<PerformanceResultsRecord, pro
     }
 
     /**
-     * Fetch records that have <code>average BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>average BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.PerformanceResults> fetchRangeOfAverage(BigDecimal lowerInclusive, BigDecimal upperInclusive) {
         return fetchRange(PerformanceResults.PERFORMANCE_RESULTS.AVERAGE, lowerInclusive, upperInclusive);
@@ -145,7 +152,8 @@ public class PerformanceResultsDao extends DAOImpl<PerformanceResultsRecord, pro
     }
 
     /**
-     * Fetch records that have <code>maximum BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>maximum BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.PerformanceResults> fetchRangeOfMaximum(BigDecimal lowerInclusive, BigDecimal upperInclusive) {
         return fetchRange(PerformanceResults.PERFORMANCE_RESULTS.MAXIMUM, lowerInclusive, upperInclusive);
@@ -159,7 +167,8 @@ public class PerformanceResultsDao extends DAOImpl<PerformanceResultsRecord, pro
     }
 
     /**
-     * Fetch records that have <code>p95 BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>p95 BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.PerformanceResults> fetchRangeOfP95(BigDecimal lowerInclusive, BigDecimal upperInclusive) {
         return fetchRange(PerformanceResults.PERFORMANCE_RESULTS.P95, lowerInclusive, upperInclusive);

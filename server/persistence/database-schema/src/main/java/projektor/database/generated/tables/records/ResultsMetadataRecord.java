@@ -219,4 +219,18 @@ public class ResultsMetadataRecord extends UpdatableRecordImpl<ResultsMetadataRe
         setCi(ci);
         setGroup(group);
     }
+
+    /**
+     * Create a detached, initialised ResultsMetadataRecord
+     */
+    public ResultsMetadataRecord(projektor.database.generated.tables.pojos.ResultsMetadata value) {
+        super(ResultsMetadata.RESULTS_METADATA);
+
+        if (value != null) {
+            setId(value.getId());
+            setTestRunId(value.getTestRunId());
+            setCi(value.getCi());
+            setGroup(value.getGroup());
+        }
+    }
 }

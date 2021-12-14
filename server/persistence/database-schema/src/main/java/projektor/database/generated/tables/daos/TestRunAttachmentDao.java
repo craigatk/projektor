@@ -39,7 +39,8 @@ public class TestRunAttachmentDao extends DAOImpl<TestRunAttachmentRecord, proje
     }
 
     /**
-     * Fetch records that have <code>id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRunAttachment> fetchRangeOfId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(TestRunAttachment.TEST_RUN_ATTACHMENT.ID, lowerInclusive, upperInclusive);
@@ -60,7 +61,8 @@ public class TestRunAttachmentDao extends DAOImpl<TestRunAttachmentRecord, proje
     }
 
     /**
-     * Fetch records that have <code>file_name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>file_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRunAttachment> fetchRangeOfFileName(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestRunAttachment.TEST_RUN_ATTACHMENT.FILE_NAME, lowerInclusive, upperInclusive);
@@ -74,7 +76,8 @@ public class TestRunAttachmentDao extends DAOImpl<TestRunAttachmentRecord, proje
     }
 
     /**
-     * Fetch records that have <code>object_name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>object_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRunAttachment> fetchRangeOfObjectName(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestRunAttachment.TEST_RUN_ATTACHMENT.OBJECT_NAME, lowerInclusive, upperInclusive);
@@ -88,7 +91,8 @@ public class TestRunAttachmentDao extends DAOImpl<TestRunAttachmentRecord, proje
     }
 
     /**
-     * Fetch records that have <code>file_size BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>file_size BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRunAttachment> fetchRangeOfFileSize(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(TestRunAttachment.TEST_RUN_ATTACHMENT.FILE_SIZE, lowerInclusive, upperInclusive);
@@ -102,7 +106,8 @@ public class TestRunAttachmentDao extends DAOImpl<TestRunAttachmentRecord, proje
     }
 
     /**
-     * Fetch records that have <code>test_run_public_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>test_run_public_id BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRunAttachment> fetchRangeOfTestRunPublicId(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestRunAttachment.TEST_RUN_ATTACHMENT.TEST_RUN_PUBLIC_ID, lowerInclusive, upperInclusive);

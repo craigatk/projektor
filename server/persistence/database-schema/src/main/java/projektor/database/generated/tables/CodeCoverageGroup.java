@@ -105,12 +105,12 @@ public class CodeCoverageGroup extends TableImpl<CodeCoverageGroupRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_IDX);
+        return Arrays.asList(Indexes.CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_IDX);
     }
 
     @Override
@@ -124,21 +124,25 @@ public class CodeCoverageGroup extends TableImpl<CodeCoverageGroupRecord> {
     }
 
     @Override
-    public List<UniqueKey<CodeCoverageGroupRecord>> getKeys() {
-        return Arrays.<UniqueKey<CodeCoverageGroupRecord>>asList(Keys.CODE_COVERAGE_GROUP_PKEY);
+    public List<ForeignKey<CodeCoverageGroupRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_FKEY, Keys.CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_STATS_ID_FKEY);
     }
 
-    @Override
-    public List<ForeignKey<CodeCoverageGroupRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<CodeCoverageGroupRecord, ?>>asList(Keys.CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_FKEY, Keys.CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_STATS_ID_FKEY);
-    }
+    private transient CodeCoverageRun _codeCoverageRun;
+    private transient CodeCoverageStats _codeCoverageStats;
 
     public CodeCoverageRun codeCoverageRun() {
-        return new CodeCoverageRun(this, Keys.CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_FKEY);
+        if (_codeCoverageRun == null)
+            _codeCoverageRun = new CodeCoverageRun(this, Keys.CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_FKEY);
+
+        return _codeCoverageRun;
     }
 
     public CodeCoverageStats codeCoverageStats() {
-        return new CodeCoverageStats(this, Keys.CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_STATS_ID_FKEY);
+        if (_codeCoverageStats == null)
+            _codeCoverageStats = new CodeCoverageStats(this, Keys.CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_STATS_ID_FKEY);
+
+        return _codeCoverageStats;
     }
 
     @Override

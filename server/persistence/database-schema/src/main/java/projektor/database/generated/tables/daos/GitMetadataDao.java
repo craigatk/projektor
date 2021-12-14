@@ -39,7 +39,8 @@ public class GitMetadataDao extends DAOImpl<GitMetadataRecord, projektor.databas
     }
 
     /**
-     * Fetch records that have <code>id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.GitMetadata> fetchRangeOfId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(GitMetadata.GIT_METADATA.ID, lowerInclusive, upperInclusive);
@@ -60,7 +61,8 @@ public class GitMetadataDao extends DAOImpl<GitMetadataRecord, projektor.databas
     }
 
     /**
-     * Fetch records that have <code>test_run_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>test_run_id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.GitMetadata> fetchRangeOfTestRunId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(GitMetadata.GIT_METADATA.TEST_RUN_ID, lowerInclusive, upperInclusive);
@@ -74,7 +76,8 @@ public class GitMetadataDao extends DAOImpl<GitMetadataRecord, projektor.databas
     }
 
     /**
-     * Fetch records that have <code>repo_name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>repo_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.GitMetadata> fetchRangeOfRepoName(String lowerInclusive, String upperInclusive) {
         return fetchRange(GitMetadata.GIT_METADATA.REPO_NAME, lowerInclusive, upperInclusive);
@@ -88,7 +91,8 @@ public class GitMetadataDao extends DAOImpl<GitMetadataRecord, projektor.databas
     }
 
     /**
-     * Fetch records that have <code>is_main_branch BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>is_main_branch BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.GitMetadata> fetchRangeOfIsMainBranch(Boolean lowerInclusive, Boolean upperInclusive) {
         return fetchRange(GitMetadata.GIT_METADATA.IS_MAIN_BRANCH, lowerInclusive, upperInclusive);
@@ -102,7 +106,8 @@ public class GitMetadataDao extends DAOImpl<GitMetadataRecord, projektor.databas
     }
 
     /**
-     * Fetch records that have <code>branch_name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>branch_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.GitMetadata> fetchRangeOfBranchName(String lowerInclusive, String upperInclusive) {
         return fetchRange(GitMetadata.GIT_METADATA.BRANCH_NAME, lowerInclusive, upperInclusive);
@@ -116,7 +121,8 @@ public class GitMetadataDao extends DAOImpl<GitMetadataRecord, projektor.databas
     }
 
     /**
-     * Fetch records that have <code>org_name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>org_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.GitMetadata> fetchRangeOfOrgName(String lowerInclusive, String upperInclusive) {
         return fetchRange(GitMetadata.GIT_METADATA.ORG_NAME, lowerInclusive, upperInclusive);
@@ -130,7 +136,8 @@ public class GitMetadataDao extends DAOImpl<GitMetadataRecord, projektor.databas
     }
 
     /**
-     * Fetch records that have <code>project_name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>project_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.GitMetadata> fetchRangeOfProjectName(String lowerInclusive, String upperInclusive) {
         return fetchRange(GitMetadata.GIT_METADATA.PROJECT_NAME, lowerInclusive, upperInclusive);
@@ -144,7 +151,8 @@ public class GitMetadataDao extends DAOImpl<GitMetadataRecord, projektor.databas
     }
 
     /**
-     * Fetch records that have <code>pull_request_number BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>pull_request_number BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.GitMetadata> fetchRangeOfPullRequestNumber(Integer lowerInclusive, Integer upperInclusive) {
         return fetchRange(GitMetadata.GIT_METADATA.PULL_REQUEST_NUMBER, lowerInclusive, upperInclusive);
@@ -158,7 +166,8 @@ public class GitMetadataDao extends DAOImpl<GitMetadataRecord, projektor.databas
     }
 
     /**
-     * Fetch records that have <code>commit_sha BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>commit_sha BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.GitMetadata> fetchRangeOfCommitSha(String lowerInclusive, String upperInclusive) {
         return fetchRange(GitMetadata.GIT_METADATA.COMMIT_SHA, lowerInclusive, upperInclusive);

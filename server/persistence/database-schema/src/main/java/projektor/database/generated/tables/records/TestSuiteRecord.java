@@ -754,4 +754,32 @@ public class TestSuiteRecord extends UpdatableRecordImpl<TestSuiteRecord> implem
         setTestSuiteGroupId(testSuiteGroupId);
         setFileName(fileName);
     }
+
+    /**
+     * Create a detached, initialised TestSuiteRecord
+     */
+    public TestSuiteRecord(projektor.database.generated.tables.pojos.TestSuite value) {
+        super(TestSuite.TEST_SUITE);
+
+        if (value != null) {
+            setId(value.getId());
+            setTestRunId(value.getTestRunId());
+            setIdx(value.getIdx());
+            setPackageName(value.getPackageName());
+            setClassName(value.getClassName());
+            setTestCount(value.getTestCount());
+            setPassingCount(value.getPassingCount());
+            setSkippedCount(value.getSkippedCount());
+            setFailureCount(value.getFailureCount());
+            setStartTs(value.getStartTs());
+            setHostname(value.getHostname());
+            setDuration(value.getDuration());
+            setSystemOut(value.getSystemOut());
+            setSystemErr(value.getSystemErr());
+            setHasSystemOut(value.getHasSystemOut());
+            setHasSystemErr(value.getHasSystemErr());
+            setTestSuiteGroupId(value.getTestSuiteGroupId());
+            setFileName(value.getFileName());
+        }
+    }
 }

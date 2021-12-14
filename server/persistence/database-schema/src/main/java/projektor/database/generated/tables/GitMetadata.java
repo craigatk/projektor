@@ -130,12 +130,12 @@ public class GitMetadata extends TableImpl<GitMetadataRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.GIT_METADATA_IS_MAIN_BRANCH_IDX, Indexes.GIT_METADATA_PROJECT_NAME_IDX, Indexes.GIT_METADATA_REPO_NAME_IDX, Indexes.GIT_METADATA_TEST_RUN_ID_IDX);
+        return Arrays.asList(Indexes.GIT_METADATA_IS_MAIN_BRANCH_IDX, Indexes.GIT_METADATA_PROJECT_NAME_IDX, Indexes.GIT_METADATA_REPO_NAME_IDX, Indexes.GIT_METADATA_TEST_RUN_ID_IDX);
     }
 
     @Override
@@ -149,17 +149,17 @@ public class GitMetadata extends TableImpl<GitMetadataRecord> {
     }
 
     @Override
-    public List<UniqueKey<GitMetadataRecord>> getKeys() {
-        return Arrays.<UniqueKey<GitMetadataRecord>>asList(Keys.GIT_METADATA_PKEY);
+    public List<ForeignKey<GitMetadataRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.GIT_METADATA__GIT_METADATA_TEST_RUN_ID_FKEY);
     }
 
-    @Override
-    public List<ForeignKey<GitMetadataRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<GitMetadataRecord, ?>>asList(Keys.GIT_METADATA__GIT_METADATA_TEST_RUN_ID_FKEY);
-    }
+    private transient TestRun _testRun;
 
     public TestRun testRun() {
-        return new TestRun(this, Keys.GIT_METADATA__GIT_METADATA_TEST_RUN_ID_FKEY);
+        if (_testRun == null)
+            _testRun = new TestRun(this, Keys.GIT_METADATA__GIT_METADATA_TEST_RUN_ID_FKEY);
+
+        return _testRun;
     }
 
     @Override

@@ -39,7 +39,8 @@ public class TestSuiteGroupDao extends DAOImpl<TestSuiteGroupRecord, projektor.d
     }
 
     /**
-     * Fetch records that have <code>id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestSuiteGroup> fetchRangeOfId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(TestSuiteGroup.TEST_SUITE_GROUP.ID, lowerInclusive, upperInclusive);
@@ -60,7 +61,8 @@ public class TestSuiteGroupDao extends DAOImpl<TestSuiteGroupRecord, projektor.d
     }
 
     /**
-     * Fetch records that have <code>test_run_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>test_run_id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestSuiteGroup> fetchRangeOfTestRunId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(TestSuiteGroup.TEST_SUITE_GROUP.TEST_RUN_ID, lowerInclusive, upperInclusive);
@@ -74,7 +76,8 @@ public class TestSuiteGroupDao extends DAOImpl<TestSuiteGroupRecord, projektor.d
     }
 
     /**
-     * Fetch records that have <code>group_name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>group_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestSuiteGroup> fetchRangeOfGroupName(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestSuiteGroup.TEST_SUITE_GROUP.GROUP_NAME, lowerInclusive, upperInclusive);
@@ -88,7 +91,8 @@ public class TestSuiteGroupDao extends DAOImpl<TestSuiteGroupRecord, projektor.d
     }
 
     /**
-     * Fetch records that have <code>group_label BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>group_label BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestSuiteGroup> fetchRangeOfGroupLabel(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestSuiteGroup.TEST_SUITE_GROUP.GROUP_LABEL, lowerInclusive, upperInclusive);
@@ -102,7 +106,8 @@ public class TestSuiteGroupDao extends DAOImpl<TestSuiteGroupRecord, projektor.d
     }
 
     /**
-     * Fetch records that have <code>directory BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>directory BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestSuiteGroup> fetchRangeOfDirectory(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestSuiteGroup.TEST_SUITE_GROUP.DIRECTORY, lowerInclusive, upperInclusive);

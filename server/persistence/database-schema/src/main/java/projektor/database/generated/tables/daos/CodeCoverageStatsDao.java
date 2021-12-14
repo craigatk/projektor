@@ -39,7 +39,8 @@ public class CodeCoverageStatsDao extends DAOImpl<CodeCoverageStatsRecord, proje
     }
 
     /**
-     * Fetch records that have <code>id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageStats> fetchRangeOfId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(CodeCoverageStats.CODE_COVERAGE_STATS.ID, lowerInclusive, upperInclusive);
@@ -60,7 +61,8 @@ public class CodeCoverageStatsDao extends DAOImpl<CodeCoverageStatsRecord, proje
     }
 
     /**
-     * Fetch records that have <code>code_coverage_run_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>code_coverage_run_id BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageStats> fetchRangeOfCodeCoverageRunId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(CodeCoverageStats.CODE_COVERAGE_STATS.CODE_COVERAGE_RUN_ID, lowerInclusive, upperInclusive);
@@ -74,7 +76,8 @@ public class CodeCoverageStatsDao extends DAOImpl<CodeCoverageStatsRecord, proje
     }
 
     /**
-     * Fetch records that have <code>scope BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>scope BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageStats> fetchRangeOfScope(String lowerInclusive, String upperInclusive) {
         return fetchRange(CodeCoverageStats.CODE_COVERAGE_STATS.SCOPE, lowerInclusive, upperInclusive);
@@ -88,7 +91,8 @@ public class CodeCoverageStatsDao extends DAOImpl<CodeCoverageStatsRecord, proje
     }
 
     /**
-     * Fetch records that have <code>statement_covered BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>statement_covered BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageStats> fetchRangeOfStatementCovered(Integer lowerInclusive, Integer upperInclusive) {
         return fetchRange(CodeCoverageStats.CODE_COVERAGE_STATS.STATEMENT_COVERED, lowerInclusive, upperInclusive);
@@ -102,7 +106,8 @@ public class CodeCoverageStatsDao extends DAOImpl<CodeCoverageStatsRecord, proje
     }
 
     /**
-     * Fetch records that have <code>statement_missed BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>statement_missed BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageStats> fetchRangeOfStatementMissed(Integer lowerInclusive, Integer upperInclusive) {
         return fetchRange(CodeCoverageStats.CODE_COVERAGE_STATS.STATEMENT_MISSED, lowerInclusive, upperInclusive);
@@ -116,7 +121,8 @@ public class CodeCoverageStatsDao extends DAOImpl<CodeCoverageStatsRecord, proje
     }
 
     /**
-     * Fetch records that have <code>line_covered BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>line_covered BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageStats> fetchRangeOfLineCovered(Integer lowerInclusive, Integer upperInclusive) {
         return fetchRange(CodeCoverageStats.CODE_COVERAGE_STATS.LINE_COVERED, lowerInclusive, upperInclusive);
@@ -130,7 +136,8 @@ public class CodeCoverageStatsDao extends DAOImpl<CodeCoverageStatsRecord, proje
     }
 
     /**
-     * Fetch records that have <code>line_missed BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>line_missed BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageStats> fetchRangeOfLineMissed(Integer lowerInclusive, Integer upperInclusive) {
         return fetchRange(CodeCoverageStats.CODE_COVERAGE_STATS.LINE_MISSED, lowerInclusive, upperInclusive);
@@ -144,7 +151,8 @@ public class CodeCoverageStatsDao extends DAOImpl<CodeCoverageStatsRecord, proje
     }
 
     /**
-     * Fetch records that have <code>branch_covered BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>branch_covered BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageStats> fetchRangeOfBranchCovered(Integer lowerInclusive, Integer upperInclusive) {
         return fetchRange(CodeCoverageStats.CODE_COVERAGE_STATS.BRANCH_COVERED, lowerInclusive, upperInclusive);
@@ -158,7 +166,8 @@ public class CodeCoverageStatsDao extends DAOImpl<CodeCoverageStatsRecord, proje
     }
 
     /**
-     * Fetch records that have <code>branch_missed BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>branch_missed BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageStats> fetchRangeOfBranchMissed(Integer lowerInclusive, Integer upperInclusive) {
         return fetchRange(CodeCoverageStats.CODE_COVERAGE_STATS.BRANCH_MISSED, lowerInclusive, upperInclusive);

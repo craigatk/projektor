@@ -105,22 +105,17 @@ public class ResultsProcessing extends TableImpl<ResultsProcessingRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_RESULTS_PROCESSING_STATUS);
+        return Arrays.asList(Indexes.IDX_RESULTS_PROCESSING_STATUS);
     }
 
     @Override
     public UniqueKey<ResultsProcessingRecord> getPrimaryKey() {
         return Keys.RESULTS_PROCESSING_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<ResultsProcessingRecord>> getKeys() {
-        return Arrays.<UniqueKey<ResultsProcessingRecord>>asList(Keys.RESULTS_PROCESSING_PKEY);
     }
 
     @Override

@@ -39,7 +39,8 @@ public class CodeCoverageGroupDao extends DAOImpl<CodeCoverageGroupRecord, proje
     }
 
     /**
-     * Fetch records that have <code>id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageGroup> fetchRangeOfId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(CodeCoverageGroup.CODE_COVERAGE_GROUP.ID, lowerInclusive, upperInclusive);
@@ -60,7 +61,8 @@ public class CodeCoverageGroupDao extends DAOImpl<CodeCoverageGroupRecord, proje
     }
 
     /**
-     * Fetch records that have <code>code_coverage_run_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>code_coverage_run_id BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageGroup> fetchRangeOfCodeCoverageRunId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(CodeCoverageGroup.CODE_COVERAGE_GROUP.CODE_COVERAGE_RUN_ID, lowerInclusive, upperInclusive);
@@ -74,7 +76,8 @@ public class CodeCoverageGroupDao extends DAOImpl<CodeCoverageGroupRecord, proje
     }
 
     /**
-     * Fetch records that have <code>name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageGroup> fetchRangeOfName(String lowerInclusive, String upperInclusive) {
         return fetchRange(CodeCoverageGroup.CODE_COVERAGE_GROUP.NAME, lowerInclusive, upperInclusive);
@@ -88,7 +91,8 @@ public class CodeCoverageGroupDao extends DAOImpl<CodeCoverageGroupRecord, proje
     }
 
     /**
-     * Fetch records that have <code>stats_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>stats_id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageGroup> fetchRangeOfStatsId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(CodeCoverageGroup.CODE_COVERAGE_GROUP.STATS_ID, lowerInclusive, upperInclusive);

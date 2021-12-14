@@ -39,7 +39,8 @@ public class CodeCoverageFileDao extends DAOImpl<CodeCoverageFileRecord, projekt
     }
 
     /**
-     * Fetch records that have <code>id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageFile> fetchRangeOfId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(CodeCoverageFile.CODE_COVERAGE_FILE.ID, lowerInclusive, upperInclusive);
@@ -60,7 +61,8 @@ public class CodeCoverageFileDao extends DAOImpl<CodeCoverageFileRecord, projekt
     }
 
     /**
-     * Fetch records that have <code>code_coverage_run_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>code_coverage_run_id BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageFile> fetchRangeOfCodeCoverageRunId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(CodeCoverageFile.CODE_COVERAGE_FILE.CODE_COVERAGE_RUN_ID, lowerInclusive, upperInclusive);
@@ -74,7 +76,8 @@ public class CodeCoverageFileDao extends DAOImpl<CodeCoverageFileRecord, projekt
     }
 
     /**
-     * Fetch records that have <code>code_coverage_group_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>code_coverage_group_id BETWEEN
+     * lowerInclusive AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageFile> fetchRangeOfCodeCoverageGroupId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(CodeCoverageFile.CODE_COVERAGE_FILE.CODE_COVERAGE_GROUP_ID, lowerInclusive, upperInclusive);
@@ -88,7 +91,8 @@ public class CodeCoverageFileDao extends DAOImpl<CodeCoverageFileRecord, projekt
     }
 
     /**
-     * Fetch records that have <code>stats_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>stats_id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageFile> fetchRangeOfStatsId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(CodeCoverageFile.CODE_COVERAGE_FILE.STATS_ID, lowerInclusive, upperInclusive);
@@ -102,7 +106,8 @@ public class CodeCoverageFileDao extends DAOImpl<CodeCoverageFileRecord, projekt
     }
 
     /**
-     * Fetch records that have <code>directory_name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>directory_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageFile> fetchRangeOfDirectoryName(String lowerInclusive, String upperInclusive) {
         return fetchRange(CodeCoverageFile.CODE_COVERAGE_FILE.DIRECTORY_NAME, lowerInclusive, upperInclusive);
@@ -116,7 +121,8 @@ public class CodeCoverageFileDao extends DAOImpl<CodeCoverageFileRecord, projekt
     }
 
     /**
-     * Fetch records that have <code>file_name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>file_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageFile> fetchRangeOfFileName(String lowerInclusive, String upperInclusive) {
         return fetchRange(CodeCoverageFile.CODE_COVERAGE_FILE.FILE_NAME, lowerInclusive, upperInclusive);
@@ -130,7 +136,8 @@ public class CodeCoverageFileDao extends DAOImpl<CodeCoverageFileRecord, projekt
     }
 
     /**
-     * Fetch records that have <code>missed_lines BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>missed_lines BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageFile> fetchRangeOfMissedLines(Integer[] lowerInclusive, Integer[] upperInclusive) {
         return fetchRange(CodeCoverageFile.CODE_COVERAGE_FILE.MISSED_LINES, lowerInclusive, upperInclusive);
@@ -144,7 +151,8 @@ public class CodeCoverageFileDao extends DAOImpl<CodeCoverageFileRecord, projekt
     }
 
     /**
-     * Fetch records that have <code>partial_lines BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>partial_lines BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageFile> fetchRangeOfPartialLines(Integer[] lowerInclusive, Integer[] upperInclusive) {
         return fetchRange(CodeCoverageFile.CODE_COVERAGE_FILE.PARTIAL_LINES, lowerInclusive, upperInclusive);
@@ -158,7 +166,8 @@ public class CodeCoverageFileDao extends DAOImpl<CodeCoverageFileRecord, projekt
     }
 
     /**
-     * Fetch records that have <code>file_path BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>file_path BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeCoverageFile> fetchRangeOfFilePath(String lowerInclusive, String upperInclusive) {
         return fetchRange(CodeCoverageFile.CODE_COVERAGE_FILE.FILE_PATH, lowerInclusive, upperInclusive);

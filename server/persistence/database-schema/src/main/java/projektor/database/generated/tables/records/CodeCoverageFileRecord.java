@@ -409,4 +409,23 @@ public class CodeCoverageFileRecord extends UpdatableRecordImpl<CodeCoverageFile
         setPartialLines(partialLines);
         setFilePath(filePath);
     }
+
+    /**
+     * Create a detached, initialised CodeCoverageFileRecord
+     */
+    public CodeCoverageFileRecord(projektor.database.generated.tables.pojos.CodeCoverageFile value) {
+        super(CodeCoverageFile.CODE_COVERAGE_FILE);
+
+        if (value != null) {
+            setId(value.getId());
+            setCodeCoverageRunId(value.getCodeCoverageRunId());
+            setCodeCoverageGroupId(value.getCodeCoverageGroupId());
+            setStatsId(value.getStatsId());
+            setDirectoryName(value.getDirectoryName());
+            setFileName(value.getFileName());
+            setMissedLines(value.getMissedLines());
+            setPartialLines(value.getPartialLines());
+            setFilePath(value.getFilePath());
+        }
+    }
 }

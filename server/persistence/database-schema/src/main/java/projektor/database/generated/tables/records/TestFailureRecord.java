@@ -257,4 +257,19 @@ public class TestFailureRecord extends UpdatableRecordImpl<TestFailureRecord> im
         setFailureType(failureType);
         setFailureText(failureText);
     }
+
+    /**
+     * Create a detached, initialised TestFailureRecord
+     */
+    public TestFailureRecord(projektor.database.generated.tables.pojos.TestFailure value) {
+        super(TestFailure.TEST_FAILURE);
+
+        if (value != null) {
+            setId(value.getId());
+            setTestCaseId(value.getTestCaseId());
+            setFailureMessage(value.getFailureMessage());
+            setFailureType(value.getFailureType());
+            setFailureText(value.getFailureText());
+        }
+    }
 }

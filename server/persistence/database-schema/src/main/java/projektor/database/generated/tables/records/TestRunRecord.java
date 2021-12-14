@@ -526,4 +526,26 @@ public class TestRunRecord extends UpdatableRecordImpl<TestRunRecord> implements
         setCreatedTimestamp(createdTimestamp);
         setWallClockDuration(wallClockDuration);
     }
+
+    /**
+     * Create a detached, initialised TestRunRecord
+     */
+    public TestRunRecord(projektor.database.generated.tables.pojos.TestRun value) {
+        super(TestRun.TEST_RUN);
+
+        if (value != null) {
+            setId(value.getId());
+            setPublicId(value.getPublicId());
+            setTotalTestCount(value.getTotalTestCount());
+            setTotalPassingCount(value.getTotalPassingCount());
+            setTotalSkippedCount(value.getTotalSkippedCount());
+            setTotalFailureCount(value.getTotalFailureCount());
+            setPassed(value.getPassed());
+            setCumulativeDuration(value.getCumulativeDuration());
+            setAverageDuration(value.getAverageDuration());
+            setSlowestTestCaseDuration(value.getSlowestTestCaseDuration());
+            setCreatedTimestamp(value.getCreatedTimestamp());
+            setWallClockDuration(value.getWallClockDuration());
+        }
+    }
 }

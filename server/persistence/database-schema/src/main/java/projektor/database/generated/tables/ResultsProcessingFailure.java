@@ -61,12 +61,14 @@ public class ResultsProcessingFailure extends TableImpl<ResultsProcessingFailure
     public final TableField<ResultsProcessingFailureRecord, String> BODY = createField(DSL.name("body"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>public.results_processing_failure.created_timestamp</code>.
+     * The column
+     * <code>public.results_processing_failure.created_timestamp</code>.
      */
     public final TableField<ResultsProcessingFailureRecord, LocalDateTime> CREATED_TIMESTAMP = createField(DSL.name("created_timestamp"), SQLDataType.LOCALDATETIME(6), this, "");
 
     /**
-     * The column <code>public.results_processing_failure.failure_message</code>.
+     * The column
+     * <code>public.results_processing_failure.failure_message</code>.
      */
     public final TableField<ResultsProcessingFailureRecord, String> FAILURE_MESSAGE = createField(DSL.name("failure_message"), SQLDataType.CLOB, this, "");
 
@@ -89,14 +91,16 @@ public class ResultsProcessingFailure extends TableImpl<ResultsProcessingFailure
     }
 
     /**
-     * Create an aliased <code>public.results_processing_failure</code> table reference
+     * Create an aliased <code>public.results_processing_failure</code> table
+     * reference
      */
     public ResultsProcessingFailure(String alias) {
         this(DSL.name(alias), RESULTS_PROCESSING_FAILURE);
     }
 
     /**
-     * Create an aliased <code>public.results_processing_failure</code> table reference
+     * Create an aliased <code>public.results_processing_failure</code> table
+     * reference
      */
     public ResultsProcessingFailure(Name alias) {
         this(alias, RESULTS_PROCESSING_FAILURE);
@@ -115,22 +119,17 @@ public class ResultsProcessingFailure extends TableImpl<ResultsProcessingFailure
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.RESULTS_PROCESSING_FAILURE_BODY_TYPE_IDX, Indexes.RESULTS_PROCESSING_FAILURE_CREATED_TIMESTAMP_IDX);
+        return Arrays.asList(Indexes.RESULTS_PROCESSING_FAILURE_BODY_TYPE_IDX, Indexes.RESULTS_PROCESSING_FAILURE_CREATED_TIMESTAMP_IDX);
     }
 
     @Override
     public UniqueKey<ResultsProcessingFailureRecord> getPrimaryKey() {
         return Keys.RESULTS_PROCESSING_FAILURE_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<ResultsProcessingFailureRecord>> getKeys() {
-        return Arrays.<UniqueKey<ResultsProcessingFailureRecord>>asList(Keys.RESULTS_PROCESSING_FAILURE_PKEY);
     }
 
     @Override

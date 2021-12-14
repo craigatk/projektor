@@ -411,4 +411,23 @@ public class PerformanceResultsRecord extends UpdatableRecordImpl<PerformanceRes
         setMaximum(maximum);
         setP95(p95);
     }
+
+    /**
+     * Create a detached, initialised PerformanceResultsRecord
+     */
+    public PerformanceResultsRecord(projektor.database.generated.tables.pojos.PerformanceResults value) {
+        super(PerformanceResults.PERFORMANCE_RESULTS);
+
+        if (value != null) {
+            setId(value.getId());
+            setTestRunId(value.getTestRunId());
+            setTestRunPublicId(value.getTestRunPublicId());
+            setName(value.getName());
+            setRequestCount(value.getRequestCount());
+            setRequestsPerSecond(value.getRequestsPerSecond());
+            setAverage(value.getAverage());
+            setMaximum(value.getMaximum());
+            setP95(value.getP95());
+        }
+    }
 }

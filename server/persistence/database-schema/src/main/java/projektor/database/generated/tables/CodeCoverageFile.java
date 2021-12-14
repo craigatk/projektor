@@ -130,12 +130,12 @@ public class CodeCoverageFile extends TableImpl<CodeCoverageFileRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.CODE_COVERAGE_FILE_CODE_COVERAGE_GROUP_ID_IDX, Indexes.CODE_COVERAGE_FILE_CODE_COVERAGE_RUN_ID_IDX);
+        return Arrays.asList(Indexes.CODE_COVERAGE_FILE_CODE_COVERAGE_GROUP_ID_IDX, Indexes.CODE_COVERAGE_FILE_CODE_COVERAGE_RUN_ID_IDX);
     }
 
     @Override
@@ -149,25 +149,33 @@ public class CodeCoverageFile extends TableImpl<CodeCoverageFileRecord> {
     }
 
     @Override
-    public List<UniqueKey<CodeCoverageFileRecord>> getKeys() {
-        return Arrays.<UniqueKey<CodeCoverageFileRecord>>asList(Keys.CODE_COVERAGE_FILE_PKEY);
+    public List<ForeignKey<CodeCoverageFileRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_CODE_COVERAGE_RUN_ID_FKEY, Keys.CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_CODE_COVERAGE_GROUP_ID_FKEY, Keys.CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_STATS_ID_FKEY);
     }
 
-    @Override
-    public List<ForeignKey<CodeCoverageFileRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<CodeCoverageFileRecord, ?>>asList(Keys.CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_CODE_COVERAGE_RUN_ID_FKEY, Keys.CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_CODE_COVERAGE_GROUP_ID_FKEY, Keys.CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_STATS_ID_FKEY);
-    }
+    private transient CodeCoverageRun _codeCoverageRun;
+    private transient CodeCoverageGroup _codeCoverageGroup;
+    private transient CodeCoverageStats _codeCoverageStats;
 
     public CodeCoverageRun codeCoverageRun() {
-        return new CodeCoverageRun(this, Keys.CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_CODE_COVERAGE_RUN_ID_FKEY);
+        if (_codeCoverageRun == null)
+            _codeCoverageRun = new CodeCoverageRun(this, Keys.CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_CODE_COVERAGE_RUN_ID_FKEY);
+
+        return _codeCoverageRun;
     }
 
     public CodeCoverageGroup codeCoverageGroup() {
-        return new CodeCoverageGroup(this, Keys.CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_CODE_COVERAGE_GROUP_ID_FKEY);
+        if (_codeCoverageGroup == null)
+            _codeCoverageGroup = new CodeCoverageGroup(this, Keys.CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_CODE_COVERAGE_GROUP_ID_FKEY);
+
+        return _codeCoverageGroup;
     }
 
     public CodeCoverageStats codeCoverageStats() {
-        return new CodeCoverageStats(this, Keys.CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_STATS_ID_FKEY);
+        if (_codeCoverageStats == null)
+            _codeCoverageStats = new CodeCoverageStats(this, Keys.CODE_COVERAGE_FILE__CODE_COVERAGE_FILE_STATS_ID_FKEY);
+
+        return _codeCoverageStats;
     }
 
     @Override
