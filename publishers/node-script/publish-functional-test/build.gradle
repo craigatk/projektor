@@ -1,6 +1,6 @@
 plugins {
     id 'com.github.psxpaul.execfork'
-    id "com.github.node-gradle.node" version "3.0.1"
+    id "com.github.node-gradle.node" version "3.1.1"
 }
 
 node {
