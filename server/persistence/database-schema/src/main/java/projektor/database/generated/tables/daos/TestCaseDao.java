@@ -40,7 +40,8 @@ public class TestCaseDao extends DAOImpl<TestCaseRecord, projektor.database.gene
     }
 
     /**
-     * Fetch records that have <code>id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(TestCase.TEST_CASE.ID, lowerInclusive, upperInclusive);
@@ -61,7 +62,8 @@ public class TestCaseDao extends DAOImpl<TestCaseRecord, projektor.database.gene
     }
 
     /**
-     * Fetch records that have <code>test_suite_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>test_suite_id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfTestSuiteId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(TestCase.TEST_CASE.TEST_SUITE_ID, lowerInclusive, upperInclusive);
@@ -75,7 +77,8 @@ public class TestCaseDao extends DAOImpl<TestCaseRecord, projektor.database.gene
     }
 
     /**
-     * Fetch records that have <code>idx BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>idx BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfIdx(Integer lowerInclusive, Integer upperInclusive) {
         return fetchRange(TestCase.TEST_CASE.IDX, lowerInclusive, upperInclusive);
@@ -89,7 +92,8 @@ public class TestCaseDao extends DAOImpl<TestCaseRecord, projektor.database.gene
     }
 
     /**
-     * Fetch records that have <code>name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfName(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestCase.TEST_CASE.NAME, lowerInclusive, upperInclusive);
@@ -103,7 +107,8 @@ public class TestCaseDao extends DAOImpl<TestCaseRecord, projektor.database.gene
     }
 
     /**
-     * Fetch records that have <code>package_name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>package_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfPackageName(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestCase.TEST_CASE.PACKAGE_NAME, lowerInclusive, upperInclusive);
@@ -117,7 +122,8 @@ public class TestCaseDao extends DAOImpl<TestCaseRecord, projektor.database.gene
     }
 
     /**
-     * Fetch records that have <code>class_name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>class_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfClassName(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestCase.TEST_CASE.CLASS_NAME, lowerInclusive, upperInclusive);
@@ -131,7 +137,8 @@ public class TestCaseDao extends DAOImpl<TestCaseRecord, projektor.database.gene
     }
 
     /**
-     * Fetch records that have <code>duration BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>duration BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfDuration(BigDecimal lowerInclusive, BigDecimal upperInclusive) {
         return fetchRange(TestCase.TEST_CASE.DURATION, lowerInclusive, upperInclusive);
@@ -145,7 +152,8 @@ public class TestCaseDao extends DAOImpl<TestCaseRecord, projektor.database.gene
     }
 
     /**
-     * Fetch records that have <code>passed BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>passed BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfPassed(Boolean lowerInclusive, Boolean upperInclusive) {
         return fetchRange(TestCase.TEST_CASE.PASSED, lowerInclusive, upperInclusive);
@@ -159,7 +167,8 @@ public class TestCaseDao extends DAOImpl<TestCaseRecord, projektor.database.gene
     }
 
     /**
-     * Fetch records that have <code>skipped BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>skipped BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfSkipped(Boolean lowerInclusive, Boolean upperInclusive) {
         return fetchRange(TestCase.TEST_CASE.SKIPPED, lowerInclusive, upperInclusive);
@@ -173,7 +182,8 @@ public class TestCaseDao extends DAOImpl<TestCaseRecord, projektor.database.gene
     }
 
     /**
-     * Fetch records that have <code>system_out BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>system_out BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfSystemOut(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestCase.TEST_CASE.SYSTEM_OUT, lowerInclusive, upperInclusive);
@@ -187,7 +197,8 @@ public class TestCaseDao extends DAOImpl<TestCaseRecord, projektor.database.gene
     }
 
     /**
-     * Fetch records that have <code>system_err BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>system_err BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfSystemErr(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestCase.TEST_CASE.SYSTEM_ERR, lowerInclusive, upperInclusive);
@@ -201,7 +212,8 @@ public class TestCaseDao extends DAOImpl<TestCaseRecord, projektor.database.gene
     }
 
     /**
-     * Fetch records that have <code>has_system_out BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>has_system_out BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfHasSystemOut(Boolean lowerInclusive, Boolean upperInclusive) {
         return fetchRange(TestCase.TEST_CASE.HAS_SYSTEM_OUT, lowerInclusive, upperInclusive);
@@ -215,7 +227,8 @@ public class TestCaseDao extends DAOImpl<TestCaseRecord, projektor.database.gene
     }
 
     /**
-     * Fetch records that have <code>has_system_err BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>has_system_err BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestCase> fetchRangeOfHasSystemErr(Boolean lowerInclusive, Boolean upperInclusive) {
         return fetchRange(TestCase.TEST_CASE.HAS_SYSTEM_ERR, lowerInclusive, upperInclusive);

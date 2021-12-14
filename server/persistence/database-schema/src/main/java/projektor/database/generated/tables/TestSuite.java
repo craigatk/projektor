@@ -177,12 +177,12 @@ public class TestSuite extends TableImpl<TestSuiteRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_TEST_SUITE_IDX, Indexes.IDX_TEST_SUITE_TEST_RUN_ID);
+        return Arrays.asList(Indexes.IDX_TEST_SUITE_IDX, Indexes.IDX_TEST_SUITE_TEST_RUN_ID);
     }
 
     @Override
@@ -196,21 +196,25 @@ public class TestSuite extends TableImpl<TestSuiteRecord> {
     }
 
     @Override
-    public List<UniqueKey<TestSuiteRecord>> getKeys() {
-        return Arrays.<UniqueKey<TestSuiteRecord>>asList(Keys.TEST_SUITE_PKEY);
+    public List<ForeignKey<TestSuiteRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.TEST_SUITE__TEST_SUITE_TEST_RUN_ID_FKEY, Keys.TEST_SUITE__TEST_SUITE_TEST_SUITE_GROUP_ID_FKEY);
     }
 
-    @Override
-    public List<ForeignKey<TestSuiteRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<TestSuiteRecord, ?>>asList(Keys.TEST_SUITE__TEST_SUITE_TEST_RUN_ID_FKEY, Keys.TEST_SUITE__TEST_SUITE_TEST_SUITE_GROUP_ID_FKEY);
-    }
+    private transient TestRun _testRun;
+    private transient TestSuiteGroup _testSuiteGroup;
 
     public TestRun testRun() {
-        return new TestRun(this, Keys.TEST_SUITE__TEST_SUITE_TEST_RUN_ID_FKEY);
+        if (_testRun == null)
+            _testRun = new TestRun(this, Keys.TEST_SUITE__TEST_SUITE_TEST_RUN_ID_FKEY);
+
+        return _testRun;
     }
 
     public TestSuiteGroup testSuiteGroup() {
-        return new TestSuiteGroup(this, Keys.TEST_SUITE__TEST_SUITE_TEST_SUITE_GROUP_ID_FKEY);
+        if (_testSuiteGroup == null)
+            _testSuiteGroup = new TestSuiteGroup(this, Keys.TEST_SUITE__TEST_SUITE_TEST_SUITE_GROUP_ID_FKEY);
+
+        return _testSuiteGroup;
     }
 
     @Override

@@ -40,7 +40,8 @@ public class ResultsProcessingFailureDao extends DAOImpl<ResultsProcessingFailur
     }
 
     /**
-     * Fetch records that have <code>public_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>public_id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchRangeOfPublicId(String lowerInclusive, String upperInclusive) {
         return fetchRange(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.PUBLIC_ID, lowerInclusive, upperInclusive);
@@ -61,7 +62,8 @@ public class ResultsProcessingFailureDao extends DAOImpl<ResultsProcessingFailur
     }
 
     /**
-     * Fetch records that have <code>body BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>body BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchRangeOfBody(String lowerInclusive, String upperInclusive) {
         return fetchRange(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.BODY, lowerInclusive, upperInclusive);
@@ -75,7 +77,8 @@ public class ResultsProcessingFailureDao extends DAOImpl<ResultsProcessingFailur
     }
 
     /**
-     * Fetch records that have <code>created_timestamp BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>created_timestamp BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchRangeOfCreatedTimestamp(LocalDateTime lowerInclusive, LocalDateTime upperInclusive) {
         return fetchRange(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.CREATED_TIMESTAMP, lowerInclusive, upperInclusive);
@@ -89,7 +92,8 @@ public class ResultsProcessingFailureDao extends DAOImpl<ResultsProcessingFailur
     }
 
     /**
-     * Fetch records that have <code>failure_message BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>failure_message BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchRangeOfFailureMessage(String lowerInclusive, String upperInclusive) {
         return fetchRange(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.FAILURE_MESSAGE, lowerInclusive, upperInclusive);
@@ -103,7 +107,8 @@ public class ResultsProcessingFailureDao extends DAOImpl<ResultsProcessingFailur
     }
 
     /**
-     * Fetch records that have <code>failure_type BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>failure_type BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchRangeOfFailureType(String lowerInclusive, String upperInclusive) {
         return fetchRange(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.FAILURE_TYPE, lowerInclusive, upperInclusive);
@@ -117,7 +122,8 @@ public class ResultsProcessingFailureDao extends DAOImpl<ResultsProcessingFailur
     }
 
     /**
-     * Fetch records that have <code>body_type BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>body_type BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchRangeOfBodyType(String lowerInclusive, String upperInclusive) {
         return fetchRange(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.BODY_TYPE, lowerInclusive, upperInclusive);

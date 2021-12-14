@@ -1,6 +1,6 @@
 plugins {
     id "com.avast.gradle.docker-compose" version "0.9.4"
-    id 'nu.studer.jooq' version '5.1.0'
+    id 'nu.studer.jooq' version '6.0.1'
     id "org.flywaydb.flyway" version "6.0.0"
     id "java-library"
 }
@@ -12,9 +12,9 @@ repositories {
 dependencies {
     api "org.flywaydb:flyway-core:6.5.7"
     api "com.zaxxer:HikariCP:3.4.5"
-    api 'org.jooq:jooq:3.14.0'
+    api 'org.jooq:jooq:3.15.5'
 
-    // Needs to be 'compile' scope so the Flyway plugin can see it
+    // Needs to be 'api' scope so the Flyway plugin can see it
     api "org.postgresql:postgresql:$postgresDriverVersion"
 
     jooqGenerator "org.postgresql:postgresql:$postgresDriverVersion"
@@ -27,7 +27,7 @@ flyway {
 }
 
 jooq {
-    version = '3.14.0'
+    version = '3.15.5'
 
     configurations {
         main {

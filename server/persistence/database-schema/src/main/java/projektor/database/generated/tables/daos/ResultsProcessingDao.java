@@ -40,7 +40,8 @@ public class ResultsProcessingDao extends DAOImpl<ResultsProcessingRecord, proje
     }
 
     /**
-     * Fetch records that have <code>public_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>public_id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.ResultsProcessing> fetchRangeOfPublicId(String lowerInclusive, String upperInclusive) {
         return fetchRange(ResultsProcessing.RESULTS_PROCESSING.PUBLIC_ID, lowerInclusive, upperInclusive);
@@ -61,7 +62,8 @@ public class ResultsProcessingDao extends DAOImpl<ResultsProcessingRecord, proje
     }
 
     /**
-     * Fetch records that have <code>status BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>status BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.ResultsProcessing> fetchRangeOfStatus(String lowerInclusive, String upperInclusive) {
         return fetchRange(ResultsProcessing.RESULTS_PROCESSING.STATUS, lowerInclusive, upperInclusive);
@@ -75,7 +77,8 @@ public class ResultsProcessingDao extends DAOImpl<ResultsProcessingRecord, proje
     }
 
     /**
-     * Fetch records that have <code>error_message BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>error_message BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.ResultsProcessing> fetchRangeOfErrorMessage(String lowerInclusive, String upperInclusive) {
         return fetchRange(ResultsProcessing.RESULTS_PROCESSING.ERROR_MESSAGE, lowerInclusive, upperInclusive);
@@ -89,7 +92,8 @@ public class ResultsProcessingDao extends DAOImpl<ResultsProcessingRecord, proje
     }
 
     /**
-     * Fetch records that have <code>created_timestamp BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>created_timestamp BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.ResultsProcessing> fetchRangeOfCreatedTimestamp(LocalDateTime lowerInclusive, LocalDateTime upperInclusive) {
         return fetchRange(ResultsProcessing.RESULTS_PROCESSING.CREATED_TIMESTAMP, lowerInclusive, upperInclusive);

@@ -54,7 +54,8 @@ public class ResultsProcessingFailureRecord extends UpdatableRecordImpl<ResultsP
     }
 
     /**
-     * Setter for <code>public.results_processing_failure.created_timestamp</code>.
+     * Setter for
+     * <code>public.results_processing_failure.created_timestamp</code>.
      */
     public ResultsProcessingFailureRecord setCreatedTimestamp(LocalDateTime value) {
         set(2, value);
@@ -62,14 +63,16 @@ public class ResultsProcessingFailureRecord extends UpdatableRecordImpl<ResultsP
     }
 
     /**
-     * Getter for <code>public.results_processing_failure.created_timestamp</code>.
+     * Getter for
+     * <code>public.results_processing_failure.created_timestamp</code>.
      */
     public LocalDateTime getCreatedTimestamp() {
         return (LocalDateTime) get(2);
     }
 
     /**
-     * Setter for <code>public.results_processing_failure.failure_message</code>.
+     * Setter for
+     * <code>public.results_processing_failure.failure_message</code>.
      */
     public ResultsProcessingFailureRecord setFailureMessage(String value) {
         set(3, value);
@@ -77,7 +80,8 @@ public class ResultsProcessingFailureRecord extends UpdatableRecordImpl<ResultsP
     }
 
     /**
-     * Getter for <code>public.results_processing_failure.failure_message</code>.
+     * Getter for
+     * <code>public.results_processing_failure.failure_message</code>.
      */
     public String getFailureMessage() {
         return (String) get(3);
@@ -296,5 +300,21 @@ public class ResultsProcessingFailureRecord extends UpdatableRecordImpl<ResultsP
         setFailureMessage(failureMessage);
         setFailureType(failureType);
         setBodyType(bodyType);
+    }
+
+    /**
+     * Create a detached, initialised ResultsProcessingFailureRecord
+     */
+    public ResultsProcessingFailureRecord(projektor.database.generated.tables.pojos.ResultsProcessingFailure value) {
+        super(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE);
+
+        if (value != null) {
+            setPublicId(value.getPublicId());
+            setBody(value.getBody());
+            setCreatedTimestamp(value.getCreatedTimestamp());
+            setFailureMessage(value.getFailureMessage());
+            setFailureType(value.getFailureType());
+            setBodyType(value.getBodyType());
+        }
     }
 }

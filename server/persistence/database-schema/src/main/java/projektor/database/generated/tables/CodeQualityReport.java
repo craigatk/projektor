@@ -113,7 +113,7 @@ public class CodeQualityReport extends TableImpl<CodeQualityReportRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
@@ -127,17 +127,17 @@ public class CodeQualityReport extends TableImpl<CodeQualityReportRecord> {
     }
 
     @Override
-    public List<UniqueKey<CodeQualityReportRecord>> getKeys() {
-        return Arrays.<UniqueKey<CodeQualityReportRecord>>asList(Keys.CODE_QUALITY_REPORT_PKEY);
+    public List<ForeignKey<CodeQualityReportRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.CODE_QUALITY_REPORT__CODE_QUALITY_REPORT_TEST_RUN_ID_FKEY);
     }
 
-    @Override
-    public List<ForeignKey<CodeQualityReportRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<CodeQualityReportRecord, ?>>asList(Keys.CODE_QUALITY_REPORT__CODE_QUALITY_REPORT_TEST_RUN_ID_FKEY);
-    }
+    private transient TestRun _testRun;
 
     public TestRun testRun() {
-        return new TestRun(this, Keys.CODE_QUALITY_REPORT__CODE_QUALITY_REPORT_TEST_RUN_ID_FKEY);
+        if (_testRun == null)
+            _testRun = new TestRun(this, Keys.CODE_QUALITY_REPORT__CODE_QUALITY_REPORT_TEST_RUN_ID_FKEY);
+
+        return _testRun;
     }
 
     @Override

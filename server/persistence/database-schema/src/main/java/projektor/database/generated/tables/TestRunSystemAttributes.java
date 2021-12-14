@@ -48,7 +48,8 @@ public class TestRunSystemAttributes extends TableImpl<TestRunSystemAttributesRe
     }
 
     /**
-     * The column <code>public.test_run_system_attributes.test_run_public_id</code>.
+     * The column
+     * <code>public.test_run_system_attributes.test_run_public_id</code>.
      */
     public final TableField<TestRunSystemAttributesRecord, String> TEST_RUN_PUBLIC_ID = createField(DSL.name("test_run_public_id"), SQLDataType.VARCHAR(12).nullable(false), this, "");
 
@@ -66,14 +67,16 @@ public class TestRunSystemAttributes extends TableImpl<TestRunSystemAttributesRe
     }
 
     /**
-     * Create an aliased <code>public.test_run_system_attributes</code> table reference
+     * Create an aliased <code>public.test_run_system_attributes</code> table
+     * reference
      */
     public TestRunSystemAttributes(String alias) {
         this(DSL.name(alias), TEST_RUN_SYSTEM_ATTRIBUTES);
     }
 
     /**
-     * Create an aliased <code>public.test_run_system_attributes</code> table reference
+     * Create an aliased <code>public.test_run_system_attributes</code> table
+     * reference
      */
     public TestRunSystemAttributes(Name alias) {
         this(alias, TEST_RUN_SYSTEM_ATTRIBUTES);
@@ -92,7 +95,7 @@ public class TestRunSystemAttributes extends TableImpl<TestRunSystemAttributesRe
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
@@ -101,17 +104,17 @@ public class TestRunSystemAttributes extends TableImpl<TestRunSystemAttributesRe
     }
 
     @Override
-    public List<UniqueKey<TestRunSystemAttributesRecord>> getKeys() {
-        return Arrays.<UniqueKey<TestRunSystemAttributesRecord>>asList(Keys.TEST_RUN_SYSTEM_ATTRIBUTES_PKEY);
+    public List<ForeignKey<TestRunSystemAttributesRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.TEST_RUN_SYSTEM_ATTRIBUTES__TEST_RUN_SYSTEM_ATTRIBUTES_TEST_RUN_PUBLIC_ID_FKEY);
     }
 
-    @Override
-    public List<ForeignKey<TestRunSystemAttributesRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<TestRunSystemAttributesRecord, ?>>asList(Keys.TEST_RUN_SYSTEM_ATTRIBUTES__TEST_RUN_SYSTEM_ATTRIBUTES_TEST_RUN_PUBLIC_ID_FKEY);
-    }
+    private transient TestRun _testRun;
 
     public TestRun testRun() {
-        return new TestRun(this, Keys.TEST_RUN_SYSTEM_ATTRIBUTES__TEST_RUN_SYSTEM_ATTRIBUTES_TEST_RUN_PUBLIC_ID_FKEY);
+        if (_testRun == null)
+            _testRun = new TestRun(this, Keys.TEST_RUN_SYSTEM_ATTRIBUTES__TEST_RUN_SYSTEM_ATTRIBUTES_TEST_RUN_PUBLIC_ID_FKEY);
+
+        return _testRun;
     }
 
     @Override

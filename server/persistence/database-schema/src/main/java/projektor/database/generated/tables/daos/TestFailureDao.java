@@ -39,7 +39,8 @@ public class TestFailureDao extends DAOImpl<TestFailureRecord, projektor.databas
     }
 
     /**
-     * Fetch records that have <code>id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestFailure> fetchRangeOfId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(TestFailure.TEST_FAILURE.ID, lowerInclusive, upperInclusive);
@@ -60,7 +61,8 @@ public class TestFailureDao extends DAOImpl<TestFailureRecord, projektor.databas
     }
 
     /**
-     * Fetch records that have <code>test_case_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>test_case_id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestFailure> fetchRangeOfTestCaseId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(TestFailure.TEST_FAILURE.TEST_CASE_ID, lowerInclusive, upperInclusive);
@@ -74,7 +76,8 @@ public class TestFailureDao extends DAOImpl<TestFailureRecord, projektor.databas
     }
 
     /**
-     * Fetch records that have <code>failure_message BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>failure_message BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestFailure> fetchRangeOfFailureMessage(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestFailure.TEST_FAILURE.FAILURE_MESSAGE, lowerInclusive, upperInclusive);
@@ -88,7 +91,8 @@ public class TestFailureDao extends DAOImpl<TestFailureRecord, projektor.databas
     }
 
     /**
-     * Fetch records that have <code>failure_type BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>failure_type BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestFailure> fetchRangeOfFailureType(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestFailure.TEST_FAILURE.FAILURE_TYPE, lowerInclusive, upperInclusive);
@@ -102,7 +106,8 @@ public class TestFailureDao extends DAOImpl<TestFailureRecord, projektor.databas
     }
 
     /**
-     * Fetch records that have <code>failure_text BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>failure_text BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestFailure> fetchRangeOfFailureText(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestFailure.TEST_FAILURE.FAILURE_TEXT, lowerInclusive, upperInclusive);

@@ -34,14 +34,16 @@ public class TestRunSystemAttributes implements Serializable {
     }
 
     /**
-     * Getter for <code>public.test_run_system_attributes.test_run_public_id</code>.
+     * Getter for
+     * <code>public.test_run_system_attributes.test_run_public_id</code>.
      */
     public String getTestRunPublicId() {
         return this.testRunPublicId;
     }
 
     /**
-     * Setter for <code>public.test_run_system_attributes.test_run_public_id</code>.
+     * Setter for
+     * <code>public.test_run_system_attributes.test_run_public_id</code>.
      */
     public TestRunSystemAttributes setTestRunPublicId(String testRunPublicId) {
         this.testRunPublicId = testRunPublicId;

@@ -143,4 +143,16 @@ public class CodeCoverageRunRecord extends UpdatableRecordImpl<CodeCoverageRunRe
         setId(id);
         setTestRunPublicId(testRunPublicId);
     }
+
+    /**
+     * Create a detached, initialised CodeCoverageRunRecord
+     */
+    public CodeCoverageRunRecord(projektor.database.generated.tables.pojos.CodeCoverageRun value) {
+        super(CodeCoverageRun.CODE_COVERAGE_RUN);
+
+        if (value != null) {
+            setId(value.getId());
+            setTestRunPublicId(value.getTestRunPublicId());
+        }
+    }
 }

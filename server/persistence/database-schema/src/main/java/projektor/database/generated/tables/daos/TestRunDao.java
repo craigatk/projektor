@@ -41,7 +41,8 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     }
 
     /**
-     * Fetch records that have <code>id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRun> fetchRangeOfId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(TestRun.TEST_RUN.ID, lowerInclusive, upperInclusive);
@@ -62,7 +63,8 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     }
 
     /**
-     * Fetch records that have <code>public_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>public_id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRun> fetchRangeOfPublicId(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestRun.TEST_RUN.PUBLIC_ID, lowerInclusive, upperInclusive);
@@ -83,7 +85,8 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     }
 
     /**
-     * Fetch records that have <code>total_test_count BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>total_test_count BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRun> fetchRangeOfTotalTestCount(Integer lowerInclusive, Integer upperInclusive) {
         return fetchRange(TestRun.TEST_RUN.TOTAL_TEST_COUNT, lowerInclusive, upperInclusive);
@@ -97,7 +100,8 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     }
 
     /**
-     * Fetch records that have <code>total_passing_count BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>total_passing_count BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRun> fetchRangeOfTotalPassingCount(Integer lowerInclusive, Integer upperInclusive) {
         return fetchRange(TestRun.TEST_RUN.TOTAL_PASSING_COUNT, lowerInclusive, upperInclusive);
@@ -111,7 +115,8 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     }
 
     /**
-     * Fetch records that have <code>total_skipped_count BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>total_skipped_count BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRun> fetchRangeOfTotalSkippedCount(Integer lowerInclusive, Integer upperInclusive) {
         return fetchRange(TestRun.TEST_RUN.TOTAL_SKIPPED_COUNT, lowerInclusive, upperInclusive);
@@ -125,7 +130,8 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     }
 
     /**
-     * Fetch records that have <code>total_failure_count BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>total_failure_count BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRun> fetchRangeOfTotalFailureCount(Integer lowerInclusive, Integer upperInclusive) {
         return fetchRange(TestRun.TEST_RUN.TOTAL_FAILURE_COUNT, lowerInclusive, upperInclusive);
@@ -139,7 +145,8 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     }
 
     /**
-     * Fetch records that have <code>passed BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>passed BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRun> fetchRangeOfPassed(Boolean lowerInclusive, Boolean upperInclusive) {
         return fetchRange(TestRun.TEST_RUN.PASSED, lowerInclusive, upperInclusive);
@@ -153,7 +160,8 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     }
 
     /**
-     * Fetch records that have <code>cumulative_duration BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>cumulative_duration BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRun> fetchRangeOfCumulativeDuration(BigDecimal lowerInclusive, BigDecimal upperInclusive) {
         return fetchRange(TestRun.TEST_RUN.CUMULATIVE_DURATION, lowerInclusive, upperInclusive);
@@ -167,7 +175,8 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     }
 
     /**
-     * Fetch records that have <code>average_duration BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>average_duration BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRun> fetchRangeOfAverageDuration(BigDecimal lowerInclusive, BigDecimal upperInclusive) {
         return fetchRange(TestRun.TEST_RUN.AVERAGE_DURATION, lowerInclusive, upperInclusive);
@@ -181,21 +190,24 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     }
 
     /**
-     * Fetch records that have <code>slowest_test_case_duration BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>slowest_test_case_duration BETWEEN
+     * lowerInclusive AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRun> fetchRangeOfSlowestTestCaseDuration(BigDecimal lowerInclusive, BigDecimal upperInclusive) {
         return fetchRange(TestRun.TEST_RUN.SLOWEST_TEST_CASE_DURATION, lowerInclusive, upperInclusive);
     }
 
     /**
-     * Fetch records that have <code>slowest_test_case_duration IN (values)</code>
+     * Fetch records that have <code>slowest_test_case_duration IN
+     * (values)</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRun> fetchBySlowestTestCaseDuration(BigDecimal... values) {
         return fetch(TestRun.TEST_RUN.SLOWEST_TEST_CASE_DURATION, values);
     }
 
     /**
-     * Fetch records that have <code>created_timestamp BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>created_timestamp BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRun> fetchRangeOfCreatedTimestamp(LocalDateTime lowerInclusive, LocalDateTime upperInclusive) {
         return fetchRange(TestRun.TEST_RUN.CREATED_TIMESTAMP, lowerInclusive, upperInclusive);
@@ -209,7 +221,8 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     }
 
     /**
-     * Fetch records that have <code>wall_clock_duration BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>wall_clock_duration BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRun> fetchRangeOfWallClockDuration(BigDecimal lowerInclusive, BigDecimal upperInclusive) {
         return fetchRange(TestRun.TEST_RUN.WALL_CLOCK_DURATION, lowerInclusive, upperInclusive);

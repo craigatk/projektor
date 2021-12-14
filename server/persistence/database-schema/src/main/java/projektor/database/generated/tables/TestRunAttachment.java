@@ -110,12 +110,12 @@ public class TestRunAttachment extends TableImpl<TestRunAttachmentRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_ATTACHMENT_TEST_RUN_ID);
+        return Arrays.asList(Indexes.IDX_ATTACHMENT_TEST_RUN_ID);
     }
 
     @Override
@@ -126,11 +126,6 @@ public class TestRunAttachment extends TableImpl<TestRunAttachmentRecord> {
     @Override
     public UniqueKey<TestRunAttachmentRecord> getPrimaryKey() {
         return Keys.TEST_RUN_ATTACHMENT_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<TestRunAttachmentRecord>> getKeys() {
-        return Arrays.<UniqueKey<TestRunAttachmentRecord>>asList(Keys.TEST_RUN_ATTACHMENT_PKEY);
     }
 
     @Override

@@ -39,7 +39,8 @@ public class ResultsMetadataDao extends DAOImpl<ResultsMetadataRecord, projektor
     }
 
     /**
-     * Fetch records that have <code>id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.ResultsMetadata> fetchRangeOfId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(ResultsMetadata.RESULTS_METADATA.ID, lowerInclusive, upperInclusive);
@@ -60,7 +61,8 @@ public class ResultsMetadataDao extends DAOImpl<ResultsMetadataRecord, projektor
     }
 
     /**
-     * Fetch records that have <code>test_run_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>test_run_id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.ResultsMetadata> fetchRangeOfTestRunId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(ResultsMetadata.RESULTS_METADATA.TEST_RUN_ID, lowerInclusive, upperInclusive);
@@ -74,7 +76,8 @@ public class ResultsMetadataDao extends DAOImpl<ResultsMetadataRecord, projektor
     }
 
     /**
-     * Fetch records that have <code>ci BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>ci BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.ResultsMetadata> fetchRangeOfCi(Boolean lowerInclusive, Boolean upperInclusive) {
         return fetchRange(ResultsMetadata.RESULTS_METADATA.CI, lowerInclusive, upperInclusive);
@@ -88,7 +91,8 @@ public class ResultsMetadataDao extends DAOImpl<ResultsMetadataRecord, projektor
     }
 
     /**
-     * Fetch records that have <code>group BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>group BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.ResultsMetadata> fetchRangeOfGroup(String lowerInclusive, String upperInclusive) {
         return fetchRange(ResultsMetadata.RESULTS_METADATA.GROUP, lowerInclusive, upperInclusive);

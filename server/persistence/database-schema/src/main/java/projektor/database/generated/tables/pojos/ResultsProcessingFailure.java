@@ -81,14 +81,16 @@ public class ResultsProcessingFailure implements Serializable {
     }
 
     /**
-     * Getter for <code>public.results_processing_failure.created_timestamp</code>.
+     * Getter for
+     * <code>public.results_processing_failure.created_timestamp</code>.
      */
     public LocalDateTime getCreatedTimestamp() {
         return this.createdTimestamp;
     }
 
     /**
-     * Setter for <code>public.results_processing_failure.created_timestamp</code>.
+     * Setter for
+     * <code>public.results_processing_failure.created_timestamp</code>.
      */
     public ResultsProcessingFailure setCreatedTimestamp(LocalDateTime createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
@@ -96,14 +98,16 @@ public class ResultsProcessingFailure implements Serializable {
     }
 
     /**
-     * Getter for <code>public.results_processing_failure.failure_message</code>.
+     * Getter for
+     * <code>public.results_processing_failure.failure_message</code>.
      */
     public String getFailureMessage() {
         return this.failureMessage;
     }
 
     /**
-     * Setter for <code>public.results_processing_failure.failure_message</code>.
+     * Setter for
+     * <code>public.results_processing_failure.failure_message</code>.
      */
     public ResultsProcessingFailure setFailureMessage(String failureMessage) {
         this.failureMessage = failureMessage;

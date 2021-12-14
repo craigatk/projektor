@@ -108,7 +108,7 @@ public class TestSuiteGroup extends TableImpl<TestSuiteGroupRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
@@ -122,17 +122,17 @@ public class TestSuiteGroup extends TableImpl<TestSuiteGroupRecord> {
     }
 
     @Override
-    public List<UniqueKey<TestSuiteGroupRecord>> getKeys() {
-        return Arrays.<UniqueKey<TestSuiteGroupRecord>>asList(Keys.TEST_SUITE_GROUP_PKEY);
+    public List<ForeignKey<TestSuiteGroupRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.TEST_SUITE_GROUP__TEST_SUITE_GROUP_TEST_RUN_ID_FKEY);
     }
 
-    @Override
-    public List<ForeignKey<TestSuiteGroupRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<TestSuiteGroupRecord, ?>>asList(Keys.TEST_SUITE_GROUP__TEST_SUITE_GROUP_TEST_RUN_ID_FKEY);
-    }
+    private transient TestRun _testRun;
 
     public TestRun testRun() {
-        return new TestRun(this, Keys.TEST_SUITE_GROUP__TEST_SUITE_GROUP_TEST_RUN_ID_FKEY);
+        if (_testRun == null)
+            _testRun = new TestRun(this, Keys.TEST_SUITE_GROUP__TEST_SUITE_GROUP_TEST_RUN_ID_FKEY);
+
+        return _testRun;
     }
 
     @Override

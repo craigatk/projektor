@@ -257,4 +257,19 @@ public class TestSuiteGroupRecord extends UpdatableRecordImpl<TestSuiteGroupReco
         setGroupLabel(groupLabel);
         setDirectory(directory);
     }
+
+    /**
+     * Create a detached, initialised TestSuiteGroupRecord
+     */
+    public TestSuiteGroupRecord(projektor.database.generated.tables.pojos.TestSuiteGroup value) {
+        super(TestSuiteGroup.TEST_SUITE_GROUP);
+
+        if (value != null) {
+            setId(value.getId());
+            setTestRunId(value.getTestRunId());
+            setGroupName(value.getGroupName());
+            setGroupLabel(value.getGroupLabel());
+            setDirectory(value.getDirectory());
+        }
+    }
 }

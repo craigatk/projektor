@@ -94,22 +94,17 @@ public class GitRepository extends TableImpl<GitRepositoryRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.GIT_REPOSITORY_ORG_NAME_IDX);
+        return Arrays.asList(Indexes.GIT_REPOSITORY_ORG_NAME_IDX);
     }
 
     @Override
     public UniqueKey<GitRepositoryRecord> getPrimaryKey() {
         return Keys.GIT_REPOSITORY_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<GitRepositoryRecord>> getKeys() {
-        return Arrays.<UniqueKey<GitRepositoryRecord>>asList(Keys.GIT_REPOSITORY_PKEY);
     }
 
     @Override

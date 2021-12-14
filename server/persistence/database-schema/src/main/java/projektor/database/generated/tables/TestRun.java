@@ -147,12 +147,12 @@ public class TestRun extends TableImpl<TestRunRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_TEST_RUN_PUBLIC_ID);
+        return Arrays.asList(Indexes.IDX_TEST_RUN_PUBLIC_ID);
     }
 
     @Override
@@ -166,8 +166,8 @@ public class TestRun extends TableImpl<TestRunRecord> {
     }
 
     @Override
-    public List<UniqueKey<TestRunRecord>> getKeys() {
-        return Arrays.<UniqueKey<TestRunRecord>>asList(Keys.TEST_RUN_PKEY, Keys.TEST_RUN_PUBLIC_ID_KEY);
+    public List<UniqueKey<TestRunRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.TEST_RUN_PUBLIC_ID_KEY);
     }
 
     @Override

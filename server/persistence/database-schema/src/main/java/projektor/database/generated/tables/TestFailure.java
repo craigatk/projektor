@@ -110,12 +110,12 @@ public class TestFailure extends TableImpl<TestFailureRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_TEST_FAILURE_TEST_CASE_ID);
+        return Arrays.asList(Indexes.IDX_TEST_FAILURE_TEST_CASE_ID);
     }
 
     @Override
@@ -129,17 +129,17 @@ public class TestFailure extends TableImpl<TestFailureRecord> {
     }
 
     @Override
-    public List<UniqueKey<TestFailureRecord>> getKeys() {
-        return Arrays.<UniqueKey<TestFailureRecord>>asList(Keys.TEST_FAILURE_PKEY);
+    public List<ForeignKey<TestFailureRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.TEST_FAILURE__TEST_FAILURE_TEST_CASE_ID_FKEY);
     }
 
-    @Override
-    public List<ForeignKey<TestFailureRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<TestFailureRecord, ?>>asList(Keys.TEST_FAILURE__TEST_FAILURE_TEST_CASE_ID_FKEY);
-    }
+    private transient TestCase _testCase;
 
     public TestCase testCase() {
-        return new TestCase(this, Keys.TEST_FAILURE__TEST_FAILURE_TEST_CASE_ID_FKEY);
+        if (_testCase == null)
+            _testCase = new TestCase(this, Keys.TEST_FAILURE__TEST_FAILURE_TEST_CASE_ID_FKEY);
+
+        return _testCase;
     }
 
     @Override

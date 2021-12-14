@@ -257,4 +257,19 @@ public class TestRunAttachmentRecord extends UpdatableRecordImpl<TestRunAttachme
         setFileSize(fileSize);
         setTestRunPublicId(testRunPublicId);
     }
+
+    /**
+     * Create a detached, initialised TestRunAttachmentRecord
+     */
+    public TestRunAttachmentRecord(projektor.database.generated.tables.pojos.TestRunAttachment value) {
+        super(TestRunAttachment.TEST_RUN_ATTACHMENT);
+
+        if (value != null) {
+            setId(value.getId());
+            setFileName(value.getFileName());
+            setObjectName(value.getObjectName());
+            setFileSize(value.getFileSize());
+            setTestRunPublicId(value.getTestRunPublicId());
+        }
+    }
 }

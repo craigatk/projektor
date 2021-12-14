@@ -295,4 +295,20 @@ public class CodeQualityReportRecord extends UpdatableRecordImpl<CodeQualityRepo
         setGroupName(groupName);
         setIdx(idx);
     }
+
+    /**
+     * Create a detached, initialised CodeQualityReportRecord
+     */
+    public CodeQualityReportRecord(projektor.database.generated.tables.pojos.CodeQualityReport value) {
+        super(CodeQualityReport.CODE_QUALITY_REPORT);
+
+        if (value != null) {
+            setId(value.getId());
+            setTestRunId(value.getTestRunId());
+            setContents(value.getContents());
+            setFileName(value.getFileName());
+            setGroupName(value.getGroupName());
+            setIdx(value.getIdx());
+        }
+    }
 }
