@@ -221,4 +221,18 @@ public class ResultsProcessingRecord extends UpdatableRecordImpl<ResultsProcessi
         setErrorMessage(errorMessage);
         setCreatedTimestamp(createdTimestamp);
     }
+
+    /**
+     * Create a detached, initialised ResultsProcessingRecord
+     */
+    public ResultsProcessingRecord(projektor.database.generated.tables.pojos.ResultsProcessing value) {
+        super(ResultsProcessing.RESULTS_PROCESSING);
+
+        if (value != null) {
+            setPublicId(value.getPublicId());
+            setStatus(value.getStatus());
+            setErrorMessage(value.getErrorMessage());
+            setCreatedTimestamp(value.getCreatedTimestamp());
+        }
+    }
 }

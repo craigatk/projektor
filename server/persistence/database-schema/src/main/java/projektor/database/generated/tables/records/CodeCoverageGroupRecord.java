@@ -219,4 +219,18 @@ public class CodeCoverageGroupRecord extends UpdatableRecordImpl<CodeCoverageGro
         setName(name);
         setStatsId(statsId);
     }
+
+    /**
+     * Create a detached, initialised CodeCoverageGroupRecord
+     */
+    public CodeCoverageGroupRecord(projektor.database.generated.tables.pojos.CodeCoverageGroup value) {
+        super(CodeCoverageGroup.CODE_COVERAGE_GROUP);
+
+        if (value != null) {
+            setId(value.getId());
+            setCodeCoverageRunId(value.getCodeCoverageRunId());
+            setName(value.getName());
+            setStatsId(value.getStatsId());
+        }
+    }
 }

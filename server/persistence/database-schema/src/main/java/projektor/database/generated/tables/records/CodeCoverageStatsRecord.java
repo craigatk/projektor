@@ -409,4 +409,23 @@ public class CodeCoverageStatsRecord extends UpdatableRecordImpl<CodeCoverageSta
         setBranchCovered(branchCovered);
         setBranchMissed(branchMissed);
     }
+
+    /**
+     * Create a detached, initialised CodeCoverageStatsRecord
+     */
+    public CodeCoverageStatsRecord(projektor.database.generated.tables.pojos.CodeCoverageStats value) {
+        super(CodeCoverageStats.CODE_COVERAGE_STATS);
+
+        if (value != null) {
+            setId(value.getId());
+            setCodeCoverageRunId(value.getCodeCoverageRunId());
+            setScope(value.getScope());
+            setStatementCovered(value.getStatementCovered());
+            setStatementMissed(value.getStatementMissed());
+            setLineCovered(value.getLineCovered());
+            setLineMissed(value.getLineMissed());
+            setBranchCovered(value.getBranchCovered());
+            setBranchMissed(value.getBranchMissed());
+        }
+    }
 }

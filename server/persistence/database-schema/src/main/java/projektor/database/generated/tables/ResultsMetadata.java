@@ -105,12 +105,12 @@ public class ResultsMetadata extends TableImpl<ResultsMetadataRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.RESULTS_METADATA_TEST_RUN_ID_IDX);
+        return Arrays.asList(Indexes.RESULTS_METADATA_TEST_RUN_ID_IDX);
     }
 
     @Override
@@ -124,17 +124,17 @@ public class ResultsMetadata extends TableImpl<ResultsMetadataRecord> {
     }
 
     @Override
-    public List<UniqueKey<ResultsMetadataRecord>> getKeys() {
-        return Arrays.<UniqueKey<ResultsMetadataRecord>>asList(Keys.RESULTS_METADATA_PKEY);
+    public List<ForeignKey<ResultsMetadataRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.RESULTS_METADATA__RESULTS_METADATA_TEST_RUN_ID_FKEY);
     }
 
-    @Override
-    public List<ForeignKey<ResultsMetadataRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ResultsMetadataRecord, ?>>asList(Keys.RESULTS_METADATA__RESULTS_METADATA_TEST_RUN_ID_FKEY);
-    }
+    private transient TestRun _testRun;
 
     public TestRun testRun() {
-        return new TestRun(this, Keys.RESULTS_METADATA__RESULTS_METADATA_TEST_RUN_ID_FKEY);
+        if (_testRun == null)
+            _testRun = new TestRun(this, Keys.RESULTS_METADATA__RESULTS_METADATA_TEST_RUN_ID_FKEY);
+
+        return _testRun;
     }
 
     @Override

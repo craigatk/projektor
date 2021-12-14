@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jooq.Catalog;
-import org.jooq.Sequence;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
 
@@ -149,27 +148,8 @@ public class Public extends SchemaImpl {
     }
 
     @Override
-    public final List<Sequence<?>> getSequences() {
-        return Arrays.<Sequence<?>>asList(
-            Sequences.CODE_COVERAGE_FILE_ID_SEQ,
-            Sequences.CODE_COVERAGE_GROUP_ID_SEQ,
-            Sequences.CODE_COVERAGE_RUN_ID_SEQ,
-            Sequences.CODE_COVERAGE_STATS_ID_SEQ,
-            Sequences.CODE_QUALITY_REPORT_ID_SEQ,
-            Sequences.GIT_METADATA_ID_SEQ,
-            Sequences.PERFORMANCE_RESULTS_ID_SEQ,
-            Sequences.RESULTS_METADATA_ID_SEQ,
-            Sequences.TEST_CASE_ID_SEQ,
-            Sequences.TEST_FAILURE_ID_SEQ,
-            Sequences.TEST_RUN_ATTACHMENT_ID_SEQ,
-            Sequences.TEST_RUN_ID_SEQ,
-            Sequences.TEST_SUITE_GROUP_ID_SEQ,
-            Sequences.TEST_SUITE_ID_SEQ);
-    }
-
-    @Override
     public final List<Table<?>> getTables() {
-        return Arrays.<Table<?>>asList(
+        return Arrays.asList(
             CodeCoverageFile.CODE_COVERAGE_FILE,
             CodeCoverageGroup.CODE_COVERAGE_GROUP,
             CodeCoverageRun.CODE_COVERAGE_RUN,
@@ -187,6 +167,7 @@ public class Public extends SchemaImpl {
             TestRunAttachment.TEST_RUN_ATTACHMENT,
             TestRunSystemAttributes.TEST_RUN_SYSTEM_ATTRIBUTES,
             TestSuite.TEST_SUITE,
-            TestSuiteGroup.TEST_SUITE_GROUP);
+            TestSuiteGroup.TEST_SUITE_GROUP
+        );
     }
 }

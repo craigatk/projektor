@@ -95,12 +95,12 @@ public class CodeCoverageRun extends TableImpl<CodeCoverageRunRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX);
+        return Arrays.asList(Indexes.CODE_COVERAGE_RUN_TEST_RUN_PUBLIC_ID_IDX);
     }
 
     @Override
@@ -111,11 +111,6 @@ public class CodeCoverageRun extends TableImpl<CodeCoverageRunRecord> {
     @Override
     public UniqueKey<CodeCoverageRunRecord> getPrimaryKey() {
         return Keys.CODE_COVERAGE_RUN_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<CodeCoverageRunRecord>> getKeys() {
-        return Arrays.<UniqueKey<CodeCoverageRunRecord>>asList(Keys.CODE_COVERAGE_RUN_PKEY);
     }
 
     @Override

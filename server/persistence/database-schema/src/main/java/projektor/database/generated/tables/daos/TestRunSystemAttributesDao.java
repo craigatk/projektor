@@ -39,7 +39,8 @@ public class TestRunSystemAttributesDao extends DAOImpl<TestRunSystemAttributesR
     }
 
     /**
-     * Fetch records that have <code>test_run_public_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>test_run_public_id BETWEEN lowerInclusive
+     * AND upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRunSystemAttributes> fetchRangeOfTestRunPublicId(String lowerInclusive, String upperInclusive) {
         return fetchRange(TestRunSystemAttributes.TEST_RUN_SYSTEM_ATTRIBUTES.TEST_RUN_PUBLIC_ID, lowerInclusive, upperInclusive);
@@ -60,7 +61,8 @@ public class TestRunSystemAttributesDao extends DAOImpl<TestRunSystemAttributesR
     }
 
     /**
-     * Fetch records that have <code>pinned BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>pinned BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.TestRunSystemAttributes> fetchRangeOfPinned(Boolean lowerInclusive, Boolean upperInclusive) {
         return fetchRange(TestRunSystemAttributes.TEST_RUN_SYSTEM_ATTRIBUTES.PINNED, lowerInclusive, upperInclusive);

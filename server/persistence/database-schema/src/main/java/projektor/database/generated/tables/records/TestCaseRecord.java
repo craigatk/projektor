@@ -563,4 +563,27 @@ public class TestCaseRecord extends UpdatableRecordImpl<TestCaseRecord> implemen
         setHasSystemOut(hasSystemOut);
         setHasSystemErr(hasSystemErr);
     }
+
+    /**
+     * Create a detached, initialised TestCaseRecord
+     */
+    public TestCaseRecord(projektor.database.generated.tables.pojos.TestCase value) {
+        super(TestCase.TEST_CASE);
+
+        if (value != null) {
+            setId(value.getId());
+            setTestSuiteId(value.getTestSuiteId());
+            setIdx(value.getIdx());
+            setName(value.getName());
+            setPackageName(value.getPackageName());
+            setClassName(value.getClassName());
+            setDuration(value.getDuration());
+            setPassed(value.getPassed());
+            setSkipped(value.getSkipped());
+            setSystemOut(value.getSystemOut());
+            setSystemErr(value.getSystemErr());
+            setHasSystemOut(value.getHasSystemOut());
+            setHasSystemErr(value.getHasSystemErr());
+        }
+    }
 }

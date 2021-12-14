@@ -39,7 +39,8 @@ public class GitRepositoryDao extends DAOImpl<GitRepositoryRecord, projektor.dat
     }
 
     /**
-     * Fetch records that have <code>repo_name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>repo_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.GitRepository> fetchRangeOfRepoName(String lowerInclusive, String upperInclusive) {
         return fetchRange(GitRepository.GIT_REPOSITORY.REPO_NAME, lowerInclusive, upperInclusive);
@@ -60,7 +61,8 @@ public class GitRepositoryDao extends DAOImpl<GitRepositoryRecord, projektor.dat
     }
 
     /**
-     * Fetch records that have <code>org_name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>org_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.GitRepository> fetchRangeOfOrgName(String lowerInclusive, String upperInclusive) {
         return fetchRange(GitRepository.GIT_REPOSITORY.ORG_NAME, lowerInclusive, upperInclusive);

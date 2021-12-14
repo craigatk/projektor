@@ -39,7 +39,8 @@ public class CodeQualityReportDao extends DAOImpl<CodeQualityReportRecord, proje
     }
 
     /**
-     * Fetch records that have <code>id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeQualityReport> fetchRangeOfId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(CodeQualityReport.CODE_QUALITY_REPORT.ID, lowerInclusive, upperInclusive);
@@ -60,7 +61,8 @@ public class CodeQualityReportDao extends DAOImpl<CodeQualityReportRecord, proje
     }
 
     /**
-     * Fetch records that have <code>test_run_id BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>test_run_id BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeQualityReport> fetchRangeOfTestRunId(Long lowerInclusive, Long upperInclusive) {
         return fetchRange(CodeQualityReport.CODE_QUALITY_REPORT.TEST_RUN_ID, lowerInclusive, upperInclusive);
@@ -74,7 +76,8 @@ public class CodeQualityReportDao extends DAOImpl<CodeQualityReportRecord, proje
     }
 
     /**
-     * Fetch records that have <code>contents BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>contents BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeQualityReport> fetchRangeOfContents(String lowerInclusive, String upperInclusive) {
         return fetchRange(CodeQualityReport.CODE_QUALITY_REPORT.CONTENTS, lowerInclusive, upperInclusive);
@@ -88,7 +91,8 @@ public class CodeQualityReportDao extends DAOImpl<CodeQualityReportRecord, proje
     }
 
     /**
-     * Fetch records that have <code>file_name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>file_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeQualityReport> fetchRangeOfFileName(String lowerInclusive, String upperInclusive) {
         return fetchRange(CodeQualityReport.CODE_QUALITY_REPORT.FILE_NAME, lowerInclusive, upperInclusive);
@@ -102,7 +106,8 @@ public class CodeQualityReportDao extends DAOImpl<CodeQualityReportRecord, proje
     }
 
     /**
-     * Fetch records that have <code>group_name BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>group_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeQualityReport> fetchRangeOfGroupName(String lowerInclusive, String upperInclusive) {
         return fetchRange(CodeQualityReport.CODE_QUALITY_REPORT.GROUP_NAME, lowerInclusive, upperInclusive);
@@ -116,7 +121,8 @@ public class CodeQualityReportDao extends DAOImpl<CodeQualityReportRecord, proje
     }
 
     /**
-     * Fetch records that have <code>idx BETWEEN lowerInclusive AND upperInclusive</code>
+     * Fetch records that have <code>idx BETWEEN lowerInclusive AND
+     * upperInclusive</code>
      */
     public List<projektor.database.generated.tables.pojos.CodeQualityReport> fetchRangeOfIdx(Integer lowerInclusive, Integer upperInclusive) {
         return fetchRange(CodeQualityReport.CODE_QUALITY_REPORT.IDX, lowerInclusive, upperInclusive);

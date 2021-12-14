@@ -409,4 +409,23 @@ public class GitMetadataRecord extends UpdatableRecordImpl<GitMetadataRecord> im
         setPullRequestNumber(pullRequestNumber);
         setCommitSha(commitSha);
     }
+
+    /**
+     * Create a detached, initialised GitMetadataRecord
+     */
+    public GitMetadataRecord(projektor.database.generated.tables.pojos.GitMetadata value) {
+        super(GitMetadata.GIT_METADATA);
+
+        if (value != null) {
+            setId(value.getId());
+            setTestRunId(value.getTestRunId());
+            setRepoName(value.getRepoName());
+            setIsMainBranch(value.getIsMainBranch());
+            setBranchName(value.getBranchName());
+            setOrgName(value.getOrgName());
+            setProjectName(value.getProjectName());
+            setPullRequestNumber(value.getPullRequestNumber());
+            setCommitSha(value.getCommitSha());
+        }
+    }
 }

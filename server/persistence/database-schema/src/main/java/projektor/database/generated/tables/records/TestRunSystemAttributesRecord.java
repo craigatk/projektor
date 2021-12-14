@@ -22,7 +22,8 @@ public class TestRunSystemAttributesRecord extends UpdatableRecordImpl<TestRunSy
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>public.test_run_system_attributes.test_run_public_id</code>.
+     * Setter for
+     * <code>public.test_run_system_attributes.test_run_public_id</code>.
      */
     public TestRunSystemAttributesRecord setTestRunPublicId(String value) {
         set(0, value);
@@ -30,7 +31,8 @@ public class TestRunSystemAttributesRecord extends UpdatableRecordImpl<TestRunSy
     }
 
     /**
-     * Getter for <code>public.test_run_system_attributes.test_run_public_id</code>.
+     * Getter for
+     * <code>public.test_run_system_attributes.test_run_public_id</code>.
      */
     public String getTestRunPublicId() {
         return (String) get(0);
@@ -142,5 +144,17 @@ public class TestRunSystemAttributesRecord extends UpdatableRecordImpl<TestRunSy
 
         setTestRunPublicId(testRunPublicId);
         setPinned(pinned);
+    }
+
+    /**
+     * Create a detached, initialised TestRunSystemAttributesRecord
+     */
+    public TestRunSystemAttributesRecord(projektor.database.generated.tables.pojos.TestRunSystemAttributes value) {
+        super(TestRunSystemAttributes.TEST_RUN_SYSTEM_ATTRIBUTES);
+
+        if (value != null) {
+            setTestRunPublicId(value.getTestRunPublicId());
+            setPinned(value.getPinned());
+        }
     }
 }

@@ -143,4 +143,16 @@ public class GitRepositoryRecord extends UpdatableRecordImpl<GitRepositoryRecord
         setRepoName(repoName);
         setOrgName(orgName);
     }
+
+    /**
+     * Create a detached, initialised GitRepositoryRecord
+     */
+    public GitRepositoryRecord(projektor.database.generated.tables.pojos.GitRepository value) {
+        super(GitRepository.GIT_REPOSITORY);
+
+        if (value != null) {
+            setRepoName(value.getRepoName());
+            setOrgName(value.getOrgName());
+        }
+    }
 }

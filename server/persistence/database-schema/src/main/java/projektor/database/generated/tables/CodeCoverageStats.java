@@ -130,12 +130,12 @@ public class CodeCoverageStats extends TableImpl<CodeCoverageStatsRecord> {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return aliased() ? null : Public.PUBLIC;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_IDX);
+        return Arrays.asList(Indexes.CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_IDX);
     }
 
     @Override
@@ -149,17 +149,17 @@ public class CodeCoverageStats extends TableImpl<CodeCoverageStatsRecord> {
     }
 
     @Override
-    public List<UniqueKey<CodeCoverageStatsRecord>> getKeys() {
-        return Arrays.<UniqueKey<CodeCoverageStatsRecord>>asList(Keys.CODE_COVERAGE_STATS_PKEY);
+    public List<ForeignKey<CodeCoverageStatsRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.CODE_COVERAGE_STATS__CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_FKEY);
     }
 
-    @Override
-    public List<ForeignKey<CodeCoverageStatsRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<CodeCoverageStatsRecord, ?>>asList(Keys.CODE_COVERAGE_STATS__CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_FKEY);
-    }
+    private transient CodeCoverageRun _codeCoverageRun;
 
     public CodeCoverageRun codeCoverageRun() {
-        return new CodeCoverageRun(this, Keys.CODE_COVERAGE_STATS__CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_FKEY);
+        if (_codeCoverageRun == null)
+            _codeCoverageRun = new CodeCoverageRun(this, Keys.CODE_COVERAGE_STATS__CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_FKEY);
+
+        return _codeCoverageRun;
     }
 
     @Override
