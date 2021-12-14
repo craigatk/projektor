@@ -55,7 +55,7 @@
     "@types/styled-components": "5.1.0",
     "axios": "0.21.2",
     "axios-cache-adapter": "2.5.0",
-    "axios-case-converter": "0.7.0",
+    "axios-case-converter": "0.9.0",
     "lodash": "4.17.21",
     "material-table": "1.55.0",
     "moment": "2.24.0",

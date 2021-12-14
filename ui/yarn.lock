@@ -2363,14 +2363,15 @@ axios-cache-adapter@2.5.0:
     cache-control-esm "1.0.0"
     lodash "^4.17.11"
 
-axios-case-converter@0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/axios-case-converter/-/axios-case-converter-0.7.0.tgz#e0a64aaf7201dde631d8d79087d18ee358ffa4cc"
-  integrity sha512-0TpWsZ6IvxVRYcK99H5zvFWtVYKYTIpJEPPLQzZ4tU61o0zjslyOrZoys9wVzTg8vWXizmRAuSqwIPBjCnMufA==
+axios-case-converter@0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/axios-case-converter/-/axios-case-converter-0.9.0.tgz#9f47f641ae3f8c04a5395370601342e4f8c33c77"
+  integrity sha512-G6tOanR1cdIrBtRyiPvR+xXyWCCZacSw8LtT8bmImvpye+XiyoOlLluz0N61IfetznNQ9BeMi5yA0rIyYDr8mQ==
   dependencies:
     camel-case "^4.1.1"
     header-case "^2.0.3"
     snake-case "^3.0.3"
+    tslib "^2.3.0"
 
 axios-mock-adapter@1.20.0:
   version "1.20.0"
@@ -8542,6 +8543,11 @@ tslib@^2.0.3, tslib@~2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.1.0.tgz#da60860f1c2ecaa5703ab7d39bc05b6bf988b97a"
   integrity sha512-hcVC3wYEziELGGmEEXue7D75zbwIIVUMWAVbHItGPx0ziyXxrOMQx4rQEVEV45Ut/1IotuEvwqPopzIOkDMf0A==
+
+tslib@^2.3.0:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
+  integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
 
 tty-browserify@^0.0.1:
   version "0.0.1"
