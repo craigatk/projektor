@@ -12,7 +12,7 @@ repositories {
 dependencies {
     api "org.flywaydb:flyway-core:6.5.7"
     api "com.zaxxer:HikariCP:3.4.5"
-    api 'org.jooq:jooq:3.14.0'
+    api 'org.jooq:jooq:3.15.5'
 
     // Needs to be 'compile' scope so the Flyway plugin can see it
     api "org.postgresql:postgresql:$postgresDriverVersion"
