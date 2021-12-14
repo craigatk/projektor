@@ -89,8 +89,8 @@ open class DatabaseRepositoryTestCase : KoinTest {
 
         val metricsConfig = InfluxMetricsConfig(
             false,
-            "",
-            "",
+            "fakedb",
+            "http://localhost",
             null,
             null,
             false,
