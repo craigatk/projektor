@@ -23,7 +23,7 @@
   "devDependencies": {
     "@testing-library/cypress": "7.0.7",
     "@testing-library/jest-dom": "5.16.1",
-    "@testing-library/react": "11.2.7",
+    "@testing-library/react": "12.1.2",
     "@types/jest": "27.0.3",
     "axios-mock-adapter": "1.20.0",
     "chai-colors": "1.0.1",
