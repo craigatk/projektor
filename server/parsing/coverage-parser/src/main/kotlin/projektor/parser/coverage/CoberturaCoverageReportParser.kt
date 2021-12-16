@@ -14,7 +14,7 @@ class CoberturaCoverageReportParser : CoverageReportParser {
             val classes = pkg.classes.clazz
 
             classes.map { clazz ->
-                val lines = clazz.lines.lines
+                val lines = clazz.lines.lines ?: listOf()
 
                 CoverageReportFile(
                     directoryName = clazz.fileName.substringBeforeLast(clazz.name).removeSuffix("/"),

@@ -80,6 +80,19 @@ class CoverageParserSpec : StringSpec({
         }
     }
 
+    "should parse Cobertura report without Doctype" {
+        val coberturaReportXml = CoberturaXmlLoader().noDoctypeCobertura()
+
+        val coverageReport = CoverageParser.parseReport(coberturaReportXml, null)
+        assertNotNull(coverageReport)
+
+        expectThat(coverageReport.totalStats.lineStat) {
+            get { covered }.isEqualTo(231)
+            get { total }.isEqualTo(234)
+            get { percentCovered }.isEqualTo(BigDecimal("98.72"))
+        }
+    }
+
     "when report does not have any branch coverage should parse it" {
         val reportXmlWithoutBranchCoverage = JacocoXmlLoader().junitResultsParser()
 

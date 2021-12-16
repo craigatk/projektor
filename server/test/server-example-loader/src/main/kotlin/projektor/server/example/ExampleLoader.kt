@@ -222,6 +222,12 @@ fun loadCoberturaCoverageUi() {
     println("View run with Cobertura coverage and UI results at $uiBaseUrl${currentResultsResponse.uri}")
 }
 
+fun loadCoberturaCoverageNoDocType() {
+    val currentResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.resultsWithCoverage(resultsXmls = listOf(), coverageXmls = listOf(CoberturaXmlLoader().noDoctypeCobertura())))
+
+    println("View run with Cobertura coverage without DocType at $uiBaseUrl${currentResultsResponse.uri}")
+}
+
 fun loadCloverCoverageLarge() {
     val repoName = "large-org/large-repo"
     val branchName = "main"
