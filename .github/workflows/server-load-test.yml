@@ -37,7 +37,7 @@ jobs:
       with:
         java-version: 11
     - name: Cache Gradle dependencies
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.gradle/caches/modules-2
         key: ${{ runner.os }}-gradle-modules-${{ hashFiles('**/*gradle*') }}

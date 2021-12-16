@@ -56,7 +56,7 @@ jobs:
           sudo apt-get install xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
 
       - name: Cache Gradle dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ~/.gradle/caches/modules-2
           key: ${{ runner.os }}-gradle-modules-${{ hashFiles('**/*gradle*') }}
@@ -67,7 +67,7 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: Cache Yarn dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
