@@ -12,7 +12,7 @@ public class CoberturaXmlReportParser {
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     public static boolean isCoberturaReport(String reportXml) {
-        return reportXml.contains("cobertura.sourceforge.net");
+        return reportXml.contains("cobertura");
     }
 
     public Coverage parseReport(String reportXml) throws IOException  {

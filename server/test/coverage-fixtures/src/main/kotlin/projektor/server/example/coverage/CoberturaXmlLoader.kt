@@ -6,4 +6,6 @@ class CoberturaXmlLoader : CoverageXmlLoader() {
     fun uiCobertura() = loadTextFromFile("cobertura/ui-cobertura.xml")
 
     fun noBranchCobertura() = loadTextFromFile("cobertura/no-branch-cobertura.xml")
+
+    fun noDoctypeCobertura() = loadTextFromFile("cobertura/no-doctype-cobertura.xml")
 }
