@@ -60,7 +60,7 @@ jobs:
       run: ./gradlew :server:test:load-test:loadTest
 
     - name: Projektor results
-      uses: craigatk/projektor-action@v13
+      uses: craigatk/projektor-action@v14
       if: failure() || success()
       with:
         server-url: https://projektorlive.herokuapp.com
