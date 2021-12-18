@@ -58,7 +58,7 @@ dependencies {
     testImplementation('org.spockframework:spock-core:1.3-groovy-2.5') {
         exclude group: 'org.codehaus.groovy'
     }
-    testImplementation "net.bytebuddy:byte-buddy:1.12.4"
+    testImplementation "net.bytebuddy:byte-buddy:1.12.5"
     testImplementation 'org.objenesis:objenesis:1.4'
 
     testImplementation "com.github.tomakehurst:wiremock-jre8:$wiremockVersion"
