@@ -109,9 +109,10 @@ class KoverCoverageMultiProjectSpec extends MultiProjectSpec {
         List<CoverageFilePayload> coverageFilePayloads = resultsRequestBodies[0].coverageFiles
         coverageFilePayloads.size() == 3
 
-        coverageFilePayloads.find { it.baseDirectoryPath.contains("project1/build/classes/groovy/main")}
-        coverageFilePayloads.find { it.baseDirectoryPath.contains("project2/build/classes/groovy/main")}
-        coverageFilePayloads.find { it.baseDirectoryPath.contains("project3/build/classes/groovy/main")}
+        List<String> baseDirectoryPaths = coverageFilePayloads.collect { it.baseDirectoryPath }
+        baseDirectoryPaths.contains("project1/src/main/groovy")
+        baseDirectoryPaths.contains("project2/src/main/groovy")
+        baseDirectoryPaths.contains("project3/src/main/groovy")
     }
 
     def "when only one subproject changes should publish coverage from all subprojects"() {

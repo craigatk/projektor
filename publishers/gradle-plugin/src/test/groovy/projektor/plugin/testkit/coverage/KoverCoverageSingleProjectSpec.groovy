@@ -49,6 +49,7 @@ class KoverCoverageSingleProjectSpec extends SingleProjectSpec {
         coverageFilePayloads.size() == 1
 
         coverageFilePayloads[0].reportContents.contains("MyClass")
+        coverageFilePayloads[0].baseDirectoryPath == "src/main/groovy"
     }
 
     def "when coverage disabled should not publish coverage results to server"() {

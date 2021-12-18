@@ -1,7 +1,9 @@
 package projektor.plugin.coverage
 
 import org.gradle.api.Task
+import org.gradle.api.file.FileCollection
 import org.gradle.api.logging.Logger
+import org.gradle.api.provider.Property
 import org.gradle.api.reporting.SingleFileReport
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import projektor.plugin.coverage.model.CoverageFilePayload
@@ -48,9 +50,12 @@ class CodeCoverageTaskCollector {
             logger.info("Unable to set Projektor Kover coverage: Found no source files or source directories.")
             return null
         } else {
+            File reportFile = koverXmlReportTask.xmlReportFile.get().getAsFile()
+            String baseDirectoryPath = findKoverBaseDirectoryPath(koverXmlReportTask)
+
             return new CodeCoverageFile(
-                    koverXmlReportTask.xmlReportFile.get().getAsFile(),
-                    koverXmlReportTask.outputDirs.get().asPath
+                    reportFile,
+                    baseDirectoryPath
             )
         }
     }
@@ -71,7 +76,7 @@ class CodeCoverageTaskCollector {
         File xmlReportFile = extractReportFile(reportTask)
 
         if (xmlReportFile.exists()) {
-            String baseDirectoryPath = findBaseDirectoryPath(reportTask)
+            String baseDirectoryPath = findJacocoBaseDirectoryPath(reportTask)
 
             logger.info("Projektor found XML code coverage report from task ${reportTask.name} in project ${reportTask.project.name} with base directory path ${baseDirectoryPath}")
 
@@ -95,11 +100,24 @@ class CodeCoverageTaskCollector {
         }
     }
 
-    private String findBaseDirectoryPath(JacocoReport reportTask) {
+    private String findJacocoBaseDirectoryPath(JacocoReport reportTask) {
         List<File> sourceDirectoriesWithFiles = reportTask.sourceDirectories.findAll { it.list() }
+        File projectRootDir = reportTask.project.rootDir
 
+        return findBaseDirectoryPath(sourceDirectoriesWithFiles, projectRootDir)
+    }
+
+    private String findKoverBaseDirectoryPath(Task koverReportTask) {
+        Property<FileCollection> srcDirsProperty = koverReportTask.srcDirs
+        List<File> sourceDirectoriesWithFiles = srcDirsProperty.get().files.toList()
+        File projectRootDir = koverReportTask.project.rootDir
+
+        return findBaseDirectoryPath(sourceDirectoriesWithFiles, projectRootDir)
+    }
+
+    private String findBaseDirectoryPath(List<File> sourceDirectoriesWithFiles, File projectRootDir) {
         if (sourceDirectoriesWithFiles.size() == 1) {
-            return DirectoryUtil.findSubDirectoryPath(reportTask.project.rootDir, sourceDirectoriesWithFiles.first())
+            return DirectoryUtil.findSubDirectoryPath(projectRootDir, sourceDirectoriesWithFiles.first())
         } else if (sourceDirectoriesWithFiles.size() > 1) {
             logger.info("Unable to set Projektor coverage base directory path: Found multiple source directories containing source files", sourceDirectoriesWithFiles)
 
