@@ -1,0 +1,23 @@
+name: Example projects
+
+on:
+  push:
+    paths:
+      - 'example-data/**'
+
+jobs:
+  kover-example:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Gradle build
+        env:
+          PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
+        working-directory: ./example-data/kover-gradle/
+        run: ./gradlew test koverXmlReport
