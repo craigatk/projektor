@@ -28,3 +28,11 @@ projektor {
     serverUrl = "https://projektorlive.herokuapp.com"
     publishToken = System.getenv("PROJEKTOR_TOKEN") ?: project.findProperty('projektor_publish_token') ?: null
 }
+
+tasks.withType(kotlinx.kover.tasks.KoverXmlReportTask) {
+    dependsOn(test)
+}
+
+kover {
+    coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO) // change instrumentation agent and reporter
+}

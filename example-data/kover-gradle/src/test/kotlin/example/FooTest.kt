@@ -1,11 +1,14 @@
+package example
+
 import strikt.api.expectThat
 import strikt.assertions.*
 
-import org.junit.jupiter.api.Test
+import io.kotest.core.spec.style.StringSpec
 
-class FooTest {
-    @Test
-    fun `should return bar`() {
-        expectThat(foo()).isEqualTo("bar")
+class FooTest : StringSpec() {
+    init {
+        "should return bar" {
+            expectThat(foo()).isEqualTo("bar")
+        }
     }
 }

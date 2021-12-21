@@ -1,3 +1,5 @@
+package example
+
 fun foo(): String {
     return "bar"
 }
