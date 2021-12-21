@@ -65,6 +65,8 @@ class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
         coverageFilePayloads[0].reportContents.contains("report.dtd")
         coverageFilePayloads[0].reportContents.contains(sourceFile.name)
 
+        coverageFilePayloads[0].baseDirectoryPath == "src/main/groovy"
+
         where:
         gradleVersion                  | _
         GradleVersion.version("5.0")   | _

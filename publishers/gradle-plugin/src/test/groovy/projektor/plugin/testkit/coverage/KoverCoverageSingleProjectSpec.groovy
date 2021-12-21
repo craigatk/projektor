@@ -1,8 +1,11 @@
 package projektor.plugin.testkit.coverage
 
+import org.gradle.testkit.runner.BuildResult
+import org.gradle.util.GradleVersion
 import projektor.plugin.coverage.model.CoverageFilePayload
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.testkit.SingleProjectSpec
+import spock.lang.Unroll
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static projektor.plugin.CodeUnderTestWriter.writePartialCoverageSpecFile
@@ -17,7 +20,8 @@ class KoverCoverageSingleProjectSpec extends SingleProjectSpec {
         return true
     }
 
-    def "should publish coverage results to server"() {
+    @Unroll
+    def "should publish Kover coverage results to server with Gradle version #gradleVersion"() {
         given:
         buildFile << """
             projektor {
@@ -35,7 +39,11 @@ class KoverCoverageSingleProjectSpec extends SingleProjectSpec {
         writePartialCoverageSpecFile(testDir, "PartialSpec")
 
         when:
-        def result = runSuccessfulBuildInCI('test', 'koverXmlReport', '-i')
+        BuildResult result = runSuccessfulBuildWithEnvironmentAndGradleVersion(
+                ["CI": "true"],
+                gradleVersion,
+                'test', 'koverXmlReport', '-i'
+        )
 
         then:
         result.task(":test").outcome == SUCCESS
@@ -50,6 +58,14 @@ class KoverCoverageSingleProjectSpec extends SingleProjectSpec {
 
         coverageFilePayloads[0].reportContents.contains("MyClass")
         coverageFilePayloads[0].baseDirectoryPath == "src/main/groovy"
+
+        where:
+        gradleVersion                  | _
+        GradleVersion.version("6.9.1") | _
+        GradleVersion.version("7.0")   | _
+        GradleVersion.version("7.2")   | _
+        GradleVersion.version("7.3")   | _
+        GradleVersion.current()        | _
     }
 
     def "when coverage disabled should not publish coverage results to server"() {

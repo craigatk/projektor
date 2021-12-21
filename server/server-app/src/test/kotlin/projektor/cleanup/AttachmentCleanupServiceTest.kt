@@ -1,6 +1,5 @@
 package projektor.cleanup
 
-import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.test.get
