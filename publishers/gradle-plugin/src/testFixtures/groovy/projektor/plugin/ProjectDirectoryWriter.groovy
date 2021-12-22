@@ -11,6 +11,14 @@ class ProjectDirectoryWriter {
         return createProjectDir(projectDir, "src/main/groovy/projektor")
     }
 
+    static File createResourcesDirectory(TemporaryFolder projectDir) {
+        projectDir.newFolder("src", "main", "resources")
+    }
+
+    static File createResourcesDirectory(File projectDir) {
+        return createProjectDir(projectDir, "src/main/resources")
+    }
+
     static File createTestDirectory(TemporaryFolder projectDir) {
         projectDir.newFolder("src", "test", "groovy", "projektor")
     }
