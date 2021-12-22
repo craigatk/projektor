@@ -1,6 +1,5 @@
 package projektor.coverage
 
-import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -224,19 +223,33 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         )
         runBlocking { coverageDatabaseRepository.addCoverageReport(coverageRun, coverageReport) }
 
-        val hasCoverageData = runBlocking { coverageDatabaseRepository.coverageExists(publicId) }
+        val hasCoverageData = runBlocking { coverageDatabaseRepository.coverageGroupExists(publicId) }
 
         expectThat(hasCoverageData).isTrue()
     }
 
     @Test
-    fun `when no coverage data should return false when checking if coverage exists`() {
+    fun `when no coverage run should return false when checking if coverage exists`() {
         val coverageDatabaseRepository = CoverageDatabaseRepository(dslContext)
 
         val publicId = randomPublicId()
         testRunDBGenerator.createTestRun(publicId, listOf())
 
-        val hasCoverageData = runBlocking { coverageDatabaseRepository.coverageExists(publicId) }
+        val hasCoverageData = runBlocking { coverageDatabaseRepository.coverageGroupExists(publicId) }
+
+        expectThat(hasCoverageData).isFalse()
+    }
+
+    @Test
+    fun `when has coverage run but no coverage groups should return false when checking if coverage exists`() {
+        val coverageDatabaseRepository = CoverageDatabaseRepository(dslContext)
+
+        val publicId = randomPublicId()
+        testRunDBGenerator.createTestRun(publicId, listOf())
+
+        runBlocking { coverageDatabaseRepository.createOrGetCoverageRun(publicId) }
+
+        val hasCoverageData = runBlocking { coverageDatabaseRepository.coverageGroupExists(publicId) }
 
         expectThat(hasCoverageData).isFalse()
     }

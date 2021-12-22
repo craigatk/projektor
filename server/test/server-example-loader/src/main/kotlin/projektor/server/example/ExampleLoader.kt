@@ -149,7 +149,7 @@ fun loadSixFailingTests() {
 }
 
 fun loadPassingGroupedExample() {
-    val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(null))
+    val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.resultsWithCoverage(resultsXmls = listOf(resultsXmlLoader.passing()), coverageXmls = listOf()))
     println("View run with passing grouped tests at at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
