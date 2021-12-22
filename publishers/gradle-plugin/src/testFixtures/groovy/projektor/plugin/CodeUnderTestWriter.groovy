@@ -68,4 +68,12 @@ class ${specClassName} extends Specification {
 }
 """
     }
+
+    static File writeResourcesFile(File resourcesDirectory) {
+        File versionFile = new File(resourcesDirectory, "version.txt")
+
+        versionFile << "1.0"
+
+        return versionFile
+    }
 }

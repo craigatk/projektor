@@ -116,10 +116,13 @@ class CodeCoverageTaskCollector {
     }
 
     private String findBaseDirectoryPath(List<File> sourceDirectoriesWithFiles, File projectRootDir) {
-        if (sourceDirectoriesWithFiles.size() == 1) {
-            return DirectoryUtil.findSubDirectoryPath(projectRootDir, sourceDirectoriesWithFiles.first())
-        } else if (sourceDirectoriesWithFiles.size() > 1) {
-            logger.info("Unable to set Projektor coverage base directory path: Found multiple source directories containing source files", sourceDirectoriesWithFiles)
+        List<File> filteredSourceDirectories = sourceDirectoriesWithFiles
+                .findAll { !it.path.contains("src/main/resources") }
+
+        if (filteredSourceDirectories.size() == 1) {
+            return DirectoryUtil.findSubDirectoryPath(projectRootDir, filteredSourceDirectories.first())
+        } else if (filteredSourceDirectories.size() > 1) {
+            logger.info("Unable to set Projektor coverage base directory path: Found multiple source directories containing source files: {}", filteredSourceDirectories)
 
             return null
         } else {
