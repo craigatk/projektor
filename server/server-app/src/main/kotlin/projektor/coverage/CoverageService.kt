@@ -146,7 +146,7 @@ class CoverageService(
     }
 
     suspend fun coverageExists(publicId: PublicId): Boolean =
-        coverageRepository.coverageExists(publicId)
+        coverageRepository.coverageGroupExists(publicId)
 
     suspend fun deleteCoverage(publicId: PublicId) =
         coverageRepository.deleteCoverage(publicId)

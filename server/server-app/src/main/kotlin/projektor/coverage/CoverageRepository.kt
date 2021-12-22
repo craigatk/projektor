@@ -38,7 +38,7 @@ interface CoverageRepository {
 
     suspend fun fetchCoverageList(publicId: PublicId): List<CoverageReport>
 
-    suspend fun coverageExists(publicId: PublicId): Boolean
+    suspend fun coverageGroupExists(publicId: PublicId): Boolean
 
     suspend fun fetchCoverageFiles(publicId: PublicId, groupName: String): List<CoverageFile>
 
