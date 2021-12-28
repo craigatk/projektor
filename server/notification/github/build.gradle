@@ -13,7 +13,7 @@ dependencies {
     implementation "org.bouncycastle:bcpkix-jdk15on:1.70"
     implementation "org.bouncycastle:bcprov-jdk15on:1.70"
 
-    implementation "ch.qos.logback:logback-classic:1.2.9"
+    implementation "ch.qos.logback:logback-classic:1.2.10"
 
     testImplementation "com.github.tomakehurst:wiremock-jre8:$wiremockVersion"
 
