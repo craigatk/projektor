@@ -2,7 +2,7 @@ version: '3'
 
 services:
   postgres:
-    image: postgres:11.14-alpine
+    image: postgres:14.1-alpine
     environment:
       - POSTGRES_USER=testuser
       - POSTGRES_PASSWORD=testpass
