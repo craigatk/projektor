@@ -22,6 +22,10 @@ const cellStyle = {
 };
 
 const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
+  if (!testSuites) {
+    return null;
+  }
+
   const hasFileName = testSuites.some((suite) => suite.fileName);
 
   return (

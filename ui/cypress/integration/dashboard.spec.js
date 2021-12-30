@@ -2,17 +2,19 @@
 
 context("dashboard", () => {
   it("should show test run summary data on dashboard page", () => {
-    const publicId = "12345";
+    const publicId = "3818";
 
     cy.server();
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/cases/failed`,
-      "fixture:failed_test_cases.json"
-    );
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
+
+    cy.interceptTestRunBasicRequests(publicId);
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
@@ -28,17 +30,19 @@ context("dashboard", () => {
   });
 
   it("should show failed test case summaries on dashboard page", () => {
-    const publicId = "12345";
+    const publicId = "1382";
 
     cy.server();
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/cases/failed`,
-      "fixture:failed_test_cases.json"
-    );
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
+
+    cy.interceptTestRunBasicRequests(publicId);
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
@@ -58,16 +62,18 @@ context("dashboard", () => {
   });
 
   it("when tests all passed should show test suite list on dashboard", () => {
-    const publicId = "12345";
+    const publicId = "13821";
 
     cy.server();
 
-    cy.route(
-      "GET",
-      `run/${publicId}/summary`,
-      "fixture:one_passing/test_run_summary.json"
-    );
-    cy.route("GET", `run/${publicId}`, "fixture:one_passing/test_run.json");
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "one_passing/test_run_summary.json",
+    });
+    cy.intercept("GET", `run/${publicId}`, {
+      fixture: "one_passing/test_run.json",
+    });
+
+    cy.interceptTestRunBasicRequests(publicId);
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
@@ -80,18 +86,14 @@ context("dashboard", () => {
   });
 
   it("when fetching test run fails should render error message", () => {
-    const publicId = "12345";
+    const publicId = "18932";
 
     cy.server();
 
-    cy.route(
-      "GET",
-      `run/${publicId}/summary`,
-      "fixture:one_passing/test_run_summary.json"
-    );
-    cy.route({
-      method: "GET",
-      url: `run/${publicId}`,
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "one_passing/test_run_summary.json",
+    });
+    cy.intercept("GET", `run/${publicId}`, {
       status: 404,
       response: {},
     });

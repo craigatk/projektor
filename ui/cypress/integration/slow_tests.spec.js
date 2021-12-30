@@ -6,21 +6,25 @@ context("test run with slow tests", () => {
 
     cy.server();
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.interceptTestRunBasicRequests(publicId);
 
-    cy.route("GET", `run/${publicId}`, "fixture:test_run.json");
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/cases/slow`,
-      "fixture:slow_test_cases.json"
-    );
+    cy.intercept("GET", `run/${publicId}`, { fixture: "test_run.json" });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/suite/3/case/1`,
-      "fixture:slow_test_case_1.json"
-    );
+    cy.intercept("GET", `run/${publicId}/cases/slow`, {
+      fixture: "slow_test_cases.json",
+    });
+
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
+
+    cy.intercept("GET", `run/${publicId}/suite/3/case/1`, {
+      fixture: "slow_test_case_1.json",
+    });
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 

@@ -2,23 +2,23 @@
 
 context("test run with coverage data", () => {
   it("should show overall coverage stats on home page", () => {
-    const publicId = "12345";
+    const publicId = "192301";
 
     cy.server();
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/cases/failed`,
-      "fixture:failed_test_cases.json"
-    );
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/coverage`,
-      "fixture:coverage/coverage-three-groups.json"
-    );
+    cy.intercept("GET", `run/${publicId}/coverage`, {
+      fixture: "coverage/coverage-three-groups.json",
+    });
+
+    cy.interceptTestRunBasicRequests(publicId);
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
@@ -39,7 +39,7 @@ context("test run with coverage data", () => {
   });
 
   it("should show overall coverage stats on home page with previous run", () => {
-    const publicId = "12345";
+    const publicId = "13438";
 
     cy.server();
 
@@ -119,30 +119,35 @@ context("test run with coverage data", () => {
   });
 
   it("should not show coverage section when no coverage data available", () => {
-    const publicId = "12345";
+    const publicId = "10832";
 
     cy.server();
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
+    cy.intercept("GET", `results/${publicId}/status`, { status: "SUCCESS" });
+    cy.intercept("GET", "config", {});
+    cy.intercept("GET", `run/${publicId}/messages`, {
+      fixture: "messages/one_message.json",
+    });
+    cy.intercept("GET", `run/${publicId}/badge/coverage`, "");
+    cy.intercept("GET", `run/${publicId}/performance`, {});
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
+    cy.intercept("GET", `run/${publicId}/quality`, {
+      fixture: "quality/empty_code_quality_reports.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/cases/failed`,
-      "fixture:failed_test_cases.json"
-    );
-
-    cy.route({
-      method: "GET",
-      url: `run/${publicId}/coverage`,
+    cy.intercept("GET", `run/${publicId}/coverage`, {
       status: 204,
       response: {},
     });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/coverage/exists`,
-      "fixture:coverage/coverage-does-not-exist.json"
-    );
+    cy.intercept("GET", `run/${publicId}/coverage/exists`, {
+      fixture: "coverage/coverage-does-not-exist.json",
+    });
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
