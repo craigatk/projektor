@@ -1,6 +1,6 @@
 context("code quality", () => {
   it("should list code quality reports on code quality page", () => {
-    const publicId = "12345";
+    const publicId = "289342";
 
     cy.intercept("GET", `run/${publicId}/quality`, {
       fixture: "quality/code_quality_reports.json",
@@ -9,6 +9,11 @@ context("code quality", () => {
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "test_run_summary.json",
     });
+
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
+
     cy.interceptTestRunBasicRequests(publicId);
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
@@ -35,7 +40,7 @@ context("code quality", () => {
   });
 
   it("should show code quality reports on dashboard", () => {
-    const publicId = "12345";
+    const publicId = "12301";
 
     cy.intercept("GET", `run/${publicId}/quality`, {
       fixture: "quality/code_quality_reports.json",
@@ -44,6 +49,11 @@ context("code quality", () => {
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "test_run_summary.json",
     });
+
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
+
     cy.interceptTestRunBasicRequests(publicId);
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
@@ -65,6 +75,11 @@ context("code quality", () => {
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "test_run_summary.json",
     });
+
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
+
     cy.interceptTestRunBasicRequests(publicId);
 
     cy.visit(`http://localhost:1234/tests/${publicId}/quality/report/2`);

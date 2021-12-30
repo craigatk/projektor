@@ -1,6 +1,8 @@
 context("dashboard git metadata", () => {
   it("should show Git pull request number and commit SHA on dashboard", () => {
-    const publicId = "12345";
+    const publicId = "1234567";
+
+    cy.server();
 
     cy.intercept("GET", `run/${publicId}/metadata/git`, {
       fixture: "metadata/git-metadata-with-pr-and-commit.json",
@@ -10,6 +12,9 @@ context("dashboard git metadata", () => {
       fixture: "test_run_summary.json",
     });
     cy.intercept("GET", "config", {});
+    cy.intercept("GET", `run/${publicId}/attachments`, {
+      fixture: "attachments/attachments_empty.json",
+    });
     cy.intercept("GET", `run/${publicId}/coverage/exists`, {
       fixture: "coverage/coverage-does-not-exist.json",
     });
@@ -21,6 +26,11 @@ context("dashboard git metadata", () => {
     });
     cy.intercept("GET", `run/${publicId}/badge/coverage`, "");
     cy.intercept("GET", `run/${publicId}/performance`, {});
+
+    cy.intercept("GET", `run/${publicId}/quality`, {});
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 

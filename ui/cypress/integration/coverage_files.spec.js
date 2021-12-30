@@ -2,7 +2,7 @@
 
 describe("file-level coverage", () => {
   it("should show file-level coverage on page", () => {
-    const publicId = "12345";
+    const publicId = "18932";
 
     cy.server();
 
@@ -63,7 +63,7 @@ describe("file-level coverage", () => {
   });
 
   it("should show links to files in GitHub when GitHub base URL and coverage file paths set", () => {
-    const publicId = "12345";
+    const publicId = "21i31";
 
     cy.server();
 

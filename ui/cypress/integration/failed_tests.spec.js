@@ -2,25 +2,25 @@
 
 describe("test run with failed test cases", () => {
   it("should show failed test case summaries on failed tests page", () => {
-    const publicId = "12345";
+    const publicId = "123io1";
 
     cy.server();
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route("GET", `run/${publicId}`, "fixture:test_run.json");
+    cy.intercept("GET", `run/${publicId}`, { fixture: "test_run.json" });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/cases/failed`,
-      "fixture:failed_test_cases.json"
-    );
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/suite/1/case/2`,
-      "fixture:failed_test_case_2.json"
-    );
+    cy.intercept("GET", `run/${publicId}/suite/1/case/2`, {
+      fixture: "failed_test_case_2.json",
+    });
+
+    cy.interceptTestRunBasicRequests(publicId);
 
     cy.visit(`http://localhost:1234/tests/${publicId}/failed`);
 
@@ -50,39 +50,37 @@ describe("test run with failed test cases", () => {
   });
 
   it("should link from failed tests page to failed test case system out and system err", () => {
-    const publicId = "12345";
+    const publicId = "23132";
     const testSuiteIdx = 1;
     const testCaseIdx = 2;
 
     cy.server();
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route("GET", `run/${publicId}`, "fixture:test_run.json");
+    cy.intercept("GET", `run/${publicId}`, { fixture: "test_run.json" });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/cases/failed`,
-      "fixture:failed_test_cases.json"
-    );
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
 
-    cy.route(
+    cy.intercept(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
-      "fixture:failed_test_case_2.json"
+      { fixture: "failed_test_case_2.json" }
     );
 
-    cy.route(
-      "GET",
-      `run/${publicId}/suite/${testSuiteIdx}/systemOut`,
-      "fixture:test_output_system_out.json"
-    );
+    cy.intercept("GET", `run/${publicId}/suite/${testSuiteIdx}/systemOut`, {
+      fixture: "test_output_system_out.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/suite/${testSuiteIdx}/systemErr`,
-      "fixture:test_output_system_err.json"
-    );
+    cy.intercept("GET", `run/${publicId}/suite/${testSuiteIdx}/systemErr`, {
+      fixture: "test_output_system_err.json",
+    });
+
+    cy.interceptTestRunBasicRequests(publicId);
 
     cy.visit(`http://localhost:1234/tests/${publicId}/failed`);
 
@@ -102,7 +100,7 @@ describe("test run with failed test cases", () => {
   });
 
   it("should show test cases collapsed initially when 6 failed test cases", () => {
-    const publicId = "12345";
+    const publicId = "321908";
 
     const testCaseIndexes = [1, 2, 3, 4, 5, 6];
 

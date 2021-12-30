@@ -47,7 +47,7 @@ describe("CodeTextProgressiveRender", () => {
     expect(queryByTestId("line-10")).toBeNull();
 
     act(() => {
-      jest.runOnlyPendingTimers()
+      jest.runOnlyPendingTimers();
     });
 
     expect(queryByTestId(progressBarId)).not.toBeNull();
@@ -63,7 +63,7 @@ describe("CodeTextProgressiveRender", () => {
     expect(queryByTestId("line-10")).toBeNull();
 
     act(() => {
-      jest.runOnlyPendingTimers()
+      jest.runOnlyPendingTimers();
     });
 
     expect(queryByTestId(progressBarId)).not.toBeNull();
@@ -79,7 +79,7 @@ describe("CodeTextProgressiveRender", () => {
     expect(queryByTestId("line-10")).toBeNull();
 
     act(() => {
-      jest.runOnlyPendingTimers()
+      jest.runOnlyPendingTimers();
     });
 
     expect(queryByTestId(progressBarId)).not.toBeNull();
@@ -95,7 +95,7 @@ describe("CodeTextProgressiveRender", () => {
     expect(queryByTestId("line-10")).toBeNull();
 
     act(() => {
-      jest.runOnlyPendingTimers()
+      jest.runOnlyPendingTimers();
     });
 
     expect(getNodeText(await findByTestId("line-1"))).toBe("line1");
@@ -110,7 +110,7 @@ describe("CodeTextProgressiveRender", () => {
     expect(getNodeText(await findByTestId("line-10"))).toBe("line10");
 
     act(() => {
-      jest.runOnlyPendingTimers()
+      jest.runOnlyPendingTimers();
     });
 
     expect(queryByTestId(progressBarId)).toBeNull();
