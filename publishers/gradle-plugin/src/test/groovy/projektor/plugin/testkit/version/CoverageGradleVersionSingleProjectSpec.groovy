@@ -69,11 +69,9 @@ class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
 
         where:
         gradleVersion                  | _
-        GradleVersion.version("5.0")   | _
-        GradleVersion.version("6.0.1") | _
-        GradleVersion.version("6.4.1") | _
         GradleVersion.version("7.0")   | _
         GradleVersion.version("7.2")   | _
+        GradleVersion.version("7.3")   | _
         GradleVersion.current()        | _
     }
 }

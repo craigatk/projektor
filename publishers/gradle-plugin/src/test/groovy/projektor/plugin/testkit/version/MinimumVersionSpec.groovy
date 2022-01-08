@@ -2,16 +2,13 @@ package projektor.plugin.testkit.version
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest
 import org.gradle.testkit.runner.GradleRunner
-import org.gradle.util.GradleVersion
 import projektor.plugin.SpecWriter
 import projektor.plugin.testkit.SingleProjectSpec
 import spock.lang.Unroll
 
-import static projektor.plugin.PluginOutput.verifyOutputContainsReportLink
-
-class ResultsGradleVersionSingleProjectSpec extends SingleProjectSpec {
+class MinimumVersionSpec extends SingleProjectSpec {
     @Unroll
-    def "should publish results from test task to server with Gradle version #gradleVersion"() {
+    def "when running with Gradle version #gradleVersion less than Gradle 7 should fail"() {
         given:
         buildFile << """
             projektor {
@@ -19,7 +16,7 @@ class ResultsGradleVersionSingleProjectSpec extends SingleProjectSpec {
             }
         """.stripIndent()
 
-        SpecWriter.createTestDirectoryWithFailingTest(projectRootDir, "SampleSpec")
+        SpecWriter.createTestDirectoryWithPassingTest(projectRootDir, "SampleSpec")
 
         String resultsId = "ABC123"
         resultsStubber.stubResultsPostSuccess(resultsId)
@@ -33,17 +30,15 @@ class ResultsGradleVersionSingleProjectSpec extends SingleProjectSpec {
                 .buildAndFail()
 
         then:
-        verifyOutputContainsReportLink(result.output, serverUrl, resultsId)
+        result.output.contains("This version of the Projektor Gradle plugin supports Gradle 7.0+ only. Please upgrade the version of Gradle your project uses.")
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()
-        resultsRequests.size() == 1
+        resultsRequests.size() == 0
 
         where:
         gradleVersion                   | _
-        "7.0"                           | _
-        "7.2"                           | _
-        "7.3"                           | _
-        GradleVersion.current().version | _
+        "5.0"                           | _
+        "6.0"                           | _
     }
 }
