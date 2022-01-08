@@ -176,10 +176,6 @@ class ProjektorBuildFinishedListener implements BuildListener {
 
     // Don't need to listen to the other methods
 
-    // TODO: Remove when Gradle 7.0 is released
-    @Override
-    void buildStarted(Gradle gradle) { }
-
     @Override
     void settingsEvaluated(Settings settings) { }
 
