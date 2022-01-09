@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Attachments } from "../model/TestRunModel";
-import MaterialTable from "material-table";
+import MaterialTable from "@material-table/core";
 import prettyBytes from "pretty-bytes";
 
 interface AttachmentsListProps {

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { RepositoryFlakyTests } from "../../model/RepositoryModel";
-import MaterialTable from "material-table";
+import MaterialTable from "@material-table/core";
 import CleanLink from "../../Link/CleanLink";
 import moment from "moment-timezone";
 

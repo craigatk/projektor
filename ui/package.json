@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start": "parcel --dist-dir dev-dist src/index.html",
-    "build": "parcel build --dist-dir dist src/index.html",
-    "build:dev": "NODE_ENV=development parcel build --dist-dir dev-dist src/index.html",
+    "build": "yarn clean-dist && parcel build --dist-dir dist src/index.html",
+    "build:dev": "yarn clean-dev-dist && NODE_ENV=development parcel build --dist-dir dev-dist src/index.html",
     "format": "prettier --write \"src/**/*.ts*\" \"src/**/*.spec.ts*\" \"cypress/fixtures/**/*.json\" \"cypress/**/*.js\"",
     "test": "jest",
     "test:projektor:ci": "yarn test || yarn projektor-publish --configFile=projektor.jest.json",
@@ -18,7 +18,9 @@
     "projektor:cypress:no-attachments": "projektor-publish --configFile=projektor.cypress.no.attachments.json",
     "projektor:cypress": "env-cmd -f ~/.env projektor-publish --configFile=projektor.cypress.json",
     "projektor:jest": "env-cmd -f ~/.env projektor-publish --configFile=projektor.jest.json",
-    "clean-results": "rimraf test-results/*.xml"
+    "clean-results": "rimraf test-results/*.xml",
+    "clean-dist": "rimraf dist",
+    "clean-dev-dist": "rimraf dev-dist"
   },
   "devDependencies": {
     "@testing-library/cypress": "8.0.2",
@@ -33,7 +35,7 @@
     "env-cmd": "10.1.0",
     "jest": "27.4.7",
     "jest-junit": "13.0.0",
-    "parcel": "2.0.1",
+    "parcel": "2.1.1",
     "prettier": "2.5.1",
     "projektor-publish": "3.10.0",
     "resize-observer-polyfill": "1.5.1",
@@ -44,6 +46,7 @@
     "wait-for-expect": "3.0.2"
   },
   "dependencies": {
+    "@material-table/core": "4.3.16",
     "@material-ui/core": "4.12.3",
     "@material-ui/icons": "4.11.2",
     "@material-ui/lab": "4.0.0-alpha.60",
@@ -57,7 +60,6 @@
     "axios-cache-adapter": "2.7.3",
     "axios-case-converter": "0.9.0",
     "lodash": "4.17.21",
-    "material-table": "1.69.3",
     "moment": "2.29.1",
     "moment-timezone": "0.5.34",
     "pretty-bytes": "5.6.0",
