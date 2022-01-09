@@ -1,5 +1,5 @@
 import * as React from "react";
-import MaterialTable from "material-table";
+import MaterialTable from "@material-table/core";
 import CoverageGraph from "./CoverageGraph";
 import { makeStyles, Typography } from "@material-ui/core";
 import CleanLink from "../Link/CleanLink";

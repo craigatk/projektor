@@ -5,7 +5,7 @@ import {
   anyTestSuiteHasGroupName,
   fullTestSuiteName,
 } from "../model/TestSuiteHelpers";
-import MaterialTable from "material-table";
+import MaterialTable from "@material-table/core";
 
 interface TestSuiteListProps {
   publicId: string;

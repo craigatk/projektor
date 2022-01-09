@@ -1,5 +1,5 @@
 import * as React from "react";
-import MaterialTable from "material-table";
+import MaterialTable from "@material-table/core";
 import { CoverageFiles, TestRunGitMetadata } from "../model/TestRunModel";
 import CoverageGraph from "./CoverageGraph";
 import { Typography } from "@material-ui/core";

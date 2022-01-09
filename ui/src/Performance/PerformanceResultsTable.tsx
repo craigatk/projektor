@@ -1,7 +1,6 @@
 import * as React from "react";
 import { PerformanceResult } from "../model/TestRunModel";
-import MaterialTable from "material-table";
-import { Typography } from "@material-ui/core";
+import MaterialTable from "@material-table/core";
 
 interface PerformanceResultsTableProps {
   performanceResults: PerformanceResult[];

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ResultsProcessingFailure } from "../../model/AdminModel";
-import MaterialTable from "material-table";
+import MaterialTable from "@material-table/core";
 import moment from "moment";
 import { Link, Tooltip } from "@material-ui/core";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
