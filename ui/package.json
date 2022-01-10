@@ -30,7 +30,7 @@
     "axios-mock-adapter": "1.20.0",
     "chai-colors": "1.0.1",
     "css-mediaquery": "0.1.2",
-    "cypress": "9.2.0",
+    "cypress": "9.2.1",
     "del": "6.0.0",
     "env-cmd": "10.1.0",
     "jest": "27.4.7",
