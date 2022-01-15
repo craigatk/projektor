@@ -131,6 +131,10 @@ public class CodeCoverageGroup extends TableImpl<CodeCoverageGroupRecord> {
     private transient CodeCoverageRun _codeCoverageRun;
     private transient CodeCoverageStats _codeCoverageStats;
 
+    /**
+     * Get the implicit join path to the <code>public.code_coverage_run</code>
+     * table.
+     */
     public CodeCoverageRun codeCoverageRun() {
         if (_codeCoverageRun == null)
             _codeCoverageRun = new CodeCoverageRun(this, Keys.CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_CODE_COVERAGE_RUN_ID_FKEY);
@@ -138,6 +142,10 @@ public class CodeCoverageGroup extends TableImpl<CodeCoverageGroupRecord> {
         return _codeCoverageRun;
     }
 
+    /**
+     * Get the implicit join path to the <code>public.code_coverage_stats</code>
+     * table.
+     */
     public CodeCoverageStats codeCoverageStats() {
         if (_codeCoverageStats == null)
             _codeCoverageStats = new CodeCoverageStats(this, Keys.CODE_COVERAGE_GROUP__CODE_COVERAGE_GROUP_STATS_ID_FKEY);

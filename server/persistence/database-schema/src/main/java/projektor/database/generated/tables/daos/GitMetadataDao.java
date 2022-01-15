@@ -5,6 +5,7 @@ package projektor.database.generated.tables.daos;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.jooq.Configuration;
 import org.jooq.impl.DAOImpl;
@@ -58,6 +59,13 @@ public class GitMetadataDao extends DAOImpl<GitMetadataRecord, projektor.databas
      */
     public projektor.database.generated.tables.pojos.GitMetadata fetchOneById(Long value) {
         return fetchOne(GitMetadata.GIT_METADATA.ID, value);
+    }
+
+    /**
+     * Fetch a unique record that has <code>id = value</code>
+     */
+    public Optional<projektor.database.generated.tables.pojos.GitMetadata> fetchOptionalById(Long value) {
+        return fetchOptional(GitMetadata.GIT_METADATA.ID, value);
     }
 
     /**

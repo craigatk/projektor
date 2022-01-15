@@ -135,6 +135,9 @@ public class TestFailure extends TableImpl<TestFailureRecord> {
 
     private transient TestCase _testCase;
 
+    /**
+     * Get the implicit join path to the <code>public.test_case</code> table.
+     */
     public TestCase testCase() {
         if (_testCase == null)
             _testCase = new TestCase(this, Keys.TEST_FAILURE__TEST_FAILURE_TEST_CASE_ID_FKEY);

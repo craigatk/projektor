@@ -155,6 +155,10 @@ public class CodeCoverageStats extends TableImpl<CodeCoverageStatsRecord> {
 
     private transient CodeCoverageRun _codeCoverageRun;
 
+    /**
+     * Get the implicit join path to the <code>public.code_coverage_run</code>
+     * table.
+     */
     public CodeCoverageRun codeCoverageRun() {
         if (_codeCoverageRun == null)
             _codeCoverageRun = new CodeCoverageRun(this, Keys.CODE_COVERAGE_STATS__CODE_COVERAGE_STATS_CODE_COVERAGE_RUN_ID_FKEY);

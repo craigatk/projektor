@@ -6,6 +6,7 @@ package projektor.database.generated.tables.daos;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.jooq.Configuration;
 import org.jooq.impl.DAOImpl;
@@ -59,6 +60,13 @@ public class ResultsProcessingDao extends DAOImpl<ResultsProcessingRecord, proje
      */
     public projektor.database.generated.tables.pojos.ResultsProcessing fetchOneByPublicId(String value) {
         return fetchOne(ResultsProcessing.RESULTS_PROCESSING.PUBLIC_ID, value);
+    }
+
+    /**
+     * Fetch a unique record that has <code>public_id = value</code>
+     */
+    public Optional<projektor.database.generated.tables.pojos.ResultsProcessing> fetchOptionalByPublicId(String value) {
+        return fetchOptional(ResultsProcessing.RESULTS_PROCESSING.PUBLIC_ID, value);
     }
 
     /**

@@ -7,6 +7,7 @@ package projektor.database.generated.tables.daos;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.jooq.Configuration;
 import org.jooq.impl.DAOImpl;
@@ -60,6 +61,13 @@ public class TestSuiteDao extends DAOImpl<TestSuiteRecord, projektor.database.ge
      */
     public projektor.database.generated.tables.pojos.TestSuite fetchOneById(Long value) {
         return fetchOne(TestSuite.TEST_SUITE.ID, value);
+    }
+
+    /**
+     * Fetch a unique record that has <code>id = value</code>
+     */
+    public Optional<projektor.database.generated.tables.pojos.TestSuite> fetchOptionalById(Long value) {
+        return fetchOptional(TestSuite.TEST_SUITE.ID, value);
     }
 
     /**

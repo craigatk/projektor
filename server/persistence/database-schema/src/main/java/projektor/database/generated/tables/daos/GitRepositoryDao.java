@@ -5,6 +5,7 @@ package projektor.database.generated.tables.daos;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.jooq.Configuration;
 import org.jooq.impl.DAOImpl;
@@ -58,6 +59,13 @@ public class GitRepositoryDao extends DAOImpl<GitRepositoryRecord, projektor.dat
      */
     public projektor.database.generated.tables.pojos.GitRepository fetchOneByRepoName(String value) {
         return fetchOne(GitRepository.GIT_REPOSITORY.REPO_NAME, value);
+    }
+
+    /**
+     * Fetch a unique record that has <code>repo_name = value</code>
+     */
+    public Optional<projektor.database.generated.tables.pojos.GitRepository> fetchOptionalByRepoName(String value) {
+        return fetchOptional(GitRepository.GIT_REPOSITORY.REPO_NAME, value);
     }
 
     /**

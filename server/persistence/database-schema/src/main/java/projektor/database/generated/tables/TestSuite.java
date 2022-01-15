@@ -203,6 +203,9 @@ public class TestSuite extends TableImpl<TestSuiteRecord> {
     private transient TestRun _testRun;
     private transient TestSuiteGroup _testSuiteGroup;
 
+    /**
+     * Get the implicit join path to the <code>public.test_run</code> table.
+     */
     public TestRun testRun() {
         if (_testRun == null)
             _testRun = new TestRun(this, Keys.TEST_SUITE__TEST_SUITE_TEST_RUN_ID_FKEY);
@@ -210,6 +213,10 @@ public class TestSuite extends TableImpl<TestSuiteRecord> {
         return _testRun;
     }
 
+    /**
+     * Get the implicit join path to the <code>public.test_suite_group</code>
+     * table.
+     */
     public TestSuiteGroup testSuiteGroup() {
         if (_testSuiteGroup == null)
             _testSuiteGroup = new TestSuiteGroup(this, Keys.TEST_SUITE__TEST_SUITE_TEST_SUITE_GROUP_ID_FKEY);

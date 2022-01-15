@@ -5,6 +5,7 @@ package projektor.database.generated.tables.daos;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.jooq.Configuration;
 import org.jooq.impl.DAOImpl;
@@ -58,6 +59,13 @@ public class CodeCoverageStatsDao extends DAOImpl<CodeCoverageStatsRecord, proje
      */
     public projektor.database.generated.tables.pojos.CodeCoverageStats fetchOneById(Long value) {
         return fetchOne(CodeCoverageStats.CODE_COVERAGE_STATS.ID, value);
+    }
+
+    /**
+     * Fetch a unique record that has <code>id = value</code>
+     */
+    public Optional<projektor.database.generated.tables.pojos.CodeCoverageStats> fetchOptionalById(Long value) {
+        return fetchOptional(CodeCoverageStats.CODE_COVERAGE_STATS.ID, value);
     }
 
     /**

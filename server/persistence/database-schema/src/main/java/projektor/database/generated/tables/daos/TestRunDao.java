@@ -7,6 +7,7 @@ package projektor.database.generated.tables.daos;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.jooq.Configuration;
 import org.jooq.impl.DAOImpl;
@@ -63,6 +64,13 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
     }
 
     /**
+     * Fetch a unique record that has <code>id = value</code>
+     */
+    public Optional<projektor.database.generated.tables.pojos.TestRun> fetchOptionalById(Long value) {
+        return fetchOptional(TestRun.TEST_RUN.ID, value);
+    }
+
+    /**
      * Fetch records that have <code>public_id BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */
@@ -82,6 +90,13 @@ public class TestRunDao extends DAOImpl<TestRunRecord, projektor.database.genera
      */
     public projektor.database.generated.tables.pojos.TestRun fetchOneByPublicId(String value) {
         return fetchOne(TestRun.TEST_RUN.PUBLIC_ID, value);
+    }
+
+    /**
+     * Fetch a unique record that has <code>public_id = value</code>
+     */
+    public Optional<projektor.database.generated.tables.pojos.TestRun> fetchOptionalByPublicId(String value) {
+        return fetchOptional(TestRun.TEST_RUN.PUBLIC_ID, value);
     }
 
     /**
