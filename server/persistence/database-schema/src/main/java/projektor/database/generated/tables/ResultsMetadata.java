@@ -130,6 +130,9 @@ public class ResultsMetadata extends TableImpl<ResultsMetadataRecord> {
 
     private transient TestRun _testRun;
 
+    /**
+     * Get the implicit join path to the <code>public.test_run</code> table.
+     */
     public TestRun testRun() {
         if (_testRun == null)
             _testRun = new TestRun(this, Keys.RESULTS_METADATA__RESULTS_METADATA_TEST_RUN_ID_FKEY);

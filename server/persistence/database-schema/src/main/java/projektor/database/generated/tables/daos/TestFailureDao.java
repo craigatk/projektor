@@ -5,6 +5,7 @@ package projektor.database.generated.tables.daos;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.jooq.Configuration;
 import org.jooq.impl.DAOImpl;
@@ -58,6 +59,13 @@ public class TestFailureDao extends DAOImpl<TestFailureRecord, projektor.databas
      */
     public projektor.database.generated.tables.pojos.TestFailure fetchOneById(Long value) {
         return fetchOne(TestFailure.TEST_FAILURE.ID, value);
+    }
+
+    /**
+     * Fetch a unique record that has <code>id = value</code>
+     */
+    public Optional<projektor.database.generated.tables.pojos.TestFailure> fetchOptionalById(Long value) {
+        return fetchOptional(TestFailure.TEST_FAILURE.ID, value);
     }
 
     /**

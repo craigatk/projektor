@@ -6,6 +6,7 @@ package projektor.database.generated.tables.daos;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.jooq.Configuration;
 import org.jooq.impl.DAOImpl;
@@ -59,6 +60,13 @@ public class ResultsProcessingFailureDao extends DAOImpl<ResultsProcessingFailur
      */
     public projektor.database.generated.tables.pojos.ResultsProcessingFailure fetchOneByPublicId(String value) {
         return fetchOne(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.PUBLIC_ID, value);
+    }
+
+    /**
+     * Fetch a unique record that has <code>public_id = value</code>
+     */
+    public Optional<projektor.database.generated.tables.pojos.ResultsProcessingFailure> fetchOptionalByPublicId(String value) {
+        return fetchOptional(ResultsProcessingFailure.RESULTS_PROCESSING_FAILURE.PUBLIC_ID, value);
     }
 
     /**

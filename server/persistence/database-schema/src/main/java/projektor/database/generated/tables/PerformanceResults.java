@@ -156,6 +156,9 @@ public class PerformanceResults extends TableImpl<PerformanceResultsRecord> {
 
     private transient TestRun _testRun;
 
+    /**
+     * Get the implicit join path to the <code>public.test_run</code> table.
+     */
     public TestRun testRun() {
         if (_testRun == null)
             _testRun = new TestRun(this, Keys.PERFORMANCE_RESULTS__PERFORMANCE_RESULTS_TEST_RUN_ID_FKEY);

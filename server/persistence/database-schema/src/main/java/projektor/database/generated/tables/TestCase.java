@@ -176,6 +176,9 @@ public class TestCase extends TableImpl<TestCaseRecord> {
 
     private transient TestSuite _testSuite;
 
+    /**
+     * Get the implicit join path to the <code>public.test_suite</code> table.
+     */
     public TestSuite testSuite() {
         if (_testSuite == null)
             _testSuite = new TestSuite(this, Keys.TEST_CASE__TEST_CASE_TEST_SUITE_ID_FKEY);

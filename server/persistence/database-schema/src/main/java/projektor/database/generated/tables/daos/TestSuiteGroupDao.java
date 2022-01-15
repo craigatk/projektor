@@ -5,6 +5,7 @@ package projektor.database.generated.tables.daos;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.jooq.Configuration;
 import org.jooq.impl.DAOImpl;
@@ -58,6 +59,13 @@ public class TestSuiteGroupDao extends DAOImpl<TestSuiteGroupRecord, projektor.d
      */
     public projektor.database.generated.tables.pojos.TestSuiteGroup fetchOneById(Long value) {
         return fetchOne(TestSuiteGroup.TEST_SUITE_GROUP.ID, value);
+    }
+
+    /**
+     * Fetch a unique record that has <code>id = value</code>
+     */
+    public Optional<projektor.database.generated.tables.pojos.TestSuiteGroup> fetchOptionalById(Long value) {
+        return fetchOptional(TestSuiteGroup.TEST_SUITE_GROUP.ID, value);
     }
 
     /**

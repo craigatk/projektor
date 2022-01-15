@@ -5,6 +5,7 @@ package projektor.database.generated.tables.daos;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.jooq.Configuration;
 import org.jooq.impl.DAOImpl;
@@ -58,6 +59,13 @@ public class ResultsMetadataDao extends DAOImpl<ResultsMetadataRecord, projektor
      */
     public projektor.database.generated.tables.pojos.ResultsMetadata fetchOneById(Long value) {
         return fetchOne(ResultsMetadata.RESULTS_METADATA.ID, value);
+    }
+
+    /**
+     * Fetch a unique record that has <code>id = value</code>
+     */
+    public Optional<projektor.database.generated.tables.pojos.ResultsMetadata> fetchOptionalById(Long value) {
+        return fetchOptional(ResultsMetadata.RESULTS_METADATA.ID, value);
     }
 
     /**

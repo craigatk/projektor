@@ -155,6 +155,9 @@ public class GitMetadata extends TableImpl<GitMetadataRecord> {
 
     private transient TestRun _testRun;
 
+    /**
+     * Get the implicit join path to the <code>public.test_run</code> table.
+     */
     public TestRun testRun() {
         if (_testRun == null)
             _testRun = new TestRun(this, Keys.GIT_METADATA__GIT_METADATA_TEST_RUN_ID_FKEY);

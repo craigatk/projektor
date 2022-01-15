@@ -6,6 +6,7 @@ package projektor.database.generated.tables.daos;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import org.jooq.Configuration;
 import org.jooq.impl.DAOImpl;
@@ -59,6 +60,13 @@ public class PerformanceResultsDao extends DAOImpl<PerformanceResultsRecord, pro
      */
     public projektor.database.generated.tables.pojos.PerformanceResults fetchOneById(Long value) {
         return fetchOne(PerformanceResults.PERFORMANCE_RESULTS.ID, value);
+    }
+
+    /**
+     * Fetch a unique record that has <code>id = value</code>
+     */
+    public Optional<projektor.database.generated.tables.pojos.PerformanceResults> fetchOptionalById(Long value) {
+        return fetchOptional(PerformanceResults.PERFORMANCE_RESULTS.ID, value);
     }
 
     /**

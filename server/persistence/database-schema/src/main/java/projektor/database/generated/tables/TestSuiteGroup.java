@@ -128,6 +128,9 @@ public class TestSuiteGroup extends TableImpl<TestSuiteGroupRecord> {
 
     private transient TestRun _testRun;
 
+    /**
+     * Get the implicit join path to the <code>public.test_run</code> table.
+     */
     public TestRun testRun() {
         if (_testRun == null)
             _testRun = new TestRun(this, Keys.TEST_SUITE_GROUP__TEST_SUITE_GROUP_TEST_RUN_ID_FKEY);

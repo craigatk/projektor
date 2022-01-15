@@ -5,6 +5,7 @@ package projektor.database.generated.tables.daos;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.jooq.Configuration;
 import org.jooq.impl.DAOImpl;
@@ -58,6 +59,13 @@ public class CodeQualityReportDao extends DAOImpl<CodeQualityReportRecord, proje
      */
     public projektor.database.generated.tables.pojos.CodeQualityReport fetchOneById(Long value) {
         return fetchOne(CodeQualityReport.CODE_QUALITY_REPORT.ID, value);
+    }
+
+    /**
+     * Fetch a unique record that has <code>id = value</code>
+     */
+    public Optional<projektor.database.generated.tables.pojos.CodeQualityReport> fetchOptionalById(Long value) {
+        return fetchOptional(CodeQualityReport.CODE_QUALITY_REPORT.ID, value);
     }
 
     /**

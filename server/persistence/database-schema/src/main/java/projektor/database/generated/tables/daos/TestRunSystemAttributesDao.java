@@ -5,6 +5,7 @@ package projektor.database.generated.tables.daos;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.jooq.Configuration;
 import org.jooq.impl.DAOImpl;
@@ -58,6 +59,13 @@ public class TestRunSystemAttributesDao extends DAOImpl<TestRunSystemAttributesR
      */
     public projektor.database.generated.tables.pojos.TestRunSystemAttributes fetchOneByTestRunPublicId(String value) {
         return fetchOne(TestRunSystemAttributes.TEST_RUN_SYSTEM_ATTRIBUTES.TEST_RUN_PUBLIC_ID, value);
+    }
+
+    /**
+     * Fetch a unique record that has <code>test_run_public_id = value</code>
+     */
+    public Optional<projektor.database.generated.tables.pojos.TestRunSystemAttributes> fetchOptionalByTestRunPublicId(String value) {
+        return fetchOptional(TestRunSystemAttributes.TEST_RUN_SYSTEM_ATTRIBUTES.TEST_RUN_PUBLIC_ID, value);
     }
 
     /**
