@@ -9,7 +9,7 @@
     "format": "prettier --write src/**/*.js"
   },
   "devDependencies": {
-    "axios": "0.24.0",
+    "axios": "0.25.0",
     "env-cmd": "10.1.0",
     "jest": "27.4.7",
     "jest-junit": "13.0.0",
