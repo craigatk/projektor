@@ -2,7 +2,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'java-test-fixtures'
     id 'maven-publish'
-    id "com.gradle.plugin-publish" version "0.19.0"
+    id "com.gradle.plugin-publish" version "0.20.0"
     id 'com.github.psxpaul.execfork'
     id 'groovy'
 }
