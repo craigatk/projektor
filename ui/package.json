@@ -46,7 +46,7 @@
     "wait-for-expect": "3.0.2"
   },
   "dependencies": {
-    "@material-table/core": "4.3.27",
+    "@material-table/core": "4.3.29",
     "@material-ui/core": "4.12.3",
     "@material-ui/icons": "4.11.2",
     "@material-ui/lab": "4.0.0-alpha.60",
