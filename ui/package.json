@@ -56,7 +56,7 @@
     "@types/react": "17.0.39",
     "@types/react-dom": "17.0.11",
     "@types/styled-components": "5.1.22",
-    "axios": "0.25.0",
+    "axios": "0.26.0",
     "axios-cache-adapter": "2.7.3",
     "axios-case-converter": "0.9.0",
     "lodash": "4.17.21",
