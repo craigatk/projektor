@@ -46,7 +46,7 @@ class CodeCoverageTaskCollector {
     }
 
     private CodeCoverageFile koverCoverageFileOrNull(Task koverXmlReportTask) {
-        if (!koverXmlReportTask.xmlReportFile.isPresent() || !koverXmlReportTask.outputDirs.isPresent()) {
+        if (!koverXmlReportTask || !koverXmlReportTask?.xmlReportFile?.isPresent() || !koverXmlReportTask?.outputDirs?.isPresent()) {
             logger.info("Unable to set Projektor Kover coverage: Found no source files or source directories.")
             return null
         } else {
