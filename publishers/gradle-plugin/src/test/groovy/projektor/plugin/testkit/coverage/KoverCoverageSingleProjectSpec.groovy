@@ -160,4 +160,46 @@ class KoverCoverageSingleProjectSpec extends SingleProjectSpec {
         then:
         result.task(":tasks").outcome == SUCCESS
     }
+
+    def "should not fail to publish when kover report file is deleted"() {
+        given:
+        buildFile << """
+            projektor {
+                serverUrl = '${serverUrl}'
+            }
+            
+            task deleteKoverReports(type: Delete) {
+                mustRunAfter koverXmlReport
+                dependsOn koverXmlReport
+                
+                delete "build/reports/kover/report.xml"
+            }
+        """.stripIndent()
+
+        String publicId = "COV123"
+        resultsStubber.stubResultsPostSuccess(publicId)
+
+        File sourceDir = createSourceDirectory(projectRootDir)
+        File testDir = createTestDirectory(projectRootDir)
+
+        writeSourceCodeFile(sourceDir)
+        writePartialCoverageSpecFile(testDir, "PartialSpec")
+
+        when:
+        BuildResult result = runSuccessfulBuildInCI('test', 'koverXmlReport', 'deleteKoverReports', '-i', '--stacktrace')
+
+        then:
+        result.output.contains("Unable to set Projektor Kover coverage: Found no coverage report files")
+
+        and:
+        result.task(":test").outcome == SUCCESS
+        result.task(":koverXmlReport").outcome == SUCCESS
+
+        and:
+        List<GroupedResults> resultsRequestBodies = resultsStubber.findResultsRequestBodies()
+        resultsRequestBodies.size() == 1
+
+        List<CoverageFilePayload> coverageFilePayloads = resultsRequestBodies[0].coverageFiles
+        coverageFilePayloads.size() == 0
+    }
 }

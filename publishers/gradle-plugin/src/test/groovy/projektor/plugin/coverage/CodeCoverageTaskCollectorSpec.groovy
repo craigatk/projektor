@@ -16,7 +16,6 @@ class CodeCoverageTaskCollectorSpec extends Specification {
         taskCollector.koverCoverageFileOrNull(null)
 
         then:
-        1 * logger.info("Unable to set Projektor Kover coverage: Found no source files or source directories.")
-        0 * _
+        1 * logger.info("Unable to set Projektor Kover coverage: Found no coverage report files.")
     }
 }
