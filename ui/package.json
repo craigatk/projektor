@@ -37,7 +37,7 @@
     "jest-junit": "13.0.0",
     "parcel": "2.2.1",
     "prettier": "2.5.1",
-    "projektor-publish": "3.10.0",
+    "projektor-publish": "3.10.1",
     "resize-observer-polyfill": "1.5.1",
     "rimraf": "3.0.2",
     "start-server-and-test": "1.14.0",
