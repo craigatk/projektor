@@ -1,1 +1,1 @@
-web: java -javaagent:server/server-app/opentelemetry/opentelemetry-javaagent-all.jar -jar $JAVA_TOOL_OPTIONS server/server-app/build/libs/server-app-1.0-all.jar
+web: java -javaagent:server/server-app/opentelemetry/opentelemetry-javaagent.jar -jar $JAVA_TOOL_OPTIONS server/server-app/build/libs/server-app-1.0-all.jar
