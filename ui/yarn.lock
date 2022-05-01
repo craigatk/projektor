@@ -1064,10 +1064,10 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@material-table/core@4.3.31":
-  version "4.3.31"
-  resolved "https://registry.yarnpkg.com/@material-table/core/-/core-4.3.31.tgz#651bb5fb5c72e7667790b0f00951ba56d6736161"
-  integrity sha512-BO+PaE6HT2CXzDuYrTJFfpWeca3ma5/RYwidN+O5xfn7i8Xm40KK6qH2i3jaEZBq2ZC+CsSeK7orTG52qOkhqg==
+"@material-table/core@4.3.43":
+  version "4.3.43"
+  resolved "https://registry.yarnpkg.com/@material-table/core/-/core-4.3.43.tgz#5211175c088653e066b6dd90f4563e00105c7136"
+  integrity sha512-rBP8gT9D0GJNMo+6kSgFgvYQCVQZK1u5HGOikifKrO9dYpASvccZiEeDttQ92CFFGW0qGnOdfGpBtZqS3cARrg==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@date-io/date-fns" "^1.3.13"
