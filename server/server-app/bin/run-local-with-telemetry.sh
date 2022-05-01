@@ -10,4 +10,4 @@ export OTEL_INSTRUMENTATION_COMMON_DB_STATEMENT_SANITIZER_ENABLED=false
 cd ..
 
 ../../gradlew stage
-java -javaagent:opentelemetry/opentelemetry-javaagent-all.jar -jar build/libs/server-app-1.0-all.jar
+java -javaagent:opentelemetry/opentelemetry-javaagent.jar -jar build/libs/server-app-1.0-all.jar
