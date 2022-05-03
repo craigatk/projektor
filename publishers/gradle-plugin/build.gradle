@@ -53,7 +53,7 @@ dependencies {
 
     implementation "io.github.resilience4j:resilience4j-retry:1.7.1"
 
-    implementation "org.eclipse.jgit:org.eclipse.jgit:6.0.0.202111291000-r"
+    implementation "org.eclipse.jgit:org.eclipse.jgit:6.1.0.202203080745-r"
 
     testImplementation("org.spockframework:spock-core:$spockVersion") {
         exclude group: 'org.codehaus.groovy'
