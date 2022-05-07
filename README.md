@@ -18,16 +18,11 @@ Access and share your full test reports quickly and easily with Projektor.
 
 ![Projektor test report](images/all-tests-passing.png "Projektor test report")
 
-Projektor shows a summary of all the tests executed as part of your test run:
-
-https://projektorlive.herokuapp.com/tests/TILYIQUYXDUP
-
+Projektor shows a summary of all the tests executed as part of your test run. 
 The summary includes things like number of tests executed, how many passed or failed, etc.
 And if there are any failures, those failure details are shown first on the dashboard:
 
 ![Projektor dashboard failed test](images/projektor-dashboard-failed-test.png "Projektor dashboard failed test")
-
-https://projektorlive.herokuapp.com/tests/RA1FTOGJBNKD
 
 To help debug failures in any environment (especially CI), Projektor gives you access
 to the system out and system err from each test:
@@ -50,7 +45,7 @@ Drilling down further, Projektor can show file-level coverage stats, including w
 
 ![Projektor code coverage files](images/code-coverage-files.png "Projektor code coverage files")
 
-For example https://projektorlive.herokuapp.com/tests/TILYIQUYXDUP/coverage/server-app/files
+For example https://projektorlive.herokuapp.com/tests/RQ99P3LRZJSX/coverage/server-app/files
 
 Projektor can also graph your project's code coverage over time, giving you the opportunity to see
 how the code coverage is trending:
