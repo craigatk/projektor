@@ -28,7 +28,7 @@
     "env-cmd": "10.1.0",
     "jest": "27.5.1",
     "jest-junit": "13.2.0",
-    "prettier": "2.5.1",
+    "prettier": "2.6.2",
     "projektor-publish": "3.10.1",
     "wait-for-expect": "3.0.2"
   },
