@@ -18,7 +18,10 @@ Access and share your full test reports quickly and easily with Projektor.
 
 ![Projektor test report](images/all-tests-passing.png "Projektor test report")
 
-Projektor shows a summary of all the tests executed as part of your test run. 
+Projektor shows a summary of all the tests executed as part of your test run:
+
+https://projektorlive.herokuapp.com/tests/RQ99P3LRZJSX
+
 The summary includes things like number of tests executed, how many passed or failed, etc.
 And if there are any failures, those failure details are shown first on the dashboard:
 
