@@ -1,20 +1,26 @@
 const fs = require("fs");
 
+function writeFileWithData(
+  fileName,
+  data
+) {
+  console.log("Writing Slack message data to " + fileName);
+  fs.writeFileSync(fileName, data);
+}
+
 function writeSlackMessageFileToDisk(
   reportUrl,
   slackMessageFileName,
   projectName,
   testsFailed
 ) {
-  const fs = require("fs");
-
   const messageJson = createSlackMessageJson(
     reportUrl,
     projectName,
     testsFailed
   );
 
-  fs.writeFileSync(slackMessageFileName, messageJson);
+  writeFileWithData(slackMessageFileName, messageJson);
 }
 
 function createSlackMessageJson(
@@ -51,11 +57,9 @@ function writeNoResultsSlackMessageFileToDisk(
   slackMessageFileName,
   projectName
 ) {
-  const fs = require("fs");
-
   const messageJson = createNoResultsSlackMessageJson(projectName);
 
-  fs.writeFileSync(slackMessageFileName, messageJson);
+  writeFileWithData(slackMessageFileName, messageJson);
 }
 
 function createNoResultsSlackMessageJson(projectName, currentTimestamp) {
