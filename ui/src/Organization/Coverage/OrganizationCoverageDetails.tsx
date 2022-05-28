@@ -24,22 +24,24 @@ const OrganizationCoverageDetails = ({
   const classes = useStyles({});
 
   if (organizationCoverage) {
-    const coverageTableRows = organizationCoverage.repositories.map(
-      (repositoryCoverage) =>
-        ({
-          name: repositoryCoverage.projectName
-            ? `${repositoryCoverage.repoName} ${repositoryCoverage.projectName}`
-            : repositoryCoverage.repoName,
-          stats: repositoryCoverage.coverage.overallStats,
-          previousTestRunId: repositoryCoverage.coverage.previousTestRunId,
-          nameLinkUrl: repositoryLinkUrlUI(
-            repositoryCoverage.repoName,
-            repositoryCoverage.projectName,
-            null
-          ),
-          coveredPercentageLink: `/tests/${repositoryCoverage.publicId}/`,
-        } as CoverageTableRow)
-    );
+    const coverageTableRows = organizationCoverage.repositories
+      .filter((repositoryCoverage) => repositoryCoverage.coverage != null)
+      .map(
+        (repositoryCoverage) =>
+          ({
+            name: repositoryCoverage.projectName
+              ? `${repositoryCoverage.repoName} ${repositoryCoverage.projectName}`
+              : repositoryCoverage.repoName,
+            stats: repositoryCoverage.coverage.overallStats,
+            previousTestRunId: repositoryCoverage.coverage.previousTestRunId,
+            nameLinkUrl: repositoryLinkUrlUI(
+              repositoryCoverage.repoName,
+              repositoryCoverage.projectName,
+              null
+            ),
+            coveredPercentageLink: `/tests/${repositoryCoverage.publicId}/`,
+          } as CoverageTableRow)
+      );
 
     return (
       <div data-testid="organization-coverage-details">
