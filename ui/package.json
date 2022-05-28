@@ -34,6 +34,7 @@
     "del": "6.0.0",
     "env-cmd": "10.1.0",
     "jest": "28.1.0",
+    "jest-environment-jsdom": "28.1.0",
     "jest-junit": "13.2.0",
     "parcel": "2.3.2",
     "prettier": "2.6.2",
