@@ -33,7 +33,8 @@
     "cypress": "9.6.0",
     "del": "6.0.0",
     "env-cmd": "10.1.0",
-    "jest": "27.5.1",
+    "jest": "28.1.0",
+    "jest-environment-jsdom": "28.1.0",
     "jest-junit": "13.2.0",
     "parcel": "2.3.2",
     "prettier": "2.6.2",
@@ -42,7 +43,7 @@
     "resize-observer-polyfill": "1.5.1",
     "rimraf": "3.0.2",
     "start-server-and-test": "1.14.0",
-    "ts-jest": "27.1.4",
+    "ts-jest": "28.0.3",
     "typescript": "4.6.4",
     "wait-for-expect": "3.0.2"
   },
