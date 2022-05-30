@@ -89,9 +89,9 @@ describe("CoverageTable", () => {
 
     getByText("Line").click(); // Initial sort is ascending
 
-    const lineCoverageNumbers = getAllByTestId("line-coverage", {
-      exact: false,
-    });
+    const lineCoverageNumbers = getAllByTestId(
+      /line-coverage.*covered-percentage/
+    );
 
     expect(lineCoverageNumbers.length).toBe(3);
     expect(lineCoverageNumbers[0]).toHaveTextContent("60%");
@@ -100,9 +100,9 @@ describe("CoverageTable", () => {
 
     getByText("Branch").click(); // Initial sort is ascending
 
-    const branchCoverageNumbers = getAllByTestId("branch-coverage", {
-      exact: false,
-    });
+    const branchCoverageNumbers = getAllByTestId(
+      /branch-coverage.*covered-percentage/
+    );
 
     expect(branchCoverageNumbers.length).toBe(3);
     expect(branchCoverageNumbers[0]).toHaveTextContent("10%");
@@ -111,9 +111,9 @@ describe("CoverageTable", () => {
 
     getByText("Statement").click(); // Initial sort is ascending
 
-    const statementCoverageNumbers = getAllByTestId("statement-coverage", {
-      exact: false,
-    });
+    const statementCoverageNumbers = getAllByTestId(
+      /statement-coverage.*covered-percentage/
+    );
 
     expect(statementCoverageNumbers.length).toBe(3);
     expect(statementCoverageNumbers[0]).toHaveTextContent("20%");

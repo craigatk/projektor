@@ -43,10 +43,20 @@ const CoverageGraphImpl = ({
   if (coverageStat.missed > 0) {
     // The HSBar component sets a NaN width if the value is 0
     // so don't add that data element if it is 0.
+
+    const missedText =
+      coverageStat.coveredPercentage > 50
+        ? `${coverageStat.missed}`
+        : `${coverageStat.missed} Uncovered`;
+
     data.push({
       value: coverageStat.missed,
       // @ts-ignore
-      description: `${coverageStat.missed}`,
+      description: (
+        <span data-testid={`${testIdPrefix}-uncovered-line-count`}>
+          {missedText}
+        </span>
+      ),
       color: "red",
     });
   }

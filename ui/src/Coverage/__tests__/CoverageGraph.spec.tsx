@@ -147,6 +147,56 @@ describe("CoverageGraph", () => {
     expect(queryByTestId("graph-covered-percentage-link")).toBeInTheDocument();
   });
 
+  it("when coverage percentage less than 50% should include 'Uncovered' in label", () => {
+    const coverageStat = {
+      covered: 4,
+      missed: 6,
+      total: 10,
+      coveredPercentage: 40.0,
+    } as CoverageStat;
+
+    const type = "Line";
+
+    const { queryByTestId } = render(
+      <CoverageGraph
+        coverageStat={coverageStat}
+        type={type}
+        height={25}
+        inline={true}
+        testIdPrefix="graph"
+        coveredPercentageLink="/tests/ABC123/"
+      />
+    );
+
+    expect(queryByTestId("graph-uncovered-line-count")).toHaveTextContent(
+      "6 Uncovered"
+    );
+  });
+
+  it("when coverage percentage more than 50% should not include 'Uncovered' in label", () => {
+    const coverageStat = {
+      covered: 6,
+      missed: 4,
+      total: 10,
+      coveredPercentage: 60.0,
+    } as CoverageStat;
+
+    const type = "Line";
+
+    const { queryByTestId } = render(
+      <CoverageGraph
+        coverageStat={coverageStat}
+        type={type}
+        height={25}
+        inline={true}
+        testIdPrefix="graph"
+        coveredPercentageLink="/tests/ABC123/"
+      />
+    );
+
+    expect(queryByTestId("graph-uncovered-line-count")).toHaveTextContent("4");
+  });
+
   it("graph should not have link when not specified", () => {
     const coverageStat = {
       covered: 10,
