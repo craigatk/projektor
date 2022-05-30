@@ -39,7 +39,7 @@
     "parcel": "2.6.0",
     "prettier": "2.6.2",
     "process": "0.11.10",
-    "projektor-publish": "3.10.1",
+    "projektor-publish": "3.10.2",
     "resize-observer-polyfill": "1.5.1",
     "rimraf": "3.0.2",
     "start-server-and-test": "1.14.0",
