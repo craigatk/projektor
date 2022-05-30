@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start": "parcel --dist-dir dev-dist src/index.html",
-    "build": "yarn clean-dist && parcel build --dist-dir dist src/index.html",
-    "build:dev": "yarn clean-dev-dist && NODE_ENV=development parcel build --dist-dir dev-dist src/index.html",
+    "build": "yarn clean-dist && NODE_OPTIONS=--no-experimental-fetch parcel build --dist-dir dist src/index.html",
+    "build:dev": "yarn clean-dev-dist && NODE_ENV=development NODE_OPTIONS=--no-experimental-fetch parcel build --dist-dir dev-dist src/index.html",
     "format": "prettier --write \"src/**/*.ts*\" \"src/**/*.spec.ts*\" \"cypress/fixtures/**/*.json\" \"cypress/**/*.js\"",
     "test": "jest",
     "test:projektor:ci": "yarn test || yarn projektor-publish --configFile=projektor.jest.json",

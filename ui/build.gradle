@@ -3,8 +3,8 @@ plugins {
 }
 
 node {
-    version = '14.16.1'
-    yarnVersion = '1.21.1'
+    version = '18.2.0'
+    yarnVersion = '1.22.17'
 }
 
 task verifyAssemble(type: projektor.gradle.UIRestUrlVerificationTask) { }
