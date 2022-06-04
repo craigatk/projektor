@@ -12,8 +12,13 @@ import projektor.plugin.attachments.AttachmentsPublisher
 import projektor.plugin.client.ResultsClient
 import projektor.plugin.client.ClientConfig
 import projektor.plugin.coverage.CodeCoverageTaskCollector
+import projektor.plugin.git.GitMetadataFinder
+import projektor.plugin.git.GitResolutionConfig
 import projektor.plugin.results.ResultsLogger
 import projektor.plugin.results.grouped.GroupedResults
+import projektor.plugin.results.grouped.ResultsMetadata
+
+import static projektor.plugin.MetadataResolver.isCI
 
 class ProjektorManualPublishTask extends DefaultTask {
 
@@ -54,6 +59,9 @@ class ProjektorManualPublishTask extends DefaultTask {
 
     @TaskAction
     void publish() {
+        ProjektorPublishPluginExtension extension = project.extensions.findByType(ProjektorPublishPluginExtension.class) ?:
+                project.extensions.create('projektor', ProjektorPublishPluginExtension.class) as ProjektorPublishPluginExtension
+
         File projectDir = project.projectDir
         Collection<Task> allTasks = project.getAllTasks(false).get(project)
 
@@ -81,6 +89,14 @@ class ProjektorManualPublishTask extends DefaultTask {
                     logger
             )
             groupedResults.coverageFiles = codeCoverageTaskCollector.coverageFilePayloads
+
+            GitResolutionConfig gitResolutionConfig = GitResolutionConfig.fromExtension(extension)
+            boolean isCI = isCI(System.getenv(), extension)
+            groupedResults.metadata = new ResultsMetadata(
+                    git: GitMetadataFinder.findGitMetadata(gitResolutionConfig, logger),
+                    ci: isCI,
+                    group: null
+            )
 
             ResultsClient resultsClient = new ResultsClient(
                     clientConfig,
