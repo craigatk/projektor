@@ -23,7 +23,7 @@
     "clean-dev-dist": "rimraf dev-dist"
   },
   "devDependencies": {
-    "@testing-library/cypress": "8.0.2",
+    "@testing-library/cypress": "8.0.3",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.5",
     "@types/jest": "27.5.2",
