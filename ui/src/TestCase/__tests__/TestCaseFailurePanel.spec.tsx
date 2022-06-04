@@ -197,6 +197,24 @@ describe("TestCaseFailurePanel", () => {
     );
   });
 
+  it("should render failure text when flag to show full failure is false but failure only has failureTExt", () => {
+    const failure: TestFailure = {
+      failureMessage: null,
+      failureText: "My failure text",
+      failureType: "",
+    };
+
+    const testCase = createTestCaseWithFailure(failure);
+
+    const { getByTestId } = render(
+      <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+    );
+
+    expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
+      "My failure text"
+    );
+  });
+
   it("should render failure text when flag to show full failure is true", () => {
     const failure: TestFailure = {
       failureMessage: "My failure message",

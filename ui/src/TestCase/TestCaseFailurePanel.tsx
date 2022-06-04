@@ -1,8 +1,8 @@
 import * as React from "react";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionActions from "@material-ui/core/AccordionActions";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
@@ -68,12 +68,21 @@ const TestCaseFailurePanel = ({
   );
   const videoAttachment = findAttachmentOfType(testCase, AttachmentType.VIDEO);
 
+  let failureTextToShow = null;
+  if (testCase.failure != null) {
+    failureTextToShow = testCase.failure.failureText;
+
+    if (!showFullFailure && testCase.failure.failureMessage) {
+      failureTextToShow = testCase.failure.failureMessage;
+    }
+  }
+
   return (
-    <ExpansionPanel
+    <Accordion
       expanded={expanded}
       data-testid={`test-case-summary-${testCaseIdentifier}`}
     >
-      <ExpansionPanelSummary
+      <AccordionSummary
         expandIcon={
           <span
             onClick={expansionPanelOnClick}
@@ -95,14 +104,12 @@ const TestCaseFailurePanel = ({
             {testCase.className} {testCase.name}
           </span>
         </Typography>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails className={classes.failureMessage}>
+      </AccordionSummary>
+      <AccordionDetails className={classes.failureMessage}>
         {testCase.failure != null && (
           <div>
             <pre data-testid={`test-case-failure-text-${testCaseIdentifier}`}>
-              {showFullFailure
-                ? testCase.failure.failureText
-                : testCase.failure.failureMessage}
+              {failureTextToShow}
             </pre>
 
             <TestCaseFailureScreenshot
@@ -111,9 +118,9 @@ const TestCaseFailurePanel = ({
             />
           </div>
         )}
-      </ExpansionPanelDetails>
+      </AccordionDetails>
       <Divider />
-      <ExpansionPanelActions className={classes.panelActions}>
+      <AccordionActions className={classes.panelActions}>
         {!testCase.passed && (
           <Button>
             <CleanLink
@@ -164,8 +171,8 @@ const TestCaseFailurePanel = ({
             </CleanLink>
           </Button>
         )}
-      </ExpansionPanelActions>
-    </ExpansionPanel>
+      </AccordionActions>
+    </Accordion>
   );
 };
 
