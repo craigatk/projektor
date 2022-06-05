@@ -15,6 +15,7 @@ import projektor.plugin.coverage.CodeCoverageTaskCollector
 import projektor.plugin.git.GitMetadataFinder
 import projektor.plugin.git.GitResolutionConfig
 import projektor.plugin.results.ResultsLogger
+import projektor.plugin.results.grouped.GitMetadata
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.results.grouped.ResultsMetadata
 
@@ -36,6 +37,10 @@ class ProjektorManualPublishTask extends DefaultTask {
     @InputFiles
     @Optional
     List<FileTree> attachments = []
+
+    @Input
+    @Optional
+    String projectName = null
 
     @Input
     @Optional
@@ -92,8 +97,11 @@ class ProjektorManualPublishTask extends DefaultTask {
 
             GitResolutionConfig gitResolutionConfig = GitResolutionConfig.fromExtension(extension)
             boolean isCI = isCI(System.getenv(), extension)
+
+            GitMetadata gitMetadata = GitMetadataFinder.findGitMetadata(gitResolutionConfig, logger)
+            gitMetadata.projectName = projectName
             groupedResults.metadata = new ResultsMetadata(
-                    git: GitMetadataFinder.findGitMetadata(gitResolutionConfig, logger),
+                    git: gitMetadata,
                     ci: isCI,
                     group: null
             )

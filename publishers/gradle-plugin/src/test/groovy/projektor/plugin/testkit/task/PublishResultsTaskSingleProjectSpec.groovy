@@ -99,4 +99,60 @@ class PublishResultsTaskSingleProjectSpec extends SingleProjectSpec {
         gitMetadata.isMainBranch
         gitMetadata.commitSha == "ffac537e6cbbf934b08745a378932722df287a53"
     }
+
+    def "should publish results with Git metadata and project name"() {
+        given:
+        String projectName = "my-project"
+
+        buildFile << """
+            projektor {
+                serverUrl = '${serverUrl}'
+            }
+            
+            task projektorPublish(type: projektor.plugin.ProjektorManualPublishTask) {
+                serverUrl = "${serverUrl}"
+                additionalResultsDirs = ["build/test-results"]
+                projectName = "${projectName}"
+            }
+        """.stripIndent()
+
+        SpecWriter.createTestDirectoryWithPassingTest(projectRootDir, "SampleSpec")
+
+        String resultsId = "ABC123"
+        resultsStubber.stubResultsPostSuccess(resultsId)
+
+        when:
+        def testResult = runSuccessfulLocalBuild('test')
+
+        then:
+        testResult.task(":test").outcome == SUCCESS
+
+        and:
+        resultsStubber.findResultsRequests().size() == 0
+
+        when:
+        def publishResults = runSuccessfulBuildWithEnvironment(
+                ['GITHUB_REPOSITORY': 'projektor/projektor', "GITHUB_REF": "refs/head/main", "GITHUB_SHA": "ffac537e6cbbf934b08745a378932722df287a53"],
+                'projektorPublish'
+        )
+
+        then:
+        publishResults.task(":projektorPublish").outcome == SUCCESS
+
+        and:
+        verifyOutputContainsReportLink(publishResults.output, serverUrl, resultsId)
+
+        and:
+        List<GroupedResults> resultsRequests = resultsStubber.findResultsRequestBodies()
+        resultsRequests.size() == 1
+
+        GitMetadata gitMetadata = resultsRequests[0].metadata?.git
+        gitMetadata != null
+
+        gitMetadata.repoName == "projektor/projektor"
+        gitMetadata.branchName == "main"
+        gitMetadata.projectName == projectName
+        gitMetadata.isMainBranch
+        gitMetadata.commitSha == "ffac537e6cbbf934b08745a378932722df287a53"
+    }
 }
