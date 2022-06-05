@@ -6,6 +6,7 @@ import groovy.transform.ToString
 class GitMetadata {
     String repoName
     String branchName
+    String projectName
     boolean isMainBranch
     String commitSha
     Integer pullRequestNumber
