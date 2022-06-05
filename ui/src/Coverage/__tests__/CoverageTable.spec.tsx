@@ -1,12 +1,12 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
-import { render } from "@testing-library/react";
+import { act, findByTestId, render } from "@testing-library/react";
 import CoverageTable from "../CoverageTable";
 import CoverageTableRow from "../CoverageTableRow";
 import { CoverageStat, CoverageStats } from "../../model/TestRunModel";
 
 describe("CoverageTable", () => {
-  it("should allow sorting by line, branch, or statement covered percentage", () => {
+  it("should allow sorting by line, branch, or statement covered percentage", async () => {
     const row1 = {
       name: "row1",
       stats: {
@@ -79,7 +79,7 @@ describe("CoverageTable", () => {
       } as CoverageStats,
     } as CoverageTableRow;
 
-    const { getByText, getAllByTestId } = render(
+    const { findByText, getByText, getAllByTestId } = render(
       <CoverageTable
         rows={[row1, row2, row3]}
         pageTitle="Coverage"
@@ -87,7 +87,9 @@ describe("CoverageTable", () => {
       />
     );
 
-    getByText("Line").click(); // Initial sort is ascending
+    act(() => {
+      getByText("Line").click(); // Initial sort is ascending
+    });
 
     const lineCoverageNumbers = getAllByTestId(
       /line-coverage.*covered-percentage/
@@ -98,7 +100,9 @@ describe("CoverageTable", () => {
     expect(lineCoverageNumbers[1]).toHaveTextContent("70%");
     expect(lineCoverageNumbers[2]).toHaveTextContent("90%");
 
-    getByText("Branch").click(); // Initial sort is ascending
+    act(() => {
+      getByText("Branch").click(); // Initial sort is ascending
+    });
 
     const branchCoverageNumbers = getAllByTestId(
       /branch-coverage.*covered-percentage/
@@ -109,7 +113,9 @@ describe("CoverageTable", () => {
     expect(branchCoverageNumbers[1]).toHaveTextContent("50%");
     expect(branchCoverageNumbers[2]).toHaveTextContent("80%");
 
-    getByText("Statement").click(); // Initial sort is ascending
+    act(() => {
+      getByText("Statement").click(); // Initial sort is ascending
+    });
 
     const statementCoverageNumbers = getAllByTestId(
       /statement-coverage.*covered-percentage/

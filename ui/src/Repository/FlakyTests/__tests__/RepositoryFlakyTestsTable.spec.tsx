@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
-import { render } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import moment from "moment-timezone";
 import {
   RepositoryFlakyTest,
@@ -51,7 +51,10 @@ describe("RepositoryFlakyTestsTable", () => {
       <RepositoryFlakyTestsTable flakyTests={flakyTests} />
     );
 
-    getByText("First failure").click(); // Initial sort is ascending
+    act(() => {
+      getByText("First failure").click(); // Initial sort is ascending
+    });
+
     const firstFailureAscending = getAllByTestId(
       "flaky-test-case-first-failure",
       {
@@ -63,7 +66,9 @@ describe("RepositoryFlakyTestsTable", () => {
     expect(firstFailureAscending[1]).toHaveTextContent("Sep 2nd 2020");
     expect(firstFailureAscending[2]).toHaveTextContent("Sep 3rd 2020");
 
-    getByText("First failure").click(); // Second sort is descending
+    act(() => {
+      getByText("First failure").click(); // Second sort is descending
+    });
     const firstFailureDescending = getAllByTestId(
       "flaky-test-case-first-failure",
       {
@@ -89,7 +94,9 @@ describe("RepositoryFlakyTestsTable", () => {
       <RepositoryFlakyTestsTable flakyTests={flakyTests} />
     );
 
-    getByText("Latest failure").click(); // Initial sort is ascending
+    act(() => {
+      getByText("Latest failure").click(); // Initial sort is ascending
+    });
     const latestFailureAscending = getAllByTestId(
       "flaky-test-case-latest-failure",
       {
@@ -101,7 +108,9 @@ describe("RepositoryFlakyTestsTable", () => {
     expect(latestFailureAscending[1]).toHaveTextContent("Oct 2nd 2020");
     expect(latestFailureAscending[2]).toHaveTextContent("Oct 3rd 2020");
 
-    getByText("Latest failure").click(); // Second sort is descending
+    act(() => {
+      getByText("Latest failure").click(); // Second sort is descending
+    });
     const latestFailureDescending = getAllByTestId(
       "flaky-test-case-latest-failure",
       {
