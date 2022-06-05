@@ -1,3 +1,5 @@
+import projektor.plugin.ProjektorManualPublishTask
+
 plugins {
     id 'com.github.psxpaul.execfork'
     id "com.github.node-gradle.node" version "3.2.1"
@@ -9,10 +11,18 @@ node {
 
 evaluationDependsOn(':server:server-app')
 
-task projektorPublish(type: projektor.plugin.ProjektorManualPublishTask) {
+task projektorPublish(type: ProjektorManualPublishTask) {
     serverUrl = "https://projektorlive.herokuapp.com"
     publishToken = System.getenv("PROJEKTOR_TOKEN") ?: project.findProperty('projektor_publish_token') ?: null
     additionalResultsDirs = ["testResults"]
+    projectName = "node-script-functional-test"
+}
+
+task projektorPublishWithToken(type: ProjektorManualPublishTask) {
+    serverUrl = "https://projektorlive.herokuapp.com"
+    publishToken = System.getenv("PROJEKTOR_TOKEN") ?: project.findProperty('projektor_publish_token') ?: null
+    additionalResultsDirs = ["testResults"]
+    projectName = "node-script-functional-test-with-token"
 }
 
 task functionalTest(type: YarnTask) {
@@ -24,7 +34,7 @@ task functionalTest(type: YarnTask) {
 task functionalTestWithToken(type: YarnTask) {
     dependsOn 'startServerDaemonWithToken'
     args = ['test-with-token']
-    finalizedBy(projektorPublish)
+    finalizedBy(projektorPublishWithToken)
 }
 
 task allFunctionalTests(dependsOn: [functionalTest, functionalTestWithToken])
