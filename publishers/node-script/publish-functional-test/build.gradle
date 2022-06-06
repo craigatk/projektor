@@ -2,7 +2,7 @@ import projektor.plugin.ProjektorManualPublishTask
 
 plugins {
     id 'com.github.psxpaul.execfork'
-    id "com.github.node-gradle.node" version "3.2.1"
+    id "com.github.node-gradle.node" version "3.3.0"
 }
 
 node {
