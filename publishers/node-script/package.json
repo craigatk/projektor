@@ -26,7 +26,7 @@
   "devDependencies": {
     "axios-mock-adapter": "1.21.1",
     "env-cmd": "10.1.0",
-    "jest": "28.1.0",
+    "jest": "28.1.1",
     "jest-junit": "13.2.0",
     "prettier": "2.6.2",
     "projektor-publish": "3.10.2",
