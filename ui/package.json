@@ -36,7 +36,7 @@
     "jest": "28.1.1",
     "jest-environment-jsdom": "28.1.1",
     "jest-junit": "13.2.0",
-    "parcel": "2.6.0",
+    "parcel": "2.6.2",
     "prettier": "2.6.2",
     "process": "0.11.10",
     "projektor-publish": "3.10.2",
