@@ -97,6 +97,7 @@ jobs:
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
           CACHE_ACCESS_KEY: ${{ secrets.CACHE_ACCESS_KEY }}
           CACHE_SECRET_KEY: ${{ secrets.CACHE_SECRET_KEY }}
+          HONEYCOMB_API_KEY: ${{ secrets.HONEYCOMB_API_KEY }}
         run: ./gradlew :publishers:node-script:publish-functional-test:functionalTestWithToken
       - name: Run functional tests without token
         env:
@@ -104,4 +105,5 @@ jobs:
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
           CACHE_ACCESS_KEY: ${{ secrets.CACHE_ACCESS_KEY }}
           CACHE_SECRET_KEY: ${{ secrets.CACHE_SECRET_KEY }}
+          HONEYCOMB_API_KEY: ${{ secrets.HONEYCOMB_API_KEY }}
         run: ./gradlew :publishers:node-script:publish-functional-test:functionalTest

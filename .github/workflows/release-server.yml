@@ -61,6 +61,7 @@ jobs:
         env:
           CACHE_ACCESS_KEY: ${{ secrets.CACHE_ACCESS_KEY }}
           CACHE_SECRET_KEY: ${{ secrets.CACHE_SECRET_KEY }}
+          HONEYCOMB_API_KEY: ${{ secrets.HONEYCOMB_API_KEY }}
         run: |
           ./gradlew :server:server-app:assembleFull -PreleaseVersion=${{ env.RELEASE_VERSION }}
 

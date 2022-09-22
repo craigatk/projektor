@@ -25,7 +25,10 @@ jobs:
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
           CACHE_ACCESS_KEY: ${{ secrets.CACHE_ACCESS_KEY }}
           CACHE_SECRET_KEY: ${{ secrets.CACHE_SECRET_KEY }}
+          HONEYCOMB_API_KEY: ${{ secrets.HONEYCOMB_API_KEY }}
         run: ./gradlew :publishers:gradle-plugin:build -x :publishers:gradle-plugin:functionalTest
 
       - name: Publish plugin
+        env:
+          HONEYCOMB_API_KEY: ${{ secrets.HONEYCOMB_API_KEY }}
         run: ./gradlew :publishers:gradle-plugin:publishPlugin -Pgradle.publish.key=${{ secrets.GRADLE_PUBLISH_KEY }} -Pgradle.publish.secret=${{ secrets.GRADLE_PUBLISH_SECRET }}
