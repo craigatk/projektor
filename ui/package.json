@@ -55,7 +55,7 @@
     "@reach/router": "1.3.4",
     "@types/node": "16.11.59",
     "@types/reach__router": "1.3.10",
-    "@types/react": "17.0.45",
+    "@types/react": "17.0.50",
     "@types/react-dom": "18.0.5",
     "@types/styled-components": "5.1.26",
     "axios": "0.27.2",
