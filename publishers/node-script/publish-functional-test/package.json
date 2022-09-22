@@ -12,7 +12,7 @@
     "axios": "0.27.2",
     "env-cmd": "10.1.0",
     "jest": "28.1.3",
-    "jest-junit": "13.2.0",
+    "jest-junit": "14.0.1",
     "prettier": "2.7.1",
     "projektor-publish": "file:../",
     "wait-for-expect": "3.0.2"
