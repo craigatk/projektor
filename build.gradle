@@ -12,6 +12,7 @@ buildscript {
 
 plugins {
     id "dev.projektor.publish" version "8.2.0"
+    id "com.atkinsondev.opentelemetry-build" version "1.1.0"
     id 'com.github.psxpaul.execfork' version '0.2.0' apply false
 }
 
@@ -19,6 +20,14 @@ projektor {
     serverUrl = "https://projektorlive.herokuapp.com"
     publishToken = System.getenv("PROJEKTOR_TOKEN") ?: project.findProperty('projektor_publish_token') ?: null
     codeQualityReports = [fileTree(dir: ".", include: "**/build/reports/ktlint/**/*.txt")]
+}
+
+openTelemetryBuild {
+    endpoint = "https://api.honeycomb.io"
+    headers = [
+            "x-honeycomb-team": System.getenv("HONEYCOMB_API_KEY") ?: project.findProperty('honeycomb_api_key') ?: null,
+            "x-honeycomb-dataset": "otel-gradle"
+    ]
 }
 
 allprojects {
