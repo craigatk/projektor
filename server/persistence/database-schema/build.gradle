@@ -1,5 +1,5 @@
 plugins {
-    id "com.avast.gradle.docker-compose" version "0.16.4"
+    id "com.avast.gradle.docker-compose" version "0.16.9"
     id 'nu.studer.jooq' version '7.1.1'
     id "org.flywaydb.flyway" version "8.5.12"
     id "java-library"
