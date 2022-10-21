@@ -60,7 +60,7 @@
     "@types/styled-components": "5.1.26",
     "axios": "0.27.2",
     "axios-cache-adapter": "2.7.3",
-    "axios-case-converter": "0.9.0",
+    "axios-case-converter": "0.11.1",
     "lodash": "4.17.21",
     "moment": "2.29.4",
     "moment-timezone": "0.5.38",
