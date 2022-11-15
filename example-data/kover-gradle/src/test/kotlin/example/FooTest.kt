@@ -1,9 +1,8 @@
 package example
 
+import io.kotest.core.spec.style.StringSpec
 import strikt.api.expectThat
 import strikt.assertions.*
-
-import io.kotest.core.spec.style.StringSpec
 
 class FooTest : StringSpec() {
     init {
