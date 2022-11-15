@@ -1,6 +1,6 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
-    id "com.heroku.sdk.heroku-gradle" version "1.0.4"
+    id "com.heroku.sdk.heroku-gradle" version "2.0.0"
     id "application"
     id 'jacoco'
     id "project-report"
@@ -114,7 +114,7 @@ task assembleFull(dependsOn: ['copyUI', 'shadowJar'])
 task stage(dependsOn: 'assembleFull')
 
 heroku {
-    includes = ["${projectDir}/build/libs/server-app-1.0-all.jar", "${projectDir}/opentelemetry/opentelemetry-javaagent.jar"]
+    includes = ["${projectDir}/build/libs/server-app-1.0-all.jar".toString(), "${projectDir}/opentelemetry/opentelemetry-javaagent.jar".toString()]
     includeBuildDir = false
     appName = "projektorlive"
     jdkVersion = "11"
