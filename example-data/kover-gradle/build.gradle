@@ -5,14 +5,14 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.21"
         classpath "org.jlleitschuh.gradle:ktlint-gradle:11.0.0"
     }
 }
 
 plugins {
     id "dev.projektor.publish" version "8.2.0"
-    id "org.jetbrains.kotlinx.kover" version "0.5.1"
+    id "org.jetbrains.kotlinx.kover" version "0.6.1"
 }
 
 apply from: "../../gradle/kotlin.gradle"
@@ -29,10 +29,16 @@ projektor {
     publishToken = System.getenv("PROJEKTOR_TOKEN") ?: project.findProperty('projektor_publish_token') ?: null
 }
 
-tasks.withType(kotlinx.kover.tasks.KoverXmlReportTask) {
+tasks.withType(kotlinx.kover.tasks.KoverXmlTask) {
     dependsOn(test)
 }
 
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
+
 kover {
-    coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO) // change instrumentation agent and reporter
+    engine.set(kotlinx.kover.api.DefaultJacocoEngine.INSTANCE) // change instrumentation agent and reporter
 }
