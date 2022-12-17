@@ -8,9 +8,9 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.zaxxer.hikari.HikariDataSource
-import io.ktor.application.Application
-import io.ktor.config.MapApplicationConfig
 import io.ktor.http.*
+import io.ktor.server.application.Application
+import io.ktor.server.config.MapApplicationConfig
 import io.ktor.server.testing.*
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import io.opentelemetry.api.GlobalOpenTelemetry

@@ -2,7 +2,7 @@ package projektor.database
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import io.ktor.config.ApplicationConfig
+import io.ktor.server.config.ApplicationConfig
 import io.micrometer.core.instrument.MeterRegistry
 import org.flywaydb.core.Flyway
 import org.jooq.DSLContext

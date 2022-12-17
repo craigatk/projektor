@@ -1,6 +1,6 @@
 package projektor.attachment
 
-import io.ktor.config.ApplicationConfig
+import io.ktor.server.config.ApplicationConfig
 import java.math.BigDecimal
 
 data class AttachmentConfig(

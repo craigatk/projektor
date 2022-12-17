@@ -1,6 +1,6 @@
 package projektor.metrics
 
-import io.ktor.config.ApplicationConfig
+import io.ktor.server.config.ApplicationConfig
 
 data class InfluxMetricsConfig(
     val enabled: Boolean,

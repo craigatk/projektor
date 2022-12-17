@@ -1,6 +1,6 @@
 package projektor.message
 
-import io.ktor.config.ApplicationConfig
+import io.ktor.server.config.ApplicationConfig
 
 data class MessageConfig(val globalMessages: List<String>) {
 

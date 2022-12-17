@@ -1,25 +1,25 @@
 package projektor
 
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import io.ktor.application.Application
-import io.ktor.application.install
-import io.ktor.config.ApplicationConfig
-import io.ktor.features.*
 import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
 import io.ktor.http.content.CachingOptions
-import io.ktor.jackson.jackson
-import io.ktor.metrics.micrometer.MicrometerMetrics
-import io.ktor.request.path
-import io.ktor.routing.*
+import io.ktor.serialization.jackson.*
+import io.ktor.server.application.*
+import io.ktor.server.config.*
+import io.ktor.server.metrics.micrometer.*
+import io.ktor.server.plugins.cachingheaders.*
+import io.ktor.server.plugins.compression.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.routing.*
 import io.micrometer.core.instrument.MeterRegistry
-import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
+import org.koin.ktor.plugin.Koin
 import org.koin.logger.SLF4JLogger
-import org.slf4j.event.Level
 import projektor.attachment.AttachmentConfig
 import projektor.attachment.AttachmentDatabaseRepository
 import projektor.attachment.AttachmentRepository
@@ -60,7 +60,6 @@ import projektor.repository.performance.RepositoryPerformanceService
 import projektor.repository.testrun.RepositoryTestRunService
 import projektor.route.*
 import projektor.schedule.Scheduler
-import projektor.telemetry.OpenTelemetryRoute
 import projektor.testcase.TestCaseService
 import projektor.testrun.TestRunRepository
 import projektor.testrun.TestRunService
@@ -111,22 +110,17 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     install(ContentNegotiation) {
         jackson {
             registerModule(JavaTimeModule())
-            propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE
+            propertyNamingStrategy = PropertyNamingStrategies.SNAKE_CASE
             disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         }
-    }
-    install(CallLogging) {
-        level = Level.INFO
-
-        filter { call -> !call.request.path().startsWith("/health") }
     }
     install(Koin) {
         SLF4JLogger()
         modules(appModule)
     }
     install(CachingHeaders) {
-        options { outgoingContent ->
+        options { _, outgoingContent ->
             val oneDayInSeconds = 24 * 60 * 60
             when (outgoingContent.contentType?.withoutParameters()) {
                 ContentType.Application.JavaScript -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 7 * oneDayInSeconds))
@@ -150,7 +144,6 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
             matchContentType(ContentType.Application.Json, ContentType.Application.JavaScript)
         }
     }
-    install(OpenTelemetryRoute)
     install(IgnoreTrailingSlash) // Needed to treat /tests/ and /tests as the same URL
 
     val authService: AuthService by inject()

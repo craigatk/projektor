@@ -1,6 +1,6 @@
 package projektor.cleanup
 
-import io.ktor.config.ApplicationConfig
+import io.ktor.server.config.ApplicationConfig
 
 data class CleanupConfig(
     val maxReportAgeDays: Int?,

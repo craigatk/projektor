@@ -1,8 +1,8 @@
 package projektor.route
 
-import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.request.*
+import io.ktor.server.application.*
+import io.ktor.server.request.*
 import projektor.util.ungzip
 
 object CompressionRequest {
