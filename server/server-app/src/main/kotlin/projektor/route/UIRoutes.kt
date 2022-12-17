@@ -1,9 +1,7 @@
 package projektor.route
 
-import io.ktor.http.content.defaultResource
-import io.ktor.http.content.resources
-import io.ktor.http.content.static
-import io.ktor.routing.Route
+import io.ktor.server.http.content.*
+import io.ktor.server.routing.*
 
 fun Route.ui() {
     static("/") {
