@@ -60,6 +60,7 @@ import projektor.repository.performance.RepositoryPerformanceService
 import projektor.repository.testrun.RepositoryTestRunService
 import projektor.route.*
 import projektor.schedule.Scheduler
+import projektor.telemetry.OpenTelemetryRoute
 import projektor.testcase.TestCaseService
 import projektor.testrun.TestRunRepository
 import projektor.testrun.TestRunService
@@ -145,6 +146,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
         }
     }
     install(IgnoreTrailingSlash) // Needed to treat /tests/ and /tests as the same URL
+    install(OpenTelemetryRoute)
 
     val authService: AuthService by inject()
     val messageService: MessageService by inject()
