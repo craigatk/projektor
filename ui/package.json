@@ -71,7 +71,7 @@
     "react-dom": "18.2.0",
     "react-horizontal-stacked-bar-chart": "8.15.2",
     "react-scroll": "1.8.9",
-    "recharts": "2.2.0",
+    "recharts": "2.3.2",
     "styled-components": "5.3.6",
     "use-query-params": "1.2.3"
   },
