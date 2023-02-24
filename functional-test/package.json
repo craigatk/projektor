@@ -14,7 +14,7 @@
     "chai-colors": "1.0.1",
     "cypress": "9.7.0",
     "lodash": "4.17.21",
-    "prettier": "2.8.3",
+    "prettier": "2.8.4",
     "rimraf": "4.1.1"
   }
 }
