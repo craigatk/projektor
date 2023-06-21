@@ -65,10 +65,10 @@ class ObjectStoreClient(config: ObjectStoreConfig) {
         val objects = objectNames.map { DeleteObject(it) }
         minioClient.removeObjects(
             RemoveObjectsArgs
-            .builder()
-            .bucket(bucketName)
-            .objects(objects)
-            .build()
+                .builder()
+                .bucket(bucketName)
+                .objects(objects)
+                .build()
         )
     }
 }
