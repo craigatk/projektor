@@ -9,7 +9,11 @@ import projektor.database.generated.tables.pojos.TestSuite
 import projektor.incomingresults.randomPublicId
 import projektor.testsuite.TestSuiteDatabaseRepository
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.any
+import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
+import strikt.assertions.isNull
 
 class TestSuiteDatabaseRepositoryFetchSuiteTest : DatabaseRepositoryTestCase() {
 

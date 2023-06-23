@@ -4,9 +4,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.Condition
 import org.jooq.DSLContext
-import org.jooq.impl.DSL.*
+import org.jooq.impl.DSL.count
+import org.jooq.impl.DSL.min
+import org.jooq.impl.DSL.noCondition
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
-import projektor.database.generated.Tables.*
+import projektor.database.generated.Tables.GIT_METADATA
+import projektor.database.generated.Tables.RESULTS_METADATA
+import projektor.database.generated.Tables.TEST_CASE
+import projektor.database.generated.Tables.TEST_RUN
 import projektor.server.api.PublicId
 import projektor.server.api.TestCase
 import projektor.server.api.repository.BranchType

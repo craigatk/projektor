@@ -19,14 +19,27 @@ import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageRepository
 import projektor.coverage.CoverageService
 import projektor.database.DataSourceConfig
-import projektor.database.generated.tables.daos.*
+import projektor.database.generated.tables.daos.CodeCoverageGroupDao
+import projektor.database.generated.tables.daos.CodeCoverageRunDao
+import projektor.database.generated.tables.daos.CodeCoverageStatsDao
+import projektor.database.generated.tables.daos.GitMetadataDao
+import projektor.database.generated.tables.daos.ResultsMetadataDao
+import projektor.database.generated.tables.daos.ResultsProcessingDao
+import projektor.database.generated.tables.daos.ResultsProcessingFailureDao
+import projektor.database.generated.tables.daos.TestCaseDao
+import projektor.database.generated.tables.daos.TestFailureDao
+import projektor.database.generated.tables.daos.TestRunAttachmentDao
+import projektor.database.generated.tables.daos.TestRunDao
+import projektor.database.generated.tables.daos.TestRunSystemAttributesDao
+import projektor.database.generated.tables.daos.TestSuiteDao
+import projektor.database.generated.tables.daos.TestSuiteGroupDao
 import projektor.error.ProcessingFailureService
 import projektor.message.MessageConfig
 import projektor.metrics.InfluxMetricsConfig
 import projektor.metrics.MetricsService
 import projektor.metrics.createRegistry
 import projektor.notification.NotificationConfig
-import java.util.*
+import java.util.TimeZone
 
 open class DatabaseRepositoryTestCase : KoinTest {
     init {

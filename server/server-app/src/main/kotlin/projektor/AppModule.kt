@@ -19,7 +19,11 @@ import projektor.coverage.CoverageService
 import projektor.error.ProcessingFailureDatabaseRepository
 import projektor.error.ProcessingFailureRepository
 import projektor.error.ProcessingFailureService
-import projektor.incomingresults.*
+import projektor.incomingresults.AppendTestResultsService
+import projektor.incomingresults.GroupedResultsConverter
+import projektor.incomingresults.GroupedTestResultsService
+import projektor.incomingresults.TestResultsProcessingService
+import projektor.incomingresults.TestResultsService
 import projektor.incomingresults.processing.ResultsProcessingDatabaseRepository
 import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.message.MessageConfig

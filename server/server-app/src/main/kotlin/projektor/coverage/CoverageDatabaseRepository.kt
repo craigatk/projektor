@@ -5,7 +5,10 @@ import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
 import org.jooq.impl.DSL.sum
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
-import projektor.database.generated.Tables.*
+import projektor.database.generated.Tables.CODE_COVERAGE_FILE
+import projektor.database.generated.Tables.CODE_COVERAGE_GROUP
+import projektor.database.generated.Tables.CODE_COVERAGE_RUN
+import projektor.database.generated.Tables.CODE_COVERAGE_STATS
 import projektor.database.generated.tables.daos.CodeCoverageFileDao
 import projektor.database.generated.tables.daos.CodeCoverageGroupDao
 import projektor.database.generated.tables.daos.CodeCoverageRunDao

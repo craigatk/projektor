@@ -7,7 +7,10 @@ import org.jooq.Record
 import org.jooq.SelectOnConditionStep
 import org.jooq.TableField
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
-import projektor.database.generated.Tables.*
+import projektor.database.generated.Tables.TEST_CASE
+import projektor.database.generated.Tables.TEST_FAILURE
+import projektor.database.generated.Tables.TEST_RUN
+import projektor.database.generated.Tables.TEST_SUITE
 import projektor.database.generated.tables.records.TestCaseRecord
 import projektor.server.api.PublicId
 import projektor.server.api.TestCase

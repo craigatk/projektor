@@ -1,6 +1,7 @@
 package projektor.attachment
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.slf4j.LoggerFactory
 import projektor.objectstore.ObjectStoreClient
 import projektor.objectstore.ObjectStoreConfig

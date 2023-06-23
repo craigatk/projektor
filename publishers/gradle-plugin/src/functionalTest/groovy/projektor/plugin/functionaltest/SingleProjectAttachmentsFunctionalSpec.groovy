@@ -5,8 +5,8 @@ import org.gradle.testkit.runner.TaskOutcome
 import projektor.plugin.AttachmentsWriter
 import projektor.plugin.BuildFileWriter
 import projektor.plugin.SpecWriter
-import projektor.server.api.attachments.Attachments
 import projektor.server.api.TestRun
+import projektor.server.api.attachments.Attachments
 import retrofit2.Response
 
 class SingleProjectAttachmentsFunctionalSpec extends ProjektorPluginFunctionalSpecification {

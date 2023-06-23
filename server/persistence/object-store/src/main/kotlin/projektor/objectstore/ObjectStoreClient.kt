@@ -1,6 +1,12 @@
 package projektor.objectstore
 
-import io.minio.*
+import io.minio.BucketExistsArgs
+import io.minio.GetObjectArgs
+import io.minio.MakeBucketArgs
+import io.minio.MinioClient
+import io.minio.PutObjectArgs
+import io.minio.RemoveObjectArgs
+import io.minio.RemoveObjectsArgs
 import io.minio.errors.ErrorResponseException
 import io.minio.messages.DeleteObject
 import projektor.objectstore.bucket.BucketCreationException

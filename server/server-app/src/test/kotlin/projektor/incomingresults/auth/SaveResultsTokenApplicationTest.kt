@@ -11,7 +11,7 @@ import projektor.ApplicationTestCase
 import projektor.auth.AuthConfig
 import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class SaveResultsTokenApplicationTest : ApplicationTestCase() {

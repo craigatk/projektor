@@ -1,6 +1,6 @@
 package projektor.notification.github.auth
 
-import java.util.*
+import java.util.Base64
 
 object PrivateKeyEncoder {
     fun base64Encode(keyContents: String): String =

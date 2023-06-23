@@ -13,6 +13,7 @@ open class UIRestUrlVerificationTask : DefaultTask(), VerificationTask {
         this.ignoreFailures = ignoreFailures
     }
 
+
     override fun getIgnoreFailures(): Boolean =
         this.ignoreFailures
 

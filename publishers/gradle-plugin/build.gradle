@@ -99,7 +99,17 @@ check.dependsOn functionalTest
 
 // https://github.com/psxpaul/gradle-execfork-plugin
 task startServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {
-    dependsOn ':server:server-app:shadowJar'
+    dependsOn ':server:server-app:shadowJar',
+            'compileFunctionalTestGroovy',
+            'compileGroovy',
+            'compileTestGroovy',
+            'compileTestFixturesGroovy',
+            'compileFunctionalTestJava',
+            'pluginUnderTestMetadata',
+            'test',
+            'processFunctionalTestResources',
+            'processTestResources',
+            'validatePlugins'
     classpath = tasks.getByPath(':server:server-app:shadowJar').outputs.files
     main = 'io.ktor.server.netty.EngineMain'
     stopAfter = functionalTest

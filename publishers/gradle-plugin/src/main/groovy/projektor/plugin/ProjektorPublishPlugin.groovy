@@ -8,8 +8,8 @@ import projektor.plugin.coverage.CodeCoverageTaskConfigurator
 
 class ProjektorPublishPlugin implements Plugin<Project> {
     void apply(Project project) {
-        if (GradleVersion.current() < GradleVersion.version("7.0")) {
-            throw new GradleException("This version of the Projektor Gradle plugin supports Gradle 7.0+ only. Please upgrade the version of Gradle your project uses.")
+        if (GradleVersion.current() < GradleVersion.version("7.6.1")) {
+            throw new GradleException("This version of the Projektor Gradle plugin supports Gradle 7.6.1+ only. Please upgrade the version of Gradle your project uses.")
         }
 
         ProjektorPublishPluginExtension extension = project.extensions.create('projektor', ProjektorPublishPluginExtension.class) as ProjektorPublishPluginExtension

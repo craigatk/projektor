@@ -1,7 +1,9 @@
 package projektor.incomingresults
 
 import com.fasterxml.jackson.core.JsonProcessingException
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 import projektor.metrics.MetricsService
 import projektor.parser.model.TestSuite

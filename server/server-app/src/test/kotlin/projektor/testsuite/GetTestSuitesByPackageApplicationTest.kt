@@ -2,8 +2,9 @@
 package projektor.testsuite
 
 import com.fasterxml.jackson.core.type.TypeReference
-import io.ktor.http.*
-import io.ktor.server.testing.*
+import io.ktor.http.HttpMethod
+import io.ktor.server.testing.handleRequest
+import io.ktor.server.testing.withTestApplication
 import org.junit.Test
 import projektor.ApplicationTestCase
 import projektor.createTestRun

@@ -7,7 +7,6 @@ import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.server.api.PublicId
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.testrun.TestRunRepository
-import java.lang.Exception
 import java.time.LocalDate
 
 class TestRunCleanupService(

@@ -2,11 +2,14 @@ package projektor.route
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
-import io.ktor.server.request.*
 import io.ktor.server.request.header
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import io.ktor.server.util.*
+import io.ktor.server.request.receiveStream
+import io.ktor.server.response.respond
+import io.ktor.server.response.respondBytes
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.util.getOrFail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import projektor.attachment.AddAttachmentResult

@@ -13,7 +13,10 @@ import projektor.parser.coverage.model.CoverageReport
 import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.parser.coverage.payload.CoveragePayloadParser
 import projektor.server.api.PublicId
-import projektor.server.api.coverage.*
+import projektor.server.api.coverage.Coverage
+import projektor.server.api.coverage.CoverageFile
+import projektor.server.api.coverage.CoverageStat
+import projektor.server.api.coverage.CoverageStats
 import projektor.server.api.error.FailureBodyType
 import java.math.BigDecimal
 
@@ -190,15 +193,21 @@ class CoverageService(
                 val (incomingCoverageReport, incomingCoverageFiles) = parsedReport
 
                 try {
-                    val existingCoverageFiles = coverageRepository.fetchCoverageFiles(publicId, incomingCoverageReport.name)
+                    val existingCoverageFiles =
+                        coverageRepository.fetchCoverageFiles(publicId, incomingCoverageReport.name)
 
                     val combinedCoverageFiles = combineCoverageFiles(existingCoverageFiles, incomingCoverageFiles)
 
-                    val coveredLines = combinedCoverageFiles.sumBy { it.stats.lineStat.covered }
-                    val missedLines = combinedCoverageFiles.sumBy { it.stats.lineStat.missed }
-                    val newLineStat = CoverageStat(covered = coveredLines, missed = missedLines, coveredPercentageDelta = null)
+                    val coveredLines = combinedCoverageFiles.sumOf { it.stats.lineStat.covered }
+                    val missedLines = combinedCoverageFiles.sumOf { it.stats.lineStat.missed }
+                    val newLineStat =
+                        CoverageStat(covered = coveredLines, missed = missedLines, coveredPercentageDelta = null)
 
-                    val (coverageGroup, coverageGroupStatus) = coverageRepository.upsertCoverageGroup(coverageRun, incomingCoverageReport, newLineStat)
+                    val (coverageGroup, coverageGroupStatus) = coverageRepository.upsertCoverageGroup(
+                        coverageRun,
+                        incomingCoverageReport,
+                        newLineStat
+                    )
 
                     if (coverageGroupStatus == CoverageGroupStatus.NEW) {
                         coverageRepository.insertCoverageFiles(

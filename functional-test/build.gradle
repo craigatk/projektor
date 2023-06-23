@@ -35,7 +35,7 @@ task functionalTest(type: YarnTask) {
 
 // https://github.com/psxpaul/gradle-execfork-plugin
 task startServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {
-    dependsOn ':server:server-app:assembleFull'
+    dependsOn ':server:server-app:assembleFull','yarnSetup'
     classpath = tasks.getByPath(':server:server-app:shadowJar').outputs.files
     main = 'io.ktor.server.netty.EngineMain'
     stopAfter = functionalTest

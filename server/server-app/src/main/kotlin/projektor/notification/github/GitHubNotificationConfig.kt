@@ -1,6 +1,6 @@
 package projektor.notification.github
 
-import io.ktor.server.config.*
+import io.ktor.server.config.ApplicationConfig
 import projektor.notification.github.auth.PrivateKeyEncoder
 
 data class GitHubNotificationConfig(

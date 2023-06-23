@@ -2,7 +2,7 @@ package example
 
 import io.kotest.core.spec.style.StringSpec
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.isEqualTo
 
 class FooTest : StringSpec() {
     init {

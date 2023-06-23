@@ -1,6 +1,5 @@
 package projektor.coverage
 
-import io.ktor.util.*
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import kotlinx.coroutines.runBlocking
 import org.jooq.exception.DataAccessException
@@ -16,7 +15,12 @@ import projektor.server.example.coverage.CloverXmlLoader
 import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectCatching
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.contains
+import strikt.assertions.hasSize
+import strikt.assertions.isA
+import strikt.assertions.isEqualTo
+import strikt.assertions.isFailure
+import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
 class CoverageServiceTest : DatabaseRepositoryTestCase() {

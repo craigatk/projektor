@@ -2,9 +2,9 @@ package projektor.plugin.functionaltest
 
 import projektor.plugin.SpecFileConfig
 import projektor.plugin.SpecWriter
+import projektor.server.api.TestOutput
 import projektor.server.api.TestRun
 import projektor.server.api.TestSuite
-import projektor.server.api.TestOutput
 import retrofit2.Response
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED

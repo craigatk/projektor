@@ -7,7 +7,7 @@ import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.server.api.results.ResultsProcessingStatus

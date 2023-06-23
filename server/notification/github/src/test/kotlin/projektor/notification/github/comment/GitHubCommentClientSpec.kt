@@ -8,7 +8,11 @@ import projektor.notification.github.GitHubWireMockStubber
 import projektor.notification.github.WireMockTestListener
 import projektor.notification.github.auth.MockJwtProvider
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.contains
+import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
+import strikt.assertions.isNull
 import kotlin.test.assertNotNull
 
 class GitHubCommentClientSpec : StringSpec() {

@@ -1,8 +1,9 @@
 package projektor.telemetry
 
-import io.ktor.server.application.*
-import io.ktor.server.routing.*
-import io.ktor.util.*
+import io.ktor.server.application.Application
+import io.ktor.server.application.BaseApplicationPlugin
+import io.ktor.server.routing.Routing
+import io.ktor.util.AttributeKey
 import io.opentelemetry.api.trace.Span
 
 class OpenTelemetryRoute {

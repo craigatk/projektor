@@ -1,7 +1,11 @@
 package projektor.incomingresults
 
-import io.ktor.http.*
-import io.ktor.server.testing.*
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.testing.handleRequest
+import io.ktor.server.testing.setBody
+import io.ktor.server.testing.withTestApplication
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
@@ -11,7 +15,9 @@ import projektor.server.api.results.ResultsProcessing
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
+import strikt.assertions.isNull
 import java.time.LocalDateTime
 import kotlin.test.assertNotNull
 
