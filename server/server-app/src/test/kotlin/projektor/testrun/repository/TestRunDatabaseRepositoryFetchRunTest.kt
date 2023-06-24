@@ -1,6 +1,5 @@
 package projektor.testrun.repository
 
-import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -11,7 +10,10 @@ import projektor.database.generated.tables.pojos.TestSuite
 import projektor.incomingresults.randomPublicId
 import projektor.testrun.TestRunDatabaseRepository
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.any
+import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import kotlin.test.assertNotNull

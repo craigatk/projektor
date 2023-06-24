@@ -1,14 +1,16 @@
 package projektor.incomingresults
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.ktor.http.*
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import org.apache.commons.lang3.RandomStringUtils
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.database.generated.tables.pojos.TestRun
 import projektor.parser.GroupedResultsXmlLoader

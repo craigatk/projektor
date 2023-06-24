@@ -2,7 +2,15 @@ package projektor
 
 import kotlinx.coroutines.runBlocking
 import projektor.coverage.CoverageService
-import projektor.database.generated.tables.daos.*
+import projektor.database.generated.tables.daos.GitMetadataDao
+import projektor.database.generated.tables.daos.ResultsMetadataDao
+import projektor.database.generated.tables.daos.TestCaseDao
+import projektor.database.generated.tables.daos.TestFailureDao
+import projektor.database.generated.tables.daos.TestRunAttachmentDao
+import projektor.database.generated.tables.daos.TestRunDao
+import projektor.database.generated.tables.daos.TestRunSystemAttributesDao
+import projektor.database.generated.tables.daos.TestSuiteDao
+import projektor.database.generated.tables.daos.TestSuiteGroupDao
 import projektor.database.generated.tables.pojos.TestRunAttachment
 import projektor.database.generated.tables.pojos.TestRunSystemAttributes
 import projektor.incomingresults.mapper.parsePackageAndClassName

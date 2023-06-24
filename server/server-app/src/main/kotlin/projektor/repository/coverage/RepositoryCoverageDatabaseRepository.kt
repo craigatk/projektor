@@ -6,7 +6,10 @@ import org.jooq.DSLContext
 import org.jooq.impl.DSL
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.coverage.toCoverageStats
-import projektor.database.generated.Tables.*
+import projektor.database.generated.Tables.CODE_COVERAGE_RUN
+import projektor.database.generated.Tables.CODE_COVERAGE_STATS
+import projektor.database.generated.Tables.GIT_METADATA
+import projektor.database.generated.Tables.TEST_RUN
 import projektor.parser.coverage.model.CoverageReportStats
 import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withBranchType
 import projektor.server.api.repository.BranchType

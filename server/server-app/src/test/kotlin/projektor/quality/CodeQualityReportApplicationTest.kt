@@ -1,8 +1,10 @@
 package projektor.quality
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.ktor.http.*
-import io.ktor.server.testing.*
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.testing.handleRequest
+import io.ktor.server.testing.withTestApplication
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.database.generated.tables.pojos.CodeQualityReport

@@ -13,7 +13,7 @@ class CypressFileNamePostProcessor : TestSuitesPostProcessor {
                 // Apply the file name from the first test suite
                 testSuiteList.forEach { testSuite -> testSuite.file = testSuiteWithFileName.file }
 
-                if (testSuiteWithFileName.name.toLowerCase() != "root suite") {
+                if (testSuiteWithFileName.name.lowercase() != "root suite") {
                     testSuiteList.forEach { testSuite -> testSuite.name = testSuiteWithFileName.name }
                 }
             }

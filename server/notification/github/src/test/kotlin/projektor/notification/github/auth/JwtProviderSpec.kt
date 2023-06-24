@@ -3,7 +3,7 @@ package projektor.notification.github.auth
 import com.auth0.jwt.JWT
 import io.kotest.core.spec.style.StringSpec
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.isNotNull
 
 class JwtProviderSpec : StringSpec() {
     init {

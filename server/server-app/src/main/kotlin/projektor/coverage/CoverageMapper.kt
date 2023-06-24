@@ -4,7 +4,11 @@ import projektor.parser.coverage.model.CoverageReport
 import projektor.parser.coverage.model.CoverageReportFile
 import projektor.parser.coverage.model.CoverageReportStat
 import projektor.parser.coverage.model.CoverageReportStats
-import projektor.server.api.coverage.*
+import projektor.server.api.coverage.Coverage
+import projektor.server.api.coverage.CoverageFile
+import projektor.server.api.coverage.CoverageGroup
+import projektor.server.api.coverage.CoverageStat
+import projektor.server.api.coverage.CoverageStats
 
 fun CoverageReportStat.toCoverageStat(previousCoverageStats: CoverageStat?): CoverageStat =
     CoverageStat(

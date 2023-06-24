@@ -5,7 +5,11 @@ import projektor.server.example.coverage.CloverXmlLoader
 import projektor.server.example.coverage.CoberturaXmlLoader
 import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.all
+import strikt.assertions.contains
+import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
 import java.math.BigDecimal
 import kotlin.test.assertNotNull
 

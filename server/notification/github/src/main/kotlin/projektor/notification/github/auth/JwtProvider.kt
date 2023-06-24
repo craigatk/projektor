@@ -9,7 +9,7 @@ import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
 import java.io.StringReader
 import java.security.Security
 import java.security.interfaces.RSAPrivateKey
-import java.util.*
+import java.util.Date
 
 open class JwtProvider(private val jwtTokenConfig: JwtTokenConfig) {
     init {

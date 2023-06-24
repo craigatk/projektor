@@ -63,9 +63,7 @@ class KoverCoverageSingleProjectSpec extends SingleProjectSpec {
 
         where:
         gradleVersion                  | _
-        GradleVersion.version("7.0")   | _
-        GradleVersion.version("7.2")   | _
-        GradleVersion.version("7.3")   | _
+        GradleVersion.version("7.6.1") | _
         GradleVersion.current()        | _
     }
 

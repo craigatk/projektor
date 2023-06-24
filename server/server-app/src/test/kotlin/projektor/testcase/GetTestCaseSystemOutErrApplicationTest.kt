@@ -1,8 +1,11 @@
 package projektor.testcase
 
-import io.ktor.http.*
-import io.ktor.server.testing.*
-import io.ktor.util.*
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.testing.handleRequest
+import io.ktor.server.testing.setBody
+import io.ktor.server.testing.withTestApplication
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.parser.GroupedResultsXmlLoader
@@ -10,7 +13,9 @@ import projektor.parser.ResultsXmlLoader
 import projektor.server.api.PublicId
 import projektor.server.api.TestOutput
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.contains
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
 class GetTestCaseSystemOutErrApplicationTest : ApplicationTestCase() {

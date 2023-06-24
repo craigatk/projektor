@@ -7,7 +7,6 @@ import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import projektor.plugin.PluginOutput
-import projektor.plugin.SpecWriter
 import projektor.server.client.ProjektorAttachmentsApi
 import projektor.server.client.ProjektorClientBuilder
 import projektor.server.client.ProjektorTestRunApi

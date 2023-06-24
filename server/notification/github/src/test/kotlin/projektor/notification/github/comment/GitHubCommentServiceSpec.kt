@@ -8,7 +8,10 @@ import projektor.notification.github.GitHubWireMockStubber
 import projektor.notification.github.WireMockTestListener
 import projektor.notification.github.auth.MockJwtProvider
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.contains
+import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNull
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime

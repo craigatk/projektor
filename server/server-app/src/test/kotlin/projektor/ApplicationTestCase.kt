@@ -8,10 +8,10 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.zaxxer.hikari.HikariDataSource
-import io.ktor.http.*
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.config.MapApplicationConfig
-import io.ktor.server.testing.*
+import io.ktor.server.testing.TestApplicationResponse
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import io.opentelemetry.api.GlobalOpenTelemetry
 import io.opentelemetry.sdk.OpenTelemetrySdk
@@ -29,7 +29,23 @@ import org.slf4j.LoggerFactory
 import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageRepository
 import projektor.coverage.CoverageService
-import projektor.database.generated.tables.daos.*
+import projektor.database.generated.tables.daos.CodeCoverageFileDao
+import projektor.database.generated.tables.daos.CodeCoverageGroupDao
+import projektor.database.generated.tables.daos.CodeCoverageRunDao
+import projektor.database.generated.tables.daos.CodeCoverageStatsDao
+import projektor.database.generated.tables.daos.CodeQualityReportDao
+import projektor.database.generated.tables.daos.GitMetadataDao
+import projektor.database.generated.tables.daos.GitRepositoryDao
+import projektor.database.generated.tables.daos.ResultsMetadataDao
+import projektor.database.generated.tables.daos.ResultsProcessingDao
+import projektor.database.generated.tables.daos.ResultsProcessingFailureDao
+import projektor.database.generated.tables.daos.TestCaseDao
+import projektor.database.generated.tables.daos.TestFailureDao
+import projektor.database.generated.tables.daos.TestRunAttachmentDao
+import projektor.database.generated.tables.daos.TestRunDao
+import projektor.database.generated.tables.daos.TestRunSystemAttributesDao
+import projektor.database.generated.tables.daos.TestSuiteDao
+import projektor.database.generated.tables.daos.TestSuiteGroupDao
 import projektor.database.generated.tables.pojos.TestRun
 import projektor.error.ProcessingFailureService
 import projektor.metrics.MetricsService
@@ -41,7 +57,7 @@ import projektor.server.example.coverage.CloverXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import java.math.BigDecimal
-import java.util.*
+import java.util.TimeZone
 import kotlin.test.assertNotNull
 
 open class ApplicationTestCase {

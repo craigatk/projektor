@@ -1,7 +1,7 @@
 package projektor.example.spock
 
-import spock.lang.Specification
 import spock.lang.Ignore
+import spock.lang.Specification
 
 class IgnoreSomeMethodsAndSomeFailingSpec extends Specification {
     def "should run test case 1"() {

@@ -1,9 +1,9 @@
 package projektor.parser.coverage.cobertura
 
-import projektor.parser.coverage.cobertura.model.CoverageClass
 import projektor.parser.coverage.cobertura.model.Coverage
-import projektor.parser.coverage.cobertura.model.Pkg
+import projektor.parser.coverage.cobertura.model.CoverageClass
 import projektor.parser.coverage.cobertura.model.CoverageLine
+import projektor.parser.coverage.cobertura.model.Pkg
 import projektor.server.example.coverage.CoberturaXmlLoader
 import projektor.server.example.coverage.JacocoXmlLoader
 import spock.lang.Specification

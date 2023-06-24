@@ -1,12 +1,19 @@
 package projektor.incomingresults
 
-import io.ktor.http.*
-import io.ktor.server.testing.*
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.server.testing.handleRequest
+import io.ktor.server.testing.setBody
+import io.ktor.server.testing.withTestApplication
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.util.gzip
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
+import strikt.assertions.isGreaterThan
+import strikt.assertions.isNotNull
+import strikt.assertions.isTrue
 import java.math.BigDecimal
 
 class SaveResultsCompressedApplicationTest : ApplicationTestCase() {

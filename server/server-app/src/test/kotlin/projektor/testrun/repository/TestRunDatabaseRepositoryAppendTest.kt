@@ -1,6 +1,5 @@
 package projektor.testrun.repository
 
-import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.test.inject
@@ -13,7 +12,11 @@ import projektor.parser.ResultsXmlLoader
 import projektor.testrun.TestRunDatabaseRepository
 import projektor.testsuite.TestSuiteRepository
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.contains
+import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
+import strikt.assertions.map
 
 class TestRunDatabaseRepositoryAppendTest : DatabaseRepositoryTestCase() {
 

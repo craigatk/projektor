@@ -1,9 +1,14 @@
 package projektor.testcase
 
-import io.ktor.http.*
-import io.ktor.server.testing.*
+import io.ktor.http.HttpMethod
+import io.ktor.server.testing.handleRequest
+import io.ktor.server.testing.withTestApplication
 import org.junit.jupiter.api.Test
-import projektor.*
+import projektor.ApplicationTestCase
+import projektor.TestSuiteData
+import projektor.createTestCase
+import projektor.createTestRun
+import projektor.createTestSuite
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.TestCase
 import strikt.api.expectThat

@@ -12,7 +12,13 @@ import projektor.server.api.coverage.CoverageFile
 import projektor.server.api.coverage.CoverageStat
 import projektor.server.api.coverage.CoverageStats
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.any
+import strikt.assertions.contains
+import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
+import strikt.assertions.isFalse
+import strikt.assertions.isNotNull
+import strikt.assertions.isTrue
 import java.math.BigDecimal
 import kotlin.test.assertNotNull
 

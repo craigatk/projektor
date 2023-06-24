@@ -8,7 +8,7 @@ import spock.lang.Unroll
 
 class MinimumVersionSpec extends SingleProjectSpec {
     @Unroll
-    def "when running with Gradle version #gradleVersion less than Gradle 7 should fail"() {
+    def "when running with Gradle version #gradleVersion less than Gradle 7.6.1 should fail"() {
         given:
         buildFile << """
             projektor {
@@ -30,7 +30,7 @@ class MinimumVersionSpec extends SingleProjectSpec {
                 .buildAndFail()
 
         then:
-        result.output.contains("This version of the Projektor Gradle plugin supports Gradle 7.0+ only. Please upgrade the version of Gradle your project uses.")
+        result.output.contains("This version of the Projektor Gradle plugin supports Gradle 7.6.1+ only. Please upgrade the version of Gradle your project uses.")
 
         and:
         List<LoggedRequest> resultsRequests = resultsStubber.findResultsRequests()

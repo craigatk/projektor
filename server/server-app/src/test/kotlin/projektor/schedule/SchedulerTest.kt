@@ -1,6 +1,5 @@
 package projektor.schedule
 
-import io.ktor.util.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.Test

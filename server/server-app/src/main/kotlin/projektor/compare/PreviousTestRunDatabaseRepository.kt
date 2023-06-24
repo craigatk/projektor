@@ -3,7 +3,9 @@ package projektor.compare
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
-import projektor.database.generated.Tables.*
+import projektor.database.generated.Tables.CODE_COVERAGE_RUN
+import projektor.database.generated.Tables.GIT_METADATA
+import projektor.database.generated.Tables.TEST_RUN
 import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withBranchType
 import projektor.server.api.PublicId
 import projektor.server.api.repository.BranchType

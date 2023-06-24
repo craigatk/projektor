@@ -1,6 +1,10 @@
 package projektor.notification.github.comment
 
-import org.kohsuke.github.*
+import org.kohsuke.github.GHFileNotFoundException
+import org.kohsuke.github.GHIssueComment
+import org.kohsuke.github.GHIssueState
+import org.kohsuke.github.GHRepository
+import org.kohsuke.github.GitHubBuilder
 import org.slf4j.LoggerFactory
 import projektor.notification.github.GitHubClientConfig
 import projektor.notification.github.auth.JwtProvider
