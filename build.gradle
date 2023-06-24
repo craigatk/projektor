@@ -1,6 +1,3 @@
-// To upgrade versions, run the following (change the version number in the command):
-//VERSION=8.1.1; SHA256SUM=$(wget -O- -q "https://services.gradle.org/distributions/gradle-$VERSION-all.zip.sha256"); ./gradlew wrapper --gradle-version $VERSION --distribution-type all --gradle-distribution-sha256-sum $SHA256SUM
-
 buildscript {
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
