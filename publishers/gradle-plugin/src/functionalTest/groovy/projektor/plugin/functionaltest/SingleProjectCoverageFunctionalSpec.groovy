@@ -2,6 +2,7 @@ package projektor.plugin.functionaltest
 
 import org.gradle.testkit.runner.TaskOutcome
 import projektor.plugin.BuildFileWriter
+import projektor.plugin.ProjectBuildFileConfig
 import projektor.server.api.TestRun
 import projektor.server.api.coverage.CoverageStats
 import retrofit2.Response
@@ -17,7 +18,7 @@ class SingleProjectCoverageFunctionalSpec extends ProjektorPluginFunctionalSpeci
     File buildFile
 
     def setup() {
-        buildFile = BuildFileWriter.createProjectBuildFile(projectRootDir, true, true)
+        buildFile = BuildFileWriter.createProjectBuildFile(projectRootDir, new ProjectBuildFileConfig(includeJacocoPlugin: true))
     }
 
     def "should upload coverage report from test run"() {

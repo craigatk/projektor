@@ -5,19 +5,13 @@ import org.junit.rules.TemporaryFolder
 class BuildFileWriter {
     static File createProjectBuildFile(
             TemporaryFolder projectDir,
-            boolean includeProjektorPlugin = true,
-            boolean includeJacocoPlugin = false,
-            boolean includeKoverPlugin = false,
-            boolean includeCodeNarcPlugin = false
+            ProjectBuildFileConfig config = new ProjectBuildFileConfig()
     ) {
         File buildFile = projectDir.newFile('build.gradle')
 
         writeBuildFileContents(
                 buildFile,
-                includeProjektorPlugin,
-                includeJacocoPlugin,
-                includeKoverPlugin,
-                includeCodeNarcPlugin
+                config
         )
 
         return buildFile
@@ -25,10 +19,7 @@ class BuildFileWriter {
 
     static void writeBuildFileContents(
             File buildFile,
-            boolean includeProjektorPlugin = true,
-            boolean includeJacocoPlugin = false,
-            boolean includeKoverPlugin = false,
-            boolean includeCodeNarcPlugin = false
+            ProjectBuildFileConfig config = new ProjectBuildFileConfig()
     ) {
         buildFile << """
             buildscript {
@@ -39,10 +30,10 @@ class BuildFileWriter {
 
             plugins {
                 id 'groovy'
-                ${includeProjektorPlugin ? "id 'dev.projektor.publish'" : ""}
-                ${includeJacocoPlugin ? "id 'jacoco'" : ""}
-                ${includeKoverPlugin ? "id 'org.jetbrains.kotlinx.kover' version '0.4.4'" : ""}
-                ${includeCodeNarcPlugin ? "id 'codenarc'" : ""}
+                ${config.includeProjektorPlugin ? "id 'dev.projektor.publish'" : ""}
+                ${config.includeJacocoPlugin ? "id 'jacoco'" : ""}
+                ${config.includeKoverPlugin ? "id 'org.jetbrains.kotlinx.kover' version '${config.koverPluginVersion}'" : ""}
+                ${config.includeCodeNarcPlugin ? "id 'codenarc'" : ""}
             }
             
             repositories {
@@ -55,12 +46,12 @@ class BuildFileWriter {
                 testImplementation('org.spockframework:spock-core:1.3-groovy-2.5')
             }
 
-            ${includeJacocoPlugin ? "jacocoTestReport { dependsOn test }": ""}
+            ${config.includeJacocoPlugin ? "jacocoTestReport { dependsOn test }": ""}
             
-            ${includeKoverPlugin ? "test { kover { enabled = true } }": ""}
-            ${includeKoverPlugin ? "kover { coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO) }": ""}
+            ${config.includeKoverPlugin ? "test { kover { enabled = true } }": ""}
+            ${config.includeKoverPlugin ? "kover { coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO) }": ""}
 
-            ${includeCodeNarcPlugin ? "codenarc { reportFormat 'text' }": ""}
+            ${config.includeCodeNarcPlugin ? "codenarc { reportFormat 'text' }": ""}
         """.stripIndent()
     }
 

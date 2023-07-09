@@ -1,6 +1,7 @@
 package projektor.plugin.functionaltest
 
 import projektor.plugin.BuildFileWriter
+import projektor.plugin.ProjectBuildFileConfig
 
 import static projektor.plugin.ProjectDirectoryWriter.createTestDirectory
 
@@ -36,9 +37,15 @@ include 'project1', 'project2', 'project3'
 
         rootBuildFile = BuildFileWriter.createRootBuildFile(projectRootDir)
 
-        BuildFileWriter.writeBuildFileContents(buildFileProject1, false, includeJacocoPlugin(), includeKoverPlugin())
-        BuildFileWriter.writeBuildFileContents(buildFileProject2, false, includeJacocoPlugin(), includeKoverPlugin())
-        BuildFileWriter.writeBuildFileContents(buildFileProject3, false, includeJacocoPlugin(), includeKoverPlugin())
+        ProjectBuildFileConfig config = new ProjectBuildFileConfig(
+                includeProjektorPlugin: false,
+                includeJacocoPlugin: includeJacocoPlugin(),
+                includeKoverPlugin: includeKoverPlugin()
+        )
+
+        BuildFileWriter.writeBuildFileContents(buildFileProject1, config)
+        BuildFileWriter.writeBuildFileContents(buildFileProject2, config)
+        BuildFileWriter.writeBuildFileContents(buildFileProject3, config)
 
         testDirectory1 = createTestDirectory(projectDir1)
         testDirectory2 = createTestDirectory(projectDir2)

@@ -2,6 +2,7 @@ package projektor.plugin.functionaltest
 
 import org.apache.commons.lang3.RandomStringUtils
 import projektor.plugin.BuildFileWriter
+import projektor.plugin.ProjectBuildFileConfig
 import projektor.plugin.SpecWriter
 import projektor.server.api.PublicId
 import retrofit2.Response
@@ -11,7 +12,7 @@ class PreviousTestRunFunctionalSpec extends ProjektorPluginFunctionalSpecificati
     File buildFile
 
     def setup() {
-        buildFile = BuildFileWriter.createProjectBuildFile(projectRootDir, true, true)
+        buildFile = BuildFileWriter.createProjectBuildFile(projectRootDir, new ProjectBuildFileConfig(includeJacocoPlugin: true))
     }
 
     def "should publish the Git metadata and find the previous test fun with coverage"() {
