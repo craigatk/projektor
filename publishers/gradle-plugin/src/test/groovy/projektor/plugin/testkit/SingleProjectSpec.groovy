@@ -13,6 +13,7 @@ abstract class SingleProjectSpec extends ProjectSpec {
                         includeProjektorPlugin: true,
                         includeJacocoPlugin: includeJacocoPlugin(),
                         includeKoverPlugin: includeKoverPlugin(),
+                        koverPluginVersion: koverPluginVersion(),
                         includeCodeNarcPlugin: includeCodenarcPlugin()
                 )
         )

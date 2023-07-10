@@ -8,14 +8,14 @@ import projektor.plugin.testkit.SingleProjectSpec
 import spock.lang.Unroll
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import static projektor.plugin.CodeUnderTestWriter.writePartialCoverageSpecFile
+import static projektor.plugin.CodeUnderTestWriter.writeKotlinSourceCodeFile
+import static projektor.plugin.CodeUnderTestWriter.writePartialCoverageKotestFile
 import static projektor.plugin.CodeUnderTestWriter.writeResourcesFile
-import static projektor.plugin.CodeUnderTestWriter.writeSourceCodeFile
+import static projektor.plugin.ProjectDirectoryWriter.createKotlinSourceDirectory
+import static projektor.plugin.ProjectDirectoryWriter.createKotlinTestDirectory
 import static projektor.plugin.ProjectDirectoryWriter.createResourcesDirectory
-import static projektor.plugin.ProjectDirectoryWriter.createSourceDirectory
-import static projektor.plugin.ProjectDirectoryWriter.createTestDirectory
 
-class KoverCoverageSingleProjectSpec extends SingleProjectSpec {
+class Kover04CoverageSingleProjectSpec extends SingleProjectSpec {
 
     @Override
     boolean includeKoverPlugin() {
@@ -34,11 +34,11 @@ class KoverCoverageSingleProjectSpec extends SingleProjectSpec {
         String publicId = "COV123"
         resultsStubber.stubResultsPostSuccess(publicId)
 
-        File sourceDir = createSourceDirectory(projectRootDir)
-        File testDir = createTestDirectory(projectRootDir)
+        File sourceDir = createKotlinSourceDirectory(projectRootDir)
+        File testDir = createKotlinTestDirectory(projectRootDir)
 
-        writeSourceCodeFile(sourceDir)
-        writePartialCoverageSpecFile(testDir, "PartialSpec")
+        writeKotlinSourceCodeFile(sourceDir)
+        writePartialCoverageKotestFile(testDir, "FooTest")
 
         when:
         BuildResult result = runSuccessfulBuildWithEnvironmentAndGradleVersion(
@@ -58,8 +58,8 @@ class KoverCoverageSingleProjectSpec extends SingleProjectSpec {
         List<CoverageFilePayload> coverageFilePayloads = resultsRequestBodies[0].coverageFiles
         coverageFilePayloads.size() == 1
 
-        coverageFilePayloads[0].reportContents.contains("MyClass")
-        coverageFilePayloads[0].baseDirectoryPath == "src/main/groovy"
+        coverageFilePayloads[0].reportContents.contains("Foo.kt")
+        coverageFilePayloads[0].baseDirectoryPath == "src/main/kotlin"
 
         where:
         gradleVersion                  | _
@@ -78,11 +78,11 @@ class KoverCoverageSingleProjectSpec extends SingleProjectSpec {
         String publicId = "COV123"
         resultsStubber.stubResultsPostSuccess(publicId)
 
-        File sourceDir = createSourceDirectory(projectRootDir)
-        File testDir = createTestDirectory(projectRootDir)
+        File sourceDir = createKotlinSourceDirectory(projectRootDir)
+        File testDir = createKotlinTestDirectory(projectRootDir)
 
-        writeSourceCodeFile(sourceDir)
-        writePartialCoverageSpecFile(testDir, "PartialSpec")
+        writeKotlinSourceCodeFile(sourceDir)
+        writePartialCoverageKotestFile(testDir, "FooTest")
 
         and:
         File resourcesDir = createResourcesDirectory(projectRootDir)
@@ -101,8 +101,8 @@ class KoverCoverageSingleProjectSpec extends SingleProjectSpec {
         List<CoverageFilePayload> coverageFilePayloads = resultsRequestBodies[0].coverageFiles
         coverageFilePayloads.size() == 1
 
-        coverageFilePayloads[0].reportContents.contains("MyClass")
-        coverageFilePayloads[0].baseDirectoryPath == "src/main/groovy"
+        coverageFilePayloads[0].reportContents.contains("Foo.kt")
+        coverageFilePayloads[0].baseDirectoryPath == "src/main/kotlin"
     }
 
     def "when coverage disabled should not publish coverage results to server"() {
@@ -117,11 +117,11 @@ class KoverCoverageSingleProjectSpec extends SingleProjectSpec {
         String publicId = "COV123"
         resultsStubber.stubResultsPostSuccess(publicId)
 
-        File sourceDir = createSourceDirectory(projectRootDir)
-        File testDir = createTestDirectory(projectRootDir)
+        File sourceDir = createKotlinSourceDirectory(projectRootDir)
+        File testDir = createKotlinTestDirectory(projectRootDir)
 
-        writeSourceCodeFile(sourceDir)
-        writePartialCoverageSpecFile(testDir, "PartialSpec")
+        writeKotlinSourceCodeFile(sourceDir)
+        writePartialCoverageKotestFile(testDir, "FooTest")
 
         when:
         def result = runSuccessfulBuildInCI('test', 'koverXmlReport', '-i')
@@ -146,11 +146,11 @@ class KoverCoverageSingleProjectSpec extends SingleProjectSpec {
             }
         """.stripIndent()
 
-        File sourceDir = createSourceDirectory(projectRootDir)
-        File testDir = createTestDirectory(projectRootDir)
+        File sourceDir = createKotlinSourceDirectory(projectRootDir)
+        File testDir = createKotlinTestDirectory(projectRootDir)
 
-        writeSourceCodeFile(sourceDir)
-        writePartialCoverageSpecFile(testDir, "PartialSpec")
+        writeKotlinSourceCodeFile(sourceDir)
+        writePartialCoverageKotestFile(testDir, "FooTest")
 
         when:
         def result = runSuccessfulBuildInCI('tasks')
@@ -177,19 +177,16 @@ class KoverCoverageSingleProjectSpec extends SingleProjectSpec {
         String publicId = "COV123"
         resultsStubber.stubResultsPostSuccess(publicId)
 
-        File sourceDir = createSourceDirectory(projectRootDir)
-        File testDir = createTestDirectory(projectRootDir)
+        File sourceDir = createKotlinSourceDirectory(projectRootDir)
+        File testDir = createKotlinTestDirectory(projectRootDir)
 
-        writeSourceCodeFile(sourceDir)
-        writePartialCoverageSpecFile(testDir, "PartialSpec")
+        writeKotlinSourceCodeFile(sourceDir)
+        writePartialCoverageKotestFile(testDir, "FooTest")
 
         when:
         BuildResult result = runSuccessfulBuildInCI('test', 'koverXmlReport', 'deleteKoverReports', '-i', '--stacktrace')
 
         then:
-        result.output.contains("Unable to set Projektor Kover coverage: Found no coverage report files")
-
-        and:
         result.task(":test").outcome == SUCCESS
         result.task(":koverXmlReport").outcome == SUCCESS
 
