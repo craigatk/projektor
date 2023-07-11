@@ -15,6 +15,10 @@ class ProjectDirectoryWriter {
         projectDir.newFolder("src", "main", "kotlin", "projektor")
     }
 
+    static File createKotlinSourceDirectory(File projectDir) {
+        return createProjectDir(projectDir, "src/main/kotlin/projektor")
+    }
+
     static File createResourcesDirectory(TemporaryFolder projectDir) {
         projectDir.newFolder("src", "main", "resources")
     }
@@ -35,8 +39,16 @@ class ProjectDirectoryWriter {
         projectDir.newFolder("src", "intTest", "groovy", "projektor")
     }
 
+    static File createKotlinIntegrationTestDirectory(TemporaryFolder projectDir) {
+        projectDir.newFolder("src", "intTest", "kotlin", "projektor")
+    }
+
     static File createTestDirectory(File projectDir) {
         return createProjectDir(projectDir, "src/test/groovy/projektor")
+    }
+
+    static File createKotlinTestDirectory(File projectDir) {
+        return createProjectDir(projectDir, "src/test/kotlin/projektor")
     }
 
     private static File createProjectDir(File projectDir, String dirPath) {

@@ -4,8 +4,12 @@ import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.testkit.SingleProjectSpec
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static projektor.plugin.CodeUnderTestWriter.writeKotlinSourceCodeFile
+import static projektor.plugin.CodeUnderTestWriter.writePartialCoverageKotestFile
 import static projektor.plugin.CodeUnderTestWriter.writePartialCoverageSpecFile
 import static projektor.plugin.CodeUnderTestWriter.writeSourceCodeFile
+import static projektor.plugin.ProjectDirectoryWriter.createKotlinSourceDirectory
+import static projektor.plugin.ProjectDirectoryWriter.createKotlinTestDirectory
 import static projektor.plugin.ProjectDirectoryWriter.createSourceDirectory
 import static projektor.plugin.ProjectDirectoryWriter.createTestDirectory
 
@@ -26,11 +30,11 @@ class KoverCoverageAutoPublishInCISpec extends SingleProjectSpec {
         String publicId = "AUTOCOV123"
         resultsStubber.stubResultsPostSuccess(publicId)
 
-        File sourceDir = createSourceDirectory(projectRootDir)
-        File testDir = createTestDirectory(projectRootDir)
+        File sourceDir = createKotlinSourceDirectory(projectRootDir)
+        File testDir = createKotlinTestDirectory(projectRootDir)
 
-        writeSourceCodeFile(sourceDir)
-        writePartialCoverageSpecFile(testDir, "PartialSpec")
+        writeKotlinSourceCodeFile(sourceDir)
+        writePartialCoverageKotestFile(testDir, "PartialTest")
 
         when:
         def result = runSuccessfulBuildWithEnvironment(["CI": "true"], 'test', 'koverXmlReport')
@@ -57,11 +61,11 @@ class KoverCoverageAutoPublishInCISpec extends SingleProjectSpec {
         String publicId = "AUTOCOV123"
         resultsStubber.stubResultsPostSuccess(publicId)
 
-        File sourceDir = createSourceDirectory(projectRootDir)
-        File testDir = createTestDirectory(projectRootDir)
+        File sourceDir = createKotlinSourceDirectory(projectRootDir)
+        File testDir = createKotlinTestDirectory(projectRootDir)
 
-        writeSourceCodeFile(sourceDir)
-        writePartialCoverageSpecFile(testDir, "PartialSpec")
+        writeKotlinSourceCodeFile(sourceDir)
+        writePartialCoverageKotestFile(testDir, "PartialTest")
 
         when:
         def result = runSuccessfulLocalBuild('tasks')

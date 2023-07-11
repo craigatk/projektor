@@ -3,6 +3,7 @@ package projektor.plugin.testkit
 import projektor.plugin.BuildFileWriter
 import projektor.plugin.ProjectBuildFileConfig
 
+import static projektor.plugin.ProjectDirectoryWriter.createKotlinTestDirectory
 import static projektor.plugin.ProjectDirectoryWriter.createTestDirectory
 
 class MultiProjectSpec extends ProjectSpec {
@@ -44,12 +45,25 @@ include 'project1', 'project2', 'project3'
                 includeCodeNarcPlugin: includeCodenarcPlugin()
         )
 
-        BuildFileWriter.writeBuildFileContents(buildFileProject1, config)
-        BuildFileWriter.writeBuildFileContents(buildFileProject2, config)
-        BuildFileWriter.writeBuildFileContents(buildFileProject3, config)
+        if (config.includeKoverPlugin) {
+            BuildFileWriter.writeKotlinBuildFileContents(buildFileProject1, config)
+            BuildFileWriter.writeKotlinBuildFileContents(buildFileProject2, config)
+            BuildFileWriter.writeKotlinBuildFileContents(buildFileProject3, config)
 
-        testDirectory1 = createTestDirectory(projectDir1)
-        testDirectory2 = createTestDirectory(projectDir2)
-        testDirectory3 = createTestDirectory(projectDir3)
+        } else {
+            BuildFileWriter.writeBuildFileContents(buildFileProject1, config)
+            BuildFileWriter.writeBuildFileContents(buildFileProject2, config)
+            BuildFileWriter.writeBuildFileContents(buildFileProject3, config)
+        }
+
+        if (config.includeKoverPlugin) {
+            testDirectory1 = createKotlinTestDirectory(projectDir1)
+            testDirectory2 = createKotlinTestDirectory(projectDir2)
+            testDirectory3 = createKotlinTestDirectory(projectDir3)
+        } else {
+            testDirectory1 = createTestDirectory(projectDir1)
+            testDirectory2 = createTestDirectory(projectDir2)
+            testDirectory3 = createTestDirectory(projectDir3)
+        }
     }
 }
