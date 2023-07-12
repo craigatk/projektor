@@ -5,30 +5,22 @@ import org.junit.rules.TemporaryFolder
 class BuildFileWriter {
     static File createProjectBuildFile(
             TemporaryFolder projectDir,
-            boolean includeProjektorPlugin = true,
-            boolean includeJacocoPlugin = false,
-            boolean includeKoverPlugin = false,
-            boolean includeCodeNarcPlugin = false
+            ProjectBuildFileConfig config = new ProjectBuildFileConfig()
     ) {
         File buildFile = projectDir.newFile('build.gradle')
 
-        writeBuildFileContents(
-                buildFile,
-                includeProjektorPlugin,
-                includeJacocoPlugin,
-                includeKoverPlugin,
-                includeCodeNarcPlugin
-        )
+        if (config.includeKoverPlugin) {
+            writeKotlinBuildFileContents(buildFile, config)
+        } else {
+            writeBuildFileContents(buildFile, config)
+        }
 
         return buildFile
     }
 
     static void writeBuildFileContents(
             File buildFile,
-            boolean includeProjektorPlugin = true,
-            boolean includeJacocoPlugin = false,
-            boolean includeKoverPlugin = false,
-            boolean includeCodeNarcPlugin = false
+            ProjectBuildFileConfig config = new ProjectBuildFileConfig()
     ) {
         buildFile << """
             buildscript {
@@ -39,10 +31,9 @@ class BuildFileWriter {
 
             plugins {
                 id 'groovy'
-                ${includeProjektorPlugin ? "id 'dev.projektor.publish'" : ""}
-                ${includeJacocoPlugin ? "id 'jacoco'" : ""}
-                ${includeKoverPlugin ? "id 'org.jetbrains.kotlinx.kover' version '0.4.4'" : ""}
-                ${includeCodeNarcPlugin ? "id 'codenarc'" : ""}
+                ${config.includeProjektorPlugin ? "id 'dev.projektor.publish'" : ""}
+                ${config.includeJacocoPlugin ? "id 'jacoco'" : ""}
+                ${config.includeCodeNarcPlugin ? "id 'codenarc'" : ""}
             }
             
             repositories {
@@ -55,12 +46,74 @@ class BuildFileWriter {
                 testImplementation('org.spockframework:spock-core:1.3-groovy-2.5')
             }
 
-            ${includeJacocoPlugin ? "jacocoTestReport { dependsOn test }": ""}
-            
-            ${includeKoverPlugin ? "test { kover { enabled = true } }": ""}
-            ${includeKoverPlugin ? "kover { coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO) }": ""}
+            ${config.includeJacocoPlugin ? "jacocoTestReport { dependsOn test }": ""}
 
-            ${includeCodeNarcPlugin ? "codenarc { reportFormat 'text' }": ""}
+            ${config.includeCodeNarcPlugin ? "codenarc { reportFormat 'text' }": ""}
+        """.stripIndent()
+    }
+
+    static void writeKotlinBuildFileContents(
+            File buildFile,
+            ProjectBuildFileConfig config = new ProjectBuildFileConfig()
+    ) {
+        String koverCoverageEngine = ""
+
+        if (config.includeKoverPlugin) {
+            if (config.koverPluginVersion.contains("0.7")) {
+                koverCoverageEngine = "kover { useJacoco() }"
+            } else {
+                koverCoverageEngine = "kover { coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO) }"
+            }
+        }
+
+        String koverConfigSetup = ""
+
+        if (config.includeKoverPlugin) {
+            if (config.koverPluginVersion.contains("0.7")) {
+                koverConfigSetup = """tasks.withType(kotlinx.kover.gradle.plugin.tasks.reports.KoverXmlTask) {
+                    dependsOn(test)
+                }"""
+            } else {
+                koverConfigSetup = "test { kover { enabled = true } }"
+            }
+        }
+
+        buildFile << """
+            buildscript {
+                repositories {
+                    mavenCentral()
+                }
+
+                dependencies {
+                    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22"
+                }
+            }
+
+            plugins {
+                ${config.includeProjektorPlugin ? "id 'dev.projektor.publish'" : ""}
+                ${config.includeKoverPlugin ? "id 'org.jetbrains.kotlinx.kover' version '${config.koverPluginVersion}'" : ""}
+            }
+
+            apply plugin: "kotlin"
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
+                implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.22"
+            
+                testImplementation "io.kotest:kotest-runner-junit5-jvm:5.6.2"
+                testImplementation "io.strikt:strikt-core:0.34.1"
+            }
+            
+            ${koverConfigSetup}
+            ${koverCoverageEngine}
+
+            test {
+                useJUnitPlatform()
+            }
         """.stripIndent()
     }
 

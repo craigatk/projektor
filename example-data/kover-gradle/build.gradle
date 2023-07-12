@@ -12,7 +12,7 @@ buildscript {
 
 plugins {
     id "dev.projektor.publish" version "8.3.0"
-    id "org.jetbrains.kotlinx.kover" version "0.6.1"
+    id "org.jetbrains.kotlinx.kover" version "0.7.2"
 }
 
 apply from: "../../gradle/kotlin.gradle"
@@ -29,7 +29,7 @@ projektor {
     publishToken = System.getenv("PROJEKTOR_TOKEN") ?: project.findProperty('projektor_publish_token') ?: null
 }
 
-tasks.withType(kotlinx.kover.tasks.KoverXmlTask) {
+tasks.withType(kotlinx.kover.gradle.plugin.tasks.reports.KoverXmlTask) {
     dependsOn(test)
 }
 
@@ -40,5 +40,5 @@ tasks.withType(Test) {
 }
 
 kover {
-    engine.set(kotlinx.kover.api.DefaultJacocoEngine.INSTANCE) // change instrumentation agent and reporter
+    useJacoco()
 }

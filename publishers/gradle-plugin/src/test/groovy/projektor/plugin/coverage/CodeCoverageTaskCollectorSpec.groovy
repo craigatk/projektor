@@ -13,9 +13,9 @@ class CodeCoverageTaskCollectorSpec extends Specification {
         Task task = Mock(Task)
 
         when:
-        taskCollector.koverCoverageFileOrNull(null)
+        taskCollector.koverCoverageFiles(null)
 
         then:
-        1 * logger.info("Unable to set Projektor Kover coverage: Found no coverage report files.")
+        1 * logger.info("Unable to set Projektor Kover coverage: Could not find kover XML task")
     }
 }

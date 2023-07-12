@@ -2,6 +2,7 @@ package projektor.plugin.functionaltest
 
 import projektor.plugin.BuildFileWriter
 import projektor.plugin.CodenarcWriter
+import projektor.plugin.ProjectBuildFileConfig
 import projektor.server.api.TestRun
 import projektor.server.api.quality.CodeQualityReport
 import projektor.server.api.quality.CodeQualityReports
@@ -18,12 +19,14 @@ class CodeQualitySingleProjectFunctionalSpec extends ProjektorPluginFunctionalSp
     File buildFile
 
     def setup() {
+
+        ProjectBuildFileConfig config = new ProjectBuildFileConfig(
+                includeCodeNarcPlugin: true
+        )
+
         buildFile = BuildFileWriter.createProjectBuildFile(
                 projectRootDir,
-                true,
-                false,
-                false,
-                true
+                config
         )
     }
 
