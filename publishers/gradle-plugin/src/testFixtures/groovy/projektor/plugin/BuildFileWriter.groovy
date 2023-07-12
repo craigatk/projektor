@@ -61,6 +61,9 @@ class BuildFileWriter {
         if (config.includeKoverPlugin) {
             if (config.koverPluginVersion.contains("0.7")) {
                 koverCoverageEngine = "kover { useJacoco() }"
+            }  else if (config.koverPluginVersion.contains("0.6")) {
+                // https://github.com/Kotlin/kotlinx-kover/blob/v0.6.0/docs/migration-to-0.6.0.md#properties-coverageengine-intellijengineversion-and-jacocoengineversion-were-removed
+                koverCoverageEngine = "kover { engine = kotlinx.kover.api.DefaultJacocoEngine.INSTANCE }"
             } else {
                 koverCoverageEngine = "kover { coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO) }"
             }
@@ -71,6 +74,10 @@ class BuildFileWriter {
         if (config.includeKoverPlugin) {
             if (config.koverPluginVersion.contains("0.7")) {
                 koverConfigSetup = """tasks.withType(kotlinx.kover.gradle.plugin.tasks.reports.KoverXmlTask) {
+                    dependsOn(test)
+                }"""
+            } else if (config.koverPluginVersion.contains("0.6")) {
+                koverConfigSetup = """tasks.withType(kotlinx.kover.tasks.KoverXmlTask) {
                     dependsOn(test)
                 }"""
             } else {
