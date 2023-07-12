@@ -110,6 +110,10 @@ class BuildFileWriter {
             
             ${koverConfigSetup}
             ${koverCoverageEngine}
+
+            test {
+                useJUnitPlatform()
+            }
         """.stripIndent()
     }
 

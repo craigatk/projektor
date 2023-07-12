@@ -71,6 +71,29 @@ class $testClassName : StringSpec() {
 """
     }
 
+    static void writeFullCoverageKotestFile(File testDirectory, String testClassName) {
+        File specFile = new File(testDirectory, "${testClassName}.kt")
+
+        specFile << """package projektor
+
+import io.kotest.core.spec.style.StringSpec
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
+
+class $testClassName : StringSpec() {
+    init {
+        "should return bar" {
+            expectThat(foo()).isEqualTo("bar")
+        }
+        
+        "should return bar" {
+            expectThat(baz()).isEqualTo("foo")
+        }
+    }
+}
+"""
+    }
+
     static void writeSecondPartialCoverageSpecFile(File testDirectory, String specClassName) {
         File specFile = new File(testDirectory, "${specClassName}.groovy")
 
