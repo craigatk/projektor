@@ -11,7 +11,7 @@ buildscript {
 }
 
 plugins {
-    id "dev.projektor.publish" version "8.3.0"
+    id "dev.projektor.publish" version "8.4.0"
     id "org.jetbrains.kotlinx.kover" version "0.7.2"
 }
 
