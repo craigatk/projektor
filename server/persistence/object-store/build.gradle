@@ -5,5 +5,5 @@ repositories {
 }
 
 dependencies {
-    api 'io.minio:minio:6.0.13'
+    api 'io.minio:minio:8.5.4'
 }

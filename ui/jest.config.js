@@ -4,6 +4,18 @@ module.exports = {
   ],
   preset: 'ts-jest',
   testMatch: ['**/*.spec.{ts,tsx}'],
+  "transform": {
+      "^.+\\.(ts|tsx|js)$": ["ts-jest", {
+          "tsconfig": {
+            "allowJs": true
+          }
+        }
+      ]
+  },
+
+  "transformIgnorePatterns": [
+    "<rootDir>/node_modules/(?!pretty-bytes)"
+  ],
   "reporters": [ "default", "jest-junit" ],
   collectCoverage: true,
   coverageReporters: ["clover", "text"],

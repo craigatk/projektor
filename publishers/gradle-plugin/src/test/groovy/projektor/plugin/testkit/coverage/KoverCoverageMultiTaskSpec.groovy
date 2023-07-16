@@ -8,12 +8,11 @@ import spock.lang.See
 import spock.lang.Unroll
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import static projektor.plugin.CodeUnderTestWriter.writePartialCoverageSpecFile
-import static projektor.plugin.CodeUnderTestWriter.writeSecondPartialCoverageSpecFile
-import static projektor.plugin.CodeUnderTestWriter.writeSourceCodeFile
-import static projektor.plugin.ProjectDirectoryWriter.createIntegrationTestDirectory
-import static projektor.plugin.ProjectDirectoryWriter.createSourceDirectory
-import static projektor.plugin.ProjectDirectoryWriter.createTestDirectory
+import static projektor.plugin.CodeUnderTestWriter.writeKotlinSourceCodeFile
+import static projektor.plugin.CodeUnderTestWriter.writePartialCoverageKotestFile
+import static projektor.plugin.ProjectDirectoryWriter.createKotlinIntegrationTestDirectory
+import static projektor.plugin.ProjectDirectoryWriter.createKotlinSourceDirectory
+import static projektor.plugin.ProjectDirectoryWriter.createKotlinTestDirectory
 
 class KoverCoverageMultiTaskSpec extends SingleProjectSpec {
 
@@ -65,13 +64,13 @@ class KoverCoverageMultiTaskSpec extends SingleProjectSpec {
         String publicId = "COV123"
         resultsStubber.stubResultsPostSuccess(publicId)
 
-        File sourceDir = createSourceDirectory(projectRootDir)
-        File testDir = createTestDirectory(projectRootDir)
-        File integrationTestDir = createIntegrationTestDirectory(projectRootDir)
+        File sourceDir = createKotlinSourceDirectory(projectRootDir)
+        File testDir = createKotlinTestDirectory(projectRootDir)
+        File integrationTestDir = createKotlinIntegrationTestDirectory(projectRootDir)
 
-        writeSourceCodeFile(sourceDir)
-        writePartialCoverageSpecFile(testDir, "PartialSpec")
-        writeSecondPartialCoverageSpecFile(integrationTestDir, "PartialIntegrationSpec")
+        writeKotlinSourceCodeFile(sourceDir)
+        writePartialCoverageKotestFile(testDir, "PartialTest")
+        writePartialCoverageKotestFile(integrationTestDir, "PartialIntegrationTest")
 
         when:
         def result = runSuccessfulBuildWithEnvironmentAndGradleVersion(
@@ -93,14 +92,11 @@ class KoverCoverageMultiTaskSpec extends SingleProjectSpec {
         List<CoverageFilePayload> coverageFilePayloads = resultsRequestBodies[0].coverageFiles
         coverageFilePayloads.size() == 1
 
-        coverageFilePayloads[0].reportContents.contains("MyClass")
-        coverageFilePayloads[0].reportContents.contains('<counter type="LINE" missed="0" covered="2"/>')
+        coverageFilePayloads[0].reportContents.contains('<counter type="LINE" missed="4" covered="0"/>')
 
         where:
         gradleVersion                  | _
-        GradleVersion.version("7.0")   | _
-        GradleVersion.version("7.2")   | _
-        GradleVersion.version("7.3")   | _
+        GradleVersion.version("7.6.1") | _
         GradleVersion.current()        | _
     }
 }

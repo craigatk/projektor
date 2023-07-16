@@ -1,6 +1,5 @@
 package projektor.repository.testrun
 
-import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
@@ -10,7 +9,10 @@ import projektor.incomingresults.randomPublicId
 import projektor.server.api.TestCase
 import projektor.server.api.repository.BranchType
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.any
+import strikt.assertions.contains
+import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
 
 class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTestCase() {
 

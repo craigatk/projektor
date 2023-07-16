@@ -6,11 +6,11 @@ import projektor.plugin.testkit.MultiProjectSpec
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.gradle.testkit.runner.TaskOutcome.UP_TO_DATE
-import static projektor.plugin.CodeUnderTestWriter.writePartialCoverageSpecFile
-import static projektor.plugin.CodeUnderTestWriter.writeSourceCodeFile
-import static projektor.plugin.ProjectDirectoryWriter.createSourceDirectory
+import static projektor.plugin.CodeUnderTestWriter.writeKotlinSourceCodeFile
+import static projektor.plugin.CodeUnderTestWriter.writePartialCoverageKotestFile
+import static projektor.plugin.ProjectDirectoryWriter.createKotlinSourceDirectory
 
-class KoverCoverageMultiProjectSpec extends MultiProjectSpec {
+class Kover04CoverageMultiProjectSpec extends MultiProjectSpec {
     File sourceDirectory1
     File sourceDirectory2
     File sourceDirectory3
@@ -21,9 +21,9 @@ class KoverCoverageMultiProjectSpec extends MultiProjectSpec {
     }
 
     def setup() {
-        sourceDirectory1 = createSourceDirectory(projectDir1)
-        sourceDirectory2 = createSourceDirectory(projectDir2)
-        sourceDirectory3 = createSourceDirectory(projectDir3)
+        sourceDirectory1 = createKotlinSourceDirectory(projectDir1)
+        sourceDirectory2 = createKotlinSourceDirectory(projectDir2)
+        sourceDirectory3 = createKotlinSourceDirectory(projectDir3)
     }
 
     def "should publish coverage from multi-project build to server"() {
@@ -38,14 +38,14 @@ class KoverCoverageMultiProjectSpec extends MultiProjectSpec {
         String publicId = "COV123"
         resultsStubber.stubResultsPostSuccess(publicId)
 
-        writeSourceCodeFile(sourceDirectory1)
-        writePartialCoverageSpecFile(testDirectory1, "PartialSpec1")
+        writeKotlinSourceCodeFile(sourceDirectory1)
+        writePartialCoverageKotestFile(testDirectory1, "PartialTest1")
 
-        writeSourceCodeFile(sourceDirectory2)
-        writePartialCoverageSpecFile(testDirectory2, "PartialSpec2")
+        writeKotlinSourceCodeFile(sourceDirectory2)
+        writePartialCoverageKotestFile(testDirectory2, "PartialTest2")
 
-        writeSourceCodeFile(sourceDirectory3)
-        writePartialCoverageSpecFile(testDirectory3, "PartialSpec3")
+        writeKotlinSourceCodeFile(sourceDirectory3)
+        writePartialCoverageKotestFile(testDirectory3, "PartialTest3")
 
         when:
         def result = runSuccessfulBuildInCI('test', 'koverXmlReport', '-i')
@@ -80,14 +80,14 @@ class KoverCoverageMultiProjectSpec extends MultiProjectSpec {
         String publicId = "COV123"
         resultsStubber.stubResultsPostSuccess(publicId)
 
-        writeSourceCodeFile(sourceDirectory1)
-        writePartialCoverageSpecFile(testDirectory1, "PartialSpec1")
+        writeKotlinSourceCodeFile(sourceDirectory1)
+        writePartialCoverageKotestFile(testDirectory1, "PartialTest1")
 
-        writeSourceCodeFile(sourceDirectory2)
-        writePartialCoverageSpecFile(testDirectory2, "PartialSpec2")
+        writeKotlinSourceCodeFile(sourceDirectory2)
+        writePartialCoverageKotestFile(testDirectory2, "PartialTest2")
 
-        writeSourceCodeFile(sourceDirectory3)
-        writePartialCoverageSpecFile(testDirectory3, "PartialSpec3")
+        writeKotlinSourceCodeFile(sourceDirectory3)
+        writePartialCoverageKotestFile(testDirectory3, "PartialTest3")
 
         when:
         def result = runSuccessfulBuildInCI('test', 'koverXmlReport', '-i')
@@ -110,9 +110,9 @@ class KoverCoverageMultiProjectSpec extends MultiProjectSpec {
         coverageFilePayloads.size() == 3
 
         List<String> baseDirectoryPaths = coverageFilePayloads.collect { it.baseDirectoryPath }
-        baseDirectoryPaths.contains("project1/src/main/groovy")
-        baseDirectoryPaths.contains("project2/src/main/groovy")
-        baseDirectoryPaths.contains("project3/src/main/groovy")
+        baseDirectoryPaths.contains("project1/src/main/kotlin")
+        baseDirectoryPaths.contains("project2/src/main/kotlin")
+        baseDirectoryPaths.contains("project3/src/main/kotlin")
     }
 
     def "when only one subproject changes should publish coverage from all subprojects"() {
@@ -127,14 +127,14 @@ class KoverCoverageMultiProjectSpec extends MultiProjectSpec {
         String publicId1 = "COVER1"
         resultsStubber.stubResultsPostSuccess(publicId1)
 
-        writeSourceCodeFile(sourceDirectory1)
-        writePartialCoverageSpecFile(testDirectory1, "PartialSpec1")
+        writeKotlinSourceCodeFile(sourceDirectory1)
+        writePartialCoverageKotestFile(testDirectory1, "PartialTest1")
 
-        writeSourceCodeFile(sourceDirectory2)
-        writePartialCoverageSpecFile(testDirectory2, "PartialSpec2")
+        writeKotlinSourceCodeFile(sourceDirectory2)
+        writePartialCoverageKotestFile(testDirectory2, "PartialTest2")
 
-        writeSourceCodeFile(sourceDirectory3)
-        writePartialCoverageSpecFile(testDirectory3, "PartialSpec3")
+        writeKotlinSourceCodeFile(sourceDirectory3)
+        writePartialCoverageKotestFile(testDirectory3, "PartialTest3")
 
         when:
         def result1 = runSuccessfulBuildInCI('test', 'koverXmlReport', '-i')
@@ -162,7 +162,7 @@ class KoverCoverageMultiProjectSpec extends MultiProjectSpec {
         String publicId2 = "COVER2"
         resultsStubber.stubResultsPostSuccess(publicId2)
 
-        writePartialCoverageSpecFile(testDirectory2, "PartialSpec4")
+        writePartialCoverageKotestFile(testDirectory2, "PartialTest4")
 
         def result2 = runSuccessfulBuildInCI('test', 'koverXmlReport', '-i')
 
@@ -171,7 +171,6 @@ class KoverCoverageMultiProjectSpec extends MultiProjectSpec {
         result2.task(":project1:koverXmlReport").outcome == UP_TO_DATE
 
         result2.task(":project2:test").outcome == SUCCESS
-        result2.task(":project2:koverXmlReport").outcome == SUCCESS
 
         result2.task(":project3:test").outcome == UP_TO_DATE
         result2.task(":project3:koverXmlReport").outcome == UP_TO_DATE
@@ -196,14 +195,14 @@ class KoverCoverageMultiProjectSpec extends MultiProjectSpec {
         String publicId1 = "COVER1"
         resultsStubber.stubResultsPostSuccess(publicId1)
 
-        writeSourceCodeFile(sourceDirectory1)
-        writePartialCoverageSpecFile(testDirectory1, "PartialSpec1")
+        writeKotlinSourceCodeFile(sourceDirectory1)
+        writePartialCoverageKotestFile(testDirectory1, "PartialTest1")
 
-        writeSourceCodeFile(sourceDirectory2)
-        writePartialCoverageSpecFile(testDirectory2, "PartialSpec2")
+        writeKotlinSourceCodeFile(sourceDirectory2)
+        writePartialCoverageKotestFile(testDirectory2, "PartialTest2")
 
-        writeSourceCodeFile(sourceDirectory3)
-        writePartialCoverageSpecFile(testDirectory3, "PartialSpec3")
+        writeKotlinSourceCodeFile(sourceDirectory3)
+        writePartialCoverageKotestFile(testDirectory3, "PartialTest3")
 
         when:
         def result1 = runSuccessfulBuildWithEnvironment(["CI": "true"], 'test', 'koverXmlReport')

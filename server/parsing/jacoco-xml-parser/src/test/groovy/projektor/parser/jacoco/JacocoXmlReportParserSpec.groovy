@@ -3,8 +3,8 @@ package projektor.parser.jacoco
 import projektor.parser.jacoco.model.Counter
 import projektor.parser.jacoco.model.CounterType
 import projektor.parser.jacoco.model.Report
-import projektor.server.example.coverage.JacocoXmlLoader
 import projektor.server.example.coverage.CloverXmlLoader
+import projektor.server.example.coverage.JacocoXmlLoader
 import spock.lang.Specification
 import spock.lang.Unroll
 

@@ -1,8 +1,10 @@
 package projektor.incomingresults
 
-import io.ktor.http.*
-import io.ktor.server.testing.*
-import io.ktor.util.*
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.server.testing.handleRequest
+import io.ktor.server.testing.setBody
+import io.ktor.server.testing.withTestApplication
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.awaitility.kotlin.await
@@ -17,7 +19,10 @@ import projektor.parser.grouped.model.GitMetadata
 import projektor.parser.grouped.model.ResultsMetadata
 import projektor.server.api.PublicId
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.any
+import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
 import java.math.BigDecimal
 
 class AppendCoverageApplicationTest : ApplicationTestCase() {

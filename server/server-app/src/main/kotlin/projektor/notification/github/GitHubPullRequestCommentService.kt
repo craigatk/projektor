@@ -2,7 +2,12 @@ package projektor.notification.github
 
 import projektor.incomingresults.model.GitMetadata
 import projektor.notification.NotificationConfig
-import projektor.notification.github.comment.*
+import projektor.notification.github.comment.GitHubCommentService
+import projektor.notification.github.comment.PullRequest
+import projektor.notification.github.comment.ReportCommentData
+import projektor.notification.github.comment.ReportCommentGitData
+import projektor.notification.github.comment.ReportCommentPerformanceData
+import projektor.notification.github.comment.ReportCoverageCommentData
 import projektor.server.api.TestRunSummary
 import projektor.server.api.coverage.Coverage
 import projektor.server.api.performance.PerformanceResult

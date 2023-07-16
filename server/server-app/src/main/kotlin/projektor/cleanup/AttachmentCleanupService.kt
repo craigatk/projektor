@@ -4,7 +4,6 @@ import org.slf4j.LoggerFactory
 import projektor.attachment.AttachmentService
 import projektor.server.api.PublicId
 import projektor.testrun.TestRunRepository
-import java.lang.Exception
 import java.time.LocalDate
 
 class AttachmentCleanupService(

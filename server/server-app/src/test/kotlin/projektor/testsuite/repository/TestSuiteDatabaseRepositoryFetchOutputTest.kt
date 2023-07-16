@@ -1,6 +1,5 @@
 package projektor.testsuite.repository
 
-import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.DatabaseRepositoryTestCase
@@ -9,7 +8,8 @@ import projektor.database.generated.tables.pojos.TestSuite
 import projektor.incomingresults.randomPublicId
 import projektor.testsuite.TestSuiteDatabaseRepository
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
 
 class TestSuiteDatabaseRepositoryFetchOutputTest : DatabaseRepositoryTestCase() {
 

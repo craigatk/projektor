@@ -5,7 +5,10 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
 

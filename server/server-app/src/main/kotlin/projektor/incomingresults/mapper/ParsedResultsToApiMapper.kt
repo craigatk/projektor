@@ -8,9 +8,13 @@ import java.time.Instant
 import projektor.parser.model.TestSuite as ParsedTestSuite
 import projektor.server.api.TestSuite as TestSuiteApi
 
-fun toTestRunSummary(publicId: PublicId, testSuites: List<ParsedTestSuite>, wallClockDuration: BigDecimal?): TestRunSummary {
-    val totalTestCount = testSuites.sumBy { it.tests }
-    val totalFailureCount = testSuites.sumBy { it.failures }
+fun toTestRunSummary(
+    publicId: PublicId,
+    testSuites: List<ParsedTestSuite>,
+    wallClockDuration: BigDecimal?
+): TestRunSummary {
+    val totalTestCount = testSuites.sumOf { it.tests }
+    val totalFailureCount = testSuites.sumOf { it.failures }
 
     val allTestCases = testSuites.flatMap { it.testCases }
     val cumulativeDuration = allTestCases
@@ -25,8 +29,8 @@ fun toTestRunSummary(publicId: PublicId, testSuites: List<ParsedTestSuite>, wall
     return TestRunSummary(
         publicId.id,
         totalTestCount,
-        testSuites.sumBy { it.passingCount },
-        testSuites.sumBy { it.skipped },
+        testSuites.sumOf { it.passingCount },
+        testSuites.sumOf { it.skipped },
         totalFailureCount,
         totalFailureCount == 0,
         cumulativeDuration,
@@ -37,9 +41,13 @@ fun toTestRunSummary(publicId: PublicId, testSuites: List<ParsedTestSuite>, wall
     )
 }
 
-fun toTestRunSummaryFromApi(publicId: PublicId, testSuites: List<TestSuiteApi>, wallClockDuration: BigDecimal?): TestRunSummary {
-    val totalTestCount = testSuites.sumBy { it.testCount }
-    val totalFailureCount = testSuites.sumBy { it.failureCount }
+fun toTestRunSummaryFromApi(
+    publicId: PublicId,
+    testSuites: List<TestSuiteApi>,
+    wallClockDuration: BigDecimal?
+): TestRunSummary {
+    val totalTestCount = testSuites.sumOf { it.testCount }
+    val totalFailureCount = testSuites.sumOf { it.failureCount }
 
     val allTestCases = testSuites.mapNotNull { it.testCases }.flatten()
     val cumulativeDuration = allTestCases
@@ -54,8 +62,8 @@ fun toTestRunSummaryFromApi(publicId: PublicId, testSuites: List<TestSuiteApi>, 
     return TestRunSummary(
         publicId.id,
         totalTestCount,
-        testSuites.sumBy { it.passingCount },
-        testSuites.sumBy { it.skippedCount },
+        testSuites.sumOf { it.passingCount },
+        testSuites.sumOf { it.skippedCount },
         totalFailureCount,
         totalFailureCount == 0,
         cumulativeDuration,

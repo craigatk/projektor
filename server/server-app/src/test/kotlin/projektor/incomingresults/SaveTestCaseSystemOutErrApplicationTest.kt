@@ -1,8 +1,11 @@
 package projektor.incomingresults
 
-import io.ktor.http.*
-import io.ktor.server.testing.*
-import io.ktor.util.*
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.testing.handleRequest
+import io.ktor.server.testing.setBody
+import io.ktor.server.testing.withTestApplication
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.ktor.ext.get
@@ -13,7 +16,12 @@ import projektor.testcase.TestCaseService
 import projektor.testrun.TestRunService
 import projektor.testsuite.TestSuiteService
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.contains
+import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
+import strikt.assertions.isFalse
+import strikt.assertions.isNotNull
+import strikt.assertions.isTrue
 
 class SaveTestCaseSystemOutErrApplicationTest : ApplicationTestCase() {
     @Test

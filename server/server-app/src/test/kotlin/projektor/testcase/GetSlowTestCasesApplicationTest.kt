@@ -6,7 +6,10 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 import org.junit.jupiter.api.Test
-import projektor.*
+import projektor.ApplicationTestCase
+import projektor.createTestCase
+import projektor.createTestRun
+import projektor.createTestSuite
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.TestCase
 import strikt.api.expectThat

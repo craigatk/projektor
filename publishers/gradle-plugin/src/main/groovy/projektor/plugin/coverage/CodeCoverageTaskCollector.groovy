@@ -24,12 +24,14 @@ class CodeCoverageTaskCollector {
     }
 
     List<CoverageFilePayload> getCoverageFilePayloads() {
-        codeCoverageFiles.collect { coverageFile ->
-            new CoverageFilePayload(
-                    reportContents: coverageFile.reportFile.text,
-                    baseDirectoryPath: coverageFile.baseDirectoryPath
-            )
-        }
+        codeCoverageFiles
+                .findAll { coverageFile -> coverageFile.reportFile.exists() }
+                .collect { coverageFile ->
+                    new CoverageFilePayload(
+                            reportContents: coverageFile.reportFile.text,
+                            baseDirectoryPath: coverageFile.baseDirectoryPath
+                    )
+                }
     }
 
     private List<CodeCoverageFile> collectCodeCoverageFiles(Collection<Task> allTasks, boolean coverageEnabled) {
@@ -39,28 +41,52 @@ class CodeCoverageTaskCollector {
     private List<CodeCoverageFile> collectKoverCodeCoverageFiles(boolean coverageEnabled, Collection<Task> allTasks) {
         if (coverageEnabled) {
             Collection<Task> koverXmlReportTasks = allTasks.findAll { it.name.contains("koverXmlReport") }
-            return koverXmlReportTasks.collect { koverCoverageFileOrNull(it) }.findAll { it != null }
+            return koverXmlReportTasks.collect { koverCoverageFiles(it) }.flatten()
         } else {
             return []
         }
     }
 
-    private CodeCoverageFile koverCoverageFileOrNull(Task koverXmlReportTask) {
-        if (!koverXmlReportTask ||
-                !koverXmlReportTask?.xmlReportFile?.isPresent() ||
-                !koverXmlReportTask?.outputDirs?.isPresent() ||
-                !koverXmlReportTask.xmlReportFile.get().getAsFile().exists()) {
-            logger.info("Unable to set Projektor Kover coverage: Found no coverage report files.")
-            return null
-        } else {
-            File reportFile = koverXmlReportTask.xmlReportFile.get().getAsFile()
-            String baseDirectoryPath = findKoverBaseDirectoryPath(koverXmlReportTask)
+    private List<CodeCoverageFile> koverCoverageFiles(Task koverXmlReportTask) {
+        if (koverXmlReportTask) {
+            if (koverXmlReportTask.hasProperty("reportFile")) {
+                if (koverXmlReportTask.outputDirs?.isPresent() && koverXmlReportTask.reportFile.get().getAsFile().exists()) {
+                    // Kover prior to 0.6
+                    File reportFile = koverXmlReportTask.xmlReportFile.get().getAsFile()
+                    String baseDirectoryPath = findKoverBaseDirectoryPath(koverXmlReportTask)
 
-            return new CodeCoverageFile(
-                    reportFile,
-                    baseDirectoryPath
-            )
+                    CodeCoverageFile coverageFile = new CodeCoverageFile(
+                            reportFile,
+                            baseDirectoryPath
+                    )
+
+                    return [coverageFile]
+                }
+            } else {
+                // Kover 0.6 and later removed the 'xmlReportFile` field, so get the report xml files
+                // from the task output
+                FileCollection outputFiles = koverXmlReportTask.outputs.getFiles()
+
+                if (!outputFiles.toList().empty) {
+                    String baseDirectoryPath = findKoverBaseDirectoryPath(koverXmlReportTask)
+
+                    return outputFiles
+                            .findAll { File reportFile -> reportFile.name.endsWith("xml") }
+                            .collect { File reportFile ->
+                                new CodeCoverageFile(
+                                        reportFile,
+                                        baseDirectoryPath
+                                )
+                            }
+                } else {
+                    logger.info("Unable to set Projektor Kover coverage: Could not find kover XML task")
+                }
+            }
+        } else {
+            logger.info("Unable to set Projektor Kover coverage: Could not find kover XML task")
         }
+
+        return []
     }
 
     private List<CodeCoverageFile> collectJacocoCodeCoverageFiles(boolean coverageEnabled, Collection<Task> allTasks) {
@@ -111,8 +137,15 @@ class CodeCoverageTaskCollector {
     }
 
     private String findKoverBaseDirectoryPath(Task koverReportTask) {
-        Property<FileCollection> srcDirsProperty = koverReportTask.srcDirs
-        List<File> sourceDirectoriesWithFiles = srcDirsProperty.get().files.toList()
+        FileCollection srcDirs
+
+        if (koverReportTask.hasProperty("srcDirs")) {
+            Property<FileCollection> srcDirsProperty = koverReportTask.srcDirs
+            srcDirs = srcDirsProperty.get()
+        } else {
+            srcDirs = koverReportTask.inputs.files
+        }
+        List<File> sourceDirectoriesWithFiles = srcDirs.files.toList()
         File projectRootDir = koverReportTask.project.rootDir
 
         return findBaseDirectoryPath(sourceDirectoriesWithFiles, projectRootDir)
@@ -121,6 +154,8 @@ class CodeCoverageTaskCollector {
     private String findBaseDirectoryPath(List<File> sourceDirectoriesWithFiles, File projectRootDir) {
         List<File> filteredSourceDirectories = sourceDirectoriesWithFiles
                 .findAll { !it.path.contains("src/main/resources") }
+                .findAll { !it.path.contains("/build/") }
+                .findAll { !it.path.contains("/caches/") }
 
         if (filteredSourceDirectories.size() == 1) {
             return DirectoryUtil.findSubDirectoryPath(projectRootDir, filteredSourceDirectories.first())

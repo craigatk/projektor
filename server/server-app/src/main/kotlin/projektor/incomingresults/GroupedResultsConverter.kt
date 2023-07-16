@@ -2,7 +2,11 @@ package projektor.incomingresults
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import projektor.incomingresults.model.*
+import projektor.incomingresults.model.GitMetadata
+import projektor.incomingresults.model.GroupedResults
+import projektor.incomingresults.model.GroupedTestSuites
+import projektor.incomingresults.model.PerformanceResult
+import projektor.incomingresults.model.ResultsMetadata
 import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.parser.grouped.GroupedResultsParser
 import projektor.parser.performance.PerformanceResultsParser

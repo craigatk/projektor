@@ -1,7 +1,12 @@
 package projektor.parser
 
 import projektor.parser.grouped.GroupedResultsParser
-import projektor.parser.grouped.model.*
+import projektor.parser.grouped.model.CodeQualityReport
+import projektor.parser.grouped.model.CoverageFile
+import projektor.parser.grouped.model.GroupedResults
+import projektor.parser.grouped.model.GroupedTestSuites
+import projektor.parser.grouped.model.PerformanceResult
+import projektor.parser.grouped.model.ResultsMetadata
 import java.math.BigDecimal
 
 class GroupedResultsXmlLoader {

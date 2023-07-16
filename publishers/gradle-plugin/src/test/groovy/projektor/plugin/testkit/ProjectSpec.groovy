@@ -102,6 +102,10 @@ abstract class ProjectSpec extends Specification {
         return false
     }
 
+    String koverPluginVersion() {
+        return "0.4.4"
+    }
+
     boolean includeCodenarcPlugin() {
         return false
     }

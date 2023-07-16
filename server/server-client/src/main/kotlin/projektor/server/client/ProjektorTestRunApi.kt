@@ -1,6 +1,10 @@
 package projektor.server.client
 
-import projektor.server.api.*
+import projektor.server.api.PublicId
+import projektor.server.api.TestCase
+import projektor.server.api.TestOutput
+import projektor.server.api.TestRun
+import projektor.server.api.TestSuite
 import projektor.server.api.coverage.Coverage
 import projektor.server.api.coverage.CoverageExists
 import projektor.server.api.coverage.CoverageStats

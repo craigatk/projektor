@@ -3,7 +3,9 @@ package projektor.metadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
-import projektor.database.generated.Tables.*
+import projektor.database.generated.Tables.GIT_METADATA
+import projektor.database.generated.Tables.RESULTS_METADATA
+import projektor.database.generated.Tables.TEST_RUN
 import projektor.server.api.PublicId
 import projektor.server.api.metadata.TestRunGitMetadata
 import projektor.server.api.metadata.TestRunMetadata

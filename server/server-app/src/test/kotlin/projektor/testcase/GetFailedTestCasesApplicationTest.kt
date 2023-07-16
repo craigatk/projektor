@@ -1,7 +1,8 @@
 package projektor.testcase
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.ktor.http.*
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 import org.junit.jupiter.api.Test
@@ -10,7 +11,12 @@ import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.TestCase
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.all
+import strikt.assertions.contains
+import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
+import strikt.assertions.map
 import kotlin.test.assertNotNull
 
 class GetFailedTestCasesApplicationTest : ApplicationTestCase() {

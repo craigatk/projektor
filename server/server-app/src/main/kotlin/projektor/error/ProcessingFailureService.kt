@@ -3,7 +3,6 @@ package projektor.error
 import projektor.server.api.PublicId
 import projektor.server.api.error.FailureBodyType
 import projektor.server.api.error.ResultsProcessingFailure
-import java.lang.Exception
 
 class ProcessingFailureService(private val processingFailureRepository: ProcessingFailureRepository) {
 

@@ -4,7 +4,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
-import projektor.database.generated.Tables.*
+import projektor.database.generated.Tables.GIT_METADATA
+import projektor.database.generated.Tables.PERFORMANCE_RESULTS
+import projektor.database.generated.Tables.TEST_RUN
 import projektor.server.api.repository.performance.RepositoryPerformanceTestTimelineEntry
 import kotlin.streams.toList
 

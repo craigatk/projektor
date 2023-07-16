@@ -1,6 +1,5 @@
 package projektor.repository.testrun
 
-import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test

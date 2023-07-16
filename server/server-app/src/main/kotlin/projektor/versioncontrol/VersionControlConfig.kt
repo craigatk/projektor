@@ -1,6 +1,6 @@
 package projektor.versioncontrol
 
-import io.ktor.server.config.*
+import io.ktor.server.config.ApplicationConfig
 
 data class VersionControlConfig(
     val gitHubBaseUrl: String?

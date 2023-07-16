@@ -5,7 +5,9 @@ import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
 import org.jooq.impl.DSL.firstValue
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
-import projektor.database.generated.Tables.*
+import projektor.database.generated.Tables.CODE_COVERAGE_RUN
+import projektor.database.generated.Tables.GIT_METADATA
+import projektor.database.generated.Tables.TEST_RUN
 import kotlin.streams.toList
 
 class OrganizationCoverageDatabaseRepository(private val dslContext: DSLContext) : OrganizationCoverageRepository {

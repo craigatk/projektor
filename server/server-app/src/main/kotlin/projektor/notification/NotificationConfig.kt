@@ -1,6 +1,6 @@
 package projektor.notification
 
-import io.ktor.server.config.*
+import io.ktor.server.config.ApplicationConfig
 
 data class NotificationConfig(val serverBaseUrl: String?) {
     companion object {

@@ -16,7 +16,13 @@ import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectThat
-import strikt.assertions.*
+import strikt.assertions.contains
+import strikt.assertions.doesNotContain
+import strikt.assertions.hasSize
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNotEmpty
+import strikt.assertions.isNotNull
+import strikt.assertions.isNull
 import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime

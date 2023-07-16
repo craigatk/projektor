@@ -12,7 +12,7 @@ dependencies {
     implementation project(":server:parsing:grouped-results-parser")
 
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     implementation "org.apache.commons:commons-lang3:3.8.1"
 }

@@ -1,6 +1,5 @@
 package projektor.incomingresults
 
-import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull

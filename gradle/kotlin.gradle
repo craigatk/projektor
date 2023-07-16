@@ -4,14 +4,14 @@ apply plugin: "org.jlleitschuh.gradle.ktlint"
 sourceCompatibility = 11
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = "$sourceCompatibility"
 }
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget =  "$sourceCompatibility"
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     testImplementation "io.kotest:kotest-runner-junit5-jvm:${kotest_version}"
