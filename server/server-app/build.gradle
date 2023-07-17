@@ -75,7 +75,7 @@ dependencies {
     testImplementation(project(':server:test:test-fixtures'))
 
     testImplementation 'org.awaitility:awaitility-kotlin:4.2.0'
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.9.2"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.9.3"
 
     testImplementation "io.insert-koin:koin-test:$koin_version"
 
