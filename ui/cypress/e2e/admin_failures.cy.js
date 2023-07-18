@@ -2,13 +2,9 @@
 
 context("admin failures", () => {
   it("should display recent failures", () => {
-    cy.server();
-
-    cy.route(
-      "GET",
-      `failures/recent?count=10`,
-      "fixture:admin/recent_failures_2.json"
-    );
+    cy.intercept("GET", `failures/recent?count=10`, {
+      fixture: "admin/recent_failures_2.json",
+    });
 
     cy.visit(`http://localhost:1234/admin`);
 
@@ -54,19 +50,13 @@ context("admin failures", () => {
   });
 
   it("should support changing the number of failures that are loaded", () => {
-    cy.server();
+    cy.intercept("GET", `failures/recent?count=10`, {
+      fixture: "admin/recent_failures_2.json",
+    });
 
-    cy.route(
-      "GET",
-      `failures/recent?count=10`,
-      "fixture:admin/recent_failures_2.json"
-    );
-
-    cy.route(
-      "GET",
-      `failures/recent?count=20`,
-      "fixture:admin/recent_failures_20.json"
-    );
+    cy.intercept("GET", `failures/recent?count=20`, {
+      fixture: "admin/recent_failures_20.json",
+    });
 
     cy.visit(`http://localhost:1234/admin`);
 
