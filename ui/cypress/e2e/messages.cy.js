@@ -4,20 +4,17 @@ context("test run messages", () => {
   it("when one message should show it on dashboard page", () => {
     const publicId = "12345";
 
-    cy.server();
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "one_passing/test_run_summary.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/summary`,
-      "fixture:one_passing/test_run_summary.json"
-    );
-    cy.route("GET", `run/${publicId}`, "fixture:one_passing/test_run.json");
+    cy.intercept("GET", `run/${publicId}`, {
+      fixture: "one_passing/test_run.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/messages`,
-      "fixture:messages/one_message.json"
-    );
+    cy.intercept("GET",`run/${publicId}/messages`, {
+      fixture: "messages/one_message.json",
+    });
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
@@ -30,20 +27,17 @@ context("test run messages", () => {
   it("when no messages should not display any dashboard page", () => {
     const publicId = "12345";
 
-    cy.server();
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "one_passing/test_run_summary.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/summary`,
-      "fixture:one_passing/test_run_summary.json"
-    );
-    cy.route("GET", `run/${publicId}`, "fixture:one_passing/test_run.json");
+    cy.intercept("GET", `run/${publicId}`, {
+      fixture: "one_passing/test_run.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/messages`,
-      "fixture:messages/no_messages.json"
-    );
+    cy.intercept("GET",`run/${publicId}/messages`, {
+      fixture: "messages/no_messages.json",
+    });
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 

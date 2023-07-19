@@ -4,33 +4,25 @@ describe("file-level coverage", () => {
   it("should show file-level coverage on page", () => {
     const publicId = "18932";
 
-    cy.server();
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/cases/failed`,
-      "fixture:failed_test_cases.json"
-    );
+    cy.intercept("GET", `run/${publicId}/coverage`, {
+      fixture: "coverage/coverage-three-groups.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/coverage`,
-      "fixture:coverage/coverage-three-groups.json"
-    );
+    cy.intercept("GET", `run/${publicId}/coverage/exists`, {
+      fixture: "coverage/coverage-exists.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/coverage/exists`,
-      "fixture:coverage/coverage-exists.json"
-    );
-
-    cy.route(
-      "GET",
-      `run/${publicId}/coverage/server-app/files`,
-      "fixture:coverage/coverage-files-server-app.json"
-    );
+    cy.intercept("GET", `run/${publicId}/coverage/server-app/files`, {
+      fixture: "coverage/coverage-files-server-app.json",
+    });
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
@@ -65,39 +57,29 @@ describe("file-level coverage", () => {
   it("should show links to files in GitHub when GitHub base URL and coverage file paths set", () => {
     const publicId = "21i31";
 
-    cy.server();
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/cases/failed`,
-      "fixture:failed_test_cases.json"
-    );
+    cy.intercept("GET", `run/${publicId}/metadata/git`, {
+      fixture: "metadata/git-metadata-with-github-base-url.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/metadata/git`,
-      "fixture:metadata/git-metadata-with-github-base-url.json"
-    );
+    cy.intercept("GET", `run/${publicId}/coverage`, {
+      fixture: "coverage/coverage-three-groups.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/coverage`,
-      "fixture:coverage/coverage-three-groups.json"
-    );
+    cy.intercept("GET", `run/${publicId}/coverage/exists`, {
+      fixture: "coverage/coverage-exists.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/coverage/exists`,
-      "fixture:coverage/coverage-exists.json"
-    );
-
-    cy.route(
-      "GET",
-      `run/${publicId}/coverage/server-app/files`,
-      "fixture:coverage/coverage-files-with-file-path.json"
-    );
+    cy.intercept("GET", `run/${publicId}/coverage/server-app/files`, {
+      fixture: "coverage/coverage-files-with-file-path.json",
+    });
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 

@@ -4,17 +4,17 @@ context("side nav", () => {
   it("should link to failed test cases", () => {
     const publicId = "12345";
 
-    cy.server();
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.intercept("GET", `run/${publicId}`, { fixture: "test_run.json" });
 
-    cy.route("GET", `run/${publicId}`, "fixture:test_run.json");
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/cases/failed`,
-      "fixture:failed_test_cases.json"
-    );
+    cy.interceptTestRunBasicRequests(publicId);
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 

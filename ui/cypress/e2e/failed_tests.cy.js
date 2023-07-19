@@ -4,8 +4,6 @@ describe("test run with failed test cases", () => {
   it("should show failed test case summaries on failed tests page", () => {
     const publicId = "123io1";
 
-    cy.server();
-
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "test_run_summary.json",
     });
@@ -53,8 +51,6 @@ describe("test run with failed test cases", () => {
     const publicId = "23132";
     const testSuiteIdx = 1;
     const testCaseIdx = 2;
-
-    cy.server();
 
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "test_run_summary.json",

@@ -5,19 +5,13 @@ context("organization coverage", () => {
     const orgName = "cov-org";
     const repoName = "cov-org/cov-repo";
 
-    cy.server();
+    cy.intercept("GET", `org/${orgName}/coverage`, {
+      fixture: "organization/organization_coverage.json",
+    });
 
-    cy.route(
-      "GET",
-      `org/${orgName}/coverage`,
-      "fixture:organization/organization_coverage.json"
-    );
-
-    cy.route(
-      "GET",
-      `repo/${repoName}/coverage/timeline`,
-      "fixture:repository/coverage_timeline.json"
-    );
+    cy.intercept("GET", `repo/${repoName}/coverage/timeline`, {
+      fixture: "repository/coverage_timeline.json",
+    });
 
     cy.visit(`http://localhost:1234/organization/${orgName}`);
 
@@ -34,15 +28,10 @@ context("organization coverage", () => {
 
   it("should display coverage for each repo and link to latest test run page", () => {
     const orgName = "cov-org";
-    const repoName = "cov-org/cov-repo";
 
-    cy.server();
-
-    cy.route(
-      "GET",
-      `org/${orgName}/coverage`,
-      "fixture:organization/organization_coverage.json"
-    );
+    cy.intercept("GET", `org/${orgName}/coverage`, {
+      fixture: "organization/organization_coverage.json",
+    });
 
     cy.visit(`http://localhost:1234/organization/${orgName}`);
 
@@ -50,15 +39,17 @@ context("organization coverage", () => {
 
     const publicId = "AF5EZOPSKX2K";
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.intercept("GET", `run/${publicId}`, {
+      fixture: "test_run.json",
+    });
 
-    cy.route("GET", `run/${publicId}`, "fixture:test_run.json");
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/cases/failed`,
-      "fixture:failed_test_cases.json"
-    );
+    cy.intercept("GET", `run/${publicId}/cases/failed`, {
+      fixture: "failed_test_cases_6.json",
+    });
 
     cy.getByTestId("line-coverage-row-1-covered-percentage-link").click();
 
