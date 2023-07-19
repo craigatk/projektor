@@ -12,7 +12,7 @@ context("test run messages", () => {
       fixture: "one_passing/test_run.json",
     });
 
-    cy.intercept("GET",`run/${publicId}/messages`, {
+    cy.intercept("GET", `run/${publicId}/messages`, {
       fixture: "messages/one_message.json",
     });
 
@@ -35,7 +35,7 @@ context("test run messages", () => {
       fixture: "one_passing/test_run.json",
     });
 
-    cy.intercept("GET",`run/${publicId}/messages`, {
+    cy.intercept("GET", `run/${publicId}/messages`, {
       fixture: "messages/no_messages.json",
     });
 

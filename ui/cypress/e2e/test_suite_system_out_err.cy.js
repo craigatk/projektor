@@ -8,9 +8,13 @@ context("test suite system out and system err", () => {
       fixture: "test_run_summary.json",
     });
 
-    cy.intercept("GET", `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`, {
-      fixture: "failed_test_case_2.json",
-    });
+    cy.intercept(
+      "GET",
+      `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
+      {
+        fixture: "failed_test_case_2.json",
+      }
+    );
 
     cy.intercept("GET", `run/${publicId}/suite/${testSuiteIdx}/systemOut`, {
       fixture: "test_output_system_out.json",
