@@ -2,7 +2,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'java-test-fixtures'
     id 'maven-publish'
-    id "com.gradle.plugin-publish" version "0.21.0"
+    id "com.gradle.plugin-publish" version "1.2.0"
     id 'com.github.psxpaul.execfork'
     id 'groovy'
 }
@@ -17,26 +17,18 @@ sourceSets {
 }
 
 gradlePlugin {
+    website = 'https://projektor.dev/docs/gradle-plugin/'
+    vcsUrl = 'https://github.com/craigatk/projektor'
     plugins {
         projektorPlugin {
             id = 'dev.projektor.publish'
             implementationClass = 'projektor.plugin.ProjektorPublishPlugin'
+            displayName = 'Projektor publishing plugin'
+            description = 'Automatically publish test reports to a Projektor report server'
+            tags.addAll(['testing', 'report'])
         }
     }
     testSourceSets sourceSets.test, sourceSets.functionalTest
-}
-
-pluginBundle {
-    website = 'https://projektor.dev/docs/gradle-plugin/'
-    vcsUrl = 'https://github.com/craigatk/projektor'
-    description = 'Automatically publish test reports to a Projektor report server'
-    tags = ['testing', 'report']
-
-    plugins {
-        projektorPlugin {
-            displayName = 'Projektor publishing plugin'
-        }
-    }
 }
 
 repositories {
@@ -44,7 +36,7 @@ repositories {
 }
 
 group = "dev.projektor"
-version = "8.4.0"
+version = "8.5.0"
 
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:${okHttpVersion}")
@@ -105,7 +97,9 @@ task startServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {
             'compileTestGroovy',
             'compileTestFixturesGroovy',
             'compileFunctionalTestJava',
+            'javadocJar',
             'pluginUnderTestMetadata',
+            'sourcesJar',
             'test',
             'processFunctionalTestResources',
             'processTestResources',

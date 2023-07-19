@@ -18,7 +18,10 @@ class SingleProjectKoverCoverageFunctionalSpec extends ProjektorPluginFunctional
     @Unroll
     def "should upload Kover coverage report from test run with kover version #koverVersion"() {
         given:
-        File buildFile = BuildFileWriter.createProjectBuildFile(projectRootDir, new ProjectBuildFileConfig(includeKoverPlugin: true, koverPluginVersion: koverVersion))
+        File buildFile = BuildFileWriter.createProjectBuildFile(
+                projectRootDir,
+                new ProjectBuildFileConfig(includeKoverPlugin: true, koverPluginVersion: koverVersion)
+        )
 
         buildFile << """
             projektor {
@@ -73,6 +76,7 @@ class SingleProjectKoverCoverageFunctionalSpec extends ProjektorPluginFunctional
         where:
         koverVersion || _
         "0.4.4"      || _
+        "0.6.0"      || _
         "0.7.2"      || _
     }
 }
