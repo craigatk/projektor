@@ -4,13 +4,9 @@ context("repository timeline", () => {
   it("should display repository timeline graph and link to individual test reports", () => {
     const repoName = "timeline-org/timeline-repo";
 
-    cy.server();
-
-    cy.route(
-      "GET",
-      `repo/${repoName}/timeline`,
-      "fixture:repository/timeline.json"
-    );
+    cy.intercept("GET", `repo/${repoName}/timeline`, {
+      fixture: "repository/timeline.json",
+    });
 
     const publicIds = [
       "JHLQTLR7XGQH",
@@ -36,13 +32,9 @@ context("repository timeline", () => {
   it("should display tooltip with timeline data on graph point hover", () => {
     const repoName = "timeline-org/timeline-repo";
 
-    cy.server();
-
-    cy.route(
-      "GET",
-      `repo/${repoName}/timeline`,
-      "fixture:repository/timeline.json"
-    );
+    cy.intercept("GET", `repo/${repoName}/timeline`, {
+      fixture: "repository/timeline.json",
+    });
 
     const publicId = "GGHZI4NSIMSF";
 
