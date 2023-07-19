@@ -6,27 +6,21 @@ context("test case", () => {
     const testSuiteIdx = 1;
     const testCaseIdx = 2;
 
-    cy.server();
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.intercept("GET", `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`, {
+      fixture: "failed_test_case_2.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
-      "fixture:failed_test_case_2.json"
-    );
+    cy.intercept("GET", `run/${publicId}/suite/${testSuiteIdx}/systemOut`, {
+      fixture: "test_output_system_out.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/suite/${testSuiteIdx}/systemOut`,
-      "fixture:test_output_system_out.json"
-    );
-
-    cy.route(
-      "GET",
-      `run/${publicId}/suite/${testSuiteIdx}/systemErr`,
-      "fixture:test_output_system_err.json"
-    );
+    cy.intercept("GET", `run/${publicId}/suite/${testSuiteIdx}/systemErr`, {
+      fixture: "test_output_system_err.json",
+    });
 
     cy.visit(
       `http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/`
@@ -67,26 +61,21 @@ context("test case", () => {
     const testSuiteIdx = 1;
     const testCaseIdx = 1;
 
-    cy.server();
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "one_passing/test_run_summary.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/summary`,
-      "fixture:one_passing/test_run_summary.json"
-    );
-    cy.route("GET", `run/${publicId}`, "fixture:one_passing/test_run.json");
+    cy.intercept("GET", `run/${publicId}`, {
+      fixture: "one_passing/test_run.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/suite/${testSuiteIdx}`,
-      "fixture:one_passing/test_suite.json"
-    );
+    cy.intercept("GET", `run/${publicId}/suite/${testSuiteIdx}`, {
+      fixture: "one_passing/test_suite.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
-      "fixture:one_passing/test_case.json"
-    );
+    cy.intercept("GET", `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`, {
+      fixture: "one_passing/test_case.json",
+    });
 
     cy.visit(`http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}`);
 
