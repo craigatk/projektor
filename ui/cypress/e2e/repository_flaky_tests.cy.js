@@ -4,12 +4,10 @@ context("repository flaky tests", () => {
   it("should display flaky tests on repository flaky test page", () => {
     const repoName = "flaky-org/flaky-repo";
 
-    cy.server();
-
-    cy.route(
+    cy.intercept(
       "GET",
       `repo/${repoName}/tests/flaky?threshold=5&max_runs=50&branch_type=MAINLINE`,
-      "fixture:repository/flaky_tests.json"
+      { fixture: "repository/flaky_tests.json" }
     );
 
     cy.visit(`http://localhost:1234/repository/${repoName}`);
@@ -66,24 +64,24 @@ context("repository flaky tests", () => {
   it("should link from test case name to specific test run", () => {
     const repoName = "flaky-org/flaky-repo";
 
-    cy.server();
-
-    cy.route(
+    cy.intercept(
       "GET",
       `repo/${repoName}/tests/flaky?threshold=5&max_runs=50&branch_type=MAINLINE`,
-      "fixture:repository/flaky_tests.json"
+      { fixture: "repository/flaky_tests.json" }
     );
 
     const publicId = "32FBHG6FDL8S";
     const testSuiteIdx = 1;
     const testCaseIdx = 1;
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
-    cy.route("GET", `run/${publicId}`, "fixture:test_run.json");
-    cy.route(
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
+    cy.intercept("GET", `run/${publicId}`, { fixture: "test_run.json" });
+    cy.intercept(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
-      "fixture:failed_test_case_2.json"
+      { fixture: "failed_test_case_2.json" }
     );
 
     cy.visit(`http://localhost:1234/repository/${repoName}`);
@@ -103,12 +101,10 @@ context("repository flaky tests", () => {
   it("should support changing max runs, flaky threshold and branch type", () => {
     const repoName = "flaky-org/flaky-repo";
 
-    cy.server();
-
-    cy.route(
+    cy.intercept(
       "GET",
       `repo/${repoName}/tests/flaky?threshold=5&max_runs=50&branch_type=MAINLINE`,
-      "fixture:repository/flaky_tests.json"
+      { fixture: "repository/flaky_tests.json" }
     );
 
     cy.visit(`http://localhost:1234/repository/${repoName}`);
@@ -127,10 +123,10 @@ context("repository flaky tests", () => {
       "projektor.example.spock.FailingSpec.should fail with output"
     );
 
-    cy.route(
+    cy.intercept(
       "GET",
       `repo/${repoName}/tests/flaky?threshold=2&max_runs=20&branch_type=ALL`,
-      "fixture:repository/flaky_tests_two_tests.json"
+      { fixture: "repository/flaky_tests_two_tests.json" }
     );
 
     cy.findByTestId("flaky-tests-threshold").type("{selectall}{backspace}2", {
@@ -161,12 +157,10 @@ context("repository flaky tests", () => {
   it("should support going directly to flaky test page with params set", () => {
     const repoName = "flaky-org/flaky-repo";
 
-    cy.server();
-
-    cy.route(
+    cy.intercept(
       "GET",
       `repo/${repoName}/tests/flaky?threshold=4&max_runs=30&branch_type=ALL`,
-      "fixture:repository/flaky_tests_two_tests.json"
+      { fixture: "repository/flaky_tests_two_tests.json" }
     );
 
     cy.visit(

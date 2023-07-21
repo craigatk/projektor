@@ -4,13 +4,9 @@ describe("repository performance", () => {
   it("should display performance timeline on home page", () => {
     const repoName = "performance-org/performance-repo";
 
-    cy.server();
-
-    cy.route(
-      "GET",
-      `repo/${repoName}/performance/timeline`,
-      "fixture:repository/performance_timeline.json"
-    );
+    cy.intercept("GET", `repo/${repoName}/performance/timeline`, {
+      fixture: "repository/performance_timeline.json",
+    });
 
     const publicIds = ["EYL6XMND5HOO", "QWPCWITIDJ8L", "BRDYYHG9DQAU"];
 
@@ -37,13 +33,9 @@ describe("repository performance", () => {
   it("should display performance timeline on performance page", () => {
     const repoName = "performance-org/performance-repo";
 
-    cy.server();
-
-    cy.route(
-      "GET",
-      `repo/${repoName}/performance/timeline`,
-      "fixture:repository/performance_timeline.json"
-    );
+    cy.intercept("GET", `repo/${repoName}/performance/timeline`, {
+      fixture: "repository/performance_timeline.json",
+    });
 
     const publicIds = ["EYL6XMND5HOO", "QWPCWITIDJ8L", "BRDYYHG9DQAU"];
 
@@ -68,13 +60,9 @@ describe("repository performance", () => {
   it("should display tooltip with timeline data on graph point hover", () => {
     const repoName = "performance-org/performance-repo";
 
-    cy.server();
-
-    cy.route(
-      "GET",
-      `repo/${repoName}/performance/timeline`,
-      "fixture:repository/performance_timeline.json"
-    );
+    cy.intercept("GET", `repo/${repoName}/performance/timeline`, {
+      fixture: "repository/performance_timeline.json",
+    });
 
     const publicId = "QWPCWITIDJ8L";
 
