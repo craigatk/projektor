@@ -2,8 +2,6 @@ context("dashboard git metadata", () => {
   it("should show Git pull request number and commit SHA on dashboard", () => {
     const publicId = "1234567";
 
-    cy.server();
-
     cy.intercept("GET", `run/${publicId}/metadata/git`, {
       fixture: "metadata/git-metadata-with-pr-and-commit.json",
     });

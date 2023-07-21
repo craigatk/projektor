@@ -4,21 +4,19 @@ context("test suite", () => {
   it("should link from test case details to test suite", () => {
     const publicId = "12345";
 
-    cy.server();
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.intercept("GET", `run/${publicId}/suite/1`, {
+      fixture: "test_suite_failing.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/suite/1`,
-      "fixture:test_suite_failing.json"
-    );
+    cy.intercept("GET", `run/${publicId}/suite/1/case/2`, {
+      fixture: "failed_test_case_2.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/suite/1/case/2`,
-      "fixture:failed_test_case_2.json"
-    );
+    cy.interceptTestRunBasicRequests(publicId);
 
     cy.visit(`http://localhost:1234/tests/${publicId}/suite/1/case/2`);
 
@@ -44,27 +42,23 @@ context("test suite", () => {
     const publicId = "12345";
     const testSuiteIdx = 3;
 
-    cy.server();
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
+    cy.intercept("GET", `run/${publicId}/suite/${testSuiteIdx}`, {
+      fixture: "test_suite_with_output.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/suite/${testSuiteIdx}`,
-      "fixture:test_suite_with_output.json"
-    );
+    cy.intercept("GET", `run/${publicId}/suite/${testSuiteIdx}/systemOut`, {
+      fixture: "test_output_system_out.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/suite/${testSuiteIdx}/systemOut`,
-      "fixture:test_output_system_out.json"
-    );
+    cy.intercept("GET", `run/${publicId}/suite/${testSuiteIdx}/systemErr`, {
+      fixture: "test_output_system_err.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/suite/${testSuiteIdx}/systemErr`,
-      "fixture:test_output_system_err.json"
-    );
+    cy.interceptTestRunBasicRequests(publicId);
 
     cy.visit(`http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}`);
 

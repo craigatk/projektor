@@ -4,8 +4,6 @@ context("dashboard", () => {
   it("should show test run summary data on dashboard page", () => {
     const publicId = "3818";
 
-    cy.server();
-
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "test_run_summary.json",
     });
@@ -31,8 +29,6 @@ context("dashboard", () => {
 
   it("should show failed test case summaries on dashboard page", () => {
     const publicId = "1382";
-
-    cy.server();
 
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "test_run_summary.json",
@@ -64,8 +60,6 @@ context("dashboard", () => {
   it("when tests all passed should show test suite list on dashboard", () => {
     const publicId = "13821";
 
-    cy.server();
-
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "one_passing/test_run_summary.json",
     });
@@ -87,8 +81,6 @@ context("dashboard", () => {
 
   it("when fetching test run fails should render error message", () => {
     const publicId = "18932";
-
-    cy.server();
 
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "one_passing/test_run_summary.json",

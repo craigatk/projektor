@@ -124,25 +124,27 @@ const DashboardSummary = ({
                   }
                 />
               )}
-            {gitMetadata && gitMetadata.gitHubBaseUrl && gitMetadata.commitSha && (
-              <DashboardSummaryItem
-                label="Commit"
-                testId="dashboard-summary-commit-sha"
-                value={
-                  <CleanLinkText
-                    href={createGitHubUrl(
-                      gitMetadata,
-                      `/commit/${gitMetadata.commitSha}`
-                    )}
-                    data-testid="dashboard-summary-commit-sha-link"
-                  >
-                    {gitMetadata.commitSha.substring(
-                      gitMetadata.commitSha.length - 7
-                    )}
-                  </CleanLinkText>
-                }
-              />
-            )}
+            {gitMetadata &&
+              gitMetadata.gitHubBaseUrl &&
+              gitMetadata.commitSha && (
+                <DashboardSummaryItem
+                  label="Commit"
+                  testId="dashboard-summary-commit-sha"
+                  value={
+                    <CleanLinkText
+                      href={createGitHubUrl(
+                        gitMetadata,
+                        `/commit/${gitMetadata.commitSha}`
+                      )}
+                      data-testid="dashboard-summary-commit-sha-link"
+                    >
+                      {gitMetadata.commitSha.substring(
+                        gitMetadata.commitSha.length - 7
+                      )}
+                    </CleanLinkText>
+                  }
+                />
+              )}
             {gitMetadata && gitMetadata.projectName && (
               <DashboardSummaryItem
                 label="Project"

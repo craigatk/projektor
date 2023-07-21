@@ -4,8 +4,6 @@ context("test run with slow tests", () => {
   it("should link to slow test cases", () => {
     const publicId = "12345";
 
-    cy.server();
-
     cy.interceptTestRunBasicRequests(publicId);
 
     cy.intercept("GET", `run/${publicId}/summary`, {

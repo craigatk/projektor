@@ -4,21 +4,17 @@ context("test run with attachments", () => {
   it("should list attachments on attachments page", () => {
     const publicId = "12345";
 
-    cy.server();
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "attachments/test_run_summary_with_attachments.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/summary`,
-      "fixture:attachments/test_run_summary_with_attachments.json"
-    );
+    cy.intercept("GET", `run/${publicId}`, {
+      fixture: "test_run.json",
+    });
 
-    cy.route("GET", `run/${publicId}`, "fixture:test_run.json");
-
-    cy.route(
-      "GET",
-      `run/${publicId}/attachments`,
-      "fixture:attachments/attachments.json"
-    );
+    cy.intercept("GET", `run/${publicId}/attachments`, {
+      fixture: "attachments/attachments.json",
+    });
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
@@ -51,21 +47,17 @@ context("test run with attachments", () => {
   it("should not show attachments nav link when run has no attachments", () => {
     const publicId = "12345";
 
-    cy.server();
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "attachments/test_run_summary_with_attachments.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/summary`,
-      "fixture:attachments/test_run_summary_with_attachments.json"
-    );
+    cy.intercept("GET", `run/${publicId}`, {
+      fixture: "test_run.json",
+    });
 
-    cy.route("GET", `run/${publicId}`, "fixture:test_run.json");
-
-    cy.route(
-      "GET",
-      `run/${publicId}/attachments`,
-      "fixture:attachments/attachments_empty.json"
-    );
+    cy.intercept("GET", `run/${publicId}/attachments`, {
+      fixture: "attachments/attachments_empty.json",
+    });
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 

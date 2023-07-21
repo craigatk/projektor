@@ -4,27 +4,35 @@ context("test case system out and system err", () => {
     const testSuiteIdx = 1;
     const testCaseIdx = 2;
 
-    cy.server();
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      fixture: "test_run_summary.json",
+    });
 
-    cy.route("GET", `run/${publicId}/summary`, "fixture:test_run_summary.json");
-
-    cy.route(
+    cy.intercept(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
-      "fixture:failed_test_case_system_out_err_test_case_level.json"
+      {
+        fixture: "failed_test_case_system_out_err_test_case_level.json",
+      }
     );
 
-    cy.route(
+    cy.intercept(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/systemOut`,
-      "fixture:test_output_system_out.json"
+      {
+        fixture: "test_output_system_out.json",
+      }
     );
 
-    cy.route(
+    cy.intercept(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/systemErr`,
-      "fixture:test_output_system_err.json"
+      {
+        fixture: "test_output_system_err.json",
+      }
     );
+
+    cy.interceptTestRunBasicRequests(publicId);
 
     cy.visit(
       `http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`
