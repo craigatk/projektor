@@ -4,20 +4,19 @@ context("results processing", () => {
   it("when test results still processing should display message", () => {
     const publicId = "12345";
 
-    cy.server();
-
-    cy.route({
-      method: "GET",
-      url: `run/${publicId}/summary`,
-      status: 404,
-      response: {},
+    cy.intercept("GET", `run/${publicId}`, {
+      statusCode: 404,
+      body: {},
     });
 
-    cy.route(
-      "GET",
-      `results/${publicId}/status`,
-      "fixture:processing_status/processing_status_processing.json"
-    );
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      statusCode: 404,
+      body: {},
+    });
+
+    cy.intercept("GET", `results/${publicId}/status`, {
+      fixture: "processing_status/processing_status_processing.json",
+    });
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
@@ -26,18 +25,20 @@ context("results processing", () => {
       "Your test results are still processing"
     );
 
-    cy.route(
-      "GET",
-      `results/${publicId}/status`,
-      "fixture:processing_status/processing_status_success.json"
-    );
+    cy.intercept("GET", `results/${publicId}/status`, {
+      fixture: "processing_status/processing_status_success.json",
+    });
 
-    cy.route(
-      "GET",
-      `run/${publicId}/summary`,
-      "fixture:one_passing/test_run_summary.json"
-    );
-    cy.route("GET", `run/${publicId}`, "fixture:one_passing/test_run.json");
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      statusCode: 200,
+      fixture: "one_passing/test_run_summary.json",
+    });
+
+    cy.intercept("GET", `run/${publicId}`, {
+      fixture: "one_passing/test_run.json",
+    });
+
+    cy.interceptTestRunBasicRequests(publicId);
 
     cy.wait(1000);
 
@@ -47,20 +48,19 @@ context("results processing", () => {
   it("should display error message when processing results failed", () => {
     const publicId = "12345";
 
-    cy.server();
-
-    cy.route({
-      method: "GET",
-      url: `run/${publicId}/summary`,
-      status: 404,
-      response: {},
+    cy.intercept("GET", `run/${publicId}`, {
+      statusCode: 404,
+      body: {},
     });
 
-    cy.route(
-      "GET",
-      `results/${publicId}/status`,
-      "fixture:processing_status/processing_status_error.json"
-    );
+    cy.intercept("GET", `run/${publicId}/summary`, {
+      statusCode: 404,
+      body: {},
+    });
+
+    cy.intercept("GET", `results/${publicId}/status`, {
+      fixture: "processing_status/processing_status_error.json",
+    });
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
