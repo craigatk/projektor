@@ -37,7 +37,7 @@
     "jest-environment-jsdom": "29.6.1",
     "jest-junit": "16.0.0",
     "parcel": "2.9.3",
-    "prettier": "2.8.8",
+    "prettier": "3.0.0",
     "process": "0.11.10",
     "projektor-publish": "3.10.2",
     "resize-observer-polyfill": "1.5.1",
