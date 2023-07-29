@@ -1,7 +1,7 @@
 import * as React from "react";
 import { RouteComponentProps } from "@reach/router";
 import { makeStyles } from "@material-ui/styles";
-import { AppBar, Typography, Paper } from "@material-ui/core";
+import { AppBar, Typography, Paper } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {

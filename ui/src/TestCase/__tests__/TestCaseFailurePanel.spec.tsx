@@ -36,7 +36,7 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
     );
 
     expect(queryByTestId("test-case-summary-failure-link-2-1")).not.toBeNull();
@@ -69,7 +69,7 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
     );
 
     expect(queryByTestId("test-case-summary-failure-link-2-1")).toBeNull();
@@ -102,11 +102,11 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
     );
 
     expect(
-      queryByTestId("test-case-summary-system-out-link-2-1")
+      queryByTestId("test-case-summary-system-out-link-2-1"),
     ).not.toBeNull();
     expect(queryByTestId("test-case-summary-system-err-link-2-1")).toBeNull();
   });
@@ -135,12 +135,12 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
     );
 
     expect(queryByTestId("test-case-summary-system-out-link-2-1")).toBeNull();
     expect(
-      queryByTestId("test-case-summary-system-err-link-2-1")
+      queryByTestId("test-case-summary-system-err-link-2-1"),
     ).not.toBeNull();
   });
 
@@ -168,14 +168,14 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
     );
 
     expect(
-      queryByTestId("test-case-summary-system-out-link-2-1")
+      queryByTestId("test-case-summary-system-out-link-2-1"),
     ).not.toBeNull();
     expect(
-      queryByTestId("test-case-summary-system-err-link-2-1")
+      queryByTestId("test-case-summary-system-err-link-2-1"),
     ).not.toBeNull();
   });
 
@@ -189,11 +189,11 @@ describe("TestCaseFailurePanel", () => {
     const testCase = createTestCaseWithFailure(failure);
 
     const { getByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
     );
 
     expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
-      "My failure message"
+      "My failure message",
     );
   });
 
@@ -207,11 +207,11 @@ describe("TestCaseFailurePanel", () => {
     const testCase = createTestCaseWithFailure(failure);
 
     const { getByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
     );
 
     expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
-      "My failure text"
+      "My failure text",
     );
   });
 
@@ -229,11 +229,11 @@ describe("TestCaseFailurePanel", () => {
         testCase={testCase}
         publicId="12345"
         showFullFailure={true}
-      />
+      />,
     );
 
     expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
-      "My failure text"
+      "My failure text",
     );
   });
 
@@ -251,7 +251,7 @@ describe("TestCaseFailurePanel", () => {
         testCase={testCase}
         publicId="12345"
         showFullFailure={true}
-      />
+      />,
     );
 
     getByTestId("test-case-summary-header-2-1").click();
@@ -259,8 +259,8 @@ describe("TestCaseFailurePanel", () => {
     await waitForExpect(() =>
       expect(getByTestId("test-case-summary-header-2-1")).toHaveAttribute(
         "aria-expanded",
-        "true"
-      )
+        "true",
+      ),
     );
   });
 
@@ -278,7 +278,7 @@ describe("TestCaseFailurePanel", () => {
         testCase={testCase}
         publicId="12345"
         showFullFailure={true}
-      />
+      />,
     );
 
     getByTestId("test-case-expand-collapse-icon-2-1").click();
@@ -286,8 +286,8 @@ describe("TestCaseFailurePanel", () => {
     await waitForExpect(() =>
       expect(getByTestId("test-case-summary-header-2-1")).toHaveAttribute(
         "aria-expanded",
-        "false"
-      )
+        "false",
+      ),
     );
   });
 
@@ -305,14 +305,14 @@ describe("TestCaseFailurePanel", () => {
         testCase={testCase}
         publicId="12345"
         showFullFailure={true}
-      />
+      />,
     );
 
     getByTestId("test-case-failure-text-2-1").click();
 
     expect(getByTestId("test-case-summary-header-2-1")).toHaveAttribute(
       "aria-expanded",
-      "true"
+      "true",
     );
   });
 
@@ -353,7 +353,7 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
     );
 
     expect(queryByTestId("test-case-failure-screenshot-2-1")).not.toBeNull();
@@ -383,11 +383,11 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
     );
 
     expect(queryByTestId("test-case-title-2-1")).toHaveTextContent(
-      "My Test Suite. Test Case"
+      "My Test Suite. Test Case",
     );
   });
 
@@ -415,11 +415,11 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
     );
 
     expect(queryByTestId("test-case-title-2-1")).toHaveTextContent(
-      "The Tests. Test Case"
+      "The Tests. Test Case",
     );
   });
 

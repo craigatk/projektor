@@ -13,7 +13,7 @@ const PerformanceSection = ({ publicId }: PerformanceSectionProps) => {
   const [performanceResults, setPerformanceResults] =
     React.useState<PerformanceResults>(null);
   const [testRunLoadingState, setTestRunLoadingState] = React.useState(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
 
   React.useEffect(() => {

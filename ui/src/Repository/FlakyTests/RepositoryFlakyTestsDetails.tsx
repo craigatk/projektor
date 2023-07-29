@@ -1,6 +1,6 @@
 import * as React from "react";
 import { RepositoryFlakyTests } from "../../model/RepositoryModel";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import { makeStyles } from "@material-ui/styles";
 import RepositoryFlakyTestsTable from "./RepositoryFlakyTestsTable";
 import PageTitle from "../../PageTitle";

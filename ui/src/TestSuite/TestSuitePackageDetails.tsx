@@ -2,8 +2,8 @@ import * as React from "react";
 import TestSuiteList from "./TestSuiteList";
 import { TestSuite } from "../model/TestRunModel";
 import PageTitle from "../PageTitle";
-import { Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Paper } from "@mui/material";
+import { makeStyles } from "@mui/material/styles";
 
 interface TestSuitePackageDetailsProps {
   publicId: string;

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { CoverageStat } from "../model/TestRunModel";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import styled from "styled-components";
 import CoveragePercentage from "./CoveragePercentage";
 import CleanLink from "../Link/CleanLink";
@@ -22,12 +22,12 @@ interface CoverageGraphStyleProps {
 
 const CoverageGraphWrapper = styled.div<CoverageGraphStyleProps>`
   margin-right: ${({ inline }) => (inline ? "10px" : "50px")};
-  display: "inline-block";
+  display: inline-block;
 `;
 
 const CoverageGraphLabel = styled(Typography)`
-  margin-bottom: "10px";
-  display: "inline-block";
+  margin-bottom: 10px;
+  display: inline-block;
 `;
 
 const CoverageGraph = ({

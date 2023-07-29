@@ -1,7 +1,7 @@
 import * as React from "react";
 import MaterialTable from "@material-table/core";
 import CoverageGraph from "./CoverageGraph";
-import { makeStyles, Typography } from "@material-ui/core";
+import { makeStyles, Typography } from "@mui/material";
 import CleanLink from "../Link/CleanLink";
 import CoverageTableRow from "./CoverageTableRow";
 
@@ -35,7 +35,7 @@ const CoverageTable = ({
 
   const sortedRows = rows.sort(
     (a, b) =>
-      a.stats.lineStat.coveredPercentage - b.stats.lineStat.coveredPercentage
+      a.stats.lineStat.coveredPercentage - b.stats.lineStat.coveredPercentage,
   );
 
   return (

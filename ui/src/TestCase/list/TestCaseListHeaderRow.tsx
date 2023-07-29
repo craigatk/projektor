@@ -1,13 +1,12 @@
 import * as React from "react";
-import { makeStyles, TableCell, TableRow } from "@material-ui/core";
+import { TableCell, TableRow } from "@mui/material";
+import styled from "styled-components";
 
-const useStyles = makeStyles((theme) => ({
-  resultCol: {
-    width: "10px",
-    marginRight: "8px",
-    marginLeft: "8px",
-  },
-}));
+const ResultsColumn = styled(TableCell)`
+  width: 10px;
+  margin-right: 8px;
+  margin-left: 8px;
+`
 
 interface TestCaseListHeaderRowProps {
   showDurationFirst: boolean;
@@ -16,18 +15,15 @@ interface TestCaseListHeaderRowProps {
 const TestCaseListHeaderRow = ({
   showDurationFirst,
 }: TestCaseListHeaderRowProps) => {
-  const classes = useStyles({});
-
   let headerCells = [];
   const resultHeaderCell = (
-    <TableCell
-      className={classes.resultCol}
+    <ResultsColumn
       key="result-header"
       role="rowheader"
       data-testid="test-list-result-header"
     >
       Result
-    </TableCell>
+    </ResultsColumn>
   );
   const testHeaderCell = (
     <TableCell

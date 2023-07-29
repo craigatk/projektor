@@ -28,7 +28,7 @@ context("test run with failed test cases", () => {
 
     cy.getBreadcrumbPackgeNameLink().should(
       "contain",
-      "projektor.example.spock"
+      "projektor.example.spock",
     );
 
     cy.getBreadcrumbClassNameLink().should("contain", "FailingSpec");
@@ -39,7 +39,7 @@ context("test run with failed test cases", () => {
 
     cy.getByTestId("test-suite-package-name-header").should(
       "contain",
-      packageName
+      packageName,
     );
   });
 });

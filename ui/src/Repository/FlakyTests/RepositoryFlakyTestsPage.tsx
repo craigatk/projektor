@@ -13,7 +13,7 @@ import {
   Select,
   TextField,
   Tooltip,
-} from "@material-ui/core";
+} from "@mui/material";
 import PageTitle from "../../PageTitle";
 import { makeStyles } from "@material-ui/styles";
 import { NumberParam, StringParam, useQueryParam } from "use-query-params";
@@ -67,11 +67,11 @@ const RepositoryFlakyTestsPage = ({
   const [maxRuns, setMaxRuns] = useQueryParam("max", NumberParam);
   const [flakyThreshold, setFlakyThreshold] = useQueryParam(
     "threshold",
-    NumberParam
+    NumberParam,
   );
   const [branchType, setBranchType] = useQueryParam("branch_type", StringParam);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
 
   const doFetch = () => {
@@ -80,7 +80,7 @@ const RepositoryFlakyTestsPage = ({
       flakyThreshold || 5,
       branchType || "mainline",
       repoName,
-      projectName
+      projectName,
     )
       .then((response) => {
         setFlakyTests(response.data);

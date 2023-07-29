@@ -1,5 +1,4 @@
 import * as React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import { TestSuite } from "../model/TestRunModel";
 import {
   Location,
@@ -8,27 +7,27 @@ import {
   Redirect,
   LocationContext,
 } from "@reach/router";
-import { Tabs, Tab, Paper } from "@material-ui/core";
+import { Tabs, Tab, Paper } from "@mui/material";
 import TestSuiteTestCaseList from "./TestSuiteTestCaseList";
 import TestSuiteSystemOut from "../TestOutput/TestSuiteSystemOut";
 import TestSuiteSystemErr from "../TestOutput/TestSuiteSystemErr";
 import { getTabCurrentValue } from "../Tabs/TabValue";
 import BreadcrumbPageHeader from "../BreadcrumbPageHeader";
 import CleanLink from "../Link/CleanLink";
+import styled from "styled-components";
 
 interface TestSuiteDetailsProps {
   publicId: string;
   testSuite: TestSuite;
 }
 
-const useStyles = makeStyles((theme) => ({
-  detailsSection: {
-    paddingTop: "20px",
-  },
-  paper: {
-    padding: theme.spacing(2, 2),
-  },
-}));
+const DetailsWrapper = styled(Paper)`
+  padding: 16px 16px;
+`
+
+const DetailsSection = styled.div`
+  padding-top: 20px;
+`
 
 const buildHeaderIntermediateLinks = (publicId, testSuite) => {
   const headerIntermediateLinks = [];
@@ -41,7 +40,7 @@ const buildHeaderIntermediateLinks = (publicId, testSuite) => {
         key="package-name-link"
       >
         {testSuite.packageName}
-      </CleanLink>
+      </CleanLink>,
     );
   }
 
@@ -51,13 +50,11 @@ const buildHeaderIntermediateLinks = (publicId, testSuite) => {
 const TestSuiteDetails = ({ publicId, testSuite }: TestSuiteDetailsProps) => {
   const linkBase = `/tests/${publicId}/suite/${testSuite.idx}`;
 
-  const classes = useStyles({});
-
   const defaultTab = "/cases";
 
   const headerIntermediateLinks = buildHeaderIntermediateLinks(
     publicId,
-    testSuite
+    testSuite,
   );
 
   return (
@@ -66,7 +63,7 @@ const TestSuiteDetails = ({ publicId, testSuite }: TestSuiteDetailsProps) => {
         intermediateLinks={headerIntermediateLinks}
         endingText={testSuite.className}
       />
-      <Paper elevation={1} className={classes.paper}>
+      <DetailsWrapper elevation={1}>
         <Location>
           {({ location }: LocationContext) => (
             <Tabs
@@ -103,7 +100,7 @@ const TestSuiteDetails = ({ publicId, testSuite }: TestSuiteDetailsProps) => {
           )}
         </Location>
 
-        <div className={classes.detailsSection}>
+        <DetailsSection>
           <Router>
             <Redirect from="/" to={`${linkBase}${defaultTab}`} noThrow={true} />
             <TestSuiteTestCaseList
@@ -122,8 +119,8 @@ const TestSuiteDetails = ({ publicId, testSuite }: TestSuiteDetailsProps) => {
               testSuiteIdx={testSuite.idx}
             />
           </Router>
-        </div>
-      </Paper>
+        </DetailsSection>
+      </DetailsWrapper>
     </div>
   );
 };

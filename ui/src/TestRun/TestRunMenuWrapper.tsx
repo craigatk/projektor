@@ -1,7 +1,6 @@
 import * as React from "react";
 import { globalHistory, Router } from "@reach/router";
 import { QueryParamProvider } from "use-query-params";
-import { makeStyles } from "@material-ui/styles";
 import TestRunAllTests from "./TestRunAllTests";
 import TestSuitePage from "../TestSuite/TestSuitePage";
 import TestSuitePackagePage from "../TestSuite/TestSuitePackagePage";
@@ -11,31 +10,33 @@ import Dashboard from "../Dashboard/Dashboard";
 import { TestRunGitMetadata, TestRunSummary } from "../model/TestRunModel";
 import SideMenu from "../SideMenu/SideMenu";
 import SlowTestCasesPage from "../TestCase/slow/SlowTestCasesPage";
-import { AppBar, Typography } from "@material-ui/core";
+import { AppBar, Typography } from "@mui/material";
 import AttachmentsPage from "../Attachments/AttachmentsPage";
 import { PinState } from "../Pin/PinState";
 import CoveragePage from "../Coverage/CoveragePage";
 import CoverageGroupFilesPage from "../Coverage/CoverageGroupFilesPage";
 import CodeQualityReportsPage from "../Quality/CodeQualityReportsPage";
+import styled from "styled-components";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-  appBar: {
-    backgroundColor: "#1c313a",
-    padding: "5px 10px",
-    height: "42px",
-  },
-  appBarLabel: {
-    marginLeft: "192px",
-  },
-  content: {
-    flexGrow: 1,
-    marginTop: "42px",
-    maxWidth: "calc(100% - 180px)",
-  },
-}));
+const Root = styled.div`
+  display: flex;
+`
+
+const TestRunAppBar = styled(AppBar)`
+  background-color: #1c313a;
+  padding: 5px 10px;
+  height: 42px;
+`
+
+const AppBarLabel = styled(Typography)`
+  margin-left: 192px;
+`
+
+const TestRunContent = styled.main`
+  flex-grow: 1;
+  margin-top: 42px;
+  max-width: calc(100% - 180px);
+`
 
 interface TestRunMenuWrapperProps {
   publicId: string;
@@ -56,18 +57,16 @@ const TestRunMenuWrapper = ({
     return null;
   }
 
-  const classes = useStyles({});
-
   return (
-    <div className={classes.root} data-testid="test-run-menu-wrapper">
+    <Root data-testid="test-run-menu-wrapper">
       <PinState publicId={publicId}>
-        <AppBar className={classes.appBar}>
+        <TestRunAppBar>
           {gitMetadata && gitMetadata.repoName && (
-            <Typography variant="subtitle1" className={classes.appBarLabel}>
+            <AppBarLabel variant="subtitle1">
               {gitMetadata.repoName}
-            </Typography>
+            </AppBarLabel>
           )}
-        </AppBar>
+        </TestRunAppBar>
         <SideMenu
           publicId={publicId}
           testRunSummary={testRunSummary}
@@ -75,7 +74,7 @@ const TestRunMenuWrapper = ({
           hasCoverage={hasCoverage}
           gitMetadata={gitMetadata}
         />
-        <main className={classes.content}>
+        <TestRunContent>
           <QueryParamProvider reachHistory={globalHistory}>
             <Router>
               <Dashboard
@@ -112,9 +111,9 @@ const TestRunMenuWrapper = ({
               <CodeQualityReportsPage path="/quality/*" publicId={publicId} />
             </Router>
           </QueryParamProvider>
-        </main>
+        </TestRunContent>
       </PinState>
-    </div>
+    </Root>
   );
 };
 

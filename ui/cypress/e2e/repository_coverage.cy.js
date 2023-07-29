@@ -100,11 +100,11 @@ describe("repository coverage", () => {
 
     cy.findByTestId("tooltip-line-coverage-percentage").should(
       "contain",
-      "95.4%"
+      "95.4%",
     );
     cy.findByTestId("tooltip-branch-coverage-percentage").should(
       "contain",
-      "68.95%"
+      "68.95%",
     );
     cy.findByTestId("tooltip-run-date").should("contain", "Sep 13th 2020");
   });
@@ -175,7 +175,7 @@ describe("repository coverage", () => {
     cy.intercept(
       "GET",
       `repo/${repoName}/project/${projectName}/coverage/timeline`,
-      { fixture: "repository/coverage_timeline.json" }
+      { fixture: "repository/coverage_timeline.json" },
     );
     cy.intercept("GET", `repo/${repoName}/project/${projectName}/timeline`, {
       fixture: "repository/timeline.json",
@@ -185,7 +185,7 @@ describe("repository coverage", () => {
       `repo/${repoName}/project/${projectName}/performance/timeline`,
       {
         fixture: "repository/performance_timeline.json",
-      }
+      },
     );
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
@@ -203,11 +203,11 @@ describe("repository coverage", () => {
     cy.intercept(
       "GET",
       `repo/${repoName}/project/${projectName}/coverage/timeline`,
-      { fixture: "repository/coverage_timeline.json" }
+      { fixture: "repository/coverage_timeline.json" },
     );
 
     cy.visit(
-      `http://localhost:1234/repository/${repoName}/project/${projectName}`
+      `http://localhost:1234/repository/${repoName}/project/${projectName}`,
     );
 
     cy.findByTestId("repository-coverage-timeline-graph").should("exist");
@@ -217,7 +217,7 @@ describe("repository coverage", () => {
     cy.findByTestId("repository-coverage-timeline-graph").should("exist");
     cy.url().should(
       "contain",
-      `/repository/${repoName}/project/${projectName}`
+      `/repository/${repoName}/project/${projectName}`,
     );
   });
 });

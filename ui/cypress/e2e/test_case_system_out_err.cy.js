@@ -13,7 +13,7 @@ context("test case system out and system err", () => {
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
       {
         fixture: "failed_test_case_system_out_err_test_case_level.json",
-      }
+      },
     );
 
     cy.intercept(
@@ -21,7 +21,7 @@ context("test case system out and system err", () => {
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/systemOut`,
       {
         fixture: "test_output_system_out.json",
-      }
+      },
     );
 
     cy.intercept(
@@ -29,18 +29,18 @@ context("test case system out and system err", () => {
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/systemErr`,
       {
         fixture: "test_output_system_err.json",
-      }
+      },
     );
 
     cy.interceptTestRunBasicRequests(publicId);
 
     cy.visit(
-      `http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`
+      `http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
     );
 
     cy.getByTestId("test-case-failure-text").should(
       "contain",
-      "Condition not satisfied"
+      "Condition not satisfied",
     );
 
     cy.getByTestId("test-case-tab-system-out").click();

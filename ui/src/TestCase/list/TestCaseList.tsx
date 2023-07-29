@@ -1,6 +1,6 @@
 import * as React from "react";
 import { TestCase } from "../../model/TestRunModel";
-import { Table, TableHead, TableBody } from "@material-ui/core";
+import { Table, TableHead, TableBody } from "@mui/material";
 import TestCaseListRow from "./TestCaseListRow";
 import TestCaseListHeaderRow from "./TestCaseListHeaderRow";
 

@@ -2,11 +2,11 @@ import * as React from "react";
 import { TestCase } from "../model/TestRunModel";
 import TestCaseFailurePanel from "./TestCaseFailurePanel";
 import { ExpandCollapseState } from "./ExpandCollapseState";
-import UnfoldLessOutlinedIcon from "@material-ui/icons/UnfoldLessOutlined";
-import UnfoldMoreOutlinedIcon from "@material-ui/icons/UnfoldMoreOutlined";
-import { Typography } from "@material-ui/core";
+import UnfoldLessOutlinedIcon from "@mui/icons-material/UnfoldLessOutlined";
+import UnfoldMoreOutlinedIcon from "@mui/icons-material/UnfoldMoreOutlined";
+import { Typography } from "@mui/material";
 import CleanLinkText from "../Link/CleanLinkText";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/material/styles";
 
 const showFullFailureMaxFailureCount = 5;
 

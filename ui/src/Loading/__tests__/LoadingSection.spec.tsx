@@ -12,7 +12,7 @@ describe("LoadingSection", () => {
         successComponent={
           <div data-testid="loading-section-success">Success!</div>
         }
-      />
+      />,
     );
 
     expect(queryByTestId("loading-section-progress")).not.toBeNull();
@@ -27,7 +27,7 @@ describe("LoadingSection", () => {
         successComponent={
           <div data-testid="loading-section-success">Success!</div>
         }
-      />
+      />,
     );
 
     expect(queryByTestId("loading-section-progress")).toBeNull();
@@ -42,7 +42,7 @@ describe("LoadingSection", () => {
         successComponent={
           <div data-testid="loading-section-success">Success!</div>
         }
-      />
+      />,
     );
 
     expect(queryByTestId("loading-section-progress")).toBeNull();
@@ -58,7 +58,7 @@ describe("LoadingSection", () => {
           <div data-testid="loading-section-success">Success!</div>
         }
         errorComponent={<div data-testid="custom-error-section">Error!</div>}
-      />
+      />,
     );
 
     expect(queryByTestId("custom-error-section")).not.toBeNull();

@@ -26,12 +26,12 @@ context("side nav", () => {
 
     cy.getByTestId("test-case-title").should(
       "contain",
-      "projektor.example.spock.FailingSpec should fail"
+      "projektor.example.spock.FailingSpec should fail",
     );
 
     cy.getByTestId("test-case-title").should(
       "contain",
-      "projektor.example.spock.FailingSpec should fail with output"
+      "projektor.example.spock.FailingSpec should fail with output",
     );
   });
 });

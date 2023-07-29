@@ -2,8 +2,8 @@ import * as React from "react";
 import { ResultsProcessingFailure } from "../../model/AdminModel";
 import MaterialTable from "@material-table/core";
 import moment from "moment";
-import { Link, Tooltip } from "@material-ui/core";
-import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+import { Link, Tooltip } from "@mui/material";
+import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { makeStyles } from "@material-ui/styles";
 
@@ -104,7 +104,7 @@ const AdminFailuresTable = ({ failures }: AdminFailuresTableProps) => {
                 data-testid={`admin-failures-created-timestamp-${rowData.id}`}
               >
                 {moment(rowData.createdTimestamp).format(
-                  "MMMM Do YYYY, h:mm:ss a"
+                  "MMMM Do YYYY, h:mm:ss a",
                 )}
               </span>
             ),

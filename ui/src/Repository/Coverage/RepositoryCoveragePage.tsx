@@ -11,7 +11,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
-} from "@material-ui/core";
+} from "@mui/material";
 import PageTitle from "../../PageTitle";
 import { makeStyles } from "@material-ui/styles";
 import { StringParam, useQueryParam } from "use-query-params";
@@ -63,7 +63,7 @@ const RepositoryCoveragePage = ({
     React.useState<RepositoryCoverageTimeline>(null);
   const [branchType, setBranchType] = useQueryParam("branch", StringParam);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
 
   const doFetch = () => {

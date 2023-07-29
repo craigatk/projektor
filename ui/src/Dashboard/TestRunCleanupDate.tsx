@@ -31,7 +31,7 @@ const TestRunCleanupDate = ({ createdTimestamp }: TestRunCleanupDateProps) => {
     } else {
       const cleanupDate = moment(createdTimestamp).add(
         maxReportAgeInDays,
-        "days"
+        "days",
       );
 
       displayValue = (

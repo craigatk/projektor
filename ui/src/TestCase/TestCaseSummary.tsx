@@ -1,7 +1,7 @@
 import * as React from "react";
 import { TestCase } from "../model/TestRunModel";
 import { RouteComponentProps } from "@reach/router";
-import { Typography, makeStyles } from "@material-ui/core";
+import { Typography, makeStyles } from "@mui/material";
 import PassedIcon from "../Icons/PassedIcon";
 import SkippedIcon from "../Icons/SkippedIcon";
 import FailedIcon from "../Icons/FailedIcon";

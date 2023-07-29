@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "@reach/router";
-import { styled } from "@material-ui/core/styles";
+import { styled } from "@mui/material/styles";
 
 interface CleanLinkProps {
   color?: string;

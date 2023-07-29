@@ -3,7 +3,7 @@ import { TestRunGitMetadata } from "../model/TestRunModel";
 
 const createGitHubUrl = (
   gitMetadata: TestRunGitMetadata,
-  uri: string
+  uri: string,
 ): string | null => {
   if (gitMetadata && gitMetadata.gitHubBaseUrl && uri) {
     const baseUrl = gitMetadata.gitHubBaseUrl.endsWith("/")
@@ -21,7 +21,7 @@ const createGitHubUrl = (
 const createGitHubFileUrl = (
   gitMetadata: TestRunGitMetadata,
   filePath: string,
-  lineNumber?: number
+  lineNumber?: number,
 ): string | null => {
   if (gitMetadata && gitMetadata.gitHubBaseUrl && filePath) {
     const baseUrl = gitMetadata.gitHubBaseUrl.endsWith("/")

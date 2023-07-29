@@ -23,7 +23,7 @@ context("dashboard", () => {
 
     cy.getByTestId("test-run-report-created-timestamp").should(
       "contain",
-      "March 25th 2020"
+      "March 25th 2020",
     );
   });
 
@@ -48,12 +48,12 @@ context("dashboard", () => {
 
     cy.getByTestId("test-case-title").should(
       "contain",
-      "projektor.example.spock.FailingSpec should fail"
+      "projektor.example.spock.FailingSpec should fail",
     );
 
     cy.getByTestId("test-case-title").should(
       "contain",
-      "projektor.example.spock.FailingSpec should fail with output"
+      "projektor.example.spock.FailingSpec should fail with output",
     );
   });
 
@@ -75,7 +75,7 @@ context("dashboard", () => {
 
     cy.findByTestId("test-suite-class-name-1").should(
       "contain",
-      "projektor.example.spock.PassingSpec"
+      "projektor.example.spock.PassingSpec",
     );
   });
 
@@ -96,7 +96,7 @@ context("dashboard", () => {
 
     cy.findByTestId("loading-section-error").should(
       "contain",
-      "Error loading data from server"
+      "Error loading data from server",
     );
   });
 });

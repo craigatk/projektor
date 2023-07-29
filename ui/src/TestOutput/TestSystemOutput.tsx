@@ -8,7 +8,7 @@ import { TestOutput } from "../model/TestRunModel";
 import LoadingState from "../Loading/LoadingState";
 import LoadingSection from "../Loading/LoadingSection";
 import CodeText from "../CodeText/CodeText";
-import { makeStyles } from "@material-ui/core/styles";
+import styled from "styled-components";
 
 interface TestSystemOutputProps {
   publicId: string;
@@ -17,15 +17,13 @@ interface TestSystemOutputProps {
   outputType: TestOutputType;
 }
 
-const useStyles = makeStyles({
-  paper: {
-    paddingTop: "10px",
-    paddingBottom: "10px",
-    backgroundColor: "#EDEDED",
-    borderRadius: "8px",
-    overflowX: "auto",
-  },
-});
+const OutputWrapper = styled.div`
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #EDEDED;
+  border-radius: 8px;
+  overflow-x: auto;
+`
 
 const TestSystemOutput = ({
   publicId,
@@ -33,10 +31,8 @@ const TestSystemOutput = ({
   testCaseIdx,
   outputType,
 }: TestSystemOutputProps) => {
-  const classes = useStyles({});
-
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
   const [output, setOutput] = React.useState<TestOutput>(null);
 
@@ -59,14 +55,14 @@ const TestSystemOutput = ({
   }, [setOutput, setLoadingState]);
 
   return (
-    <div className={classes.paper}>
+    <OutputWrapper>
       <LoadingSection
         loadingState={loadingState}
         successComponent={
           <CodeText text={output != null ? output.value : null} />
         }
       />
-    </div>
+    </OutputWrapper>
   );
 };
 

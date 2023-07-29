@@ -32,7 +32,7 @@ describe("TestSuitePage", () => {
       .reply(200, testSuite);
 
     const { getByTestId, queryByTestId } = render(
-      <TestSuitePage publicId={publicId} testSuiteIdx={testSuiteIdx} />
+      <TestSuitePage publicId={publicId} testSuiteIdx={testSuiteIdx} />,
     );
 
     await waitFor(() => getByTestId("test-suite-details"));
@@ -50,7 +50,7 @@ describe("TestSuitePage", () => {
       .reply(404, {});
 
     const { getByTestId, queryByTestId } = render(
-      <TestSuitePage publicId={publicId} testSuiteIdx={testSuiteIdx} />
+      <TestSuitePage publicId={publicId} testSuiteIdx={testSuiteIdx} />,
     );
 
     await waitFor(() => getByTestId("loading-section-error"));

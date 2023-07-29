@@ -33,16 +33,16 @@ describe("RepositoryCoverageBadge", () => {
     const { findByTestId } = render(
       <LocationProvider history={createHistory(createMemorySource("/ui"))}>
         <RepositoryCoverageBadge repoName={repoName} />
-      </LocationProvider>
+      </LocationProvider>,
     );
 
     expect(await findByTestId("coverage-badge-contents")).toHaveTextContent(
-      "my-badge"
+      "my-badge",
     );
 
     expect(await findByTestId("coverage-badge-copy-link")).toHaveAttribute(
       "data-badge",
-      "[![Code coverage percentage](undefined/repo/my-org/my-repo/badge/coverage)](undefined/repository/my-org/my-repo/coverage)"
+      "[![Code coverage percentage](undefined/repo/my-org/my-repo/badge/coverage)](undefined/repository/my-org/my-repo/coverage)",
     );
 
     (await findByTestId("coverage-badge-copy-link")).click();

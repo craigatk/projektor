@@ -27,17 +27,17 @@ describe("RepositoryCoverageTimelineGraphTooltip", () => {
     };
 
     const { getByTestId } = render(
-      <RepositoryCoverageTimelineGraphTooltip {...props} />
+      <RepositoryCoverageTimelineGraphTooltip {...props} />,
     );
 
     expect(getByTestId("tooltip-line-coverage-percentage")).toHaveTextContent(
-      "97.25%"
+      "97.25%",
     );
     expect(getByTestId("tooltip-branch-coverage-percentage")).toHaveTextContent(
-      "80.25%"
+      "80.25%",
     );
     expect(getByTestId("tooltip-run-date")).toHaveTextContent(
-      "Oct 2nd 2020 6:03 am"
+      "Oct 2nd 2020 6:03 am",
     );
   });
 
@@ -47,7 +47,7 @@ describe("RepositoryCoverageTimelineGraphTooltip", () => {
     };
 
     const { getByTestId } = render(
-      <RepositoryCoverageTimelineGraphTooltip {...props} />
+      <RepositoryCoverageTimelineGraphTooltip {...props} />,
     );
 
     expect(getByTestId("empty-tooltip")).toBeInTheDocument();

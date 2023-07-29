@@ -2,7 +2,7 @@ import * as React from "react";
 import { OrganizationCoverage } from "../../model/OrganizationModel";
 import CoverageTable from "../../Coverage/CoverageTable";
 import CoverageTableRow from "../../Coverage/CoverageTableRow";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import { makeStyles } from "@material-ui/styles";
 import { repositoryLinkUrlUI } from "../../Repository/RepositoryLink";
 
@@ -37,10 +37,10 @@ const OrganizationCoverageDetails = ({
             nameLinkUrl: repositoryLinkUrlUI(
               repositoryCoverage.repoName,
               repositoryCoverage.projectName,
-              null
+              null,
             ),
             coveredPercentageLink: `/tests/${repositoryCoverage.publicId}/`,
-          } as CoverageTableRow)
+          }) as CoverageTableRow,
       );
 
     return (

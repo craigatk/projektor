@@ -31,7 +31,7 @@ describe("CodeTextProgressiveRender", () => {
         lineCount={lines.length}
         lineHeight={14}
         highlightedLine={2}
-      />
+      />,
     );
 
     expect(queryByTestId(progressBarId)).not.toBeNull();
@@ -136,7 +136,7 @@ describe("CodeTextProgressiveRender", () => {
         lineCount={lines.length}
         lineHeight={14}
         highlightedLine={2}
-      />
+      />,
     );
 
     expect(getNodeText(await findByTestId("line-1"))).toBe("line1");

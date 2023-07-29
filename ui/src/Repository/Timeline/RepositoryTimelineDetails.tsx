@@ -2,7 +2,7 @@ import * as React from "react";
 import { RepositoryTimeline } from "../../model/RepositoryModel";
 import PageTitle from "../../PageTitle";
 import RepositoryTimelineGraph from "./RepositoryTimelineGraph";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 
 interface RepositoryTimelineDetailsProps {
   timeline: RepositoryTimeline;

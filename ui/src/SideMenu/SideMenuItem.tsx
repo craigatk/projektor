@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import { makeStyles } from "@material-ui/styles";
 
 interface SideMenuItemProps {

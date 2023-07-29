@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Alert } from "@material-ui/lab";
+import Alert from '@mui/material/Alert';
 import { fetchMessages } from "../service/TestRunService";
 
 interface TestRunMessagesProps {

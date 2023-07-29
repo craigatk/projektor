@@ -14,7 +14,7 @@ interface TestSuitePackagePageProps extends RouteComponentProps {
 const TestSuitePackagePage = ({ publicId }: TestSuitePackagePageProps) => {
   const [packageName, setPackageName] = useQueryParam("name", StringParam);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
   const [testSuites, setTestSuites] = React.useState<TestSuite[]>([]);
 

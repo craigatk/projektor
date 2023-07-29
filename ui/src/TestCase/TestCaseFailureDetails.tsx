@@ -1,7 +1,7 @@
 import * as React from "react";
 import { TestFailure } from "../model/TestRunModel";
 import { RouteComponentProps } from "@reach/router";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/material/styles";
 
 interface TestCaseFailureDetailsProps extends RouteComponentProps {
   failure: TestFailure;

@@ -24,7 +24,7 @@ const RepositoryPerformanceTimelinePage = ({
   const [repositoryPerformanceTimeline, setRepositoryPerformanceTimeline] =
     React.useState<RepositoryPerformanceTimeline>(null);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
 
   React.useEffect(() => {

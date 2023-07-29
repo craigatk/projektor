@@ -23,7 +23,7 @@ const RepositoryTimelinePage = ({
   const [repositoryTimeline, setRepositoryTimeline] =
     React.useState<RepositoryTimeline>(null);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
 
   React.useEffect(() => {

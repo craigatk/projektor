@@ -1,7 +1,7 @@
 import * as React from "react";
 import { RouteComponentProps, Router } from "@reach/router";
 import { makeStyles } from "@material-ui/styles";
-import { AppBar, Typography } from "@material-ui/core";
+import { AppBar, Typography } from "@mui/material";
 import OrganizationSideMenu from "./OrganizationSideMenu";
 import OrganizationCoveragePage from "./Coverage/OrganizationCoveragePage";
 

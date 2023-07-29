@@ -65,7 +65,7 @@ describe("RepositoryCoveragePage", () => {
         <QueryParamProvider reachHistory={globalHistory}>
           <RepositoryCoveragePage orgPart="my-org" repoPart="my-repo" />
         </QueryParamProvider>
-      </LocationProvider>
+      </LocationProvider>,
     );
 
     await findByTestId("repository-coverage-timeline-graph");
@@ -83,7 +83,7 @@ describe("RepositoryCoveragePage", () => {
         <QueryParamProvider reachHistory={globalHistory}>
           <RepositoryCoveragePage orgPart="my-org" repoPart="my-repo" />
         </QueryParamProvider>
-      </LocationProvider>
+      </LocationProvider>,
     );
 
     await findByTestId("repo-no-coverage");

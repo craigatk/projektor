@@ -4,9 +4,9 @@ import {
   TestResultsProcessingStatus,
 } from "../model/TestRunModel";
 import LoadingState from "../Loading/LoadingState";
-import { Paper, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import { Paper, Typography } from "@mui/material";
+import { makeStyles } from "@mui/material/styles";
+import LinearProgress from "@mui/material/LinearProgress";
 import { fetchTestResultsProcessing } from "../service/TestRunService";
 import { RouteComponentProps } from "@reach/router";
 
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const resultsAreStillProcessing = (
-  processing: TestResultsProcessing
+  processing: TestResultsProcessing,
 ): boolean => {
   return (
     !processing ||
@@ -55,7 +55,7 @@ const TestResultsProcessingCheck = ({
   const [resultsProcessing, setResultsProcessing] =
     React.useState<TestResultsProcessing>(null);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
 
   const loadTestResultsProcessing = () => {
