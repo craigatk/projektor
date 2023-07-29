@@ -1,6 +1,6 @@
 import * as React from "react";
 import { TestRunGitMetadata } from "../model/TestRunModel";
-import { Link } from "@material-ui/core";
+import { Link } from "@mui/material";
 import { createGitHubFileUrl } from "./VersionControlHelpers";
 
 interface GitHubFileLinkProps {

@@ -48,7 +48,7 @@ describe("VersionControlHelpers", () => {
       const url = createGitHubFileUrl(gitMetadata, filePath);
 
       expect(url).toBe(
-        "https://github.com/craigatk/projektor/blob/master/ui/package.json"
+        "https://github.com/craigatk/projektor/blob/master/ui/package.json",
       );
     });
 
@@ -65,7 +65,7 @@ describe("VersionControlHelpers", () => {
       const url = createGitHubFileUrl(gitMetadata, filePath);
 
       expect(url).toBe(
-        "https://github.com/craigatk/projektor/blob/master/ui/package.json"
+        "https://github.com/craigatk/projektor/blob/master/ui/package.json",
       );
     });
 
@@ -83,7 +83,7 @@ describe("VersionControlHelpers", () => {
       const url = createGitHubFileUrl(gitMetadata, filePath, lineNumber);
 
       expect(url).toBe(
-        "https://github.com/craigatk/projektor/blob/master/ui/package.json#L2"
+        "https://github.com/craigatk/projektor/blob/master/ui/package.json#L2",
       );
     });
 

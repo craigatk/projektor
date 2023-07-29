@@ -32,7 +32,7 @@ describe("TestSystemOut", () => {
 
     mockAxios
       .onGet(
-        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/systemOut`
+        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/systemOut`,
       )
       .reply(200, testSuiteOutput);
 
@@ -43,7 +43,7 @@ describe("TestSystemOut", () => {
           testSuiteIdx={testSuiteIdx}
           outputType={outputType}
         />
-      </QueryParamProvider>
+      </QueryParamProvider>,
     );
 
     await findByTestId("code-text");
@@ -62,7 +62,7 @@ describe("TestSystemOut", () => {
 
     mockAxios
       .onGet(
-        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/systemOut`
+        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/systemOut`,
       )
       .reply(200, testCaseOutput);
 
@@ -74,7 +74,7 @@ describe("TestSystemOut", () => {
           testCaseIdx={testCaseIdx}
           outputType={outputType}
         />
-      </QueryParamProvider>
+      </QueryParamProvider>,
     );
 
     expect(await findByTestId("code-text")).toHaveTextContent("My output");
@@ -93,7 +93,7 @@ describe("TestSystemOut", () => {
 
     mockAxios
       .onGet(
-        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/systemErr`
+        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/systemErr`,
       )
       .reply(200, testCaseOutput);
 
@@ -105,7 +105,7 @@ describe("TestSystemOut", () => {
           testCaseIdx={testCaseIdx}
           outputType={outputType}
         />
-      </QueryParamProvider>
+      </QueryParamProvider>,
     );
 
     expect(await findByTestId("code-text")).toHaveTextContent("My system err");
@@ -119,7 +119,7 @@ describe("TestSystemOut", () => {
 
     mockAxios
       .onGet(
-        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/systemOut`
+        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/systemOut`,
       )
       .reply(404, {});
 
@@ -130,7 +130,7 @@ describe("TestSystemOut", () => {
           testSuiteIdx={testSuiteIdx}
           outputType={outputType}
         />
-      </QueryParamProvider>
+      </QueryParamProvider>,
     );
 
     await findByTestId("loading-section-error");

@@ -2,7 +2,7 @@ import moment from "moment";
 
 const formatSecondsDuration = (
   durationInSeconds: number,
-  includeMSThreshold: number = 60 * 60
+  includeMSThreshold: number = 60 * 60,
 ): string => {
   const secondsFormat =
     durationInSeconds < includeMSThreshold ? "s.SSS[s]" : "s[s]";

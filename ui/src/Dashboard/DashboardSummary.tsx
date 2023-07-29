@@ -1,6 +1,6 @@
 import * as React from "react";
 import { TestRunGitMetadata, TestRunSummary } from "../model/TestRunModel";
-import { Grid, Hidden, List } from "@material-ui/core";
+import { Grid, Hidden, List } from "@mui/material";
 import TestCountList from "../TestCount/TestCountList";
 import PageTitle from "../PageTitle";
 import TestRunDuration from "./TestRunDuration";
@@ -9,7 +9,6 @@ import TestRunCleanupDate from "./TestRunCleanupDate";
 import TestRunMessages from "../TestRunMessages/TestRunMessages";
 import GitRepoListItem from "./GitRepoListItem";
 import DashboardSummaryItem from "./DashboardSummaryItem";
-import CleanLink from "../Link/CleanLink";
 import { createGitHubUrl } from "../VersionControl/VersionControlHelpers";
 import CleanLinkText from "../Link/CleanLinkText";
 
@@ -115,7 +114,7 @@ const DashboardSummary = ({
                     <CleanLinkText
                       href={createGitHubUrl(
                         gitMetadata,
-                        `/pull/${gitMetadata.pullRequestNumber}`
+                        `/pull/${gitMetadata.pullRequestNumber}`,
                       )}
                       data-testid="dashboard-summary-pull-request-link"
                     >
@@ -134,12 +133,12 @@ const DashboardSummary = ({
                     <CleanLinkText
                       href={createGitHubUrl(
                         gitMetadata,
-                        `/commit/${gitMetadata.commitSha}`
+                        `/commit/${gitMetadata.commitSha}`,
                       )}
                       data-testid="dashboard-summary-commit-sha-link"
                     >
                       {gitMetadata.commitSha.substring(
-                        gitMetadata.commitSha.length - 7
+                        gitMetadata.commitSha.length - 7,
                       )}
                     </CleanLinkText>
                   }

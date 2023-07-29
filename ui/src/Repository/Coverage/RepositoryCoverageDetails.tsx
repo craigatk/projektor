@@ -2,7 +2,7 @@ import * as React from "react";
 import { RepositoryCoverageTimeline } from "../../model/RepositoryModel";
 import PageTitle from "../../PageTitle";
 import RepositoryCoverageTimelineGraph from "./RepositoryCoverageTimelineGraph";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import { makeStyles } from "@material-ui/styles";
 import RepositoryCoverageBadge from "../../Badge/RepositoryCoverageBadge";
 

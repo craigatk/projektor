@@ -33,24 +33,24 @@ describe("file-level coverage", () => {
 
     cy.getByTestId("coverage-file-name-1").should(
       "contain",
-      "projektor/cleanup/CleanupScheduledJob.kt"
+      "projektor/cleanup/CleanupScheduledJob.kt",
     );
     cy.getByTestId(
-      "coverage-file-line-coverage-row-1-covered-percentage"
+      "coverage-file-line-coverage-row-1-covered-percentage",
     ).should("contain", "71.43%");
     cy.getByTestId("branch-coverage-row-1-covered-percentage").should(
       "contain",
-      "100%"
+      "100%",
     );
     cy.getByTestId("coverage-file-missed-lines-1").should(
       "contain",
-      "16, 18, 20, 21"
+      "16, 18, 20, 21",
     );
     cy.getByTestId("coverage-file-partial-lines-1").should("be.empty");
 
     // Should filter out files with no lines of code (in this case an interface)
     cy.findAllByText("projektor/attachment/AttachmentRepository.kt").should(
-      "not.exist"
+      "not.exist",
     );
   });
 
@@ -90,14 +90,14 @@ describe("file-level coverage", () => {
 
     cy.getByTestId("coverage-file-name-1").should(
       "contain",
-      "projektor/attachment/AttachmentDatabaseRepository.kt"
+      "projektor/attachment/AttachmentDatabaseRepository.kt",
     );
 
     cy.getByTestId(`coverage-file-1-file-name-link`)
       .should("have.attr", "href")
       .and(
         "equal",
-        "http://localhost:1234/craigatk/projektor/blob/main/src/main/kotlin/projektor/attachment/AttachmentDatabaseRepository.kt"
+        "http://localhost:1234/craigatk/projektor/blob/main/src/main/kotlin/projektor/attachment/AttachmentDatabaseRepository.kt",
       );
 
     cy.getByTestId("coverage-file-missed-lines-1").should("contain", "39, 41");
@@ -107,28 +107,28 @@ describe("file-level coverage", () => {
       .should("have.attr", "href")
       .and(
         "equal",
-        "http://localhost:1234/craigatk/projektor/blob/main/src/main/kotlin/projektor/attachment/AttachmentDatabaseRepository.kt#L39"
+        "http://localhost:1234/craigatk/projektor/blob/main/src/main/kotlin/projektor/attachment/AttachmentDatabaseRepository.kt#L39",
       );
 
     cy.getByTestId("coverage-file-1-missed-line-link-41")
       .should("have.attr", "href")
       .and(
         "equal",
-        "http://localhost:1234/craigatk/projektor/blob/main/src/main/kotlin/projektor/attachment/AttachmentDatabaseRepository.kt#L41"
+        "http://localhost:1234/craigatk/projektor/blob/main/src/main/kotlin/projektor/attachment/AttachmentDatabaseRepository.kt#L41",
       );
 
     cy.getByTestId("coverage-file-1-partial-line-link-34")
       .should("have.attr", "href")
       .and(
         "equal",
-        "http://localhost:1234/craigatk/projektor/blob/main/src/main/kotlin/projektor/attachment/AttachmentDatabaseRepository.kt#L34"
+        "http://localhost:1234/craigatk/projektor/blob/main/src/main/kotlin/projektor/attachment/AttachmentDatabaseRepository.kt#L34",
       );
 
     cy.getByTestId("coverage-file-1-partial-line-link-36")
       .should("have.attr", "href")
       .and(
         "equal",
-        "http://localhost:1234/craigatk/projektor/blob/main/src/main/kotlin/projektor/attachment/AttachmentDatabaseRepository.kt#L36"
+        "http://localhost:1234/craigatk/projektor/blob/main/src/main/kotlin/projektor/attachment/AttachmentDatabaseRepository.kt#L36",
       );
   });
 });

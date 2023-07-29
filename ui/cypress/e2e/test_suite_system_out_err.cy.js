@@ -13,7 +13,7 @@ context("test suite system out and system err", () => {
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
       {
         fixture: "failed_test_case_2.json",
-      }
+      },
     );
 
     cy.intercept("GET", `run/${publicId}/suite/${testSuiteIdx}/systemOut`, {
@@ -23,12 +23,12 @@ context("test suite system out and system err", () => {
     cy.interceptTestRunBasicRequests(publicId);
 
     cy.visit(
-      `http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`
+      `http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
     );
 
     cy.getByTestId("test-case-failure-text").should(
       "contain",
-      "Condition not satisfied"
+      "Condition not satisfied",
     );
 
     cy.getByTestId("test-case-tab-system-out").click();

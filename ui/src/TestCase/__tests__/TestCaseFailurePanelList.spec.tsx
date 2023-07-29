@@ -13,15 +13,15 @@ describe("TestCaseFailureListPanel", () => {
     };
 
     const testCases = [1, 2, 3, 4].map((idx) =>
-      createTestCaseWithFailure(idx, failure)
+      createTestCaseWithFailure(idx, failure),
     );
 
     const { getByTestId } = render(
-      <TestCaseFailurePanelList failedTestCases={testCases} publicId="12345" />
+      <TestCaseFailurePanelList failedTestCases={testCases} publicId="12345" />,
     );
 
     expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
-      "My longer and more descriptive failure text"
+      "My longer and more descriptive failure text",
     );
   });
 
@@ -33,21 +33,21 @@ describe("TestCaseFailureListPanel", () => {
     };
 
     const testCases = [1, 2, 3, 4, 5, 6].map((idx) =>
-      createTestCaseWithFailure(idx, failure)
+      createTestCaseWithFailure(idx, failure),
     );
 
     const { getByTestId } = render(
-      <TestCaseFailurePanelList failedTestCases={testCases} publicId="12345" />
+      <TestCaseFailurePanelList failedTestCases={testCases} publicId="12345" />,
     );
 
     expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
-      "My failure message"
+      "My failure message",
     );
   });
 
   function createTestCaseWithFailure(
     idx: number,
-    failure: TestFailure
+    failure: TestFailure,
   ): TestCase {
     return {
       idx,

@@ -18,11 +18,11 @@ describe("TestRunDuration", () => {
         cumulativeDuration={cumulativeDuration}
         wallClockDuration={wallClockDuration}
         slowestTestCaseDuration={slowestTestCaseDuration}
-      />
+      />,
     );
 
     expect(getByTestId("test-run-wall-clock-duration")).toHaveTextContent(
-      "8.750s"
+      "8.750s",
     );
   });
 
@@ -40,7 +40,7 @@ describe("TestRunDuration", () => {
         cumulativeDuration={cumulativeDuration}
         wallClockDuration={wallClockDuration}
         slowestTestCaseDuration={slowestTestCaseDuration}
-      />
+      />,
     );
 
     expect(queryByTestId("test-run-wall-clock-duration")).toBeNull();

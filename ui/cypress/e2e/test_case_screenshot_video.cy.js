@@ -20,7 +20,7 @@ describe("test case with Cypress attachments", () => {
     cy.intercept(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
-      { fixture: "cypress/failed_test_case_with_screenshot_and_video.json" }
+      { fixture: "cypress/failed_test_case_with_screenshot_and_video.json" },
     );
 
     cy.intercept(
@@ -29,7 +29,7 @@ describe("test case with Cypress attachments", () => {
       {
         fixture:
           "attachments/test run with attachments -- should list attachments on attachments page (failed).png",
-      }
+      },
     );
     cy.intercept("GET", `run/${publicId}/attachments/attachments.spec.js.mp4`, {
       fixture: "attachments/attachments.spec.js.mp4",
@@ -40,20 +40,20 @@ describe("test case with Cypress attachments", () => {
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
     cy.getByTestId(
-      `test-case-failure-screenshot-${testSuiteIdx}-${testCaseIdx}`
+      `test-case-failure-screenshot-${testSuiteIdx}-${testCaseIdx}`,
     )
       .should("have.attr", "src")
       .and(
         "contain",
-        "/attachments/test run with attachments -- should list attachments on attachments page (failed).png"
+        "/attachments/test run with attachments -- should list attachments on attachments page (failed).png",
       );
 
     cy.getByTestId(
-      `test-case-screenshot-link-${testSuiteIdx}-${testCaseIdx}`
+      `test-case-screenshot-link-${testSuiteIdx}-${testCaseIdx}`,
     ).click();
 
     cy.getByTestId(
-      `test-case-failure-screenshot-${testSuiteIdx}-${testCaseIdx}`
+      `test-case-failure-screenshot-${testSuiteIdx}-${testCaseIdx}`,
     ).should("exist");
   });
 
@@ -78,7 +78,7 @@ describe("test case with Cypress attachments", () => {
     cy.intercept(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
-      { fixture: "cypress/failed_test_case_with_screenshot_and_video.json" }
+      { fixture: "cypress/failed_test_case_with_screenshot_and_video.json" },
     );
 
     cy.intercept(
@@ -87,7 +87,7 @@ describe("test case with Cypress attachments", () => {
       {
         fixture:
           "attachments/test run with attachments -- should list attachments on attachments page (failed).png",
-      }
+      },
     );
     cy.intercept("GET", `run/${publicId}/attachments/attachments.spec.js.mp4`, {
       fixture: "attachments/attachments.spec.js.mp4",
@@ -98,7 +98,7 @@ describe("test case with Cypress attachments", () => {
     cy.visit(`http://localhost:1234/tests/${publicId}`);
 
     cy.getByTestId(
-      `test-case-video-link-${testSuiteIdx}-${testCaseIdx}`
+      `test-case-video-link-${testSuiteIdx}-${testCaseIdx}`,
     ).click();
 
     cy.getByTestId("test-case-failure-video").should("exist");

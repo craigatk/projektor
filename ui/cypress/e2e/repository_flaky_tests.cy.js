@@ -7,7 +7,7 @@ context("repository flaky tests", () => {
     cy.intercept(
       "GET",
       `repo/${repoName}/tests/flaky?threshold=5&max_runs=50&branch_type=MAINLINE`,
-      { fixture: "repository/flaky_tests.json" }
+      { fixture: "repository/flaky_tests.json" },
     );
 
     cy.visit(`http://localhost:1234/repository/${repoName}`);
@@ -18,23 +18,23 @@ context("repository flaky tests", () => {
 
     cy.getByTestId("flaky-test-case-name-1").should(
       "contain",
-      "projektor.testsuite.GetTestSuiteApplicationTest.should fetch grouped test suite from database"
+      "projektor.testsuite.GetTestSuiteApplicationTest.should fetch grouped test suite from database",
     );
     cy.getByTestId("flaky-test-case-failure-percentage-1").should(
       "contain",
-      "70.35%"
+      "70.35%",
     );
     cy.getByTestId("flaky-test-case-failure-count-1").should("contain", "5");
     cy.getByTestId("flaky-test-case-first-failure-1").should(
       "contain",
-      "Sep 22nd 2020"
+      "Sep 22nd 2020",
     );
     cy.getByTestId(`flaky-test-case-first-failure-1`)
       .should("have.attr", "href")
       .and("equal", "/tests/32FBHG6FDL89/suite/1/case/2");
     cy.getByTestId("flaky-test-case-latest-failure-1").should(
       "contain",
-      "Sep 30th 2020"
+      "Sep 30th 2020",
     );
     cy.getByTestId(`flaky-test-case-latest-failure-1`)
       .should("have.attr", "href")
@@ -42,21 +42,21 @@ context("repository flaky tests", () => {
 
     cy.getByTestId("flaky-test-case-name-2").should(
       "contain",
-      "projektor.example.spock.FailingSpec.should fail with output"
+      "projektor.example.spock.FailingSpec.should fail with output",
     );
     cy.getByTestId("flaky-test-case-failure-percentage-2").should(
       "contain",
-      "60.25%"
+      "60.25%",
     );
     cy.getByTestId("flaky-test-case-failure-count-2").should("contain", "4");
 
     cy.getByTestId("flaky-test-case-name-3").should(
       "contain",
-      "projektor.example.spock.FailingSpec.should fail"
+      "projektor.example.spock.FailingSpec.should fail",
     );
     cy.getByTestId("flaky-test-case-failure-percentage-3").should(
       "contain",
-      "50.15%"
+      "50.15%",
     );
     cy.getByTestId("flaky-test-case-failure-count-3").should("contain", "3");
   });
@@ -67,7 +67,7 @@ context("repository flaky tests", () => {
     cy.intercept(
       "GET",
       `repo/${repoName}/tests/flaky?threshold=5&max_runs=50&branch_type=MAINLINE`,
-      { fixture: "repository/flaky_tests.json" }
+      { fixture: "repository/flaky_tests.json" },
     );
 
     const publicId = "32FBHG6FDL8S";
@@ -81,7 +81,7 @@ context("repository flaky tests", () => {
     cy.intercept(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
-      { fixture: "failed_test_case_2.json" }
+      { fixture: "failed_test_case_2.json" },
     );
 
     cy.visit(`http://localhost:1234/repository/${repoName}`);
@@ -94,7 +94,7 @@ context("repository flaky tests", () => {
 
     cy.getByTestId("test-case-failure-text").should(
       "contain",
-      "Condition not satisfied"
+      "Condition not satisfied",
     );
   });
 
@@ -104,7 +104,7 @@ context("repository flaky tests", () => {
     cy.intercept(
       "GET",
       `repo/${repoName}/tests/flaky?threshold=5&max_runs=50&branch_type=MAINLINE`,
-      { fixture: "repository/flaky_tests.json" }
+      { fixture: "repository/flaky_tests.json" },
     );
 
     cy.visit(`http://localhost:1234/repository/${repoName}`);
@@ -115,18 +115,18 @@ context("repository flaky tests", () => {
 
     cy.findByTestId("flaky-test-case-name-1").should(
       "contain",
-      "projektor.testsuite.GetTestSuiteApplicationTest.should fetch grouped test suite from database"
+      "projektor.testsuite.GetTestSuiteApplicationTest.should fetch grouped test suite from database",
     );
 
     cy.findByTestId("flaky-test-case-name-2").should(
       "contain",
-      "projektor.example.spock.FailingSpec.should fail with output"
+      "projektor.example.spock.FailingSpec.should fail with output",
     );
 
     cy.intercept(
       "GET",
       `repo/${repoName}/tests/flaky?threshold=2&max_runs=20&branch_type=ALL`,
-      { fixture: "repository/flaky_tests_two_tests.json" }
+      { fixture: "repository/flaky_tests_two_tests.json" },
     );
 
     cy.findByTestId("flaky-tests-threshold").type("{selectall}{backspace}2", {
@@ -141,12 +141,12 @@ context("repository flaky tests", () => {
 
     cy.findByTestId("flaky-test-case-name-1").should(
       "contain",
-      "projektor.flaky.FlakyTest1"
+      "projektor.flaky.FlakyTest1",
     );
 
     cy.findByTestId("flaky-test-case-name-2").should(
       "contain",
-      "projektor.flaky.FlakyTest2"
+      "projektor.flaky.FlakyTest2",
     );
 
     cy.url().should("contain", "max=20");
@@ -160,23 +160,23 @@ context("repository flaky tests", () => {
     cy.intercept(
       "GET",
       `repo/${repoName}/tests/flaky?threshold=4&max_runs=30&branch_type=ALL`,
-      { fixture: "repository/flaky_tests_two_tests.json" }
+      { fixture: "repository/flaky_tests_two_tests.json" },
     );
 
     cy.visit(
-      `http://localhost:1234/repository/${repoName}/tests/flaky?max=30&threshold=4&branch_type=all`
+      `http://localhost:1234/repository/${repoName}/tests/flaky?max=30&threshold=4&branch_type=all`,
     );
 
     cy.testIdShouldExist("repository-flaky-tests-table");
 
     cy.getByTestId("flaky-test-case-name-1").should(
       "contain",
-      "projektor.flaky.FlakyTest1"
+      "projektor.flaky.FlakyTest1",
     );
 
     cy.getByTestId("flaky-test-case-name-2").should(
       "contain",
-      "projektor.flaky.FlakyTest2"
+      "projektor.flaky.FlakyTest2",
     );
   });
 });

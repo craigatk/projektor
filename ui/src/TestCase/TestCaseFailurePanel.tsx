@@ -1,14 +1,14 @@
 import * as React from "react";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionActions from "@material-ui/core/AccordionActions";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
-import { makeStyles } from "@material-ui/core/styles";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionActions from "@mui/material/AccordionActions";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
+import { makeStyles } from "@mui/material/styles";
 import { AttachmentType, TestCase } from "../model/TestRunModel";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import CleanLink from "../Link/CleanLink";
 import { ExpandCollapseState } from "./ExpandCollapseState";
 import TestCaseFailureScreenshot from "./TestCaseFailureScreenshot";
@@ -64,7 +64,7 @@ const TestCaseFailurePanel = ({
 
   const screenshotAttachment = findAttachmentOfType(
     testCase,
-    AttachmentType.IMAGE
+    AttachmentType.IMAGE,
   );
   const videoAttachment = findAttachmentOfType(testCase, AttachmentType.VIDEO);
 

@@ -65,7 +65,7 @@ describe("TestRunDataWrapper", () => {
       .reply(204);
 
     const { getByTestId, queryByTestId } = render(
-      <TestRunDataWrapper publicId={publicId} />
+      <TestRunDataWrapper publicId={publicId} />,
     );
 
     await waitFor(() => getByTestId("test-run-menu-wrapper"));
@@ -86,7 +86,7 @@ describe("TestRunDataWrapper", () => {
       .reply(200, { status: "PROCESSING" });
 
     const { getByTestId, queryByTestId } = render(
-      <TestRunDataWrapper publicId={publicId} />
+      <TestRunDataWrapper publicId={publicId} />,
     );
 
     await waitFor(() => getByTestId("results-still-processing"));

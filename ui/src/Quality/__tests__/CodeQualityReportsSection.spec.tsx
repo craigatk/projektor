@@ -33,7 +33,7 @@ describe("CodeQualityReportsSection", () => {
       <CodeQualityReportsSection
         publicId="12345"
         codeQualityReports={codeQualityReports}
-      />
+      />,
     );
 
     expect(queryByText("file_1.txt")).not.toBeNull();
@@ -56,7 +56,7 @@ describe("CodeQualityReportsSection", () => {
       <CodeQualityReportsSection
         publicId="12345"
         codeQualityReports={codeQualityReports}
-      />
+      />,
     );
 
     expect(queryByTestId("code-quality-reports-all-passed")).not.toBeNull();
@@ -71,7 +71,7 @@ describe("CodeQualityReportsSection", () => {
       <CodeQualityReportsSection
         publicId="12345"
         codeQualityReports={codeQualityReports}
-      />
+      />,
     );
 
     expect(queryByTestId("code-quality-reports-not-found")).not.toBeNull();

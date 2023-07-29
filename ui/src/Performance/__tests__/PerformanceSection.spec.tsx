@@ -42,28 +42,28 @@ describe("PerformanceSection", () => {
       .reply(200, performanceResults);
 
     const { findByTestId, getByTestId } = render(
-      <PerformanceSection publicId={publicId} />
+      <PerformanceSection publicId={publicId} />,
     );
 
     await findByTestId("performance-results-table");
 
     expect(getByTestId("performance-result-name-1")).toHaveTextContent(
-      "perf-1"
+      "perf-1",
     );
     expect(
-      getByTestId("performance-result-requests-per-second-1")
+      getByTestId("performance-result-requests-per-second-1"),
     ).toHaveTextContent("450.123");
     expect(getByTestId("performance-result-request-count-1")).toHaveTextContent(
-      "5000"
+      "5000",
     );
     expect(getByTestId("performance-result-average-1")).toHaveTextContent(
-      "23.345 ms"
+      "23.345 ms",
     );
     expect(getByTestId("performance-result-maximum-1")).toHaveTextContent(
-      "59.293 ms"
+      "59.293 ms",
     );
     expect(getByTestId("performance-result-p95-1")).toHaveTextContent(
-      "41.293 ms"
+      "41.293 ms",
     );
   });
 });

@@ -13,7 +13,7 @@ interface AttachmentsPageProps extends RouteComponentProps {
 
 const AttachmentsPage = ({ publicId }: AttachmentsPageProps) => {
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
   const [attachments, setAttachments] = React.useState<Attachments>(null);
 

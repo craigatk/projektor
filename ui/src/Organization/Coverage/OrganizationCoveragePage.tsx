@@ -16,7 +16,7 @@ const OrganizationCoveragePage = ({
   const [organizationCoverage, setOrganizationCoverage] =
     React.useState<OrganizationCoverage>(null);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
 
   React.useEffect(() => {

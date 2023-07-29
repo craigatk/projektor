@@ -1,6 +1,6 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/styles";
-import { Drawer, List, Typography } from "@material-ui/core";
+import { Drawer, List, Typography } from "@mui/material";
 import { TestRunGitMetadata, TestRunSummary } from "../model/TestRunModel";
 import DashboardIcon from "../Icons/DashboardIcon";
 import FailedIcon from "../Icons/FailedIcon";
@@ -118,7 +118,7 @@ const SideMenu = ({
             linkTo={repositoryLinkUrlUI(
               gitMetadata.repoName,
               gitMetadata.projectName,
-              null
+              null,
             )}
             icon={<RepositoryIcon />}
             linkText="Repository"

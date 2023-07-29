@@ -1,5 +1,5 @@
 import * as React from "react";
-import AssignmentLateOutlinedIcon from "@material-ui/icons/AssignmentLateOutlined";
+import AssignmentLateOutlinedIcon from "@mui/icons-material/AssignmentLateOutlined";
 
 const CodeQualityIcon = ({ className }: IconProps) => {
   return (

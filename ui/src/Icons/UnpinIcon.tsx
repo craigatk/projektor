@@ -1,5 +1,5 @@
 import * as React from "react";
-import Bookmark from "@material-ui/icons/Bookmark";
+import Bookmark from "@mui/icons-material/Bookmark";
 
 const UnpinIcon = ({ className }: IconProps) => {
   return (

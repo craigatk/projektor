@@ -20,7 +20,7 @@ context("test run messages", () => {
 
     cy.getByTestId("test-run-message-1").should(
       "contain",
-      "Here is one message"
+      "Here is one message",
     );
   });
 

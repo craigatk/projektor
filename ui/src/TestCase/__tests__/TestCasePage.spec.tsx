@@ -42,7 +42,7 @@ describe("TestCasePage", () => {
 
     mockAxios
       .onGet(
-        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`
+        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
       )
       .reply(200, testCase);
 
@@ -51,7 +51,7 @@ describe("TestCasePage", () => {
         publicId={publicId}
         testSuiteIdx={testSuiteIdx}
         testCaseIdx={testCaseIdx}
-      />
+      />,
     );
 
     await waitFor(() => getByTestId("test-case-details"));
@@ -67,7 +67,7 @@ describe("TestCasePage", () => {
 
     mockAxios
       .onGet(
-        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`
+        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
       )
       .reply(404, {});
 
@@ -76,7 +76,7 @@ describe("TestCasePage", () => {
         publicId={publicId}
         testSuiteIdx={testSuiteIdx}
         testCaseIdx={testCaseIdx}
-      />
+      />,
     );
 
     await waitFor(() => getByTestId("loading-section-error"));

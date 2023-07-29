@@ -40,7 +40,7 @@ describe("RepositoryCoverageTimelineGraph", () => {
       <RepositoryCoverageTimelineGraph
         coverageTimeline={timeline}
         graphWidth={500}
-      />
+      />,
     );
 
     await findByTestId("repository-coverage-timeline-graph");

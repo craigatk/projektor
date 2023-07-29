@@ -30,7 +30,7 @@ context("test run with slow tests", () => {
 
     cy.getByTestId("slow-test-cases-title").should(
       "contain",
-      "Slowest test cases"
+      "Slowest test cases",
     );
 
     const testSuiteIdx = 3;
@@ -38,19 +38,19 @@ context("test run with slow tests", () => {
 
     cy.getByTestId(`test-case-name-${testSuiteIdx}-${testCaseIdx}`).should(
       "contain",
-      "projektor.example.spock.OutputSpec.should include system out and system err"
+      "projektor.example.spock.OutputSpec.should include system out and system err",
     );
 
     cy.getTestCaseLinkInList(testSuiteIdx, testCaseIdx).click();
 
     cy.getBreadcrumbPackgeNameLink().should(
       "contain",
-      "projektor.example.spock"
+      "projektor.example.spock",
     );
     cy.getBreadcrumbClassNameLink().should("contain", "OutputSpec");
     cy.getBreadcrumbEndingText().should(
       "contain",
-      "should include system out and system err"
+      "should include system out and system err",
     );
   });
 });

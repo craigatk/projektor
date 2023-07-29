@@ -2,8 +2,8 @@ import PageTitle from "../PageTitle";
 import * as React from "react";
 import CodeQualityReportTabs from "./CodeQualityReportTabs";
 import { CodeQualityReports } from "../model/TestRunModel";
-import { makeStyles } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
+import { makeStyles } from "@mui/material/styles";
+import { Typography } from "@mui/material";
 import CleanLinkText from "../Link/CleanLinkText";
 
 interface CodeQualityReportsSectionProps {
@@ -31,7 +31,7 @@ const CodeQualityReportsSection = ({
   const reportsWithContents =
     codeQualityReports && codeQualityReports.reports
       ? codeQualityReports.reports.filter(
-          (report) => report.contents && report.contents.length > 0
+          (report) => report.contents && report.contents.length > 0,
         )
       : [];
   const hasReportsWithContents = reportsWithContents.length > 0;
@@ -39,7 +39,7 @@ const CodeQualityReportsSection = ({
   const reportsWithoutContents =
     codeQualityReports && codeQualityReports.reports
       ? codeQualityReports.reports.filter(
-          (report) => !report.contents || report.contents.length === 0
+          (report) => !report.contents || report.contents.length === 0,
         )
       : [];
   const hasReportsWithoutContents = reportsWithoutContents.length > 0;

@@ -1,15 +1,10 @@
 import * as React from "react";
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  makeStyles,
-} from "@material-ui/core";
+import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import PassedIcon from "../Icons/PassedIcon";
 import FailedIcon from "../Icons/FailedIcon";
 import TotalIcon from "../Icons/TotalIcon";
 import SkippedIcon from "../Icons/SkippedIcon";
+import styled, { css } from "styled-components";
 
 interface TestCountListProps {
   passedCount: number;
@@ -19,21 +14,15 @@ interface TestCountListProps {
   horizontal: boolean;
 }
 
-interface TestCountListStyleProps {
-  horizontal: boolean;
-}
-
-const useStyles = makeStyles({
-  // style rule
-  list: ({ horizontal }: TestCountListStyleProps) =>
-    horizontal
-      ? {
-          display: "flex",
-          flexDirection: "row",
-          padding: 0,
-        }
-      : {},
-});
+const CountList = styled(List)<{ horizontal: boolean }>`
+  ${(props) =>
+    props.horizontal &&
+    css`
+      display: flex;
+      flex-direction: row;
+      padding: 0;
+    `}
+`;
 
 const TestCountList = ({
   passedCount,
@@ -42,10 +31,8 @@ const TestCountList = ({
   totalCount,
   horizontal,
 }: TestCountListProps) => {
-  const classes = useStyles({ horizontal });
-
   return (
-    <List dense={true} className={classes.list}>
+    <CountList dense={true} horizontal={horizontal}>
       <ListItem>
         <ListItemIcon>
           <PassedIcon />
@@ -82,7 +69,7 @@ const TestCountList = ({
           data-testid="test-count-list-total"
         />
       </ListItem>
-    </List>
+    </CountList>
   );
 };
 

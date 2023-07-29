@@ -1,5 +1,5 @@
 import * as React from "react";
-import InsertDriveFileOutlinedIcon from "@material-ui/icons/InsertDriveFileOutlined";
+import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 
 const AttachmentIcon = ({ className }: IconProps) => {
   return (

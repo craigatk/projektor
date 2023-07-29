@@ -14,11 +14,11 @@ describe("CoverageFileMissedLines", () => {
         missedLines={missedLines}
         filePath={filePath}
         fileIdx={fileIdx}
-      />
+      />,
     );
 
     expect(getByTestId("coverage-file-missed-lines-1")).toHaveTextContent(
-      "1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
+      "1, 2, 3, 4, 5, 6, 7, 8, 9, 10",
     );
   });
 
@@ -32,10 +32,10 @@ describe("CoverageFileMissedLines", () => {
         missedLines={missedLines}
         filePath={filePath}
         fileIdx={fileIdx}
-      />
+      />,
     );
     expect(getByTestId("coverage-file-missed-lines-1")).toHaveTextContent(
-      "1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ... show all"
+      "1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ... show all",
     );
 
     act(() => {
@@ -43,7 +43,7 @@ describe("CoverageFileMissedLines", () => {
     });
 
     expect(getByTestId("coverage-file-missed-lines-1")).toHaveTextContent(
-      "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12"
+      "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12",
     );
   });
 });

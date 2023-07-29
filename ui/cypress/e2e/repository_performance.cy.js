@@ -16,11 +16,11 @@ describe("repository performance", () => {
 
     cy.getByTestId("performance-timeline-title-1").should(
       "contain",
-      "perf-test"
+      "perf-test",
     );
 
     publicIds.forEach((publicId) =>
-      cy.roleShouldExist(`dot-requestsPerSecond-${publicId}`)
+      cy.roleShouldExist(`dot-requestsPerSecond-${publicId}`),
     );
 
     publicIds.forEach((publicId) => cy.roleShouldExist(`dot-p95-${publicId}`));
@@ -47,11 +47,11 @@ describe("repository performance", () => {
 
     cy.getByTestId("performance-timeline-title-1").should(
       "contain",
-      "perf-test"
+      "perf-test",
     );
 
     publicIds.forEach((publicId) =>
-      cy.roleShouldExist(`dot-requestsPerSecond-${publicId}`)
+      cy.roleShouldExist(`dot-requestsPerSecond-${publicId}`),
     );
 
     publicIds.forEach((publicId) => cy.roleShouldExist(`dot-p95-${publicId}`));
@@ -76,19 +76,19 @@ describe("repository performance", () => {
 
     cy.getByTestId("performance-timeline-tooltip-average").should(
       "contain",
-      "32.684ms"
+      "32.684ms",
     );
     cy.getByTestId("performance-timeline-tooltip-p95").should(
       "contain",
-      "60.027ms"
+      "60.027ms",
     );
     cy.getByTestId("performance-timeline-tooltip-max").should(
       "contain",
-      "382.67ms"
+      "382.67ms",
     );
     cy.getByTestId("performance-timeline-tooltip-rps").should(
       "contain",
-      "496.002"
+      "496.002",
     );
   });
 });

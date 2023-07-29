@@ -1,6 +1,6 @@
 import * as React from "react";
-import { styled } from "@material-ui/core/styles";
-import { Link } from "@material-ui/core";
+import { styled } from "@mui/material/styles";
+import { Link } from "@mui/material";
 
 interface CleanLinkProps {
   color?: string;

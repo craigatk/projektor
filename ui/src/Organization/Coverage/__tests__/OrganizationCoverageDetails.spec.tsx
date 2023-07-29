@@ -56,11 +56,11 @@ describe("OrganizationCoverageDetails", () => {
       <OrganizationCoverageDetails
         orgName={orgName}
         organizationCoverage={organizationCoverage}
-      />
+      />,
     );
 
     expect(await findByTestId("coverage-name-1")).toHaveTextContent(
-      `has-coverage-repo`
+      `has-coverage-repo`,
     );
   });
 });

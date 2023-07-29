@@ -28,19 +28,19 @@ describe("test run with failed test cases", () => {
 
     cy.getByTestId("test-case-title").should(
       "contain",
-      "projektor.example.spock.FailingSpec should fail"
+      "projektor.example.spock.FailingSpec should fail",
     );
 
     cy.getByTestId("test-case-title").should(
       "contain",
-      "projektor.example.spock.FailingSpec should fail with output"
+      "projektor.example.spock.FailingSpec should fail with output",
     );
 
     cy.getByTestId("test-case-summary-failure-link-1-2").click();
 
     cy.getBreadcrumbPackgeNameLink().should(
       "contain",
-      "projektor.example.spock"
+      "projektor.example.spock",
     );
 
     cy.getBreadcrumbClassNameLink().should("contain", "FailingSpec");
@@ -65,7 +65,7 @@ describe("test run with failed test cases", () => {
     cy.intercept(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
-      { fixture: "failed_test_case_2.json" }
+      { fixture: "failed_test_case_2.json" },
     );
 
     cy.intercept("GET", `run/${publicId}/suite/${testSuiteIdx}/systemOut`, {
@@ -81,7 +81,7 @@ describe("test run with failed test cases", () => {
     cy.visit(`http://localhost:1234/tests/${publicId}/failed`);
 
     cy.getByTestId(
-      `test-case-summary-system-out-link-${testSuiteIdx}-${testCaseIdx}`
+      `test-case-summary-system-out-link-${testSuiteIdx}-${testCaseIdx}`,
     ).click();
 
     cy.getCodeText().should("contain", "System out line 1");
@@ -89,7 +89,7 @@ describe("test run with failed test cases", () => {
     cy.go("back");
 
     cy.getByTestId(
-      `test-case-summary-system-err-link-${testSuiteIdx}-${testCaseIdx}`
+      `test-case-summary-system-err-link-${testSuiteIdx}-${testCaseIdx}`,
     ).click();
 
     cy.getCodeText().should("contain", "System err line 1");
@@ -115,14 +115,14 @@ describe("test run with failed test cases", () => {
     cy.findByTestId("test-failure-collapse-all-link").should("not.exist");
     testCaseIndexes.forEach((testCaseIdx) => {
       cy.findByTestId(`test-case-failure-text-1-${testCaseIdx}`).should(
-        "not.exist"
+        "not.exist",
       );
     });
 
     cy.findByTestId("test-failure-expand-all-link").click();
     testCaseIndexes.forEach((testCaseIdx) => {
       cy.findByTestId(`test-case-failure-text-1-${testCaseIdx}`).should(
-        "exist"
+        "exist",
       );
     });
 
@@ -131,7 +131,7 @@ describe("test run with failed test cases", () => {
     cy.findByTestId(`test-case-summary-1-2`).click();
     cy.findByTestId(`test-case-failure-text-1-2`).should(
       "contain",
-      "Condition not satisfied2"
+      "Condition not satisfied2",
     );
   });
 });

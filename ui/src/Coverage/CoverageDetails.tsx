@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Coverage } from "../model/TestRunModel";
-import { makeStyles, Typography } from "@material-ui/core";
+import { makeStyles, Typography } from "@mui/material";
 import OverallCoverageGraphs from "./OverallCoverageGraphs";
 import CoverageTable from "./CoverageTable";
 import CoverageTableRow from "./CoverageTableRow";
@@ -26,7 +26,7 @@ const CoverageDetails = ({ coverage, publicId }: CoverageDetailsProps) => {
         stats: group.stats,
         previousTestRunId: coverage.previousTestRunId,
         nameLinkUrl: `/tests/${publicId}/coverage/${group.name}/files`,
-      } as CoverageTableRow)
+      }) as CoverageTableRow,
   );
 
   return (

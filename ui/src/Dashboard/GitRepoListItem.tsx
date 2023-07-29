@@ -28,7 +28,7 @@ const GitRepoListItem = ({ gitMetadata }: GitRepoListItemProps) => {
             to={repositoryLinkUrlUI(
               gitMetadata.repoName,
               gitMetadata.projectName,
-              null
+              null,
             )}
             data-testid="dashboard-summary-git-repo-link"
           >

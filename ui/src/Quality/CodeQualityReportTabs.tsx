@@ -1,6 +1,6 @@
 import * as React from "react";
 import { CodeQualityReport } from "../model/TestRunModel";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/material/styles";
 import {
   Link,
   Location,
@@ -9,7 +9,7 @@ import {
   Router,
 } from "@reach/router";
 import { getTabCurrentValue } from "../Tabs/TabValue";
-import { Paper, Tab, Tabs } from "@material-ui/core";
+import { Paper, Tab, Tabs } from "@mui/material";
 import CodeQualityReportTab from "./CodeQualityReportTab";
 
 interface CodeQualityReportTabsProps {

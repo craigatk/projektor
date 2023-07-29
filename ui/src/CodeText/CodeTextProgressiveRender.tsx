@@ -1,5 +1,5 @@
 import * as React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/material/styles";
 import { scroller } from "react-scroll";
 import CodeTextProgressBar from "./CodeTextProgressBar";
 

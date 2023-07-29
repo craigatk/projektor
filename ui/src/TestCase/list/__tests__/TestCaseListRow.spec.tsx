@@ -36,15 +36,15 @@ describe("TestCaseListRow", () => {
         testCase={testCase}
         showDurationFirst={false}
         showFullTestCaseName={true}
-      />
+      />,
     );
 
     expect(getByTestId("test-case-name-link-2-1")).toHaveTextContent(
-      "dev.projektor.dev.projektor.TestCase.this is a test method"
+      "dev.projektor.dev.projektor.TestCase.this is a test method",
     );
 
     expect(getByTestId("test-case-duration-2-1")).toHaveTextContent(
-      "2m 3.123s"
+      "2m 3.123s",
     );
   });
 });

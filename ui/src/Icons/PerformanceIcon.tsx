@@ -1,5 +1,5 @@
 import * as React from "react";
-import AssessmentOutlinedIcon from "@material-ui/icons/AssessmentOutlined";
+import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 
 const PerformanceIcon = ({ className }: IconProps) => {
   return (

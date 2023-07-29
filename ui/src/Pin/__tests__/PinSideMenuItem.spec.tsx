@@ -48,7 +48,7 @@ describe("PinSideMenuItem", () => {
     const { getByTestId, findByTestId } = render(
       <PinState publicId={publicId}>
         <PinSideMenuItem />
-      </PinState>
+      </PinState>,
     );
 
     await findByTestId("nav-link-pin");
@@ -84,7 +84,7 @@ describe("PinSideMenuItem", () => {
     const { getByTestId, findByTestId } = render(
       <PinState publicId={publicId}>
         <PinSideMenuItem />
-      </PinState>
+      </PinState>,
     );
 
     await findByTestId("nav-link-unpin");
@@ -112,7 +112,7 @@ describe("PinSideMenuItem", () => {
     const { queryByTestId } = render(
       <PinState publicId={publicId}>
         <PinSideMenuItem />
-      </PinState>
+      </PinState>,
     );
 
     await waitFor(() => expect(queryByTestId("nav-link-unpin")).toBeNull());

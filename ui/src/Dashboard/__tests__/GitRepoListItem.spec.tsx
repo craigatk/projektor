@@ -14,11 +14,11 @@ describe("GitRepoListItem", () => {
     } as TestRunGitMetadata;
 
     const { getByTestId } = render(
-      <GitRepoListItem gitMetadata={gitMetadata} />
+      <GitRepoListItem gitMetadata={gitMetadata} />,
     );
 
     expect(getByTestId("dashboard-summary-git-org-link")).toHaveTextContent(
-      "my-org"
+      "my-org",
     );
   });
 
@@ -31,11 +31,11 @@ describe("GitRepoListItem", () => {
     } as TestRunGitMetadata;
 
     const { getByTestId } = render(
-      <GitRepoListItem gitMetadata={gitMetadata} />
+      <GitRepoListItem gitMetadata={gitMetadata} />,
     );
 
     expect(getByTestId("dashboard-summary-git-repo-link")).toHaveTextContent(
-      "my-cov"
+      "my-cov",
     );
   });
 });

@@ -1,5 +1,5 @@
 import * as React from "react";
-import HourglassEmpty from "@material-ui/icons/HourglassEmpty";
+import HourglassEmpty from "@mui/icons-material/HourglassEmpty";
 
 const SlowIcon = ({ className }: IconProps) => {
   return (

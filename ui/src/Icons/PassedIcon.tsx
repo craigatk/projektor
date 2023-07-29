@@ -1,5 +1,5 @@
 import * as React from "react";
-import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 const PassedIcon = ({ className }: IconProps) => {
   return (

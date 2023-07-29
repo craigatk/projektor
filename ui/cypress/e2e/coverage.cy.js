@@ -24,15 +24,15 @@ context("test run with coverage data", () => {
 
     cy.getByTestId("coverage-graph-title-line").should(
       "contain",
-      "Line 97.31%"
+      "Line 97.31%",
     );
     cy.getByTestId("coverage-graph-title-statement").should(
       "contain",
-      "Statement 96.23%"
+      "Statement 96.23%",
     );
     cy.getByTestId("coverage-graph-title-branch").should(
       "contain",
-      "Branch 77.02%"
+      "Branch 77.02%",
     );
   });
 
@@ -57,15 +57,15 @@ context("test run with coverage data", () => {
 
     cy.getByTestId("coverage-graph-title-line").should(
       "contain",
-      "Line 95.82% +0.5%"
+      "Line 95.82% +0.5%",
     );
     cy.getByTestId("coverage-graph-title-statement").should(
       "contain",
-      "Statement 96.06% +0.05"
+      "Statement 96.06% +0.05",
     );
     cy.getByTestId("coverage-graph-title-branch").should(
       "contain",
-      "Branch 77.02% +8.07%"
+      "Branch 77.02% +8.07%",
     );
   });
 
@@ -97,7 +97,7 @@ context("test run with coverage data", () => {
     cy.getByTestId("coverage-graph-title-line").should("contain", "Line");
     cy.getByTestId("coverage-graph-title-statement").should(
       "contain",
-      "Statement"
+      "Statement",
     );
     cy.getByTestId("coverage-graph-title-branch").should("contain", "Branch");
 

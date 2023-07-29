@@ -1,5 +1,5 @@
 import * as React from "react";
-import AcUnitOutlinedIcon from "@material-ui/icons/AcUnitOutlined";
+import AcUnitOutlinedIcon from "@mui/icons-material/AcUnitOutlined";
 
 const FlakyTestsIcon = ({ className }: IconProps) => {
   return (

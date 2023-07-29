@@ -20,7 +20,7 @@ const CoverageGroupFilesPage = ({
   coverageGroupName,
 }: CoverageGroupFilesPageProps) => {
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
   const [coverageFiles, setCoverageFiles] = React.useState<CoverageFiles>(null);
   const [gitMetadata, setGitMetadata] =

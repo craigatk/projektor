@@ -22,7 +22,7 @@ describe("TestSuiteDetails", () => {
     };
 
     const { queryByTestId } = render(
-      <TestSuiteDetails testSuite={testSuite} publicId="12345" />
+      <TestSuiteDetails testSuite={testSuite} publicId="12345" />,
     );
 
     expect(queryByTestId("test-suite-tab-system-out")).not.toBeNull();
@@ -46,7 +46,7 @@ describe("TestSuiteDetails", () => {
     };
 
     const { queryByTestId } = render(
-      <TestSuiteDetails testSuite={testSuite} publicId="12345" />
+      <TestSuiteDetails testSuite={testSuite} publicId="12345" />,
     );
 
     expect(queryByTestId("test-suite-tab-system-err")).not.toBeNull();

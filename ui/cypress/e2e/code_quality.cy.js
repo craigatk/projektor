@@ -23,19 +23,19 @@ context("code quality", () => {
     cy.findByTestId("code-quality-title").should("contain", "Code quality");
     cy.findByTestId("code-text-line-content-1").should(
       "contain",
-      "github-line-1"
+      "github-line-1",
     );
 
     cy.findByText("server-app-ktlint.txt").click();
     cy.findByTestId("code-text-line-content-1").should(
       "contain",
-      "server-app-line-1"
+      "server-app-line-1",
     );
 
     cy.findByText("notifications-github-ktlint.txt").click();
     cy.findByTestId("code-text-line-content-1").should(
       "contain",
-      "github-line-1"
+      "github-line-1",
     );
   });
 
@@ -61,7 +61,7 @@ context("code quality", () => {
     cy.findByText("server-app-ktlint.txt").click();
     cy.findByTestId("code-text-line-content-1").should(
       "contain",
-      "server-app-line-1"
+      "server-app-line-1",
     );
   });
 
@@ -86,11 +86,11 @@ context("code quality", () => {
 
     cy.findByTestId("code-text-line-content-1").should(
       "contain",
-      "server-app-line-1"
+      "server-app-line-1",
     );
     cy.findByTestId("code-text-line-content-2").should(
       "contain",
-      "server-app-line-2"
+      "server-app-line-2",
     );
   });
 });

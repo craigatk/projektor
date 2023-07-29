@@ -19,7 +19,7 @@ const cellStyle = {
 
 const RepositoryFlakyTestsTable = ({ flakyTests }: FlakyTestsTableProps) => {
   const sortedFlakyTests = flakyTests.tests.sort(
-    (a, b) => b.failureCount - a.failureCount
+    (a, b) => b.failureCount - a.failureCount,
   );
 
   return (
@@ -81,7 +81,7 @@ const RepositoryFlakyTestsTable = ({ flakyTests }: FlakyTestsTableProps) => {
                 data-testid={`flaky-test-case-first-failure-${rowData.idx}`}
               >
                 {moment(rowData.firstCreatedTimestamp).format(
-                  "MMM Do YYYY, h:mm a"
+                  "MMM Do YYYY, h:mm a",
                 )}
               </CleanLink>
             ),
@@ -97,7 +97,7 @@ const RepositoryFlakyTestsTable = ({ flakyTests }: FlakyTestsTableProps) => {
                 data-testid={`flaky-test-case-latest-failure-${rowData.idx}`}
               >
                 {moment(rowData.latestCreatedTimestamp).format(
-                  "MMM Do YYYY, h:mm a"
+                  "MMM Do YYYY, h:mm a",
                 )}
               </CleanLink>
             ),

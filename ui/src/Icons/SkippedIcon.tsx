@@ -1,5 +1,5 @@
 import * as React from "react";
-import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 
 const SkippedIcon = ({ className }: IconProps) => {
   return (

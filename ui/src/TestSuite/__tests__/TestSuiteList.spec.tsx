@@ -39,7 +39,7 @@ describe("TestSuiteList", () => {
     };
 
     const { getByTestId } = render(
-      <TestSuiteList publicId="12345" testSuites={[testSuite1, testSuite2]} />
+      <TestSuiteList publicId="12345" testSuites={[testSuite1, testSuite2]} />,
     );
 
     expect(getByTestId("test-suite-group-name-1")).toHaveTextContent("Group1");
@@ -64,7 +64,7 @@ describe("TestSuiteList", () => {
     };
 
     const { queryByTestId } = render(
-      <TestSuiteList publicId="12345" testSuites={[testSuite]} />
+      <TestSuiteList publicId="12345" testSuites={[testSuite]} />,
     );
 
     expect(queryByTestId("test-suite-group-name-1")).toBeNull();
@@ -89,14 +89,14 @@ describe("TestSuiteList", () => {
     };
 
     const { getByTestId } = render(
-      <TestSuiteList publicId="12345" testSuites={[testSuite]} />
+      <TestSuiteList publicId="12345" testSuites={[testSuite]} />,
     );
 
     expect(getByTestId("test-suite-file-name-1")).toHaveTextContent(
-      "path/to/file.js"
+      "path/to/file.js",
     );
     expect(getByTestId("test-suite-class-name-1")).toHaveTextContent(
-      "my test suite"
+      "my test suite",
     );
   });
 
@@ -119,12 +119,12 @@ describe("TestSuiteList", () => {
     };
 
     const { getByTestId, queryByTestId } = render(
-      <TestSuiteList publicId="12345" testSuites={[testSuite]} />
+      <TestSuiteList publicId="12345" testSuites={[testSuite]} />,
     );
 
     expect(queryByTestId("test-suite-file-name-1")).toBeNull();
     expect(getByTestId("test-suite-class-name-1")).toHaveTextContent(
-      "my test suite"
+      "my test suite",
     );
   });
 });

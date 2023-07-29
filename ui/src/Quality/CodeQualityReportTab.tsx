@@ -2,7 +2,7 @@ import * as React from "react";
 import CodeText from "../CodeText/CodeText";
 import { RouteComponentProps } from "@reach/router";
 import { CodeQualityReport } from "../model/TestRunModel";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/material/styles";
 
 interface CodeQualityReportTabProps extends RouteComponentProps {
   codeQualityReportsWithContents: CodeQualityReport[];
@@ -27,7 +27,7 @@ const CodeQualityReportTab = ({
   const classes = useStyles({});
 
   const codeQualityReport = codeQualityReportsWithContents.find(
-    (report) => report.idx === parseInt(idx)
+    (report) => report.idx === parseInt(idx),
   );
   const reportContents = codeQualityReport ? codeQualityReport.contents : "";
 

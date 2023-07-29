@@ -3,11 +3,11 @@ import { AxiosResponse } from "axios";
 import { ResultsProcessingFailure } from "../model/AdminModel";
 
 const fetchRecentFailures = (
-  count: number
+  count: number,
 ): Promise<AxiosResponse<ResultsProcessingFailure[]>> => {
   // @ts-ignore
   return axiosInstance.get<ResultsProcessingFailure[]>(
-    `failures/recent?count=${count}`
+    `failures/recent?count=${count}`,
   );
 };
 

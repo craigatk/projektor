@@ -20,7 +20,7 @@ context("repository timeline", () => {
     cy.findByTestId("repository-timeline-graph").should("exist");
 
     publicIds.forEach((publicId) =>
-      cy.findByRole(`dot-duration-${publicId}`).should("exist")
+      cy.findByRole(`dot-duration-${publicId}`).should("exist"),
     );
 
     const publicIdToClick = publicIds[1];
@@ -49,15 +49,15 @@ context("repository timeline", () => {
     cy.findByTestId("timeline-tooltip-duration").should("contain", "10.258s");
     cy.findByTestId("timeline-tooltip-test-count").should(
       "contain",
-      "63 tests"
+      "63 tests",
     );
     cy.findByTestId("timeline-tooltip-average-duration").should(
       "contain",
-      "0.163s"
+      "0.163s",
     );
     cy.findByTestId("timeline-tooltip-run-date").should(
       "contain",
-      "Sep 24th 2020"
+      "Sep 24th 2020",
     );
   });
 });

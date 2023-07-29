@@ -32,7 +32,7 @@ describe("CodeQualityReportTab", () => {
           codeQualityReportsWithContents={reports}
           idx="2"
         />
-      </QueryParamProvider>
+      </QueryParamProvider>,
     );
 
     expect(queryByText("Contents 2")).not.toBeNull();

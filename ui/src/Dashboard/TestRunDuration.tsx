@@ -1,7 +1,8 @@
 import * as React from "react";
-import { List, ListItem, ListItemText, makeStyles } from "@material-ui/core";
+import { List, ListItem, ListItemText } from "@mui/material";
 import CleanLink from "../Link/CleanLink";
 import { formatSecondsDuration } from "../dateUtils/dateUtils";
+import styled from "styled-components";
 
 interface TestRunDurationProps {
   publicId: string;
@@ -11,12 +12,15 @@ interface TestRunDurationProps {
   slowestTestCaseDuration: number;
 }
 
-const useStyles = makeStyles({
-  label: {
-    minWidth: "135px",
-    display: "inline-block",
-  },
-});
+const ItemLabel = styled.span`
+  min-width: 135px;
+  display: inline-block;
+`
+
+const ItemLink = styled(CleanLink)`
+  min-width: 135px;
+  display: inline-block;
+`
 
 const TestRunDuration = ({
   publicId,
@@ -25,14 +29,13 @@ const TestRunDuration = ({
   wallClockDuration,
   slowestTestCaseDuration,
 }: TestRunDurationProps) => {
-  const classes = useStyles({});
   return (
     <List dense={true}>
       <ListItem>
         <ListItemText
           primary={
             <span>
-              <span className={classes.label}>Average duration</span>
+              <ItemLabel>Average duration</ItemLabel>
               <span data-testid="test-run-average-duration">
                 {averageDuration}s
               </span>
@@ -45,7 +48,7 @@ const TestRunDuration = ({
           <ListItemText
             primary={
               <span>
-                <span className={classes.label}>Wall clock duration</span>
+                <ItemLabel>Wall clock duration</ItemLabel>
                 <span data-testid="test-run-wall-clock-duration">
                   {formatSecondsDuration(wallClockDuration)}
                 </span>
@@ -58,7 +61,7 @@ const TestRunDuration = ({
         <ListItemText
           primary={
             <span>
-              <span className={classes.label}>Cumulative duration</span>
+              <ItemLabel>Cumulative duration</ItemLabel>
               <span data-testid="test-run-cumulative-duration">
                 {formatSecondsDuration(cumulativeDuration)}
               </span>
@@ -70,13 +73,12 @@ const TestRunDuration = ({
         <ListItemText
           primary={
             <span>
-              <CleanLink
+              <ItemLink
                 to={`/tests/${publicId}/slow`}
-                className={classes.label}
                 data-testid="test-run-slow-test-cases-link"
               >
                 Slowest test case
-              </CleanLink>
+              </ItemLink>
               <span data-testid="test-run-slowest-test-case-duration">
                 {formatSecondsDuration(slowestTestCaseDuration)}
               </span>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import Storage from "@material-ui/icons/Storage";
+import Storage from "@mui/icons-material/Storage";
 
 const TotalIcon = ({ className }: IconProps) => {
   return (

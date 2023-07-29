@@ -45,7 +45,7 @@ describe("TestResultsProcessingCheck", () => {
         processingSucceeded={succeededFunc}
         refreshInterval={5000}
         autoRefreshTimeout={60000}
-      />
+      />,
     );
 
     await findByTestId("results-still-processing");
@@ -64,13 +64,13 @@ describe("TestResultsProcessingCheck", () => {
         processingSucceeded={succeededFunc}
         refreshInterval={100}
         autoRefreshTimeout={400}
-      />
+      />,
     );
 
     await findByTestId("results-still-processing");
 
     await waitFor(() =>
-      expect(mockAxios.history.get.length).toBeGreaterThan(1)
+      expect(mockAxios.history.get.length).toBeGreaterThan(1),
     );
 
     return setTimeout(() => {
@@ -89,7 +89,7 @@ describe("TestResultsProcessingCheck", () => {
         processingSucceeded={succeededFunc}
         refreshInterval={5000}
         autoRefreshTimeout={60000}
-      />
+      />,
     );
 
     await findByTestId("results-processing-failed");
@@ -108,7 +108,7 @@ describe("TestResultsProcessingCheck", () => {
         processingSucceeded={succeededFunc}
         refreshInterval={5000}
         autoRefreshTimeout={60000}
-      />
+      />,
     );
 
     await findByTestId("results-deleted");
@@ -127,7 +127,7 @@ describe("TestResultsProcessingCheck", () => {
         processingSucceeded={succeededFunc}
         refreshInterval={5000}
         autoRefreshTimeout={60000}
-      />
+      />,
     );
 
     await waitFor(() => expect(succeededFunc).toHaveBeenCalled());

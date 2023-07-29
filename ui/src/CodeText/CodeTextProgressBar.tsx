@@ -1,6 +1,6 @@
 import * as React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { LinearProgress } from "@material-ui/core";
+import { makeStyles } from "@mui/material/styles";
+import { LinearProgress } from "@mui/material";
 
 interface CodeTextProgressBarProps {
   currentValue: number;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import Dashboard from "@material-ui/icons/Dashboard";
+import Dashboard from "@mui/icons-material/Dashboard";
 
 const DashboardIcon = () => {
   return (

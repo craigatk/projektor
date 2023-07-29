@@ -1,6 +1,6 @@
 import * as React from "react";
 import { CoverageStat } from "../model/TestRunModel";
-import { makeStyles, Tooltip } from "@material-ui/core";
+import { makeStyles, Tooltip } from "@mui/material";
 
 interface CoveragePercentageProps {
   coverageStat: CoverageStat;

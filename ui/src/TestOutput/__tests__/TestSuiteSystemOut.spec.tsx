@@ -30,20 +30,20 @@ describe("TestSuiteSystemOut", () => {
 
     mockAxios
       .onGet(
-        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/systemOut`
+        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/systemOut`,
       )
       .reply(200, systemOut);
 
     const { findByTestId, queryByTestId } = render(
       <QueryParamProvider reachHistory={globalHistory}>
         <TestSuiteSystemOut publicId={publicId} testSuiteIdx={testSuiteIdx} />
-      </QueryParamProvider>
+      </QueryParamProvider>,
     );
 
     await findByTestId("code-text");
 
     expect(
-      getNodeText(await findByTestId("code-text-line-content-1"))
+      getNodeText(await findByTestId("code-text-line-content-1")),
     ).toContain("My system out");
 
     expect(queryByTestId("loading-section-error")).toBeNull();

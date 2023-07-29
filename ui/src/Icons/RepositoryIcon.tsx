@@ -1,5 +1,5 @@
 import * as React from "react";
-import TimelineOutlinedIcon from "@material-ui/icons/TimelineOutlined";
+import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 
 const RepositoryIcon = ({ className }: IconProps) => {
   return (

@@ -13,7 +13,7 @@ interface TestSuitePageProps extends RouteComponentProps {
 
 const TestSuitePage = ({ publicId, testSuiteIdx }: TestSuitePageProps) => {
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
   const [testSuite, setTestSuite] = React.useState<TestSuite>(null);
 

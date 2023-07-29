@@ -30,7 +30,7 @@ describe("TestCaseDetails", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseDetails testCase={testCase} publicId="12345" />
+      <TestCaseDetails testCase={testCase} publicId="12345" />,
     );
 
     expect(queryByTestId("test-case-tab-summary")).not.toBeNull();
@@ -64,7 +64,7 @@ describe("TestCaseDetails", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseDetails testCase={testCase} publicId="12345" />
+      <TestCaseDetails testCase={testCase} publicId="12345" />,
     );
 
     expect(queryByTestId("test-case-tab-summary")).not.toBeNull();
@@ -98,7 +98,7 @@ describe("TestCaseDetails", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseDetails testCase={testCase} publicId="12345" />
+      <TestCaseDetails testCase={testCase} publicId="12345" />,
     );
 
     expect(queryByTestId("test-case-tab-system-out")).not.toBeNull();
@@ -129,7 +129,7 @@ describe("TestCaseDetails", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseDetails testCase={testCase} publicId="12345" />
+      <TestCaseDetails testCase={testCase} publicId="12345" />,
     );
 
     expect(queryByTestId("test-case-tab-system-err")).not.toBeNull();
@@ -167,7 +167,7 @@ describe("TestCaseDetails", () => {
     };
 
     const { findByTestId } = render(
-      <TestCaseDetails testCase={testCase} publicId="12345" />
+      <TestCaseDetails testCase={testCase} publicId="12345" />,
     );
 
     (await findByTestId("test-case-tab-screenshot")).click();
@@ -204,7 +204,7 @@ describe("TestCaseDetails", () => {
     };
 
     const { findByTestId } = render(
-      <TestCaseDetails testCase={testCase} publicId="12345" />
+      <TestCaseDetails testCase={testCase} publicId="12345" />,
     );
 
     (await findByTestId("test-case-tab-video")).click();

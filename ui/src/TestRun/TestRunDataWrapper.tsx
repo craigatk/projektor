@@ -18,7 +18,7 @@ interface TestRunDataWrapperProps extends RouteComponentProps {
 
 const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
   const [testRunSummary, setTestRunSummary] =
     React.useState<TestRunSummary>(null);

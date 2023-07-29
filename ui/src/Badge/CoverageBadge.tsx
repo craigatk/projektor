@@ -6,8 +6,8 @@ import {
   repositoryLinkUrlAPI,
   repositoryLinkUrlUI,
 } from "../Repository/RepositoryLink";
-import { Chip, Fade, Link, Tooltip } from "@material-ui/core";
-import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+import { Chip, Fade, Link, Tooltip } from "@mui/material";
+import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 
 interface CoverageBadgeProps {
   badgeSvg: string;

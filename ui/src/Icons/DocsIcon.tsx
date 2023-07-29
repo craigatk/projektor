@@ -1,5 +1,5 @@
 import * as React from "react";
-import AssignmentOutlined from "@material-ui/icons/AssignmentOutlined";
+import AssignmentOutlined from "@mui/icons-material/AssignmentOutlined";
 
 const DocsIcon = ({ className }: IconProps) => {
   return (

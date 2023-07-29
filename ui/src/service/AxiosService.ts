@@ -17,7 +17,7 @@ const axiosInstanceWithoutCache = applyCaseConverters(
   // @ts-ignore
   axios.create({
     baseURL: process.env.API_BASE_URL,
-  })
+  }),
 );
 
 export { axiosInstance, axiosInstanceWithoutCache };

@@ -51,11 +51,11 @@ describe("Dashboard summary", () => {
           testRunSummary={testRunSummary}
           gitMetadata={gitMetadata}
         />
-      </PinState>
+      </PinState>,
     );
 
     expect(getByTestId("dashboard-summary-project-name")).toHaveTextContent(
-      "server"
+      "server",
     );
   });
 
@@ -75,7 +75,7 @@ describe("Dashboard summary", () => {
           testRunSummary={testRunSummary}
           gitMetadata={gitMetadata}
         />
-      </PinState>
+      </PinState>,
     );
 
     expect(queryByTestId("dashboard-summary-project-name")).toBeNull();
@@ -97,11 +97,11 @@ describe("Dashboard summary", () => {
           testRunSummary={testRunSummary}
           gitMetadata={gitMetadata}
         />
-      </PinState>
+      </PinState>,
     );
 
     expect(getByTestId("dashboard-summary-branch-name")).toHaveTextContent(
-      "main"
+      "main",
     );
   });
 
@@ -121,7 +121,7 @@ describe("Dashboard summary", () => {
           testRunSummary={testRunSummary}
           gitMetadata={gitMetadata}
         />
-      </PinState>
+      </PinState>,
     );
 
     expect(queryByTestId("dashboard-summary-branch-name")).toBeNull();
@@ -135,11 +135,11 @@ describe("Dashboard summary", () => {
           testRunSummary={testRunSummary}
           gitMetadata={null}
         />
-      </PinState>
+      </PinState>,
     );
 
     expect(getByTestId("test-run-cumulative-duration")).toHaveTextContent(
-      "10.000s"
+      "10.000s",
     );
     expect(getByTestId("test-run-average-duration")).toHaveTextContent("2.5s");
   });
@@ -164,7 +164,7 @@ describe("Dashboard summary", () => {
           testRunSummary={testRunSummaryWithoutDuration}
           gitMetadata={null}
         />
-      </PinState>
+      </PinState>,
     );
 
     expect(getByTestId("dashboard-summary-duration-section")).toBeEmpty();

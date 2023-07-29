@@ -29,7 +29,7 @@ describe("SideMenu", () => {
           hasAttachments={true}
           hasCoverage={true}
         />
-      </PinState>
+      </PinState>,
     );
 
     expect(queryByTestId("nav-link-attachments")).not.toBeNull();
@@ -44,7 +44,7 @@ describe("SideMenu", () => {
           hasAttachments={false}
           hasCoverage={true}
         />
-      </PinState>
+      </PinState>,
     );
 
     expect(queryByTestId("nav-link-attachments")).toBeNull();
@@ -59,7 +59,7 @@ describe("SideMenu", () => {
           hasAttachments={true}
           hasCoverage={true}
         />
-      </PinState>
+      </PinState>,
     );
 
     expect(queryByTestId("nav-link-coverage")).not.toBeNull();
@@ -74,7 +74,7 @@ describe("SideMenu", () => {
           hasAttachments={false}
           hasCoverage={false}
         />
-      </PinState>
+      </PinState>,
     );
 
     expect(queryByTestId("nav-link-coverage")).toBeNull();
@@ -89,7 +89,7 @@ describe("SideMenu", () => {
           hasAttachments={false}
           hasCoverage={false}
         />
-      </PinState>
+      </PinState>,
     );
 
     expect(queryByTestId("nav-link-docs")).toHaveTextContent("Docs");

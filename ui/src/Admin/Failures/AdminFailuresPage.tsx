@@ -6,7 +6,7 @@ import LoadingSection from "../../Loading/LoadingSection";
 import AdminFailuresDetails from "./AdminFailuresDetails";
 import { ResultsProcessingFailure } from "../../model/AdminModel";
 import { fetchRecentFailures } from "../../service/AdminService";
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField } from "@mui/material";
 import { makeStyles } from "@material-ui/styles";
 
 interface AdminFailuresPageProps extends RouteComponentProps {}
@@ -29,10 +29,10 @@ const AdminFailuresPage = ({}: AdminFailuresPageProps) => {
   const classes = useStyles({});
 
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
   const [failures, setFailures] = React.useState<ResultsProcessingFailure[]>(
-    []
+    [],
   );
   const [fetchCount, setFetchCount] = React.useState<number>(10);
 

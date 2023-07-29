@@ -1,6 +1,6 @@
 import * as React from "react";
 import { CoverageStats } from "../model/TestRunModel";
-import { Grid, makeStyles } from "@material-ui/core";
+import { Grid, makeStyles } from "@mui/material";
 import CoverageGraph from "./CoverageGraph";
 
 interface OverallCoverageGraphsProps {

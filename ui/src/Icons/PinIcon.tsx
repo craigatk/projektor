@@ -1,5 +1,5 @@
 import * as React from "react";
-import BookmarkBorder from "@material-ui/icons/BookmarkBorder";
+import BookmarkBorder from "@mui/icons-material/BookmarkBorder";
 
 const PinIcon = ({ className }: IconProps) => {
   return (

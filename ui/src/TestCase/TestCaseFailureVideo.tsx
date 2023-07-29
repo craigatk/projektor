@@ -1,6 +1,6 @@
 import * as React from "react";
 import { AttachmentType, TestCase } from "../model/TestRunModel";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/material/styles";
 import { findAttachmentOfType } from "./testCaseHelpers";
 import { RouteComponentProps } from "@reach/router";
 

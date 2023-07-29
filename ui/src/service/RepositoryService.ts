@@ -9,7 +9,7 @@ import {
 
 const fetchRepositoryTimeline = (
   repoName: string,
-  projectName?: string
+  projectName?: string,
 ): Promise<AxiosResponse<RepositoryTimeline>> => {
   const url = projectName
     ? `repo/${repoName}/project/${projectName}/timeline`
@@ -21,7 +21,7 @@ const fetchRepositoryTimeline = (
 const fetchRepositoryCoverageTimeline = (
   repoName: string,
   projectName?: string,
-  branchType?: string
+  branchType?: string,
 ): Promise<AxiosResponse<RepositoryCoverageTimeline>> => {
   let url = projectName
     ? `repo/${repoName}/project/${projectName}/coverage/timeline`
@@ -37,7 +37,7 @@ const fetchRepositoryCoverageTimeline = (
 
 const fetchRepositoryCoverageBadge = (
   repoName: string,
-  projectName?: string
+  projectName?: string,
 ): Promise<AxiosResponse<string>> => {
   const url = projectName
     ? `repo/${repoName}/project/${projectName}/badge/coverage`
@@ -51,7 +51,7 @@ const fetchRepositoryFlakyTests = (
   flakyThreshold: number,
   branchType: string,
   repoName: string,
-  projectName?: string
+  projectName?: string,
 ): Promise<AxiosResponse<RepositoryFlakyTests>> => {
   const branchTypeValue = branchType.toUpperCase();
 
@@ -64,7 +64,7 @@ const fetchRepositoryFlakyTests = (
 
 const fetchRepositoryPerformanceTimeline = (
   repoName: string,
-  projectName?: string
+  projectName?: string,
 ): Promise<AxiosResponse<RepositoryPerformanceTimeline>> => {
   const url = projectName
     ? `repo/${repoName}/project/${projectName}/performance/timeline`

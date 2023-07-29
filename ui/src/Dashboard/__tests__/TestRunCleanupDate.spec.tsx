@@ -52,11 +52,11 @@ describe("TestRunCleanupDate", () => {
     const { getByTestId, findByTestId } = render(
       <PinState publicId={publicId}>
         <TestRunCleanupDate createdTimestamp={createdTimestamp} />
-      </PinState>
+      </PinState>,
     );
 
     expect(
-      getNodeText(await findByTestId("test-run-report-cleanup-date"))
+      getNodeText(await findByTestId("test-run-report-cleanup-date")),
     ).toContain("May 25th 2020");
 
     mockAxios
@@ -93,7 +93,7 @@ describe("TestRunCleanupDate", () => {
     const { getByTestId, findByTestId } = render(
       <PinState publicId={publicId}>
         <TestRunCleanupDate createdTimestamp={createdTimestamp} />
-      </PinState>
+      </PinState>,
     );
 
     await findByTestId("test-run-header-unpin-link");
@@ -123,14 +123,14 @@ describe("TestRunCleanupDate", () => {
     const { queryByTestId } = render(
       <PinState publicId={publicId}>
         <TestRunCleanupDate createdTimestamp={createdTimestamp} />
-      </PinState>
+      </PinState>,
     );
 
     await waitFor(() =>
-      expect(queryByTestId("test-run-header-unpin-link")).toBeNull()
+      expect(queryByTestId("test-run-header-unpin-link")).toBeNull(),
     );
     await waitFor(() =>
-      expect(queryByTestId("test-run-header-pin-link")).toBeNull()
+      expect(queryByTestId("test-run-header-pin-link")).toBeNull(),
     );
   });
 });

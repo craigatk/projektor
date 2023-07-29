@@ -1,5 +1,6 @@
 import * as React from "react";
-import { ListItem, ListItemText, makeStyles } from "@material-ui/core";
+import { ListItem, ListItemText } from "@mui/material";
+import styled from "styled-components";
 
 interface DashboardSummaryItemProps {
   label: string;
@@ -7,25 +8,22 @@ interface DashboardSummaryItemProps {
   value: any;
 }
 
-const useStyles = makeStyles({
-  label: {
-    minWidth: "105px",
-    display: "inline-block",
-  },
-});
+const ItemLabel = styled.span`
+  min-width: 105px;
+  display: inline-block;
+`
 
 const DashboardSummaryItem = ({
   label,
   testId,
   value,
 }: DashboardSummaryItemProps) => {
-  const classes = useStyles({});
   return (
     <ListItem>
       <ListItemText
         primary={
           <span>
-            <span className={classes.label}>{label}</span>
+            <ItemLabel>{label}</ItemLabel>
             <span data-testid={testId}>{value}</span>
           </span>
         }

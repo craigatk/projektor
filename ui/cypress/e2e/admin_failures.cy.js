@@ -14,38 +14,38 @@ context("admin failures", () => {
     const firstPublicId = "SJAWN6PITO29";
     cy.findByTestId(`admin-failures-id-${firstPublicId}`).should(
       "contain",
-      firstPublicId
+      firstPublicId,
     );
     cy.findByTestId(`admin-failures-message-${firstPublicId}`).should(
       "contain",
-      "Problem saving test results: Unexpected IOException"
+      "Problem saving test results: Unexpected IOException",
     );
     cy.findByTestId(`admin-failures-body-type-${firstPublicId}`).should(
       "contain",
-      "TEST_RESULTS"
+      "TEST_RESULTS",
     );
     cy.findByTestId(`admin-failures-body-${firstPublicId}`).should("exist");
     cy.findByTestId(`admin-failures-created-timestamp-${firstPublicId}`).should(
       "contain",
-      "March"
+      "March",
     );
 
     const secondPublicId = "X3NFUCTIPXNV";
     cy.findByTestId(`admin-failures-id-${secondPublicId}`).should(
       "contain",
-      secondPublicId
+      secondPublicId,
     );
     cy.findByTestId(`admin-failures-message-${secondPublicId}`).should(
       "contain",
-      "Problem parsing test results: Unexpected IOException"
+      "Problem parsing test results: Unexpected IOException",
     );
     cy.findByTestId(`admin-failures-body-type-${secondPublicId}`).should(
       "contain",
-      "TEST_RESULTS"
+      "TEST_RESULTS",
     );
     cy.findByTestId(`admin-failures-body-${secondPublicId}`).should("exist");
     cy.findByTestId(
-      `admin-failures-created-timestamp-${secondPublicId}`
+      `admin-failures-created-timestamp-${secondPublicId}`,
     ).should("contain", "March");
   });
 
@@ -67,14 +67,14 @@ context("admin failures", () => {
     firstPublicIds.forEach((publicId) =>
       cy
         .findByTestId(`admin-failures-id-${publicId}`)
-        .should("contain", publicId)
+        .should("contain", publicId),
     );
 
     cy.findByTestId("admin-failures-count-field").type(
       "{selectall}{backspace}20",
       {
         delay: 50,
-      }
+      },
     );
 
     cy.findByTestId("admin-failures-load-button").click();
@@ -85,7 +85,7 @@ context("admin failures", () => {
     secondPublicIds.forEach((publicId) =>
       cy
         .findByTestId(`admin-failures-id-${publicId}`)
-        .should("contain", publicId)
+        .should("contain", publicId),
     );
   });
 });

@@ -1,8 +1,8 @@
 import * as React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Typography from "@material-ui/core/Typography";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import { makeStyles } from "@mui/material/styles";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+import Typography from "@mui/material/Typography";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {

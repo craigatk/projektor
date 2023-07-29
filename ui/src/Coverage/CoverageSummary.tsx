@@ -7,7 +7,7 @@ import OverallCoverageGraphs from "./OverallCoverageGraphs";
 import CleanLink from "../Link/CleanLink";
 import { makeStyles } from "@material-ui/styles";
 import TestRunCoverageBadge from "../Badge/TestRunCoverageBadge";
-import { Grid, Hidden } from "@material-ui/core";
+import { Grid, Hidden } from "@mui/material";
 
 interface CoverageSummaryProps {
   publicId: string;
