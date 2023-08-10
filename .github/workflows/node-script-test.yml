@@ -9,7 +9,7 @@ on:
 
 jobs:
   node-script-test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - name: Install Node.js
@@ -32,7 +32,7 @@ jobs:
           yarn projektor-publish
 
   node-script-functional-test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     services:
       database:
         image: postgres:15.3-alpine
