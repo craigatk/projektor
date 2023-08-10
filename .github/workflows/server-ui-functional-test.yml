@@ -15,7 +15,7 @@ on:
 
 jobs:
   assemble-and-functional-test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     services:
       database:
         image: postgres:15.3-alpine
