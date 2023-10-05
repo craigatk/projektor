@@ -15,7 +15,7 @@ dependencies {
 
     implementation "ch.qos.logback:logback-classic:$logbackVersion"
 
-    testImplementation "com.github.tomakehurst:wiremock-jre8:$wiremockVersion"
+    testImplementation "org.wiremock:wiremock:$wiremockVersion"
 
-    testFixturesImplementation "com.github.tomakehurst:wiremock-jre8:$wiremockVersion"
+    testFixturesImplementation "org.wiremock:wiremock:$wiremockVersion"
 }
