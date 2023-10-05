@@ -39,7 +39,10 @@ group = "dev.projektor"
 version = "8.5.0"
 
 dependencies {
-    implementation("com.squareup.okhttp3:okhttp:${okHttpVersion}")
+    implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
+
+    // okhttp dependency vulnerability.  Addressed once version 5.0+ released
+    implementation("com.squareup.okio:okio-jvm:$okio_version")
 
     implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonDatabindVersion"
 
@@ -68,6 +71,10 @@ dependencies {
     functionalTestImplementation gradleTestKit()
     functionalTestImplementation("com.squareup.okhttp3:okhttp:${okHttpVersion}")
     functionalTestImplementation("com.squareup.okhttp3:logging-interceptor:${okHttpVersion}")
+
+    // okhttp dependency vulnerability.  Addressed once version 5.0+ released
+    functionalTestImplementation("com.squareup.okio:okio-jvm:$okio_version")
+
     functionalTestImplementation("org.apache.commons:commons-lang3:3.13.0")
     functionalTestImplementation(project(":server:server-client"))
 }
