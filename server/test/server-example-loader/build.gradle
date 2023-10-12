@@ -12,6 +12,9 @@ dependencies {
     implementation project(":server:parsing:grouped-results-parser")
 
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
+    // okhttp dependency vulnerability.  Addressed once version 5.0+ released
+    implementation "com.squareup.okio:okio-jvm:$okio_version"
+
     implementation 'com.google.code.gson:gson:2.10.1'
 
     implementation "org.apache.commons:commons-lang3:3.8.1"
