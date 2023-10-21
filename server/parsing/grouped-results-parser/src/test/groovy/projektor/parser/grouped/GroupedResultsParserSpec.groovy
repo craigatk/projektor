@@ -136,4 +136,24 @@ class GroupedResultsParserSpec extends Specification {
         parsedResults.performanceResults.size() == 1
         groupedResults.performanceResults.find { it.name == "perf-1" }
     }
+
+    def "should not fail on really large payloads"() {
+        String largeBlob = (1..5_000_000).collect { i -> i }.join()
+
+        GroupedTestSuites groupedTestSuite = new GroupedTestSuites(
+                groupName: "MyGroup",
+                groupLabel: "MyLabel",
+                directory: "path/to/my-group",
+                testSuitesBlob: """<testsuites>${largeBlob}</testsuites>"""
+        )
+
+        GroupedResults groupedResults = new GroupedResults(groupedTestSuites: [groupedTestSuite])
+
+        when:
+        String groupedResultsXml = mapper.writeValueAsString(groupedResults)
+        GroupedResults parsedGroupedResults = groupedResultsParser.parseGroupedResults(groupedResultsXml)
+
+        then:
+        parsedGroupedResults.groupedTestSuites.size() == 1
+    }
 }
