@@ -7,9 +7,7 @@ repositories {
 dependencies {
     api "io.minio:minio:$minio_version"
 
-    // okhttp dependency vulnerability.  Addressed once version 5.0+ released
-    api "com.squareup.okio:okio-jvm:$okio_version"
-
-    // remove once minio includes updated version
+    // remove once minio includes updated version of snappy and okhttp3
     api "org.xerial.snappy:snappy-java:$snappy_java_version"
+    api "com.squareup.okhttp3:okhttp:${ok_http3_version}"
 }
