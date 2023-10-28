@@ -58,6 +58,7 @@ import projektor.notification.github.comment.GitHubCommentClient
 import projektor.notification.github.comment.GitHubCommentService
 import projektor.organization.coverage.OrganizationCoverageService
 import projektor.performance.PerformanceResultsService
+import projektor.processing.ProcessingConfig
 import projektor.quality.CodeQualityReportRepository
 import projektor.repository.coverage.RepositoryCoverageService
 import projektor.repository.performance.RepositoryPerformanceService
@@ -112,6 +113,8 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
 
     val versionControlConfig = VersionControlConfig.createVersionControlConfig(applicationConfig)
 
+    val processingConfig = ProcessingConfig.createProcessingConfig(applicationConfig)
+
     val notificationConfig = NotificationConfig.createNotificationConfig(applicationConfig)
     val gitHubCommentService = conditionallyCreateGitHubCommentService(applicationConfig)
 
@@ -126,6 +129,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
         metricRegistry = metricRegistry,
         messageConfig = messageConfig,
         notificationConfig = notificationConfig,
+        processingConfig = processingConfig,
         gitHubCommentService = gitHubCommentService,
         attachmentService = attachmentService
     )

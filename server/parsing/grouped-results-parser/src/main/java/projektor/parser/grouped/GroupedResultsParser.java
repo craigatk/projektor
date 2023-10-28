@@ -9,16 +9,20 @@ import projektor.parser.grouped.model.GroupedResults;
 import java.io.IOException;
 
 public class GroupedResultsParser {
-    private static final int MAX_PAYLOAD_STRING_LENGTH = 50_000_000; // default is 20_000_000
+    public static final int DEFAULT_MAX_PAYLOAD_SIZE = 50_000_000; // Jackson default is 20_000_000
 
     private final ObjectMapper mapper;
 
     public GroupedResultsParser() {
+        this(DEFAULT_MAX_PAYLOAD_SIZE);
+    }
+
+    public GroupedResultsParser(Integer maxPayloadSize) {
         this.mapper = new ObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         this.mapper.getFactory()
-                .setStreamReadConstraints(StreamReadConstraints.builder().maxStringLength(MAX_PAYLOAD_STRING_LENGTH).build());
+                .setStreamReadConstraints(StreamReadConstraints.builder().maxStringLength(maxPayloadSize).build());
     }
 
     public GroupedResults parseGroupedResults(String groupedResultsBlob) throws IOException {

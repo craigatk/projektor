@@ -39,6 +39,8 @@ import projektor.metrics.InfluxMetricsConfig
 import projektor.metrics.MetricsService
 import projektor.metrics.createRegistry
 import projektor.notification.NotificationConfig
+import projektor.parser.grouped.GroupedResultsParser
+import projektor.processing.ProcessingConfig
 import java.util.TimeZone
 
 open class DatabaseRepositoryTestCase : KoinTest {
@@ -120,6 +122,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
                     createRegistry(metricsConfig),
                     MessageConfig(listOf()),
                     NotificationConfig(null),
+                    ProcessingConfig(GroupedResultsParser.DEFAULT_MAX_PAYLOAD_SIZE),
                     null,
                     null
                 )

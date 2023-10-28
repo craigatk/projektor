@@ -44,6 +44,7 @@ import projektor.parser.performance.PerformanceResultsParser
 import projektor.performance.PerformanceResultsDatabaseRepository
 import projektor.performance.PerformanceResultsRepository
 import projektor.performance.PerformanceResultsService
+import projektor.processing.ProcessingConfig
 import projektor.quality.CodeQualityReportDatabaseRepository
 import projektor.quality.CodeQualityReportRepository
 import projektor.repository.coverage.RepositoryCoverageDatabaseRepository
@@ -78,6 +79,7 @@ fun createAppModule(
     metricRegistry: MeterRegistry,
     messageConfig: MessageConfig,
     notificationConfig: NotificationConfig,
+    processingConfig: ProcessingConfig,
     gitHubCommentService: GitHubCommentService?,
     attachmentService: AttachmentService?
 ) = module {
@@ -111,7 +113,7 @@ fun createAppModule(
 
     single { AppendTestResultsService(get(), get()) }
     single { CoverageService(get(), get(), get(), get()) }
-    single { GroupedResultsParser() }
+    single { GroupedResultsParser(processingConfig.maxPayloadSize) }
     single { PerformanceResultsParser() }
     single { GroupedResultsConverter(get(), get(), get()) }
     single { GroupedTestResultsService(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }

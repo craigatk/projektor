@@ -7,16 +7,17 @@ import projektor.parser.grouped.model.GroupedTestSuites
 import projektor.parser.grouped.model.PerformanceResult
 import projektor.parser.grouped.model.ResultsMetadata
 import spock.lang.Specification
-import spock.lang.Subject
 
 class GroupedResultsParserSpec extends Specification {
-    @Subject
-    GroupedResultsParser groupedResultsParser = new GroupedResultsParser()
+    private int defaultMaxPayloadSize = 20_000_000
+    private int largeMaxPayloadSize = 50_000_000
 
     private ObjectMapper mapper = new ObjectMapper()
 
     def "should deserialize grouped results that were serialized"() {
         given:
+        GroupedResultsParser groupedResultsParser = new GroupedResultsParser(defaultMaxPayloadSize)
+
         List<GroupedTestSuites> groupedTestSuites = (1..3).collect { idx ->
             new GroupedTestSuites(
                     groupName: "MyGroup${idx}",
@@ -56,6 +57,8 @@ class GroupedResultsParserSpec extends Specification {
 
     def "should serialize grouped results"() {
         given:
+        GroupedResultsParser groupedResultsParser = new GroupedResultsParser(defaultMaxPayloadSize)
+
         List<GroupedTestSuites> groupedTestSuites = (1..2).collect { idx ->
             new GroupedTestSuites(
                     groupName: "MyGroup${idx}",
@@ -83,6 +86,8 @@ class GroupedResultsParserSpec extends Specification {
 
     def "should parse grouped results with all metadata"() {
         given:
+        GroupedResultsParser groupedResultsParser = new GroupedResultsParser(defaultMaxPayloadSize)
+
         List<GroupedTestSuites> groupedTestSuites = (1..2).collect { idx ->
             new GroupedTestSuites(
                     groupName: "MyGroup${idx}",
@@ -120,6 +125,8 @@ class GroupedResultsParserSpec extends Specification {
 
     def "should deserialize results with only performance results"() {
         given:
+        GroupedResultsParser groupedResultsParser = new GroupedResultsParser(defaultMaxPayloadSize)
+
         GroupedResults groupedResults = new GroupedResults()
         groupedResults.metadata = new ResultsMetadata(
                 git: new GitMetadata(repoName: "my-repo", branchName: "main", isMainBranch: true)
@@ -138,6 +145,8 @@ class GroupedResultsParserSpec extends Specification {
     }
 
     def "should not fail on really large payloads"() {
+        GroupedResultsParser groupedResultsParser = new GroupedResultsParser(largeMaxPayloadSize)
+
         String largeBlob = (1..5_000_000).collect { i -> i }.join()
 
         GroupedTestSuites groupedTestSuite = new GroupedTestSuites(
