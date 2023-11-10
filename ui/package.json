@@ -42,7 +42,7 @@
     "projektor-publish": "3.10.2",
     "resize-observer-polyfill": "1.5.1",
     "rimraf": "5.0.5",
-    "start-server-and-test": "2.0.1",
+    "start-server-and-test": "2.0.2",
     "ts-jest": "29.1.1",
     "typescript": "5.2.2",
     "wait-for-expect": "3.0.2"
