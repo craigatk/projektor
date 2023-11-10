@@ -42,7 +42,7 @@ describe("TestSuitePage", () => {
   });
 
   it("should render error when fetching test suite fails", async () => {
-    const publicId = "12345";
+    const publicId = "failing-test-suite-fetch-id";
     const testSuiteIdx = 1;
 
     mockAxios

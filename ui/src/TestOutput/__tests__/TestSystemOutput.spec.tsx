@@ -114,7 +114,7 @@ describe("TestSystemOut", () => {
 
   it("should render error when fetching output fails", async () => {
     const publicId = "12345";
-    const testSuiteIdx = 1;
+    const testSuiteIdx = 17;
     const outputType = TestOutputType.SystemOut;
 
     mockAxios

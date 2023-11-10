@@ -75,7 +75,7 @@ describe("TestRunDataWrapper", () => {
   });
 
   it("should render processing message when fetching test summary fails and results are still processing", async () => {
-    const publicId = "12345";
+    const publicId = "failing-test-summary-id";
 
     mockAxios
       .onGet(`http://localhost:8080/run/${publicId}/summary`)

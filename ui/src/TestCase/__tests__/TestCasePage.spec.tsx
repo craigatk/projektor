@@ -61,7 +61,7 @@ describe("TestCasePage", () => {
   });
 
   it("should render error when fetching test case fails", async () => {
-    const publicId = "12345";
+    const publicId = "failing-test-case-id";
     const testSuiteIdx = 1;
     const testCaseIdx = 2;
 
