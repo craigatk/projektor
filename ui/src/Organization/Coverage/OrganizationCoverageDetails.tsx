@@ -37,10 +37,10 @@ const OrganizationCoverageDetails = ({
             nameLinkUrl: repositoryLinkUrlUI(
               repositoryCoverage.repoName,
               repositoryCoverage.projectName,
-              null
+              null,
             ),
             coveredPercentageLink: `/tests/${repositoryCoverage.publicId}/`,
-          } as CoverageTableRow)
+          }) as CoverageTableRow,
       );
 
     return (

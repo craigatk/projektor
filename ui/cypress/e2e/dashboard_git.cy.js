@@ -46,7 +46,7 @@ context("dashboard git metadata", () => {
       .should("have.attr", "href")
       .and(
         "equal",
-        "http://localhost:1234/craigatk/projektor/commit/d7efb34a60091f0d9516660a371c290092a6638c"
+        "http://localhost:1234/craigatk/projektor/commit/d7efb34a60091f0d9516660a371c290092a6638c",
       );
   });
 });

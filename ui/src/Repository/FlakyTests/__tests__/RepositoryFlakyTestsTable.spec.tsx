@@ -26,15 +26,15 @@ describe("RepositoryFlakyTestsTable", () => {
     } as RepositoryFlakyTests;
 
     const { getByTestId } = render(
-      <RepositoryFlakyTestsTable flakyTests={flakyTests} />
+      <RepositoryFlakyTestsTable flakyTests={flakyTests} />,
     );
 
     expect(getByTestId("flaky-test-case-first-failure-1")).toHaveTextContent(
-      "Sep 1st 2020, 5:03 am"
+      "Sep 1st 2020, 5:03 am",
     );
 
     expect(getByTestId("flaky-test-case-latest-failure-1")).toHaveTextContent(
-      "Oct 2nd 2020, 6:03 am"
+      "Oct 2nd 2020, 6:03 am",
     );
   });
 
@@ -48,7 +48,7 @@ describe("RepositoryFlakyTestsTable", () => {
     } as RepositoryFlakyTests;
 
     const { getByText, getAllByTestId } = render(
-      <RepositoryFlakyTestsTable flakyTests={flakyTests} />
+      <RepositoryFlakyTestsTable flakyTests={flakyTests} />,
     );
 
     act(() => {
@@ -59,7 +59,7 @@ describe("RepositoryFlakyTestsTable", () => {
       "flaky-test-case-first-failure",
       {
         exact: false,
-      }
+      },
     );
     expect(firstFailureAscending.length).toBe(3);
     expect(firstFailureAscending[0]).toHaveTextContent("Sep 1st 2020");
@@ -73,7 +73,7 @@ describe("RepositoryFlakyTestsTable", () => {
       "flaky-test-case-first-failure",
       {
         exact: false,
-      }
+      },
     );
     expect(firstFailureDescending.length).toBe(3);
     expect(firstFailureDescending[0]).toHaveTextContent("Sep 3rd 2020");
@@ -91,7 +91,7 @@ describe("RepositoryFlakyTestsTable", () => {
     } as RepositoryFlakyTests;
 
     const { getByText, getAllByTestId } = render(
-      <RepositoryFlakyTestsTable flakyTests={flakyTests} />
+      <RepositoryFlakyTestsTable flakyTests={flakyTests} />,
     );
 
     act(() => {
@@ -101,7 +101,7 @@ describe("RepositoryFlakyTestsTable", () => {
       "flaky-test-case-latest-failure",
       {
         exact: false,
-      }
+      },
     );
     expect(latestFailureAscending.length).toBe(3);
     expect(latestFailureAscending[0]).toHaveTextContent("Oct 1st 2020");
@@ -115,7 +115,7 @@ describe("RepositoryFlakyTestsTable", () => {
       "flaky-test-case-latest-failure",
       {
         exact: false,
-      }
+      },
     );
     expect(latestFailureDescending.length).toBe(3);
     expect(latestFailureDescending[0]).toHaveTextContent("Oct 3rd 2020");
@@ -125,7 +125,7 @@ describe("RepositoryFlakyTestsTable", () => {
 
   function createFlakyTest(
     firstTestCaseCreatedDate: string,
-    lastTestCaseCreatedDate: string
+    lastTestCaseCreatedDate: string,
   ): RepositoryFlakyTest {
     return {
       testCase: {

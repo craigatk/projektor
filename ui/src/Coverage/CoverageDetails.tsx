@@ -26,7 +26,7 @@ const CoverageDetails = ({ coverage, publicId }: CoverageDetailsProps) => {
         stats: group.stats,
         previousTestRunId: coverage.previousTestRunId,
         nameLinkUrl: `/tests/${publicId}/coverage/${group.name}/files`,
-      } as CoverageTableRow)
+      }) as CoverageTableRow,
   );
 
   return (

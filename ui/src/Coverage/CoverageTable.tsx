@@ -35,7 +35,7 @@ const CoverageTable = ({
 
   const sortedRows = rows.sort(
     (a, b) =>
-      a.stats.lineStat.coveredPercentage - b.stats.lineStat.coveredPercentage
+      a.stats.lineStat.coveredPercentage - b.stats.lineStat.coveredPercentage,
   );
 
   return (

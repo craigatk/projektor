@@ -14,7 +14,7 @@ interface TestRunAllTestsProps extends RouteComponentProps {
 const TestRunAllTests = ({ publicId }: TestRunAllTestsProps) => {
   const [testRun, setTestRun] = React.useState<TestRun>(null);
   const [testRunLoadingState, setTestRunLoadingState] = React.useState(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
 
   React.useEffect(() => {

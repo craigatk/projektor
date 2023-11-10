@@ -28,7 +28,7 @@ describe("TestSuiteHelpers", () => {
       } as TestSuite;
 
       expect(fullTestSuiteName(testSuite)).toEqual(
-        "src/Repository/Coverage/__tests__/RepositoryCoverageTimelineGraph.spec.tsx"
+        "src/Repository/Coverage/__tests__/RepositoryCoverageTimelineGraph.spec.tsx",
       );
     });
   });

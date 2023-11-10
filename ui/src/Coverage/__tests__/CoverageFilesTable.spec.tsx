@@ -24,7 +24,7 @@ describe("CoverageFilesTable", () => {
       <CoverageFilesTable
         coverageFiles={coverageFiles}
         coverageGroupName="my-group"
-      />
+      />,
     );
 
     expect(queryByText("dir/HasLines.tsx")).not.toBeNull();
@@ -46,24 +46,24 @@ describe("CoverageFilesTable", () => {
       <CoverageFilesTable
         coverageFiles={coverageFiles}
         coverageGroupName="my-group"
-      />
+      />,
     );
 
     expect(getByTestId("coverage-file-name-1")).toHaveTextContent(
-      "dir/LowCoverage.tsx"
+      "dir/LowCoverage.tsx",
     );
     expect(getByTestId("coverage-file-name-2")).toHaveTextContent(
-      "dir/MidCoverage.tsx"
+      "dir/MidCoverage.tsx",
     );
     expect(getByTestId("coverage-file-name-3")).toHaveTextContent(
-      "dir/HighCoverage.tsx"
+      "dir/HighCoverage.tsx",
     );
   });
 
   function createFile(
     fileName: string,
     totalLines: number,
-    lineCoveredPercentage: number
+    lineCoveredPercentage: number,
   ) {
     return {
       fileName,

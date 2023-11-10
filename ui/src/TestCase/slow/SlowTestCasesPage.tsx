@@ -12,7 +12,7 @@ interface SlowTestCasesPageProps extends RouteComponentProps {
 
 const SlowTestCasesPage = ({ publicId }: SlowTestCasesPageProps) => {
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
   const [testCases, setTestCases] = React.useState<TestCase[]>([]);
 

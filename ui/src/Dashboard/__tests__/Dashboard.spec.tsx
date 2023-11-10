@@ -52,7 +52,7 @@ describe("Dashboard", () => {
     const { getByTestId } = render(
       <PinState publicId={publicId}>
         <Dashboard publicId={publicId} testRunSummary={testRunSummary} />
-      </PinState>
+      </PinState>,
     );
 
     await waitFor(() => getByTestId("test-suite-list"));
@@ -78,7 +78,7 @@ describe("Dashboard", () => {
     const { queryByTestId } = render(
       <PinState publicId={publicId}>
         <Dashboard publicId={publicId} testRunSummary={testRunSummary} />
-      </PinState>
+      </PinState>,
     );
 
     expect(queryByTestId("test-suite-list")).toBeNull();

@@ -12,23 +12,23 @@ describe("CodeText", () => {
     const { findByTestId, queryByTestId } = render(
       <QueryParamProvider reachHistory={globalHistory}>
         <CodeText text={text} />
-      </QueryParamProvider>
+      </QueryParamProvider>,
     );
 
     await findByTestId("code-text");
 
     expect(await findByTestId("code-text-line-content-1")).toHaveTextContent(
-      "line 1"
+      "line 1",
     );
     expect(await findByTestId("code-text-line-number-1")).toHaveTextContent(
-      "1"
+      "1",
     );
 
     expect(await findByTestId("code-text-line-content-2")).toHaveTextContent(
-      "line 2"
+      "line 2",
     );
     expect(await findByTestId("code-text-line-number-2")).toHaveTextContent(
-      "2"
+      "2",
     );
 
     expect(queryByTestId("code-text-line-number-3")).toBeNull();
@@ -40,7 +40,7 @@ describe("CodeText", () => {
     const { findByTestId, queryByTestId } = render(
       <QueryParamProvider reachHistory={globalHistory}>
         <CodeText text={text} />
-      </QueryParamProvider>
+      </QueryParamProvider>,
     );
 
     await findByTestId("code-text");

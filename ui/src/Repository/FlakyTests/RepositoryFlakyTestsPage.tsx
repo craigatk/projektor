@@ -67,11 +67,11 @@ const RepositoryFlakyTestsPage = ({
   const [maxRuns, setMaxRuns] = useQueryParam("max", NumberParam);
   const [flakyThreshold, setFlakyThreshold] = useQueryParam(
     "threshold",
-    NumberParam
+    NumberParam,
   );
   const [branchType, setBranchType] = useQueryParam("branch_type", StringParam);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
 
   const doFetch = () => {
@@ -80,7 +80,7 @@ const RepositoryFlakyTestsPage = ({
       flakyThreshold || 5,
       branchType || "mainline",
       repoName,
-      projectName
+      projectName,
     )
       .then((response) => {
         setFlakyTests(response.data);

@@ -41,10 +41,10 @@ describe("AttachmentsPage", () => {
     const { findByTestId } = render(<AttachmentsPage publicId={publicId} />);
 
     expect(
-      await findByTestId("attachment-file-name-attachment1.txt")
+      await findByTestId("attachment-file-name-attachment1.txt"),
     ).toHaveTextContent("attachment1.txt");
     expect(
-      await findByTestId("attachment-file-name-attachment2.txt")
+      await findByTestId("attachment-file-name-attachment2.txt"),
     ).toHaveTextContent("attachment2.txt");
   });
 });

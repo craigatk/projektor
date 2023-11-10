@@ -63,7 +63,7 @@ const RepositoryCoveragePage = ({
     React.useState<RepositoryCoverageTimeline>(null);
   const [branchType, setBranchType] = useQueryParam("branch", StringParam);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
 
   const doFetch = () => {

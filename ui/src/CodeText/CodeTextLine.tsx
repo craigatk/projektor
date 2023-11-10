@@ -81,7 +81,7 @@ const CodeTextLine = ({
 
 function linesAreEqual(
   prevLine: CodeTextLineProps,
-  nextLine: CodeTextLineProps
+  nextLine: CodeTextLineProps,
 ) {
   return (
     prevLine.idx === nextLine.idx &&

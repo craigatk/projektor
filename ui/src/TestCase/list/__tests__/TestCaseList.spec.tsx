@@ -35,29 +35,29 @@ describe("TestCaseList", () => {
         publicId="12345"
         testCases={[testCase]}
         showFullTestCaseName={true}
-      />
+      />,
     );
 
     const headerCells = queryAllByRole("rowheader");
     expect(headerCells.length).toBe(3);
     expect(headerCells[0].getAttribute("data-testid")).toContain(
-      "test-list-duration-header"
+      "test-list-duration-header",
     );
     expect(headerCells[1].getAttribute("data-testid")).toContain(
-      "test-list-name-header"
+      "test-list-name-header",
     );
     expect(headerCells[2].getAttribute("data-testid")).toContain(
-      "test-list-result-header"
+      "test-list-result-header",
     );
 
     const rowCells = queryAllByRole("rowcell");
     expect(rowCells.length).toBe(3);
     expect(rowCells[0].getAttribute("data-testid")).toContain(
-      "test-case-duration"
+      "test-case-duration",
     );
     expect(rowCells[1].getAttribute("data-testid")).toContain("test-case-name");
     expect(rowCells[2].getAttribute("data-testid")).toContain(
-      "test-case-result"
+      "test-case-result",
     );
   });
 });

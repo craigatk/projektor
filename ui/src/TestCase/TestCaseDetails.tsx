@@ -39,7 +39,7 @@ interface TestCaseDetailsProps {
 
 const buildHeaderIntermediateLinks = (
   publicId: string,
-  testCase: TestCase
+  testCase: TestCase,
 ): React.ReactNode[] => {
   const headerIntermediateLinks = [];
 
@@ -51,7 +51,7 @@ const buildHeaderIntermediateLinks = (
         key="package-name-link"
       >
         {testCase.packageName}
-      </CleanLink>
+      </CleanLink>,
     );
   }
 
@@ -63,7 +63,7 @@ const buildHeaderIntermediateLinks = (
         key="class-name-link"
       >
         {testCase.className}
-      </CleanLink>
+      </CleanLink>,
     );
   }
   return headerIntermediateLinks;
@@ -79,16 +79,16 @@ const TestCaseDetails = ({ publicId, testCase }: TestCaseDetailsProps) => {
 
   const headerIntermediateLinks = buildHeaderIntermediateLinks(
     publicId,
-    testCase
+    testCase,
   );
 
   const hasScreenshotAttachment = !!findAttachmentOfType(
     testCase,
-    AttachmentType.IMAGE
+    AttachmentType.IMAGE,
   );
   const hasVideoAttachment = !!findAttachmentOfType(
     testCase,
-    AttachmentType.VIDEO
+    AttachmentType.VIDEO,
   );
 
   return (

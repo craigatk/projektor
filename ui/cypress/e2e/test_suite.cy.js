@@ -22,7 +22,7 @@ context("test suite", () => {
 
     cy.getBreadcrumbPackgeNameLink().should(
       "contain",
-      "projektor.example.spock"
+      "projektor.example.spock",
     );
 
     cy.getBreadcrumbClassNameLink().should("contain", "FailingSpec");
@@ -33,7 +33,7 @@ context("test suite", () => {
 
     cy.getBreadcrumbPackgeNameLink().should(
       "contain",
-      "projektor.example.spock"
+      "projektor.example.spock",
     );
     cy.getBreadcrumbEndingText().should("contain", "FailingSpec");
   });
@@ -64,7 +64,7 @@ context("test suite", () => {
 
     cy.getBreadcrumbPackgeNameLink().should(
       "contain",
-      "projektor.example.spock"
+      "projektor.example.spock",
     );
     cy.getBreadcrumbEndingText().should("contain", "OutputSpec");
 
