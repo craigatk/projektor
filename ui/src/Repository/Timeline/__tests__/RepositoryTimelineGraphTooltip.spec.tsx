@@ -35,14 +35,14 @@ describe("RepositoryTimelineGraphTooltip", () => {
     };
 
     const { getByTestId } = render(
-      <RepositoryTimelineGraphTooltip {...props} />
+      <RepositoryTimelineGraphTooltip {...props} />,
     );
 
     expect(getByTestId("timeline-tooltip-duration")).toHaveTextContent(
-      "2m 50.000s"
+      "2m 50.000s",
     );
     expect(getByTestId("timeline-tooltip-average-duration")).toHaveTextContent(
-      "11.333s"
+      "11.333s",
     );
   });
 
@@ -66,11 +66,11 @@ describe("RepositoryTimelineGraphTooltip", () => {
     };
 
     const { getByTestId } = render(
-      <RepositoryTimelineGraphTooltip {...props} />
+      <RepositoryTimelineGraphTooltip {...props} />,
     );
 
     expect(getByTestId("timeline-tooltip-run-date")).toHaveTextContent(
-      "Oct 2nd 2020, 6:03 am"
+      "Oct 2nd 2020, 6:03 am",
     );
   });
 });

@@ -84,7 +84,7 @@ describe("CoverageTable", () => {
         rows={[row1, row2, row3]}
         pageTitle="Coverage"
         groupHeader="Group"
-      />
+      />,
     );
 
     act(() => {
@@ -92,7 +92,7 @@ describe("CoverageTable", () => {
     });
 
     const lineCoverageNumbers = getAllByTestId(
-      /line-coverage.*covered-percentage/
+      /line-coverage.*covered-percentage/,
     );
 
     expect(lineCoverageNumbers.length).toBe(3);
@@ -105,7 +105,7 @@ describe("CoverageTable", () => {
     });
 
     const branchCoverageNumbers = getAllByTestId(
-      /branch-coverage.*covered-percentage/
+      /branch-coverage.*covered-percentage/,
     );
 
     expect(branchCoverageNumbers.length).toBe(3);
@@ -118,7 +118,7 @@ describe("CoverageTable", () => {
     });
 
     const statementCoverageNumbers = getAllByTestId(
-      /statement-coverage.*covered-percentage/
+      /statement-coverage.*covered-percentage/,
     );
 
     expect(statementCoverageNumbers.length).toBe(3);

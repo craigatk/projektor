@@ -104,7 +104,7 @@ const AdminFailuresTable = ({ failures }: AdminFailuresTableProps) => {
                 data-testid={`admin-failures-created-timestamp-${rowData.id}`}
               >
                 {moment(rowData.createdTimestamp).format(
-                  "MMMM Do YYYY, h:mm:ss a"
+                  "MMMM Do YYYY, h:mm:ss a",
                 )}
               </span>
             ),

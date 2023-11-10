@@ -64,7 +64,7 @@ const TestCaseFailurePanel = ({
 
   const screenshotAttachment = findAttachmentOfType(
     testCase,
-    AttachmentType.IMAGE
+    AttachmentType.IMAGE,
   );
   const videoAttachment = findAttachmentOfType(testCase, AttachmentType.VIDEO);
 

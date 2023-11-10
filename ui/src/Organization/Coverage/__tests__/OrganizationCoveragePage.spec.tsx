@@ -122,47 +122,47 @@ describe("OrganizationCoveragePage", () => {
       .reply(200, organizationCoverage);
 
     const { findByTestId, getByTestId } = render(
-      <OrganizationCoveragePage orgName={orgName} />
+      <OrganizationCoveragePage orgName={orgName} />,
     );
 
     expect(await findByTestId("coverage-name-1")).toHaveTextContent(
-      `${orgName}/repo1`
+      `${orgName}/repo1`,
     );
     expect(getByTestId("coverage-name-2")).toHaveTextContent(
-      `${orgName}/repo2`
+      `${orgName}/repo2`,
     );
     expect(getByTestId("coverage-name-3")).toHaveTextContent(
-      `${orgName}/repo3`
+      `${orgName}/repo3`,
     );
 
     expect(
-      getByTestId("line-coverage-row-1-covered-percentage")
+      getByTestId("line-coverage-row-1-covered-percentage"),
     ).toHaveTextContent("90.11%");
     expect(
-      getByTestId("statement-coverage-row-1-covered-percentage")
+      getByTestId("statement-coverage-row-1-covered-percentage"),
     ).toHaveTextContent("91.11%");
     expect(
-      getByTestId("branch-coverage-row-1-covered-percentage")
+      getByTestId("branch-coverage-row-1-covered-percentage"),
     ).toHaveTextContent("92.11%");
 
     expect(
-      getByTestId("line-coverage-row-2-covered-percentage")
+      getByTestId("line-coverage-row-2-covered-percentage"),
     ).toHaveTextContent("93.11%");
     expect(
-      getByTestId("statement-coverage-row-2-covered-percentage")
+      getByTestId("statement-coverage-row-2-covered-percentage"),
     ).toHaveTextContent("94.11%");
     expect(
-      getByTestId("branch-coverage-row-2-covered-percentage")
+      getByTestId("branch-coverage-row-2-covered-percentage"),
     ).toHaveTextContent("95.11%");
 
     expect(
-      getByTestId("line-coverage-row-3-covered-percentage")
+      getByTestId("line-coverage-row-3-covered-percentage"),
     ).toHaveTextContent("96.11%");
     expect(
-      getByTestId("statement-coverage-row-3-covered-percentage")
+      getByTestId("statement-coverage-row-3-covered-percentage"),
     ).toHaveTextContent("97.11%");
     expect(
-      getByTestId("branch-coverage-row-3-covered-percentage")
+      getByTestId("branch-coverage-row-3-covered-percentage"),
     ).toHaveTextContent("98.11%");
   });
 
@@ -207,11 +207,11 @@ describe("OrganizationCoveragePage", () => {
       .reply(200, organizationCoverage);
 
     const { findByTestId } = render(
-      <OrganizationCoveragePage orgName={orgName} />
+      <OrganizationCoveragePage orgName={orgName} />,
     );
 
     expect(await findByTestId("coverage-name-1")).toHaveTextContent(
-      `${orgName}/repo1 server`
+      `${orgName}/repo1 server`,
     );
   });
 
@@ -221,13 +221,13 @@ describe("OrganizationCoveragePage", () => {
     mockAxios.onGet(`http://localhost:8080/org/${orgName}/coverage`).reply(204);
 
     const { getByTestId, findByTestId } = render(
-      <OrganizationCoveragePage orgName={orgName} />
+      <OrganizationCoveragePage orgName={orgName} />,
     );
 
     expect(
-      await findByTestId("organization-coverage-no-details")
+      await findByTestId("organization-coverage-no-details"),
     ).toHaveTextContent(
-      `No repositories found with coverage in organization ${orgName}`
+      `No repositories found with coverage in organization ${orgName}`,
     );
   });
 });

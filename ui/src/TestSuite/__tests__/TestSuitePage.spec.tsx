@@ -32,7 +32,7 @@ describe("TestSuitePage", () => {
       .reply(200, testSuite);
 
     const { getByTestId, queryByTestId } = render(
-      <TestSuitePage publicId={publicId} testSuiteIdx={testSuiteIdx} />
+      <TestSuitePage publicId={publicId} testSuiteIdx={testSuiteIdx} />,
     );
 
     await waitFor(() => getByTestId("test-suite-details"));
@@ -42,7 +42,7 @@ describe("TestSuitePage", () => {
   });
 
   it("should render error when fetching test suite fails", async () => {
-    const publicId = "12345";
+    const publicId = "failing-test-suite-fetch-id";
     const testSuiteIdx = 1;
 
     mockAxios
@@ -50,7 +50,7 @@ describe("TestSuitePage", () => {
       .reply(404, {});
 
     const { getByTestId, queryByTestId } = render(
-      <TestSuitePage publicId={publicId} testSuiteIdx={testSuiteIdx} />
+      <TestSuitePage publicId={publicId} testSuiteIdx={testSuiteIdx} />,
     );
 
     await waitFor(() => getByTestId("loading-section-error"));

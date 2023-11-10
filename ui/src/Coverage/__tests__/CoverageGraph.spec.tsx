@@ -21,11 +21,11 @@ describe("CoverageGraph", () => {
         type={type}
         height={25}
         inline={false}
-      />
+      />,
     );
 
     expect(queryByTestId("coverage-graph-title-line")).toHaveTextContent(
-      "Line 98.89%"
+      "Line 98.89%",
     );
   });
 
@@ -46,11 +46,11 @@ describe("CoverageGraph", () => {
         type={type}
         height={25}
         inline={false}
-      />
+      />,
     );
 
     expect(queryByTestId("coverage-graph-title-line")).toHaveTextContent(
-      "Line 98.89% +1.25%"
+      "Line 98.89% +1.25%",
     );
   });
 
@@ -71,11 +71,11 @@ describe("CoverageGraph", () => {
         type={type}
         height={25}
         inline={false}
-      />
+      />,
     );
 
     expect(queryByTestId("coverage-graph-title-line")).toHaveTextContent(
-      "Line 98.89% -2.25%"
+      "Line 98.89% -2.25%",
     );
   });
 
@@ -95,7 +95,7 @@ describe("CoverageGraph", () => {
         type={type}
         height={25}
         inline={true}
-      />
+      />,
     );
 
     expect(queryByTestId("coverage-graph-title-line")).toBeNull();
@@ -117,7 +117,7 @@ describe("CoverageGraph", () => {
         type={type}
         height={25}
         inline={false}
-      />
+      />,
     );
 
     expect(queryByTestId("coverage-graph-title-line")).toBeNull();
@@ -141,7 +141,7 @@ describe("CoverageGraph", () => {
         inline={true}
         testIdPrefix="graph"
         coveredPercentageLink="/tests/ABC123/"
-      />
+      />,
     );
 
     expect(queryByTestId("graph-covered-percentage-link")).toBeInTheDocument();
@@ -165,11 +165,11 @@ describe("CoverageGraph", () => {
         inline={true}
         testIdPrefix="graph"
         coveredPercentageLink="/tests/ABC123/"
-      />
+      />,
     );
 
     expect(queryByTestId("graph-uncovered-line-count")).toHaveTextContent(
-      "6 Uncovered"
+      "6 Uncovered",
     );
   });
 
@@ -191,7 +191,7 @@ describe("CoverageGraph", () => {
         inline={true}
         testIdPrefix="graph"
         coveredPercentageLink="/tests/ABC123/"
-      />
+      />,
     );
 
     expect(queryByTestId("graph-uncovered-line-count")).toHaveTextContent("4");
@@ -215,11 +215,11 @@ describe("CoverageGraph", () => {
         inline={true}
         testIdPrefix="graph"
         coveredPercentageLink={null}
-      />
+      />,
     );
 
     expect(
-      queryByTestId("graph-covered-percentage-link")
+      queryByTestId("graph-covered-percentage-link"),
     ).not.toBeInTheDocument();
   });
 });

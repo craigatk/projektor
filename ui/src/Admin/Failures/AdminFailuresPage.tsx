@@ -29,10 +29,10 @@ const AdminFailuresPage = ({}: AdminFailuresPageProps) => {
   const classes = useStyles({});
 
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
   const [failures, setFailures] = React.useState<ResultsProcessingFailure[]>(
-    []
+    [],
   );
   const [fetchCount, setFetchCount] = React.useState<number>(10);
 

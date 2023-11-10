@@ -22,7 +22,7 @@ context("results processing", () => {
 
     cy.getByTestId("results-still-processing").should(
       "contain",
-      "Your test results are still processing"
+      "Your test results are still processing",
     );
 
     cy.intercept("GET", `results/${publicId}/status`, {
@@ -66,11 +66,11 @@ context("results processing", () => {
 
     cy.getByTestId("results-processing-failed").should(
       "contain",
-      "Error processing test results"
+      "Error processing test results",
     );
     cy.getByTestId("results-processing-failed").should(
       "contain",
-      "Failed to parse results"
+      "Failed to parse results",
     );
   });
 });

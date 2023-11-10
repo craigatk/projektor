@@ -36,7 +36,7 @@ const TestSystemOutput = ({
   const classes = useStyles({});
 
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
   const [output, setOutput] = React.useState<TestOutput>(null);
 

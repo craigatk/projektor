@@ -27,7 +27,7 @@ const CodeQualityReportTab = ({
   const classes = useStyles({});
 
   const codeQualityReport = codeQualityReportsWithContents.find(
-    (report) => report.idx === parseInt(idx)
+    (report) => report.idx === parseInt(idx),
   );
   const reportContents = codeQualityReport ? codeQualityReport.contents : "";
 

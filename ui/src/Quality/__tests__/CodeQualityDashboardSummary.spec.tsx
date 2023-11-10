@@ -37,7 +37,7 @@ describe("CodeQualityDashboardSummary", () => {
       .reply(200, codeQualityReports);
 
     const { findByTestId, findByText } = render(
-      <CodeQualityDashboardSummary publicId={publicId} />
+      <CodeQualityDashboardSummary publicId={publicId} />,
     );
 
     await findByTestId("code-quality-summary-title");
@@ -54,7 +54,7 @@ describe("CodeQualityDashboardSummary", () => {
       .reply(200, codeQualityReports);
 
     const { queryByTestId } = render(
-      <CodeQualityDashboardSummary publicId={publicId} />
+      <CodeQualityDashboardSummary publicId={publicId} />,
     );
 
     expect(queryByTestId("code-quality-summary-title")).toBeNull();

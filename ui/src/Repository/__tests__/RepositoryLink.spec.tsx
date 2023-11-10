@@ -29,7 +29,7 @@ describe("RepositoryLink", () => {
     it("when repo name, project name, and uri should create link", () => {
       const linkUrl = repositoryLinkUrlUI(repoName, projectName, uri);
       expect(linkUrl).toEqual(
-        "/repository/my-org/my-repo/project/my-project/coverage"
+        "/repository/my-org/my-repo/project/my-project/coverage",
       );
     });
   });
@@ -62,7 +62,7 @@ describe("RepositoryLink", () => {
     it("when repo name, project name, and uri should create link", () => {
       const linkUrl = repositoryLinkUrlAPI(repoName, projectName, uri);
       expect(linkUrl).toEqual(
-        "/repo/my-org/my-repo/project/my-project/coverage"
+        "/repo/my-org/my-repo/project/my-project/coverage",
       );
     });
   });

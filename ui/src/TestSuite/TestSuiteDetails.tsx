@@ -41,7 +41,7 @@ const buildHeaderIntermediateLinks = (publicId, testSuite) => {
         key="package-name-link"
       >
         {testSuite.packageName}
-      </CleanLink>
+      </CleanLink>,
     );
   }
 
@@ -57,7 +57,7 @@ const TestSuiteDetails = ({ publicId, testSuite }: TestSuiteDetailsProps) => {
 
   const headerIntermediateLinks = buildHeaderIntermediateLinks(
     publicId,
-    testSuite
+    testSuite,
   );
 
   return (

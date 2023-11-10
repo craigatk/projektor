@@ -28,7 +28,7 @@ const TestCaseFailureScreenshot = ({
 
   const screenshotAttachment = findAttachmentOfType(
     testCase,
-    AttachmentType.IMAGE
+    AttachmentType.IMAGE,
   );
 
   if (screenshotAttachment) {

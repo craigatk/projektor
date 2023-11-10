@@ -26,7 +26,7 @@ const CodeQualityDashboardSummary = ({
   const reportsWithContents =
     codeQualityReports && codeQualityReports.reports
       ? codeQualityReports.reports.filter(
-          (report) => report.contents && report.contents.length > 0
+          (report) => report.contents && report.contents.length > 0,
         )
       : [];
   const hasReportsWithContents = reportsWithContents.length > 0;

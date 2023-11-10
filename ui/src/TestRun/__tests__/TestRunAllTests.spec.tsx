@@ -37,7 +37,7 @@ describe("TestRunAllTests", () => {
       .reply(200, testRun);
 
     const { getByTestId, queryByTestId } = render(
-      <TestRunAllTests publicId={publicId} />
+      <TestRunAllTests publicId={publicId} />,
     );
 
     await waitFor(() => getByTestId("test-suite-list"));
@@ -47,12 +47,12 @@ describe("TestRunAllTests", () => {
   });
 
   it("should render error when fetching all tests fails", async () => {
-    const publicId = "12345";
+    const publicId = "failing-id";
 
     mockAxios.onGet(`http://localhost:8080/run/${publicId}`).reply(404, {});
 
     const { getByTestId, queryByTestId } = render(
-      <TestRunAllTests publicId={publicId} />
+      <TestRunAllTests publicId={publicId} />,
     );
 
     await waitFor(() => getByTestId("loading-section-error"));

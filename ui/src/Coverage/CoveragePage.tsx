@@ -13,7 +13,7 @@ interface CoveragePageProps extends RouteComponentProps {
 
 const CoveragePage = ({ publicId }: CoveragePageProps) => {
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
   const [coverage, setCoverage] = React.useState<Coverage>(null);
 

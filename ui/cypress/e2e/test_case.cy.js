@@ -15,7 +15,7 @@ context("test case", () => {
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
       {
         fixture: "failed_test_case_2.json",
-      }
+      },
     );
 
     cy.intercept("GET", `run/${publicId}/suite/${testSuiteIdx}/systemOut`, {
@@ -27,12 +27,12 @@ context("test case", () => {
     });
 
     cy.visit(
-      `http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/`
+      `http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/`,
     );
 
     cy.getByTestId("test-case-failure-text").should(
       "contain",
-      "Condition not satisfied"
+      "Condition not satisfied",
     );
     cy.url().should("contain", "/failure");
 
@@ -56,7 +56,7 @@ context("test case", () => {
 
     cy.getByTestId("test-case-failure-text").should(
       "contain",
-      "Condition not satisfied"
+      "Condition not satisfied",
     );
   });
 
@@ -82,7 +82,7 @@ context("test case", () => {
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
       {
         fixture: "one_passing/test_case.json",
-      }
+      },
     );
 
     cy.visit(`http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}`);
@@ -92,11 +92,11 @@ context("test case", () => {
     cy.getByTestId("test-case-summary-name").should("contain", "should pass");
     cy.getByTestId("test-case-summary-class-name").should(
       "contain",
-      "PassingSpec"
+      "PassingSpec",
     );
     cy.getByTestId("test-case-summary-package-name").should(
       "contain",
-      "projektor.example.spock"
+      "projektor.example.spock",
     );
   });
 
@@ -120,11 +120,11 @@ context("test case", () => {
     cy.intercept(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
-      { fixture: "cypress/test_case_side_nav.json" }
+      { fixture: "cypress/test_case_side_nav.json" },
     );
 
     cy.visit(
-      `http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`
+      `http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
     );
 
     const testCaseName = "side nav should link to failed test cases";
@@ -133,7 +133,7 @@ context("test case", () => {
     cy.getByTestId("test-case-summary-name").should("contain", testCaseName);
     cy.getByTestId("test-case-summary-class-name").should(
       "contain",
-      testCaseClassName
+      testCaseClassName,
     );
     cy.getByTestId("test-case-summary-duration").should("contain", "2.63s");
 
@@ -160,16 +160,16 @@ context("test case", () => {
     cy.intercept(
       "GET",
       `run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
-      { fixture: "failed_test_case_2.json" }
+      { fixture: "failed_test_case_2.json" },
     );
 
     cy.visit(
-      `http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`
+      `http://localhost:1234/tests/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}`,
     );
 
     cy.getByTestId("test-case-failure-text").should(
       "contain",
-      "Condition not satisfied"
+      "Condition not satisfied",
     );
   });
 });

@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
-import {getNodeText, render, waitFor} from "@testing-library/react";
+import { getNodeText, render, waitFor } from "@testing-library/react";
 import CodeTextProgressiveRender from "../CodeTextProgressiveRender";
 import { act } from "react-dom/test-utils";
 import _ from "lodash";
@@ -31,7 +31,7 @@ describe("CodeTextProgressiveRender", () => {
         lineCount={lines.length}
         lineHeight={14}
         highlightedLine={2}
-      />
+      />,
     );
 
     expect(queryByTestId(progressBarId)).not.toBeNull();
@@ -113,7 +113,7 @@ describe("CodeTextProgressiveRender", () => {
       jest.runOnlyPendingTimers();
     });
 
-    await waitFor(() => expect(queryByTestId(progressBarId)).toBeNull())
+    await waitFor(() => expect(queryByTestId(progressBarId)).toBeNull());
   });
 
   it("should not render progress bar when only 1 chunk", async () => {
@@ -136,7 +136,7 @@ describe("CodeTextProgressiveRender", () => {
         lineCount={lines.length}
         lineHeight={14}
         highlightedLine={2}
-      />
+      />,
     );
 
     expect(getNodeText(await findByTestId("line-1"))).toBe("line1");

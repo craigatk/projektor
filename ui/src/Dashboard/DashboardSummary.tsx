@@ -115,7 +115,7 @@ const DashboardSummary = ({
                     <CleanLinkText
                       href={createGitHubUrl(
                         gitMetadata,
-                        `/pull/${gitMetadata.pullRequestNumber}`
+                        `/pull/${gitMetadata.pullRequestNumber}`,
                       )}
                       data-testid="dashboard-summary-pull-request-link"
                     >
@@ -134,12 +134,12 @@ const DashboardSummary = ({
                     <CleanLinkText
                       href={createGitHubUrl(
                         gitMetadata,
-                        `/commit/${gitMetadata.commitSha}`
+                        `/commit/${gitMetadata.commitSha}`,
                       )}
                       data-testid="dashboard-summary-commit-sha-link"
                     >
                       {gitMetadata.commitSha.substring(
-                        gitMetadata.commitSha.length - 7
+                        gitMetadata.commitSha.length - 7,
                       )}
                     </CleanLinkText>
                   }

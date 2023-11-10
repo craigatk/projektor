@@ -18,7 +18,7 @@ const TestCasePage = ({
   testCaseIdx,
 }: TestCasePageProps) => {
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
   const [testCase, setTestCase] = React.useState<TestCase>(null);
 

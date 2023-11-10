@@ -15,7 +15,7 @@ describe("Code text line", () => {
         idx={idx}
         highlighted={highlighted}
         handleLineClick={handleLineClick}
-      />
+      />,
     );
 
     fireEvent.click(getByTestId("code-text-line-number-2"));

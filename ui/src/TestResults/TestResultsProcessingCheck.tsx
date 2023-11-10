@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const resultsAreStillProcessing = (
-  processing: TestResultsProcessing
+  processing: TestResultsProcessing,
 ): boolean => {
   return (
     !processing ||
@@ -55,7 +55,7 @@ const TestResultsProcessingCheck = ({
   const [resultsProcessing, setResultsProcessing] =
     React.useState<TestResultsProcessing>(null);
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
 
   const loadTestResultsProcessing = () => {

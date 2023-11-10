@@ -24,20 +24,20 @@ context("test run with attachments", () => {
 
     cy.getByTestId("attachment-file-name-test-attachment.txt").should(
       "contain",
-      "test-attachment.txt"
+      "test-attachment.txt",
     );
     cy.getByTestId("attachment-file-size-test-attachment.txt").should(
       "contain",
-      "30 B"
+      "30 B",
     );
 
     cy.getByTestId("attachment-file-name-test-run-summary.png").should(
       "contain",
-      "test-run-summary.png"
+      "test-run-summary.png",
     );
     cy.getByTestId("attachment-file-size-test-run-summary.png").should(
       "contain",
-      "32.2 kB"
+      "32.2 kB",
     );
 
     cy.getByTestId("attachment-file-name-test-attachment.txt").click();

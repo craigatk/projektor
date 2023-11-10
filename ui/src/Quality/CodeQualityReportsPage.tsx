@@ -12,7 +12,7 @@ interface CodeQualityReportsPageProps extends RouteComponentProps {
 
 const CodeQualityReportsPage = ({ publicId }: CodeQualityReportsPageProps) => {
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
-    LoadingState.Loading
+    LoadingState.Loading,
   );
   const [codeQualityReports, setCodeQualityReports] =
     React.useState<CodeQualityReports>(null);

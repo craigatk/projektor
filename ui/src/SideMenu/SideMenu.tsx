@@ -118,7 +118,7 @@ const SideMenu = ({
             linkTo={repositoryLinkUrlUI(
               gitMetadata.repoName,
               gitMetadata.projectName,
-              null
+              null,
             )}
             icon={<RepositoryIcon />}
             linkText="Repository"

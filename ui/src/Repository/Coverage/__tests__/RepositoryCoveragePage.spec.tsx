@@ -65,14 +65,14 @@ describe("RepositoryCoveragePage", () => {
         <QueryParamProvider reachHistory={globalHistory}>
           <RepositoryCoveragePage orgPart="my-org" repoPart="my-repo" />
         </QueryParamProvider>
-      </LocationProvider>
+      </LocationProvider>,
     );
 
     await findByTestId("repository-coverage-timeline-graph");
   });
 
   it("should display message when no coverage timeline", async () => {
-    const repoName = "my-org/my-repo";
+    const repoName = "my-org/my-no-coverage-repo";
 
     mockAxios
       .onGet(`http://localhost:8080/repo/${repoName}/coverage/timeline`)
@@ -81,9 +81,9 @@ describe("RepositoryCoveragePage", () => {
     const { findByTestId } = render(
       <LocationProvider history={createHistory(createMemorySource("/ui"))}>
         <QueryParamProvider reachHistory={globalHistory}>
-          <RepositoryCoveragePage orgPart="my-org" repoPart="my-repo" />
+          <RepositoryCoveragePage orgPart="my-org" repoPart="my-no-coverage-repo" />
         </QueryParamProvider>
-      </LocationProvider>
+      </LocationProvider>,
     );
 
     await findByTestId("repo-no-coverage");
