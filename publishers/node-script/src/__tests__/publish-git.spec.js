@@ -39,32 +39,32 @@ describe("Node script publishing with Git metadata", () => {
       null,
       40,
       40,
-      ["main", "master"]
+      ["main", "master"],
     );
 
     expect(mockAxios.history.post.length).toBe(1);
 
     const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("groupedResults")
+      postRequest.url.includes("groupedResults"),
     );
 
     const parsedRequestBody = JSON.parse(resultsPostRequest.data);
 
     expect(parsedRequestBody.groupedTestSuites.length).toBe(1);
     expect(parsedRequestBody.groupedTestSuites[0].testSuitesBlob).toContain(
-      "resultsDir1-results1"
+      "resultsDir1-results1",
     );
     expect(parsedRequestBody.groupedTestSuites[0].testSuitesBlob).toContain(
-      "resultsDir1-results2"
+      "resultsDir1-results2",
     );
 
     expect(parsedRequestBody.metadata.git.repoName).toEqual(
-      "projektor/projektor"
+      "projektor/projektor",
     );
     expect(parsedRequestBody.metadata.git.branchName).toEqual("main");
     expect(parsedRequestBody.metadata.git.isMainBranch).toEqual(true);
     expect(parsedRequestBody.metadata.git.commitSha).toEqual(
-      "02fea3d66fab1de935e1ac3adb008a0abb9a61f3"
+      "02fea3d66fab1de935e1ac3adb008a0abb9a61f3",
     );
     expect(parsedRequestBody.metadata.git.projectName).toEqual("my-proj");
   });
@@ -95,24 +95,24 @@ describe("Node script publishing with Git metadata", () => {
       null,
       40,
       40,
-      ["main", "master"]
+      ["main", "master"],
     );
 
     expect(mockAxios.history.post.length).toBe(1);
 
     const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("groupedResults")
+      postRequest.url.includes("groupedResults"),
     );
 
     const parsedRequestBody = JSON.parse(resultsPostRequest.data);
 
     expect(parsedRequestBody.metadata.git.repoName).toEqual(
-      "projektor/projektor"
+      "projektor/projektor",
     );
     expect(parsedRequestBody.metadata.git.branchName).toEqual("feature/branch");
     expect(parsedRequestBody.metadata.git.isMainBranch).toEqual(false);
     expect(parsedRequestBody.metadata.git.commitSha).toEqual(
-      "02fea3d66fab1de935e1ac3adb008a0abb9a61f3"
+      "02fea3d66fab1de935e1ac3adb008a0abb9a61f3",
     );
     expect(parsedRequestBody.metadata.git.pullRequestNumber).toEqual(23);
     expect(parsedRequestBody.metadata.git.projectName).toEqual("my-proj");
@@ -144,13 +144,13 @@ describe("Node script publishing with Git metadata", () => {
       null,
       40,
       40,
-      ["main", "develop"]
+      ["main", "develop"],
     );
 
     expect(mockAxios.history.post.length).toBe(1);
 
     const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("groupedResults")
+      postRequest.url.includes("groupedResults"),
     );
 
     const parsedRequestBody = JSON.parse(resultsPostRequest.data);

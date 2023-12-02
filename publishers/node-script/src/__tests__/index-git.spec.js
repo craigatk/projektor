@@ -29,7 +29,7 @@ describe("node script index - Git source control values", () => {
       },
       { VELA_BUILD_REF: "refs/heads/my-branch" },
       null,
-      "src/__tests__/does_not_exist.json"
+      "src/__tests__/does_not_exist.json",
     );
     expect(mockAxios.history.post.length).toBe(1);
 
@@ -54,7 +54,7 @@ describe("node script index - Git source control values", () => {
       },
       { VELA_PULL_REQUEST_SOURCE: "my-branch" },
       null,
-      "src/__tests__/does_not_exist.json"
+      "src/__tests__/does_not_exist.json",
     );
     expect(mockAxios.history.post.length).toBe(1);
 
@@ -84,7 +84,7 @@ describe("node script index - Git source control values", () => {
         DRONE_PULL_REQUEST: "42",
       },
       null,
-      "src/__tests__/does_not_exist.json"
+      "src/__tests__/does_not_exist.json",
     );
     expect(mockAxios.history.post.length).toBe(1);
 
@@ -112,7 +112,7 @@ describe("node script index - Git source control values", () => {
       },
       { VELA_BUILD_PULL_REQUEST: "42" },
       null,
-      "src/__tests__/does_not_exist.json"
+      "src/__tests__/does_not_exist.json",
     );
     expect(mockAxios.history.post.length).toBe(1);
 
@@ -138,7 +138,7 @@ describe("node script index - Git source control values", () => {
       },
       { VELA_BUILD_PULL_REQUEST: "42", VELA_BUILD_NUMBER: "22" },
       null,
-      "src/__tests__/does_not_exist.json"
+      "src/__tests__/does_not_exist.json",
     );
     expect(mockAxios.history.post.length).toBe(1);
 
@@ -163,7 +163,7 @@ describe("node script index - Git source control values", () => {
       },
       { VELA_BUILD_PULL_REQUEST: "42", VELA_BUILD_NUMBER: "22" },
       null,
-      "src/__tests__/does_not_exist.json"
+      "src/__tests__/does_not_exist.json",
     );
     expect(mockAxios.history.post.length).toBe(1);
 

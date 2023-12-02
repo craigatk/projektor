@@ -7,7 +7,7 @@ const sendAttachment = (
   publishToken,
   attachmentContents,
   attachmentFileName,
-  attachmentMaxSizeMB
+  attachmentMaxSizeMB,
 ) => {
   const headers = {};
 
@@ -36,7 +36,7 @@ const collectAndSendAttachments = (
   publishToken,
   attachmentFileGlobs,
   publicId,
-  attachmentMaxSizeMB
+  attachmentMaxSizeMB,
 ) => {
   if (attachmentFileGlobs && attachmentFileGlobs.length > 0) {
     const attachments = collectFileContents(attachmentFileGlobs);
@@ -44,7 +44,7 @@ const collectAndSendAttachments = (
 
     if (attachmentsCount) {
       console.log(
-        `Sending ${attachmentsCount} attachments to Projektor server`
+        `Sending ${attachmentsCount} attachments to Projektor server`,
       );
       attachments.forEach((attachment) =>
         sendAttachment(
@@ -53,16 +53,16 @@ const collectAndSendAttachments = (
           publishToken,
           attachment.contents,
           attachment.name,
-          attachmentMaxSizeMB
+          attachmentMaxSizeMB,
         ).catch((e) => {
           console.error(
             `Error sending attachment ${attachment.name} to Projektor server ${serverUrl}`,
-            e.message
+            e.message,
           );
-        })
+        }),
       );
       console.log(
-        `Finished sending attachments ${attachmentsCount} to Projektor`
+        `Finished sending attachments ${attachmentsCount} to Projektor`,
       );
     }
   }

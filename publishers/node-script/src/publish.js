@@ -13,7 +13,7 @@ const collectResults = (resultsFileGlobs) => {
 
   if (resultsFilePaths.length > 0) {
     console.log(
-      `Found ${resultsFilePaths.length} test results file(s) in ${resultsFileGlobs}`
+      `Found ${resultsFilePaths.length} test results file(s) in ${resultsFileGlobs}`,
     );
 
     resultsFilePaths.forEach((filePath) => {
@@ -69,7 +69,7 @@ const sendResults = async (
   group,
   compressionEnabled,
   resultsMaxSizeMB,
-  gitMainBranchNames
+  gitMainBranchNames,
 ) => {
   const headers = {};
 
@@ -129,7 +129,7 @@ const sendResults = async (
     compressionEnabled
       ? await gzip(JSON.stringify(groupedResults))
       : groupedResults,
-    resultsPostConfig
+    resultsPostConfig,
   );
 
   return resp.data;
@@ -138,7 +138,7 @@ const sendResults = async (
 const createResultsLogMessage = (
   resultsFileGlobs,
   coverageFileGlobs,
-  serverUrl
+  serverUrl,
 ) => {
   let message = `Gathering results from ${resultsFileGlobs}`;
 
@@ -170,17 +170,18 @@ const collectAndSendResults = async (
   baseDirectoryPath,
   resultsMaxSizeMB,
   attachmentMaxSizeMB,
-  gitMainBranchNames
+  gitMainBranchNames,
+  verbose,
 ) => {
   console.log(
-    createResultsLogMessage(resultsFileGlobs, coverageFileGlobs, serverUrl)
+    createResultsLogMessage(resultsFileGlobs, coverageFileGlobs, serverUrl),
   );
 
   const resultsBlob = collectResults(resultsFileGlobs);
   const performanceResults = collectPerformanceResults(performanceFileGlobs);
   const coverageFilePayloads = collectCoverage(
     coverageFileGlobs,
-    baseDirectoryPath
+    baseDirectoryPath,
   );
   const codeQualityFilePayloads =
     collectCodeQualityReports(codeQualityFileGlobs);
@@ -209,7 +210,7 @@ const collectAndSendResults = async (
         group,
         compressionEnabled,
         resultsMaxSizeMB,
-        gitMainBranchNames
+        gitMainBranchNames,
       );
 
       const publicId = resultsResponseData.id;
@@ -221,7 +222,7 @@ const collectAndSendResults = async (
         publishToken,
         attachmentFileGlobs,
         publicId,
-        attachmentMaxSizeMB
+        attachmentMaxSizeMB,
       );
 
       return {
@@ -235,8 +236,13 @@ const collectAndSendResults = async (
     } catch (e) {
       console.error(
         `Error publishing results to Projektor server ${serverUrl}`,
-        e.message
+        e.message,
       );
+
+      if (verbose) {
+        console.error("Publishing error stack trace", e.stack);
+      }
+
       if (e.response && e.response.data) {
         console.error("Error from server", e.response.data.error_message);
       }

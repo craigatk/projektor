@@ -31,13 +31,13 @@ describe("Node script publishing with performance results", () => {
       "projektor/projektor",
       "main",
       "my-proj",
-      true
+      true,
     );
 
     expect(mockAxios.history.post.length).toBe(1);
 
     const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("groupedResults")
+      postRequest.url.includes("groupedResults"),
     );
 
     const parsedRequestBody = JSON.parse(resultsPostRequest.data);
@@ -46,12 +46,12 @@ describe("Node script publishing with performance results", () => {
     expect(parsedRequestBody.performanceResults.length).toBe(2);
 
     const file1 = parsedRequestBody.performanceResults.find(
-      (file) => file.name === "perf-test-1.json"
+      (file) => file.name === "perf-test-1.json",
     );
     expect(file1.resultsBlob).toBe('{"name":"perf-test-1"}');
 
     const file2 = parsedRequestBody.performanceResults.find(
-      (file) => file.name === "perf-test-2.json"
+      (file) => file.name === "perf-test-2.json",
     );
     expect(file2.resultsBlob).toBe('{"name":"perf-test-2"}');
   });
@@ -75,13 +75,13 @@ describe("Node script publishing with performance results", () => {
       "projektor/projektor",
       "main",
       "my-proj",
-      true
+      true,
     );
 
     expect(mockAxios.history.post.length).toBe(1);
 
     const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("groupedResults")
+      postRequest.url.includes("groupedResults"),
     );
 
     const parsedRequestBody = JSON.parse(resultsPostRequest.data);
@@ -89,10 +89,10 @@ describe("Node script publishing with performance results", () => {
 
     expect(parsedRequestBody.performanceResults.length).toBe(1);
     expect(parsedRequestBody.performanceResults[0].name).toBe(
-      "perf-test-1.json"
+      "perf-test-1.json",
     );
     expect(parsedRequestBody.performanceResults[0].resultsBlob).toBe(
-      '{"name":"perf-test-1"}'
+      '{"name":"perf-test-1"}',
     );
   });
 });

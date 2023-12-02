@@ -36,13 +36,13 @@ describe("publish with attachments", () => {
       serverUrl,
       publishToken,
       [fileGlob],
-      [attachmentGlob]
+      [attachmentGlob],
     );
 
     expect(mockAxios.history.post.length).toBe(3);
 
     const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("groupedResults")
+      postRequest.url.includes("groupedResults"),
     );
     expect(resultsPostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(publishToken);
 
@@ -51,17 +51,17 @@ describe("publish with attachments", () => {
     expect(postData).toContain("resultsDir1-results2");
 
     const attachment1PostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("attachments/attachment1.txt")
+      postRequest.url.includes("attachments/attachment1.txt"),
     );
     expect(attachment1PostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(
-      publishToken
+      publishToken,
     );
 
     const attachment2PostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("attachments/attachment2.txt")
+      postRequest.url.includes("attachments/attachment2.txt"),
     );
     expect(attachment2PostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(
-      publishToken
+      publishToken,
     );
   });
 
@@ -76,13 +76,13 @@ describe("publish with attachments", () => {
 
     mockAxios
       .onPost(
-        "http://localhost:8080/run/DEF567/attachments/attachmentNested1.txt"
+        "http://localhost:8080/run/DEF567/attachments/attachmentNested1.txt",
       )
       .reply(200);
 
     mockAxios
       .onPost(
-        "http://localhost:8080/run/DEF567/attachments/attachmentNested2.txt"
+        "http://localhost:8080/run/DEF567/attachments/attachmentNested2.txt",
       )
       .reply(200);
 
@@ -91,12 +91,12 @@ describe("publish with attachments", () => {
     expect(mockAxios.history.post.length).toBe(3);
 
     const attachment1PostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("attachments/attachmentNested1.txt")
+      postRequest.url.includes("attachments/attachmentNested1.txt"),
     );
     expect(attachment1PostRequest).not.toBeNull();
 
     const attachment2PostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("attachments/attachmentNested2.txt")
+      postRequest.url.includes("attachments/attachmentNested2.txt"),
     );
     expect(attachment2PostRequest).not.toBeNull();
   });
@@ -112,7 +112,7 @@ describe("publish with attachments", () => {
 
     mockAxios
       .onPost(
-        "http://localhost:8080/run/FAIL123/attachments/attachmentNested1.txt"
+        "http://localhost:8080/run/FAIL123/attachments/attachmentNested1.txt",
       )
       .reply(400, null);
 
@@ -121,7 +121,7 @@ describe("publish with attachments", () => {
     expect(mockAxios.history.post.length).toBe(3);
 
     const attachment1PostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("attachments/attachmentNested1.txt")
+      postRequest.url.includes("attachments/attachmentNested1.txt"),
     );
     expect(attachment1PostRequest).not.toBeNull();
   });

@@ -29,13 +29,13 @@ describe("node script index - performance results", () => {
       { performance, serverUrl, compressionEnabled },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(mockAxios.history.post.length).toBe(1);
 
     const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("groupedResults")
+      postRequest.url.includes("groupedResults"),
     );
 
     const parsedRequestBody = JSON.parse(resultsPostRequest.data.toString());
@@ -43,12 +43,12 @@ describe("node script index - performance results", () => {
 
     expect(parsedRequestBody.performanceResults.length).toBe(2);
     const file1 = parsedRequestBody.performanceResults.find(
-      (file) => file.name === "perf-test-1.json"
+      (file) => file.name === "perf-test-1.json",
     );
     expect(file1.resultsBlob).toBe('{"name":"perf-test-1"}');
 
     const file2 = parsedRequestBody.performanceResults.find(
-      (file) => file.name === "perf-test-2.json"
+      (file) => file.name === "perf-test-2.json",
     );
     expect(file2.resultsBlob).toBe('{"name":"perf-test-2"}');
   });
@@ -62,13 +62,13 @@ describe("node script index - performance results", () => {
       { performance, serverUrl, compressionEnabled },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(mockAxios.history.post.length).toBe(0);
 
     expect(consoleLog).toHaveBeenCalledWith(
-      "No performance results files found in locations does_not_exist/*.json"
+      "No performance results files found in locations does_not_exist/*.json",
     );
   });
 });

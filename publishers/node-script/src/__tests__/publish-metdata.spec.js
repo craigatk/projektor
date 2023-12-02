@@ -36,13 +36,13 @@ describe("Node script publishing with results metadata", () => {
       42,
       "my-proj",
       isCI,
-      "MyGroup"
+      "MyGroup",
     );
 
     expect(mockAxios.history.post.length).toBe(1);
 
     const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("groupedResults")
+      postRequest.url.includes("groupedResults"),
     );
 
     const parsedRequestBody = JSON.parse(resultsPostRequest.data);

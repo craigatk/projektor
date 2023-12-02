@@ -34,7 +34,7 @@ describe("publish with coverage", () => {
     expect(mockAxios.history.post.length).toBe(1);
 
     const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("groupedResults")
+      postRequest.url.includes("groupedResults"),
     );
     expect(resultsPostRequest.headers["X-PROJEKTOR-TOKEN"]).toBe(publishToken);
 
@@ -45,7 +45,7 @@ describe("publish with coverage", () => {
     const resultsPostBody = JSON.parse(resultsPostData);
     expect(resultsPostBody.coverageFiles.length).toBe(1);
     expect(resultsPostBody.coverageFiles[0].reportContents).toContain(
-      "<coverage"
+      "<coverage",
     );
   });
 
@@ -76,18 +76,18 @@ describe("publish with coverage", () => {
       null,
       null,
       false,
-      "base/dir"
+      "base/dir",
     );
 
     const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("groupedResults")
+      postRequest.url.includes("groupedResults"),
     );
     const resultsPostData = resultsPostRequest.data;
     const resultsPostBody = JSON.parse(resultsPostData);
 
     expect(resultsPostBody.coverageFiles.length).toBe(1);
     expect(resultsPostBody.coverageFiles[0].baseDirectoryPath).toEqual(
-      "base/dir"
+      "base/dir",
     );
   });
 
@@ -119,11 +119,11 @@ describe("publish with coverage", () => {
       null,
       null,
       false,
-      null
+      null,
     );
 
     const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("groupedResults")
+      postRequest.url.includes("groupedResults"),
     );
     const resultsPostData = resultsPostRequest.data;
     const resultsPostBody = JSON.parse(resultsPostData);
@@ -131,11 +131,11 @@ describe("publish with coverage", () => {
     expect(resultsPostBody.coverageFiles.length).toBe(2);
 
     expect(consoleLog).toHaveBeenCalledWith(
-      "Gathering results from src/__tests__/resultsDir1/*.xml and coverage from src/__tests__/coverageDir1/*.xml,src/__tests__/coverageDir2/*.xml to send to Projektor server http://localhost:8080"
+      "Gathering results from src/__tests__/resultsDir1/*.xml and coverage from src/__tests__/coverageDir1/*.xml,src/__tests__/coverageDir2/*.xml to send to Projektor server http://localhost:8080",
     );
 
     expect(consoleLog).toHaveBeenCalledWith(
-      "Found 2 coverage file(s) in src/__tests__/coverageDir1/*.xml,src/__tests__/coverageDir2/*.xml"
+      "Found 2 coverage file(s) in src/__tests__/coverageDir1/*.xml,src/__tests__/coverageDir2/*.xml",
     );
   });
 });

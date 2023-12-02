@@ -25,13 +25,13 @@ describe("node script index - coverage reports", () => {
       { coverage, serverUrl, compressionEnabled: false },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(mockAxios.history.post.length).toBe(1);
 
     const resultsPostRequest = mockAxios.history.post.find((postRequest) =>
-      postRequest.url.includes("groupedResults")
+      postRequest.url.includes("groupedResults"),
     );
 
     const resultsPostData = resultsPostRequest.data;
@@ -39,7 +39,7 @@ describe("node script index - coverage reports", () => {
     const resultsPostBody = JSON.parse(resultsPostData);
     expect(resultsPostBody.coverageFiles.length).toBe(1);
     expect(resultsPostBody.coverageFiles[0].reportContents).toContain(
-      "<coverage"
+      "<coverage",
     );
   });
 });

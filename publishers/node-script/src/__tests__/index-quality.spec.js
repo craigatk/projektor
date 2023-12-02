@@ -30,7 +30,7 @@ describe("node script index - code quality reports", () => {
       { resultsFileGlobs, codeQuality, serverUrl },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(mockAxios.history.post.length).toBe(1);
@@ -66,7 +66,7 @@ describe("node script index - code quality reports", () => {
       { resultsFileGlobs, codeQuality, serverUrl },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(mockAxios.history.post.length).toBe(1);
@@ -106,7 +106,7 @@ describe("node script index - code quality reports", () => {
       { resultsFileGlobs, codeQuality, serverUrl },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(mockAxios.history.post.length).toBe(1);
