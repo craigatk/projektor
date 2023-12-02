@@ -30,7 +30,7 @@ describe("print link", () => {
     expect(returnedReportUrl).toBe(reportUrl);
 
     expect(consoleLog).toHaveBeenLastCalledWith(
-      "View Projektor results at http://localhost:8080/tests/REPORT123"
+      "View Projektor results at http://localhost:8080/tests/REPORT123",
     );
   });
 
@@ -40,7 +40,7 @@ describe("print link", () => {
     expect(returnedReportUrl).toBeNull();
 
     expect(consoleLog).toHaveBeenLastCalledWith(
-      `No Projektor results file found with name ${resultsFileName}`
+      `No Projektor results file found with name ${resultsFileName}`,
     );
   });
 });

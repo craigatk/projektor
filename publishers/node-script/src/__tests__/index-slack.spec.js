@@ -34,7 +34,7 @@ describe("index Slack message file", () => {
       { resultsFileGlobs, serverUrl, projectName, writeSlackMessageFile },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(fs.existsSync(slackMessageFileName)).toBeTruthy();
@@ -44,7 +44,7 @@ describe("index Slack message file", () => {
       .toString();
     const parsedMessage = JSON.parse(messageFileContents);
     expect(parsedMessage.attachments[0].pretext).toBe(
-      `Tests passed in project ${projectName}`
+      `Tests passed in project ${projectName}`,
     );
   });
 
@@ -69,7 +69,7 @@ describe("index Slack message file", () => {
       },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(fs.existsSync(slackMessageFileName)).toBeTruthy();
@@ -79,7 +79,7 @@ describe("index Slack message file", () => {
       .toString();
     const parsedMessage = JSON.parse(messageFileContents);
     expect(parsedMessage.attachments[0].pretext).toBe(
-      `Tests passed in project ${slackProjectName}`
+      `Tests passed in project ${slackProjectName}`,
     );
   });
 
@@ -102,7 +102,7 @@ describe("index Slack message file", () => {
       },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(fs.existsSync(slackMessageFileName)).toBeTruthy();
@@ -112,7 +112,7 @@ describe("index Slack message file", () => {
       .toString();
     const parsedMessage = JSON.parse(messageFileContents);
     expect(parsedMessage.attachments[0].pretext).toBe(
-      `Tests passed in project ${slackProjectName}`
+      `Tests passed in project ${slackProjectName}`,
     );
   });
 
@@ -135,7 +135,7 @@ describe("index Slack message file", () => {
       },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(fs.existsSync(slackMessageFileName)).toBeTruthy();
@@ -147,7 +147,7 @@ describe("index Slack message file", () => {
     const message = parsedMessage.attachments[0];
     expect(message.pretext).toBe("No test results found");
     expect(message.text).toBe(
-      `No test results found to publish in project ${slackProjectName}`
+      `No test results found to publish in project ${slackProjectName}`,
     );
   });
 });

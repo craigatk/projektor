@@ -25,11 +25,11 @@ describe("slack messages", () => {
       reportUrl,
       projectName,
       testsFailed,
-      currentTimestamp
+      currentTimestamp,
     );
 
     expect(messageJson).toEqual(
-      '{"attachments":[{"fallback":"Projektor test report","color":"#FF0000","pretext":"Tests failed in project my-project","title":"Projektor test report","title_link":"http://localhost/tests/ABC12345","text":"See the Projektor test report for details on the failing tests","footer":"Projektor","ts":1596674144043}]}'
+      '{"attachments":[{"fallback":"Projektor test report","color":"#FF0000","pretext":"Tests failed in project my-project","title":"Projektor test report","title_link":"http://localhost/tests/ABC12345","text":"See the Projektor test report for details on the failing tests","footer":"Projektor","ts":1596674144043}]}',
     );
   });
 
@@ -43,11 +43,11 @@ describe("slack messages", () => {
       reportUrl,
       projectName,
       testsFailed,
-      currentTimestamp
+      currentTimestamp,
     );
 
     expect(messageJson).toEqual(
-      '{"attachments":[{"fallback":"Projektor test report","color":"#00FF00","pretext":"Tests passed in project my-project","title":"Projektor test report","title_link":"http://localhost/tests/ABC12345","text":"See the Projektor test report for details on the tests","footer":"Projektor","ts":1596674144043}]}'
+      '{"attachments":[{"fallback":"Projektor test report","color":"#00FF00","pretext":"Tests passed in project my-project","title":"Projektor test report","title_link":"http://localhost/tests/ABC12345","text":"See the Projektor test report for details on the tests","footer":"Projektor","ts":1596674144043}]}',
     );
   });
 
@@ -61,11 +61,11 @@ describe("slack messages", () => {
       reportUrl,
       projectName,
       testsFailed,
-      currentTimestamp
+      currentTimestamp,
     );
 
     expect(messageJson).toEqual(
-      '{"attachments":[{"fallback":"Projektor test report","color":"#00FF00","pretext":"Tests passed in project ","title":"Projektor test report","title_link":"http://localhost/tests/ABC12345","text":"See the Projektor test report for details on the tests","footer":"Projektor","ts":1596674144043}]}'
+      '{"attachments":[{"fallback":"Projektor test report","color":"#00FF00","pretext":"Tests passed in project ","title":"Projektor test report","title_link":"http://localhost/tests/ABC12345","text":"See the Projektor test report for details on the tests","footer":"Projektor","ts":1596674144043}]}',
     );
   });
 
@@ -78,7 +78,7 @@ describe("slack messages", () => {
       reportUrl,
       slackMessageFileName,
       projectName,
-      testsFailed
+      testsFailed,
     );
 
     expect(fs.existsSync(slackMessageFileName)).toBeTruthy();
@@ -90,11 +90,11 @@ describe("slack messages", () => {
 
     const messageJson = createNoResultsSlackMessageJson(
       projectName,
-      currentTimestamp
+      currentTimestamp,
     );
 
     expect(messageJson).toEqual(
-      '{"attachments":[{"fallback":"Projektor test report","color":"#FFFF00","pretext":"No test results found","title":"Projektor test report","text":"No test results found to publish in project my-project","footer":"Projektor","ts":1596674144044}]}'
+      '{"attachments":[{"fallback":"Projektor test report","color":"#FFFF00","pretext":"No test results found","title":"Projektor test report","text":"No test results found to publish in project my-project","footer":"Projektor","ts":1596674144044}]}',
     );
   });
 

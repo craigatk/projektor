@@ -101,11 +101,11 @@ describe("Projektor publisher", () => {
     expect(postData).toContain("resultsDir1-results2");
 
     expect(consoleLog).toHaveBeenCalledWith(
-      "Gathering results from src/__tests__/resultsDir1/*.xml to send to Projektor server http://localhost:8080"
+      "Gathering results from src/__tests__/resultsDir1/*.xml to send to Projektor server http://localhost:8080",
     );
 
     expect(consoleLog).toHaveBeenCalledWith(
-      "Found 2 test results file(s) in src/__tests__/resultsDir1/*.xml"
+      "Found 2 test results file(s) in src/__tests__/resultsDir1/*.xml",
     );
   });
 
@@ -171,19 +171,18 @@ describe("Projektor publisher", () => {
       false,
       null,
       true,
-      null
+      null,
     );
 
-    const uncompressedPostData = await extractUncompressedResultsPostData(
-      mockAxios
-    );
+    const uncompressedPostData =
+      await extractUncompressedResultsPostData(mockAxios);
     const parsedResultsPostData = JSON.parse(uncompressedPostData);
 
     expect(parsedResultsPostData.groupedTestSuites[0].testSuitesBlob).toContain(
-      "resultsDir1-results1"
+      "resultsDir1-results1",
     );
     expect(parsedResultsPostData.metadata.git.repoName).toEqual(
-      "my-org/my-repo"
+      "my-org/my-repo",
     );
     expect(parsedResultsPostData.metadata.git.branchName).toEqual("my-branch");
   });
@@ -211,7 +210,7 @@ describe("Projektor publisher", () => {
       null,
       false,
       null,
-      false
+      false,
     );
 
     expect(mockAxios.history.post.length).toBe(1);
@@ -220,10 +219,10 @@ describe("Projektor publisher", () => {
     const parsedResultsPostData = JSON.parse(postData);
 
     expect(parsedResultsPostData.groupedTestSuites[0].testSuitesBlob).toContain(
-      "resultsDir1-results1"
+      "resultsDir1-results1",
     );
     expect(parsedResultsPostData.metadata.git.repoName).toEqual(
-      "my-org/my-repo"
+      "my-org/my-repo",
     );
     expect(parsedResultsPostData.metadata.git.branchName).toEqual("my-branch");
   });
@@ -253,7 +252,7 @@ describe("Projektor publisher", () => {
       null,
       false,
       null,
-      20
+      20,
     );
 
     expect(mockAxios.history.post.length).toBe(1);

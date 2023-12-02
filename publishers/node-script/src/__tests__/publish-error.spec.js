@@ -28,12 +28,12 @@ describe("Publishing invalid results", () => {
 
     expect(consoleError).toHaveBeenCalledWith(
       "Error publishing results to Projektor server http://localhost:8080",
-      "Request failed with status code 400"
+      "Request failed with status code 400",
     );
 
     expect(consoleError).toHaveBeenCalledWith(
       "Error from server",
-      "Failed to parse"
+      "Failed to parse",
     );
   });
 });

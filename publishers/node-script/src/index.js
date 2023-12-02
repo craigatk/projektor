@@ -37,6 +37,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
   let attachmentMaxSizeMB;
   let groupResults;
   let gitMainBranchNames;
+  let verbose;
 
   const configFilePath = args.configFile || defaultConfigFilePath;
 
@@ -65,6 +66,8 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     attachmentMaxSizeMB = config.attachmentMaxSizeMB;
     groupResults = config.groupResults;
     gitMainBranchNames = config.gitMainBranchNames;
+
+    verbose = config.verbose;
   } else {
     serverUrl = args.serverUrl;
     resultsFileGlobs = args.resultsFileGlobs;
@@ -109,6 +112,12 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
         ? args.gitMainBranchNames
         : args.gitMainBranchNames.split(",");
     }
+
+    verbose = !!args.verbose;
+  }
+
+  if (verbose) {
+    console.log("Projektor publishing with verbose logging enabled.");
   }
 
   if (_.isNil(compressionEnabled)) {
@@ -184,7 +193,8 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       baseDirectoryPath,
       resultsMaxSizeMB,
       attachmentMaxSizeMB,
-      gitMainBranchNames
+      gitMainBranchNames,
+      verbose,
     );
 
     const hasTestResults = resultsBlob;
@@ -195,7 +205,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
 
     if (resultsFileGlobs && resultsFileGlobs.length > 0 && !hasTestResults) {
       console.log(
-        `No test results files found in locations ${resultsFileGlobs}`
+        `No test results files found in locations ${resultsFileGlobs}`,
       );
     }
 
@@ -205,7 +215,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
       !hasPerformanceResults
     ) {
       console.log(
-        `No performance results files found in locations ${performanceFileGlobs}`
+        `No performance results files found in locations ${performanceFileGlobs}`,
       );
     }
 
@@ -226,12 +236,12 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
           reportUrl,
           messageFileName,
           messageProjectName,
-          containsTestFailure(resultsBlob)
+          containsTestFailure(resultsBlob),
         );
       } else {
         writeNoResultsSlackMessageFileToDisk(
           messageFileName,
-          messageProjectName
+          messageProjectName,
         );
       }
     }
@@ -242,7 +252,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
 
     if (exitWithFailure && containsTestFailure(resultsBlob)) {
       console.log(
-        "Projektor exiting with non-zero exit code due to test failure"
+        "Projektor exiting with non-zero exit code due to test failure",
       );
       process.exitCode = 1;
     }
@@ -250,7 +260,7 @@ async function run(args, env, publishToken, defaultConfigFilePath) {
     return { reportUrl, publicId };
   } else {
     console.error(
-      `Results files not configured, please specify them either on the command line or in the ${configFilePath} config file`
+      `Results files not configured, please specify them either on the command line or in the ${configFilePath} config file`,
     );
 
     return { reportUrl: null, publicId: null };

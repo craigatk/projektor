@@ -32,7 +32,7 @@ describe("node script index", () => {
       {},
       {},
       null,
-      "src/__tests__/projektor.test.json"
+      "src/__tests__/projektor.test.json",
     );
 
     expect(reportUrl).toEqual("http://localhost:8080/tests/ABC123");
@@ -58,7 +58,7 @@ describe("node script index", () => {
     const { reportUrl, publicId } = await runCLI(
       ["--configFile=src/__tests__/projektor.test.json"],
       null,
-      "projektor.fake.json"
+      "projektor.fake.json",
     );
 
     expect(reportUrl).toEqual("http://localhost:8080/tests/DEF345");
@@ -76,11 +76,11 @@ describe("node script index", () => {
     await runCLI(
       ["--configFile=src/__tests__/projektor.missing.results.json"],
       null,
-      "projektor.fake.json"
+      "projektor.fake.json",
     );
 
     expect(consoleError).toHaveBeenLastCalledWith(
-      expect.stringContaining("Results files not configured")
+      expect.stringContaining("Results files not configured"),
     );
   });
 
@@ -105,7 +105,7 @@ describe("node script index", () => {
       { resultsFileGlobs, attachments, serverUrl },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(mockAxios.history.post.length).toBe(3);
@@ -113,10 +113,10 @@ describe("node script index", () => {
     const postUrls = mockAxios.history.post.map((post) => post.url);
     expect(postUrls).toContain("http://localhost:8080/groupedResults");
     expect(postUrls).toContain(
-      "http://localhost:8080/run/ABC123/attachments/attachment1.txt"
+      "http://localhost:8080/run/ABC123/attachments/attachment1.txt",
     );
     expect(postUrls).toContain(
-      "http://localhost:8080/run/ABC123/attachments/attachment2.txt"
+      "http://localhost:8080/run/ABC123/attachments/attachment2.txt",
     );
   });
 
@@ -144,7 +144,7 @@ describe("node script index", () => {
       { resultsFileGlobs, attachments, serverUrl },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(mockAxios.history.post.length).toBe(4);
@@ -152,13 +152,13 @@ describe("node script index", () => {
     const postUrls = mockAxios.history.post.map((post) => post.url);
     expect(postUrls).toContain("http://localhost:8080/groupedResults");
     expect(postUrls).toContain(
-      "http://localhost:8080/run/ABC123/attachments/attachment1.txt"
+      "http://localhost:8080/run/ABC123/attachments/attachment1.txt",
     );
     expect(postUrls).toContain(
-      "http://localhost:8080/run/ABC123/attachments/attachment2.txt"
+      "http://localhost:8080/run/ABC123/attachments/attachment2.txt",
     );
     expect(postUrls).toContain(
-      "http://localhost:8080/run/ABC123/attachments/attachmentNested1.txt"
+      "http://localhost:8080/run/ABC123/attachments/attachmentNested1.txt",
     );
   });
 
@@ -179,7 +179,7 @@ describe("node script index", () => {
       },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(mockAxios.history.post.length).toBe(1);
@@ -205,7 +205,7 @@ describe("node script index", () => {
       },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(mockAxios.history.post.length).toBe(1);
@@ -223,13 +223,51 @@ describe("node script index", () => {
       { resultsFileGlobs, serverUrl, compressionEnabled },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(mockAxios.history.post.length).toBe(0);
 
     expect(consoleLog).toHaveBeenCalledWith(
-      "No test results files found in locations does_not_exist/*.xml"
+      "No test results files found in locations does_not_exist/*.xml",
+    );
+  });
+
+  it("should log message when verbose mode enabled", async () => {
+    const serverUrl = "http://localhost:8080";
+    const resultsFileGlobs = ["does_not_exist/*.xml"];
+    const compressionEnabled = false;
+
+    await run(
+      { resultsFileGlobs, serverUrl, compressionEnabled, verbose: true },
+      {},
+      null,
+      "projektor.none.json",
+    );
+
+    expect(mockAxios.history.post.length).toBe(0);
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "Projektor publishing with verbose logging enabled.",
+    );
+  });
+
+  it("should not log message when verbose not mode enabled", async () => {
+    const serverUrl = "http://localhost:8080";
+    const resultsFileGlobs = ["does_not_exist/*.xml"];
+    const compressionEnabled = false;
+
+    await run(
+      { resultsFileGlobs, serverUrl, compressionEnabled },
+      {},
+      null,
+      "projektor.none.json",
+    );
+
+    expect(mockAxios.history.post.length).toBe(0);
+
+    expect(consoleLog).not.toHaveBeenCalledWith(
+      "Projektor publishing with verbose logging enabled.",
     );
   });
 });

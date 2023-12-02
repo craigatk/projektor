@@ -35,7 +35,7 @@ describe("node script index exit with failure", () => {
         "src/__tests__/resultsWithFailure/*.xml",
       ],
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(process.exitCode).toBe(1);
@@ -56,7 +56,7 @@ describe("node script index exit with failure", () => {
         "src/__tests__/resultsDir1/*.xml",
       ],
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(process.exitCode).not.toBe(1);
@@ -75,7 +75,7 @@ describe("node script index exit with failure", () => {
       { resultsFileGlobs, failOnPublishError: true, serverUrl },
       {},
       null,
-      "projektor.none.json"
+      "projektor.none.json",
     );
 
     expect(process.exitCode).toBe(1);

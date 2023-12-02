@@ -5,7 +5,7 @@ const collectCoverage = (coverageFileGlobs, baseDirectoryPath) => {
 
   if (coverageFileGlobs) {
     console.log(
-      `Found ${coverageFiles.length} coverage file(s) in ${coverageFileGlobs}`
+      `Found ${coverageFiles.length} coverage file(s) in ${coverageFileGlobs}`,
     );
   }
 
