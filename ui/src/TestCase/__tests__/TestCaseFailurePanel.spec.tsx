@@ -423,6 +423,39 @@ describe("TestCaseFailurePanel", () => {
     );
   });
 
+  it("should show file name when it is present", () => {
+    const testCase: TestCase = {
+      idx: 1,
+      testSuiteIdx: 2,
+      publicId: "12345",
+      name: "Test Case",
+      testSuiteName: "My Test Suite",
+      packageName: "The Tests",
+      className: "",
+      fullName: "Test Case",
+      fileName: "failing-spec.ts",
+      duration: 1.2,
+      passed: false,
+      skipped: false,
+      hasSystemOut: true,
+      hasSystemErr: true,
+      hasSystemOutTestCase: false,
+      hasSystemErrTestCase: false,
+      hasSystemOutTestSuite: true,
+      hasSystemErrTestSuite: true,
+      failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
+    };
+
+    const { queryByTestId } = render(
+      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
+    );
+
+    expect(queryByTestId("test-case-file-name-2-1")).toHaveTextContent(
+      "failing-spec.ts",
+    );
+  });
+
   function createTestCaseWithFailure(failure: TestFailure): TestCase {
     return {
       idx: 1,

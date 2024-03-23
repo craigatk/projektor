@@ -86,6 +86,7 @@ interface TestCase {
   publicId: string;
   name: string;
   testSuiteName: string;
+  fileName?: string;
   packageName: string;
   className: string;
   fullName: string;

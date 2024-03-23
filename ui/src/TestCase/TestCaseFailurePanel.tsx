@@ -30,6 +30,10 @@ const useStyles = makeStyles(() => ({
     userSelect: "text",
     "-webkit-user-select": "text",
   },
+  testCaseFileName: {
+    display: "block",
+    paddingTop: "10px",
+  },
 }));
 
 interface TestCaseFailurePanelProps {
@@ -103,6 +107,14 @@ const TestCaseFailurePanel = ({
             {testCase.packageName || testCase.testSuiteName || ""}.
             {testCase.className} {testCase.name}
           </span>
+          {testCase.fileName && (
+            <span
+              className={classes.testCaseFileName}
+              data-testid={`test-case-file-name-${testCaseIdentifier}`}
+            >
+              {testCase.fileName}
+            </span>
+          )}
         </Typography>
       </AccordionSummary>
       <AccordionDetails className={classes.failureMessage}>
