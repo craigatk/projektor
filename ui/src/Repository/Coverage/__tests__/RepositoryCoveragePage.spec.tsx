@@ -81,7 +81,10 @@ describe("RepositoryCoveragePage", () => {
     const { findByTestId } = render(
       <LocationProvider history={createHistory(createMemorySource("/ui"))}>
         <QueryParamProvider reachHistory={globalHistory}>
-          <RepositoryCoveragePage orgPart="my-org" repoPart="my-no-coverage-repo" />
+          <RepositoryCoveragePage
+            orgPart="my-org"
+            repoPart="my-no-coverage-repo"
+          />
         </QueryParamProvider>
       </LocationProvider>,
     );
