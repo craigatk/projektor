@@ -22,7 +22,7 @@ context("test suite", () => {
 
     cy.getBreadcrumbPackgeNameLink().should(
       "contain",
-      "projektor.example.spock",
+      "projektor.example.spock2",
     );
 
     cy.getBreadcrumbClassNameLink().should("contain", "FailingSpec");
