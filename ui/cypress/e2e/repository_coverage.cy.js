@@ -2,6 +2,9 @@ describe("repository coverage", () => {
   it("should display repository coverage graph and link to individual test reports", () => {
     const repoName = "cov-org/cov-repo";
 
+    cy.intercept("GET", `repo/${repoName}/coverage/exists`, {
+      fixture: "repository/coverage_exists_true.json",
+    });
     cy.intercept("GET", `repo/${repoName}/coverage/timeline`, {
       fixture: "repository/coverage_timeline.json",
     });
@@ -45,6 +48,9 @@ describe("repository coverage", () => {
       statusCode: 404,
     });
 
+    cy.intercept("GET", `repo/${repoName}/coverage/exists`, {
+      fixture: "repository/coverage_exists_true.json",
+    });
     cy.intercept("GET", `repo/${repoName}/coverage/timeline?branch=ALL`, {
       fixture: "repository/coverage_timeline.json",
     });
@@ -79,6 +85,9 @@ describe("repository coverage", () => {
   it("should display tooltip with coverage data on graph point hover", () => {
     const repoName = "cov-org/cov-repo";
 
+    cy.intercept("GET", `repo/${repoName}/coverage/exists`, {
+      fixture: "repository/coverage_exists_true.json",
+    });
     cy.intercept("GET", `repo/${repoName}/coverage/timeline`, {
       fixture: "repository/coverage_timeline.json",
     });
@@ -132,6 +141,9 @@ describe("repository coverage", () => {
     });
     cy.intercept("GET", `run/${testId}/messages`, { messages: [] });
 
+    cy.intercept("GET", `repo/${repoName}/coverage/exists`, {
+      fixture: "repository/coverage_exists_true.json",
+    });
     cy.intercept("GET", `repo/${repoName}/coverage/timeline`, {
       fixture: "repository/coverage_timeline.json",
     });
@@ -175,6 +187,13 @@ describe("repository coverage", () => {
 
     cy.intercept(
       "GET",
+      `repo/${repoName}/project/${projectName}/coverage/exists`,
+      {
+        fixture: "repository/coverage_exists_true.json",
+      },
+    );
+    cy.intercept(
+      "GET",
       `repo/${repoName}/project/${projectName}/coverage/timeline`,
       { fixture: "repository/coverage_timeline.json" },
     );
@@ -201,6 +220,13 @@ describe("repository coverage", () => {
     const repoName = "cov-org/cov-repo";
     const projectName = "cov-project";
 
+    cy.intercept(
+      "GET",
+      `repo/${repoName}/project/${projectName}/coverage/exists`,
+      {
+        fixture: "repository/coverage_exists_true.json",
+      },
+    );
     cy.intercept(
       "GET",
       `repo/${repoName}/project/${projectName}/coverage/timeline`,

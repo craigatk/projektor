@@ -337,7 +337,24 @@ fun loadCoverageWithProjectName() {
     val currentResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata))
     sendCoverageToServer(currentResultsResponse.id, JacocoXmlLoader().serverApp())
 
-    println("View run coverage and project name at $uiBaseUrl${currentResultsResponse.uri}")
+    println("View run with coverage and project name at $uiBaseUrl${currentResultsResponse.uri}")
+}
+
+fun loadNoCoverageWithProjectName() {
+    val repoName = "projektor/projektor"
+    val branchName = "main"
+    val projectName = "nocoverage"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    gitMetadata.projectName = projectName
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+
+    val currentResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata))
+
+    println("View run with no coverage and project name at $uiBaseUrl${currentResultsResponse.uri}")
 }
 
 fun loadCoverage75WithGit() {

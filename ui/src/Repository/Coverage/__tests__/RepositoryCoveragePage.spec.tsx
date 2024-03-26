@@ -18,6 +18,7 @@ import {
 } from "@reach/router";
 import ResizeObserver from "resize-observer-polyfill";
 import { QueryParamProvider } from "use-query-params";
+import { CoverageExists } from "../../../model/TestRunModel";
 
 window.ResizeObserver = ResizeObserver;
 
@@ -56,6 +57,14 @@ describe("RepositoryCoveragePage", () => {
       ],
     } as RepositoryCoverageTimeline;
 
+    const coverageExists = {
+      exists: true,
+    } as CoverageExists;
+
+    mockAxios
+      .onGet(`http://localhost:8080/repo/${repoName}/coverage/exists`)
+      .reply(200, coverageExists);
+
     mockAxios
       .onGet(`http://localhost:8080/repo/${repoName}/coverage/timeline`)
       .reply(200, timeline);
@@ -71,12 +80,16 @@ describe("RepositoryCoveragePage", () => {
     await findByTestId("repository-coverage-timeline-graph");
   });
 
-  it("should display message when no coverage timeline", async () => {
+  it("should not display coverage section when coverage does not exist for given repo", async () => {
     const repoName = "my-org/my-no-coverage-repo";
 
+    const coverageExists = {
+      exists: false,
+    } as CoverageExists;
+
     mockAxios
-      .onGet(`http://localhost:8080/repo/${repoName}/coverage/timeline`)
-      .reply(200);
+      .onGet(`http://localhost:8080/repo/${repoName}/coverage/exists`)
+      .reply(200, coverageExists);
 
     const { findByTestId } = render(
       <LocationProvider history={createHistory(createMemorySource("/ui"))}>
@@ -89,6 +102,35 @@ describe("RepositoryCoveragePage", () => {
       </LocationProvider>,
     );
 
-    await findByTestId("repo-no-coverage");
+    await findByTestId("repo-page-no-coverage");
+  });
+
+  it("should display message when no coverage timeline for given branch", async () => {
+    const repoName = "my-org/my-no-coverage-branch";
+
+    const coverageExists = {
+      exists: true,
+    } as CoverageExists;
+
+    mockAxios
+      .onGet(`http://localhost:8080/repo/${repoName}/coverage/exists`)
+      .reply(200, coverageExists);
+
+    mockAxios
+      .onGet(`http://localhost:8080/repo/${repoName}/coverage/timeline`)
+      .reply(200);
+
+    const { findByTestId } = render(
+      <LocationProvider history={createHistory(createMemorySource("/ui"))}>
+        <QueryParamProvider reachHistory={globalHistory}>
+          <RepositoryCoveragePage
+            orgPart="my-org"
+            repoPart="my-no-coverage-branch"
+          />
+        </QueryParamProvider>
+      </LocationProvider>,
+    );
+
+    await findByTestId("repo-results-no-coverage");
   });
 });

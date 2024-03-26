@@ -62,6 +62,27 @@ class RepositoryCoverageDatabaseRepository(private val dslContext: DSLContext) :
             if (timelineEntries.isNotEmpty()) RepositoryCoverageTimeline(timelineEntries.map { it.toFullEntry() }) else null
         }
 
+    override suspend fun coverageExists(repoName: String, projectName: String?): Boolean =
+        withContext(Dispatchers.IO) {
+            dslContext.fetchExists(
+                dslContext.select(CODE_COVERAGE_RUN.ID)
+                    .from(GIT_METADATA)
+                    .innerJoin(TEST_RUN).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                    .innerJoin(CODE_COVERAGE_RUN).on(TEST_RUN.PUBLIC_ID.eq(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID))
+                    .innerJoin(CODE_COVERAGE_STATS).on(CODE_COVERAGE_STATS.CODE_COVERAGE_RUN_ID.eq(CODE_COVERAGE_RUN.ID))
+                    .where(
+                        GIT_METADATA.REPO_NAME.eq(repoName)
+                            .let {
+                                if (projectName == null)
+                                    it.and(GIT_METADATA.PROJECT_NAME.isNull)
+                                else
+                                    it.and(GIT_METADATA.PROJECT_NAME.eq(projectName))
+                            }
+                            .and(CODE_COVERAGE_STATS.SCOPE.eq("GROUP"))
+                    )
+            )
+        }
+
     data class ReportTimelineEntry(
         val publicId: String,
         val createdTimestamp: Instant,
