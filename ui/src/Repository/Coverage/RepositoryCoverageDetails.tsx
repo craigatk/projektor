@@ -49,7 +49,7 @@ const RepositoryCoverageDetails = ({
       return (
         <Typography
           align="center"
-          data-testid="repo-no-coverage"
+          data-testid="repo-results-no-coverage"
           className={classes.noCoverage}
         >
           No coverage information available for repository {repoName}

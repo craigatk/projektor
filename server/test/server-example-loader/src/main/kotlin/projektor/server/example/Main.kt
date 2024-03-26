@@ -19,6 +19,7 @@ fun main() {
     loadMultipleCoverageExample()
     loadMultipleCoverageWithPreviousRunExample()
     loadCoverageWithProjectName()
+    loadNoCoverageWithProjectName()
     loadCoverage75WithGit()
     loadCoverage85WithGit()
     loadResultsWithGitButWithoutCoverage()

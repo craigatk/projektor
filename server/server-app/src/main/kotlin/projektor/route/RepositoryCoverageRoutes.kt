@@ -10,6 +10,7 @@ import io.ktor.server.util.getOrFail
 import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageService
 import projektor.repository.coverage.RepositoryCoverageService
+import projektor.server.api.coverage.CoverageExists
 import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.coverage.RepositoryCurrentCoverage
 
@@ -46,6 +47,27 @@ fun Route.repositoryCoverage(
 
         coverageTimeline?.let { call.respond(HttpStatusCode.OK, it) }
             ?: call.respond(HttpStatusCode.NoContent)
+    }
+
+    get("/repo/{orgPart}/{repoPart}/coverage/exists") {
+        val orgPart = call.parameters.getOrFail("orgPart")
+        val repoPart = call.parameters.getOrFail("repoPart")
+        val fullRepoName = "$orgPart/$repoPart"
+
+        val coverageExists = repositoryCoverageService.coverageExists(fullRepoName, null)
+
+        call.respond(HttpStatusCode.OK, CoverageExists(coverageExists))
+    }
+
+    get("/repo/{orgPart}/{repoPart}/project/{projectName}/coverage/exists") {
+        val orgPart = call.parameters.getOrFail("orgPart")
+        val repoPart = call.parameters.getOrFail("repoPart")
+        val projectName = call.parameters.getOrFail("projectName")
+        val fullRepoName = "$orgPart/$repoPart"
+
+        val coverageExists = repositoryCoverageService.coverageExists(fullRepoName, projectName)
+
+        call.respond(HttpStatusCode.OK, CoverageExists(coverageExists))
     }
 
     suspend fun handleCurrentCoverageRequest(

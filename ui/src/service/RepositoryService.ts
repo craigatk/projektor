@@ -6,6 +6,7 @@ import {
   RepositoryPerformanceTimeline,
   RepositoryTimeline,
 } from "../model/RepositoryModel";
+import { CoverageExists } from "../model/TestRunModel";
 
 const fetchRepositoryTimeline = (
   repoName: string,
@@ -33,6 +34,18 @@ const fetchRepositoryCoverageTimeline = (
 
   // @ts-ignore
   return axiosInstance.get<RepositoryCoverageTimeline>(url);
+};
+
+const fetchRepositoryCoverageExists = (
+  repoName: string,
+  projectName?: string,
+): Promise<AxiosResponse<CoverageExists>> => {
+  let url = projectName
+    ? `repo/${repoName}/project/${projectName}/coverage/exists`
+    : `repo/${repoName}/coverage/exists`;
+
+  // @ts-ignore
+  return axiosInstance.get<CoverageExists>(url);
 };
 
 const fetchRepositoryCoverageBadge = (
@@ -76,6 +89,7 @@ const fetchRepositoryPerformanceTimeline = (
 export {
   fetchRepositoryTimeline,
   fetchRepositoryCoverageTimeline,
+  fetchRepositoryCoverageExists,
   fetchRepositoryCoverageBadge,
   fetchRepositoryFlakyTests,
   fetchRepositoryPerformanceTimeline,
