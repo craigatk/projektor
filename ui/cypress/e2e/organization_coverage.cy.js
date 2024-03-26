@@ -9,6 +9,9 @@ context("organization coverage", () => {
       fixture: "organization/organization_coverage.json",
     });
 
+    cy.intercept("GET", `repo/${repoName}/coverage/exists`, {
+      fixture: "repository/coverage_exists_true.json",
+    });
     cy.intercept("GET", `repo/${repoName}/coverage/timeline`, {
       fixture: "repository/coverage_timeline.json",
     });
