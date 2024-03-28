@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "axios": "1.6.2",
-    "glob": "8.1.0",
+    "glob": "10.3.12",
     "lodash": "4.17.21",
     "minimist": "1.2.8",
     "node-gzip": "1.1.2"
