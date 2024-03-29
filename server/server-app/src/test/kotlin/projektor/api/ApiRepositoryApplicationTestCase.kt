@@ -28,7 +28,7 @@ class ApiRepositoryApplicationTestCase : ApplicationTestCase() {
         val runInDifferentRepoPublicId = randomPublicId()
 
         withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/api/repo/$repoName/coverage/current") {
+            handleRequest(HttpMethod.Get, "/api/v1/repo/$repoName/coverage/current") {
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = firstRunPublicId,
@@ -95,7 +95,7 @@ class ApiRepositoryApplicationTestCase : ApplicationTestCase() {
         val runInDifferentRepoPublicId = randomPublicId()
 
         withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/api/repo/$repoName/coverage/current?project=other-project") {
+            handleRequest(HttpMethod.Get, "/api/v1/repo/$repoName/coverage/current?project=other-project") {
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = firstRunPublicId,
@@ -163,7 +163,7 @@ class ApiRepositoryApplicationTestCase : ApplicationTestCase() {
         val runInDifferentRepoPublicId = randomPublicId()
 
         withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/api/repo/$repoName/coverage/current?branch=my-branch") {
+            handleRequest(HttpMethod.Get, "/api/v1/repo/$repoName/coverage/current?branch=my-branch") {
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = firstRunPublicId,
