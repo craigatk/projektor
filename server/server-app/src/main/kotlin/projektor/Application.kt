@@ -196,7 +196,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     val codeQualityReportRepository: CodeQualityReportRepository by inject()
 
     routing {
-        api(repositoryCoverageService)
+        api(organizationCoverageService, repositoryCoverageService)
         attachments(attachmentService, authService)
         badge(coverageBadgeService)
         codeQuality(codeQualityReportRepository)
