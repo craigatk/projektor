@@ -36,7 +36,7 @@ class ApiOrganizationApplicationTestCase : ApplicationTestCase() {
         val anotherRepo = "another-org/repo"
 
         withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/api/org/$orgName/coverage/current") {
+            handleRequest(HttpMethod.Get, "/api/v1/org/$orgName/coverage/current") {
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = olderRunRepo1,

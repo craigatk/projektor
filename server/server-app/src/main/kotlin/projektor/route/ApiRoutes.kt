@@ -13,7 +13,7 @@ fun Route.api(
     organizationCoverageService: OrganizationCoverageService,
     repositoryCoverageService: RepositoryCoverageService,
 ) {
-    get("/api/org/{orgName}/coverage/current") {
+    get("/api/v1/org/{orgName}/coverage/current") {
         val orgName = call.parameters.getOrFail("orgName")
 
         val organizationCoverage = organizationCoverageService.getCoverage(orgName)
@@ -25,7 +25,7 @@ fun Route.api(
         }
     }
 
-    get("/api/repo/{orgPart}/{repoPart}/coverage/current") {
+    get("/api/v1/repo/{orgPart}/{repoPart}/coverage/current") {
         val orgPart = call.parameters.getOrFail("orgPart")
         val repoPart = call.parameters.getOrFail("repoPart")
         val fullRepoName = "$orgPart/$repoPart"
