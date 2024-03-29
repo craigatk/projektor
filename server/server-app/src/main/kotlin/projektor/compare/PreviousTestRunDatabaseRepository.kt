@@ -6,9 +6,11 @@ import org.jooq.DSLContext
 import projektor.database.generated.Tables.CODE_COVERAGE_RUN
 import projektor.database.generated.Tables.GIT_METADATA
 import projektor.database.generated.Tables.TEST_RUN
+import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withBranchName
 import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withBranchType
+import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withProjectName
 import projektor.server.api.PublicId
-import projektor.server.api.repository.BranchType
+import projektor.server.api.repository.BranchSearch
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
@@ -35,12 +37,7 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
                         GIT_METADATA.IS_MAIN_BRANCH.eq(true)
                             .and(TEST_RUN.PUBLIC_ID.ne(publicId.id))
                             .and(GIT_METADATA.REPO_NAME.eq(currentRunInfo.repoName))
-                            .let {
-                                if (currentRunInfo.projectName == null)
-                                    it.and(GIT_METADATA.PROJECT_NAME.isNull)
-                                else
-                                    it.and(GIT_METADATA.PROJECT_NAME.eq(currentRunInfo.projectName))
-                            }
+                            .and(withProjectName(currentRunInfo.projectName))
                             .and(TEST_RUN.CREATED_TIMESTAMP.lessThan(currentRunInfo.createdTimestamp))
                     )
                     .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
@@ -53,7 +50,7 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
             }
         }
 
-    override suspend fun findMostRecentRunWithCoverage(branchType: BranchType, repoName: String, projectName: String?): RecentTestRun? =
+    override suspend fun findMostRecentRunWithCoverage(repoName: String, projectName: String?, branch: BranchSearch?): RecentTestRun? =
         withContext(Dispatchers.IO) {
             val recentTestRun = dslContext.select(TEST_RUN.PUBLIC_ID, TEST_RUN.CREATED_TIMESTAMP)
                 .from(TEST_RUN)
@@ -61,13 +58,9 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
                 .innerJoin(CODE_COVERAGE_RUN).on(TEST_RUN.PUBLIC_ID.eq(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID))
                 .where(
                     GIT_METADATA.REPO_NAME.eq(repoName)
-                        .and(withBranchType(branchType))
-                        .let {
-                            if (projectName == null)
-                                it.and(GIT_METADATA.PROJECT_NAME.isNull)
-                            else
-                                it.and(GIT_METADATA.PROJECT_NAME.eq(projectName))
-                        }
+                        .and(withBranchType(branch?.branchType))
+                        .and(withBranchName(branch?.branchName))
+                        .and(withProjectName(projectName))
                 )
                 .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
                 .limit(1)

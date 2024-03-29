@@ -133,7 +133,7 @@ fun createAppModule(
 
     single { OrganizationCoverageService(get(), get()) }
 
-    single { RepositoryCoverageService(get()) }
+    single { RepositoryCoverageService(get(), get(), get()) }
     single { RepositoryPerformanceService(get()) }
     single { RepositoryTestRunService(get()) }
 

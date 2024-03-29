@@ -7,6 +7,7 @@ import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables.GIT_METADATA
 import projektor.database.generated.Tables.PERFORMANCE_RESULTS
 import projektor.database.generated.Tables.TEST_RUN
+import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withProjectName
 import projektor.server.api.repository.performance.RepositoryPerformanceTestTimelineEntry
 import kotlin.streams.toList
 
@@ -33,12 +34,7 @@ class RepositoryPerformanceDatabaseRepository(private val dslContext: DSLContext
                 .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
                 .where(
                     GIT_METADATA.REPO_NAME.eq(repoName)
-                        .let {
-                            if (projectName == null)
-                                it.and(GIT_METADATA.PROJECT_NAME.isNull)
-                            else
-                                it.and(GIT_METADATA.PROJECT_NAME.eq(projectName))
-                        }
+                        .and(withProjectName(projectName))
                 )
                 .orderBy(TEST_RUN.CREATED_TIMESTAMP.asc())
                 .fetchResultSet()

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.koin.test.inject
 import projektor.DatabaseRepositoryTestCase
 import projektor.incomingresults.randomPublicId
+import projektor.server.api.repository.BranchSearch
 import projektor.server.api.repository.BranchType
 import projektor.server.example.coverage.JacocoXmlLoader
 import projektor.util.randomOrgAndRepo
@@ -133,7 +134,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             null
         )
 
-        val mostRecentTestRun = runBlocking { previousTestRunService.findMostRecentRunWithCoverage(BranchType.MAINLINE, repoName, null) }
+        val mostRecentTestRun = runBlocking { previousTestRunService.findMostRecentRunWithCoverage(repoName, null, BranchSearch(branchType = BranchType.MAINLINE)) }
 
         expectThat(mostRecentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newestMainlineWithCoveragePublicId)
@@ -175,7 +176,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             null
         )
 
-        val mostRecentTestRun = runBlocking { previousTestRunService.findMostRecentRunWithCoverage(BranchType.ALL, repoName, null) }
+        val mostRecentTestRun = runBlocking { previousTestRunService.findMostRecentRunWithCoverage(repoName, null, BranchSearch(branchType = BranchType.ALL)) }
 
         expectThat(mostRecentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newerFeatureBranchWithCoveragePublicId)
@@ -217,7 +218,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             projectName = "other-project"
         )
 
-        val recentTestRun = runBlocking { previousTestRunService.findMostRecentRunWithCoverage(BranchType.MAINLINE, repoName, projectName) }
+        val recentTestRun = runBlocking { previousTestRunService.findMostRecentRunWithCoverage(repoName, projectName, BranchSearch(branchType = BranchType.MAINLINE)) }
         expectThat(recentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newPublicId)
             get { createdTimestamp }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC))
