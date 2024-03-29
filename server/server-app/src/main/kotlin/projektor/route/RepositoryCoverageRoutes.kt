@@ -7,16 +7,12 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.util.getOrFail
-import projektor.compare.PreviousTestRunService
-import projektor.coverage.CoverageService
 import projektor.repository.coverage.RepositoryCoverageService
 import projektor.server.api.coverage.CoverageExists
+import projektor.server.api.repository.BranchSearch
 import projektor.server.api.repository.BranchType
-import projektor.server.api.repository.coverage.RepositoryCurrentCoverage
 
 fun Route.repositoryCoverage(
-    coverageService: CoverageService,
-    previousTestRunService: PreviousTestRunService,
     repositoryCoverageService: RepositoryCoverageService,
 ) {
     fun findBranchType(call: ApplicationCall): BranchType {
@@ -78,17 +74,16 @@ fun Route.repositoryCoverage(
     ) {
         val fullRepoName = "$orgPart/$repoPart"
 
-        val mostRecentTestRun = previousTestRunService.findMostRecentRunWithCoverage(BranchType.MAINLINE, fullRepoName, projectName)
-        val coveredPercentage = mostRecentTestRun?.publicId?.let { publicId -> coverageService.getCoveredLinePercentage(publicId) }
+        val repositoryCurrentCoverage = repositoryCoverageService.fetchRepositoryCurrentCoverage(
+            fullRepoName,
+            projectName,
+            BranchSearch(branchType = BranchType.MAINLINE)
+        )
 
-        if (mostRecentTestRun != null && coveredPercentage != null) {
+        if (repositoryCurrentCoverage != null) {
             call.respond(
                 HttpStatusCode.OK,
-                RepositoryCurrentCoverage(
-                    id = mostRecentTestRun.publicId.id,
-                    coveredPercentage = coveredPercentage,
-                    createdTimestamp = mostRecentTestRun.createdTimestamp
-                )
+                repositoryCurrentCoverage
             )
         } else {
             call.respond(HttpStatusCode.NoContent)

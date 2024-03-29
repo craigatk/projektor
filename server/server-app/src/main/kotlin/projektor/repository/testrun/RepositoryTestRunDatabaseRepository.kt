@@ -119,17 +119,27 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
 
     companion object {
         fun runInCIFromRepo(repoName: String, projectName: String?): Condition =
-            GIT_METADATA.REPO_NAME.eq(repoName).let {
-                if (projectName == null)
-                    it.and(GIT_METADATA.PROJECT_NAME.isNull)
-                else
-                    it.and(GIT_METADATA.PROJECT_NAME.eq(projectName))
-            }.and(RESULTS_METADATA.CI.eq(true))
+            GIT_METADATA.REPO_NAME.eq(repoName)
+                .and(withProjectName(projectName))
+                .and(RESULTS_METADATA.CI.eq(true))
 
-        fun withBranchType(branchType: BranchType): Condition =
+        fun withBranchType(branchType: BranchType?): Condition =
             when (branchType) {
                 BranchType.MAINLINE -> GIT_METADATA.IS_MAIN_BRANCH.isTrue
                 else -> noCondition()
             }
+
+        fun withBranchName(branchName: String?): Condition =
+            if (branchName != null) {
+                GIT_METADATA.BRANCH_NAME.eq(branchName)
+            } else {
+                noCondition()
+            }
+
+        fun withProjectName(projectName: String?): Condition =
+            if (projectName == null)
+                GIT_METADATA.PROJECT_NAME.isNull
+            else
+                GIT_METADATA.PROJECT_NAME.eq(projectName)
     }
 }

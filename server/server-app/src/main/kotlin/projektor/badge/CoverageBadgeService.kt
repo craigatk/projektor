@@ -4,6 +4,7 @@ import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageService
 import projektor.notification.badge.SvgCoverageBadgeCreator
 import projektor.server.api.PublicId
+import projektor.server.api.repository.BranchSearch
 import projektor.server.api.repository.BranchType
 
 class CoverageBadgeService(
@@ -14,13 +15,13 @@ class CoverageBadgeService(
     suspend fun createCoverageBadge(fullRepoName: String, projectName: String?): String? {
 
         val mostRecentRunWithCoverage = previousTestRunService.findMostRecentRunWithCoverage(
-            BranchType.MAINLINE,
             fullRepoName,
-            projectName
+            projectName,
+            BranchSearch(branchType = BranchType.MAINLINE)
         ) ?: previousTestRunService.findMostRecentRunWithCoverage(
-            BranchType.ALL,
             fullRepoName,
-            projectName
+            projectName,
+            BranchSearch(branchType = BranchType.ALL)
         )
 
         val coveredPercentage = mostRecentRunWithCoverage?.publicId?.let { publicId ->

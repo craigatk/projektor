@@ -63,28 +63,8 @@ import projektor.quality.CodeQualityReportRepository
 import projektor.repository.coverage.RepositoryCoverageService
 import projektor.repository.performance.RepositoryPerformanceService
 import projektor.repository.testrun.RepositoryTestRunService
+import projektor.route.*
 import projektor.route.attachments
-import projektor.route.badge
-import projektor.route.codeQuality
-import projektor.route.config
-import projektor.route.coverage
-import projektor.route.failure
-import projektor.route.health
-import projektor.route.messages
-import projektor.route.metadata
-import projektor.route.organization
-import projektor.route.performance
-import projektor.route.previousRuns
-import projektor.route.repository
-import projektor.route.repositoryCoverage
-import projektor.route.repositoryPerformance
-import projektor.route.results
-import projektor.route.testCases
-import projektor.route.testRunSystemAttributes
-import projektor.route.testRuns
-import projektor.route.testSuites
-import projektor.route.ui
-import projektor.route.version
 import projektor.schedule.Scheduler
 import projektor.telemetry.OpenTelemetryRoute
 import projektor.testcase.TestCaseService
@@ -216,6 +196,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     val codeQualityReportRepository: CodeQualityReportRepository by inject()
 
     routing {
+        api(repositoryCoverageService)
         attachments(attachmentService, authService)
         badge(coverageBadgeService)
         codeQuality(codeQualityReportRepository)
@@ -229,7 +210,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
         performance(performanceResultsService)
         previousRuns(previousTestRunService)
         repository(repositoryTestRunService)
-        repositoryCoverage(coverageService, previousTestRunService, repositoryCoverageService)
+        repositoryCoverage(repositoryCoverageService)
         repositoryPerformance(repositoryPerformanceService)
         results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService, metricRegistry, metricsService)
         testCases(testCaseService)

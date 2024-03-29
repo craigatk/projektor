@@ -12,6 +12,7 @@ import projektor.database.generated.Tables.GIT_METADATA
 import projektor.database.generated.Tables.TEST_RUN
 import projektor.parser.coverage.model.CoverageReportStats
 import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withBranchType
+import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withProjectName
 import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.coverage.RepositoryCoverageTimeline
 import projektor.server.api.repository.coverage.RepositoryCoverageTimelineEntry
@@ -43,12 +44,7 @@ class RepositoryCoverageDatabaseRepository(private val dslContext: DSLContext) :
                 .where(
                     GIT_METADATA.REPO_NAME.eq(repoName)
                         .and(withBranchType(branchType))
-                        .let {
-                            if (projectName == null)
-                                it.and(GIT_METADATA.PROJECT_NAME.isNull)
-                            else
-                                it.and(GIT_METADATA.PROJECT_NAME.eq(projectName))
-                        }
+                        .and(withProjectName(projectName))
                         .and(CODE_COVERAGE_STATS.SCOPE.eq("GROUP"))
                 )
                 .groupBy(TEST_RUN.PUBLIC_ID, TEST_RUN.CREATED_TIMESTAMP)
@@ -72,12 +68,7 @@ class RepositoryCoverageDatabaseRepository(private val dslContext: DSLContext) :
                     .innerJoin(CODE_COVERAGE_STATS).on(CODE_COVERAGE_STATS.CODE_COVERAGE_RUN_ID.eq(CODE_COVERAGE_RUN.ID))
                     .where(
                         GIT_METADATA.REPO_NAME.eq(repoName)
-                            .let {
-                                if (projectName == null)
-                                    it.and(GIT_METADATA.PROJECT_NAME.isNull)
-                                else
-                                    it.and(GIT_METADATA.PROJECT_NAME.eq(projectName))
-                            }
+                            .and(withProjectName(projectName))
                             .and(CODE_COVERAGE_STATS.SCOPE.eq("GROUP"))
                     )
             )
