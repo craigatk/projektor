@@ -77,6 +77,7 @@ class ApiRepositoryApplicationTestCase : ApplicationTestCase() {
                 expectThat(currentCoverage) {
                     get { createdTimestamp }.isEqualTo(thirdTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
                     get { coveredPercentage }.isEqualTo(JacocoXmlLoader.jacocoXmlParserLineCoveragePercentage)
+                    get { repo }.isEqualTo(repoName)
                 }
             }
         }
@@ -145,6 +146,7 @@ class ApiRepositoryApplicationTestCase : ApplicationTestCase() {
                     get { id }.isEqualTo(runInDifferentProjectPublicId.id)
                     get { createdTimestamp }.isEqualTo(currentCoverageTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
                     get { coveredPercentage }.isEqualTo(JacocoXmlLoader.junitResultsParserLineCoveragePercentage)
+                    get { repo }.isEqualTo(repoName)
                 }
             }
         }
@@ -213,6 +215,8 @@ class ApiRepositoryApplicationTestCase : ApplicationTestCase() {
                     get { id }.isEqualTo(firstRunPublicId.id)
                     get { createdTimestamp }.isEqualTo(currentCoverageTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
                     get { coveredPercentage }.isEqualTo(JacocoXmlLoader.serverAppReducedLineCoveragePercentage)
+                    get { repo }.isEqualTo(repoName)
+                    get { branch }.isEqualTo("my-branch")
                 }
             }
         }

@@ -16,7 +16,7 @@ fun Route.api(
     get("/api/v1/org/{orgName}/coverage/current") {
         val orgName = call.parameters.getOrFail("orgName")
 
-        val organizationCoverage = organizationCoverageService.getCoverage(orgName)
+        val organizationCoverage = organizationCoverageService.getCurrentCoverage(orgName)
 
         if (organizationCoverage.repositories.isNotEmpty()) {
             call.respond(HttpStatusCode.OK, organizationCoverage)

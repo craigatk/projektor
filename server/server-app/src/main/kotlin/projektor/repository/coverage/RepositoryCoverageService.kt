@@ -28,7 +28,10 @@ class RepositoryCoverageService(
             RepositoryCurrentCoverage(
                 id = mostRecentRunWithCoverage.publicId.id,
                 coveredPercentage = coveredPercentage,
-                createdTimestamp = mostRecentRunWithCoverage.createdTimestamp
+                createdTimestamp = mostRecentRunWithCoverage.createdTimestamp,
+                repo = repoName,
+                branch = mostRecentRunWithCoverage.branch,
+                project = projectName
             )
         } else {
             null
