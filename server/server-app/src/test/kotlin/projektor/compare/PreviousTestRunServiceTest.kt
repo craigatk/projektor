@@ -222,6 +222,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
         expectThat(recentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newPublicId)
             get { createdTimestamp }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC))
+            get { branch }.isEqualTo("main")
         }
     }
 }
