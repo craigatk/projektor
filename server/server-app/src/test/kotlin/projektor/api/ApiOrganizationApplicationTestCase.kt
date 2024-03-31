@@ -111,23 +111,31 @@ class ApiOrganizationApplicationTestCase : ApplicationTestCase() {
                 assertNotNull(repo1DataProj1)
                 expectThat(repo1DataProj1.id).isEqualTo(publicId1.id)
                 expectThat(repo1DataProj1.coveredPercentage).isEqualTo(JacocoXmlLoader.serverAppLineCoveragePercentage)
+                expectThat(repo1DataProj1.repo).isEqualTo(repo1)
+                expectThat(repo1DataProj1.branch).isEqualTo("main")
 
                 val repo1DataProj2 = repositoryDatas1.find { it.project == "proj2" }
                 assertNotNull(repo1DataProj2)
                 expectThat(repo1DataProj2.id).isEqualTo(otherProjectRepo1.id)
                 expectThat(repo1DataProj2.coveredPercentage).isEqualTo(JacocoXmlLoader.serverAppReducedLineCoveragePercentage)
+                expectThat(repo1DataProj2.repo).isEqualTo(repo1)
+                expectThat(repo1DataProj2.branch).isEqualTo("main")
 
                 val repositoryData2 = organizationCoverage.repositories.find { it.repo == repo2 }
                 assertNotNull(repositoryData2)
 
                 expectThat(repositoryData2.id).isEqualTo(publicId2.id)
                 expectThat(repositoryData2.coveredPercentage).isEqualTo(JacocoXmlLoader.jacocoXmlParserLineCoveragePercentage)
+                expectThat(repositoryData2.repo).isEqualTo(repo2)
+                expectThat(repositoryData2.branch).isEqualTo("main")
 
                 val repositoryData3 = organizationCoverage.repositories.find { it.repo == repo3 }
                 assertNotNull(repositoryData3)
 
                 expectThat(repositoryData3.id).isEqualTo(publicId3.id)
                 expectThat(repositoryData3.coveredPercentage).isEqualTo(JacocoXmlLoader.junitResultsParserLineCoveragePercentage)
+                expectThat(repositoryData3.repo).isEqualTo(repo3)
+                expectThat(repositoryData3.branch).isEqualTo("main")
 
                 expectThat(repoNames).doesNotContain(noCodeCoverageRepo)
             }

@@ -8,6 +8,7 @@ import io.ktor.server.util.*
 import projektor.organization.coverage.OrganizationCoverageService
 import projektor.repository.coverage.RepositoryCoverageService
 import projektor.server.api.repository.BranchSearch
+import projektor.server.api.repository.BranchType
 
 fun Route.api(
     organizationCoverageService: OrganizationCoverageService,
@@ -33,10 +34,16 @@ fun Route.api(
         val projectName = call.request.queryParameters["project"]
         val branchName = call.request.queryParameters["branch"]
 
+        val branchSearch = if (branchName != null) {
+            BranchSearch(branchName = branchName)
+        } else {
+            BranchSearch(branchType = BranchType.MAINLINE)
+        }
+
         val repositoryCurrentCoverage = repositoryCoverageService.fetchRepositoryCurrentCoverage(
             fullRepoName,
             projectName,
-            BranchSearch(branchName = branchName)
+            branchSearch
         )
 
         repositoryCurrentCoverage?.let { call.respond(HttpStatusCode.OK, it) }
