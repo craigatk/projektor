@@ -28,17 +28,17 @@ class RepositoryTestRunTimelineApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/timeline") {
-                val firstTestRun = createTestRun(firstRunPublicId, 20, BigDecimal("10.001"))
+                val firstTestRun = createTestRun(firstRunPublicId, 20, 0, BigDecimal("10.001"))
                 testRunDao.insert(firstTestRun)
                 testRunDBGenerator.addGitMetadata(firstTestRun, repoName, true, "main", null, null, null)
                 testRunDBGenerator.addResultsMetadata(firstTestRun, true)
 
-                val secondTestRun = createTestRun(secondRunPublicId, 30, BigDecimal("15.001"))
+                val secondTestRun = createTestRun(secondRunPublicId, 30, 0, BigDecimal("15.001"))
                 testRunDao.insert(secondTestRun)
                 testRunDBGenerator.addGitMetadata(secondTestRun, repoName, true, "main", null, null, null)
                 testRunDBGenerator.addResultsMetadata(secondTestRun, true)
 
-                val thirdTestRun = createTestRun(thirdRunPublicId, 45, BigDecimal("25.001"))
+                val thirdTestRun = createTestRun(thirdRunPublicId, 45, 0, BigDecimal("25.001"))
                 testRunDao.insert(thirdTestRun)
                 testRunDBGenerator.addGitMetadata(thirdTestRun, repoName, true, "main", null, null, null)
                 testRunDBGenerator.addResultsMetadata(thirdTestRun, true)
@@ -89,17 +89,17 @@ class RepositoryTestRunTimelineApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/project/$projectName/timeline") {
-                val firstTestRun = createTestRun(firstRunPublicId, 20, BigDecimal("10.001"))
+                val firstTestRun = createTestRun(firstRunPublicId, 20, 0, BigDecimal("10.001"))
                 testRunDao.insert(firstTestRun)
                 testRunDBGenerator.addGitMetadata(firstTestRun, repoName, true, "main", projectName, null, null)
                 testRunDBGenerator.addResultsMetadata(firstTestRun, true)
 
-                val secondTestRun = createTestRun(secondRunPublicId, 30, BigDecimal("15.001"))
+                val secondTestRun = createTestRun(secondRunPublicId, 30, 0, BigDecimal("15.001"))
                 testRunDao.insert(secondTestRun)
                 testRunDBGenerator.addGitMetadata(secondTestRun, repoName, true, "main", projectName, null, null)
                 testRunDBGenerator.addResultsMetadata(secondTestRun, true)
 
-                val thirdTestRun = createTestRun(thirdRunPublicId, 45, BigDecimal("25.001"))
+                val thirdTestRun = createTestRun(thirdRunPublicId, 45, 0, BigDecimal("25.001"))
                 testRunDao.insert(thirdTestRun)
                 testRunDBGenerator.addGitMetadata(thirdTestRun, repoName, true, "main", projectName, null, null)
                 testRunDBGenerator.addResultsMetadata(thirdTestRun, true)

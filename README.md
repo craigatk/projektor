@@ -1,10 +1,10 @@
 # Projektor
 
-| Project | Coverage |
-| ------- | -------- |
-| Server | [![Code coverage percentage](https://projektorlive.herokuapp.com/repo/craigatk/projektor/badge/coverage)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/coverage) |
-| UI | [![Code coverage percentage](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/ui-jest/badge/coverage)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/project/ui-jest/coverage) |
-| Node publisher | [![Code coverage percentage](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/node-script/badge/coverage)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/project/node-script/coverage) |
+| Project                | Tests                                                                                                                                                                                                  | Coverage                                                                                                                                                                                                                      |
+|------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Server & Gradle plugin | [![Test results](https://projektorlive.herokuapp.com/repo/craigatk/projektor/badge/tests)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/)                                         | [![Code coverage percentage](https://projektorlive.herokuapp.com/repo/craigatk/projektor/badge/coverage)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/coverage)                                         |
+| UI                     | [![Test results](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/ui-jest/badge/tests)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/project/ui-jest/)         | [![Code coverage percentage](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/ui-jest/badge/coverage)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/project/ui-jest/coverage)         |
+| Node publisher         | [![Test results](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/node-script/badge/tests)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/project/node-script/) | [![Code coverage percentage](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/node-script/badge/coverage)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/project/node-script/coverage) |
 
 For detailed instructions to get started with Projektor, please see the full project documentation at https://projektor.dev
 
