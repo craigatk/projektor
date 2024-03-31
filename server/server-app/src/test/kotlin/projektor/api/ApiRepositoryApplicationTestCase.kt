@@ -221,4 +221,56 @@ class ApiRepositoryApplicationTestCase : ApplicationTestCase() {
             }
         }
     }
+
+    @Test
+    fun `when no branch specific should fetch current coverage from mainline branch`() {
+        val orgName = RandomStringUtils.randomAlphabetic(12)
+        val repoName = "$orgName/repo"
+
+        val otherBranchRunPublicId1 = randomPublicId()
+        val mainRunPublicId = randomPublicId()
+        val otherBranchRunPublicId2 = randomPublicId()
+
+        withTestApplication(::createTestApplication) {
+            handleRequest(HttpMethod.Get, "/api/v1/repo/$repoName/coverage/current") {
+
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                    publicId = otherBranchRunPublicId1,
+                    coverageText = JacocoXmlLoader().serverAppReduced(),
+                    repoName = repoName,
+                    branchName = "other"
+                )
+
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                    publicId = mainRunPublicId,
+                    coverageText = JacocoXmlLoader().serverApp(),
+                    repoName = repoName,
+                    branchName = "main"
+                )
+
+                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                    publicId = otherBranchRunPublicId2,
+                    coverageText = JacocoXmlLoader().jacocoXmlParser(),
+                    repoName = repoName,
+                    branchName = "other"
+                )
+            }.apply {
+                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+                val responseBody = response.content
+                assertNotNull(responseBody)
+
+                val currentCoverage: RepositoryCurrentCoverage = objectMapper.readValue(responseBody)
+
+                val currentCoverageTestRunDB = testRunDao.fetchOneByPublicId(mainRunPublicId.id)
+
+                expectThat(currentCoverage) {
+                    get { id }.isEqualTo(mainRunPublicId.id)
+                    get { createdTimestamp }.isEqualTo(currentCoverageTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
+                    get { coveredPercentage }.isEqualTo(JacocoXmlLoader.serverAppLineCoveragePercentage)
+                    get { repo }.isEqualTo(repoName)
+                    get { branch }.isEqualTo("main")
+                }
+            }
+        }
+    }
 }
