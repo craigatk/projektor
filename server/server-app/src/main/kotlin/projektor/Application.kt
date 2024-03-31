@@ -31,6 +31,7 @@ import projektor.attachment.AttachmentService
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
 import projektor.badge.CoverageBadgeService
+import projektor.badge.TestRunBadgeService
 import projektor.cleanup.AttachmentCleanupService
 import projektor.cleanup.CleanupConfig
 import projektor.cleanup.CleanupScheduledJob
@@ -188,6 +189,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     val performanceResultsService: PerformanceResultsService by inject()
 
     val coverageBadgeService: CoverageBadgeService by inject()
+    val testRunBadgeService: TestRunBadgeService by inject()
 
     val metricsService: MetricsService by inject()
 
@@ -198,7 +200,8 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     routing {
         api(organizationCoverageService, repositoryCoverageService)
         attachments(attachmentService, authService)
-        badge(coverageBadgeService)
+        badgeCoverage(coverageBadgeService)
+        badgeTests(testRunBadgeService)
         codeQuality(codeQualityReportRepository)
         config(cleanupConfig)
         coverage(authService, coverageService)

@@ -10,6 +10,7 @@ import projektor.attachment.AttachmentService
 import projektor.auth.AuthConfig
 import projektor.auth.AuthService
 import projektor.badge.CoverageBadgeService
+import projektor.badge.TestRunBadgeService
 import projektor.compare.PreviousTestRunDatabaseRepository
 import projektor.compare.PreviousTestRunRepository
 import projektor.compare.PreviousTestRunService
@@ -34,6 +35,7 @@ import projektor.metadata.TestRunMetadataService
 import projektor.metrics.MetricsService
 import projektor.notification.NotificationConfig
 import projektor.notification.badge.SvgCoverageBadgeCreator
+import projektor.notification.badge.SvgTestRunBadgeCreator
 import projektor.notification.github.GitHubPullRequestCommentService
 import projektor.notification.github.comment.GitHubCommentService
 import projektor.organization.coverage.OrganizationCoverageDatabaseRepository
@@ -143,4 +145,6 @@ fun createAppModule(
 
     single { CoverageBadgeService(get(), get(), get()) }
     single { SvgCoverageBadgeCreator() }
+    single { TestRunBadgeService(get(), get()) }
+    single { SvgTestRunBadgeCreator() }
 }

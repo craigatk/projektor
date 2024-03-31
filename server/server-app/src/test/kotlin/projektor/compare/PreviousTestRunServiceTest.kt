@@ -13,6 +13,7 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
+import strikt.assertions.isTrue
 import java.time.ZoneOffset
 
 class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
@@ -223,6 +224,91 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             get { publicId }.isEqualTo(newPublicId)
             get { createdTimestamp }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC))
             get { branch }.isEqualTo("main")
+        }
+    }
+
+    @Test
+    fun shouldFindMostRecentTestRunWithoutProject() {
+        val previousTestRunService: PreviousTestRunService by inject()
+
+        val previousPublicId = randomPublicId()
+        val newPublicId = randomPublicId()
+        val newerWithDifferentProjectName = randomPublicId()
+
+        val repoName = randomOrgAndRepo()
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            publicId = previousPublicId,
+            coverageText = JacocoXmlLoader().serverAppReduced(),
+            repoName = repoName,
+            branchName = "main",
+            projectName = null
+        )
+
+        val newTestRun = testRunDBGenerator.createSimpleTestRunInRepo(
+            publicId = newPublicId,
+            repoName = repoName,
+            ci = true,
+            projectName = null
+        )
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            publicId = newerWithDifferentProjectName,
+            coverageText = JacocoXmlLoader().serverAppReduced(),
+            repoName = repoName,
+            branchName = "main",
+            projectName = "other-project"
+        )
+
+        val recentTestRun = runBlocking { previousTestRunService.findMostRecentRun(repoName, null, BranchSearch(branchType = BranchType.MAINLINE)) }
+        expectThat(recentTestRun).isNotNull().and {
+            get { publicId }.isEqualTo(newPublicId)
+            get { createdTimestamp }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC))
+            get { branch }.isEqualTo("main")
+        }
+    }
+
+    @Test
+    fun shouldFindMostRecentTestRunWithProject() {
+        val previousTestRunService: PreviousTestRunService by inject()
+
+        val previousPublicId = randomPublicId()
+        val newPublicId = randomPublicId()
+        val newerWithDifferentProjectName = randomPublicId()
+
+        val repoName = randomOrgAndRepo()
+        val projectName = "project"
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            publicId = previousPublicId,
+            coverageText = JacocoXmlLoader().serverAppReduced(),
+            repoName = repoName,
+            branchName = "main",
+            projectName = projectName
+        )
+
+        val newTestRun = testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            publicId = newPublicId,
+            coverageText = JacocoXmlLoader().serverAppReduced(),
+            repoName = repoName,
+            branchName = "main",
+            projectName = projectName
+        )
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            publicId = newerWithDifferentProjectName,
+            coverageText = JacocoXmlLoader().serverAppReduced(),
+            repoName = repoName,
+            branchName = "main",
+            projectName = "other-project"
+        )
+
+        val recentTestRun = runBlocking { previousTestRunService.findMostRecentRun(repoName, projectName, BranchSearch(branchType = BranchType.MAINLINE)) }
+        expectThat(recentTestRun).isNotNull().and {
+            get { publicId }.isEqualTo(newPublicId)
+            get { createdTimestamp }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC))
+            get { branch }.isEqualTo("main")
+            get { passed }.isTrue()
         }
     }
 }

@@ -41,7 +41,7 @@ class TestRunDBGenerator(
     private val attachmentDao: TestRunAttachmentDao
 ) {
     fun createTestRun(publicId: PublicId, testSuiteDataList: List<TestSuiteData>): TestRunDB {
-        val testRun = createTestRun(publicId, testSuiteDataList.size)
+        val testRun = createTestRun(publicId, testSuiteDataList.size, testSuiteDataList.count { it.failingTestCaseNames.isNotEmpty() })
         testRunDao.insert(testRun)
         println("Inserted test run ${testRun.publicId}")
 
@@ -146,6 +146,19 @@ class TestRunDBGenerator(
             )
         )
 
+    fun createSimpleFailingTestRun(publicId: PublicId): TestRunDB =
+        createTestRun(
+            publicId,
+            listOf(
+                TestSuiteData(
+                    "testSuite1",
+                    listOf("testSuite1TestCase1"),
+                    listOf("failingTestSuite1TestCase1"),
+                    listOf()
+                )
+            )
+        )
+
     fun createEmptyTestRun(publicId: PublicId): TestRunDB =
         createTestRun(
             publicId,
@@ -164,6 +177,13 @@ class TestRunDBGenerator(
 
     fun createSimpleTestRunInRepo(publicId: PublicId, repoName: String, ci: Boolean, projectName: String?): TestRunDB {
         val testRunDB = createSimpleTestRun(publicId)
+        addResultsMetadata(testRunDB, ci)
+        addGitMetadata(testRunDB, repoName, true, "main", projectName, null, null)
+        return testRunDB
+    }
+
+    fun createSimpleFailingTestRunInRepo(publicId: PublicId, repoName: String, ci: Boolean, projectName: String?): TestRunDB {
+        val testRunDB = createSimpleFailingTestRun(publicId)
         addResultsMetadata(testRunDB, ci)
         addGitMetadata(testRunDB, repoName, true, "main", projectName, null, null)
         return testRunDB
@@ -247,11 +267,11 @@ data class TestSuiteData(
     val fileName: String? = null
 )
 
-fun createTestRun(publicId: PublicId, totalTestCount: Int, cumulativeDuration: BigDecimal = BigDecimal("30.000")): TestRunDB = TestRunDB()
+fun createTestRun(publicId: PublicId, totalTestCount: Int, failingTestCount: Int = 0, cumulativeDuration: BigDecimal = BigDecimal("30.000")): TestRunDB = TestRunDB()
     .setPublicId(publicId.id)
     .setTotalTestCount(totalTestCount)
     .setTotalPassingCount(totalTestCount)
-    .setTotalFailureCount(0)
+    .setTotalFailureCount(failingTestCount)
     .setTotalSkippedCount(0)
     .setCumulativeDuration(cumulativeDuration)
     .setAverageDuration(
@@ -261,7 +281,7 @@ fun createTestRun(publicId: PublicId, totalTestCount: Int, cumulativeDuration: B
             cumulativeDuration
     )
     .setSlowestTestCaseDuration(BigDecimal("10.000"))
-    .setPassed(true)
+    .setPassed(failingTestCount == 0)
     .setCreatedTimestamp(LocalDateTime.now())
 
 fun createTestSuite(testRunId: Long, packageAndClassName: String, idx: Int): TestSuiteDB = TestSuiteDB()
