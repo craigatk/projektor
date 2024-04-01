@@ -3,15 +3,18 @@ package projektor.route
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.call
-import io.ktor.server.response.respond
+import io.ktor.server.response.*
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.util.getOrFail
+import projektor.compare.PreviousTestRunService
 import projektor.repository.testrun.RepositoryTestRunService
+import projektor.server.api.repository.BranchSearch
 import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.RepositoryFlakyTests
 
 fun Route.repository(
+    previousTestRunService: PreviousTestRunService,
     repositoryTestRunService: RepositoryTestRunService
 ) {
     get("/repo/{orgPart}/{repoPart}/timeline") {
@@ -105,5 +108,36 @@ fun Route.repository(
             branchType = branchType,
             call
         )
+    }
+
+    get("/repo/{orgPart}/{repoPart}/run/latest") {
+        val orgPart = call.parameters.getOrFail("orgPart")
+        val repoPart = call.parameters.getOrFail("repoPart")
+        val fullRepoName = "$orgPart/$repoPart"
+
+        val latestTestRun = previousTestRunService.findMostRecentRun(
+            fullRepoName,
+            null,
+            BranchSearch(branchType = BranchType.MAINLINE)
+        )
+
+        latestTestRun?.let { call.respondRedirect("/tests/${latestTestRun.publicId.id}", permanent = false) }
+            ?: call.respond(HttpStatusCode.NoContent)
+    }
+
+    get("/repo/{orgPart}/{repoPart}/project/{projectName}/run/latest") {
+        val orgPart = call.parameters.getOrFail("orgPart")
+        val repoPart = call.parameters.getOrFail("repoPart")
+        val projectName = call.parameters.getOrFail("projectName")
+        val fullRepoName = "$orgPart/$repoPart"
+
+        val latestTestRun = previousTestRunService.findMostRecentRun(
+            fullRepoName,
+            projectName,
+            BranchSearch(branchType = BranchType.MAINLINE)
+        )
+
+        latestTestRun?.let { call.respondRedirect("/tests/${latestTestRun.publicId.id}", permanent = false) }
+            ?: call.respond(HttpStatusCode.NoContent)
     }
 }
