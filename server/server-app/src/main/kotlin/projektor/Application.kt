@@ -212,7 +212,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
         organization(organizationCoverageService)
         performance(performanceResultsService)
         previousRuns(previousTestRunService)
-        repository(repositoryTestRunService)
+        repository(previousTestRunService, repositoryTestRunService)
         repositoryCoverage(repositoryCoverageService)
         repositoryPerformance(repositoryPerformanceService)
         results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService, metricRegistry, metricsService)
