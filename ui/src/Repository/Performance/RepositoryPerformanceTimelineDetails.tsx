@@ -31,7 +31,7 @@ const RepositoryPerformanceTimelineDetails = ({
     return (
       <div>
         <PageTitle
-          title="Performance over time"
+          title="Performance tests over time"
           testid="repository-performance-title"
         />
         {performanceTimeline.testTimelines.map((testTimeline, idx) => (

@@ -5,7 +5,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import {
   repositoryLinkUrlAPI,
   repositoryLinkUrlUI,
-} from "../Repository/RepositoryLink";
+} from "../../Repository/RepositoryLink";
 import { Chip, Fade, Link, Tooltip } from "@material-ui/core";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 
@@ -61,7 +61,7 @@ const CoverageBadge = ({
           dangerouslySetInnerHTML={badgeContents}
         />
         <span className={classes.badgeLink}>
-          <Tooltip title="Copy coverage badge readme code to clipboard">
+          <Tooltip title="Copy coverage badge Markdown readme code to clipboard">
             <CopyToClipboard onCopy={onCopy} text={badgeMarkdown}>
               <Link
                 data-testid="coverage-badge-copy-link"

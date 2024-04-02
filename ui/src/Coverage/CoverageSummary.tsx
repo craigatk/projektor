@@ -6,7 +6,7 @@ import { fetchCoverage } from "../service/TestRunService";
 import OverallCoverageGraphs from "./OverallCoverageGraphs";
 import CleanLink from "../Link/CleanLink";
 import { makeStyles } from "@material-ui/styles";
-import TestRunCoverageBadge from "../Badge/TestRunCoverageBadge";
+import TestRunCoverageBadge from "../Badge/coverage/TestRunCoverageBadge";
 import { Grid, Hidden } from "@material-ui/core";
 
 interface CoverageSummaryProps {

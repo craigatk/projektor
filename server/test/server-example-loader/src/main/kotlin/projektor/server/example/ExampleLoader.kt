@@ -250,8 +250,7 @@ fun loadCloverCoverageLarge() {
     println("View run with large Clover coverage and UI results at $uiBaseUrl${currentResultsResponse.uri}")
 }
 
-fun loadMultipleTestRunsFromSameRepoForTimeline() {
-    val repoName = "timeline-org/timeline-repo"
+fun loadMultipleTestRunsFromSameRepoForTimeline(repoName: String = "timeline-org/timeline-repo", printLink: Boolean = true) {
     val branchName = "main"
     val gitMetadata = GitMetadata()
     gitMetadata.repoName = repoName
@@ -266,7 +265,18 @@ fun loadMultipleTestRunsFromSameRepoForTimeline() {
     sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.longOutput(), metadata = resultsMetadata))
     sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.someIgnored(), metadata = resultsMetadata))
 
-    println("View repository test run timeline at $uiBaseUrl/repository/$repoName")
+    if (printLink) {
+        println("View repository test run timeline at $uiBaseUrl/repository/$repoName")
+    }
+}
+
+fun loadTestRunTimelineAndCoverageTimeline() {
+    val repoName = "timeline-org/test-cov-timeline-repo"
+
+    loadMultipleTestRunsFromSameRepoForTimeline(repoName, false)
+    repositoryCoverageTimeline(repoName, false)
+
+    println("View repository test run and coverage timeline at $uiBaseUrl/repository/$repoName")
 }
 
 fun loadMultipleShortTestRunsFromSameRepoForTimeline() {
@@ -516,8 +526,7 @@ fun performanceSingleTestTimeline() {
     println("View performance test timeline with single test at $uiBaseUrl/repository/$repoName")
 }
 
-fun repositoryCoverageTimeline() {
-    val repoName = "cov-org/cov-repo"
+fun repositoryCoverageTimeline(repoName: String = "cov-org/cov-repo", printLink: Boolean = true) {
     val branchName = "main"
     val gitMetadata = GitMetadata()
     gitMetadata.repoName = repoName
@@ -533,7 +542,9 @@ fun repositoryCoverageTimeline() {
     sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().junitResultsParser())
     sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().junitResultsParserReduced())
 
-    println("View repository coverage timeline at $uiBaseUrl/repository/$repoName")
+    if (printLink) {
+        println("View repository coverage timeline at $uiBaseUrl/repository/$repoName")
+    }
 }
 
 fun repositoryCoverageTimelineDifferentBranches() {

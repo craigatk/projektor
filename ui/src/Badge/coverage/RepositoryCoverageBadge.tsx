@@ -1,5 +1,5 @@
 import * as React from "react";
-import { fetchRepositoryCoverageBadge } from "../service/RepositoryService";
+import { fetchRepositoryCoverageBadge } from "../../service/RepositoryService";
 import CoverageBadge from "./CoverageBadge";
 
 interface RepositoryCoverageBadgeProps {

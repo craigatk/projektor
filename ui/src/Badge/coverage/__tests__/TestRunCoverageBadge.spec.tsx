@@ -1,16 +1,16 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import MockAdapter from "axios-mock-adapter";
-import { axiosInstance } from "../../service/AxiosService";
+import { axiosInstance } from "../../../service/AxiosService";
 import { render } from "@testing-library/react";
 import {
   createHistory,
   createMemorySource,
   LocationProvider,
 } from "@reach/router";
-import RepositoryCoverageBadge from "../RepositoryCoverageBadge";
+import TestRunCoverageBadge from "../TestRunCoverageBadge";
 
-describe("RepositoryCoverageBadge", () => {
+describe("TestRunCoverageBadge", () => {
   let mockAxios;
 
   beforeEach(() => {
@@ -24,15 +24,16 @@ describe("RepositoryCoverageBadge", () => {
 
   it("should display coverage badge", async () => {
     const repoName = "my-org/my-repo";
+    const publicId = "12345";
     mockAxios
-      .onGet(`http://localhost:8080/repo/${repoName}/badge/coverage`)
+      .onGet(`http://localhost:8080/run/${publicId}/badge/coverage`)
       .reply(200, "<span>my-badge</span>");
 
     document.execCommand = jest.fn();
 
     const { findByTestId } = render(
       <LocationProvider history={createHistory(createMemorySource("/ui"))}>
-        <RepositoryCoverageBadge repoName={repoName} />
+        <TestRunCoverageBadge publicId={publicId} repoName={repoName} />
       </LocationProvider>,
     );
 
