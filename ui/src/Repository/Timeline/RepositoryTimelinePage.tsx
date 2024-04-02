@@ -42,6 +42,7 @@ const RepositoryTimelinePage = ({
         <RepositoryTimelineDetails
           timeline={repositoryTimeline}
           repoName={repoName}
+          projectName={projectName}
           hideIfEmpty={hideIfEmpty}
         />
       }

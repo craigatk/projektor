@@ -1,16 +1,16 @@
 import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import MockAdapter from "axios-mock-adapter";
-import { axiosInstance } from "../../service/AxiosService";
-import { render } from "@testing-library/react";
+import { axiosInstance } from "../../../service/AxiosService";
+import { act, render } from "@testing-library/react";
 import {
   createHistory,
   createMemorySource,
   LocationProvider,
 } from "@reach/router";
-import TestRunCoverageBadge from "../TestRunCoverageBadge";
+import RepositoryCoverageBadge from "../RepositoryCoverageBadge";
 
-describe("TestRunCoverageBadge", () => {
+describe("RepositoryCoverageBadge", () => {
   let mockAxios;
 
   beforeEach(() => {
@@ -24,16 +24,15 @@ describe("TestRunCoverageBadge", () => {
 
   it("should display coverage badge", async () => {
     const repoName = "my-org/my-repo";
-    const publicId = "12345";
     mockAxios
-      .onGet(`http://localhost:8080/run/${publicId}/badge/coverage`)
+      .onGet(`http://localhost:8080/repo/${repoName}/badge/coverage`)
       .reply(200, "<span>my-badge</span>");
 
     document.execCommand = jest.fn();
 
     const { findByTestId } = render(
       <LocationProvider history={createHistory(createMemorySource("/ui"))}>
-        <TestRunCoverageBadge publicId={publicId} repoName={repoName} />
+        <RepositoryCoverageBadge repoName={repoName} />
       </LocationProvider>,
     );
 
@@ -46,7 +45,9 @@ describe("TestRunCoverageBadge", () => {
       "[![Code coverage percentage](undefined/repo/my-org/my-repo/badge/coverage)](undefined/repository/my-org/my-repo/coverage)",
     );
 
-    (await findByTestId("coverage-badge-copy-link")).click();
+    await act(async () => {
+      (await findByTestId("coverage-badge-copy-link")).click();
+    });
 
     await findByTestId("coverage-badge-copied");
 
