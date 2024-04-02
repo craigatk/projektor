@@ -55,7 +55,7 @@ const TestsBadge = ({ badgeSvg, repoName, projectName }: TestsBadgeProps) => {
           dangerouslySetInnerHTML={badgeContents}
         />
         <span className={classes.badgeLink}>
-          <Tooltip title="Copy tests badge readme code to clipboard">
+          <Tooltip title="Copy tests badge Markdown readme code to clipboard">
             <CopyToClipboard onCopy={onCopy} text={badgeMarkdown}>
               <Link
                 data-testid="tests-badge-copy-link"

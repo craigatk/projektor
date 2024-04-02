@@ -61,7 +61,7 @@ const CoverageBadge = ({
           dangerouslySetInnerHTML={badgeContents}
         />
         <span className={classes.badgeLink}>
-          <Tooltip title="Copy coverage badge readme code to clipboard">
+          <Tooltip title="Copy coverage badge Markdown readme code to clipboard">
             <CopyToClipboard onCopy={onCopy} text={badgeMarkdown}>
               <Link
                 data-testid="coverage-badge-copy-link"
