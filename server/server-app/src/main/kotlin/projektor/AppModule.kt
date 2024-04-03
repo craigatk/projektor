@@ -145,6 +145,6 @@ fun createAppModule(
 
     single { CoverageBadgeService(get(), get(), get()) }
     single { SvgCoverageBadgeCreator() }
-    single { TestRunBadgeService(get(), get()) }
+    single { TestRunBadgeService(get(), get(), get()) }
     single { SvgTestRunBadgeCreator() }
 }

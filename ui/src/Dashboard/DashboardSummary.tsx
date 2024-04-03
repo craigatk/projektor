@@ -9,9 +9,10 @@ import TestRunCleanupDate from "./TestRunCleanupDate";
 import TestRunMessages from "../TestRunMessages/TestRunMessages";
 import GitRepoListItem from "./GitRepoListItem";
 import DashboardSummaryItem from "./DashboardSummaryItem";
-import CleanLink from "../Link/CleanLink";
 import { createGitHubUrl } from "../VersionControl/VersionControlHelpers";
 import CleanLinkText from "../Link/CleanLinkText";
+import { makeStyles } from "@material-ui/styles";
+import TestRunTestsBadge from "../Badge/tests/TestRunTestsBadge";
 
 interface DashboardSummaryProps {
   publicId: string;
@@ -19,11 +20,19 @@ interface DashboardSummaryProps {
   gitMetadata?: TestRunGitMetadata;
 }
 
+const useStyles = makeStyles(() => ({
+  testsBadgeSection: {
+    marginLeft: "15px",
+  },
+}));
+
 const DashboardSummary = ({
   publicId,
   testRunSummary,
   gitMetadata,
 }: DashboardSummaryProps) => {
+  const classes = useStyles({});
+
   const {
     totalPassingCount,
     totalFailureCount,
@@ -50,6 +59,7 @@ const DashboardSummary = ({
         title={hasTests ? "Tests" : "Summary"}
         testid="dashboard-summary-title"
       />
+
       <TestRunMessages publicId={publicId} />
       <Grid container>
         {hasTests ? (
@@ -66,6 +76,15 @@ const DashboardSummary = ({
               totalCount={totalTestCount}
               horizontal={false}
             />
+            {hasTests && gitMetadata && (
+              <div className={classes.testsBadgeSection}>
+                <TestRunTestsBadge
+                  publicId={publicId}
+                  repoName={gitMetadata.repoName}
+                  projectName={gitMetadata.projectName}
+                />
+              </div>
+            )}
           </Grid>
         ) : null}
         {totalTestCount > 0 ? (
