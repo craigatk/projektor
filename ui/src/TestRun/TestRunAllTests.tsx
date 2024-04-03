@@ -6,12 +6,21 @@ import LoadingSection from "../Loading/LoadingSection";
 import { fetchTestRun } from "../service/TestRunService";
 import { TestRun } from "../model/TestRunModel";
 import PageTitle from "../PageTitle";
+import { makeStyles } from "@material-ui/styles";
 
 interface TestRunAllTestsProps extends RouteComponentProps {
   publicId: string;
 }
 
+const useStyles = makeStyles(() => ({
+  mainSection: {
+    marginTop: "20px",
+  },
+}));
+
 const TestRunAllTests = ({ publicId }: TestRunAllTestsProps) => {
+  const classes = useStyles({});
+
   const [testRun, setTestRun] = React.useState<TestRun>(null);
   const [testRunLoadingState, setTestRunLoadingState] = React.useState(
     LoadingState.Loading,
@@ -27,7 +36,7 @@ const TestRunAllTests = ({ publicId }: TestRunAllTestsProps) => {
   }, [setTestRun, setTestRunLoadingState]);
 
   return (
-    <div>
+    <div className={classes.mainSection}>
       <PageTitle title="All tests" testid="test-run-all-tests-title" />
       <LoadingSection
         loadingState={testRunLoadingState}

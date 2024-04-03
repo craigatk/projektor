@@ -4,8 +4,17 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.util.*
 import projektor.badge.TestRunBadgeService
+import projektor.server.api.PublicId
 
 fun Route.badgeTests(testRunBadgeService: TestRunBadgeService) {
+    get("/run/{publicId}/badge/tests") {
+        val publicId = call.parameters.getOrFail("publicId")
+
+        val svgBadge = testRunBadgeService.createTestsBadge(PublicId(publicId))
+
+        respondWithSvg(svgBadge, call)
+    }
+
     get("/repo/{orgPart}/{repoPart}/badge/tests") {
         val orgPart = call.parameters.getOrFail("orgPart")
         val repoPart = call.parameters.getOrFail("repoPart")
