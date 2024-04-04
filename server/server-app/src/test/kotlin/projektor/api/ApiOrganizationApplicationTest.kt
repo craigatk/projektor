@@ -14,7 +14,7 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
-class ApiOrganizationApplicationTestCase : ApplicationTestCase() {
+class ApiOrganizationApplicationTest : ApplicationTestCase() {
     @Test
     fun `when three repos in org should find their coverage data`() {
         val orgName = RandomStringUtils.randomAlphabetic(12)

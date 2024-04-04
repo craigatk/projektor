@@ -14,7 +14,7 @@ import strikt.assertions.isEqualTo
 import java.time.ZoneOffset
 import kotlin.test.assertNotNull
 
-class ApiRepositoryApplicationTestCase : ApplicationTestCase() {
+class ApiRepositoryApplicationTest : ApplicationTestCase() {
     @Test
     fun `should fetch current coverage for repository without project name`() {
         val orgName = RandomStringUtils.randomAlphabetic(12)
