@@ -17,4 +17,9 @@ public class Project {
     @JsonProperty("package")
     @JacksonXmlElementWrapper(useWrapping = false)
     public List<CoveragePackage> packages;
+
+    // Used if there are no packages
+    @JsonProperty("file")
+    @JacksonXmlElementWrapper(useWrapping = false)
+    public List<CoverageFile> files;
 }
