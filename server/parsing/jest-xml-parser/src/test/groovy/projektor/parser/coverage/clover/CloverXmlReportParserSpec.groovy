@@ -1,6 +1,6 @@
 package projektor.parser.coverage.clover
 
-
+import projektor.parser.coverage.clover.model.Coverage
 import projektor.server.example.coverage.JacocoXmlLoader
 import projektor.server.example.coverage.CloverXmlLoader
 import spock.lang.Specification
@@ -12,7 +12,7 @@ class CloverXmlReportParserSpec extends Specification {
         String reportXml = new CloverXmlLoader().uiClover()
 
         when:
-        projektor.parser.coverage.clover.model.Coverage report = new CloverXmlReportParser().parseReport(reportXml)
+        Coverage report = new CloverXmlReportParser().parseReport(reportXml)
 
         then:
         report.project != null
@@ -29,6 +29,30 @@ class CloverXmlReportParserSpec extends Specification {
         report.project.metrics.coveredConditionals == 158
     }
 
+    def "should parse Jest coverage XML report without a package"()  {
+        given:
+        String reportXml = new CloverXmlLoader().noPackage()
+
+        when:
+        Coverage report = new CloverXmlReportParser().parseReport(reportXml)
+
+        then:
+        report.project != null
+        report.project.metrics != null
+
+        report.project.packages == null
+
+        report.project.name == "All files"
+
+        // <metrics statements="44" coveredstatements="44" conditionals="24" coveredconditionals="24" methods="2" coveredmethods="2"/>
+
+        report.project.metrics.statements == 44
+        report.project.metrics.coveredStatements == 44
+
+        report.project.metrics.conditionals == 24
+        report.project.metrics.coveredConditionals == 24
+    }
+
     @Unroll
     def "should determine if report is Jest report #shouldBeJest"() {
         expect:
@@ -36,7 +60,7 @@ class CloverXmlReportParserSpec extends Specification {
 
         where:
         reportXml                               || shouldBeJest
-        new CloverXmlLoader().uiClover() || true
+        new CloverXmlLoader().uiClover()        || true
         new JacocoXmlLoader().jacocoXmlParser() || false
     }
 }

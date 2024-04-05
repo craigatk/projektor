@@ -138,4 +138,22 @@ class CoverageParserFileSpec : StringSpec({
             get { partialLines }.hasSize(0)
         }
     }
+
+    "should parse Jest Clover report with no package" {
+        val reportXml = CloverXmlLoader().noPackage()
+
+        val coverageReport = CoverageParser.parseReport(reportXml, null)
+        assertNotNull(coverageReport)
+
+        val coverageReportFiles = coverageReport.files
+        assertNotNull(coverageReportFiles)
+        expectThat(coverageReportFiles).hasSize(1)
+
+        val actionFile = coverageReportFiles.find { it.fileName == "projektor-action.js" }
+        expectThat(actionFile).isNotNull().and {
+            get { directoryName }.isEqualTo("")
+            get { filePath }.isEqualTo("/projektor-action.js")
+            get { stats }.get { lineStat }.get { percentCovered }.isEqualTo(BigDecimal("100.00"))
+        }
+    }
 })
