@@ -12,7 +12,7 @@ buildscript {
 
 plugins {
     id "dev.projektor.publish" version "8.7.0"
-    id "org.jetbrains.kotlinx.kover" version "0.7.5"
+    id "org.jetbrains.kotlinx.kover" version "0.7.6"
 }
 
 apply from: "../../gradle/kotlin.gradle"
