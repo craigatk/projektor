@@ -44,7 +44,7 @@
     "rimraf": "5.0.5",
     "start-server-and-test": "2.0.3",
     "ts-jest": "29.1.2",
-    "typescript": "5.2.2",
+    "typescript": "5.4.4",
     "wait-for-expect": "3.0.2"
   },
   "dependencies": {
