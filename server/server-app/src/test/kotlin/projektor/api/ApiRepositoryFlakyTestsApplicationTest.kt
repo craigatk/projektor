@@ -2,12 +2,12 @@ package projektor.api
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.repository.RepositoryFlakyTests
+import projektor.util.randomFullRepoName
 import strikt.api.expectThat
 import strikt.assertions.any
 import strikt.assertions.contains
@@ -18,8 +18,7 @@ import kotlin.test.assertNotNull
 class ApiRepositoryFlakyTestsApplicationTest : ApplicationTestCase() {
     @Test
     fun `when flaky tests without a project name should return them`() {
-        val orgName = RandomStringUtils.randomAlphabetic(12)
-        val repoName = "$orgName/repo"
+        val repoName = randomFullRepoName()
         val projectName = null
 
         val publicIds = (1..5).map { randomPublicId() }
@@ -60,8 +59,7 @@ class ApiRepositoryFlakyTestsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when flaky tests within specified max runs and threshold should find them`() {
-        val orgName = RandomStringUtils.randomAlphabetic(12)
-        val repoName = "$orgName/repo"
+        val repoName = randomFullRepoName()
         val projectName = null
 
         val failingPublicIds = (1..3).map { randomPublicId() }
@@ -111,8 +109,7 @@ class ApiRepositoryFlakyTestsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when flaky tests with a project name should return them`() {
-        val orgName = RandomStringUtils.randomAlphabetic(12)
-        val repoName = "$orgName/repo"
+        val repoName = randomFullRepoName()
         val projectName = "my-project"
 
         val publicIds = (1..5).map { randomPublicId() }
@@ -153,8 +150,7 @@ class ApiRepositoryFlakyTestsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should find flaky tests in mainline only`() {
-        val orgName = RandomStringUtils.randomAlphabetic(12)
-        val repoName = "$orgName/repo"
+        val repoName = randomFullRepoName()
         val projectName = null
 
         val failingMainlinePublicIds = (1..3).map { randomPublicId() }

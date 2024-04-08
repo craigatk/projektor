@@ -11,6 +11,8 @@ import projektor.repository.testrun.RepositoryTestRunService
 import projektor.server.api.repository.BranchSearch
 import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.RepositoryFlakyTests
+import projektor.server.api.repository.RepositoryTestRunSummaries
+import kotlin.math.min
 
 fun Route.api(
     organizationCoverageService: OrganizationCoverageService,
@@ -83,5 +85,18 @@ fun Route.api(
         } else {
             call.respond(HttpStatusCode.NoContent)
         }
+    }
+
+    get("/api/v1/repo/{orgPart}/{repoPart}/tests/runs/summaries") {
+        val orgPart = call.parameters.getOrFail("orgPart")
+        val repoPart = call.parameters.getOrFail("repoPart")
+        val projectName = call.request.queryParameters["project"]
+        val limit = min(call.request.queryParameters["limit"]?.toInt() ?: 10, 100) // Defaults to 10 with a max of 100
+
+        val fullRepoName = "$orgPart/$repoPart"
+
+        val testRunSummaries = repositoryTestRunService.fetchRepositoryTestRunSummaries(fullRepoName, projectName, limit)
+
+        call.respond(HttpStatusCode.OK, RepositoryTestRunSummaries(testRuns = testRunSummaries))
     }
 }

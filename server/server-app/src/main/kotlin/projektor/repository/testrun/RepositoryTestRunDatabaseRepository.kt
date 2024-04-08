@@ -1,5 +1,6 @@
 package projektor.repository.testrun
 
+import io.opentelemetry.api.GlobalOpenTelemetry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.Condition
@@ -14,14 +15,18 @@ import projektor.database.generated.Tables.TEST_CASE
 import projektor.database.generated.Tables.TEST_RUN
 import projektor.server.api.PublicId
 import projektor.server.api.TestCase
+import projektor.server.api.TestRunSummary
 import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.RepositoryTestRunTimeline
 import projektor.server.api.repository.RepositoryTestRunTimelineEntry
+import projektor.telemetry.startSpanWithParent
 import projektor.testcase.TestCaseDatabaseRepository
 import projektor.testcase.TestCaseDatabaseRepository.Companion.selectTestCase
 import kotlin.streams.toList
 
 class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : RepositoryTestRunRepository {
+    private val tracer = GlobalOpenTelemetry.getTracer("projektor.RepositoryTestRunDatabaseRepository")
+
     private val timelineEntryMapper = JdbcMapperFactory.newInstance()
         .addKeys("public_id")
         .ignorePropertyNotFound()
@@ -49,6 +54,29 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
             }
 
             if (timelineEntries.isNotEmpty()) RepositoryTestRunTimeline(timelineEntries) else null
+        }
+
+    override suspend fun fetchRepositoryTestRunSummaries(repoName: String, projectName: String?, limit: Int): List<TestRunSummary> =
+        withContext(Dispatchers.IO) {
+            val span = tracer.startSpanWithParent("projektor.fetchRepositoryTestRunSummaries")
+
+            val testRunSummaries = dslContext
+                .select(TEST_RUN.PUBLIC_ID.`as`("id"))
+                .select(TEST_RUN.fields().filterNot { it.name == "id" }.toList())
+                .from(TEST_RUN)
+                .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
+                .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                .where(
+                    runInCIFromRepo(repoName, projectName)
+                        .and(withBranchType(BranchType.MAINLINE))
+                )
+                .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc())
+                .limit(limit)
+                .fetchInto(TestRunSummary::class.java)
+
+            span.end()
+
+            testRunSummaries
         }
 
     override suspend fun fetchRepositoryFailingTestCases(

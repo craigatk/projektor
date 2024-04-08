@@ -1,5 +1,6 @@
 package projektor.repository.testrun
 
+import projektor.server.api.TestRunSummary
 import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.RepositoryFlakyTest
 import kotlin.math.min
@@ -23,4 +24,7 @@ class RepositoryTestRunService(private val repositoryTestRunRepository: Reposito
 
         return flakyTestCalculator.calculateFlakyTests(failingTestCases, flakyFailureThreshold, testRunCount)
     }
+
+    suspend fun fetchRepositoryTestRunSummaries(repoName: String, projectName: String?, limit: Int): List<TestRunSummary> =
+        repositoryTestRunRepository.fetchRepositoryTestRunSummaries(repoName, projectName, limit)
 }
