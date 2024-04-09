@@ -2,11 +2,14 @@ package projektor.repository.testrun
 
 import projektor.server.api.PublicId
 import projektor.server.api.TestCase
+import projektor.server.api.TestRunSummary
 import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.RepositoryTestRunTimeline
 
 interface RepositoryTestRunRepository {
     suspend fun fetchRepositoryTestRunTimeline(repoName: String, projectName: String?): RepositoryTestRunTimeline?
+
+    suspend fun fetchRepositoryTestRunSummaries(repoName: String, projectName: String?, limit: Int): List<TestRunSummary>
 
     suspend fun fetchRepositoryFailingTestCases(repoName: String, projectName: String?, maxRuns: Int, branchType: BranchType): List<TestCase>
 

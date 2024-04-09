@@ -3,12 +3,12 @@ package projektor.api
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.repository.coverage.RepositoryCurrentCoverage
 import projektor.server.example.coverage.JacocoXmlLoader
+import projektor.util.randomFullRepoName
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import java.time.ZoneOffset
@@ -17,8 +17,7 @@ import kotlin.test.assertNotNull
 class ApiRepositoryApplicationTest : ApplicationTestCase() {
     @Test
     fun `should fetch current coverage for repository without project name`() {
-        val orgName = RandomStringUtils.randomAlphabetic(12)
-        val repoName = "$orgName/repo"
+        val repoName = randomFullRepoName()
 
         val firstRunPublicId = randomPublicId()
         val secondRunPublicId = randomPublicId()
@@ -85,8 +84,7 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should fetch current coverage for repository with project name`() {
-        val orgName = RandomStringUtils.randomAlphabetic(12)
-        val repoName = "$orgName/repo"
+        val repoName = randomFullRepoName()
 
         val firstRunPublicId = randomPublicId()
         val secondRunPublicId = randomPublicId()
@@ -154,8 +152,7 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should fetch current coverage for repository with branch name`() {
-        val orgName = RandomStringUtils.randomAlphabetic(12)
-        val repoName = "$orgName/repo"
+        val repoName = randomFullRepoName()
 
         val firstRunPublicId = randomPublicId()
         val secondRunPublicId = randomPublicId()
@@ -224,8 +221,7 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when no branch specific should fetch current coverage from mainline branch`() {
-        val orgName = RandomStringUtils.randomAlphabetic(12)
-        val repoName = "$orgName/repo"
+        val repoName = randomFullRepoName()
 
         val otherBranchRunPublicId1 = randomPublicId()
         val mainRunPublicId = randomPublicId()
