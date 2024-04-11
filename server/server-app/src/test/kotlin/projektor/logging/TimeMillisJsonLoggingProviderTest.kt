@@ -3,6 +3,7 @@ package projektor.logging
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.spi.LoggingEvent
+import ch.qos.logback.classic.util.LogbackMDCAdapter
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import net.logstash.logback.encoder.LogstashEncoder
@@ -22,7 +23,10 @@ class TimeMillisJsonLoggingProviderTest {
 
         encoder.start()
 
-        val logger = LoggerContext().getLogger("MyLogger")
+        val loggerContext = LoggerContext()
+        loggerContext.mdcAdapter = LogbackMDCAdapter()
+
+        val logger = loggerContext.getLogger("MyLogger")
 
         val event = LoggingEvent("MyClass", logger, Level.INFO, "The message", null, null)
         event.timeStamp = 12345000
