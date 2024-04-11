@@ -74,6 +74,12 @@ including the change in coverage percentage in the PR.
 
 Details on how to set this up are at https://projektor.dev/docs/github-pull-request/
 
+## Changelog
+
+### Projektor server
+
+[Projektor server changelog](CHANGELOG.md)
+
 ## Development
 
 For information on how Projektor is developed, how to build it from source and deploy it yourself, and other

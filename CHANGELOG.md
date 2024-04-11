@@ -4,6 +4,8 @@
 
 Full list of releases and packaged server .jar file for each release: https://github.com/craigatk/projektor/releases
 
+* v5.0.0
+  * BREAKING CHANGE: Projektor server is now built with Java 17 and requires Java 17+ to run
 * v4.39.0
   * Adding API endpoint for fetching recent test runs for a repo
 * v4.38.1
@@ -19,7 +21,7 @@ Full list of releases and packaged server .jar file for each release: https://gi
 * v4.35.0
   * Use mainline when no branch specified when getting repo current coverage
 * v4.34.0
-  * Adding /api endpoints for getting org and repo current coverage perecentage
+  * Adding /api endpoints for getting org and repo current coverage percentage
 * v4.33.2
   * Adding test file name to failed tests view on dashboard
 * v4.33.1
