@@ -75,10 +75,10 @@ class MultiProjectCoverageFunctionalSpec extends MultiProjectFunctionalSpecifica
             assert overallStatsResponse.successful
 
             CoverageStats overallStats = overallStatsResponse.body()
-            assert overallStats.statementStat.covered == 20
-            assert overallStats.statementStat.missed == 16
-            assert overallStats.statementStat.total == 36
-            assert overallStats.statementStat.coveredPercentage == 55.56
+            assert overallStats.statementStat.covered == 25
+            assert overallStats.statementStat.missed == 5
+            assert overallStats.statementStat.total == 30
+            assert overallStats.statementStat.coveredPercentage == 83.33
 
             assert overallStats.lineStat.covered == 5
             assert overallStats.lineStat.missed == 1
@@ -138,10 +138,10 @@ class MultiProjectCoverageFunctionalSpec extends MultiProjectFunctionalSpecifica
             assert overallStatsResponse1.successful
 
             CoverageStats overallStats = overallStatsResponse1.body()
-            assert overallStats.statementStat.covered == 20
-            assert overallStats.statementStat.missed == 16
-            assert overallStats.statementStat.total == 36
-            assert overallStats.statementStat.coveredPercentage == 55.56
+            assert overallStats.statementStat.covered == 25
+            assert overallStats.statementStat.missed == 5
+            assert overallStats.statementStat.total == 30
+            assert overallStats.statementStat.coveredPercentage == 83.33
 
             assert overallStats.lineStat.covered == 5
             assert overallStats.lineStat.missed == 1
@@ -178,7 +178,7 @@ class MultiProjectCoverageFunctionalSpec extends MultiProjectFunctionalSpecifica
             Coverage coverage2 = coverageResponse2.body()
             assert coverage2.previousTestRunId == testId1
 
-            assert coverage2.overallStats.statementStat.coveredPercentage == 55.56
+            assert coverage2.overallStats.statementStat.coveredPercentage == 83.33
             assert coverage2.overallStats.statementStat.coveredPercentageDelta == 0.00
 
             assert coverage2.overallStats.lineStat.coveredPercentage == 83.33

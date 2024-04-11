@@ -72,7 +72,11 @@ include 'project1', 'project2', 'project3'
             }
             
             dependencies {
-                testImplementation('org.spockframework:spock-core:1.3-groovy-2.5')
+                testImplementation('org.spockframework:spock-core:2.3-groovy-3.0')
+            }
+
+            test {
+                useJUnitPlatform()
             }
             
             projektor {

@@ -103,7 +103,6 @@ task startServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {
             'javadocJar',
             'pluginUnderTestMetadata',
             'sourcesJar',
-            'test',
             'processFunctionalTestResources',
             'processTestResources',
             'validatePlugins'
