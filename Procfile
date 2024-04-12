@@ -1,1 +1,1 @@
-web: java -javaagent:server/server-app/opentelemetry/opentelemetry-javaagent.jar --add-opens=java.base/sun.net=ALL-UNNAMED -jar $JAVA_TOOL_OPTIONS server/server-app/build/libs/server-app-1.0-all.jar
+web: java -javaagent:server/server-app/opentelemetry/opentelemetry-javaagent.jar --add-opens=java.base/sun.net.www.protocol.https=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED -jar $JAVA_TOOL_OPTIONS server/server-app/build/libs/server-app-1.0-all.jar
