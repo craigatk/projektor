@@ -13,24 +13,25 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
 @ExperimentalTime
-
 class SchedulerTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should run scheduled job`() {
         var schedulerCalled = false
 
-        val scheduledJob = Runnable {
-            schedulerCalled = true
-        }
+        val scheduledJob =
+            Runnable {
+                schedulerCalled = true
+            }
 
         val schedulerLock = SchedulerLock(dataSource)
         val scheduler = Scheduler(schedulerLock)
 
-        val scheduleDuration = measureTime {
-            scheduler.scheduleJob(ScheduledJob("my_job", scheduledJob, ScheduleDelay(4, TimeUnit.SECONDS)))
+        val scheduleDuration =
+            measureTime {
+                scheduler.scheduleJob(ScheduledJob("my_job", scheduledJob, ScheduleDelay(4, TimeUnit.SECONDS)))
 
-            await until { schedulerCalled }
-        }
+                await until { schedulerCalled }
+            }
 
         expectThat(scheduleDuration.inWholeSeconds).isGreaterThanOrEqualTo(4)
 

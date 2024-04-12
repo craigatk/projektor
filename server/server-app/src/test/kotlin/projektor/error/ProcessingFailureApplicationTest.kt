@@ -19,7 +19,6 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class ProcessingFailureApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should fetch processing failures`() {
         val tooOldPublicIds = (1..5).map { randomPublicId() }
@@ -35,7 +34,7 @@ class ProcessingFailureApplicationTest : ApplicationTestCase() {
                             publicId = publicId,
                             body = "too-old",
                             bodyType = FailureBodyType.COVERAGE,
-                            e = IllegalArgumentException("too-old")
+                            e = IllegalArgumentException("too-old"),
                         )
                     }
                 }
@@ -46,7 +45,7 @@ class ProcessingFailureApplicationTest : ApplicationTestCase() {
                             publicId = publicId,
                             body = "recent-body-$publicId",
                             bodyType = FailureBodyType.COVERAGE,
-                            e = IllegalArgumentException("recent-failure-$publicId")
+                            e = IllegalArgumentException("recent-failure-$publicId"),
                         )
                     }
                 }

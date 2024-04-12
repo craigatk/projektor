@@ -48,7 +48,7 @@ class CoverageParserFileSpec : StringSpec({
         }
     }
 
-    "should include full file path for Jacoco results when base directory set"() {
+    "should include full file path for Jacoco results when base directory set" {
         val jacocoReportXml = JacocoXmlLoader().serverApp()
 
         val coverageReport = CoverageParser.parseReport(jacocoReportXml, "server/server-app/src/main/kotlin")

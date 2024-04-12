@@ -43,52 +43,51 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/org/$orgName/coverage") {
-
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = olderRunRepo1,
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repo1,
-                    projectName = "proj1"
+                    projectName = "proj1",
                 )
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = publicId1,
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repo1,
-                    projectName = "proj1"
+                    projectName = "proj1",
                 )
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = otherProjectRepo1,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repo1,
-                    projectName = "proj2"
+                    projectName = "proj2",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = olderRunRepo2,
                     coverageText = JacocoXmlLoader().jacocoXmlParser(),
-                    repoName = repo2
+                    repoName = repo2,
                 )
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = publicId2,
                     coverageText = JacocoXmlLoader().jacocoXmlParser(),
-                    repoName = repo2
+                    repoName = repo2,
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = olderRunRepo3,
                     coverageText = JacocoXmlLoader().junitResultsParser(),
-                    repoName = repo3
+                    repoName = repo3,
                 )
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = publicId3,
                     coverageText = JacocoXmlLoader().junitResultsParser(),
-                    repoName = repo3
+                    repoName = repo3,
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = anotherPublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
-                    repoName = anotherRepo
+                    repoName = anotherRepo,
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -146,19 +145,18 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/org/$orgName/coverage") {
-
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = mainBranchId,
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = featureBranchId,
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
-                    branchName = "feature/branch"
+                    branchName = "feature/branch",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)

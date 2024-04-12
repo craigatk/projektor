@@ -17,27 +17,26 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class CodeQualityReportApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `when code quality reports for test run should get them`() {
         val publicId = randomPublicId()
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/quality") {
-
                 val testRun = testRunDBGenerator.createEmptyTestRun(publicId)
 
-                val codeQualityReports = (1..3).map { idx ->
-                    val codeQualityReport = CodeQualityReport()
+                val codeQualityReports =
+                    (1..3).map { idx ->
+                        val codeQualityReport = CodeQualityReport()
 
-                    codeQualityReport.testRunId = testRun.id
-                    codeQualityReport.contents = "Report contents $idx"
-                    codeQualityReport.fileName = "code_quality_$idx.txt"
-                    codeQualityReport.groupName = "group_$idx"
-                    codeQualityReport.idx = idx
+                        codeQualityReport.testRunId = testRun.id
+                        codeQualityReport.contents = "Report contents $idx"
+                        codeQualityReport.fileName = "code_quality_$idx.txt"
+                        codeQualityReport.groupName = "group_$idx"
+                        codeQualityReport.idx = idx
 
-                    codeQualityReport
-                }
+                        codeQualityReport
+                    }
 
                 codeQualityReportDao.insert(codeQualityReports)
             }
@@ -76,7 +75,6 @@ class CodeQualityReportApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/quality") {
-
                 val testRun = testRunDBGenerator.createEmptyTestRun(publicId)
                 val otherTestRun = testRunDBGenerator.createEmptyTestRun(otherPublicId)
 

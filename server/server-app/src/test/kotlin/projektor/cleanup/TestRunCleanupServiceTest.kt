@@ -28,36 +28,37 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should delete non-grouped test run without attachments`() {
-        val cleanupService = TestRunCleanupService(
-            CleanupConfig(30, null, false),
-            get(),
-            get(),
-            get(),
-            null
-        )
+        val cleanupService =
+            TestRunCleanupService(
+                CleanupConfig(30, null, false),
+                get(),
+                get(),
+                get(),
+                null,
+            )
 
         val publicId = randomPublicId()
 
-        val testRun = testRunDBGenerator.createTestRun(
-            publicId,
-            listOf(
-                TestSuiteData(
-                    "testSuite1",
-                    listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
-                    listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
-                    listOf()
+        val testRun =
+            testRunDBGenerator.createTestRun(
+                publicId,
+                listOf(
+                    TestSuiteData(
+                        "testSuite1",
+                        listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
+                        listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
+                        listOf(),
+                    ),
+                    TestSuiteData(
+                        "testSuite2",
+                        listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
+                        listOf("testSuite2FailedTestCase1"),
+                        listOf(),
+                    ),
                 ),
-                TestSuiteData(
-                    "testSuite2",
-                    listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
-                    listOf("testSuite2FailedTestCase1"),
-                    listOf()
-                )
             )
-        )
 
         val testSuiteIds = testSuiteDao.fetchByTestRunId(testRun.id).map { it.id }
         val testCaseIds = testSuiteIds.flatMap { testCaseDao.fetchByTestSuiteId(it) }.map { it.id }
@@ -77,33 +78,35 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
 
     @Test
     fun `should delete grouped test run without attachments`() {
-        val cleanupService = TestRunCleanupService(
-            CleanupConfig(30, null, false),
-            get(),
-            get(),
-            get(),
-            null
-        )
+        val cleanupService =
+            TestRunCleanupService(
+                CleanupConfig(30, null, false),
+                get(),
+                get(),
+                get(),
+                null,
+            )
 
         val publicId = randomPublicId()
 
-        val testRun = testRunDBGenerator.createTestRun(
-            publicId,
-            listOf(
-                TestSuiteData(
-                    "testSuite1",
-                    listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
-                    listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
-                    listOf()
+        val testRun =
+            testRunDBGenerator.createTestRun(
+                publicId,
+                listOf(
+                    TestSuiteData(
+                        "testSuite1",
+                        listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
+                        listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
+                        listOf(),
+                    ),
+                    TestSuiteData(
+                        "testSuite2",
+                        listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
+                        listOf("testSuite2FailedTestCase1"),
+                        listOf(),
+                    ),
                 ),
-                TestSuiteData(
-                    "testSuite2",
-                    listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
-                    listOf("testSuite2FailedTestCase1"),
-                    listOf()
-                )
             )
-        )
 
         val testGroup1 = testRunDBGenerator.addTestSuiteGroupToTestRun("group1", testRun, listOf("testSuite1"))
         val testGroup2 = testRunDBGenerator.addTestSuiteGroupToTestRun("group2", testRun, listOf("testSuite2"))
@@ -129,13 +132,14 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
 
     @Test
     fun `should update processing status to 'deleted'`() {
-        val cleanupService = TestRunCleanupService(
-            CleanupConfig(30, null, false),
-            get(),
-            get(),
-            get(),
-            null
-        )
+        val cleanupService =
+            TestRunCleanupService(
+                CleanupConfig(30, null, false),
+                get(),
+                get(),
+                get(),
+                null,
+            )
 
         val publicId = randomPublicId()
 
@@ -143,7 +147,7 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
             ResultsProcessing()
                 .setPublicId(publicId.id)
                 .setCreatedTimestamp(LocalDateTime.now())
-                .setStatus(ResultsProcessingStatus.SUCCESS.name)
+                .setStatus(ResultsProcessingStatus.SUCCESS.name),
         )
 
         testRunDBGenerator.createTestRun(
@@ -153,9 +157,9 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
                     "testSuite1",
                     listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
                     listOf(),
-                    listOf()
-                )
-            )
+                    listOf(),
+                ),
+            ),
         )
 
         runBlocking { cleanupService.cleanupTestRun(publicId) }
@@ -169,45 +173,48 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
 
     @Test
     fun `should delete test run with attachments`() {
-        val attachmentsConfig = AttachmentConfig(
-            "http://localhost:9000",
-            "attachmentsremoving",
-            true,
-            "minio_access_key",
-            "minio_secret_key",
-            null
-        )
+        val attachmentsConfig =
+            AttachmentConfig(
+                "http://localhost:9000",
+                "attachmentsremoving",
+                true,
+                "minio_access_key",
+                "minio_secret_key",
+                null,
+            )
 
         val attachmentService = AttachmentService(attachmentsConfig, AttachmentDatabaseRepository(dslContext))
         attachmentService.conditionallyCreateBucketIfNotExists()
 
-        val cleanupService = TestRunCleanupService(
-            CleanupConfig(30, null, false),
-            get(),
-            get(),
-            get(),
-            attachmentService
-        )
+        val cleanupService =
+            TestRunCleanupService(
+                CleanupConfig(30, null, false),
+                get(),
+                get(),
+                get(),
+                attachmentService,
+            )
 
         val publicId = randomPublicId()
 
-        val testRun = testRunDBGenerator.createTestRun(
-            publicId,
-            listOf(
-                TestSuiteData(
-                    "testSuite1",
-                    listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
-                    listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
-                    listOf()
+        val testRun =
+            testRunDBGenerator.createTestRun(
+                publicId,
+                listOf(
+                    TestSuiteData(
+                        "testSuite1",
+                        listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
+                        listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
+                        listOf(),
+                    ),
+                    TestSuiteData(
+                        "testSuite2",
+                        listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
+                        listOf("testSuite2FailedTestCase1"),
+                        listOf(),
+                    ),
                 ),
-                TestSuiteData(
-                    "testSuite2",
-                    listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
-                    listOf("testSuite2FailedTestCase1"),
-                    listOf()
-                )
             )
-        )
 
         val attachmentInputStream = File("src/test/resources/test-attachment.txt").inputStream()
         val attachmentFileNames = listOf("attachment1.txt", "attachment2.txt", "attachment3.txt")

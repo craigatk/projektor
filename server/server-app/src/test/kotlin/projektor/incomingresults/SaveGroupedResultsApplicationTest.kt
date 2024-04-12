@@ -17,7 +17,6 @@ import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
 class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should save grouped test results`() {
         val requestBody = GroupedResultsXmlLoader().passingGroupedResults()

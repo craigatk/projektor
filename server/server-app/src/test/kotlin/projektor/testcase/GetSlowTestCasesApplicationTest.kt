@@ -56,7 +56,7 @@ class GetSlowTestCasesApplicationTest : ApplicationTestCase() {
                         BigDecimal("19.000"),
                         BigDecimal("18.000"),
                         BigDecimal("17.000"),
-                        BigDecimal("16.000")
+                        BigDecimal("16.000"),
                     )
             }
         }

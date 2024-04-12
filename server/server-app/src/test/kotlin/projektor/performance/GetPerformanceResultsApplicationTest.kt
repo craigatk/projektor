@@ -23,23 +23,25 @@ class GetPerformanceResultsApplicationTest : ApplicationTestCase() {
     fun `when performance results should return them`() {
         val publicId = randomPublicId()
 
-        val savedPerfResult1 = IncomingPerformanceResult(
-            name = "perf1",
-            requestsPerSecond = BigDecimal("80.00"),
-            requestCount = 4000,
-            average = BigDecimal("25.66"),
-            maximum = BigDecimal("45.99"),
-            p95 = BigDecimal("40.78")
-        )
+        val savedPerfResult1 =
+            IncomingPerformanceResult(
+                name = "perf1",
+                requestsPerSecond = BigDecimal("80.00"),
+                requestCount = 4000,
+                average = BigDecimal("25.66"),
+                maximum = BigDecimal("45.99"),
+                p95 = BigDecimal("40.78"),
+            )
 
-        val savedPerfResult2 = IncomingPerformanceResult(
-            name = "perf2",
-            requestsPerSecond = BigDecimal("90.00"),
-            requestCount = 6000,
-            average = BigDecimal("20.67"),
-            maximum = BigDecimal("42.88"),
-            p95 = BigDecimal("30.48")
-        )
+        val savedPerfResult2 =
+            IncomingPerformanceResult(
+                name = "perf2",
+                requestsPerSecond = BigDecimal("90.00"),
+                requestCount = 6000,
+                average = BigDecimal("20.67"),
+                maximum = BigDecimal("42.88"),
+                p95 = BigDecimal("30.48"),
+            )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/performance") {

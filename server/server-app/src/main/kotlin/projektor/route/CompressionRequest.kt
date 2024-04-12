@@ -8,11 +8,12 @@ import projektor.util.ungzip
 
 object CompressionRequest {
     suspend fun receiveCompressedOrPlainTextPayload(call: ApplicationCall): String {
-        val payload = if (call.request.header(HttpHeaders.ContentEncoding) == "gzip") {
-            ungzip(call.receive<ByteArray>())
-        } else {
-            call.receive<String>()
-        }
+        val payload =
+            if (call.request.header(HttpHeaders.ContentEncoding) == "gzip") {
+                ungzip(call.receive<ByteArray>())
+            } else {
+                call.receive<String>()
+            }
 
         return payload
     }

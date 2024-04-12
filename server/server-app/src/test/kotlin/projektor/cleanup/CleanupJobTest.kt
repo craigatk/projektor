@@ -12,13 +12,14 @@ import java.time.LocalDate
 class CleanupJobTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should execute test report cleanup`() {
-        val cleanupService = TestRunCleanupService(
-            CleanupConfig(30, null, false),
-            get(),
-            get(),
-            get(),
-            null
-        )
+        val cleanupService =
+            TestRunCleanupService(
+                CleanupConfig(30, null, false),
+                get(),
+                get(),
+                get(),
+                null,
+            )
         val cleanupScheduledJob = CleanupScheduledJob(cleanupService, null)
 
         val publicIdToDelete = randomPublicId()

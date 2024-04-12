@@ -29,7 +29,11 @@ class TestRunMetadataDatabaseRepository(private val dslContext: DSLContext) : Te
                 .fetchOneInto(TestRunMetadata::class.java)
         }
 
-    override suspend fun updateGitMetadata(testRunId: Long, pullRequestNumber: Int?, commitSha: String?) {
+    override suspend fun updateGitMetadata(
+        testRunId: Long,
+        pullRequestNumber: Int?,
+        commitSha: String?,
+    ) {
         withContext(Dispatchers.IO) {
             dslContext.update(GIT_METADATA)
                 .set(GIT_METADATA.PULL_REQUEST_NUMBER, pullRequestNumber)

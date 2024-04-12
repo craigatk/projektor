@@ -19,5 +19,5 @@ data class TestSuite(
     val hasSystemErr: Boolean,
     val groupName: String?,
     val groupLabel: String?,
-    val testCases: List<TestCase>?
+    val testCases: List<TestCase>?,
 )

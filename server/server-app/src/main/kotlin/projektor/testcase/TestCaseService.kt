@@ -7,23 +7,28 @@ import projektor.server.api.TestOutput
 
 class TestCaseService(
     private val testCaseRepository: TestCaseRepository,
-    private val attachmentService: AttachmentService?
+    private val attachmentService: AttachmentService?,
 ) {
+    private val attachmentMatchers =
+        listOf(
+            CypressScreenshotAttachmentMatcher(),
+            CypressVideoAttachmentMatcher(),
+        )
 
-    private val attachmentMatchers = listOf(
-        CypressScreenshotAttachmentMatcher(),
-        CypressVideoAttachmentMatcher()
-    )
-
-    suspend fun fetchTestCase(testRunPublicId: PublicId, testSuiteIdx: Int, testCaseIdx: Int): TestCase? {
+    suspend fun fetchTestCase(
+        testRunPublicId: PublicId,
+        testSuiteIdx: Int,
+        testCaseIdx: Int,
+    ): TestCase? {
         val testCase = testCaseRepository.fetchTestCase(testRunPublicId, testSuiteIdx, testCaseIdx)
 
         if (testCase?.passed == false) {
             val attachments = attachmentService?.listAttachments(testRunPublicId)
 
-            val testCaseAttachments = attachmentMatchers.mapNotNull { attachmentMatcher ->
-                attachmentMatcher.findAttachment(testCase, attachments)
-            }
+            val testCaseAttachments =
+                attachmentMatchers.mapNotNull { attachmentMatcher ->
+                    attachmentMatcher.findAttachment(testCase, attachments)
+                }
 
             testCase.attachments = testCaseAttachments
         }
@@ -38,9 +43,10 @@ class TestCaseService(
             val attachments = attachmentService?.listAttachments(publicId)
 
             failedTestCases.forEach { testCase ->
-                val testCaseAttachments = attachmentMatchers.mapNotNull { attachmentMatcher ->
-                    attachmentMatcher.findAttachment(testCase, attachments)
-                }
+                val testCaseAttachments =
+                    attachmentMatchers.mapNotNull { attachmentMatcher ->
+                        attachmentMatcher.findAttachment(testCase, attachments)
+                    }
 
                 testCase.attachments = testCaseAttachments
             }
@@ -49,12 +55,20 @@ class TestCaseService(
         return failedTestCases
     }
 
-    suspend fun fetchSlowTestCases(publicId: PublicId, limit: Int): List<TestCase> =
-        testCaseRepository.fetchSlowTestCases(publicId, limit)
+    suspend fun fetchSlowTestCases(
+        publicId: PublicId,
+        limit: Int,
+    ): List<TestCase> = testCaseRepository.fetchSlowTestCases(publicId, limit)
 
-    suspend fun fetchTestCaseSystemErr(publicId: PublicId, testSuiteIdx: Int, testCaseIdx: Int): TestOutput =
-        testCaseRepository.fetchTestCaseSystemErr(publicId, testSuiteIdx, testCaseIdx)
+    suspend fun fetchTestCaseSystemErr(
+        publicId: PublicId,
+        testSuiteIdx: Int,
+        testCaseIdx: Int,
+    ): TestOutput = testCaseRepository.fetchTestCaseSystemErr(publicId, testSuiteIdx, testCaseIdx)
 
-    suspend fun fetchTestCaseSystemOut(publicId: PublicId, testSuiteIdx: Int, testCaseIdx: Int): TestOutput =
-        testCaseRepository.fetchTestCaseSystemOut(publicId, testSuiteIdx, testCaseIdx)
+    suspend fun fetchTestCaseSystemOut(
+        publicId: PublicId,
+        testSuiteIdx: Int,
+        testCaseIdx: Int,
+    ): TestOutput = testCaseRepository.fetchTestCaseSystemOut(publicId, testSuiteIdx, testCaseIdx)
 }

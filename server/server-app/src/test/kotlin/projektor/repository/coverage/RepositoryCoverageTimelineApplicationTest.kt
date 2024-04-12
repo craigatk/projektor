@@ -21,7 +21,6 @@ import java.time.ZoneOffset
 import kotlin.test.assertNotNull
 
 class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should fetch coverage timeline in mainline for repository without project name`() {
         val orgName = RandomStringUtils.randomAlphabetic(12)
@@ -37,33 +36,32 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/coverage/timeline") {
-
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = firstRunPublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = secondRunPublicId,
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = thirdRunPublicId,
                     coverageText = JacocoXmlLoader().jacocoXmlParser(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInDifferentBranchPublicId,
                     coverageText = JacocoXmlLoader().jacocoXmlParser(),
                     repoName = repoName,
-                    branchName = "feature/dev"
+                    branchName = "feature/dev",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -71,14 +69,14 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = "other-project"
+                    projectName = "other-project",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInDifferentRepoPublicId,
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = "other/repo",
-                    branchName = "main"
+                    branchName = "main",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -133,33 +131,32 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/coverage/timeline?branch=ALL") {
-
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = firstRunPublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = secondRunPublicId,
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = thirdRunPublicId,
                     coverageText = JacocoXmlLoader().jacocoXmlParser(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInDifferentBranchPublicId,
                     coverageText = JacocoXmlLoader().jacocoXmlParser(),
                     repoName = repoName,
-                    branchName = "feature/dev"
+                    branchName = "feature/dev",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -167,14 +164,14 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = "other-project"
+                    projectName = "other-project",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInDifferentRepoPublicId,
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = "other/repo",
-                    branchName = "main"
+                    branchName = "main",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -216,13 +213,12 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/project/$projectName/coverage/timeline") {
-
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = firstRunPublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = projectName
+                    projectName = projectName,
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -230,7 +226,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = projectName
+                    projectName = projectName,
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -238,7 +234,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
                     branchName = "feature/dev",
-                    projectName = projectName
+                    projectName = projectName,
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -246,7 +242,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = null
+                    projectName = null,
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -254,14 +250,14 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = "other-project"
+                    projectName = "other-project",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInDifferentRepoPublicId,
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = "other/repo",
-                    branchName = "main"
+                    branchName = "main",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -308,13 +304,12 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/project/$projectName/coverage/timeline?branch=ALL") {
-
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = firstRunPublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = projectName
+                    projectName = projectName,
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -322,7 +317,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = projectName
+                    projectName = projectName,
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -330,7 +325,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
                     branchName = "feature/dev",
-                    projectName = projectName
+                    projectName = projectName,
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -338,7 +333,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = null
+                    projectName = null,
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -346,14 +341,14 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = "other-project"
+                    projectName = "other-project",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInDifferentRepoPublicId,
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = "other/repo",
-                    branchName = "main"
+                    branchName = "main",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)

@@ -10,7 +10,10 @@ class TimeMillisJsonLoggingProvider : AbstractFieldJsonProvider<ILoggingEvent> {
         fieldName = FIELD_NAME
     }
 
-    override fun writeTo(generator: JsonGenerator, event: ILoggingEvent) {
+    override fun writeTo(
+        generator: JsonGenerator,
+        event: ILoggingEvent,
+    ) {
         JsonWritingUtils.writeNumberField(generator, fieldName, event.timeStamp / 1000)
     }
 

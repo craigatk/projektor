@@ -12,7 +12,10 @@ import projektor.server.api.attachments.Attachment
 class AttachmentDatabaseRepository(private val dslContext: DSLContext) : AttachmentRepository {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
-    override suspend fun addAttachment(publicId: PublicId, attachment: Attachment) {
+    override suspend fun addAttachment(
+        publicId: PublicId,
+        attachment: Attachment,
+    ) {
         withContext(Dispatchers.IO) {
             dslContext.transaction { configuration ->
                 val attachmentDao = TestRunAttachmentDao(configuration)
@@ -30,13 +33,16 @@ class AttachmentDatabaseRepository(private val dslContext: DSLContext) : Attachm
                 .fetchInto(Attachment::class.java)
         }
 
-    override suspend fun deleteAttachment(publicId: PublicId, objectName: String) {
+    override suspend fun deleteAttachment(
+        publicId: PublicId,
+        objectName: String,
+    ) {
         withContext(Dispatchers.IO) {
             dslContext
                 .deleteFrom(Tables.TEST_RUN_ATTACHMENT)
                 .where(
                     Tables.TEST_RUN_ATTACHMENT.TEST_RUN_PUBLIC_ID.eq(publicId.id)
-                        .and(Tables.TEST_RUN_ATTACHMENT.OBJECT_NAME.eq(objectName))
+                        .and(Tables.TEST_RUN_ATTACHMENT.OBJECT_NAME.eq(objectName)),
                 )
                 .execute()
         }

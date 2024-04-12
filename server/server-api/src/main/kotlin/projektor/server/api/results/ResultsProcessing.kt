@@ -6,5 +6,5 @@ data class ResultsProcessing(
     val id: String,
     val status: ResultsProcessingStatus,
     val createdTimestamp: LocalDateTime?,
-    val errorMessage: String?
+    val errorMessage: String?,
 )

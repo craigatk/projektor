@@ -12,16 +12,18 @@ import strikt.assertions.isNotNull
 class CoverageFileCombinerTest {
     @Test
     fun `should add new files that do not currently exist`() {
-        val existingCoverageFiles = listOf(
-            createCoverageFile("src/File1.tsx", arrayOf(2), CoverageStat(covered = 5, missed = 1)),
-            createCoverageFile("src/File2.tsx", arrayOf(), CoverageStat(covered = 6, missed = 0)),
-            createCoverageFile("src/File3.tsx", arrayOf(), CoverageStat(covered = 7, missed = 0))
-        )
+        val existingCoverageFiles =
+            listOf(
+                createCoverageFile("src/File1.tsx", arrayOf(2), CoverageStat(covered = 5, missed = 1)),
+                createCoverageFile("src/File2.tsx", arrayOf(), CoverageStat(covered = 6, missed = 0)),
+                createCoverageFile("src/File3.tsx", arrayOf(), CoverageStat(covered = 7, missed = 0)),
+            )
 
-        val incomingCoverageFiles = listOf(
-            createCoverageFile("src/File8.tsx", arrayOf(2, 6), CoverageStat(covered = 5, missed = 2)),
-            createCoverageFile("src/File9.tsx", arrayOf(), CoverageStat(covered = 9, missed = 0))
-        )
+        val incomingCoverageFiles =
+            listOf(
+                createCoverageFile("src/File8.tsx", arrayOf(2, 6), CoverageStat(covered = 5, missed = 2)),
+                createCoverageFile("src/File9.tsx", arrayOf(), CoverageStat(covered = 9, missed = 0)),
+            )
 
         val combinedCoverageFiles = combineCoverageFiles(existingCoverageFiles, incomingCoverageFiles)
         expectThat(combinedCoverageFiles).hasSize(5)
@@ -55,15 +57,17 @@ class CoverageFileCombinerTest {
 
     @Test
     fun `should combine existing file and add new one`() {
-        val existingCoverageFiles = listOf(
-            createCoverageFile("src/File1.tsx", arrayOf(2), CoverageStat(covered = 5, missed = 1)),
-            createCoverageFile("src/File2.tsx", arrayOf(3), CoverageStat(covered = 6, missed = 1)),
-        )
+        val existingCoverageFiles =
+            listOf(
+                createCoverageFile("src/File1.tsx", arrayOf(2), CoverageStat(covered = 5, missed = 1)),
+                createCoverageFile("src/File2.tsx", arrayOf(3), CoverageStat(covered = 6, missed = 1)),
+            )
 
-        val incomingCoverageFiles = listOf(
-            createCoverageFile("src/File1.tsx", arrayOf(6), CoverageStat(covered = 5, missed = 1)),
-            createCoverageFile("src/File3.tsx", arrayOf(), CoverageStat(covered = 9, missed = 0))
-        )
+        val incomingCoverageFiles =
+            listOf(
+                createCoverageFile("src/File1.tsx", arrayOf(6), CoverageStat(covered = 5, missed = 1)),
+                createCoverageFile("src/File3.tsx", arrayOf(), CoverageStat(covered = 9, missed = 0)),
+            )
 
         val combinedCoverageFiles = combineCoverageFiles(existingCoverageFiles, incomingCoverageFiles)
         expectThat(combinedCoverageFiles).hasSize(3)
@@ -87,13 +91,15 @@ class CoverageFileCombinerTest {
 
     @Test
     fun `should use the intersection of missed lines as the result`() {
-        val existingCoverageFiles = listOf(
-            createCoverageFile("src/File1.tsx", arrayOf(2, 6, 8, 9), CoverageStat(covered = 5, missed = 4)),
-        )
+        val existingCoverageFiles =
+            listOf(
+                createCoverageFile("src/File1.tsx", arrayOf(2, 6, 8, 9), CoverageStat(covered = 5, missed = 4)),
+            )
 
-        val incomingCoverageFiles = listOf(
-            createCoverageFile("src/File1.tsx", arrayOf(1, 6, 8, 10), CoverageStat(covered = 5, missed = 4)),
-        )
+        val incomingCoverageFiles =
+            listOf(
+                createCoverageFile("src/File1.tsx", arrayOf(1, 6, 8, 10), CoverageStat(covered = 5, missed = 4)),
+            )
 
         val combinedCoverageFiles = combineCoverageFiles(existingCoverageFiles, incomingCoverageFiles)
         expectThat(combinedCoverageFiles).hasSize(1)
@@ -105,17 +111,21 @@ class CoverageFileCombinerTest {
         }
     }
 
-    private fun createCoverageFile(filePath: String, missedLines: Array<Int>, lineStat: CoverageStat) =
-        CoverageFile(
-            filePath = filePath,
-            fileName = "fileName",
-            directoryName = "dir",
-            missedLines = missedLines,
-            partialLines = arrayOf(),
-            stats = CoverageStats(
+    private fun createCoverageFile(
+        filePath: String,
+        missedLines: Array<Int>,
+        lineStat: CoverageStat,
+    ) = CoverageFile(
+        filePath = filePath,
+        fileName = "fileName",
+        directoryName = "dir",
+        missedLines = missedLines,
+        partialLines = arrayOf(),
+        stats =
+            CoverageStats(
                 lineStat = lineStat,
                 branchStat = CoverageStat(0, 0),
-                statementStat = CoverageStat(0, 0)
-            )
-        )
+                statementStat = CoverageStat(0, 0),
+            ),
+    )
 }

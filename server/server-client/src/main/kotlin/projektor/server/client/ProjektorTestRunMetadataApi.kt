@@ -7,5 +7,7 @@ import retrofit2.http.Path
 
 interface ProjektorTestRunMetadataApi {
     @GET("/run/{publicId}/metadata")
-    fun testRunMetadata(@Path("publicId") publicId: String): Call<TestRunMetadata>
+    fun testRunMetadata(
+        @Path("publicId") publicId: String,
+    ): Call<TestRunMetadata>
 }

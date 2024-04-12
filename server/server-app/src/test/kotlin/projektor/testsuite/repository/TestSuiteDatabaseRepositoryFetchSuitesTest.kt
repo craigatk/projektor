@@ -27,26 +27,27 @@ class TestSuiteDatabaseRepositoryFetchSuitesTest : DatabaseRepositoryTestCase() 
                     "projektor.TestSuite1",
                     listOf("testCase1"),
                     listOf(),
-                    listOf()
+                    listOf(),
                 ),
                 TestSuiteData(
                     "projektor.TestSuite2",
                     listOf("testCase1"),
                     listOf(),
-                    listOf()
+                    listOf(),
                 ),
                 TestSuiteData(
                     "something.else.testSuite2",
                     listOf("testCase1"),
                     listOf(),
-                    listOf()
-                )
-            )
+                    listOf(),
+                ),
+            ),
         )
 
-        val testSuites = runBlocking {
-            testSuiteDatabaseRepository.fetchTestSuites(publicId, TestSuiteSearchCriteria("projektor", false))
-        }
+        val testSuites =
+            runBlocking {
+                testSuiteDatabaseRepository.fetchTestSuites(publicId, TestSuiteSearchCriteria("projektor", false))
+            }
 
         expectThat(testSuites)
             .hasSize(2)
@@ -72,26 +73,27 @@ class TestSuiteDatabaseRepositoryFetchSuitesTest : DatabaseRepositoryTestCase() 
                     "projektor.TestSuite1",
                     listOf("testCase1"),
                     listOf(),
-                    listOf()
+                    listOf(),
                 ),
                 TestSuiteData(
                     "projektor.TestSuite2",
                     listOf("testCase1"),
                     listOf(),
-                    listOf()
+                    listOf(),
                 ),
                 TestSuiteData(
                     "something.else.testSuite2",
                     listOf("testCase1"),
                     listOf(),
-                    listOf()
-                )
-            )
+                    listOf(),
+                ),
+            ),
         )
 
-        val testSuites = runBlocking {
-            testSuiteDatabaseRepository.fetchTestSuites(publicId, TestSuiteSearchCriteria("should.find.nothing", false))
-        }
+        val testSuites =
+            runBlocking {
+                testSuiteDatabaseRepository.fetchTestSuites(publicId, TestSuiteSearchCriteria("should.find.nothing", false))
+            }
 
         expectThat(testSuites).isEmpty()
     }

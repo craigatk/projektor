@@ -15,7 +15,12 @@ import projektor.database.generated.tables.pojos.ResultsProcessingFailure as Res
 class ProcessingFailureDatabaseRepository(private val dslContext: DSLContext) : ProcessingFailureRepository {
     private val resultsProcessingFailureDao = ResultsProcessingFailureDao(dslContext.configuration())
 
-    override suspend fun recordProcessingFailure(publicId: PublicId, body: String, bodyType: FailureBodyType, failureMessage: String?): ResultsProcessingFailure {
+    override suspend fun recordProcessingFailure(
+        publicId: PublicId,
+        body: String,
+        bodyType: FailureBodyType,
+        failureMessage: String?,
+    ): ResultsProcessingFailure {
         val resultsProcessingFailureDB = ResultsProcessingFailureDB()
         resultsProcessingFailureDB.publicId = publicId.id
         resultsProcessingFailureDB.body = body
@@ -29,7 +34,7 @@ class ProcessingFailureDatabaseRepository(private val dslContext: DSLContext) : 
             body = body,
             bodyType = bodyType,
             failureMessage = failureMessage,
-            createdTimestamp = resultsProcessingFailureDB.createdTimestamp.toInstant(ZoneOffset.UTC)
+            createdTimestamp = resultsProcessingFailureDB.createdTimestamp.toInstant(ZoneOffset.UTC),
         )
     }
 

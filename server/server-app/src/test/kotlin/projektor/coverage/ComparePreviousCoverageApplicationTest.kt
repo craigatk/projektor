@@ -29,13 +29,13 @@ class ComparePreviousCoverageApplicationTest : ApplicationTestCase() {
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = previousPublicId,
                     coverageText = JacocoXmlLoader().serverApp(),
-                    repoName = repoName
+                    repoName = repoName,
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = thisPublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
-                    repoName = repoName
+                    repoName = repoName,
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -86,17 +86,16 @@ class ComparePreviousCoverageApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$thisPublicId/coverage") {
-
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = previousPublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
-                    repoName = repoName
+                    repoName = repoName,
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = thisPublicId,
                     coverageText = JacocoXmlLoader().serverApp(),
-                    repoName = repoName
+                    repoName = repoName,
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)

@@ -16,23 +16,25 @@ import projektor.database.generated.tables.pojos.ResultsProcessing as ResultsPro
 
 class ResultsProcessingDatabaseRepository(
     private val dslContext: DSLContext,
-    private val processingFailureRepository: ProcessingFailureRepository
+    private val processingFailureRepository: ProcessingFailureRepository,
 ) : ResultsProcessingRepository {
     private val resultsProcessingDao = ResultsProcessingDao(dslContext.configuration())
 
-    private val resultsProcessingMapper = JdbcMapperFactory.newInstance()
-        .addKeys("public_id")
-        .ignorePropertyNotFound()
-        .newMapper(ResultsProcessing::class.java)
+    private val resultsProcessingMapper =
+        JdbcMapperFactory.newInstance()
+            .addKeys("public_id")
+            .ignorePropertyNotFound()
+            .newMapper(ResultsProcessing::class.java)
 
     override suspend fun createResultsProcessing(publicId: PublicId): ResultsProcessing =
         withContext(Dispatchers.IO) {
             val createdTimestamp = LocalDateTime.now()
 
-            val resultsProcessingDB = ResultsProcessingDB()
-                .setPublicId(publicId.id)
-                .setStatus(ResultsProcessingStatus.RECEIVED.name)
-                .setCreatedTimestamp(createdTimestamp)
+            val resultsProcessingDB =
+                ResultsProcessingDB()
+                    .setPublicId(publicId.id)
+                    .setStatus(ResultsProcessingStatus.RECEIVED.name)
+                    .setCreatedTimestamp(createdTimestamp)
             resultsProcessingDao.insert(resultsProcessingDB)
 
             ResultsProcessing(publicId.id, ResultsProcessingStatus.RECEIVED, createdTimestamp, null)
@@ -40,7 +42,7 @@ class ResultsProcessingDatabaseRepository(
 
     override suspend fun updateResultsProcessingStatus(
         publicId: PublicId,
-        newStatus: ResultsProcessingStatus
+        newStatus: ResultsProcessingStatus,
     ): Boolean =
         withContext(Dispatchers.IO) {
             dslContext.update(Tables.RESULTS_PROCESSING)
@@ -52,20 +54,21 @@ class ResultsProcessingDatabaseRepository(
     override suspend fun recordResultsProcessingError(
         publicId: PublicId,
         resultsBody: String,
-        errorMessage: String?
+        errorMessage: String?,
     ): Boolean =
         withContext(Dispatchers.IO) {
-            val updateProcessingStatus = dslContext.update(Tables.RESULTS_PROCESSING)
-                .set(Tables.RESULTS_PROCESSING.STATUS, ResultsProcessingStatus.ERROR.name)
-                .set(Tables.RESULTS_PROCESSING.ERROR_MESSAGE, errorMessage)
-                .where(Tables.RESULTS_PROCESSING.PUBLIC_ID.eq(publicId.id))
-                .execute() > 0
+            val updateProcessingStatus =
+                dslContext.update(Tables.RESULTS_PROCESSING)
+                    .set(Tables.RESULTS_PROCESSING.STATUS, ResultsProcessingStatus.ERROR.name)
+                    .set(Tables.RESULTS_PROCESSING.ERROR_MESSAGE, errorMessage)
+                    .where(Tables.RESULTS_PROCESSING.PUBLIC_ID.eq(publicId.id))
+                    .execute() > 0
 
             processingFailureRepository.recordProcessingFailure(
                 publicId = publicId,
                 body = resultsBody,
                 bodyType = FailureBodyType.TEST_RESULTS,
-                failureMessage = errorMessage
+                failureMessage = errorMessage,
             )
 
             updateProcessingStatus
@@ -73,13 +76,14 @@ class ResultsProcessingDatabaseRepository(
 
     override suspend fun fetchResultsProcessing(publicId: PublicId): ResultsProcessing? =
         withContext(Dispatchers.IO) {
-            val resultSet = dslContext
-                .select(Tables.RESULTS_PROCESSING.fields().toList())
-                .select(Tables.RESULTS_PROCESSING.PUBLIC_ID.`as`("id"))
-                .from(Tables.RESULTS_PROCESSING)
-                .where(Tables.RESULTS_PROCESSING.PUBLIC_ID.eq(publicId.id))
-                .limit(1)
-                .fetchResultSet()
+            val resultSet =
+                dslContext
+                    .select(Tables.RESULTS_PROCESSING.fields().toList())
+                    .select(Tables.RESULTS_PROCESSING.PUBLIC_ID.`as`("id"))
+                    .from(Tables.RESULTS_PROCESSING)
+                    .where(Tables.RESULTS_PROCESSING.PUBLIC_ID.eq(publicId.id))
+                    .limit(1)
+                    .fetchResultSet()
 
             resultSet.use { resultsProcessingMapper.stream(it).findFirst().orElse(null) }
         }

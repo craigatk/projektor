@@ -13,7 +13,10 @@ class GroupedResultsXmlLoader {
     private val groupedResultsParser = GroupedResultsParser()
     private val resultsXmlLoader = ResultsXmlLoader()
 
-    fun passingGroupedResults(metadata: ResultsMetadata? = null, wallClockDuration: BigDecimal? = null): String {
+    fun passingGroupedResults(
+        metadata: ResultsMetadata? = null,
+        wallClockDuration: BigDecimal? = null,
+    ): String {
         val groupedTestSuites1 = GroupedTestSuites()
         groupedTestSuites1.groupName = "Group1"
         groupedTestSuites1.groupLabel = "unitTest"
@@ -34,7 +37,10 @@ class GroupedResultsXmlLoader {
         return groupedResultsParser.serializeGroupedResults(groupedResults)
     }
 
-    fun wrapResultsXmlInGroup(resultsXml: String, metadata: ResultsMetadata? = null): String {
+    fun wrapResultsXmlInGroup(
+        resultsXml: String,
+        metadata: ResultsMetadata? = null,
+    ): String {
         val groupedTestSuites = GroupedTestSuites()
         groupedTestSuites.groupName = "Group1"
         groupedTestSuites.groupLabel = "unitTest"
@@ -48,7 +54,10 @@ class GroupedResultsXmlLoader {
         return groupedResultsParser.serializeGroupedResults(groupedResults)
     }
 
-    fun wrapResultsXmlsInGroup(resultsXmls: List<String>, metadata: ResultsMetadata? = null): String {
+    fun wrapResultsXmlsInGroup(
+        resultsXmls: List<String>,
+        metadata: ResultsMetadata? = null,
+    ): String {
         val groupedTestSuites = GroupedTestSuites()
         groupedTestSuites.groupName = "Group1"
         groupedTestSuites.groupLabel = "unitTest"
@@ -62,7 +71,10 @@ class GroupedResultsXmlLoader {
         return groupedResultsParser.serializeGroupedResults(groupedResults)
     }
 
-    fun wrapPerformanceResultsInGroup(performanceResults: List<PerformanceResult>, metadata: ResultsMetadata? = null): String {
+    fun wrapPerformanceResultsInGroup(
+        performanceResults: List<PerformanceResult>,
+        metadata: ResultsMetadata? = null,
+    ): String {
         val groupedResults = GroupedResults()
         groupedResults.performanceResults = performanceResults
         groupedResults.metadata = metadata
@@ -70,7 +82,11 @@ class GroupedResultsXmlLoader {
         return groupedResultsParser.serializeGroupedResults(groupedResults)
     }
 
-    fun wrapPerformanceResultsInGroup(name: String, performanceResultsBlob: String, metadata: ResultsMetadata? = null): String {
+    fun wrapPerformanceResultsInGroup(
+        name: String,
+        performanceResultsBlob: String,
+        metadata: ResultsMetadata? = null,
+    ): String {
         val performanceResult = PerformanceResult()
         performanceResult.name = name
         performanceResult.resultsBlob = performanceResultsBlob
@@ -78,7 +94,10 @@ class GroupedResultsXmlLoader {
         return wrapPerformanceResultsInGroup(listOf(performanceResult), metadata)
     }
 
-    fun passingResultsWithCoverage(coverageFiles: List<CoverageFile>, metadata: ResultsMetadata? = null): String {
+    fun passingResultsWithCoverage(
+        coverageFiles: List<CoverageFile>,
+        metadata: ResultsMetadata? = null,
+    ): String {
         val groupedTestSuites1 = GroupedTestSuites()
         groupedTestSuites1.groupName = "Group1"
         groupedTestSuites1.groupLabel = "unitTest"
@@ -99,7 +118,10 @@ class GroupedResultsXmlLoader {
         return groupedResultsParser.serializeGroupedResults(groupedResults)
     }
 
-    fun codeQualityResults(codeQualityReports: List<CodeQualityReport>, metadata: ResultsMetadata? = null): String {
+    fun codeQualityResults(
+        codeQualityReports: List<CodeQualityReport>,
+        metadata: ResultsMetadata? = null,
+    ): String {
         val groupedResults = GroupedResults()
         groupedResults.metadata = metadata
         groupedResults.codeQualityFiles = codeQualityReports
@@ -107,7 +129,11 @@ class GroupedResultsXmlLoader {
         return groupedResultsParser.serializeGroupedResults(groupedResults)
     }
 
-    fun resultsWithCoverage(resultsXmls: List<String>, coverageXmls: List<String>, metadata: ResultsMetadata? = null): String {
+    fun resultsWithCoverage(
+        resultsXmls: List<String>,
+        coverageXmls: List<String>,
+        metadata: ResultsMetadata? = null,
+    ): String {
         val groupedTestSuites = GroupedTestSuites()
         groupedTestSuites.groupName = "All files"
         groupedTestSuites.directory = "/src"
@@ -116,12 +142,13 @@ class GroupedResultsXmlLoader {
         val groupedResults = GroupedResults()
         groupedResults.groupedTestSuites = listOf(groupedTestSuites)
         groupedResults.metadata = metadata
-        groupedResults.coverageFiles = coverageXmls.map { coverageXml ->
-            val coverageFile = CoverageFile()
-            coverageFile.reportContents = coverageXml
-            coverageFile.baseDirectoryPath = "/src"
-            coverageFile
-        }
+        groupedResults.coverageFiles =
+            coverageXmls.map { coverageXml ->
+                val coverageFile = CoverageFile()
+                coverageFile.reportContents = coverageXml
+                coverageFile.baseDirectoryPath = "/src"
+                coverageFile
+            }
 
         return groupedResultsParser.serializeGroupedResults(groupedResults)
     }

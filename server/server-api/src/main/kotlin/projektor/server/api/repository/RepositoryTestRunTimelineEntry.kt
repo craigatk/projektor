@@ -10,7 +10,7 @@ data class RepositoryTestRunTimelineEntry(
     val cumulativeDuration: BigDecimal,
     val wallClockDuration: BigDecimal?,
     val totalTestCount: Int,
-    val passed: Boolean
+    val passed: Boolean,
 ) {
     val testAverageDuration: BigDecimal
         get() = calculateAverageDuration(cumulativeDuration, totalTestCount)

@@ -34,7 +34,7 @@ class GroupedTestResultsService(
     private val gitHubPullRequestCommentService: GitHubPullRequestCommentService,
     private val coverageService: CoverageService,
     private val appendTestResultsService: AppendTestResultsService,
-    private val codeQualityReportRepository: CodeQualityReportRepository
+    private val codeQualityReportRepository: CodeQualityReportRepository,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
@@ -49,23 +49,24 @@ class GroupedTestResultsService(
 
         val span = tracer.startSpanWithParent("projektor.parseGroupedResults")
 
-        val groupedResults = try {
-            groupedResultsConverter.parseAndConvertGroupedResults(groupedResultsBlob)
-        } catch (e: JsonProcessingException) {
-            val errorMessage = "Problem parsing test results: ${e.message}"
-            logger.info(errorMessage, e)
-            metricsService.incrementResultsParseFailureCounter()
-            testResultsProcessingService.recordResultsProcessingError(publicId, groupedResultsBlob, errorMessage)
-            throw PersistTestResultsException(publicId, errorMessage, e)
-        } catch (e: Exception) {
-            val errorMessage = "Error persisting test results: ${e.message}"
-            logger.error(errorMessage, e)
-            metricsService.incrementResultsProcessFailureCounter()
-            testResultsProcessingService.recordResultsProcessingError(publicId, groupedResultsBlob, errorMessage)
-            throw PersistTestResultsException(publicId, errorMessage, e)
-        } finally {
-            span.end()
-        }
+        val groupedResults =
+            try {
+                groupedResultsConverter.parseAndConvertGroupedResults(groupedResultsBlob)
+            } catch (e: JsonProcessingException) {
+                val errorMessage = "Problem parsing test results: ${e.message}"
+                logger.info(errorMessage, e)
+                metricsService.incrementResultsParseFailureCounter()
+                testResultsProcessingService.recordResultsProcessingError(publicId, groupedResultsBlob, errorMessage)
+                throw PersistTestResultsException(publicId, errorMessage, e)
+            } catch (e: Exception) {
+                val errorMessage = "Error persisting test results: ${e.message}"
+                logger.error(errorMessage, e)
+                metricsService.incrementResultsProcessFailureCounter()
+                testResultsProcessingService.recordResultsProcessingError(publicId, groupedResultsBlob, errorMessage)
+                throw PersistTestResultsException(publicId, errorMessage, e)
+            } finally {
+                span.end()
+            }
 
         val group = groupedResults.metadata?.group
         val repoAndOrgName = groupedResults.metadata?.git?.repoName
@@ -84,13 +85,18 @@ class GroupedTestResultsService(
         return existingPublicIdWithGroup ?: publicId
     }
 
-    suspend fun doPersistTestResults(publicId: PublicId, groupedResults: GroupedResults, groupedResultsBlob: String) {
+    suspend fun doPersistTestResults(
+        publicId: PublicId,
+        groupedResults: GroupedResults,
+        groupedResultsBlob: String,
+    ) {
         try {
             val (testRunId, testRunSummary) = testRunRepository.saveGroupedTestRun(publicId, groupedResults)
 
-            val performanceResults = groupedResults.performanceResults.map { performanceResult ->
-                performanceResultsRepository.savePerformanceResults(testRunId, publicId, performanceResult)
-            }
+            val performanceResults =
+                groupedResults.performanceResults.map { performanceResult ->
+                    performanceResultsRepository.savePerformanceResults(testRunId, publicId, performanceResult)
+                }
 
             testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.SUCCESS)
 
@@ -110,7 +116,7 @@ class GroupedTestResultsService(
                 testRunMetadataRepository.updateGitMetadata(
                     testRunId = testRunId,
                     pullRequestNumber = pullRequestNumber,
-                    commitSha = groupedResults.metadata.git.commitSha
+                    commitSha = groupedResults.metadata.git.commitSha,
                 )
             }
         } catch (e: Exception) {
@@ -121,17 +127,22 @@ class GroupedTestResultsService(
         }
     }
 
-    private suspend fun doAppendTestResults(publicId: PublicId, groupedResults: GroupedResults, groupedResultsBlob: String) {
+    private suspend fun doAppendTestResults(
+        publicId: PublicId,
+        groupedResults: GroupedResults,
+        groupedResultsBlob: String,
+    ) {
         try {
             val (testRunId, testRunSummary) = appendTestResultsService.appendGroupedTestRun(publicId, groupedResults)
 
             metricsService.incrementResultsProcessSuccessCounter()
 
-            val coverage = groupedResults.coverageFiles?.let {
-                coverageService.appendCoverage(publicId, it)
+            val coverage =
+                groupedResults.coverageFiles?.let {
+                    coverageService.appendCoverage(publicId, it)
 
-                coverageService.getCoverage(publicId)
-            }
+                    coverageService.getCoverage(publicId)
+                }
 
             groupedResults.codeQualityReports?.let {
                 codeQualityReportRepository.insertCodeQualityReports(testRunId, it)
@@ -146,7 +157,10 @@ class GroupedTestResultsService(
         }
     }
 
-    private suspend fun saveCoverage(publicId: PublicId, coverageFiles: List<CoverageFilePayload>): Coverage? {
+    private suspend fun saveCoverage(
+        publicId: PublicId,
+        coverageFiles: List<CoverageFilePayload>,
+    ): Coverage? {
         coverageService.appendCoverage(publicId, coverageFiles)
 
         return coverageService.getCoverageWithPreviousRunComparison(publicId)
@@ -156,13 +170,15 @@ class GroupedTestResultsService(
         testRunSummary: TestRunSummary,
         gitMetadata: GitMetadata?,
         coverage: Coverage?,
-        performanceResults: List<PerformanceResult>?
+        performanceResults: List<PerformanceResult>?,
     ): PullRequest? =
         try {
             val pullRequest = gitHubPullRequestCommentService.upsertComment(testRunSummary, gitMetadata, coverage, performanceResults)
 
             if (pullRequest != null) {
-                logger.info("Successfully commented on pull request ${pullRequest.number} in ${pullRequest.orgName}/${pullRequest.repoName}")
+                logger.info(
+                    "Successfully commented on pull request ${pullRequest.number} in ${pullRequest.orgName}/${pullRequest.repoName}",
+                )
 
                 metricsService.incrementPullRequestCommentSuccessCounter()
             }

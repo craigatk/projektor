@@ -13,7 +13,6 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 class RepositoryTestRunDatabaseRepositoryTimelineTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should find entries without project name for CI builds`() {
         val repositoryTestRunDatabaseRepository = RepositoryTestRunDatabaseRepository(dslContext)

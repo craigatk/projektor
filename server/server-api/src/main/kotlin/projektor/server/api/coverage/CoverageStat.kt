@@ -6,7 +6,7 @@ import java.math.BigDecimal
 data class CoverageStat(
     val covered: Int,
     val missed: Int,
-    val coveredPercentageDelta: BigDecimal? = null
+    val coveredPercentageDelta: BigDecimal? = null,
 ) {
     var total: Int = 0
         get() = covered + missed

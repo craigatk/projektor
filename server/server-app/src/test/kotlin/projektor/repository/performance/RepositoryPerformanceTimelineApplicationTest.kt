@@ -21,7 +21,6 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 class RepositoryPerformanceTimelineApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should fetch performance timeline for repository without project name`() {
         val orgName = RandomStringUtils.randomAlphabetic(12)
@@ -33,45 +32,66 @@ class RepositoryPerformanceTimelineApplicationTest : ApplicationTestCase() {
 
         val testName = "perf-test"
 
-        val firstPerfResultToSave = PerformanceResult(
-            name = testName,
-            requestsPerSecond = BigDecimal("80.000"),
-            requestCount = 4000,
-            average = BigDecimal("25.664"),
-            p95 = BigDecimal("40.783"),
-            maximum = BigDecimal("45.991")
-        )
+        val firstPerfResultToSave =
+            PerformanceResult(
+                name = testName,
+                requestsPerSecond = BigDecimal("80.000"),
+                requestCount = 4000,
+                average = BigDecimal("25.664"),
+                p95 = BigDecimal("40.783"),
+                maximum = BigDecimal("45.991"),
+            )
 
-        val secondPerfResultToSave = PerformanceResult(
-            name = testName,
-            requestsPerSecond = BigDecimal("90.000"),
-            requestCount = 6000,
-            average = BigDecimal("20.670"),
-            p95 = BigDecimal("30.483"),
-            maximum = BigDecimal("42.889")
-        )
+        val secondPerfResultToSave =
+            PerformanceResult(
+                name = testName,
+                requestsPerSecond = BigDecimal("90.000"),
+                requestCount = 6000,
+                average = BigDecimal("20.670"),
+                p95 = BigDecimal("30.483"),
+                maximum = BigDecimal("42.889"),
+            )
 
-        val thirdPerfResultToSave = PerformanceResult(
-            name = testName,
-            requestsPerSecond = BigDecimal("100.000"),
-            requestCount = 7000,
-            average = BigDecimal("22.672"),
-            p95 = BigDecimal("35.482"),
-            maximum = BigDecimal("44.881")
-        )
+        val thirdPerfResultToSave =
+            PerformanceResult(
+                name = testName,
+                requestsPerSecond = BigDecimal("100.000"),
+                requestCount = 7000,
+                average = BigDecimal("22.672"),
+                p95 = BigDecimal("35.482"),
+                maximum = BigDecimal("44.881"),
+            )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/performance/timeline") {
                 val performanceResultsRepository: PerformanceResultsRepository = application.get()
 
                 val firstTestRun = testRunDBGenerator.createEmptyTestRunInRepo(firstRunPublicId, repoName, true, null)
-                runBlocking { performanceResultsRepository.savePerformanceResults(firstTestRun.id, firstRunPublicId, firstPerfResultToSave) }
+                runBlocking {
+                    performanceResultsRepository.savePerformanceResults(
+                        firstTestRun.id,
+                        firstRunPublicId,
+                        firstPerfResultToSave,
+                    )
+                }
 
                 val secondTestRun = testRunDBGenerator.createEmptyTestRunInRepo(secondRunPublicId, repoName, true, null)
-                runBlocking { performanceResultsRepository.savePerformanceResults(secondTestRun.id, secondRunPublicId, secondPerfResultToSave) }
+                runBlocking {
+                    performanceResultsRepository.savePerformanceResults(
+                        secondTestRun.id,
+                        secondRunPublicId,
+                        secondPerfResultToSave,
+                    )
+                }
 
                 val thirdTestRun = testRunDBGenerator.createEmptyTestRunInRepo(thirdRunPublicId, repoName, true, null)
-                runBlocking { performanceResultsRepository.savePerformanceResults(thirdTestRun.id, thirdRunPublicId, thirdPerfResultToSave) }
+                runBlocking {
+                    performanceResultsRepository.savePerformanceResults(
+                        thirdTestRun.id,
+                        thirdRunPublicId,
+                        thirdPerfResultToSave,
+                    )
+                }
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
@@ -128,45 +148,66 @@ class RepositoryPerformanceTimelineApplicationTest : ApplicationTestCase() {
 
         val testName = "perf-test"
 
-        val firstPerfResultToSave = PerformanceResult(
-            name = testName,
-            requestsPerSecond = BigDecimal("80.000"),
-            requestCount = 4000,
-            average = BigDecimal("25.664"),
-            p95 = BigDecimal("40.783"),
-            maximum = BigDecimal("45.991")
-        )
+        val firstPerfResultToSave =
+            PerformanceResult(
+                name = testName,
+                requestsPerSecond = BigDecimal("80.000"),
+                requestCount = 4000,
+                average = BigDecimal("25.664"),
+                p95 = BigDecimal("40.783"),
+                maximum = BigDecimal("45.991"),
+            )
 
-        val secondPerfResultToSave = PerformanceResult(
-            name = testName,
-            requestsPerSecond = BigDecimal("90.000"),
-            requestCount = 6000,
-            average = BigDecimal("20.670"),
-            p95 = BigDecimal("30.483"),
-            maximum = BigDecimal("42.889")
-        )
+        val secondPerfResultToSave =
+            PerformanceResult(
+                name = testName,
+                requestsPerSecond = BigDecimal("90.000"),
+                requestCount = 6000,
+                average = BigDecimal("20.670"),
+                p95 = BigDecimal("30.483"),
+                maximum = BigDecimal("42.889"),
+            )
 
-        val thirdPerfResultToSave = PerformanceResult(
-            name = testName,
-            requestsPerSecond = BigDecimal("100.000"),
-            requestCount = 7000,
-            average = BigDecimal("22.672"),
-            p95 = BigDecimal("35.482"),
-            maximum = BigDecimal("44.881")
-        )
+        val thirdPerfResultToSave =
+            PerformanceResult(
+                name = testName,
+                requestsPerSecond = BigDecimal("100.000"),
+                requestCount = 7000,
+                average = BigDecimal("22.672"),
+                p95 = BigDecimal("35.482"),
+                maximum = BigDecimal("44.881"),
+            )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/project/$projectName/performance/timeline") {
                 val performanceResultsRepository: PerformanceResultsRepository = application.get()
 
                 val firstTestRun = testRunDBGenerator.createEmptyTestRunInRepo(firstRunPublicId, repoName, true, projectName)
-                runBlocking { performanceResultsRepository.savePerformanceResults(firstTestRun.id, firstRunPublicId, firstPerfResultToSave) }
+                runBlocking {
+                    performanceResultsRepository.savePerformanceResults(
+                        firstTestRun.id,
+                        firstRunPublicId,
+                        firstPerfResultToSave,
+                    )
+                }
 
                 val secondTestRun = testRunDBGenerator.createEmptyTestRunInRepo(secondRunPublicId, repoName, true, projectName)
-                runBlocking { performanceResultsRepository.savePerformanceResults(secondTestRun.id, secondRunPublicId, secondPerfResultToSave) }
+                runBlocking {
+                    performanceResultsRepository.savePerformanceResults(
+                        secondTestRun.id,
+                        secondRunPublicId,
+                        secondPerfResultToSave,
+                    )
+                }
 
                 val thirdTestRun = testRunDBGenerator.createEmptyTestRunInRepo(thirdRunPublicId, repoName, true, projectName)
-                runBlocking { performanceResultsRepository.savePerformanceResults(thirdTestRun.id, thirdRunPublicId, thirdPerfResultToSave) }
+                runBlocking {
+                    performanceResultsRepository.savePerformanceResults(
+                        thirdTestRun.id,
+                        thirdRunPublicId,
+                        thirdPerfResultToSave,
+                    )
+                }
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 

@@ -31,12 +31,13 @@ class CoverageServiceTest : DatabaseRepositoryTestCase() {
         val metricsService = MetricsService(meterRegistry)
         val previousTestRunService: PreviousTestRunService by inject()
         val processingFailureService: ProcessingFailureService by inject()
-        val coverageService = CoverageService(
-            coverageRepository,
-            metricsService,
-            previousTestRunService,
-            processingFailureService
-        )
+        val coverageService =
+            CoverageService(
+                coverageRepository,
+                metricsService,
+                previousTestRunService,
+                processingFailureService,
+            )
 
         val coverageFilePayload = CoverageFilePayload(reportContents = JacocoXmlLoader().junitResultsParser())
         val publicId = PublicId("this-is-too-long-for-an-id")
@@ -56,17 +57,19 @@ class CoverageServiceTest : DatabaseRepositoryTestCase() {
         val metricsService = MetricsService(meterRegistry)
         val previousTestRunService: PreviousTestRunService by inject()
         val processingFailureService: ProcessingFailureService by inject()
-        val coverageService = CoverageService(
-            coverageRepository,
-            metricsService,
-            previousTestRunService,
-            processingFailureService
-        )
+        val coverageService =
+            CoverageService(
+                coverageRepository,
+                metricsService,
+                previousTestRunService,
+                processingFailureService,
+            )
 
         val reportContents = CloverXmlLoader().coverageFilesTable()
-        val coverageFilePayload = CoverageFilePayload(
-            reportContents = reportContents
-        )
+        val coverageFilePayload =
+            CoverageFilePayload(
+                reportContents = reportContents,
+            )
 
         val parsedReportPair = runBlocking { coverageService.parseReport(coverageFilePayload) }
         assertNotNull(parsedReportPair)

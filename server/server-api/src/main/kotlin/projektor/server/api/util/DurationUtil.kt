@@ -6,7 +6,10 @@ import java.math.RoundingMode
 
 private val roundingMathContext = MathContext(3, RoundingMode.HALF_UP)
 
-fun calculateAverageDuration(cumulativeDuration: BigDecimal, totalTestCount: Int): BigDecimal {
+fun calculateAverageDuration(
+    cumulativeDuration: BigDecimal,
+    totalTestCount: Int,
+): BigDecimal {
     return if (cumulativeDuration > BigDecimal.ZERO && totalTestCount > 0) {
         cumulativeDuration.divide(totalTestCount.toBigDecimal(), roundingMathContext)
     } else {

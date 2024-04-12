@@ -19,7 +19,6 @@ import kotlin.test.assertNotNull
 
 @ExperimentalStdlibApi
 class CoverageExistsApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `when report has coverage data should return true`() {
         val publicId = randomPublicId()

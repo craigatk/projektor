@@ -15,7 +15,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
 class SaveGroupedResultsGitRepositoryTest : ApplicationTestCase() {
-
     @Test
     fun `should set Git repository table with Git org and repo`() {
         val gitMetadata = GitMetadata()

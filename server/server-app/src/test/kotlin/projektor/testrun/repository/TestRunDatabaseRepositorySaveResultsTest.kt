@@ -15,7 +15,6 @@ import projektor.parser.model.TestCase as ParsedTestCase
 import projektor.parser.model.TestSuite as ParsedTestSuite
 
 class TestRunDatabaseRepositorySaveResultsTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should save test run with two passing test cases`() {
         val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)

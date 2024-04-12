@@ -19,7 +19,6 @@ import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
 class GetFailedTestCasesAttachmentsApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should include screenshot attachment when test case has one`() {
         val publicId = randomPublicId()
@@ -35,9 +34,9 @@ class GetFailedTestCasesAttachmentsApplicationTest : ApplicationTestCase() {
                             "testSuite1",
                             listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
                             listOf("testSuite1 FailedTestCase 1", "testSuite1 FailedTestCase 2"),
-                            listOf()
+                            listOf(),
                         ),
-                    )
+                    ),
                 )
 
                 testRunDBGenerator.addAttachment(publicId, "object-1", "testSuite1 FailedTestCase 1.png")
@@ -92,9 +91,9 @@ class GetFailedTestCasesAttachmentsApplicationTest : ApplicationTestCase() {
                             listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
                             listOf("testSuite1 FailedTestCase 1", "testSuite1 FailedTestCase 2"),
                             listOf(),
-                            "testSuite1.spec.js"
+                            "testSuite1.spec.js",
                         ),
-                    )
+                    ),
                 )
 
                 testRunDBGenerator.addAttachment(publicId, "screenshot-1", "testSuite1 FailedTestCase 1.png")

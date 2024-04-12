@@ -12,29 +12,29 @@ import strikt.assertions.isNotNull
 import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 
 class TestSuiteDatabaseRepositoryFetchGroupedSuitesTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should fetch grouped test suites`() {
         val testSuiteDatabaseRepository = TestSuiteDatabaseRepository(dslContext)
         val publicId = randomPublicId()
 
-        val testRun = testRunDBGenerator.createTestRun(
-            publicId,
-            listOf(
-                TestSuiteData(
-                    "projektor.TestSuite1",
-                    listOf("testCase1"),
-                    listOf(),
-                    listOf()
+        val testRun =
+            testRunDBGenerator.createTestRun(
+                publicId,
+                listOf(
+                    TestSuiteData(
+                        "projektor.TestSuite1",
+                        listOf("testCase1"),
+                        listOf(),
+                        listOf(),
+                    ),
+                    TestSuiteData(
+                        "projektor.TestSuite2",
+                        listOf("testCase2"),
+                        listOf(),
+                        listOf(),
+                    ),
                 ),
-                TestSuiteData(
-                    "projektor.TestSuite2",
-                    listOf("testCase2"),
-                    listOf(),
-                    listOf()
-                )
             )
-        )
 
         val testSuiteGroup = TestSuiteGroupDB()
         testSuiteGroup.testRunId = testRun.id

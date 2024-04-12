@@ -26,7 +26,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isTrue
 
 class SaveGroupedResultsWithMetadataPullRequestCommentApplicationTest : ApplicationTestCase() {
-
     @BeforeEach
     fun reset() {
         wireMockServer.resetAll()
@@ -70,7 +69,13 @@ class SaveGroupedResultsWithMetadataPullRequestCommentApplicationTest : Applicat
             }.apply {
                 val (_, testRun) = waitForTestRunSaveToComplete(response)
 
-                await until { gitHubWireMockStubber.findAddCommentRequestBodies(incomingOrgName, incomingRepoName, gitHubPullRequestNumber).size == 1 }
+                await until {
+                    gitHubWireMockStubber.findAddCommentRequestBodies(
+                        incomingOrgName,
+                        incomingRepoName,
+                        gitHubPullRequestNumber,
+                    ).size == 1
+                }
 
                 val gitMetadatas = gitMetadataDao.fetchByTestRunId(testRun.id)
                 expectThat(gitMetadatas).hasSize(1)

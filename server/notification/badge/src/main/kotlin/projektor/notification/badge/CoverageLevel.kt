@@ -6,7 +6,8 @@ enum class CoverageLevel(val fillColor: String) {
     GOOD("#4c1"),
     OK("#dfb317"),
     POOR("#fe7d37"),
-    TERRIBLE("#e05d44");
+    TERRIBLE("#e05d44"),
+    ;
 
     companion object {
         fun of(coveredPercentage: BigDecimal): CoverageLevel =

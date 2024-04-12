@@ -7,7 +7,7 @@ data class TestRunGitMetadata(
     val projectName: String?,
     val isMainBranch: Boolean,
     val pullRequestNumber: Int?,
-    val commitSha: String?
+    val commitSha: String?,
 ) {
     var gitHubBaseUrl: String? = null
 }

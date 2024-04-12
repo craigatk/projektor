@@ -15,7 +15,6 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
 class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should find failing test cases in repo and CI without project name`() {
         val repositoryTestRunDatabaseRepository = RepositoryTestRunDatabaseRepository(dslContext)
@@ -31,26 +30,27 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
 
         val ciInOtherRepoPublicId = randomPublicId()
 
-        val testSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.failingTestSuite1",
-                listOf("passing1"),
-                listOf("failing1", "failing2"),
-                listOf()
-            ),
-            TestSuiteData(
-                "projektor.passingTestSuite",
-                listOf("passing2"),
-                listOf(),
-                listOf()
-            ),
-            TestSuiteData(
-                "projektor.failingTestSuite2",
-                listOf("passing3"),
-                listOf("failing3", "failing4"),
-                listOf()
+        val testSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.failingTestSuite1",
+                    listOf("passing1"),
+                    listOf("failing1", "failing2"),
+                    listOf(),
+                ),
+                TestSuiteData(
+                    "projektor.passingTestSuite",
+                    listOf("passing2"),
+                    listOf(),
+                    listOf(),
+                ),
+                TestSuiteData(
+                    "projektor.failingTestSuite2",
+                    listOf("passing3"),
+                    listOf("failing3", "failing4"),
+                    listOf(),
+                ),
             )
-        )
 
         val maxRuns = 4
 
@@ -59,14 +59,15 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
         testRunDBGenerator.createTestRunInRepo(nonCIPublicId, testSuiteDataList, repoName, false, projectName)
         testRunDBGenerator.createTestRunInRepo(ciInOtherRepoPublicId, testSuiteDataList, "$orgName/another-project", true, projectName)
 
-        val failingTestCases = runBlocking {
-            repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
-                repoName,
-                projectName,
-                maxRuns,
-                BranchType.ALL
-            )
-        }
+        val failingTestCases =
+            runBlocking {
+                repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
+                    repoName,
+                    projectName,
+                    maxRuns,
+                    BranchType.ALL,
+                )
+            }
 
         val failingTestCaseNames = failingTestCases.map(TestCase::fullName)
 
@@ -125,47 +126,50 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
         val secondRunCITruePublicId = randomPublicId()
         val thirdRunCITruePublicId = randomPublicId()
 
-        val testSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.failingTestSuite1",
-                listOf("passing1"),
-                listOf("failing1"),
-                listOf()
-            ),
-            TestSuiteData(
-                "projektor.passingTestSuite",
-                listOf("passing2"),
-                listOf(),
-                listOf()
+        val testSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.failingTestSuite1",
+                    listOf("passing1"),
+                    listOf("failing1"),
+                    listOf(),
+                ),
+                TestSuiteData(
+                    "projektor.passingTestSuite",
+                    listOf("passing2"),
+                    listOf(),
+                    listOf(),
+                ),
             )
-        )
 
         listOf(firstRunCITruePublicId, secondRunCITruePublicId, thirdRunCITruePublicId).forEach { publicId ->
             testRunDBGenerator.createTestRunInRepo(publicId, testSuiteDataList, repoName, true, projectName)
         }
 
-        val failingTestCasesMax1 = runBlocking {
-            repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
-                repoName,
-                projectName,
-                1,
-                BranchType.ALL
-            )
-        }
+        val failingTestCasesMax1 =
+            runBlocking {
+                repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
+                    repoName,
+                    projectName,
+                    1,
+                    BranchType.ALL,
+                )
+            }
 
         expectThat(failingTestCasesMax1)
             .hasSize(1)
 
         expectThat(failingTestCasesMax1[0].publicId).isEqualTo(thirdRunCITruePublicId.id)
 
-        val failingTestCasesMax2 = runBlocking {
-            repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
-                repoName,
-                projectName,
-                2,
-                BranchType.ALL
-            )
-        }
+        val failingTestCasesMax2 =
+            runBlocking {
+                repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
+                    repoName,
+                    projectName,
+                    2,
+                    BranchType.ALL,
+                )
+            }
 
         expectThat(failingTestCasesMax2)
             .hasSize(2)
@@ -183,46 +187,49 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
         val projectName = null
 
         val failingMainlinePublicIds = (1..3).map { randomPublicId() }
-        val failingMainlineTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.failingMainlineTestSuite1",
-                listOf("passing1"),
-                listOf("failingMainline1"),
-                listOf()
-            ),
-            TestSuiteData(
-                "projektor.failingMainlineTestSuite2",
-                listOf("passing2"),
-                listOf("failingMainline2"),
-                listOf()
+        val failingMainlineTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.failingMainlineTestSuite1",
+                    listOf("passing1"),
+                    listOf("failingMainline1"),
+                    listOf(),
+                ),
+                TestSuiteData(
+                    "projektor.failingMainlineTestSuite2",
+                    listOf("passing2"),
+                    listOf("failingMainline2"),
+                    listOf(),
+                ),
             )
-        )
 
         val failingBranchPublicIds = (1..3).map { randomPublicId() }
-        val failingBranchTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.failingBranchTestSuite1",
-                listOf("passing1"),
-                listOf("failingBranch1"),
-                listOf()
-            ),
-            TestSuiteData(
-                "projektor.failingBranchTestSuite2",
-                listOf("passing2"),
-                listOf("failingBranch2"),
-                listOf()
+        val failingBranchTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.failingBranchTestSuite1",
+                    listOf("passing1"),
+                    listOf("failingBranch1"),
+                    listOf(),
+                ),
+                TestSuiteData(
+                    "projektor.failingBranchTestSuite2",
+                    listOf("passing2"),
+                    listOf("failingBranch2"),
+                    listOf(),
+                ),
             )
-        )
 
         val passingPublicIds = (1..7).map { randomPublicId() }
-        val passingTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.passingTestSuite",
-                listOf("passing1", "passing2"),
-                listOf(),
-                listOf()
+        val passingTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.passingTestSuite",
+                    listOf("passing1", "passing2"),
+                    listOf(),
+                    listOf(),
+                ),
             )
-        )
 
         failingMainlinePublicIds.forEach { publicId ->
             testRunDBGenerator.createTestRunInRepo(publicId, failingMainlineTestSuiteDataList, repoName, true, projectName, "main")
@@ -234,25 +241,26 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
             testRunDBGenerator.createTestRunInRepo(publicId, passingTestSuiteDataList, repoName, true, projectName)
         }
 
-        val failingTestCases = runBlocking {
-            repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
-                repoName,
-                projectName,
-                100,
-                BranchType.MAINLINE
-            )
-        }
+        val failingTestCases =
+            runBlocking {
+                repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
+                    repoName,
+                    projectName,
+                    100,
+                    BranchType.MAINLINE,
+                )
+            }
 
         val failingTestCaseNames = failingTestCases.map(TestCase::fullName)
 
         expectThat(failingTestCaseNames)
             .contains(
                 "projektor.failingMainline1ClassName.failingMainline1",
-                "projektor.failingMainline2ClassName.failingMainline2"
+                "projektor.failingMainline2ClassName.failingMainline2",
             )
             .not().contains(
                 "projektor.failingBranch1ClassName.failingBranch1",
-                "projektor.failingBranch2ClassName.failingBranch2"
+                "projektor.failingBranch2ClassName.failingBranch2",
             )
     }
 
@@ -265,46 +273,49 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
         val projectName = null
 
         val failingMainlinePublicIds = (1..3).map { randomPublicId() }
-        val failingMainlineTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.failingMainlineTestSuite1",
-                listOf("passing1"),
-                listOf("failingMainline1"),
-                listOf()
-            ),
-            TestSuiteData(
-                "projektor.failingMainlineTestSuite2",
-                listOf("passing2"),
-                listOf("failingMainline2"),
-                listOf()
+        val failingMainlineTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.failingMainlineTestSuite1",
+                    listOf("passing1"),
+                    listOf("failingMainline1"),
+                    listOf(),
+                ),
+                TestSuiteData(
+                    "projektor.failingMainlineTestSuite2",
+                    listOf("passing2"),
+                    listOf("failingMainline2"),
+                    listOf(),
+                ),
             )
-        )
 
         val failingBranchPublicIds = (1..3).map { randomPublicId() }
-        val failingBranchTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.failingBranchTestSuite1",
-                listOf("passing1"),
-                listOf("failingBranch1"),
-                listOf()
-            ),
-            TestSuiteData(
-                "projektor.failingBranchTestSuite2",
-                listOf("passing2"),
-                listOf("failingBranch2"),
-                listOf()
+        val failingBranchTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.failingBranchTestSuite1",
+                    listOf("passing1"),
+                    listOf("failingBranch1"),
+                    listOf(),
+                ),
+                TestSuiteData(
+                    "projektor.failingBranchTestSuite2",
+                    listOf("passing2"),
+                    listOf("failingBranch2"),
+                    listOf(),
+                ),
             )
-        )
 
         val passingPublicIds = (1..7).map { randomPublicId() }
-        val passingTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.passingTestSuite",
-                listOf("passing1", "passing2"),
-                listOf(),
-                listOf()
+        val passingTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.passingTestSuite",
+                    listOf("passing1", "passing2"),
+                    listOf(),
+                    listOf(),
+                ),
             )
-        )
 
         failingMainlinePublicIds.forEach { publicId ->
             testRunDBGenerator.createTestRunInRepo(publicId, failingMainlineTestSuiteDataList, repoName, true, projectName, "main")
@@ -316,25 +327,26 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
             testRunDBGenerator.createTestRunInRepo(publicId, passingTestSuiteDataList, repoName, true, projectName)
         }
 
-        val failingTestCases = runBlocking {
-            repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
-                repoName,
-                projectName,
-                100,
-                BranchType.ALL
-            )
-        }
+        val failingTestCases =
+            runBlocking {
+                repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
+                    repoName,
+                    projectName,
+                    100,
+                    BranchType.ALL,
+                )
+            }
 
         val failingTestCaseNames = failingTestCases.map(TestCase::fullName)
 
         expectThat(failingTestCaseNames)
             .contains(
                 "projektor.failingMainline1ClassName.failingMainline1",
-                "projektor.failingMainline2ClassName.failingMainline2"
+                "projektor.failingMainline2ClassName.failingMainline2",
             )
             .contains(
                 "projektor.failingBranch1ClassName.failingBranch1",
-                "projektor.failingBranch2ClassName.failingBranch2"
+                "projektor.failingBranch2ClassName.failingBranch2",
             )
     }
 }

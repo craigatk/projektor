@@ -21,13 +21,13 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 class SaveCoberturaCoverageApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should save Cobertura coverage and test results`() {
-        val requestBody = GroupedResultsXmlLoader().resultsWithCoverage(
-            resultsXmls = listOf(ResultsXmlLoader().jestUi()),
-            coverageXmls = listOf(CoberturaXmlLoader().uiCobertura())
-        )
+        val requestBody =
+            GroupedResultsXmlLoader().resultsWithCoverage(
+                resultsXmls = listOf(ResultsXmlLoader().jestUi()),
+                coverageXmls = listOf(CoberturaXmlLoader().uiCobertura()),
+            )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/groupedResults") {
@@ -76,10 +76,11 @@ class SaveCoberturaCoverageApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should save Cobertura coverage without branch field on line and test results`() {
-        val requestBody = GroupedResultsXmlLoader().resultsWithCoverage(
-            resultsXmls = listOf(ResultsXmlLoader().jestUi()),
-            coverageXmls = listOf(CoberturaXmlLoader().noBranchCobertura())
-        )
+        val requestBody =
+            GroupedResultsXmlLoader().resultsWithCoverage(
+                resultsXmls = listOf(ResultsXmlLoader().jestUi()),
+                coverageXmls = listOf(CoberturaXmlLoader().noBranchCobertura()),
+            )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/groupedResults") {

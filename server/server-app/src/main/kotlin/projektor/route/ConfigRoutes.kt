@@ -16,9 +16,9 @@ fun Route.config(cleanupConfig: CleanupConfig) {
             ServerConfig(
                 ServerCleanupConfig(
                     cleanupConfig.enabled,
-                    cleanupConfig.maxReportAgeDays
-                )
-            )
+                    cleanupConfig.maxReportAgeDays,
+                ),
+            ),
         )
     }
 }

@@ -103,17 +103,18 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     val attachmentService = conditionallyCreateAttachmentService(applicationConfig, attachmentRepository)
     attachmentService?.conditionallyCreateBucketIfNotExists()
 
-    val appModule = createAppModule(
-        dataSource = dataSource,
-        authConfig = authConfig,
-        dslContext = dslContext,
-        metricRegistry = metricRegistry,
-        messageConfig = messageConfig,
-        notificationConfig = notificationConfig,
-        processingConfig = processingConfig,
-        gitHubCommentService = gitHubCommentService,
-        attachmentService = attachmentService
-    )
+    val appModule =
+        createAppModule(
+            dataSource = dataSource,
+            authConfig = authConfig,
+            dslContext = dslContext,
+            metricRegistry = metricRegistry,
+            messageConfig = messageConfig,
+            notificationConfig = notificationConfig,
+            processingConfig = processingConfig,
+            gitHubCommentService = gitHubCommentService,
+            attachmentService = attachmentService,
+        )
 
     install(CORS) {
         anyHost()
@@ -173,7 +174,8 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
 
     val coverageService: CoverageService by inject()
 
-    val testRunCleanupService = TestRunCleanupService(cleanupConfig, testRunRepository, resultsProcessingRepository, coverageService, attachmentService)
+    val testRunCleanupService =
+        TestRunCleanupService(cleanupConfig, testRunRepository, resultsProcessingRepository, coverageService, attachmentService)
     val attachmentCleanupService = attachmentService?.let { AttachmentCleanupService(cleanupConfig, testRunRepository, attachmentService) }
     val scheduler: Scheduler by inject()
     CleanupScheduledJob.conditionallyStartCleanupScheduledJob(cleanupConfig, testRunCleanupService, attachmentCleanupService, scheduler)
@@ -225,30 +227,36 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     }
 }
 
-private fun conditionallyCreateAttachmentService(applicationConfig: ApplicationConfig, attachmentRepository: AttachmentRepository): AttachmentService? =
-    if (AttachmentConfig.attachmentsEnabled(applicationConfig))
+private fun conditionallyCreateAttachmentService(
+    applicationConfig: ApplicationConfig,
+    attachmentRepository: AttachmentRepository,
+): AttachmentService? =
+    if (AttachmentConfig.attachmentsEnabled(applicationConfig)) {
         AttachmentService(AttachmentConfig.createAttachmentConfig(applicationConfig), attachmentRepository)
-    else
+    } else {
         null
+    }
 
 private fun conditionallyCreateGitHubCommentService(applicationConfig: ApplicationConfig): GitHubCommentService? {
     val gitHubNotificationConfig = GitHubNotificationConfig.createGitHubNotificationConfig(applicationConfig)
     val (gitHubApiUrl, gitHubAppId, privateKey) = gitHubNotificationConfig
 
     return if (gitHubApiUrl != null && gitHubAppId != null && privateKey != null) {
-        val jwtTokenConfig = JwtTokenConfig(
-            gitHubAppId = gitHubAppId,
-            pemContents = privateKey,
-            ttlMillis = 60_000
-        )
+        val jwtTokenConfig =
+            JwtTokenConfig(
+                gitHubAppId = gitHubAppId,
+                pemContents = privateKey,
+                ttlMillis = 60_000,
+            )
         val jwtProvider = JwtProvider(jwtTokenConfig)
 
         val gitHubClientConfig = GitHubClientConfig(gitHubApiUrl = gitHubApiUrl)
 
-        val gitHubCommentClient = GitHubCommentClient(
-            clientConfig = gitHubClientConfig,
-            jwtProvider = jwtProvider
-        )
+        val gitHubCommentClient =
+            GitHubCommentClient(
+                clientConfig = gitHubClientConfig,
+                jwtProvider = jwtProvider,
+            )
 
         GitHubCommentService(gitHubCommentClient)
     } else {

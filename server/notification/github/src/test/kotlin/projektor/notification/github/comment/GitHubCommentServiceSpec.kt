@@ -29,9 +29,10 @@ class GitHubCommentServiceSpec : StringSpec() {
     init {
         "should add new comment when one does not exist" {
             val gitHubApiUrl = "http://localhost:${wireMockServer.port()}/"
-            val clientConfig = GitHubClientConfig(
-                gitHubApiUrl
-            )
+            val clientConfig =
+                GitHubClientConfig(
+                    gitHubApiUrl,
+                )
             val commentClient = GitHubCommentClient(clientConfig, jwtProvider)
             val commentService = GitHubCommentService(commentClient)
 
@@ -39,25 +40,28 @@ class GitHubCommentServiceSpec : StringSpec() {
             val repoName = "my-repo"
             val branchName = "my-branch"
             val pullRequestNumber = 2
-            val report = ReportCommentData(
-                projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
-                git = ReportCommentGitData(
-                    orgName = orgName,
-                    repoName = repoName,
-                    branchName = branchName
-                ),
-                publicId = "V1BMYK93MTNR",
-                createdDate = LocalDateTime.of(
-                    LocalDate.of(2020, 12, 16),
-                    LocalTime.of(14, 30)
-                ),
-                passed = true,
-                failedTestCount = 0,
-                totalTestCount = 25,
-                coverage = null,
-                performance = null,
-                project = null
-            )
+            val report =
+                ReportCommentData(
+                    projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
+                    git =
+                        ReportCommentGitData(
+                            orgName = orgName,
+                            repoName = repoName,
+                            branchName = branchName,
+                        ),
+                    publicId = "V1BMYK93MTNR",
+                    createdDate =
+                        LocalDateTime.of(
+                            LocalDate.of(2020, 12, 16),
+                            LocalTime.of(14, 30),
+                        ),
+                    passed = true,
+                    failedTestCount = 0,
+                    totalTestCount = 25,
+                    coverage = null,
+                    performance = null,
+                    project = null,
+                )
 
             gitHubWireMockStubber.stubRepositoryRequests(orgName, repoName)
             gitHubWireMockStubber.stubListPullRequests(orgName, repoName, listOf("another-branch", branchName))
@@ -81,9 +85,10 @@ class GitHubCommentServiceSpec : StringSpec() {
 
         "should update comment when one exists" {
             val gitHubApiUrl = "http://localhost:${wireMockServer.port()}/"
-            val clientConfig = GitHubClientConfig(
-                gitHubApiUrl
-            )
+            val clientConfig =
+                GitHubClientConfig(
+                    gitHubApiUrl,
+                )
             val commentClient = GitHubCommentClient(clientConfig, jwtProvider)
             val commentService = GitHubCommentService(commentClient)
 
@@ -91,32 +96,40 @@ class GitHubCommentServiceSpec : StringSpec() {
             val repoName = "my-repo"
             val branchName = "my-branch"
             val pullRequestNumber = 2
-            val report = ReportCommentData(
-                projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
-                git = ReportCommentGitData(
-                    orgName = orgName,
-                    repoName = repoName,
-                    branchName = branchName
-                ),
-                publicId = "V1BMYK93MTNR",
-                createdDate = LocalDateTime.of(
-                    LocalDate.of(2020, 12, 16),
-                    LocalTime.of(14, 30)
-                ),
-                passed = true,
-                failedTestCount = 0,
-                totalTestCount = 25,
-                coverage = null,
-                performance = null,
-                project = null
-            )
+            val report =
+                ReportCommentData(
+                    projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
+                    git =
+                        ReportCommentGitData(
+                            orgName = orgName,
+                            repoName = repoName,
+                            branchName = branchName,
+                        ),
+                    publicId = "V1BMYK93MTNR",
+                    createdDate =
+                        LocalDateTime.of(
+                            LocalDate.of(2020, 12, 16),
+                            LocalTime.of(14, 30),
+                        ),
+                    passed = true,
+                    failedTestCount = 0,
+                    totalTestCount = 25,
+                    coverage = null,
+                    performance = null,
+                    project = null,
+                )
 
             gitHubWireMockStubber.stubRepositoryRequests(orgName, repoName)
             gitHubWireMockStubber.stubListPullRequests(orgName, repoName, listOf("another-branch", branchName))
             gitHubWireMockStubber.stubGetIssue(orgName, repoName, pullRequestNumber)
             val commentId = 3
-            gitHubWireMockStubber.stubListComments(orgName, repoName, pullRequestNumber, listOf("A comment", "Another comment", GitHubCommentCreator.headerText))
-            gitHubWireMockStubber.stubGetComment(orgName, repoName, pullRequestNumber, commentId, GitHubCommentCreator.headerText)
+            gitHubWireMockStubber.stubListComments(
+                orgName,
+                repoName,
+                pullRequestNumber,
+                listOf("A comment", "Another comment", GitHubCommentCreator.HEADER_TEXT),
+            )
+            gitHubWireMockStubber.stubGetComment(orgName, repoName, pullRequestNumber, commentId, GitHubCommentCreator.HEADER_TEXT)
             gitHubWireMockStubber.stubUpdateComment(orgName, repoName, pullRequestNumber, commentId)
 
             val pullRequest = commentService.upsertReportComment(report, "12345")
@@ -135,9 +148,10 @@ class GitHubCommentServiceSpec : StringSpec() {
 
         "should return null when no pull request with branch name" {
             val gitHubApiUrl = "http://localhost:${wireMockServer.port()}/"
-            val clientConfig = GitHubClientConfig(
-                gitHubApiUrl
-            )
+            val clientConfig =
+                GitHubClientConfig(
+                    gitHubApiUrl,
+                )
             val commentClient = GitHubCommentClient(clientConfig, jwtProvider)
             val commentService = GitHubCommentService(commentClient)
 
@@ -145,25 +159,28 @@ class GitHubCommentServiceSpec : StringSpec() {
             val repoName = "my-repo"
             val branchName = "my-branch"
             val pullRequestNumber = 2
-            val report = ReportCommentData(
-                projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
-                git = ReportCommentGitData(
-                    orgName = orgName,
-                    repoName = repoName,
-                    branchName = branchName
-                ),
-                publicId = "V1BMYK93MTNR",
-                createdDate = LocalDateTime.of(
-                    LocalDate.of(2020, 12, 16),
-                    LocalTime.of(14, 30)
-                ),
-                passed = true,
-                failedTestCount = 0,
-                totalTestCount = 25,
-                coverage = null,
-                performance = null,
-                project = null
-            )
+            val report =
+                ReportCommentData(
+                    projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
+                    git =
+                        ReportCommentGitData(
+                            orgName = orgName,
+                            repoName = repoName,
+                            branchName = branchName,
+                        ),
+                    publicId = "V1BMYK93MTNR",
+                    createdDate =
+                        LocalDateTime.of(
+                            LocalDate.of(2020, 12, 16),
+                            LocalTime.of(14, 30),
+                        ),
+                    passed = true,
+                    failedTestCount = 0,
+                    totalTestCount = 25,
+                    coverage = null,
+                    performance = null,
+                    project = null,
+                )
 
             gitHubWireMockStubber.stubRepositoryRequests(orgName, repoName)
             gitHubWireMockStubber.stubListPullRequests(orgName, repoName, listOf("another-branch", "yet-another-branch"))
@@ -183,9 +200,10 @@ class GitHubCommentServiceSpec : StringSpec() {
 
         "should find pull request by commit SHA" {
             val gitHubApiUrl = "http://localhost:${wireMockServer.port()}/"
-            val clientConfig = GitHubClientConfig(
-                gitHubApiUrl
-            )
+            val clientConfig =
+                GitHubClientConfig(
+                    gitHubApiUrl,
+                )
             val commentClient = GitHubCommentClient(clientConfig, jwtProvider)
             val commentService = GitHubCommentService(commentClient)
 
@@ -194,26 +212,29 @@ class GitHubCommentServiceSpec : StringSpec() {
             val branchName = "my-branch"
             val pullRequestNumber = 2
             val sha = "123456789"
-            val report = ReportCommentData(
-                projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
-                git = ReportCommentGitData(
-                    orgName = orgName,
-                    repoName = repoName,
-                    branchName = branchName,
-                    commitSha = sha
-                ),
-                publicId = "V1BMYK93MTNR",
-                createdDate = LocalDateTime.of(
-                    LocalDate.of(2020, 12, 16),
-                    LocalTime.of(14, 30)
-                ),
-                passed = true,
-                failedTestCount = 0,
-                totalTestCount = 25,
-                coverage = null,
-                performance = null,
-                project = null
-            )
+            val report =
+                ReportCommentData(
+                    projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
+                    git =
+                        ReportCommentGitData(
+                            orgName = orgName,
+                            repoName = repoName,
+                            branchName = branchName,
+                            commitSha = sha,
+                        ),
+                    publicId = "V1BMYK93MTNR",
+                    createdDate =
+                        LocalDateTime.of(
+                            LocalDate.of(2020, 12, 16),
+                            LocalTime.of(14, 30),
+                        ),
+                    passed = true,
+                    failedTestCount = 0,
+                    totalTestCount = 25,
+                    coverage = null,
+                    performance = null,
+                    project = null,
+                )
 
             gitHubWireMockStubber.stubRepositoryRequests(orgName, repoName)
             gitHubWireMockStubber.stubListPullRequests(orgName, repoName, listOf("branch-1", "branch-2"), listOf("sha1", sha))
@@ -237,9 +258,10 @@ class GitHubCommentServiceSpec : StringSpec() {
 
         "should find pull request by commit SHA when no branch included" {
             val gitHubApiUrl = "http://localhost:${wireMockServer.port()}/"
-            val clientConfig = GitHubClientConfig(
-                gitHubApiUrl
-            )
+            val clientConfig =
+                GitHubClientConfig(
+                    gitHubApiUrl,
+                )
             val commentClient = GitHubCommentClient(clientConfig, jwtProvider)
             val commentService = GitHubCommentService(commentClient)
 
@@ -248,26 +270,29 @@ class GitHubCommentServiceSpec : StringSpec() {
             val branchName = null
             val pullRequestNumber = 2
             val sha = "123456789"
-            val report = ReportCommentData(
-                projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
-                git = ReportCommentGitData(
-                    orgName = orgName,
-                    repoName = repoName,
-                    branchName = branchName,
-                    commitSha = sha
-                ),
-                publicId = "V1BMYK93MTNR",
-                createdDate = LocalDateTime.of(
-                    LocalDate.of(2020, 12, 16),
-                    LocalTime.of(14, 30)
-                ),
-                passed = true,
-                failedTestCount = 0,
-                totalTestCount = 25,
-                coverage = null,
-                performance = null,
-                project = null
-            )
+            val report =
+                ReportCommentData(
+                    projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
+                    git =
+                        ReportCommentGitData(
+                            orgName = orgName,
+                            repoName = repoName,
+                            branchName = branchName,
+                            commitSha = sha,
+                        ),
+                    publicId = "V1BMYK93MTNR",
+                    createdDate =
+                        LocalDateTime.of(
+                            LocalDate.of(2020, 12, 16),
+                            LocalTime.of(14, 30),
+                        ),
+                    passed = true,
+                    failedTestCount = 0,
+                    totalTestCount = 25,
+                    coverage = null,
+                    performance = null,
+                    project = null,
+                )
 
             gitHubWireMockStubber.stubRepositoryRequests(orgName, repoName)
             gitHubWireMockStubber.stubListPullRequests(orgName, repoName, listOf("branch-1", "branch-2"), listOf("sha1", sha))
@@ -291,9 +316,10 @@ class GitHubCommentServiceSpec : StringSpec() {
 
         "when pull request number passed in should use that" {
             val gitHubApiUrl = "http://localhost:${wireMockServer.port()}/"
-            val clientConfig = GitHubClientConfig(
-                gitHubApiUrl
-            )
+            val clientConfig =
+                GitHubClientConfig(
+                    gitHubApiUrl,
+                )
             val commentClient = GitHubCommentClient(clientConfig, jwtProvider)
             val commentService = GitHubCommentService(commentClient)
 
@@ -302,27 +328,30 @@ class GitHubCommentServiceSpec : StringSpec() {
             val branchName = "my-branch"
             val pullRequestNumber = 2
             val sha = "123456789"
-            val report = ReportCommentData(
-                projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
-                git = ReportCommentGitData(
-                    orgName = orgName,
-                    repoName = repoName,
-                    branchName = branchName,
-                    commitSha = sha,
-                    pullRequestNumber = pullRequestNumber
-                ),
-                publicId = "V1BMYK93MTNR",
-                createdDate = LocalDateTime.of(
-                    LocalDate.of(2020, 12, 16),
-                    LocalTime.of(14, 30)
-                ),
-                passed = true,
-                failedTestCount = 0,
-                totalTestCount = 25,
-                coverage = null,
-                performance = null,
-                project = null
-            )
+            val report =
+                ReportCommentData(
+                    projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
+                    git =
+                        ReportCommentGitData(
+                            orgName = orgName,
+                            repoName = repoName,
+                            branchName = branchName,
+                            commitSha = sha,
+                            pullRequestNumber = pullRequestNumber,
+                        ),
+                    publicId = "V1BMYK93MTNR",
+                    createdDate =
+                        LocalDateTime.of(
+                            LocalDate.of(2020, 12, 16),
+                            LocalTime.of(14, 30),
+                        ),
+                    passed = true,
+                    failedTestCount = 0,
+                    totalTestCount = 25,
+                    coverage = null,
+                    performance = null,
+                    project = null,
+                )
 
             gitHubWireMockStubber.stubRepositoryRequests(orgName, repoName)
             gitHubWireMockStubber.stubGetIssue(orgName, repoName, pullRequestNumber)

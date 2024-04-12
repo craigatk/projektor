@@ -16,7 +16,6 @@ import java.io.File
 
 @ExperimentalStdlibApi
 class AddAttachmentTokenApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `when token required and valid token included in header should add attachment`() {
         val validPublishToken = "publish12345"
@@ -34,12 +33,12 @@ class AddAttachmentTokenApplicationTest : ApplicationTestCase() {
                             "testSuite1",
                             listOf("testSuite1TestCase1", "testSuite1TestCase2"),
                             listOf(),
-                            listOf()
-                        )
-                    )
+                            listOf(),
+                        ),
+                    ),
                 )
 
-                addHeader(AuthConfig.PublishToken, validPublishToken)
+                addHeader(AuthConfig.PUBLISH_TOKEN, validPublishToken)
                 setBody(File("src/test/resources/test-attachment.txt").readBytes())
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -73,12 +72,12 @@ class AddAttachmentTokenApplicationTest : ApplicationTestCase() {
                             "testSuite1",
                             listOf("testSuite1TestCase1", "testSuite1TestCase2"),
                             listOf(),
-                            listOf()
-                        )
-                    )
+                            listOf(),
+                        ),
+                    ),
                 )
 
-                addHeader(AuthConfig.PublishToken, "invalidPublishTOken")
+                addHeader(AuthConfig.PUBLISH_TOKEN, "invalidPublishTOken")
                 setBody(File("src/test/resources/test-attachment.txt").readBytes())
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.Unauthorized)

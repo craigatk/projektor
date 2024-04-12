@@ -5,8 +5,9 @@ class PerformanceResultsLoader {
 
     fun k6GetRun() = loadTextFromFile("k6/getRun.json")
 
-    fun loadTextFromFile(filename: String) = javaClass
-        .getResourceAsStream("/$filename")
-        .bufferedReader()
-        .readText()
+    fun loadTextFromFile(filename: String) =
+        javaClass
+            .getResourceAsStream("/$filename")
+            .bufferedReader()
+            .readText()
 }

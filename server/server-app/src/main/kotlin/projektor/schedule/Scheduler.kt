@@ -10,9 +10,10 @@ class Scheduler(private val schedulerLock: SchedulerLock) {
     private val scheduledJobs = ConcurrentHashMap<String, ScheduledJob>()
 
     fun scheduleJob(job: ScheduledJob) {
-        val runnableWithLock = Runnable {
-            schedulerLock.executeWithLock(job.runnable, SchedulerLockConfig(60, job.name))
-        }
+        val runnableWithLock =
+            Runnable {
+                schedulerLock.executeWithLock(job.runnable, SchedulerLockConfig(60, job.name))
+            }
 
         executor.scheduleWithFixedDelay(runnableWithLock, job.scheduleDelay.value, job.scheduleDelay.value, job.scheduleDelay.unit)
 

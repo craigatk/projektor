@@ -22,12 +22,16 @@ class TestRunBadgeService(
         }
     }
 
-    suspend fun createTestsBadge(repoName: String, projectName: String?): String? {
-        val previousTestRun = previousTestRunService.findMostRecentRun(
-            repoName,
-            projectName,
-            BranchSearch(branchType = BranchType.MAINLINE)
-        )
+    suspend fun createTestsBadge(
+        repoName: String,
+        projectName: String?,
+    ): String? {
+        val previousTestRun =
+            previousTestRunService.findMostRecentRun(
+                repoName,
+                projectName,
+                BranchSearch(branchType = BranchType.MAINLINE),
+            )
 
         return if (previousTestRun != null) {
             testRunBadgeCreator.createBadge(previousTestRun.passed)

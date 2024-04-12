@@ -7,13 +7,32 @@ import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.RepositoryTestRunTimeline
 
 interface RepositoryTestRunRepository {
-    suspend fun fetchRepositoryTestRunTimeline(repoName: String, projectName: String?): RepositoryTestRunTimeline?
+    suspend fun fetchRepositoryTestRunTimeline(
+        repoName: String,
+        projectName: String?,
+    ): RepositoryTestRunTimeline?
 
-    suspend fun fetchRepositoryTestRunSummaries(repoName: String, projectName: String?, limit: Int): List<TestRunSummary>
+    suspend fun fetchRepositoryTestRunSummaries(
+        repoName: String,
+        projectName: String?,
+        limit: Int,
+    ): List<TestRunSummary>
 
-    suspend fun fetchRepositoryFailingTestCases(repoName: String, projectName: String?, maxRuns: Int, branchType: BranchType): List<TestCase>
+    suspend fun fetchRepositoryFailingTestCases(
+        repoName: String,
+        projectName: String?,
+        maxRuns: Int,
+        branchType: BranchType,
+    ): List<TestCase>
 
-    suspend fun fetchRecentTestRunPublicIds(repoName: String, projectName: String?, maxRuns: Int): List<PublicId>
+    suspend fun fetchRecentTestRunPublicIds(
+        repoName: String,
+        projectName: String?,
+        maxRuns: Int,
+    ): List<PublicId>
 
-    suspend fun fetchTestRunCount(repoName: String, projectName: String?): Long
+    suspend fun fetchTestRunCount(
+        repoName: String,
+        projectName: String?,
+    ): Long
 }

@@ -8,5 +8,5 @@ data class PerformanceResult(
     val requestCount: Long,
     val average: BigDecimal,
     val maximum: BigDecimal,
-    val p95: BigDecimal
+    val p95: BigDecimal,
 )

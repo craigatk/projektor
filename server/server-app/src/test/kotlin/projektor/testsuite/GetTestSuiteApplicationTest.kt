@@ -37,15 +37,15 @@ class GetTestSuiteApplicationTest : ApplicationTestCase() {
                             "testSuite1",
                             listOf("testSuite1TestCase1"),
                             listOf("testSuite1TestCase2"),
-                            listOf()
+                            listOf(),
                         ),
                         TestSuiteData(
                             "testSuite2",
                             listOf("testSuite2TestCase1", "testSuite2TestCase2", "testSuite2TestCase3"),
                             listOf(),
-                            listOf()
-                        )
-                    )
+                            listOf(),
+                        ),
+                    ),
                 )
             }.apply {
                 val responseContent = response.content
@@ -82,23 +82,24 @@ class GetTestSuiteApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/suite/$testSuiteIdx") {
-                val testRun = testRunDBGenerator.createTestRun(
-                    publicId,
-                    listOf(
-                        TestSuiteData(
-                            "projektor.TestSuite1",
-                            listOf("testCase1"),
-                            listOf(),
-                            listOf()
+                val testRun =
+                    testRunDBGenerator.createTestRun(
+                        publicId,
+                        listOf(
+                            TestSuiteData(
+                                "projektor.TestSuite1",
+                                listOf("testCase1"),
+                                listOf(),
+                                listOf(),
+                            ),
+                            TestSuiteData(
+                                "projektor.TestSuite2",
+                                listOf("testCase2"),
+                                listOf(),
+                                listOf(),
+                            ),
                         ),
-                        TestSuiteData(
-                            "projektor.TestSuite2",
-                            listOf("testCase2"),
-                            listOf(),
-                            listOf()
-                        )
                     )
-                )
 
                 val testSuiteGroup = TestSuiteGroupDB()
                 testSuiteGroup.testRunId = testRun.id
@@ -124,11 +125,12 @@ class GetTestSuiteApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should get test suite with file name`() {
-        val resultsBody = GroupedResultsXmlLoader().wrapResultsXmlsInGroup(
-            listOf(
-                ResultsXmlLoader().cypressWithFilePathAndRootSuiteNameSet()
+        val resultsBody =
+            GroupedResultsXmlLoader().wrapResultsXmlsInGroup(
+                listOf(
+                    ResultsXmlLoader().cypressWithFilePathAndRootSuiteNameSet(),
+                ),
             )
-        )
 
         val testSuiteIdx = 1
 

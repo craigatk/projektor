@@ -26,14 +26,14 @@ class RepositoryTestRunPassFailBadgeApplicationTest : ApplicationTestCase() {
                     publicId = mainlinePublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = featureBranchPublicId,
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
-                    branchName = "feature/dev"
+                    branchName = "feature/dev",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -57,14 +57,14 @@ class RepositoryTestRunPassFailBadgeApplicationTest : ApplicationTestCase() {
                     publicId = passingPublicId,
                     repoName = repoName,
                     ci = true,
-                    projectName = null
+                    projectName = null,
                 )
 
                 testRunDBGenerator.createSimpleFailingTestRunInRepo(
                     publicId = failingPublicId,
                     repoName = repoName,
                     ci = true,
-                    projectName = null
+                    projectName = null,
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -90,7 +90,7 @@ class RepositoryTestRunPassFailBadgeApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = projectName
+                    projectName = projectName,
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -98,7 +98,7 @@ class RepositoryTestRunPassFailBadgeApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
                     branchName = "feature/dev",
-                    projectName = projectName
+                    projectName = projectName,
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)

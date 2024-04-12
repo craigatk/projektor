@@ -13,18 +13,18 @@ import strikt.assertions.isNotNull
 import java.time.LocalDate
 
 class AttachmentCleanupServiceTest : DatabaseRepositoryTestCase() {
-
     init {
         attachmentsEnabled = true
     }
 
     @Test
     fun `should delete attachments from test runs older than specified day`() {
-        val attachmentCleanupService = AttachmentCleanupService(
-            CleanupConfig(null, 21, false),
-            get(),
-            attachmentService
-        )
+        val attachmentCleanupService =
+            AttachmentCleanupService(
+                CleanupConfig(null, 21, false),
+                get(),
+                attachmentService,
+            )
 
         val cleanupPublicId = randomPublicId()
         testRunDBGenerator.createTestRun(cleanupPublicId, LocalDate.now().minusDays(23), false)
@@ -51,11 +51,12 @@ class AttachmentCleanupServiceTest : DatabaseRepositoryTestCase() {
 
     @Test
     fun `when dry run enabled should not delete any attachments`() {
-        val attachmentCleanupService = AttachmentCleanupService(
-            CleanupConfig(null, 14, true),
-            get(),
-            attachmentService
-        )
+        val attachmentCleanupService =
+            AttachmentCleanupService(
+                CleanupConfig(null, 14, true),
+                get(),
+                attachmentService,
+            )
 
         val cleanupPublicId = randomPublicId()
         testRunDBGenerator.createTestRun(cleanupPublicId, LocalDate.now().minusDays(16), false)

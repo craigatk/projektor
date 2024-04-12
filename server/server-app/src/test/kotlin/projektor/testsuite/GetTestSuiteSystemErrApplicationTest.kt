@@ -19,10 +19,12 @@ class GetTestSuiteSystemErrApplicationTest : ApplicationTestCase() {
     fun shouldFetchTestSuiteSystemErrFromDatabase() {
         val publicId = randomPublicId()
         val testSuiteIdx = 1
-        val systemErr = """Here is some system err
+        val systemErr =
+            """
+            Here is some system err
             With multiple
             Lines
-        """.trimIndent()
+            """.trimIndent()
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/suite/$testSuiteIdx/systemErr") {

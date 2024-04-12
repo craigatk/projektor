@@ -14,7 +14,6 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
 class OpenTelemetryApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should add custom spans when fetching test run`() {
         val publicId = randomPublicId()
@@ -28,9 +27,9 @@ class OpenTelemetryApplicationTest : ApplicationTestCase() {
                             "testSuite1",
                             listOf("testSuite1TestCase1", "testSuite1TestCase2"),
                             listOf(),
-                            listOf()
-                        )
-                    )
+                            listOf(),
+                        ),
+                    ),
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)

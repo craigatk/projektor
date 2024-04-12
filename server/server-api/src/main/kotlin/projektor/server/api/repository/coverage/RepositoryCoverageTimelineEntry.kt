@@ -6,5 +6,5 @@ import java.time.Instant
 data class RepositoryCoverageTimelineEntry(
     val publicId: String,
     val createdTimestamp: Instant,
-    val coverageStats: CoverageStats
+    val coverageStats: CoverageStats,
 )

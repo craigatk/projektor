@@ -26,12 +26,12 @@ class ObjectStoreClientObjectSpec : StringSpec() {
                 .and { get { readBytes().decodeToString() }.isEqualTo("Here is a test file") }
         }
 
-        "when trying to get object that does not exist should return null"() {
+        "when trying to get object that does not exist should return null" {
             expectThat(client.getObject(bucketName, "objectDoesNotExist"))
                 .isNull()
         }
 
-        "should delete object"() {
+        "should delete object" {
             client.putObject(bucketName, objectName, File("src/test/resources/test_file.txt").inputStream())
 
             client.removeObject(bucketName, objectName)

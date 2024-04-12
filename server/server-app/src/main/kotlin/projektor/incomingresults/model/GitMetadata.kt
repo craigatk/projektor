@@ -6,5 +6,5 @@ data class GitMetadata(
     val branchName: String?,
     val isMainBranch: Boolean,
     val commitSha: String? = null,
-    val pullRequestNumber: Int? = null
+    val pullRequestNumber: Int? = null,
 )

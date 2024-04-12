@@ -16,7 +16,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isTrue
 
 class SaveGroupedResultsWithMetadataApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should save grouped test results with Git metadata`() {
         val gitMetadata = GitMetadata()

@@ -30,14 +30,14 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
                     publicId = mainlinePublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = featureBranchPublicId,
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
-                    branchName = "feature/dev"
+                    branchName = "feature/dev",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -60,7 +60,7 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
                     publicId = featureBranchPublicId,
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
-                    branchName = "feature/dev"
+                    branchName = "feature/dev",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -83,7 +83,7 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
                     publicId = thisPublicId,
                     repoName = repoName,
                     ci = true,
-                    projectName = null
+                    projectName = null,
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.NotFound)
@@ -105,7 +105,7 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = projectName
+                    projectName = projectName,
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -129,7 +129,7 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
                     publicId = thisPublicId,
                     repoName = repoName,
                     ci = true,
-                    projectName = projectName
+                    projectName = projectName,
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.NotFound)

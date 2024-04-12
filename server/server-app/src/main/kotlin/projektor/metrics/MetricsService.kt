@@ -18,16 +18,23 @@ class MetricsService(private val metricRegistry: MeterRegistry) {
     private val resultsParseFailureCounter = metricRegistry.counter("results_parse_failure")
 
     fun incrementCoverageParseFailureCounter() = coverageParseFailureCounter.increment()
+
     fun incrementCoverageProcessFailureCounter() = coverageProcessFailureCounter.increment()
+
     fun incrementCoverageProcessSuccessCounter() = coverageProcessSuccessCounter.increment()
+
     fun incrementCoverageProcessStartCounter() = coverageProcessStartCounter.increment()
 
     fun incrementPullRequestCommentSuccessCounter() = pullRequestCommentSuccessCounter.increment()
+
     fun incrementPullRequestCommentFailureCounter() = pullRequestCommentFailureCounter.increment()
 
     fun incrementResultsProcessStartCounter() = resultsProcessStartCounter.increment()
+
     fun incrementResultsProcessSuccessCounter() = resultsProcessSuccessCounter.increment()
+
     fun incrementResultsProcessFailureCounter() = resultsProcessFailureCounter.increment()
+
     fun incrementResultsParseFailureCounter() = resultsParseFailureCounter.increment()
 
     fun createTimer(name: String): Pair<Timer, Timer.Sample> {

@@ -4,5 +4,5 @@ data class CodeQualityReport(
     val idx: Int,
     val contents: String,
     val fileName: String,
-    val groupName: String?
+    val groupName: String?,
 )

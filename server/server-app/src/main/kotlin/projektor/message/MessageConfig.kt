@@ -3,7 +3,6 @@ package projektor.message
 import io.ktor.server.config.ApplicationConfig
 
 data class MessageConfig(val globalMessages: List<String>) {
-
     companion object {
         fun createMessageConfig(applicationConfig: ApplicationConfig): MessageConfig {
             val messageString = applicationConfig.propertyOrNull("ktor.message.global")?.getString()

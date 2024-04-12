@@ -19,7 +19,6 @@ import strikt.assertions.isNotNull
 import strikt.assertions.map
 
 class TestRunDatabaseRepositoryAppendTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should append new test group of test suites`() {
         val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
@@ -29,23 +28,24 @@ class TestRunDatabaseRepositoryAppendTest : DatabaseRepositoryTestCase() {
 
         val publicId = randomPublicId()
 
-        val testRun = testRunDBGenerator.createTestRun(
-            publicId,
-            listOf(
-                TestSuiteData(
-                    "testSuite1",
-                    listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
-                    listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
-                    listOf()
+        val testRun =
+            testRunDBGenerator.createTestRun(
+                publicId,
+                listOf(
+                    TestSuiteData(
+                        "testSuite1",
+                        listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
+                        listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
+                        listOf(),
+                    ),
+                    TestSuiteData(
+                        "testSuite2",
+                        listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
+                        listOf("testSuite2FailedTestCase1"),
+                        listOf(),
+                    ),
                 ),
-                TestSuiteData(
-                    "testSuite2",
-                    listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
-                    listOf("testSuite2FailedTestCase1"),
-                    listOf()
-                )
             )
-        )
 
         testRunDBGenerator.addTestSuiteGroupToTestRun("SomeGroup1", testRun, listOf("testSuite1"))
         testRunDBGenerator.addTestSuiteGroupToTestRun("SomeGroup2", testRun, listOf("testSuite2"))
@@ -74,29 +74,30 @@ class TestRunDatabaseRepositoryAppendTest : DatabaseRepositoryTestCase() {
 
         val publicId = randomPublicId()
 
-        val testRun = testRunDBGenerator.createTestRun(
-            publicId,
-            listOf(
-                TestSuiteData(
-                    "testSuite1",
-                    listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
-                    listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
-                    listOf()
+        val testRun =
+            testRunDBGenerator.createTestRun(
+                publicId,
+                listOf(
+                    TestSuiteData(
+                        "testSuite1",
+                        listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
+                        listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
+                        listOf(),
+                    ),
+                    TestSuiteData(
+                        "testSuite2",
+                        listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
+                        listOf("testSuite2FailedTestCase1"),
+                        listOf(),
+                    ),
+                    TestSuiteData(
+                        "testSuite3",
+                        listOf("testSuite3PassedTestCase1", "testSuite3PassedTestCase2"),
+                        listOf("testSuite3FailedTestCase1"),
+                        listOf(),
+                    ),
                 ),
-                TestSuiteData(
-                    "testSuite2",
-                    listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
-                    listOf("testSuite2FailedTestCase1"),
-                    listOf()
-                ),
-                TestSuiteData(
-                    "testSuite3",
-                    listOf("testSuite3PassedTestCase1", "testSuite3PassedTestCase2"),
-                    listOf("testSuite3FailedTestCase1"),
-                    listOf()
-                )
             )
-        )
 
         testRunDBGenerator.addTestSuiteGroupToTestRun("Group1", testRun, listOf("testSuite1"))
         testRunDBGenerator.addTestSuiteGroupToTestRun("Group2", testRun, listOf("testSuite2", "testSuite3"))

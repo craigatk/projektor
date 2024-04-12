@@ -23,26 +23,37 @@ import projektor.server.api.attachments.Attachments
 
 fun Route.attachments(
     attachmentService: AttachmentService?,
-    authService: AuthService
+    authService: AuthService,
 ) {
     post("/run/{publicId}/attachments/{attachmentName}") {
         val publicId = call.parameters.getOrFail("publicId")
         val attachmentName = call.parameters.getOrFail("attachmentName")
-        val attachmentStream = withContext(Dispatchers.IO) {
-            call.receiveStream()
-        }
+        val attachmentStream =
+            withContext(Dispatchers.IO) {
+                call.receiveStream()
+            }
 
         val contentLengthInBytes = call.request.header("content-length")?.toLong()
 
-        if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
+        if (!authService.isAuthValid(call.request.header(AuthConfig.PUBLISH_TOKEN))) {
             call.respond(HttpStatusCode.Unauthorized)
         } else if (attachmentService != null) {
             if (attachmentService.attachmentSizeValid(contentLengthInBytes)) {
-                val addAttachmentResult = attachmentService.addAttachment(PublicId(publicId), attachmentName, attachmentStream, contentLengthInBytes)
+                val addAttachmentResult =
+                    attachmentService.addAttachment(
+                        PublicId(publicId),
+                        attachmentName,
+                        attachmentStream,
+                        contentLengthInBytes,
+                    )
 
                 when (addAttachmentResult) {
                     AddAttachmentResult.Success -> call.respond(HttpStatusCode.OK, AddAttachmentResponse(attachmentName, null))
-                    is AddAttachmentResult.Failure -> call.respond(HttpStatusCode.BadRequest, AddAttachmentResponse(attachmentName, AddAttachmentError.ATTACHMENT_FAILED))
+                    is AddAttachmentResult.Failure ->
+                        call.respond(
+                            HttpStatusCode.BadRequest,
+                            AddAttachmentResponse(attachmentName, AddAttachmentError.ATTACHMENT_FAILED),
+                        )
                 }
             } else {
                 call.respond(HttpStatusCode.BadRequest, AddAttachmentResponse(null, AddAttachmentError.ATTACHMENT_TOO_LARGE))

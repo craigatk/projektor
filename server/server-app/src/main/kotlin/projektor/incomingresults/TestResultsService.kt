@@ -16,7 +16,7 @@ class TestResultsService(
     private val testResultsProcessor: TestResultsProcessor,
     private val testRunRepository: TestRunRepository,
     private val testResultsProcessingService: TestResultsProcessingService,
-    private val metricsService: MetricsService
+    private val metricsService: MetricsService,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
@@ -33,7 +33,10 @@ class TestResultsService(
         return publicId
     }
 
-    suspend fun doPersistTestResults(publicId: PublicId, resultsBlob: String) {
+    suspend fun doPersistTestResults(
+        publicId: PublicId,
+        resultsBlob: String,
+    ) {
         try {
             testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.PROCESSING)
 

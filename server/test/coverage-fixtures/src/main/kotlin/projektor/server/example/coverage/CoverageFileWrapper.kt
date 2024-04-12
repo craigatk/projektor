@@ -6,11 +6,14 @@ import projektor.parser.coverage.payload.CoveragePayloadParser
 object CoverageFileWrapper {
     private val coveragePayloadParser = CoveragePayloadParser()
 
-    fun createCoverageFilePayload(payload: String, baseDirectoryPath: String?): String =
+    fun createCoverageFilePayload(
+        payload: String,
+        baseDirectoryPath: String?,
+    ): String =
         coveragePayloadParser.serializeCoverageFilePayload(
             CoverageFilePayload(
                 reportContents = payload,
-                baseDirectoryPath = baseDirectoryPath
-            )
+                baseDirectoryPath = baseDirectoryPath,
+            ),
         )
 }

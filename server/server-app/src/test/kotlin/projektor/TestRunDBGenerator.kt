@@ -38,9 +38,12 @@ class TestRunDBGenerator(
     private val gitMetadataDao: GitMetadataDao,
     private val resultsMetadataDao: ResultsMetadataDao,
     private val coverageService: CoverageService,
-    private val attachmentDao: TestRunAttachmentDao
+    private val attachmentDao: TestRunAttachmentDao,
 ) {
-    fun createTestRun(publicId: PublicId, testSuiteDataList: List<TestSuiteData>): TestRunDB {
+    fun createTestRun(
+        publicId: PublicId,
+        testSuiteDataList: List<TestSuiteData>,
+    ): TestRunDB {
         val testRun = createTestRun(publicId, testSuiteDataList.size, testSuiteDataList.count { it.failingTestCaseNames.isNotEmpty() })
         testRunDao.insert(testRun)
         println("Inserted test run ${testRun.publicId}")
@@ -90,7 +93,7 @@ class TestRunDBGenerator(
         repoName: String,
         ci: Boolean,
         projectName: String?,
-        branchName: String = "main"
+        branchName: String = "main",
     ): TestRunDB {
         val testRunDB = createTestRun(publicId, testSuiteDataList)
         addResultsMetadata(testRunDB, ci)
@@ -105,7 +108,7 @@ class TestRunDBGenerator(
         branchName: String?,
         projectName: String?,
         pullRequestNumber: Int?,
-        commitSha: String?
+        commitSha: String?,
     ): GitMetadataDB {
         val gitMetadata = GitMetadataDB()
         gitMetadata.testRunId = testRunDB.id
@@ -123,7 +126,7 @@ class TestRunDBGenerator(
 
     fun addResultsMetadata(
         testRunDB: TestRunDB,
-        ci: Boolean
+        ci: Boolean,
     ): ResultsMetadataDB {
         val resultsMetadata = ResultsMetadataDB()
         resultsMetadata.testRunId = testRunDB.id
@@ -141,9 +144,9 @@ class TestRunDBGenerator(
                     "testSuite1",
                     listOf("testSuite1TestCase1"),
                     listOf(),
-                    listOf()
-                )
-            )
+                    listOf(),
+                ),
+            ),
         )
 
     fun createSimpleFailingTestRun(publicId: PublicId): TestRunDB =
@@ -154,42 +157,62 @@ class TestRunDBGenerator(
                     "testSuite1",
                     listOf("testSuite1TestCase1"),
                     listOf("failingTestSuite1TestCase1"),
-                    listOf()
-                )
-            )
+                    listOf(),
+                ),
+            ),
         )
 
     fun createEmptyTestRun(publicId: PublicId): TestRunDB =
         createTestRun(
             publicId,
-            listOf()
+            listOf(),
         )
 
-    fun createEmptyTestRunInRepo(publicId: PublicId, repoName: String, ci: Boolean, projectName: String?): TestRunDB {
-        val testRunDB = createTestRun(
-            publicId,
-            listOf()
-        )
+    fun createEmptyTestRunInRepo(
+        publicId: PublicId,
+        repoName: String,
+        ci: Boolean,
+        projectName: String?,
+    ): TestRunDB {
+        val testRunDB =
+            createTestRun(
+                publicId,
+                listOf(),
+            )
         addResultsMetadata(testRunDB, ci)
         addGitMetadata(testRunDB, repoName, true, "main", projectName, null, null)
         return testRunDB
     }
 
-    fun createSimpleTestRunInRepo(publicId: PublicId, repoName: String, ci: Boolean, projectName: String?): TestRunDB {
+    fun createSimpleTestRunInRepo(
+        publicId: PublicId,
+        repoName: String,
+        ci: Boolean,
+        projectName: String?,
+    ): TestRunDB {
         val testRunDB = createSimpleTestRun(publicId)
         addResultsMetadata(testRunDB, ci)
         addGitMetadata(testRunDB, repoName, true, "main", projectName, null, null)
         return testRunDB
     }
 
-    fun createSimpleFailingTestRunInRepo(publicId: PublicId, repoName: String, ci: Boolean, projectName: String?): TestRunDB {
+    fun createSimpleFailingTestRunInRepo(
+        publicId: PublicId,
+        repoName: String,
+        ci: Boolean,
+        projectName: String?,
+    ): TestRunDB {
         val testRunDB = createSimpleFailingTestRun(publicId)
         addResultsMetadata(testRunDB, ci)
         addGitMetadata(testRunDB, repoName, true, "main", projectName, null, null)
         return testRunDB
     }
 
-    fun createTestRun(publicId: PublicId, createdOn: LocalDate, pinned: Boolean): TestRunDB {
+    fun createTestRun(
+        publicId: PublicId,
+        createdOn: LocalDate,
+        pinned: Boolean,
+    ): TestRunDB {
         val testRun = createTestRun(publicId, listOf())
         testRun.createdTimestamp = createdOn.atStartOfDay()
         testRunDao.update(testRun)
@@ -205,21 +228,22 @@ class TestRunDBGenerator(
         coverageText: String,
         repoName: String,
         branchName: String = "main",
-        projectName: String? = null
-    ): TestRunDB = createTestRunWithCoverageAndGitMetadata(
-        publicId,
-        CoverageFilePayload(coverageText),
-        repoName,
-        branchName,
-        projectName
-    )
+        projectName: String? = null,
+    ): TestRunDB =
+        createTestRunWithCoverageAndGitMetadata(
+            publicId,
+            CoverageFilePayload(coverageText),
+            repoName,
+            branchName,
+            projectName,
+        )
 
     fun createTestRunWithCoverageAndGitMetadata(
         publicId: PublicId,
         coverageFilePayload: CoverageFilePayload,
         repoName: String,
         branchName: String = "main",
-        projectName: String? = null
+        projectName: String? = null,
     ): TestRunDB {
         val testRunDB = createSimpleTestRun(publicId)
         addGitMetadata(testRunDB, repoName, branchName == "main", branchName, projectName, null, null)
@@ -228,7 +252,11 @@ class TestRunDBGenerator(
         return testRunDB
     }
 
-    fun addTestSuiteGroupToTestRun(testSuiteGroup: TestSuiteGroupDB, testRun: TestRunDB, testSuiteClassNames: List<String>) {
+    fun addTestSuiteGroupToTestRun(
+        testSuiteGroup: TestSuiteGroupDB,
+        testRun: TestRunDB,
+        testSuiteClassNames: List<String>,
+    ) {
         val testSuiteDBs = testSuiteDao.fetchByTestRunId(testRun.id).filter { it.className in testSuiteClassNames }
 
         testSuiteDBs.forEach { testSuiteDB ->
@@ -237,7 +265,11 @@ class TestRunDBGenerator(
         }
     }
 
-    fun addTestSuiteGroupToTestRun(groupName: String, testRun: TestRunDB, testSuiteClassNames: List<String>): TestSuiteGroupDB {
+    fun addTestSuiteGroupToTestRun(
+        groupName: String,
+        testRun: TestRunDB,
+        testSuiteClassNames: List<String>,
+    ): TestSuiteGroupDB {
         val testSuiteGroup = TestSuiteGroupDB()
         testSuiteGroup.testRunId = testRun.id
         testSuiteGroup.groupName = groupName
@@ -248,7 +280,11 @@ class TestRunDBGenerator(
         return testSuiteGroup
     }
 
-    fun addAttachment(publicId: PublicId, objectName: String, fileName: String): TestRunAttachment {
+    fun addAttachment(
+        publicId: PublicId,
+        objectName: String,
+        fileName: String,
+    ): TestRunAttachment {
         val attachment = TestRunAttachment()
         attachment.testRunPublicId = publicId.id
         attachment.objectName = objectName
@@ -264,50 +300,72 @@ data class TestSuiteData(
     val passingTestCaseNames: List<String>,
     val failingTestCaseNames: List<String>,
     val skippedTestCaseNames: List<String>,
-    val fileName: String? = null
+    val fileName: String? = null,
 )
 
-fun createTestRun(publicId: PublicId, totalTestCount: Int, failingTestCount: Int = 0, cumulativeDuration: BigDecimal = BigDecimal("30.000")): TestRunDB = TestRunDB()
-    .setPublicId(publicId.id)
-    .setTotalTestCount(totalTestCount)
-    .setTotalPassingCount(totalTestCount)
-    .setTotalFailureCount(failingTestCount)
-    .setTotalSkippedCount(0)
-    .setCumulativeDuration(cumulativeDuration)
-    .setAverageDuration(
-        if (totalTestCount > 0)
-            calculateAverageDuration(cumulativeDuration, totalTestCount)
-        else
-            cumulativeDuration
-    )
-    .setSlowestTestCaseDuration(BigDecimal("10.000"))
-    .setPassed(failingTestCount == 0)
-    .setCreatedTimestamp(LocalDateTime.now())
+fun createTestRun(
+    publicId: PublicId,
+    totalTestCount: Int,
+    failingTestCount: Int = 0,
+    cumulativeDuration: BigDecimal = BigDecimal("30.000"),
+): TestRunDB =
+    TestRunDB()
+        .setPublicId(publicId.id)
+        .setTotalTestCount(totalTestCount)
+        .setTotalPassingCount(totalTestCount)
+        .setTotalFailureCount(failingTestCount)
+        .setTotalSkippedCount(0)
+        .setCumulativeDuration(cumulativeDuration)
+        .setAverageDuration(
+            if (totalTestCount > 0) {
+                calculateAverageDuration(cumulativeDuration, totalTestCount)
+            } else {
+                cumulativeDuration
+            },
+        )
+        .setSlowestTestCaseDuration(BigDecimal("10.000"))
+        .setPassed(failingTestCount == 0)
+        .setCreatedTimestamp(LocalDateTime.now())
 
-fun createTestSuite(testRunId: Long, packageAndClassName: String, idx: Int): TestSuiteDB = TestSuiteDB()
-    .setTestRunId(testRunId)
-    .setPackageName(parsePackageAndClassName(packageAndClassName).first)
-    .setClassName(parsePackageAndClassName(packageAndClassName).second)
-    .setIdx(idx)
-    .setTestCount(6)
-    .setPassingCount(3)
-    .setFailureCount(2)
-    .setSkippedCount(1)
-    .setDuration(BigDecimal.TEN)
-    .setStartTs(LocalDateTime.now())
-    .setHostname("hostname")
+fun createTestSuite(
+    testRunId: Long,
+    packageAndClassName: String,
+    idx: Int,
+): TestSuiteDB =
+    TestSuiteDB()
+        .setTestRunId(testRunId)
+        .setPackageName(parsePackageAndClassName(packageAndClassName).first)
+        .setClassName(parsePackageAndClassName(packageAndClassName).second)
+        .setIdx(idx)
+        .setTestCount(6)
+        .setPassingCount(3)
+        .setFailureCount(2)
+        .setSkippedCount(1)
+        .setDuration(BigDecimal.TEN)
+        .setStartTs(LocalDateTime.now())
+        .setHostname("hostname")
 
-fun createTestCase(testSuiteId: Long, name: String, idx: Int, passed: Boolean): TestCaseDB = TestCaseDB()
-    .setTestSuiteId(testSuiteId)
-    .setName(name)
-    .setIdx(idx)
-    .setClassName("${name}ClassName")
-    .setDuration(BigDecimal("2.5"))
-    .setPassed(passed)
-    .setSkipped(false)
+fun createTestCase(
+    testSuiteId: Long,
+    name: String,
+    idx: Int,
+    passed: Boolean,
+): TestCaseDB =
+    TestCaseDB()
+        .setTestSuiteId(testSuiteId)
+        .setName(name)
+        .setIdx(idx)
+        .setClassName("${name}ClassName")
+        .setDuration(BigDecimal("2.5"))
+        .setPassed(passed)
+        .setSkipped(false)
 
-fun createTestFailure(testCaseId: Long, testCaseName: String): TestFailureDB = TestFailureDB()
-    .setTestCaseId(testCaseId)
-    .setFailureMessage("$testCaseName failure message")
-    .setFailureText("$testCaseName failure text")
-    .setFailureType("$testCaseName failure type")
+fun createTestFailure(
+    testCaseId: Long,
+    testCaseName: String,
+): TestFailureDB =
+    TestFailureDB()
+        .setTestCaseId(testCaseId)
+        .setFailureMessage("$testCaseName failure message")
+        .setFailureText("$testCaseName failure text")
+        .setFailureType("$testCaseName failure type")

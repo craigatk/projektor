@@ -28,26 +28,25 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/api/v1/repo/$repoName/coverage/current") {
-
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = firstRunPublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = secondRunPublicId,
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = thirdRunPublicId,
                     coverageText = JacocoXmlLoader().jacocoXmlParser(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -55,14 +54,14 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = "other-project"
+                    projectName = "other-project",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInDifferentRepoPublicId,
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = "other/repo",
-                    branchName = "main"
+                    branchName = "main",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -95,26 +94,25 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/api/v1/repo/$repoName/coverage/current?project=other-project") {
-
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = firstRunPublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = secondRunPublicId,
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = thirdRunPublicId,
                     coverageText = JacocoXmlLoader().jacocoXmlParser(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -122,14 +120,14 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = "other-project"
+                    projectName = "other-project",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInDifferentRepoPublicId,
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = "other/repo",
-                    branchName = "main"
+                    branchName = "main",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -163,26 +161,25 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/api/v1/repo/$repoName/coverage/current?branch=my-branch") {
-
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = firstRunPublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
-                    branchName = "my-branch"
+                    branchName = "my-branch",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = secondRunPublicId,
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = thirdRunPublicId,
                     coverageText = JacocoXmlLoader().jacocoXmlParser(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -190,14 +187,14 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = "other-project"
+                    projectName = "other-project",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInDifferentRepoPublicId,
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = "other/repo",
-                    branchName = "main"
+                    branchName = "main",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -229,26 +226,25 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/api/v1/repo/$repoName/coverage/current") {
-
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = otherBranchRunPublicId1,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
-                    branchName = "other"
+                    branchName = "other",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = mainRunPublicId,
                     coverageText = JacocoXmlLoader().serverApp(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = otherBranchRunPublicId2,
                     coverageText = JacocoXmlLoader().jacocoXmlParser(),
                     repoName = repoName,
-                    branchName = "other"
+                    branchName = "other",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)

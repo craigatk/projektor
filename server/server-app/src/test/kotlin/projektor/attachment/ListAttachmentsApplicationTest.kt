@@ -39,9 +39,9 @@ class ListAttachmentsApplicationTest : ApplicationTestCase() {
                             "testSuite1",
                             listOf("testSuite1TestCase1", "testSuite1TestCase2"),
                             listOf(),
-                            listOf()
-                        )
-                    )
+                            listOf(),
+                        ),
+                    ),
                 )
                 addHeader("content-length", attachment1Bytes.size.toString())
                 setBody(attachment1Bytes)

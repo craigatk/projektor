@@ -19,7 +19,6 @@ import java.time.LocalDateTime
 import kotlin.test.assertNotNull
 
 class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should fetch all fields in test run and test suite`() {
         val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
@@ -134,15 +133,15 @@ class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
                     "testSuite1",
                     listOf("testSuite1PassedTestCase1", "testSuitePassed1TestCase2"),
                     listOf("testSuite1FailedTestCase1"),
-                    listOf("testSuite1SkippedTestCase1", "testSuite1SkippedTestCase2")
+                    listOf("testSuite1SkippedTestCase1", "testSuite1SkippedTestCase2"),
                 ),
                 TestSuiteData(
                     "testSuite2",
                     listOf("testSuite2PassedTestCase1"),
                     listOf("testSuite2FailedTestCase1", "testSuite2FailedTestCase2", "testSuite2FailedTestCase3"),
-                    listOf()
-                )
-            )
+                    listOf(),
+                ),
+            ),
         )
 
         val testRun = runBlocking { testRunDatabaseRepository.fetchTestRun(publicId) }

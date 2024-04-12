@@ -14,5 +14,5 @@ data class TestRunSummary(
     val averageDuration: BigDecimal,
     val slowestTestCaseDuration: BigDecimal,
     val createdTimestamp: Instant,
-    val wallClockDuration: BigDecimal?
+    val wallClockDuration: BigDecimal?,
 )

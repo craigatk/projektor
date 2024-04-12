@@ -33,9 +33,9 @@ class AddAttachmentMaxSizeApplicationTest : ApplicationTestCase() {
                             "testSuite1",
                             listOf("testSuite1TestCase1", "testSuite1TestCase2"),
                             listOf(),
-                            listOf()
-                        )
-                    )
+                            listOf(),
+                        ),
+                    ),
                 )
 
                 addHeader("content-length", "23342")
@@ -64,9 +64,9 @@ class AddAttachmentMaxSizeApplicationTest : ApplicationTestCase() {
                             "testSuite1",
                             listOf("testSuite1TestCase1", "testSuite1TestCase2"),
                             listOf(),
-                            listOf()
-                        )
-                    )
+                            listOf(),
+                        ),
+                    ),
                 )
 
                 addHeader("content-length", "23342")

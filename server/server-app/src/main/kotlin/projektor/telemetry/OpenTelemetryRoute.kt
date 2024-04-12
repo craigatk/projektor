@@ -7,7 +7,6 @@ import io.ktor.util.AttributeKey
 import io.opentelemetry.api.trace.Span
 
 class OpenTelemetryRoute {
-
     class Configuration {
         var includeHttpMethod: Boolean = false
     }
@@ -15,7 +14,10 @@ class OpenTelemetryRoute {
     companion object Feature : BaseApplicationPlugin<Application, Configuration, OpenTelemetryRoute> {
         override val key: AttributeKey<OpenTelemetryRoute> = AttributeKey("OpenTelemetryRoute")
 
-        override fun install(pipeline: Application, configure: Configuration.() -> Unit): OpenTelemetryRoute {
+        override fun install(
+            pipeline: Application,
+            configure: Configuration.() -> Unit,
+        ): OpenTelemetryRoute {
             val configuration = Configuration().apply(configure)
 
             pipeline.environment.monitor.subscribe(Routing.RoutingCallStarted) { call ->

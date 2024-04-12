@@ -4,7 +4,10 @@ import projektor.server.api.TestCase
 import projektor.server.api.attachments.Attachment
 
 class CypressVideoAttachmentMatcher : TestCaseAttachmentMatcher {
-    override fun findAttachment(testCase: TestCase, attachments: List<Attachment>?): Attachment? =
+    override fun findAttachment(
+        testCase: TestCase,
+        attachments: List<Attachment>?,
+    ): Attachment? =
         attachments?.find { attachment ->
             val testCaseFilePathParts = testCase.fileName?.split("/")
 

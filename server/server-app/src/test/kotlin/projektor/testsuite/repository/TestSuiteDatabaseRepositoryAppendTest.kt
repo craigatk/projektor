@@ -11,7 +11,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
 class TestSuiteDatabaseRepositoryAppendTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should fetch highest test suite index`() {
         val testSuiteDatabaseRepository = TestSuiteDatabaseRepository(dslContext)
@@ -24,15 +23,15 @@ class TestSuiteDatabaseRepositoryAppendTest : DatabaseRepositoryTestCase() {
                     "testSuite1",
                     listOf("testSuite1PassedTestCase1"),
                     listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
-                    listOf()
+                    listOf(),
                 ),
                 TestSuiteData(
                     "testSuite2",
                     listOf("testSuite2TestCase1", "testSuite2TestCase2", "testSuite2TestCase3"),
                     listOf(),
-                    listOf()
-                )
-            )
+                    listOf(),
+                ),
+            ),
         )
 
         val highestTestSuiteIdx = runBlocking { testSuiteDatabaseRepository.fetchHighestTestSuiteIndex(publicId) }

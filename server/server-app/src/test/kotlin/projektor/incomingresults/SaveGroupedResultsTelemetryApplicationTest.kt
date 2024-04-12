@@ -13,7 +13,6 @@ import strikt.assertions.any
 import strikt.assertions.isEqualTo
 
 class SaveGroupedResultsTelemetryApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should record telemetry when saving grouped test results`() {
         val requestBody = GroupedResultsXmlLoader().passingGroupedResults()

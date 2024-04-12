@@ -5,13 +5,17 @@ import projektor.server.api.error.FailureBodyType
 import projektor.server.api.error.ResultsProcessingFailure
 
 class ProcessingFailureService(private val processingFailureRepository: ProcessingFailureRepository) {
-
-    suspend fun recordProcessingFailure(publicId: PublicId, body: String, bodyType: FailureBodyType, e: Exception) {
+    suspend fun recordProcessingFailure(
+        publicId: PublicId,
+        body: String,
+        bodyType: FailureBodyType,
+        e: Exception,
+    ) {
         processingFailureRepository.recordProcessingFailure(
             publicId = publicId,
             body = body,
             bodyType = bodyType,
-            failureMessage = e.message
+            failureMessage = e.message,
         )
     }
 

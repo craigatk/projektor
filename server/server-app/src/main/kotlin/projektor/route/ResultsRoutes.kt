@@ -28,10 +28,10 @@ fun Route.results(
     testResultsProcessingService: TestResultsProcessingService,
     authService: AuthService,
     metricRegistry: MeterRegistry,
-    metricsService: MetricsService
+    metricsService: MetricsService,
 ) {
     post("/results") {
-        if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
+        if (!authService.isAuthValid(call.request.header(AuthConfig.PUBLISH_TOKEN))) {
             call.respond(HttpStatusCode.Unauthorized)
         } else {
             metricsService.incrementResultsProcessStartCounter()
@@ -48,7 +48,7 @@ fun Route.results(
         }
     }
     post("/groupedResults") {
-        if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
+        if (!authService.isAuthValid(call.request.header(AuthConfig.PUBLISH_TOKEN))) {
             call.respond(HttpStatusCode.Unauthorized)
         } else {
             metricsService.incrementResultsProcessStartCounter()

@@ -37,10 +37,11 @@ class SavePerformanceResultsApplicationTest : ApplicationTestCase() {
         perfResult2.name = "perf-2"
         perfResult2.resultsBlob = PerformanceResultsLoader().k6GetRun()
 
-        val requestBody = GroupedResultsXmlLoader().wrapPerformanceResultsInGroup(
-            listOf(perfResult1, perfResult2),
-            metadata
-        )
+        val requestBody =
+            GroupedResultsXmlLoader().wrapPerformanceResultsInGroup(
+                listOf(perfResult1, perfResult2),
+                metadata,
+            )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/groupedResults") {

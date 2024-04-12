@@ -23,7 +23,6 @@ import strikt.assertions.isNotNull
 import java.math.BigDecimal
 
 class SaveGroupedResultsWithCoverageApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should save grouped results with coverage`() {
         val incomingCoverageFile = CoverageFile()

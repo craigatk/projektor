@@ -16,13 +16,13 @@ import java.time.ZoneId
 
 class GitHubPullRequestCommentService(
     private val notificationConfig: NotificationConfig,
-    private val gitHubCommentService: GitHubCommentService?
+    private val gitHubCommentService: GitHubCommentService?,
 ) {
     fun upsertComment(
         testRunSummary: TestRunSummary,
         gitMetadata: GitMetadata?,
         coverage: Coverage?,
-        performanceResults: List<PerformanceResult>?
+        performanceResults: List<PerformanceResult>?,
     ): PullRequest? {
         val (serverBaseUrl) = notificationConfig
 
@@ -36,41 +36,45 @@ class GitHubPullRequestCommentService(
                 val orgName = repoParts[0]
                 val repoName = repoParts[1]
 
-                val coverageData = if (coverage != null) {
-                    ReportCoverageCommentData(
-                        lineCoveredPercentage = coverage.overallStats.lineStat.coveredPercentage,
-                        lineCoverageDelta = coverage.overallStats.lineStat.coveredPercentageDelta
-                    )
-                } else {
-                    null
-                }
+                val coverageData =
+                    if (coverage != null) {
+                        ReportCoverageCommentData(
+                            lineCoveredPercentage = coverage.overallStats.lineStat.coveredPercentage,
+                            lineCoverageDelta = coverage.overallStats.lineStat.coveredPercentageDelta,
+                        )
+                    } else {
+                        null
+                    }
 
-                val performanceData = performanceResults?.map { performanceResult ->
-                    ReportCommentPerformanceData(
-                        name = performanceResult.name,
-                        requestsPerSecond = performanceResult.requestsPerSecond,
-                        p95 = performanceResult.p95
-                    )
-                }
+                val performanceData =
+                    performanceResults?.map { performanceResult ->
+                        ReportCommentPerformanceData(
+                            name = performanceResult.name,
+                            requestsPerSecond = performanceResult.requestsPerSecond,
+                            p95 = performanceResult.p95,
+                        )
+                    }
 
-                val commentData = ReportCommentData(
-                    projektorServerBaseUrl = serverBaseUrl,
-                    git = ReportCommentGitData(
-                        orgName = orgName,
-                        repoName = repoName,
-                        branchName = branchName,
-                        commitSha = commitSha,
-                        pullRequestNumber = pullRequestNumber
-                    ),
-                    publicId = testRunSummary.id,
-                    createdDate = LocalDateTime.ofInstant(testRunSummary.createdTimestamp, ZoneId.of("Z")),
-                    passed = testRunSummary.passed,
-                    totalTestCount = testRunSummary.totalTestCount,
-                    failedTestCount = testRunSummary.totalFailureCount,
-                    performance = performanceData,
-                    coverage = coverageData,
-                    project = gitMetadata.projectName
-                )
+                val commentData =
+                    ReportCommentData(
+                        projektorServerBaseUrl = serverBaseUrl,
+                        git =
+                            ReportCommentGitData(
+                                orgName = orgName,
+                                repoName = repoName,
+                                branchName = branchName,
+                                commitSha = commitSha,
+                                pullRequestNumber = pullRequestNumber,
+                            ),
+                        publicId = testRunSummary.id,
+                        createdDate = LocalDateTime.ofInstant(testRunSummary.createdTimestamp, ZoneId.of("Z")),
+                        passed = testRunSummary.passed,
+                        totalTestCount = testRunSummary.totalTestCount,
+                        failedTestCount = testRunSummary.totalFailureCount,
+                        performance = performanceData,
+                        coverage = coverageData,
+                        project = gitMetadata.projectName,
+                    )
 
                 gitHubCommentService.upsertReportComment(commentData, testRunSummary.id)
             } else {

@@ -68,14 +68,15 @@ open class DatabaseRepositoryTestCase : KoinTest {
     lateinit var coverageStatsDao: CodeCoverageStatsDao
     lateinit var coverageService: CoverageService
 
-    val attachmentConfig = AttachmentConfig(
-        url = "http://localhost:9000",
-        bucketName = "attachmentstesting",
-        autoCreateBucket = true,
-        accessKey = "minio_access_key",
-        secretKey = "minio_secret_key",
-        maxSizeMB = null
-    )
+    val attachmentConfig =
+        AttachmentConfig(
+            url = "http://localhost:9000",
+            bucketName = "attachmentstesting",
+            autoCreateBucket = true,
+            accessKey = "minio_access_key",
+            secretKey = "minio_secret_key",
+            maxSizeMB = null,
+        )
     var attachmentsEnabled = false
     lateinit var attachmentService: AttachmentService
 
@@ -83,13 +84,14 @@ open class DatabaseRepositoryTestCase : KoinTest {
     fun setup() {
         val hikariConfig = HikariConfig()
 
-        val dataSourceConfig = DataSourceConfig(
-            System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5433/projektordb",
-            System.getenv("DB_USERNAME") ?: "testuser",
-            System.getenv("DB_PASSWORD") ?: "testpass",
-            "public",
-            3
-        )
+        val dataSourceConfig =
+            DataSourceConfig(
+                System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5433/projektordb",
+                System.getenv("DB_USERNAME") ?: "testuser",
+                System.getenv("DB_PASSWORD") ?: "testpass",
+                "public",
+                3,
+            )
 
         hikariConfig.username = dataSourceConfig.username
         hikariConfig.password = dataSourceConfig.password
@@ -102,16 +104,17 @@ open class DatabaseRepositoryTestCase : KoinTest {
 
         dslContext = DSL.using(dataSource, SQLDialect.POSTGRES)
 
-        val metricsConfig = InfluxMetricsConfig(
-            false,
-            "fakedb",
-            "http://localhost",
-            null,
-            null,
-            false,
-            10,
-            "test"
-        )
+        val metricsConfig =
+            InfluxMetricsConfig(
+                false,
+                "fakedb",
+                "http://localhost",
+                null,
+                null,
+                false,
+                10,
+                "test",
+            )
 
         startKoin {
             modules(
@@ -124,8 +127,8 @@ open class DatabaseRepositoryTestCase : KoinTest {
                     NotificationConfig(null),
                     ProcessingConfig(GroupedResultsParser.DEFAULT_MAX_PAYLOAD_SIZE),
                     null,
-                    null
-                )
+                    null,
+                ),
             )
         }
 
@@ -151,24 +154,26 @@ open class DatabaseRepositoryTestCase : KoinTest {
         val metricsService: MetricsService by inject()
         coverageService = CoverageService(coverageRepository, metricsService, previousTestRunService, processingFailureService)
 
-        testRunDBGenerator = TestRunDBGenerator(
-            testRunDao,
-            testSuiteGroupDao,
-            testSuiteDao,
-            testCaseDao,
-            testFailureDao,
-            testRunSystemAttributesDao,
-            gitMetadataDao,
-            resultsMetadataDao,
-            coverageService,
-            attachmentDao
-        )
+        testRunDBGenerator =
+            TestRunDBGenerator(
+                testRunDao,
+                testSuiteGroupDao,
+                testSuiteDao,
+                testCaseDao,
+                testFailureDao,
+                testRunSystemAttributesDao,
+                gitMetadataDao,
+                resultsMetadataDao,
+                coverageService,
+                attachmentDao,
+            )
 
         if (attachmentsEnabled) {
-            attachmentService = AttachmentService(
-                attachmentConfig,
-                get()
-            )
+            attachmentService =
+                AttachmentService(
+                    attachmentConfig,
+                    get(),
+                )
             attachmentService.conditionallyCreateBucketIfNotExists()
         }
     }

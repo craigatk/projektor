@@ -12,7 +12,6 @@ import strikt.assertions.isNull
 import strikt.assertions.isTrue
 
 class TestRunSystemAttributesDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should fetch pinned when it is true`() {
         val repository = TestRunSystemAttributesDatabaseRepository(dslContext)

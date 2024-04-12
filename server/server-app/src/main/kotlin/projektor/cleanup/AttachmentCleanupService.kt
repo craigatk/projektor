@@ -9,7 +9,7 @@ import java.time.LocalDate
 class AttachmentCleanupService(
     private val cleanupConfig: CleanupConfig,
     private val testRunRepository: TestRunRepository,
-    private val attachmentService: AttachmentService
+    private val attachmentService: AttachmentService,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
@@ -20,9 +20,10 @@ class AttachmentCleanupService(
             val createdBefore = LocalDate.now().minusDays(maxAttachmentAgeDays)
             val testRunsWithAttachmentsToDelete = testRunRepository.findTestRunsCreatedBeforeAndNotPinnedWithAttachments(createdBefore)
 
-            val testRunsWithAttachmentsDeleted = testRunsWithAttachmentsToDelete.mapNotNull {
-                conditionallyRemoveAttachments(it, cleanupConfig)
-            }
+            val testRunsWithAttachmentsDeleted =
+                testRunsWithAttachmentsToDelete.mapNotNull {
+                    conditionallyRemoveAttachments(it, cleanupConfig)
+                }
 
             logger.info("Removed attachments from ${testRunsWithAttachmentsDeleted.size} test runs created before $createdBefore")
 
@@ -33,7 +34,10 @@ class AttachmentCleanupService(
             listOf()
         }
 
-    private suspend fun conditionallyRemoveAttachments(publicId: PublicId, cleanupConfig: CleanupConfig): PublicId? =
+    private suspend fun conditionallyRemoveAttachments(
+        publicId: PublicId,
+        cleanupConfig: CleanupConfig,
+    ): PublicId? =
         try {
             if (!cleanupConfig.dryRun) {
                 attachmentService.deleteAttachments(publicId)

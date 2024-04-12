@@ -27,12 +27,11 @@ class RepositoryCoverageExistsApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/coverage/exists") {
-
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInRepoPublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -40,14 +39,14 @@ class RepositoryCoverageExistsApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = "other-project"
+                    projectName = "other-project",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInDifferentRepoPublicId,
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = "other/repo",
-                    branchName = "main"
+                    branchName = "main",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -70,20 +69,19 @@ class RepositoryCoverageExistsApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/coverage/exists") {
-
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInDifferentProjectPublicId,
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = "other-project"
+                    projectName = "other-project",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInDifferentRepoPublicId,
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = "other/repo",
-                    branchName = "main"
+                    branchName = "main",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -109,12 +107,11 @@ class RepositoryCoverageExistsApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/project/$projectName/coverage/exists") {
-
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInRepoPublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -122,14 +119,14 @@ class RepositoryCoverageExistsApplicationTest : ApplicationTestCase() {
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = repoName,
                     branchName = "main",
-                    projectName = projectName
+                    projectName = projectName,
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInDifferentRepoPublicId,
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = "other/repo",
-                    branchName = "main"
+                    branchName = "main",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -154,19 +151,18 @@ class RepositoryCoverageExistsApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/project/$projectName/coverage/exists") {
-
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInRepoPublicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
                     repoName = repoName,
-                    branchName = "main"
+                    branchName = "main",
                 )
 
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = runInDifferentRepoPublicId,
                     coverageText = JacocoXmlLoader().junitResultsParser(),
                     repoName = "other/repo",
-                    branchName = "main"
+                    branchName = "main",
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)

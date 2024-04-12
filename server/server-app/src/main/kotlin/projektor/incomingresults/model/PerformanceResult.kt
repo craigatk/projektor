@@ -9,9 +9,8 @@ data class PerformanceResult(
     val requestCount: Long,
     val average: BigDecimal,
     val maximum: BigDecimal,
-    val p95: BigDecimal
+    val p95: BigDecimal,
 ) {
-
     fun toApi(): PerformanceResultApi =
         PerformanceResultApi(
             name = name,
@@ -19,6 +18,6 @@ data class PerformanceResult(
             requestCount = requestCount,
             average = average,
             maximum = maximum,
-            p95 = p95
+            p95 = p95,
         )
 }

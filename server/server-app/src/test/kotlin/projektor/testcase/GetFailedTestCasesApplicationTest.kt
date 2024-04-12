@@ -33,15 +33,15 @@ class GetFailedTestCasesApplicationTest : ApplicationTestCase() {
                             "testSuite1",
                             listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
                             listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
-                            listOf()
+                            listOf(),
                         ),
                         TestSuiteData(
                             "testSuite2",
                             listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
                             listOf("testSuite2FailedTestCase1"),
-                            listOf()
-                        )
-                    )
+                            listOf(),
+                        ),
+                    ),
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -56,7 +56,7 @@ class GetFailedTestCasesApplicationTest : ApplicationTestCase() {
                     .contains(
                         "testSuite1FailedTestCase1",
                         "testSuite1FailedTestCase2",
-                        "testSuite2FailedTestCase1"
+                        "testSuite2FailedTestCase1",
                     )
 
                 expectThat(failedTestCases)

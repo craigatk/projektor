@@ -6,7 +6,7 @@ import projektor.notification.github.auth.PrivateKeyEncoder
 data class GitHubNotificationConfig(
     val gitHubApiUrl: String?,
     val gitHubAppId: String?,
-    val privateKey: String?
+    val privateKey: String?,
 ) {
     companion object {
         fun createGitHubNotificationConfig(applicationConfig: ApplicationConfig): GitHubNotificationConfig {
@@ -19,7 +19,7 @@ data class GitHubNotificationConfig(
             return GitHubNotificationConfig(
                 gitHubApiUrl = gitHubApiUrl,
                 gitHubAppId = gitHubAppId,
-                privateKey = privateKey
+                privateKey = privateKey,
             )
         }
     }

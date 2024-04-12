@@ -24,7 +24,6 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 class SaveResultsApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should parse request and save results for passing test`() {
         val requestBody = resultsXmlLoader.passing()
