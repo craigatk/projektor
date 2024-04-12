@@ -25,8 +25,9 @@ class TestResultsCypressProcessorSpec : StringSpec({
     "should parse multiple Cypress test results with file name in separate suite" {
         val testResultsProcessor = TestResultsProcessor()
         val resultsXmlLoader = ResultsXmlLoader()
-        val blob = resultsXmlLoader.cypressAttachmentsSpecWithFilePath() +
-            resultsXmlLoader.cypressRepositoryTimelineSpecWithFilePath()
+        val blob =
+            resultsXmlLoader.cypressAttachmentsSpecWithFilePath() +
+                resultsXmlLoader.cypressRepositoryTimelineSpecWithFilePath()
 
         val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
         expectThat(testSuiteList).hasSize(4).any {
@@ -56,8 +57,9 @@ class TestResultsCypressProcessorSpec : StringSpec({
     "should filter out empty Cypress test suites" {
         val testResultsProcessor = TestResultsProcessor()
         val resultsXmlLoader = ResultsXmlLoader()
-        val blob = resultsXmlLoader.cypressEmptyTestSuites() +
-            resultsXmlLoader.cypressRepositoryTimelineSpecWithFilePath()
+        val blob =
+            resultsXmlLoader.cypressEmptyTestSuites() +
+                resultsXmlLoader.cypressRepositoryTimelineSpecWithFilePath()
 
         val testSuiteList = testResultsProcessor.parseResultsBlob(blob)
         expectThat(testSuiteList).hasSize(2).any {

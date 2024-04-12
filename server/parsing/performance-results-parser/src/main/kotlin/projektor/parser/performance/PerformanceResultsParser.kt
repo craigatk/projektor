@@ -16,15 +16,17 @@ class PerformanceResultsParser {
             val k6Results = k6PerformanceResultsParser.parseResults(resultsStr)
 
             PerformanceResultsReport(
-                requestStats = RequestStats(
-                    ratePerSecond = k6Results.metrics.iterations.rate,
-                    count = k6Results.metrics.iterations.count
-                ),
-                performanceStats = PerformanceStats(
-                    average = k6Results.metrics.requestDurationStats.average,
-                    maximum = k6Results.metrics.requestDurationStats.maximum,
-                    p95 = k6Results.metrics.requestDurationStats.p95
-                )
+                requestStats =
+                    RequestStats(
+                        ratePerSecond = k6Results.metrics.iterations.rate,
+                        count = k6Results.metrics.iterations.count,
+                    ),
+                performanceStats =
+                    PerformanceStats(
+                        average = k6Results.metrics.requestDurationStats.average,
+                        maximum = k6Results.metrics.requestDurationStats.maximum,
+                        p95 = k6Results.metrics.requestDurationStats.p95,
+                    ),
             )
         } catch (e: Exception) {
             logger.warn("Error parsing performance results", e)

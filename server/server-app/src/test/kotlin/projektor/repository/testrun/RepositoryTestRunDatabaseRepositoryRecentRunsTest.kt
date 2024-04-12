@@ -10,7 +10,6 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
 class RepositoryTestRunDatabaseRepositoryRecentRunsTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should find recent test run public IDs`() {
         val repositoryTestRunDatabaseRepository = RepositoryTestRunDatabaseRepository(dslContext)

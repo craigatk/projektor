@@ -12,9 +12,7 @@ import projektor.server.api.coverage.CoverageExists
 import projektor.server.api.repository.BranchSearch
 import projektor.server.api.repository.BranchType
 
-fun Route.repositoryCoverage(
-    repositoryCoverageService: RepositoryCoverageService,
-) {
+fun Route.repositoryCoverage(repositoryCoverageService: RepositoryCoverageService) {
     fun findBranchType(call: ApplicationCall): BranchType {
         val branchTypeString = (call.request.queryParameters["branch"] ?: "MAINLINE").uppercase()
         return BranchType.valueOf(branchTypeString)
@@ -70,20 +68,21 @@ fun Route.repositoryCoverage(
         orgPart: String,
         repoPart: String,
         projectName: String?,
-        call: ApplicationCall
+        call: ApplicationCall,
     ) {
         val fullRepoName = "$orgPart/$repoPart"
 
-        val repositoryCurrentCoverage = repositoryCoverageService.fetchRepositoryCurrentCoverage(
-            fullRepoName,
-            projectName,
-            BranchSearch(branchType = BranchType.MAINLINE)
-        )
+        val repositoryCurrentCoverage =
+            repositoryCoverageService.fetchRepositoryCurrentCoverage(
+                fullRepoName,
+                projectName,
+                BranchSearch(branchType = BranchType.MAINLINE),
+            )
 
         if (repositoryCurrentCoverage != null) {
             call.respond(
                 HttpStatusCode.OK,
-                repositoryCurrentCoverage
+                repositoryCurrentCoverage,
             )
         } else {
             call.respond(HttpStatusCode.NoContent)

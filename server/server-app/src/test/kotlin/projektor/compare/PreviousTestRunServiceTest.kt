@@ -18,7 +18,6 @@ import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 
 class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should exclude test run that is newer than specified test run`() {
         val previousTestRunService by inject<PreviousTestRunService>()
@@ -33,7 +32,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
         testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
             previousPublicId,
             JacocoXmlLoader().serverApp(),
-            repoName
+            repoName,
         )
 
         testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -41,19 +40,19 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             coverageText = JacocoXmlLoader().serverAppReduced(),
             repoName = repoName,
             branchName = "main",
-            projectName = "other-project"
+            projectName = "other-project",
         )
 
         testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
             thisPublicId,
             JacocoXmlLoader().serverApp(),
-            repoName
+            repoName,
         )
 
         testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
             newerPublicId,
             JacocoXmlLoader().serverApp(),
-            repoName
+            repoName,
         )
 
         val returnedId = runBlocking { previousTestRunService.findPreviousMainBranchRunWithCoverage(thisPublicId) }
@@ -78,7 +77,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             coverageText = JacocoXmlLoader().serverAppReduced(),
             repoName = repoName,
             branchName = "main",
-            projectName = "project"
+            projectName = "project",
         )
 
         testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -86,7 +85,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             coverageText = JacocoXmlLoader().serverAppReduced(),
             repoName = repoName,
             branchName = "main",
-            projectName = "other-project"
+            projectName = "other-project",
         )
 
         testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
@@ -94,7 +93,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             coverageText = JacocoXmlLoader().serverAppReduced(),
             repoName = repoName,
             branchName = "main",
-            projectName = "project"
+            projectName = "project",
         )
 
         val returnedId = runBlocking { previousTestRunService.findPreviousMainBranchRunWithCoverage(thisPublicId) }
@@ -117,7 +116,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
                 publicId,
                 JacocoXmlLoader().serverApp(),
                 repoName,
-                branchName = "main"
+                branchName = "main",
             )
         }
 
@@ -125,7 +124,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             newerFeatureBranchWithCoveragePublicId,
             JacocoXmlLoader().serverApp(),
             repoName,
-            branchName = "feature/dev"
+            branchName = "feature/dev",
         )
 
         val newerWithoutCoveragePublicId = randomPublicId()
@@ -133,10 +132,17 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             newerWithoutCoveragePublicId,
             repoName,
             true,
-            null
+            null,
         )
 
-        val mostRecentTestRun = runBlocking { previousTestRunService.findMostRecentRunWithCoverage(repoName, null, BranchSearch(branchType = BranchType.MAINLINE)) }
+        val mostRecentTestRun =
+            runBlocking {
+                previousTestRunService.findMostRecentRunWithCoverage(
+                    repoName,
+                    null,
+                    BranchSearch(branchType = BranchType.MAINLINE),
+                )
+            }
 
         expectThat(mostRecentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newestMainlineWithCoveragePublicId)
@@ -159,7 +165,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
                 publicId,
                 JacocoXmlLoader().serverApp(),
                 repoName,
-                branchName = "main"
+                branchName = "main",
             )
         }
 
@@ -167,7 +173,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             newerFeatureBranchWithCoveragePublicId,
             JacocoXmlLoader().serverApp(),
             repoName,
-            branchName = "feature/dev"
+            branchName = "feature/dev",
         )
 
         val newerWithoutCoveragePublicId = randomPublicId()
@@ -175,10 +181,11 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             newerWithoutCoveragePublicId,
             repoName,
             true,
-            null
+            null,
         )
 
-        val mostRecentTestRun = runBlocking { previousTestRunService.findMostRecentRunWithCoverage(repoName, null, BranchSearch(branchType = BranchType.ALL)) }
+        val mostRecentTestRun =
+            runBlocking { previousTestRunService.findMostRecentRunWithCoverage(repoName, null, BranchSearch(branchType = BranchType.ALL)) }
 
         expectThat(mostRecentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newerFeatureBranchWithCoveragePublicId)
@@ -201,29 +208,39 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             coverageText = JacocoXmlLoader().serverAppReduced(),
             repoName = repoName,
             branchName = "main",
-            projectName = projectName
+            projectName = projectName,
         )
 
-        val newTestRun = testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-            publicId = newPublicId,
-            coverageText = JacocoXmlLoader().serverAppReduced(),
-            repoName = repoName,
-            branchName = "main",
-            projectName = projectName
-        )
+        val newTestRun =
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = newPublicId,
+                coverageText = JacocoXmlLoader().serverAppReduced(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = projectName,
+            )
 
         testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
             publicId = newerWithDifferentProjectName,
             coverageText = JacocoXmlLoader().serverAppReduced(),
             repoName = repoName,
             branchName = "main",
-            projectName = "other-project"
+            projectName = "other-project",
         )
 
-        val recentTestRun = runBlocking { previousTestRunService.findMostRecentRunWithCoverage(repoName, projectName, BranchSearch(branchType = BranchType.MAINLINE)) }
+        val recentTestRun =
+            runBlocking {
+                previousTestRunService.findMostRecentRunWithCoverage(
+                    repoName,
+                    projectName,
+                    BranchSearch(branchType = BranchType.MAINLINE),
+                )
+            }
         expectThat(recentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newPublicId)
-            get { createdTimestamp.truncatedTo(ChronoUnit.MILLIS) }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MILLIS))
+            get {
+                createdTimestamp.truncatedTo(ChronoUnit.MILLIS)
+            }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MILLIS))
             get { branch }.isEqualTo("main")
         }
     }
@@ -243,28 +260,32 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             coverageText = JacocoXmlLoader().serverAppReduced(),
             repoName = repoName,
             branchName = "main",
-            projectName = null
+            projectName = null,
         )
 
-        val newTestRun = testRunDBGenerator.createSimpleTestRunInRepo(
-            publicId = newPublicId,
-            repoName = repoName,
-            ci = true,
-            projectName = null
-        )
+        val newTestRun =
+            testRunDBGenerator.createSimpleTestRunInRepo(
+                publicId = newPublicId,
+                repoName = repoName,
+                ci = true,
+                projectName = null,
+            )
 
         testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
             publicId = newerWithDifferentProjectName,
             coverageText = JacocoXmlLoader().serverAppReduced(),
             repoName = repoName,
             branchName = "main",
-            projectName = "other-project"
+            projectName = "other-project",
         )
 
-        val recentTestRun = runBlocking { previousTestRunService.findMostRecentRun(repoName, null, BranchSearch(branchType = BranchType.MAINLINE)) }
+        val recentTestRun =
+            runBlocking { previousTestRunService.findMostRecentRun(repoName, null, BranchSearch(branchType = BranchType.MAINLINE)) }
         expectThat(recentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newPublicId)
-            get { createdTimestamp.truncatedTo(ChronoUnit.MILLIS) }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MILLIS))
+            get {
+                createdTimestamp.truncatedTo(ChronoUnit.MILLIS)
+            }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MILLIS))
             get { branch }.isEqualTo("main")
         }
     }
@@ -285,29 +306,33 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
             coverageText = JacocoXmlLoader().serverAppReduced(),
             repoName = repoName,
             branchName = "main",
-            projectName = projectName
+            projectName = projectName,
         )
 
-        val newTestRun = testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-            publicId = newPublicId,
-            coverageText = JacocoXmlLoader().serverAppReduced(),
-            repoName = repoName,
-            branchName = "main",
-            projectName = projectName
-        )
+        val newTestRun =
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = newPublicId,
+                coverageText = JacocoXmlLoader().serverAppReduced(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = projectName,
+            )
 
         testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
             publicId = newerWithDifferentProjectName,
             coverageText = JacocoXmlLoader().serverAppReduced(),
             repoName = repoName,
             branchName = "main",
-            projectName = "other-project"
+            projectName = "other-project",
         )
 
-        val recentTestRun = runBlocking { previousTestRunService.findMostRecentRun(repoName, projectName, BranchSearch(branchType = BranchType.MAINLINE)) }
+        val recentTestRun =
+            runBlocking { previousTestRunService.findMostRecentRun(repoName, projectName, BranchSearch(branchType = BranchType.MAINLINE)) }
         expectThat(recentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newPublicId)
-            get { createdTimestamp.truncatedTo(ChronoUnit.MILLIS) }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MILLIS))
+            get {
+                createdTimestamp.truncatedTo(ChronoUnit.MILLIS)
+            }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MILLIS))
             get { branch }.isEqualTo("main")
             get { passed }.isTrue()
         }

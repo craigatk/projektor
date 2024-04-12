@@ -5,5 +5,5 @@ import java.math.BigDecimal
 data class ReportCommentPerformanceData(
     val name: String,
     val requestsPerSecond: BigDecimal,
-    val p95: BigDecimal
+    val p95: BigDecimal,
 )

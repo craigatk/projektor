@@ -18,18 +18,22 @@ data class DataSourceConfig(
     val username: String,
     val password: String,
     val schema: String,
-    val maximumPoolSize: Int
+    val maximumPoolSize: Int,
 ) {
     companion object {
-        fun createDataSourceConfig(applicationConfig: ApplicationConfig) = DataSourceConfig(
-            applicationConfig.property("ktor.datasource.jdbcUrl").getString(),
-            applicationConfig.property("ktor.datasource.username").getString(),
-            applicationConfig.property("ktor.datasource.password").getString(),
-            applicationConfig.property("ktor.datasource.schema").getString(),
-            applicationConfig.property("ktor.datasource.maximumPoolSize").getString().toInt()
-        )
+        fun createDataSourceConfig(applicationConfig: ApplicationConfig) =
+            DataSourceConfig(
+                applicationConfig.property("ktor.datasource.jdbcUrl").getString(),
+                applicationConfig.property("ktor.datasource.username").getString(),
+                applicationConfig.property("ktor.datasource.password").getString(),
+                applicationConfig.property("ktor.datasource.schema").getString(),
+                applicationConfig.property("ktor.datasource.maximumPoolSize").getString().toInt(),
+            )
 
-        fun createDataSource(dataSourceConfig: DataSourceConfig, metricRegistry: MeterRegistry): HikariDataSource {
+        fun createDataSource(
+            dataSourceConfig: DataSourceConfig,
+            metricRegistry: MeterRegistry,
+        ): HikariDataSource {
             val hikariConfig = HikariConfig()
             hikariConfig.username = dataSourceConfig.username
             hikariConfig.password = dataSourceConfig.password
@@ -43,24 +47,32 @@ data class DataSourceConfig(
             return dataSource
         }
 
-        fun flywayMigrate(dataSource: DataSource, dataSourceConfig: DataSourceConfig) {
-            val flyway = Flyway.configure()
-                .dataSource(dataSource)
-                .schemas(dataSourceConfig.schema)
-                .load()
+        fun flywayMigrate(
+            dataSource: DataSource,
+            dataSourceConfig: DataSourceConfig,
+        ) {
+            val flyway =
+                Flyway.configure()
+                    .dataSource(dataSource)
+                    .schemas(dataSourceConfig.schema)
+                    .load()
 
             flyway.migrate()
         }
 
-        fun createDSLContext(dataSource: DataSource, dataSourceConfig: DataSourceConfig): DSLContext {
-            val settings = Settings()
-                .withRenderMapping(
-                    RenderMapping()
-                        .withSchemata(
-                            MappedSchema().withInput("public")
-                                .withOutput(dataSourceConfig.schema)
-                        )
-                )
+        fun createDSLContext(
+            dataSource: DataSource,
+            dataSourceConfig: DataSourceConfig,
+        ): DSLContext {
+            val settings =
+                Settings()
+                    .withRenderMapping(
+                        RenderMapping()
+                            .withSchemata(
+                                MappedSchema().withInput("public")
+                                    .withOutput(dataSourceConfig.schema),
+                            ),
+                    )
 
             return DSL.using(dataSource, SQLDialect.POSTGRES, settings)
         }

@@ -6,12 +6,12 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jlleitschuh.gradle:ktlint-gradle:11.6.1"
+        classpath "org.jlleitschuh.gradle:ktlint-gradle:12.1.0"
     }
 }
 
 plugins {
-    id "dev.projektor.publish" version "8.7.0"
+    id "dev.projektor.publish" version "9.0.0"
     id "com.atkinsondev.opentelemetry-build" version "1.10.0"
     id 'com.github.psxpaul.execfork' version '0.2.2' apply false
 }

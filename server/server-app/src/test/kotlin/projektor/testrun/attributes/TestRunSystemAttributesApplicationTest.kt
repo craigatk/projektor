@@ -24,7 +24,7 @@ class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
             handleRequest(HttpMethod.Get, "/run/$publicId/attributes") {
                 testRunDBGenerator.createTestRun(
                     publicId,
-                    listOf()
+                    listOf(),
                 )
 
                 testRunSystemAttributesDao.insert(TestRunSystemAttributes(publicId.id, true))
@@ -57,7 +57,7 @@ class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
             handleRequest(HttpMethod.Post, "/run/$publicId/attributes/pin") {
                 testRunDBGenerator.createTestRun(
                     publicId,
-                    listOf()
+                    listOf(),
                 )
 
                 testRunSystemAttributesDao.insert(TestRunSystemAttributes(publicId.id, false))
@@ -89,7 +89,7 @@ class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
             handleRequest(HttpMethod.Post, "/run/$publicId/attributes/unpin") {
                 testRunDBGenerator.createTestRun(
                     publicId,
-                    listOf()
+                    listOf(),
                 )
 
                 testRunSystemAttributesDao.insert(TestRunSystemAttributes(publicId.id, true))

@@ -10,34 +10,40 @@ import projektor.parser.jacoco.model.CounterType
 import projektor.parser.jacoco.model.LineType
 
 class JacocoCoverageReportParser : CoverageReportParser {
-    override fun parseReport(reportXml: String, baseDirectoryPath: String?): CoverageReport =
+    override fun parseReport(
+        reportXml: String,
+        baseDirectoryPath: String?,
+    ): CoverageReport =
         try {
             val parsedReport = JacocoXmlReportParser().parseReport(reportXml)
 
-            val files = parsedReport.packages?.flatMap { pkg ->
-                pkg.sourceFiles.map { sourceFile ->
-                    val directoryName = pkg.name.replace(".", "/")
-                    val fileName = sourceFile.name
-                    val filePath =
-                        if (baseDirectoryPath != null) "$baseDirectoryPath/$directoryName/$fileName" else null
+            val files =
+                parsedReport.packages?.flatMap { pkg ->
+                    pkg.sourceFiles.map { sourceFile ->
+                        val directoryName = pkg.name.replace(".", "/")
+                        val fileName = sourceFile.name
+                        val filePath =
+                            if (baseDirectoryPath != null) "$baseDirectoryPath/$directoryName/$fileName" else null
 
-                    CoverageReportFile(
-                        directoryName = directoryName,
-                        fileName = fileName,
-                        missedLines = sourceFile.lines?.filter { it.lineType() == LineType.MISSED }?.map { it.number }
-                            ?: listOf(),
-                        partialLines = sourceFile.lines?.filter { it.lineType() == LineType.PARTIAL }?.map { it.number }
-                            ?: listOf(),
-                        stats = createStats(sourceFile.counters),
-                        filePath = filePath
-                    )
+                        CoverageReportFile(
+                            directoryName = directoryName,
+                            fileName = fileName,
+                            missedLines =
+                                sourceFile.lines?.filter { it.lineType() == LineType.MISSED }?.map { it.number }
+                                    ?: listOf(),
+                            partialLines =
+                                sourceFile.lines?.filter { it.lineType() == LineType.PARTIAL }?.map { it.number }
+                                    ?: listOf(),
+                            stats = createStats(sourceFile.counters),
+                            filePath = filePath,
+                        )
+                    }
                 }
-            }
 
             CoverageReport(
                 parsedReport.name,
                 createStats(parsedReport.counters),
-                files
+                files,
             )
         } catch (e: Exception) {
             throw CoverageParseException(e)
@@ -52,11 +58,14 @@ class JacocoCoverageReportParser : CoverageReportParser {
             return CoverageReportStats(
                 statementStat = statementStat,
                 lineStat = lineStat,
-                branchStat = branchStat
+                branchStat = branchStat,
             )
         }
 
-        private fun createStat(counters: List<Counter>?, counterType: CounterType): CoverageReportStat {
+        private fun createStat(
+            counters: List<Counter>?,
+            counterType: CounterType,
+        ): CoverageReportStat {
             val counter = counters?.find { it.type == counterType }
 
             return if (counter != null) {

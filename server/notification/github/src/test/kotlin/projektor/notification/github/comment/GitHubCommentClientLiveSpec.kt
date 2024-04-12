@@ -18,15 +18,17 @@ class GitHubCommentClientLiveSpec : StringSpec() {
     private val gitHubAppId = "91621"
     private val gitHubApiUrl = "https://api.github.com"
 
-    private val clientConfig = GitHubClientConfig(
-        gitHubApiUrl = gitHubApiUrl
-    )
+    private val clientConfig =
+        GitHubClientConfig(
+            gitHubApiUrl = gitHubApiUrl,
+        )
 
-    private val jwtTokenConfig = JwtTokenConfig(
-        gitHubAppId = gitHubAppId,
-        pemContents = keyContents,
-        ttlMillis = ttl
-    )
+    private val jwtTokenConfig =
+        JwtTokenConfig(
+            gitHubAppId = gitHubAppId,
+            pemContents = keyContents,
+            ttlMillis = ttl,
+        )
 
     private val jwtCreator = JwtProvider(jwtTokenConfig)
 
@@ -104,8 +106,9 @@ class GitHubCommentClientLiveSpec : StringSpec() {
         }
     }
 
-    private fun loadTextFromFile(filename: String) = javaClass
-        .getResourceAsStream("/$filename")
-        .bufferedReader()
-        .readText()
+    private fun loadTextFromFile(filename: String) =
+        javaClass
+            .getResourceAsStream("/$filename")
+            .bufferedReader()
+            .readText()
 }

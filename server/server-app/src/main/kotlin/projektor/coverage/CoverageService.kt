@@ -24,12 +24,15 @@ class CoverageService(
     private val coverageRepository: CoverageRepository,
     private val metricsService: MetricsService,
     private val previousTestRunService: PreviousTestRunService,
-    private val processingFailureService: ProcessingFailureService
+    private val processingFailureService: ProcessingFailureService,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
     private val coveragePayloadParser = CoveragePayloadParser()
 
-    suspend fun parseAndSaveReport(payload: String, publicId: PublicId): CoverageReport? =
+    suspend fun parseAndSaveReport(
+        payload: String,
+        publicId: PublicId,
+    ): CoverageReport? =
         try {
             val coverageFilePayload = coveragePayloadParser.parseCoverageFilePayload(payload)
 
@@ -40,12 +43,15 @@ class CoverageService(
                 publicId = publicId,
                 body = payload,
                 bodyType = FailureBodyType.COVERAGE,
-                e = e
+                e = e,
             )
             throw e
         }
 
-    suspend fun saveReport(coverageFilePayload: CoverageFilePayload, publicId: PublicId): CoverageReport? =
+    suspend fun saveReport(
+        coverageFilePayload: CoverageFilePayload,
+        publicId: PublicId,
+    ): CoverageReport? =
         try {
             saveReportInternal(coverageFilePayload, publicId)
         } catch (e: Exception) {
@@ -64,12 +70,15 @@ class CoverageService(
                 publicId = publicId,
                 body = coverageFilePayload.reportContents,
                 bodyType = FailureBodyType.COVERAGE,
-                e = e
+                e = e,
             )
             throw e
         }
 
-    private suspend fun saveReportInternal(coverageFilePayload: CoverageFilePayload, publicId: PublicId): CoverageReport? {
+    private suspend fun saveReportInternal(
+        coverageFilePayload: CoverageFilePayload,
+        publicId: PublicId,
+    ): CoverageReport? {
         metricsService.incrementCoverageProcessStartCounter()
         val coverageRun = coverageRepository.createOrGetCoverageRun(publicId)
         val coverageReport = CoverageParser.parseReport(coverageFilePayload.reportContents, coverageFilePayload.baseDirectoryPath)
@@ -103,7 +112,7 @@ class CoverageService(
             Coverage(
                 groups = coverageReports.map { it.toCoverageGroup(null) },
                 overallStats = overallStats.toCoverageStats(null),
-                previousTestRunId = null
+                previousTestRunId = null,
             )
         } else {
             null
@@ -123,7 +132,7 @@ class CoverageService(
             Coverage(
                 groups = coverageReports.map { it.toCoverageGroup(previousCoverage) },
                 overallStats = overallStats.toCoverageStats(previousCoverage?.overallStats),
-                previousTestRunId = previousTestRun?.id
+                previousTestRunId = previousTestRun?.id,
             )
         } else {
             null
@@ -148,46 +157,51 @@ class CoverageService(
         }
     }
 
-    suspend fun coverageExists(publicId: PublicId): Boolean =
-        coverageRepository.coverageGroupExists(publicId)
+    suspend fun coverageExists(publicId: PublicId): Boolean = coverageRepository.coverageGroupExists(publicId)
 
-    suspend fun deleteCoverage(publicId: PublicId) =
-        coverageRepository.deleteCoverage(publicId)
+    suspend fun deleteCoverage(publicId: PublicId) = coverageRepository.deleteCoverage(publicId)
 
-    suspend fun getCoverageGroupFiles(publicId: PublicId, groupName: String): List<CoverageFile> =
-        coverageRepository.fetchCoverageFiles(publicId, groupName)
+    suspend fun getCoverageGroupFiles(
+        publicId: PublicId,
+        groupName: String,
+    ): List<CoverageFile> = coverageRepository.fetchCoverageFiles(publicId, groupName)
 
     suspend fun parseReport(coverageFilePayload: CoverageFilePayload): Pair<CoverageReport, List<CoverageFile>>? =
         withContext(Dispatchers.IO) {
             val coverageReport = CoverageParser.parseReport(coverageFilePayload.reportContents, coverageFilePayload.baseDirectoryPath)
 
             coverageReport?.let { report ->
-                val coverageFiles = report.files?.let { fileList ->
-                    fileList.map { it.toCoverageFile() }
-                } ?: listOf()
+                val coverageFiles =
+                    report.files?.let { fileList ->
+                        fileList.map { it.toCoverageFile() }
+                    } ?: listOf()
 
                 Pair(coverageReport, coverageFiles)
             }
         }
 
-    suspend fun appendCoverage(publicId: PublicId, coverageFiles: List<CoverageFilePayload>) {
+    suspend fun appendCoverage(
+        publicId: PublicId,
+        coverageFiles: List<CoverageFilePayload>,
+    ) {
         val coverageRun = coverageRepository.createOrGetCoverageRun(publicId)
 
         coverageFiles.forEach { coverageFilePayload ->
-            val parsedReport = try {
-                parseReport(coverageFilePayload)
-            } catch (e: Exception) {
-                logger.info("Problem parsing coverage report", e)
-                metricsService.incrementCoverageParseFailureCounter()
+            val parsedReport =
+                try {
+                    parseReport(coverageFilePayload)
+                } catch (e: Exception) {
+                    logger.info("Problem parsing coverage report", e)
+                    metricsService.incrementCoverageParseFailureCounter()
 
-                processingFailureService.recordProcessingFailure(
-                    publicId = publicId,
-                    body = coverageFilePayload.reportContents,
-                    bodyType = FailureBodyType.COVERAGE,
-                    e = e
-                )
-                null
-            }
+                    processingFailureService.recordProcessingFailure(
+                        publicId = publicId,
+                        body = coverageFilePayload.reportContents,
+                        bodyType = FailureBodyType.COVERAGE,
+                        e = e,
+                    )
+                    null
+                }
 
             if (parsedReport != null) {
                 val (incomingCoverageReport, incomingCoverageFiles) = parsedReport
@@ -203,11 +217,12 @@ class CoverageService(
                     val newLineStat =
                         CoverageStat(covered = coveredLines, missed = missedLines, coveredPercentageDelta = null)
 
-                    val (coverageGroup, coverageGroupStatus) = coverageRepository.upsertCoverageGroup(
-                        coverageRun,
-                        incomingCoverageReport,
-                        newLineStat
-                    )
+                    val (coverageGroup, coverageGroupStatus) =
+                        coverageRepository.upsertCoverageGroup(
+                            coverageRun,
+                            incomingCoverageReport,
+                            newLineStat,
+                        )
 
                     if (coverageGroupStatus == CoverageGroupStatus.NEW) {
                         coverageRepository.insertCoverageFiles(
@@ -226,7 +241,7 @@ class CoverageService(
                         publicId = publicId,
                         body = coverageFilePayload.reportContents,
                         bodyType = FailureBodyType.COVERAGE,
-                        e = e
+                        e = e,
                     )
                 }
             }

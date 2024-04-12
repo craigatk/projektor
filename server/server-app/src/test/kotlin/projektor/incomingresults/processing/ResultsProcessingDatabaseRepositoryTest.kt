@@ -44,9 +44,10 @@ class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     fun `should update results processing status`() {
         val publicId = randomPublicId()
 
-        val resultsProcessingDB = ResultsProcessing()
-            .setPublicId(publicId.id)
-            .setStatus(ResultsProcessingStatus.RECEIVED.name)
+        val resultsProcessingDB =
+            ResultsProcessing()
+                .setPublicId(publicId.id)
+                .setStatus(ResultsProcessingStatus.RECEIVED.name)
         resultsProcessingDao.insert(resultsProcessingDB)
 
         runBlocking { resultsProcessingDatabaseRepository.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.PROCESSING) }
@@ -61,9 +62,10 @@ class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     fun `should set status to error and record error message`() {
         val publicId = randomPublicId()
 
-        val resultsProcessingDB = ResultsProcessing()
-            .setPublicId(publicId.id)
-            .setStatus(ResultsProcessingStatus.RECEIVED.name)
+        val resultsProcessingDB =
+            ResultsProcessing()
+                .setPublicId(publicId.id)
+                .setStatus(ResultsProcessingStatus.RECEIVED.name)
         resultsProcessingDao.insert(resultsProcessingDB)
 
         val newErrorMessage = "An error occurred"
@@ -94,9 +96,10 @@ class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     fun `should fetch results processing record`() {
         val publicId = randomPublicId()
 
-        val resultsProcessingDB = ResultsProcessing()
-            .setPublicId(publicId.id)
-            .setStatus(ResultsProcessingStatus.RECEIVED.name)
+        val resultsProcessingDB =
+            ResultsProcessing()
+                .setPublicId(publicId.id)
+                .setStatus(ResultsProcessingStatus.RECEIVED.name)
         resultsProcessingDao.insert(resultsProcessingDB)
 
         val resultsProcessing = runBlocking { resultsProcessingDatabaseRepository.fetchResultsProcessing(publicId) }

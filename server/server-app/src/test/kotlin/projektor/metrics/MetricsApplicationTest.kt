@@ -13,7 +13,6 @@ import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
 
 class MetricsApplicationTest : ApplicationTestCase() {
-
     @BeforeEach
     fun reset() {
         metricsStubber.reset()
@@ -30,7 +29,7 @@ class MetricsApplicationTest : ApplicationTestCase() {
             handleRequest(HttpMethod.Get, "/run/$publicId") {
                 testRunDBGenerator.createTestRun(
                     publicId,
-                    listOf()
+                    listOf(),
                 )
             }.apply {
                 await until { metricsStubber.findCreateMetricsDatabaseRequests().isNotEmpty() }
@@ -52,7 +51,7 @@ class MetricsApplicationTest : ApplicationTestCase() {
             handleRequest(HttpMethod.Get, "/run/$publicId") {
                 testRunDBGenerator.createTestRun(
                     publicId,
-                    listOf()
+                    listOf(),
                 )
             }.apply {
                 await until { metricsStubber.findCreateMetricsDatabaseRequests().isNotEmpty() }

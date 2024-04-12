@@ -83,7 +83,7 @@ fun createAppModule(
     notificationConfig: NotificationConfig,
     processingConfig: ProcessingConfig,
     gitHubCommentService: GitHubCommentService?,
-    attachmentService: AttachmentService?
+    attachmentService: AttachmentService?,
 ) = module {
     single { dataSource }
     single { TestResultsProcessor() }

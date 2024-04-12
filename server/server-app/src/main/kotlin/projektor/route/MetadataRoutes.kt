@@ -12,7 +12,7 @@ import projektor.versioncontrol.VersionControlConfig
 
 fun Route.metadata(
     testRunMetadataService: TestRunMetadataService,
-    versionControlConfig: VersionControlConfig
+    versionControlConfig: VersionControlConfig,
 ) {
     get("/run/{publicId}/metadata") {
         val publicId = call.parameters.getOrFail("publicId")

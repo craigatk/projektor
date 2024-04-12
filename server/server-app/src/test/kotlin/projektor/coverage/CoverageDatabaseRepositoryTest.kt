@@ -23,7 +23,6 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `when one coverage report should fetch its overall stats`() {
         val coverageDatabaseRepository = CoverageDatabaseRepository(dslContext)
@@ -33,15 +32,16 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
         val coverageRun = runBlocking { coverageDatabaseRepository.createOrGetCoverageRun(publicId) }
 
-        val coverageReport = CoverageReport(
-            "my-report",
-            CoverageReportStats(
-                statementStat = CoverageReportStat(75, 25),
-                lineStat = CoverageReportStat(60, 0),
-                branchStat = CoverageReportStat(33, 66)
-            ),
-            null
-        )
+        val coverageReport =
+            CoverageReport(
+                "my-report",
+                CoverageReportStats(
+                    statementStat = CoverageReportStat(75, 25),
+                    lineStat = CoverageReportStat(60, 0),
+                    branchStat = CoverageReportStat(33, 66),
+                ),
+                null,
+            )
         runBlocking { coverageDatabaseRepository.addCoverageReport(coverageRun, coverageReport) }
 
         val overallStats = runBlocking { coverageDatabaseRepository.fetchOverallStats(publicId) }
@@ -74,43 +74,47 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
         val coverageRun = runBlocking { coverageDatabaseRepository.createOrGetCoverageRun(publicId) }
 
-        val coverageReport = CoverageReport(
-            "my-report",
-            CoverageReportStats(
-                statementStat = CoverageReportStat(75, 25),
-                lineStat = CoverageReportStat(60, 0),
-                branchStat = CoverageReportStat(33, 66)
-            ),
-            null
-        )
+        val coverageReport =
+            CoverageReport(
+                "my-report",
+                CoverageReportStats(
+                    statementStat = CoverageReportStat(75, 25),
+                    lineStat = CoverageReportStat(60, 0),
+                    branchStat = CoverageReportStat(33, 66),
+                ),
+                null,
+            )
         val coverageGroup = runBlocking { coverageDatabaseRepository.addCoverageReport(coverageRun, coverageReport) }
 
-        val coverageReportFiles = listOf(
-            CoverageFile(
-                directoryName = "dir-1",
-                fileName = "File1.kt",
-                stats = CoverageStats(
-                    statementStat = CoverageStat(75, 25),
-                    lineStat = CoverageStat(60, 0),
-                    branchStat = CoverageStat(33, 66)
+        val coverageReportFiles =
+            listOf(
+                CoverageFile(
+                    directoryName = "dir-1",
+                    fileName = "File1.kt",
+                    stats =
+                        CoverageStats(
+                            statementStat = CoverageStat(75, 25),
+                            lineStat = CoverageStat(60, 0),
+                            branchStat = CoverageStat(33, 66),
+                        ),
+                    missedLines = arrayOf(12, 13),
+                    partialLines = arrayOf(14, 15),
+                    filePath = null,
                 ),
-                missedLines = arrayOf(12, 13),
-                partialLines = arrayOf(14, 15),
-                filePath = null
-            ),
-            CoverageFile(
-                directoryName = "dir-2",
-                fileName = "File2.kt",
-                stats = CoverageStats(
-                    statementStat = CoverageStat(80, 20),
-                    lineStat = CoverageStat(55, 10),
-                    branchStat = CoverageStat(12, 1)
+                CoverageFile(
+                    directoryName = "dir-2",
+                    fileName = "File2.kt",
+                    stats =
+                        CoverageStats(
+                            statementStat = CoverageStat(80, 20),
+                            lineStat = CoverageStat(55, 10),
+                            branchStat = CoverageStat(12, 1),
+                        ),
+                    missedLines = arrayOf(18, 19, 20),
+                    partialLines = arrayOf(21),
+                    filePath = null,
                 ),
-                missedLines = arrayOf(18, 19, 20),
-                partialLines = arrayOf(21),
-                filePath = null
             )
-        )
 
         runBlocking { coverageDatabaseRepository.insertCoverageFiles(coverageReportFiles, coverageRun, coverageGroup) }
 
@@ -143,43 +147,47 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
         val coverageRun = runBlocking { coverageDatabaseRepository.createOrGetCoverageRun(publicId) }
 
-        val coverageReport = CoverageReport(
-            "my-report",
-            CoverageReportStats(
-                statementStat = CoverageReportStat(75, 25),
-                lineStat = CoverageReportStat(60, 0),
-                branchStat = CoverageReportStat(33, 66)
-            ),
-            null
-        )
+        val coverageReport =
+            CoverageReport(
+                "my-report",
+                CoverageReportStats(
+                    statementStat = CoverageReportStat(75, 25),
+                    lineStat = CoverageReportStat(60, 0),
+                    branchStat = CoverageReportStat(33, 66),
+                ),
+                null,
+            )
         val coverageGroup = runBlocking { coverageDatabaseRepository.addCoverageReport(coverageRun, coverageReport) }
 
-        val coverageReportFiles = listOf(
-            CoverageFile(
-                directoryName = "dir-1",
-                fileName = "File1.kt",
-                stats = CoverageStats(
-                    statementStat = CoverageStat(75, 25, null),
-                    lineStat = CoverageStat(60, 0, null),
-                    branchStat = CoverageStat(33, 66, null)
+        val coverageReportFiles =
+            listOf(
+                CoverageFile(
+                    directoryName = "dir-1",
+                    fileName = "File1.kt",
+                    stats =
+                        CoverageStats(
+                            statementStat = CoverageStat(75, 25, null),
+                            lineStat = CoverageStat(60, 0, null),
+                            branchStat = CoverageStat(33, 66, null),
+                        ),
+                    missedLines = arrayOf(12),
+                    partialLines = arrayOf(14, 15),
+                    filePath = null,
                 ),
-                missedLines = arrayOf(12),
-                partialLines = arrayOf(14, 15),
-                filePath = null
-            ),
-            CoverageFile(
-                directoryName = "dir-2",
-                fileName = "File2.kt",
-                stats = CoverageStats(
-                    statementStat = CoverageStat(80, 20, null),
-                    lineStat = CoverageStat(55, 10, null),
-                    branchStat = CoverageStat(12, 1, null)
+                CoverageFile(
+                    directoryName = "dir-2",
+                    fileName = "File2.kt",
+                    stats =
+                        CoverageStats(
+                            statementStat = CoverageStat(80, 20, null),
+                            lineStat = CoverageStat(55, 10, null),
+                            branchStat = CoverageStat(12, 1, null),
+                        ),
+                    missedLines = arrayOf(18, 19, 20),
+                    partialLines = arrayOf(21),
+                    filePath = null,
                 ),
-                missedLines = arrayOf(18, 19, 20),
-                partialLines = arrayOf(21),
-                filePath = null
             )
-        )
 
         runBlocking { coverageDatabaseRepository.insertCoverageFiles(coverageReportFiles, coverageRun, coverageGroup) }
 
@@ -218,15 +226,16 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
         val coverageRun = runBlocking { coverageDatabaseRepository.createOrGetCoverageRun(publicId) }
 
-        val coverageReport = CoverageReport(
-            "my-report",
-            CoverageReportStats(
-                statementStat = CoverageReportStat(75, 25),
-                lineStat = CoverageReportStat(60, 0),
-                branchStat = CoverageReportStat(33, 66)
-            ),
-            null
-        )
+        val coverageReport =
+            CoverageReport(
+                "my-report",
+                CoverageReportStats(
+                    statementStat = CoverageReportStat(75, 25),
+                    lineStat = CoverageReportStat(60, 0),
+                    branchStat = CoverageReportStat(33, 66),
+                ),
+                null,
+            )
         runBlocking { coverageDatabaseRepository.addCoverageReport(coverageRun, coverageReport) }
 
         val hasCoverageData = runBlocking { coverageDatabaseRepository.coverageGroupExists(publicId) }
@@ -269,19 +278,23 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
         val coverageRun = runBlocking { coverageDatabaseRepository.createOrGetCoverageRun(publicId) }
 
-        val coverageReport = CoverageReport(
-            "my-report",
-            CoverageReportStats(
-                statementStat = CoverageReportStat(75, 25),
-                lineStat = CoverageReportStat(60, 0),
-                branchStat = CoverageReportStat(33, 66)
-            ),
-            null
-        )
+        val coverageReport =
+            CoverageReport(
+                "my-report",
+                CoverageReportStats(
+                    statementStat = CoverageReportStat(75, 25),
+                    lineStat = CoverageReportStat(60, 0),
+                    branchStat = CoverageReportStat(33, 66),
+                ),
+                null,
+            )
 
         val newLineStat = CoverageStat(covered = 8, missed = 1)
 
-        val (newCoverageGroup, coverageGroupStatus) = runBlocking { coverageDatabaseRepository.upsertCoverageGroup(coverageRun, coverageReport, newLineStat) }
+        val (newCoverageGroup, coverageGroupStatus) =
+            runBlocking {
+                coverageDatabaseRepository.upsertCoverageGroup(coverageRun, coverageReport, newLineStat)
+            }
         expectThat(newCoverageGroup) {
             get { name }.isEqualTo("my-report")
         }

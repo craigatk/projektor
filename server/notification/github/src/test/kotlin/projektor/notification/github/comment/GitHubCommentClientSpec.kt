@@ -27,9 +27,10 @@ class GitHubCommentClientSpec : StringSpec() {
     init {
         "should create comment on issue" {
             val gitHubApiUrl = "http://localhost:${wireMockServer.port()}/"
-            val clientConfig = GitHubClientConfig(
-                gitHubApiUrl
-            )
+            val clientConfig =
+                GitHubClientConfig(
+                    gitHubApiUrl,
+                )
             val gitHubCommentClient = GitHubCommentClient(clientConfig, jwtProvider)
 
             val orgName = "my-org"
@@ -55,9 +56,10 @@ class GitHubCommentClientSpec : StringSpec() {
 
         "should return null when trying to get repository that does not have app enabled" {
             val gitHubApiUrl = "http://localhost:${wireMockServer.port()}/"
-            val clientConfig = GitHubClientConfig(
-                gitHubApiUrl
-            )
+            val clientConfig =
+                GitHubClientConfig(
+                    gitHubApiUrl,
+                )
             val gitHubCommentClient = GitHubCommentClient(clientConfig, jwtProvider)
 
             val orgName = "my-org"
@@ -72,9 +74,10 @@ class GitHubCommentClientSpec : StringSpec() {
 
         "when open PR exists for branch should find the PR number" {
             val gitHubApiUrl = "http://localhost:${wireMockServer.port()}/"
-            val clientConfig = GitHubClientConfig(
-                gitHubApiUrl
-            )
+            val clientConfig =
+                GitHubClientConfig(
+                    gitHubApiUrl,
+                )
             val gitHubCommentClient = GitHubCommentClient(clientConfig, jwtProvider)
 
             val orgName = "my-org"
@@ -93,9 +96,10 @@ class GitHubCommentClientSpec : StringSpec() {
 
         "when no open PR for branch should return null for PR number" {
             val gitHubApiUrl = "http://localhost:${wireMockServer.port()}/"
-            val clientConfig = GitHubClientConfig(
-                gitHubApiUrl
-            )
+            val clientConfig =
+                GitHubClientConfig(
+                    gitHubApiUrl,
+                )
             val gitHubCommentClient = GitHubCommentClient(clientConfig, jwtProvider)
 
             val orgName = "my-org"

@@ -12,7 +12,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
 class TestSuiteDatabaseRepositoryFetchOutputTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should fetch test suite system out`() {
         val testSuiteDatabaseRepository = TestSuiteDatabaseRepository(dslContext)
@@ -35,9 +34,10 @@ class TestSuiteDatabaseRepositoryFetchOutputTest : DatabaseRepositoryTestCase() 
         testSuiteDB.systemErr = "My system err"
         testSuiteDao.insert(testSuiteDB)
 
-        val systemOut = runBlocking {
-            testSuiteDatabaseRepository.fetchTestSuiteSystemOut(publicId, 1)
-        }
+        val systemOut =
+            runBlocking {
+                testSuiteDatabaseRepository.fetchTestSuiteSystemOut(publicId, 1)
+            }
 
         expectThat(systemOut)
             .get { value }.isNotNull().isEqualTo("My system out")
@@ -65,9 +65,10 @@ class TestSuiteDatabaseRepositoryFetchOutputTest : DatabaseRepositoryTestCase() 
         testSuiteDB.systemErr = "My system err"
         testSuiteDao.insert(testSuiteDB)
 
-        val systemErr = runBlocking {
-            testSuiteDatabaseRepository.fetchTestSuiteSystemErr(publicId, 1)
-        }
+        val systemErr =
+            runBlocking {
+                testSuiteDatabaseRepository.fetchTestSuiteSystemErr(publicId, 1)
+            }
 
         expectThat(systemErr)
             .get { value }.isNotNull().isEqualTo("My system err")

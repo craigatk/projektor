@@ -33,9 +33,9 @@ class GetTestRunCompressionApplicationTest : ApplicationTestCase() {
                             "reallyLongNameForTestSuite$it",
                             listOf("testSuite${it}TestCase1", "testSuite${it}TestCase2"),
                             listOf(),
-                            listOf()
+                            listOf(),
                         )
-                    }
+                    },
                 )
 
                 addHeader(HttpHeaders.AcceptEncoding, "gzip")

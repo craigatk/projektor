@@ -6,5 +6,5 @@ data class GroupedTestSuites(
     val testSuites: List<TestSuite>,
     val groupName: String?,
     val groupLabel: String?,
-    val directory: String?
+    val directory: String?,
 )

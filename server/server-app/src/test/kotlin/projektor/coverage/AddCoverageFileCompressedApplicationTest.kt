@@ -29,10 +29,11 @@ class AddCoverageFileCompressedApplicationTest : ApplicationTestCase() {
 
         val coverageGroup = "server-app"
         val coverageXmlReport = JacocoXmlLoader().serverApp()
-        val coverageFilePayload = CoverageFilePayload(
-            reportContents = coverageXmlReport,
-            baseDirectoryPath = "server/server-app/src/main/kotlin"
-        )
+        val coverageFilePayload =
+            CoverageFilePayload(
+                reportContents = coverageXmlReport,
+                baseDirectoryPath = "server/server-app/src/main/kotlin",
+            )
         val compressedBody = gzip(coveragePayloadParser.serializeCoverageFilePayload(coverageFilePayload))
 
         withTestApplication(::createTestApplication) {
@@ -62,7 +63,9 @@ class AddCoverageFileCompressedApplicationTest : ApplicationTestCase() {
                 expectThat(resultsProcessingDatabaseRepositoryFile)
                     .isNotNull().and {
                         get { directoryName }.isEqualTo("projektor/incomingresults/processing")
-                        get { filePath }.isEqualTo("server/server-app/src/main/kotlin/projektor/incomingresults/processing/ResultsProcessingDatabaseRepository.kt")
+                        get { filePath }.isEqualTo(
+                            "server/server-app/src/main/kotlin/projektor/incomingresults/processing/ResultsProcessingDatabaseRepository.kt",
+                        )
                     }
             }
         }

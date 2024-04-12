@@ -14,7 +14,10 @@ class WireMockTestListener(private val wireMockServer: WireMockServer) : TestLis
         wireMockServer.resetAll()
     }
 
-    override suspend fun afterTest(testCase: TestCase, result: TestResult) {
+    override suspend fun afterTest(
+        testCase: TestCase,
+        result: TestResult,
+    ) {
         wireMockServer.stop()
     }
 }

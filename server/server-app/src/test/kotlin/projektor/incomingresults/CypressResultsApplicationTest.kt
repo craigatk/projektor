@@ -57,12 +57,13 @@ class CypressResultsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when one Cypress test suite is empty should save other one`() {
-        val requestBody = GroupedResultsXmlLoader().wrapResultsXmlsInGroup(
-            listOf(
-                resultsXmlLoader.cypressEmptyTestSuites(),
-                resultsXmlLoader.cypressAttachmentsSpecWithFilePath()
+        val requestBody =
+            GroupedResultsXmlLoader().wrapResultsXmlsInGroup(
+                listOf(
+                    resultsXmlLoader.cypressEmptyTestSuites(),
+                    resultsXmlLoader.cypressAttachmentsSpecWithFilePath(),
+                ),
             )
-        )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/groupedResults") {

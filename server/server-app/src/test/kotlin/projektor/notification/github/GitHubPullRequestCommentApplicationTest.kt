@@ -195,7 +195,12 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
         gitMetadata.isMainBranch = true
         val metadata = ResultsMetadata()
         metadata.git = gitMetadata
-        val requestBody = GroupedResultsXmlLoader().wrapPerformanceResultsInGroup("performance.json", PerformanceResultsLoader().k6GetRun(), metadata)
+        val requestBody =
+            GroupedResultsXmlLoader().wrapPerformanceResultsInGroup(
+                "performance.json",
+                PerformanceResultsLoader().k6GetRun(),
+                metadata,
+            )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/groupedResults") {

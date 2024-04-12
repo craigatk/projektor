@@ -11,7 +11,6 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
 class AttachmentDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `when test run has two attachments should return them`() {
         val publicId = randomPublicId()

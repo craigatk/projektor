@@ -5,7 +5,7 @@ import io.ktor.server.config.ApplicationConfig
 data class CleanupConfig(
     val maxReportAgeDays: Int?,
     val maxAttachmentAgeDays: Int?,
-    val dryRun: Boolean
+    val dryRun: Boolean,
 ) {
     val enabled: Boolean
         get() = reportCleanupEnabled || attachmentCleanupEnabled
@@ -25,7 +25,7 @@ data class CleanupConfig(
             return CleanupConfig(
                 maxReportAgeDays,
                 maxAttachmentAgeDays,
-                dryRun
+                dryRun,
             )
         }
     }

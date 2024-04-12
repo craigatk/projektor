@@ -16,15 +16,17 @@ class SvgCoverageBadgeCreator(templateFileName: String = "coverage.template.svg"
         val fillColor = coverageLevel.fillColor
         val roundedCoveredPercentage = coveredPercentage.setScale(0, RoundingMode.HALF_UP)
 
-        val svgText = svgTemplate
-            .replace("{coveredPercentage}", roundedCoveredPercentage.toPlainString())
-            .replace("{fillColor}", fillColor)
+        val svgText =
+            svgTemplate
+                .replace("{coveredPercentage}", roundedCoveredPercentage.toPlainString())
+                .replace("{fillColor}", fillColor)
 
         return svgText
     }
 
-    private fun loadTextFromFile(filename: String) = javaClass
-        .getResourceAsStream("/$filename")
-        .bufferedReader()
-        .readText()
+    private fun loadTextFromFile(filename: String) =
+        javaClass
+            .getResourceAsStream("/$filename")
+            .bufferedReader()
+            .readText()
 }

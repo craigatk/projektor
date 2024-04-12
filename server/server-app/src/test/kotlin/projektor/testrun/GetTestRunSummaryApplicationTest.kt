@@ -23,17 +23,18 @@ class GetTestRunSummaryApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/summary") {
-                val testRun = TestRunDB()
-                    .setPublicId(publicId.id)
-                    .setTotalTestCount(6)
-                    .setTotalPassingCount(4)
-                    .setTotalFailureCount(2)
-                    .setTotalSkippedCount(1)
-                    .setCumulativeDuration(BigDecimal("30.000"))
-                    .setAverageDuration(BigDecimal("5.000"))
-                    .setSlowestTestCaseDuration(BigDecimal("10.000"))
-                    .setPassed(false)
-                    .setCreatedTimestamp(LocalDateTime.now())
+                val testRun =
+                    TestRunDB()
+                        .setPublicId(publicId.id)
+                        .setTotalTestCount(6)
+                        .setTotalPassingCount(4)
+                        .setTotalFailureCount(2)
+                        .setTotalSkippedCount(1)
+                        .setCumulativeDuration(BigDecimal("30.000"))
+                        .setAverageDuration(BigDecimal("5.000"))
+                        .setSlowestTestCaseDuration(BigDecimal("10.000"))
+                        .setPassed(false)
+                        .setCreatedTimestamp(LocalDateTime.now())
 
                 testRunDao.insert(testRun)
             }.apply {

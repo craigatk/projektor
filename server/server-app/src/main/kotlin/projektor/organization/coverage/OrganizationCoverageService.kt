@@ -8,21 +8,22 @@ import projektor.server.api.repository.coverage.RepositoryCurrentCoverage
 
 class OrganizationCoverageService(
     private val organizationCoverageRepository: OrganizationCoverageRepository,
-    private val coverageService: CoverageService
+    private val coverageService: CoverageService,
 ) {
     suspend fun getCoverage(orgName: String): OrganizationCoverage {
         val repositoryTestRuns = findReposWithCoverage(orgName)
 
-        val repositories = repositoryTestRuns.map { repositoryTestRun ->
-            val coverage = coverageService.getCoverage(repositoryTestRun.publicId)
+        val repositories =
+            repositoryTestRuns.map { repositoryTestRun ->
+                val coverage = coverageService.getCoverage(repositoryTestRun.publicId)
 
-            RepositoryCoverage(
-                publicId = repositoryTestRun.publicId.id,
-                repoName = repositoryTestRun.repoName,
-                projectName = repositoryTestRun.projectName,
-                coverage = coverage
-            )
-        }
+                RepositoryCoverage(
+                    publicId = repositoryTestRun.publicId.id,
+                    repoName = repositoryTestRun.repoName,
+                    projectName = repositoryTestRun.projectName,
+                    coverage = coverage,
+                )
+            }
 
         return OrganizationCoverage(repositories)
     }
@@ -30,18 +31,19 @@ class OrganizationCoverageService(
     suspend fun getCurrentCoverage(orgName: String): OrganizationCurrentCoverage {
         val repositoryTestRuns = findReposWithCoverage(orgName)
 
-        val repositories = repositoryTestRuns.map { repositoryTestRun ->
-            val coveredPercentage = coverageService.getCoveredLinePercentage(repositoryTestRun.publicId)
+        val repositories =
+            repositoryTestRuns.map { repositoryTestRun ->
+                val coveredPercentage = coverageService.getCoveredLinePercentage(repositoryTestRun.publicId)
 
-            RepositoryCurrentCoverage(
-                id = repositoryTestRun.publicId.id,
-                createdTimestamp = repositoryTestRun.createdTimestamp,
-                coveredPercentage = coveredPercentage,
-                repo = repositoryTestRun.repoName,
-                project = repositoryTestRun.projectName,
-                branch = repositoryTestRun.branchName
-            )
-        }
+                RepositoryCurrentCoverage(
+                    id = repositoryTestRun.publicId.id,
+                    createdTimestamp = repositoryTestRun.createdTimestamp,
+                    coveredPercentage = coveredPercentage,
+                    repo = repositoryTestRun.repoName,
+                    project = repositoryTestRun.projectName,
+                    branch = repositoryTestRun.branchName,
+                )
+            }
 
         return OrganizationCurrentCoverage(repositories)
     }

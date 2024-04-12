@@ -19,26 +19,35 @@ import projektor.util.addPrefixToFields
 import kotlin.streams.toList
 
 class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuiteRepository {
-    private val testSuiteMapper = JdbcMapperFactory.newInstance()
-        .addKeys("id", "test_cases_id", "test_cases_failure_id")
-        .ignorePropertyNotFound()
-        .newMapper(TestSuite::class.java)
+    private val testSuiteMapper =
+        JdbcMapperFactory.newInstance()
+            .addKeys("id", "test_cases_id", "test_cases_failure_id")
+            .ignorePropertyNotFound()
+            .newMapper(TestSuite::class.java)
 
-    override suspend fun fetchTestSuite(testRunPublicId: PublicId, testSuiteIdx: Int): TestSuite? =
+    override suspend fun fetchTestSuite(
+        testRunPublicId: PublicId,
+        testSuiteIdx: Int,
+    ): TestSuite? =
         withContext(Dispatchers.IO) {
-            val resultSet = selectTestSuite(dslContext)
-                .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id).and(TEST_SUITE.IDX.eq(testSuiteIdx)))
-                .orderBy(TEST_SUITE.ID)
-                .fetchResultSet()
+            val resultSet =
+                selectTestSuite(dslContext)
+                    .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id).and(TEST_SUITE.IDX.eq(testSuiteIdx)))
+                    .orderBy(TEST_SUITE.ID)
+                    .fetchResultSet()
 
-            val testSuite: TestSuite? = resultSet.use {
-                testSuiteMapper.stream(resultSet).findFirst().orElse(null)
-            }
+            val testSuite: TestSuite? =
+                resultSet.use {
+                    testSuiteMapper.stream(resultSet).findFirst().orElse(null)
+                }
 
             testSuite
         }
 
-    override suspend fun fetchTestSuites(testRunPublicId: PublicId, searchCriteria: TestSuiteSearchCriteria): List<TestSuite> =
+    override suspend fun fetchTestSuites(
+        testRunPublicId: PublicId,
+        searchCriteria: TestSuiteSearchCriteria,
+    ): List<TestSuite> =
         withContext(Dispatchers.IO) {
             val conditions = mutableListOf(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
 
@@ -50,47 +59,58 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
                 conditions.add(TEST_SUITE.FAILURE_COUNT.ge(1))
             }
 
-            val testSuites = dslContext
-                .select(TEST_SUITE.fields().toList())
-                .from(TEST_SUITE)
-                .innerJoin(TEST_RUN).on(TEST_SUITE.TEST_RUN_ID.eq(TEST_RUN.ID))
-                .where(conditions)
-                .fetchInto(TestSuite::class.java)
+            val testSuites =
+                dslContext
+                    .select(TEST_SUITE.fields().toList())
+                    .from(TEST_SUITE)
+                    .innerJoin(TEST_RUN).on(TEST_SUITE.TEST_RUN_ID.eq(TEST_RUN.ID))
+                    .where(conditions)
+                    .fetchInto(TestSuite::class.java)
 
             testSuites
         }
 
     override suspend fun fetchTestSuitesWithCases(testRunPublicId: PublicId): List<TestSuite> =
         withContext(Dispatchers.IO) {
-            val resultSet = selectTestSuite(dslContext)
-                .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
-                .orderBy(TEST_SUITE.ID)
-                .fetchResultSet()
+            val resultSet =
+                selectTestSuite(dslContext)
+                    .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
+                    .orderBy(TEST_SUITE.ID)
+                    .fetchResultSet()
 
-            val testSuites = resultSet.use {
-                testSuiteMapper.stream(resultSet).toList()
-            }
+            val testSuites =
+                resultSet.use {
+                    testSuiteMapper.stream(resultSet).toList()
+                }
 
             testSuites
         }
 
-    override suspend fun fetchTestSuiteSystemErr(testRunPublicId: PublicId, testSuiteIdx: Int): TestOutput =
-        fetchTestSuiteOutputField(testRunPublicId, testSuiteIdx, TEST_SUITE.SYSTEM_ERR)
+    override suspend fun fetchTestSuiteSystemErr(
+        testRunPublicId: PublicId,
+        testSuiteIdx: Int,
+    ): TestOutput = fetchTestSuiteOutputField(testRunPublicId, testSuiteIdx, TEST_SUITE.SYSTEM_ERR)
 
-    override suspend fun fetchTestSuiteSystemOut(testRunPublicId: PublicId, testSuiteIdx: Int): TestOutput =
-        fetchTestSuiteOutputField(testRunPublicId, testSuiteIdx, TEST_SUITE.SYSTEM_OUT)
+    override suspend fun fetchTestSuiteSystemOut(
+        testRunPublicId: PublicId,
+        testSuiteIdx: Int,
+    ): TestOutput = fetchTestSuiteOutputField(testRunPublicId, testSuiteIdx, TEST_SUITE.SYSTEM_OUT)
 
-    private suspend fun fetchTestSuiteOutputField(testRunPublicId: PublicId, testSuiteIdx: Int, field: TableField<TestSuiteRecord, String>) =
-        withContext(Dispatchers.IO) {
-            val outputValue = dslContext
+    private suspend fun fetchTestSuiteOutputField(
+        testRunPublicId: PublicId,
+        testSuiteIdx: Int,
+        field: TableField<TestSuiteRecord, String>,
+    ) = withContext(Dispatchers.IO) {
+        val outputValue =
+            dslContext
                 .select(field)
                 .from(TEST_SUITE)
                 .innerJoin(TEST_RUN).on(TEST_SUITE.TEST_RUN_ID.eq(TEST_RUN.ID))
                 .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id).and(TEST_SUITE.IDX.eq(testSuiteIdx)))
                 .fetchOne(field)
 
-            TestOutput(outputValue)
-        }
+        TestOutput(outputValue)
+    }
 
     override suspend fun fetchHighestTestSuiteIndex(testRunPublicId: PublicId): Int? =
         withContext(Dispatchers.IO) {

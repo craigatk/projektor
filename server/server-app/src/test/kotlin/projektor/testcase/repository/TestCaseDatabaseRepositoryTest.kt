@@ -33,15 +33,15 @@ class TestCaseDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                     "testSuite1",
                     listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
                     listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
-                    listOf()
+                    listOf(),
                 ),
                 TestSuiteData(
                     "testSuite2",
                     listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
                     listOf("testSuite2FailedTestCase1"),
-                    listOf()
-                )
-            )
+                    listOf(),
+                ),
+            ),
         )
 
         val testCaseDatabaseRepository = TestCaseDatabaseRepository(dslContext)
@@ -86,7 +86,7 @@ class TestCaseDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 BigDecimal("24.000"),
                 BigDecimal("23.000"),
                 BigDecimal("22.000"),
-                BigDecimal("21.000")
+                BigDecimal("21.000"),
             )
     }
 

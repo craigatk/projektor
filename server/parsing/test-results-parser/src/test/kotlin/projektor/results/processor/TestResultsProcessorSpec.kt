@@ -22,7 +22,7 @@ class TestResultsProcessorSpec : StringSpec({
             .map(TestSuite::name)
             .contains(
                 "test suite",
-                "test run with failed test cases"
+                "test run with failed test cases",
             )
     }
 
@@ -38,7 +38,7 @@ class TestResultsProcessorSpec : StringSpec({
             .map(TestSuite::name)
             .contains(
                 "projektor.example.spock.PassingSpec",
-                "projektor.example.spock.FailingSpec"
+                "projektor.example.spock.FailingSpec",
             )
     }
 
@@ -53,7 +53,7 @@ class TestResultsProcessorSpec : StringSpec({
             .hasSize(1)
             .map(TestSuite::name)
             .contains(
-                "projektor.example.spock.PassingSpec"
+                "projektor.example.spock.PassingSpec",
             )
     }
 
@@ -68,7 +68,7 @@ class TestResultsProcessorSpec : StringSpec({
             .hasSize(1)
             .map(TestSuite::name)
             .contains(
-                "pytest"
+                "pytest",
             )
     }
 

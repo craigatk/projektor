@@ -15,7 +15,7 @@ import projektor.server.api.repository.RepositoryFlakyTests
 
 fun Route.repository(
     previousTestRunService: PreviousTestRunService,
-    repositoryTestRunService: RepositoryTestRunService
+    repositoryTestRunService: RepositoryTestRunService,
 ) {
     get("/repo/{orgPart}/{repoPart}/timeline") {
         val orgPart = call.parameters.getOrFail("orgPart")
@@ -47,17 +47,18 @@ fun Route.repository(
         maxRuns: Int,
         flakyThreshold: Int,
         branchType: BranchType,
-        call: ApplicationCall
+        call: ApplicationCall,
     ) {
         val fullRepoName = "$orgPart/$repoPart"
 
-        val flakyTests = repositoryTestRunService.fetchFlakyTests(
-            repoName = fullRepoName,
-            projectName = projectName,
-            maxRuns = maxRuns,
-            flakyFailureThreshold = flakyThreshold,
-            branchType = branchType
-        )
+        val flakyTests =
+            repositoryTestRunService.fetchFlakyTests(
+                repoName = fullRepoName,
+                projectName = projectName,
+                maxRuns = maxRuns,
+                flakyFailureThreshold = flakyThreshold,
+                branchType = branchType,
+            )
 
         if (flakyTests.isNotEmpty()) {
             call.respond(
@@ -65,8 +66,8 @@ fun Route.repository(
                 RepositoryFlakyTests(
                     tests = flakyTests,
                     maxRuns = maxRuns,
-                    failureCountThreshold = flakyThreshold
-                )
+                    failureCountThreshold = flakyThreshold,
+                ),
             )
         } else {
             call.respond(HttpStatusCode.NoContent)
@@ -87,7 +88,7 @@ fun Route.repository(
             maxRuns = maxRuns,
             flakyThreshold = flakyThreshold,
             branchType = branchType,
-            call
+            call,
         )
     }
 
@@ -106,7 +107,7 @@ fun Route.repository(
             maxRuns = maxRuns,
             flakyThreshold = flakyThreshold,
             branchType = branchType,
-            call
+            call,
         )
     }
 
@@ -115,11 +116,12 @@ fun Route.repository(
         val repoPart = call.parameters.getOrFail("repoPart")
         val fullRepoName = "$orgPart/$repoPart"
 
-        val latestTestRun = previousTestRunService.findMostRecentRun(
-            fullRepoName,
-            null,
-            BranchSearch(branchType = BranchType.MAINLINE)
-        )
+        val latestTestRun =
+            previousTestRunService.findMostRecentRun(
+                fullRepoName,
+                null,
+                BranchSearch(branchType = BranchType.MAINLINE),
+            )
 
         latestTestRun?.let { call.respondRedirect("/tests/${latestTestRun.publicId.id}", permanent = false) }
             ?: call.respond(HttpStatusCode.NoContent)
@@ -131,11 +133,12 @@ fun Route.repository(
         val projectName = call.parameters.getOrFail("projectName")
         val fullRepoName = "$orgPart/$repoPart"
 
-        val latestTestRun = previousTestRunService.findMostRecentRun(
-            fullRepoName,
-            projectName,
-            BranchSearch(branchType = BranchType.MAINLINE)
-        )
+        val latestTestRun =
+            previousTestRunService.findMostRecentRun(
+                fullRepoName,
+                projectName,
+                BranchSearch(branchType = BranchType.MAINLINE),
+            )
 
         latestTestRun?.let { call.respondRedirect("/tests/${latestTestRun.publicId.id}", permanent = false) }
             ?: call.respond(HttpStatusCode.NoContent)

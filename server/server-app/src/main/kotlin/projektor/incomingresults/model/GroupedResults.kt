@@ -10,5 +10,5 @@ data class GroupedResults(
     val metadata: ResultsMetadata?,
     val wallClockDuration: BigDecimal?,
     val coverageFiles: List<CoverageFilePayload>?,
-    val codeQualityReports: List<CodeQualityReport>?
+    val codeQualityReports: List<CodeQualityReport>?,
 )

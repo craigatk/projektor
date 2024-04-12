@@ -17,7 +17,6 @@ import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
 class GetTestRunApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should fetch test run from database`() {
         val publicId = randomPublicId()
@@ -31,15 +30,15 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
                             "testSuite1",
                             listOf("testSuite1TestCase1", "testSuite1TestCase2"),
                             listOf(),
-                            listOf()
+                            listOf(),
                         ),
                         TestSuiteData(
                             "testSuite2",
                             listOf("testSuite2TestCase1", "testSuite2TestCase2", "testSuite2TestCase3"),
                             listOf(),
-                            listOf()
-                        )
-                    )
+                            listOf(),
+                        ),
+                    ),
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -75,9 +74,9 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
                             "testSuite1",
                             listOf("testSuite1TestCase1", "testSuite1TestCase2"),
                             listOf(),
-                            listOf()
-                        )
-                    )
+                            listOf(),
+                        ),
+                    ),
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -100,23 +99,24 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId") {
-                val testRun = testRunDBGenerator.createTestRun(
-                    publicId,
-                    listOf(
-                        TestSuiteData(
-                            "projektor.TestSuite1",
-                            listOf("testCase1"),
-                            listOf(),
-                            listOf()
+                val testRun =
+                    testRunDBGenerator.createTestRun(
+                        publicId,
+                        listOf(
+                            TestSuiteData(
+                                "projektor.TestSuite1",
+                                listOf("testCase1"),
+                                listOf(),
+                                listOf(),
+                            ),
+                            TestSuiteData(
+                                "projektor.TestSuite2",
+                                listOf("testCase2"),
+                                listOf(),
+                                listOf(),
+                            ),
                         ),
-                        TestSuiteData(
-                            "projektor.TestSuite2",
-                            listOf("testCase2"),
-                            listOf(),
-                            listOf()
-                        )
                     )
-                )
 
                 val testSuiteGroup1 = TestSuiteGroup()
                 testSuiteGroup1.testRunId = testRun.id

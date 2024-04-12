@@ -14,7 +14,7 @@ class TestRunCleanupService(
     private val testRunRepository: TestRunRepository,
     private val resultsProcessingRepository: ResultsProcessingRepository,
     private val coverageService: CoverageService,
-    private val attachmentService: AttachmentService?
+    private val attachmentService: AttachmentService?,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
@@ -25,9 +25,10 @@ class TestRunCleanupService(
             val createdBefore = LocalDate.now().minusDays(maxReportAgeDays)
             val testRunsToCleanUp = testRunRepository.findTestRunsCreatedBeforeAndNotPinned(createdBefore)
 
-            val cleanedUpTestRunIds = testRunsToCleanUp.mapNotNull {
-                conditionallyCleanupTestRun(it, cleanupConfig)
-            }
+            val cleanedUpTestRunIds =
+                testRunsToCleanUp.mapNotNull {
+                    conditionallyCleanupTestRun(it, cleanupConfig)
+                }
 
             logger.info("Removed ${cleanedUpTestRunIds.size} test runs created before $createdBefore")
 
@@ -48,7 +49,10 @@ class TestRunCleanupService(
         resultsProcessingRepository.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.DELETED)
     }
 
-    private suspend fun conditionallyCleanupTestRun(publicId: PublicId, cleanupConfig: CleanupConfig): PublicId? =
+    private suspend fun conditionallyCleanupTestRun(
+        publicId: PublicId,
+        cleanupConfig: CleanupConfig,
+    ): PublicId? =
         try {
             if (!cleanupConfig.dryRun) {
                 cleanupTestRun(publicId)

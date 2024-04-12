@@ -19,10 +19,12 @@ class GetTestSuiteSystemOutApplicationTest : ApplicationTestCase() {
     fun shouldFetchTestSuiteSystemOutFromDatabase() {
         val publicId = randomPublicId()
         val testSuiteIdx = 1
-        val systemOut = """Here is some system output
+        val systemOut =
+            """
+            Here is some system output
             With multiple
             Lines
-        """.trimIndent()
+            """.trimIndent()
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/run/$publicId/suite/$testSuiteIdx/systemOut") {

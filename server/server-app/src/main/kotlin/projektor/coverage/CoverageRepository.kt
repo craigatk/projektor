@@ -13,25 +13,25 @@ interface CoverageRepository {
 
     suspend fun addCoverageReport(
         coverageRun: CodeCoverageRun,
-        coverageReport: CoverageReport
+        coverageReport: CoverageReport,
     ): CodeCoverageGroup
 
     suspend fun upsertCoverageGroup(
         coverageRun: CodeCoverageRun,
         coverageReport: CoverageReport,
-        newLineStat: CoverageStat
+        newLineStat: CoverageStat,
     ): Pair<CodeCoverageGroup, CoverageGroupStatus>
 
     suspend fun insertCoverageFiles(
         coverageReportFiles: List<CoverageFile>,
         coverageRun: CodeCoverageRun,
-        coverageGroup: CodeCoverageGroup
+        coverageGroup: CodeCoverageGroup,
     )
 
     suspend fun upsertCoverageFiles(
         coverageReportFiles: List<CoverageFile>,
         coverageRun: CodeCoverageRun,
-        coverageGroup: CodeCoverageGroup
+        coverageGroup: CodeCoverageGroup,
     )
 
     suspend fun fetchOverallStats(publicId: PublicId): CoverageReportStats
@@ -40,7 +40,10 @@ interface CoverageRepository {
 
     suspend fun coverageGroupExists(publicId: PublicId): Boolean
 
-    suspend fun fetchCoverageFiles(publicId: PublicId, groupName: String): List<CoverageFile>
+    suspend fun fetchCoverageFiles(
+        publicId: PublicId,
+        groupName: String,
+    ): List<CoverageFile>
 
     suspend fun deleteCoverage(publicId: PublicId): Boolean
 }

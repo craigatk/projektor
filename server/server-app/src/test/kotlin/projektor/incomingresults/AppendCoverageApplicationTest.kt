@@ -38,21 +38,24 @@ class AppendCoverageApplicationTest : ApplicationTestCase() {
         metadata.git = gitMetadata
         metadata.group = "B12"
 
-        val coverageFilesTableRequestBody = GroupedResultsXmlLoader().resultsWithCoverage(
-            listOf(resultsXmlLoader.jestCoverageFilesTable()),
-            listOf(cloverXmlLoader.coverageFilesTable()),
-            metadata
-        )
-        val coverageGraphRequestBody = GroupedResultsXmlLoader().resultsWithCoverage(
-            listOf(resultsXmlLoader.jestCoverageGraph()),
-            listOf(cloverXmlLoader.coverageGraph()),
-            metadata
-        )
-        val coverageTableRequestBody = GroupedResultsXmlLoader().resultsWithCoverage(
-            listOf(resultsXmlLoader.jestCoverageTable()),
-            listOf(cloverXmlLoader.coverageTable()),
-            metadata
-        )
+        val coverageFilesTableRequestBody =
+            GroupedResultsXmlLoader().resultsWithCoverage(
+                listOf(resultsXmlLoader.jestCoverageFilesTable()),
+                listOf(cloverXmlLoader.coverageFilesTable()),
+                metadata,
+            )
+        val coverageGraphRequestBody =
+            GroupedResultsXmlLoader().resultsWithCoverage(
+                listOf(resultsXmlLoader.jestCoverageGraph()),
+                listOf(cloverXmlLoader.coverageGraph()),
+                metadata,
+            )
+        val coverageTableRequestBody =
+            GroupedResultsXmlLoader().resultsWithCoverage(
+                listOf(resultsXmlLoader.jestCoverageTable()),
+                listOf(cloverXmlLoader.coverageTable()),
+                metadata,
+            )
 
         lateinit var publicId: PublicId
         lateinit var testRun: TestRun
@@ -229,8 +232,9 @@ class AppendCoverageApplicationTest : ApplicationTestCase() {
                 }
 
                 await untilAsserted {
-                    val coverageTableFile = runBlocking { coverageService.getCoverageGroupFiles(publicId, coverageGroup.name) }
-                        .find { it.fileName == "CoverageTable.tsx" }
+                    val coverageTableFile =
+                        runBlocking { coverageService.getCoverageGroupFiles(publicId, coverageGroup.name) }
+                            .find { it.fileName == "CoverageTable.tsx" }
 
                     expectThat(coverageTableFile)
                         .isNotNull()

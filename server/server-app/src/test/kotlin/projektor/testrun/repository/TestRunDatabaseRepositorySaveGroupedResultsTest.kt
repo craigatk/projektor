@@ -16,7 +16,6 @@ import projektor.parser.model.TestCase as ParsedTestCase
 import projektor.parser.model.TestSuite as ParsedTestSuite
 
 class TestRunDatabaseRepositorySaveGroupedResultsTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should save grouped results with two groups with two test suites each`() {
         val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
@@ -26,22 +25,24 @@ class TestRunDatabaseRepositorySaveGroupedResultsTest : DatabaseRepositoryTestCa
         val testGroup1TestSuite1 = createTestSuite("testGroup1TestSuite1")
         val testGroup1TestSuite2 = createTestSuite("testGroup1TestSuite2")
 
-        val testGroup1 = GroupedTestSuites(
-            listOf(testGroup1TestSuite1, testGroup1TestSuite2),
-            "Group1",
-            "Label1",
-            "directory-1"
-        )
+        val testGroup1 =
+            GroupedTestSuites(
+                listOf(testGroup1TestSuite1, testGroup1TestSuite2),
+                "Group1",
+                "Label1",
+                "directory-1",
+            )
 
         val testGroup2TestSuite1 = createTestSuite("testGroup2TestSuite1")
         val testGroup2TestSuite2 = createTestSuite("testGroup2TestSuite2")
 
-        val testGroup2 = GroupedTestSuites(
-            listOf(testGroup2TestSuite1, testGroup2TestSuite2),
-            "Group2",
-            "Label2",
-            "directory-2"
-        )
+        val testGroup2 =
+            GroupedTestSuites(
+                listOf(testGroup2TestSuite1, testGroup2TestSuite2),
+                "Group2",
+                "Label2",
+                "directory-2",
+            )
 
         val groupedResults = GroupedResults(listOf(testGroup1, testGroup2), listOf(), null, null, null, null)
 
@@ -86,12 +87,13 @@ class TestRunDatabaseRepositorySaveGroupedResultsTest : DatabaseRepositoryTestCa
         val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
         val publicId = randomPublicId()
 
-        val testGroup = GroupedTestSuites(
-            listOf(),
-            "Group",
-            "Label",
-            "directory"
-        )
+        val testGroup =
+            GroupedTestSuites(
+                listOf(),
+                "Group",
+                "Label",
+                "directory",
+            )
 
         val groupedResults = GroupedResults(listOf(testGroup), listOf(), null, null, null, null)
 

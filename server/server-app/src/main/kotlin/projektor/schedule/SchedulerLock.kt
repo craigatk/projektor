@@ -11,7 +11,10 @@ class SchedulerLock(dataSource: DataSource) {
     private val lockProvider = JdbcTemplateLockProvider(dataSource)
     private val executor = DefaultLockingTaskExecutor(lockProvider)
 
-    fun executeWithLock(runnable: Runnable, lockConfig: SchedulerLockConfig) {
+    fun executeWithLock(
+        runnable: Runnable,
+        lockConfig: SchedulerLockConfig,
+    ) {
         val lockAtMostFor: Duration = Duration.ofMinutes(lockConfig.lockMinutes)
         val lockAtLeastFor: Duration = Duration.ofSeconds(15)
         executor.executeWithLock(runnable, LockConfiguration(Instant.now(), lockConfig.lockName, lockAtMostFor, lockAtLeastFor))

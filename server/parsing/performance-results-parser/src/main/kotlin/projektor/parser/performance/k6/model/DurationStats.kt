@@ -9,5 +9,5 @@ class DurationStats(
     @JsonProperty("med") val median: BigDecimal,
     @JsonProperty("min") val minimum: BigDecimal,
     @JsonProperty("p(90)") val p90: BigDecimal,
-    @JsonProperty("p(95)") val p95: BigDecimal
+    @JsonProperty("p(95)") val p95: BigDecimal,
 )

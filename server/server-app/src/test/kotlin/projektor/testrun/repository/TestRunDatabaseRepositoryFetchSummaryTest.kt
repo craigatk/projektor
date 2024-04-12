@@ -13,7 +13,6 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 
 class TestRunDatabaseRepositoryFetchSummaryTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should fetch all fields in the test run summary`() {
         val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)

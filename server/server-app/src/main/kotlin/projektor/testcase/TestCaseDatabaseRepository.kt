@@ -19,54 +19,65 @@ import projektor.util.addPrefixToFields
 import kotlin.streams.toList
 
 class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseRepository {
-
     override suspend fun fetchFailedTestCases(testRunPublicId: PublicId): List<TestCase> =
         withContext(Dispatchers.IO) {
-            val resultSet = selectTestCase(dslContext)
-                .where(
-                    TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
-                        .and(TEST_CASE.PASSED.eq(false))
-                )
-                .orderBy(TEST_CASE.ID)
-                .fetchResultSet()
+            val resultSet =
+                selectTestCase(dslContext)
+                    .where(
+                        TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
+                            .and(TEST_CASE.PASSED.eq(false)),
+                    )
+                    .orderBy(TEST_CASE.ID)
+                    .fetchResultSet()
 
             resultSet.use { testCaseMapper.stream(it).toList() }
         }
 
-    override suspend fun fetchSlowTestCases(testRunPublicId: PublicId, limit: Int): List<TestCase> =
+    override suspend fun fetchSlowTestCases(
+        testRunPublicId: PublicId,
+        limit: Int,
+    ): List<TestCase> =
         withContext(Dispatchers.IO) {
-            val resultSet = selectTestCase(dslContext)
-                .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
-                .orderBy(TEST_CASE.DURATION.desc())
-                .limit(limit)
-                .fetchResultSet()
+            val resultSet =
+                selectTestCase(dslContext)
+                    .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
+                    .orderBy(TEST_CASE.DURATION.desc())
+                    .limit(limit)
+                    .fetchResultSet()
 
             resultSet.use { testCaseMapper.stream(it).toList() }
         }
 
-    override suspend fun fetchTestCase(testRunPublicId: PublicId, testSuiteIdx: Int, testCaseIdx: Int): TestCase? =
+    override suspend fun fetchTestCase(
+        testRunPublicId: PublicId,
+        testSuiteIdx: Int,
+        testCaseIdx: Int,
+    ): TestCase? =
         withContext(Dispatchers.IO) {
-            val resultSet = selectTestCase(dslContext)
-                .where(
-                    TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
-                        .and(TEST_SUITE.IDX.eq(testSuiteIdx))
-                        .and(TEST_CASE.IDX.eq(testCaseIdx))
-                )
-                .orderBy(TEST_CASE.ID)
-                .fetchResultSet()
+            val resultSet =
+                selectTestCase(dslContext)
+                    .where(
+                        TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
+                            .and(TEST_SUITE.IDX.eq(testSuiteIdx))
+                            .and(TEST_CASE.IDX.eq(testCaseIdx)),
+                    )
+                    .orderBy(TEST_CASE.ID)
+                    .fetchResultSet()
 
-            val testCase: TestCase? = resultSet.use {
-                testCaseMapper.stream(resultSet).findFirst().orElse(null)
-            }
+            val testCase: TestCase? =
+                resultSet.use {
+                    testCaseMapper.stream(resultSet).findFirst().orElse(null)
+                }
 
             testCase
         }
 
     companion object {
-        val testCaseMapper = JdbcMapperFactory.newInstance()
-            .addKeys("id", "failure_id")
-            .ignorePropertyNotFound()
-            .newMapper(TestCase::class.java)
+        val testCaseMapper =
+            JdbcMapperFactory.newInstance()
+                .addKeys("id", "failure_id")
+                .ignorePropertyNotFound()
+                .newMapper(TestCase::class.java)
 
         fun selectTestCase(dslContext: DSLContext): SelectOnConditionStep<Record> =
             dslContext
@@ -88,15 +99,26 @@ class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseR
                 .leftOuterJoin(TEST_FAILURE).on(TEST_FAILURE.TEST_CASE_ID.eq(TEST_CASE.ID))
     }
 
-    override suspend fun fetchTestCaseSystemErr(publicId: PublicId, testSuiteIdx: Int, testCaseIdx: Int): TestOutput =
-        fetchTestCaseOutputField(publicId, testSuiteIdx, testCaseIdx, TEST_CASE.SYSTEM_ERR)
+    override suspend fun fetchTestCaseSystemErr(
+        publicId: PublicId,
+        testSuiteIdx: Int,
+        testCaseIdx: Int,
+    ): TestOutput = fetchTestCaseOutputField(publicId, testSuiteIdx, testCaseIdx, TEST_CASE.SYSTEM_ERR)
 
-    override suspend fun fetchTestCaseSystemOut(publicId: PublicId, testSuiteIdx: Int, testCaseIdx: Int): TestOutput =
-        fetchTestCaseOutputField(publicId, testSuiteIdx, testCaseIdx, TEST_CASE.SYSTEM_OUT)
+    override suspend fun fetchTestCaseSystemOut(
+        publicId: PublicId,
+        testSuiteIdx: Int,
+        testCaseIdx: Int,
+    ): TestOutput = fetchTestCaseOutputField(publicId, testSuiteIdx, testCaseIdx, TEST_CASE.SYSTEM_OUT)
 
-    private suspend fun fetchTestCaseOutputField(testRunPublicId: PublicId, testSuiteIdx: Int, testCaseIdx: Int, field: TableField<TestCaseRecord, String>) =
-        withContext(Dispatchers.IO) {
-            val outputValue = dslContext
+    private suspend fun fetchTestCaseOutputField(
+        testRunPublicId: PublicId,
+        testSuiteIdx: Int,
+        testCaseIdx: Int,
+        field: TableField<TestCaseRecord, String>,
+    ) = withContext(Dispatchers.IO) {
+        val outputValue =
+            dslContext
                 .select(field)
                 .from(TEST_CASE)
                 .innerJoin(TEST_SUITE).on(TEST_CASE.TEST_SUITE_ID.eq(TEST_SUITE.ID))
@@ -104,10 +126,10 @@ class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseR
                 .where(
                     TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
                         .and(TEST_SUITE.IDX.eq(testSuiteIdx))
-                        .and(TEST_CASE.IDX.eq(testCaseIdx))
+                        .and(TEST_CASE.IDX.eq(testCaseIdx)),
                 )
                 .fetchOne(field)
 
-            TestOutput(outputValue)
-        }
+        TestOutput(outputValue)
+    }
 }

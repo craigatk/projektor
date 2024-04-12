@@ -18,7 +18,6 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `when flaky tests without a project name should return them`() {
         val orgName = RandomStringUtils.randomAlphabetic(12)
@@ -27,20 +26,21 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
 
         val publicIds = (1..5).map { randomPublicId() }
 
-        val testSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.failingTestSuite1",
-                listOf("passing1"),
-                listOf("failing1"),
-                listOf()
-            ),
-            TestSuiteData(
-                "projektor.failingTestSuite2",
-                listOf("passing2"),
-                listOf("failing2"),
-                listOf()
+        val testSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.failingTestSuite1",
+                    listOf("passing1"),
+                    listOf("failing1"),
+                    listOf(),
+                ),
+                TestSuiteData(
+                    "projektor.failingTestSuite2",
+                    listOf("passing2"),
+                    listOf("failing2"),
+                    listOf(),
+                ),
             )
-        )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/tests/flaky") {
@@ -68,30 +68,32 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
         val projectName = null
 
         val failingPublicIds = (1..3).map { randomPublicId() }
-        val failingTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.failingTestSuite1",
-                listOf("passing1"),
-                listOf("failing1"),
-                listOf()
-            ),
-            TestSuiteData(
-                "projektor.failingTestSuite2",
-                listOf("passing2"),
-                listOf("failing2"),
-                listOf()
+        val failingTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.failingTestSuite1",
+                    listOf("passing1"),
+                    listOf("failing1"),
+                    listOf(),
+                ),
+                TestSuiteData(
+                    "projektor.failingTestSuite2",
+                    listOf("passing2"),
+                    listOf("failing2"),
+                    listOf(),
+                ),
             )
-        )
 
         val passingPublicIds = (1..7).map { randomPublicId() }
-        val passingTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.passingTestSuite",
-                listOf("passing1", "passing2"),
-                listOf(),
-                listOf()
+        val passingTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.passingTestSuite",
+                    listOf("passing1", "passing2"),
+                    listOf(),
+                    listOf(),
+                ),
             )
-        )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/tests/flaky?max_runs=10&threshold=3") {
@@ -119,30 +121,32 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
         val projectName = null
 
         val failingPublicIds = (1..3).map { randomPublicId() }
-        val failingTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.failingTestSuite1",
-                listOf("passing1"),
-                listOf("failing1"),
-                listOf()
-            ),
-            TestSuiteData(
-                "projektor.failingTestSuite2",
-                listOf("passing2"),
-                listOf("failing2"),
-                listOf()
+        val failingTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.failingTestSuite1",
+                    listOf("passing1"),
+                    listOf("failing1"),
+                    listOf(),
+                ),
+                TestSuiteData(
+                    "projektor.failingTestSuite2",
+                    listOf("passing2"),
+                    listOf("failing2"),
+                    listOf(),
+                ),
             )
-        )
 
         val passingPublicIds = (1..8).map { randomPublicId() }
-        val passingTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.passingTestSuite",
-                listOf("passing1", "passing2"),
-                listOf(),
-                listOf()
+        val passingTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.passingTestSuite",
+                    listOf("passing1", "passing2"),
+                    listOf(),
+                    listOf(),
+                ),
             )
-        )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/tests/flaky?max_runs=10&threshold=3") {
@@ -166,14 +170,15 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
 
         val publicIds = (1..5).map { randomPublicId() }
 
-        val testSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.passingTestSuite",
-                listOf("passing"),
-                listOf(),
-                listOf()
+        val testSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.passingTestSuite",
+                    listOf("passing"),
+                    listOf(),
+                    listOf(),
+                ),
             )
-        )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/tests/flaky") {
@@ -194,20 +199,21 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
 
         val publicIds = (1..5).map { randomPublicId() }
 
-        val testSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.failingTestSuite1",
-                listOf("passing1"),
-                listOf("failing1"),
-                listOf()
-            ),
-            TestSuiteData(
-                "projektor.failingTestSuite2",
-                listOf("passing2"),
-                listOf("failing2"),
-                listOf()
+        val testSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.failingTestSuite1",
+                    listOf("passing1"),
+                    listOf("failing1"),
+                    listOf(),
+                ),
+                TestSuiteData(
+                    "projektor.failingTestSuite2",
+                    listOf("passing2"),
+                    listOf("failing2"),
+                    listOf(),
+                ),
             )
-        )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/project/$projectName/tests/flaky") {
@@ -235,46 +241,49 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
         val projectName = null
 
         val failingMainlinePublicIds = (1..3).map { randomPublicId() }
-        val failingMainlineTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.failingMainlineTestSuite1",
-                listOf("passing1"),
-                listOf("failingMainline1"),
-                listOf()
-            ),
-            TestSuiteData(
-                "projektor.failingMainlineTestSuite2",
-                listOf("passing2"),
-                listOf("failingMainline2"),
-                listOf()
+        val failingMainlineTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.failingMainlineTestSuite1",
+                    listOf("passing1"),
+                    listOf("failingMainline1"),
+                    listOf(),
+                ),
+                TestSuiteData(
+                    "projektor.failingMainlineTestSuite2",
+                    listOf("passing2"),
+                    listOf("failingMainline2"),
+                    listOf(),
+                ),
             )
-        )
 
         val failingBranchPublicIds = (1..3).map { randomPublicId() }
-        val failingBranchTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.failingBranchTestSuite1",
-                listOf("passing1"),
-                listOf("failingBranch1"),
-                listOf()
-            ),
-            TestSuiteData(
-                "projektor.failingBranchTestSuite2",
-                listOf("passing2"),
-                listOf("failingBranch2"),
-                listOf()
+        val failingBranchTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.failingBranchTestSuite1",
+                    listOf("passing1"),
+                    listOf("failingBranch1"),
+                    listOf(),
+                ),
+                TestSuiteData(
+                    "projektor.failingBranchTestSuite2",
+                    listOf("passing2"),
+                    listOf("failingBranch2"),
+                    listOf(),
+                ),
             )
-        )
 
         val passingPublicIds = (1..7).map { randomPublicId() }
-        val passingTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.passingTestSuite",
-                listOf("passing1", "passing2"),
-                listOf(),
-                listOf()
+        val passingTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.passingTestSuite",
+                    listOf("passing1", "passing2"),
+                    listOf(),
+                    listOf(),
+                ),
             )
-        )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/tests/flaky?max_runs=20&threshold=3&branch_type=MAINLINE") {
@@ -282,7 +291,14 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
                     testRunDBGenerator.createTestRunInRepo(publicId, failingMainlineTestSuiteDataList, repoName, true, projectName, "main")
                 }
                 failingBranchPublicIds.forEach { publicId ->
-                    testRunDBGenerator.createTestRunInRepo(publicId, failingBranchTestSuiteDataList, repoName, true, projectName, "my-branch")
+                    testRunDBGenerator.createTestRunInRepo(
+                        publicId,
+                        failingBranchTestSuiteDataList,
+                        repoName,
+                        true,
+                        projectName,
+                        "my-branch",
+                    )
                 }
                 passingPublicIds.forEach { publicId ->
                     testRunDBGenerator.createTestRunInRepo(publicId, passingTestSuiteDataList, repoName, true, projectName)
@@ -300,11 +316,11 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
                 expectThat(flakyTestCaseNames)
                     .contains(
                         "projektor.failingMainline1ClassName.failingMainline1",
-                        "projektor.failingMainline2ClassName.failingMainline2"
+                        "projektor.failingMainline2ClassName.failingMainline2",
                     )
                     .not().contains(
                         "projektor.failingBranch1ClassName.failingBranch1",
-                        "projektor.failingBranch2ClassName.failingBranch2"
+                        "projektor.failingBranch2ClassName.failingBranch2",
                     )
             }
         }
@@ -317,46 +333,49 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
         val projectName = null
 
         val failingMainlinePublicIds = (1..3).map { randomPublicId() }
-        val failingMainlineTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.failingMainlineTestSuite1",
-                listOf("passing1"),
-                listOf("failingMainline1"),
-                listOf()
-            ),
-            TestSuiteData(
-                "projektor.failingMainlineTestSuite2",
-                listOf("passing2"),
-                listOf("failingMainline2"),
-                listOf()
+        val failingMainlineTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.failingMainlineTestSuite1",
+                    listOf("passing1"),
+                    listOf("failingMainline1"),
+                    listOf(),
+                ),
+                TestSuiteData(
+                    "projektor.failingMainlineTestSuite2",
+                    listOf("passing2"),
+                    listOf("failingMainline2"),
+                    listOf(),
+                ),
             )
-        )
 
         val failingBranchPublicIds = (1..3).map { randomPublicId() }
-        val failingBranchTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.failingBranchTestSuite1",
-                listOf("passing1"),
-                listOf("failingBranch1"),
-                listOf()
-            ),
-            TestSuiteData(
-                "projektor.failingBranchTestSuite2",
-                listOf("passing2"),
-                listOf("failingBranch2"),
-                listOf()
+        val failingBranchTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.failingBranchTestSuite1",
+                    listOf("passing1"),
+                    listOf("failingBranch1"),
+                    listOf(),
+                ),
+                TestSuiteData(
+                    "projektor.failingBranchTestSuite2",
+                    listOf("passing2"),
+                    listOf("failingBranch2"),
+                    listOf(),
+                ),
             )
-        )
 
         val passingPublicIds = (1..7).map { randomPublicId() }
-        val passingTestSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.passingTestSuite",
-                listOf("passing1", "passing2"),
-                listOf(),
-                listOf()
+        val passingTestSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.passingTestSuite",
+                    listOf("passing1", "passing2"),
+                    listOf(),
+                    listOf(),
+                ),
             )
-        )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/tests/flaky?max_runs=20&threshold=3&branch_type=ALL") {
@@ -364,7 +383,14 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
                     testRunDBGenerator.createTestRunInRepo(publicId, failingMainlineTestSuiteDataList, repoName, true, projectName, "main")
                 }
                 failingBranchPublicIds.forEach { publicId ->
-                    testRunDBGenerator.createTestRunInRepo(publicId, failingBranchTestSuiteDataList, repoName, true, projectName, "my-branch")
+                    testRunDBGenerator.createTestRunInRepo(
+                        publicId,
+                        failingBranchTestSuiteDataList,
+                        repoName,
+                        true,
+                        projectName,
+                        "my-branch",
+                    )
                 }
                 passingPublicIds.forEach { publicId ->
                     testRunDBGenerator.createTestRunInRepo(publicId, passingTestSuiteDataList, repoName, true, projectName)
@@ -382,11 +408,11 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
                 expectThat(flakyTestCaseNames)
                     .contains(
                         "projektor.failingMainline1ClassName.failingMainline1",
-                        "projektor.failingMainline2ClassName.failingMainline2"
+                        "projektor.failingMainline2ClassName.failingMainline2",
                     )
                     .contains(
                         "projektor.failingBranch1ClassName.failingBranch1",
-                        "projektor.failingBranch2ClassName.failingBranch2"
+                        "projektor.failingBranch2ClassName.failingBranch2",
                     )
             }
         }
@@ -400,14 +426,15 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
 
         val publicIds = (1..5).map { randomPublicId() }
 
-        val testSuiteDataList = listOf(
-            TestSuiteData(
-                "projektor.passingTestSuite",
-                listOf("passing"),
-                listOf(),
-                listOf()
+        val testSuiteDataList =
+            listOf(
+                TestSuiteData(
+                    "projektor.passingTestSuite",
+                    listOf("passing"),
+                    listOf(),
+                    listOf(),
+                ),
             )
-        )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Get, "/repo/$repoName/project/$projectName/tests/flaky") {

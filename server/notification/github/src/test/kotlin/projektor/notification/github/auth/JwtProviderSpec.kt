@@ -8,11 +8,12 @@ import strikt.assertions.isNotNull
 class JwtProviderSpec : StringSpec() {
     init {
         "should create JWT from private key" {
-            val jwtTokenConfig = JwtTokenConfig(
-                gitHubAppId = "12345",
-                pemContents = loadTextFromFile("fake_private_key.txt"),
-                ttlMillis = 60_000
-            )
+            val jwtTokenConfig =
+                JwtTokenConfig(
+                    gitHubAppId = "12345",
+                    pemContents = loadTextFromFile("fake_private_key.txt"),
+                    ttlMillis = 60_000,
+                )
 
             val jwtProvider = JwtProvider(jwtTokenConfig)
 
@@ -23,8 +24,9 @@ class JwtProviderSpec : StringSpec() {
         }
     }
 
-    private fun loadTextFromFile(filename: String) = javaClass
-        .getResourceAsStream("/$filename")
-        .bufferedReader()
-        .readText()
+    private fun loadTextFromFile(filename: String) =
+        javaClass
+            .getResourceAsStream("/$filename")
+            .bufferedReader()
+            .readText()
 }

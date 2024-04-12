@@ -15,15 +15,15 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
 class SaveGroupedResultsCodeQualityApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should save results with code quality files`() {
-        val codeQualityReports = (1..2).map { idx ->
-            val codeQualityReport = projektor.parser.grouped.model.CodeQualityReport()
-            codeQualityReport.contents = "Report contents $idx"
-            codeQualityReport.fileName = "quality_$idx.txt"
-            codeQualityReport
-        }
+        val codeQualityReports =
+            (1..2).map { idx ->
+                val codeQualityReport = projektor.parser.grouped.model.CodeQualityReport()
+                codeQualityReport.contents = "Report contents $idx"
+                codeQualityReport.fileName = "quality_$idx.txt"
+                codeQualityReport
+            }
 
         val requestBody = GroupedResultsXmlLoader().codeQualityResults(codeQualityReports)
         val compressedBody = gzip(requestBody)

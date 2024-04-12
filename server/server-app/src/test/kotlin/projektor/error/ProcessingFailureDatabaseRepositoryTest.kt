@@ -12,7 +12,6 @@ import strikt.assertions.isEqualTo
 import java.time.temporal.ChronoUnit
 
 class ProcessingFailureDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should fetch most recent failure`() {
         val processingFailureRepository: ProcessingFailureRepository by inject()
@@ -22,14 +21,15 @@ class ProcessingFailureDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val bodyType = FailureBodyType.TEST_RESULTS
         val failureMessage = "the failure"
 
-        val failureDB = runBlocking {
-            processingFailureRepository.recordProcessingFailure(
-                publicId,
-                body,
-                bodyType,
-                failureMessage
-            )
-        }
+        val failureDB =
+            runBlocking {
+                processingFailureRepository.recordProcessingFailure(
+                    publicId,
+                    body,
+                    bodyType,
+                    failureMessage,
+                )
+            }
 
         val failures = runBlocking { processingFailureRepository.fetchRecentProcessingFailures(1) }
         expectThat(failures).hasSize(1)

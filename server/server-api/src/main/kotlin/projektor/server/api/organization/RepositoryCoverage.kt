@@ -6,5 +6,5 @@ data class RepositoryCoverage(
     val publicId: String,
     val repoName: String,
     val projectName: String?,
-    val coverage: Coverage?
+    val coverage: Coverage?,
 )

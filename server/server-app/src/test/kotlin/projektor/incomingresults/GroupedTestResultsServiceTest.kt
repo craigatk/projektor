@@ -13,7 +13,6 @@ import strikt.assertions.isNotEmpty
 import kotlin.test.assertNotNull
 
 class GroupedTestResultsServiceTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should filter out test suites that have no test cases`() {
         val groupedTestResultsService: GroupedTestResultsService by inject()

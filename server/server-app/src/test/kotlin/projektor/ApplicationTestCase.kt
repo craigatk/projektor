@@ -68,18 +68,20 @@ open class ApplicationTestCase {
     val cloverXmlLoader = CloverXmlLoader()
     val resultsXmlLoader = ResultsXmlLoader()
 
-    val objectMapper: ObjectMapper = ObjectMapper()
-        .registerKotlinModule()
-        .registerModule(JavaTimeModule())
-        .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
-        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    val objectMapper: ObjectMapper =
+        ObjectMapper()
+            .registerKotlinModule()
+            .registerModule(JavaTimeModule())
+            .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
     val exporter = InMemorySpanExporter.create()
-    val tracerProvider = SdkTracerProvider
-        .builder()
-        .addSpanProcessor(SimpleSpanProcessor.create(exporter))
-        .build()
+    val tracerProvider =
+        SdkTracerProvider
+            .builder()
+            .addSpanProcessor(SimpleSpanProcessor.create(exporter))
+            .build()
 
     lateinit var dataSource: HikariDataSource
     lateinit var dslContext: DSLContext
@@ -231,23 +233,27 @@ open class ApplicationTestCase {
 
         codeQualityReportDao = CodeQualityReportDao(dslContext.configuration())
 
-        testRunDBGenerator = TestRunDBGenerator(
-            testRunDao,
-            testSuiteGroupDao,
-            testSuiteDao,
-            testCaseDao,
-            testFailureDao,
-            testRunSystemAttributesDao,
-            gitMetadataDao,
-            resultsMetadataDao,
-            coverageService,
-            attachmentDao
-        )
+        testRunDBGenerator =
+            TestRunDBGenerator(
+                testRunDao,
+                testSuiteGroupDao,
+                testSuiteDao,
+                testCaseDao,
+                testFailureDao,
+                testRunSystemAttributesDao,
+                gitMetadataDao,
+                resultsMetadataDao,
+                coverageService,
+                attachmentDao,
+            )
 
         this.application = application
     }
 
-    fun waitUntilTestRunHasAttachments(publicId: PublicId, attachmentCount: Int) {
+    fun waitUntilTestRunHasAttachments(
+        publicId: PublicId,
+        attachmentCount: Int,
+    ) {
         await until { attachmentDao.fetchByTestRunPublicId(publicId.id).size == attachmentCount }
     }
 
@@ -275,10 +281,11 @@ open class ApplicationTestCase {
         return Pair(PublicId(publicId), testRun)
     }
 
-    protected fun loadTextFromFile(filename: String) = javaClass
-        .getResourceAsStream("/$filename")
-        .bufferedReader()
-        .readText()
+    protected fun loadTextFromFile(filename: String) =
+        javaClass
+            .getResourceAsStream("/$filename")
+            .bufferedReader()
+            .readText()
 
     @AfterEach
     fun closeDataSource() {

@@ -39,17 +39,19 @@ fun Route.api(
         val projectName = call.request.queryParameters["project"]
         val branchName = call.request.queryParameters["branch"]
 
-        val branchSearch = if (branchName != null) {
-            BranchSearch(branchName = branchName)
-        } else {
-            BranchSearch(branchType = BranchType.MAINLINE)
-        }
+        val branchSearch =
+            if (branchName != null) {
+                BranchSearch(branchName = branchName)
+            } else {
+                BranchSearch(branchType = BranchType.MAINLINE)
+            }
 
-        val repositoryCurrentCoverage = repositoryCoverageService.fetchRepositoryCurrentCoverage(
-            fullRepoName,
-            projectName,
-            branchSearch
-        )
+        val repositoryCurrentCoverage =
+            repositoryCoverageService.fetchRepositoryCurrentCoverage(
+                fullRepoName,
+                projectName,
+                branchSearch,
+            )
 
         repositoryCurrentCoverage?.let { call.respond(HttpStatusCode.OK, it) }
             ?: call.respond(HttpStatusCode.NoContent)
@@ -65,13 +67,14 @@ fun Route.api(
 
         val fullRepoName = "$orgPart/$repoPart"
 
-        val flakyTests = repositoryTestRunService.fetchFlakyTests(
-            repoName = fullRepoName,
-            projectName = projectName,
-            maxRuns = maxRuns,
-            flakyFailureThreshold = flakyThreshold,
-            branchType = branchType
-        )
+        val flakyTests =
+            repositoryTestRunService.fetchFlakyTests(
+                repoName = fullRepoName,
+                projectName = projectName,
+                maxRuns = maxRuns,
+                flakyFailureThreshold = flakyThreshold,
+                branchType = branchType,
+            )
 
         if (flakyTests.isNotEmpty()) {
             call.respond(
@@ -79,8 +82,8 @@ fun Route.api(
                 RepositoryFlakyTests(
                     tests = flakyTests,
                     maxRuns = maxRuns,
-                    failureCountThreshold = flakyThreshold
-                )
+                    failureCountThreshold = flakyThreshold,
+                ),
             )
         } else {
             call.respond(HttpStatusCode.NoContent)

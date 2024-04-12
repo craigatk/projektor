@@ -14,20 +14,20 @@ fun CoverageReportStat.toCoverageStat(previousCoverageStats: CoverageStat?): Cov
     CoverageStat(
         covered = this.covered,
         missed = this.missed,
-        coveredPercentageDelta = previousCoverageStats?.let { this.percentCovered - it.coveredPercentage }
+        coveredPercentageDelta = previousCoverageStats?.let { this.percentCovered - it.coveredPercentage },
     )
 
 fun CoverageReportStats.toCoverageStats(previousCoverageStats: CoverageStats?): CoverageStats =
     CoverageStats(
         statementStat = this.statementStat.toCoverageStat(previousCoverageStats?.statementStat),
         lineStat = this.lineStat.toCoverageStat(previousCoverageStats?.lineStat),
-        branchStat = this.branchStat.toCoverageStat(previousCoverageStats?.branchStat)
+        branchStat = this.branchStat.toCoverageStat(previousCoverageStats?.branchStat),
     )
 
 fun CoverageReport.toCoverageGroup(previousCoverage: Coverage?): CoverageGroup =
     CoverageGroup(
         name = name,
-        stats = totalStats.toCoverageStats(previousCoverage?.findCoverageGroup(name)?.stats)
+        stats = totalStats.toCoverageStats(previousCoverage?.findCoverageGroup(name)?.stats),
     )
 
 fun CoverageReportFile.toCoverageFile(): CoverageFile =
@@ -37,5 +37,5 @@ fun CoverageReportFile.toCoverageFile(): CoverageFile =
         missedLines = missedLines.toTypedArray(),
         partialLines = partialLines.toTypedArray(),
         stats = stats.toCoverageStats(null),
-        filePath = filePath
+        filePath = filePath,
     )

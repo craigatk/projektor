@@ -13,7 +13,7 @@ import java.math.BigDecimal
 
 class AttachmentService(
     private val config: AttachmentConfig,
-    private val attachmentRepository: AttachmentRepository
+    private val attachmentRepository: AttachmentRepository,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
@@ -37,7 +37,12 @@ class AttachmentService(
             attachmentSizeInBytes.toBigDecimal() <= maxSizeInBytes
     }
 
-    suspend fun addAttachment(publicId: PublicId, fileName: String, attachmentStream: InputStream, attachmentSize: Long?): AddAttachmentResult {
+    suspend fun addAttachment(
+        publicId: PublicId,
+        fileName: String,
+        attachmentStream: InputStream,
+        attachmentSize: Long?,
+    ): AddAttachmentResult {
         val objectName = attachmentObjectName(publicId, fileName)
 
         return try {
@@ -45,7 +50,10 @@ class AttachmentService(
                 objectStoreClient.putObject(config.bucketName, objectName, attachmentStream)
             }
 
-            attachmentRepository.addAttachment(publicId, Attachment(fileName = fileName, objectName = objectName, fileSize = attachmentSize))
+            attachmentRepository.addAttachment(
+                publicId,
+                Attachment(fileName = fileName, objectName = objectName, fileSize = attachmentSize),
+            )
 
             AddAttachmentResult.Success
         } catch (e: Exception) {
@@ -54,7 +62,10 @@ class AttachmentService(
         }
     }
 
-    suspend fun getAttachment(publicId: PublicId, attachmentFileName: String) = withContext(Dispatchers.IO) {
+    suspend fun getAttachment(
+        publicId: PublicId,
+        attachmentFileName: String,
+    ) = withContext(Dispatchers.IO) {
         objectStoreClient.getObject(config.bucketName, attachmentObjectName(publicId, attachmentFileName))
     }
 
@@ -71,6 +82,9 @@ class AttachmentService(
     }
 
     companion object {
-        fun attachmentObjectName(publicId: PublicId, attachmentFileName: String) = "${publicId.id}-$attachmentFileName"
+        fun attachmentObjectName(
+            publicId: PublicId,
+            attachmentFileName: String,
+        ) = "${publicId.id}-$attachmentFileName"
     }
 }

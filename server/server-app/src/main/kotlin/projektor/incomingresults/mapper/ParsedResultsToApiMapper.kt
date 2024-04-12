@@ -11,20 +11,22 @@ import projektor.server.api.TestSuite as TestSuiteApi
 fun toTestRunSummary(
     publicId: PublicId,
     testSuites: List<ParsedTestSuite>,
-    wallClockDuration: BigDecimal?
+    wallClockDuration: BigDecimal?,
 ): TestRunSummary {
     val totalTestCount = testSuites.sumOf { it.tests }
     val totalFailureCount = testSuites.sumOf { it.failures }
 
     val allTestCases = testSuites.flatMap { it.testCases }
-    val cumulativeDuration = allTestCases
-        .mapNotNull { it.time }
-        .fold(BigDecimal.ZERO, BigDecimal::add)
+    val cumulativeDuration =
+        allTestCases
+            .mapNotNull { it.time }
+            .fold(BigDecimal.ZERO, BigDecimal::add)
     val averageDuration = calculateAverageDuration(cumulativeDuration, totalTestCount)
-    val slowestTestCaseDuration = allTestCases
-        .mapNotNull { it.time }
-        .maxOrNull()
-        ?: BigDecimal.ZERO
+    val slowestTestCaseDuration =
+        allTestCases
+            .mapNotNull { it.time }
+            .maxOrNull()
+            ?: BigDecimal.ZERO
 
     return TestRunSummary(
         publicId.id,
@@ -37,27 +39,29 @@ fun toTestRunSummary(
         averageDuration,
         slowestTestCaseDuration,
         Instant.now(),
-        wallClockDuration
+        wallClockDuration,
     )
 }
 
 fun toTestRunSummaryFromApi(
     publicId: PublicId,
     testSuites: List<TestSuiteApi>,
-    wallClockDuration: BigDecimal?
+    wallClockDuration: BigDecimal?,
 ): TestRunSummary {
     val totalTestCount = testSuites.sumOf { it.testCount }
     val totalFailureCount = testSuites.sumOf { it.failureCount }
 
     val allTestCases = testSuites.mapNotNull { it.testCases }.flatten()
-    val cumulativeDuration = allTestCases
-        .mapNotNull { it.duration }
-        .fold(BigDecimal.ZERO, BigDecimal::add)
+    val cumulativeDuration =
+        allTestCases
+            .mapNotNull { it.duration }
+            .fold(BigDecimal.ZERO, BigDecimal::add)
     val averageDuration = calculateAverageDuration(cumulativeDuration, totalTestCount)
-    val slowestTestCaseDuration = allTestCases
-        .mapNotNull { it.duration }
-        .maxOrNull()
-        ?: BigDecimal.ZERO
+    val slowestTestCaseDuration =
+        allTestCases
+            .mapNotNull { it.duration }
+            .maxOrNull()
+            ?: BigDecimal.ZERO
 
     return TestRunSummary(
         publicId.id,
@@ -70,6 +74,6 @@ fun toTestRunSummaryFromApi(
         averageDuration,
         slowestTestCaseDuration,
         Instant.now(),
-        wallClockDuration
+        wallClockDuration,
     )
 }

@@ -9,7 +9,6 @@ import projektor.server.api.PublicId
 import projektor.server.api.attributes.TestRunSystemAttributes
 
 class TestRunSystemAttributesDatabaseRepository(private val dslContext: DSLContext) : TestRunSystemAttributesRepository {
-
     override suspend fun fetchAttributes(publicId: PublicId): TestRunSystemAttributes? =
         withContext(Dispatchers.IO) {
             dslContext
@@ -23,11 +22,18 @@ class TestRunSystemAttributesDatabaseRepository(private val dslContext: DSLConte
 
     override suspend fun unpin(publicId: PublicId) = upsertPinned(publicId, false)
 
-    private suspend fun upsertPinned(publicId: PublicId, newPinnedValue: Boolean): Int =
+    private suspend fun upsertPinned(
+        publicId: PublicId,
+        newPinnedValue: Boolean,
+    ): Int =
         withContext(Dispatchers.IO) {
             try {
                 dslContext
-                    .insertInto(TEST_RUN_SYSTEM_ATTRIBUTES, TEST_RUN_SYSTEM_ATTRIBUTES.TEST_RUN_PUBLIC_ID, TEST_RUN_SYSTEM_ATTRIBUTES.PINNED)
+                    .insertInto(
+                        TEST_RUN_SYSTEM_ATTRIBUTES,
+                        TEST_RUN_SYSTEM_ATTRIBUTES.TEST_RUN_PUBLIC_ID,
+                        TEST_RUN_SYSTEM_ATTRIBUTES.PINNED,
+                    )
                     .values(publicId.id, newPinnedValue)
                     .onDuplicateKeyUpdate()
                     .set(TEST_RUN_SYSTEM_ATTRIBUTES.PINNED, newPinnedValue)

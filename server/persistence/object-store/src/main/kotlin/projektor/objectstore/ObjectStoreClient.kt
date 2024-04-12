@@ -13,10 +13,11 @@ import projektor.objectstore.bucket.BucketCreationException
 import java.io.InputStream
 
 class ObjectStoreClient(config: ObjectStoreConfig) {
-    private val minioClient = MinioClient.builder()
-        .endpoint(config.url)
-        .credentials(config.accessKey, config.secretKey)
-        .build()
+    private val minioClient =
+        MinioClient.builder()
+            .endpoint(config.url)
+            .credentials(config.accessKey, config.secretKey)
+            .build()
 
     fun createBucketIfNotExists(bucketName: String) {
         try {
@@ -28,11 +29,16 @@ class ObjectStoreClient(config: ObjectStoreConfig) {
         }
     }
 
-    fun bucketExists(bucketName: String) = minioClient.bucketExists(
-        BucketExistsArgs.builder().bucket(bucketName).build()
-    )
+    fun bucketExists(bucketName: String) =
+        minioClient.bucketExists(
+            BucketExistsArgs.builder().bucket(bucketName).build(),
+        )
 
-    fun putObject(bucketName: String, objectName: String, stream: InputStream) {
+    fun putObject(
+        bucketName: String,
+        objectName: String,
+        stream: InputStream,
+    ) {
         minioClient.putObject(
             PutObjectArgs
                 .builder()
@@ -40,41 +46,50 @@ class ObjectStoreClient(config: ObjectStoreConfig) {
                 .`object`(objectName)
                 .stream(stream, -1, 10485760)
                 .contentType("application/octet-stream")
-                .build()
+                .build(),
         )
     }
 
-    fun getObject(bucketName: String, objectName: String): InputStream? =
+    fun getObject(
+        bucketName: String,
+        objectName: String,
+    ): InputStream? =
         try {
             minioClient.getObject(
                 GetObjectArgs
                     .builder()
                     .bucket(bucketName)
                     .`object`(objectName)
-                    .build()
+                    .build(),
             )
         } catch (e: ErrorResponseException) {
             null
         }
 
-    fun removeObject(bucketName: String, objectName: String) {
+    fun removeObject(
+        bucketName: String,
+        objectName: String,
+    ) {
         minioClient.removeObject(
             RemoveObjectArgs
                 .builder()
                 .bucket(bucketName)
                 .`object`(objectName)
-                .build()
+                .build(),
         )
     }
 
-    fun removeObjects(bucketName: String, objectNames: List<String>) {
+    fun removeObjects(
+        bucketName: String,
+        objectNames: List<String>,
+    ) {
         val objects = objectNames.map { DeleteObject(it) }
         minioClient.removeObjects(
             RemoveObjectsArgs
                 .builder()
                 .bucket(bucketName)
                 .objects(objects)
-                .build()
+                .build(),
         )
     }
 }

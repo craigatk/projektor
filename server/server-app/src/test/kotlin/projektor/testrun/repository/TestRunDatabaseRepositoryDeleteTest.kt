@@ -13,30 +13,30 @@ import strikt.assertions.isNull
 import java.time.LocalDate
 
 class TestRunDatabaseRepositoryDeleteTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should delete test run`() {
         val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
 
         val publicId = randomPublicId()
 
-        val testRun = testRunDBGenerator.createTestRun(
-            publicId,
-            listOf(
-                TestSuiteData(
-                    "testSuite1",
-                    listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
-                    listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
-                    listOf()
+        val testRun =
+            testRunDBGenerator.createTestRun(
+                publicId,
+                listOf(
+                    TestSuiteData(
+                        "testSuite1",
+                        listOf("testSuite1PassedTestCase1", "testSuite1PassedTestCase2"),
+                        listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
+                        listOf(),
+                    ),
+                    TestSuiteData(
+                        "testSuite2",
+                        listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
+                        listOf("testSuite2FailedTestCase1"),
+                        listOf(),
+                    ),
                 ),
-                TestSuiteData(
-                    "testSuite2",
-                    listOf("testSuite2PassedTestCase1", "testSuite2PassedTestCase2"),
-                    listOf("testSuite2FailedTestCase1"),
-                    listOf()
-                )
             )
-        )
 
         val testSuiteIds = testSuiteDao.fetchByTestRunId(testRun.id).map { it.id }
         val testCaseIds = testSuiteIds.flatMap { testCaseDao.fetchByTestSuiteId(it) }.map { it.id }
@@ -100,7 +100,8 @@ class TestRunDatabaseRepositoryDeleteTest : DatabaseRepositoryTestCase() {
         val noAttachmentsPublicId = randomPublicId()
         testRunDBGenerator.createTestRun(noAttachmentsPublicId, LocalDate.of(2020, 2, 1), false)
 
-        val fetchedTestRuns = runBlocking { testRunDatabaseRepository.findTestRunsCreatedBeforeAndNotPinnedWithAttachments(LocalDate.of(2020, 2, 2)) }
+        val fetchedTestRuns =
+            runBlocking { testRunDatabaseRepository.findTestRunsCreatedBeforeAndNotPinnedWithAttachments(LocalDate.of(2020, 2, 2)) }
 
         expectThat(fetchedTestRuns)
             .contains(shouldFetch1PublicId, shouldFetch2PublicId)

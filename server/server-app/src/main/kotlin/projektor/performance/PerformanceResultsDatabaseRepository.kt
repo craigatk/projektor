@@ -19,7 +19,7 @@ class PerformanceResultsDatabaseRepository(private val dslContext: DSLContext) :
     override suspend fun savePerformanceResults(
         testRunId: Long,
         publicId: PublicId,
-        results: IncomingPerformanceResult
+        results: IncomingPerformanceResult,
     ): PerformanceResult =
         withContext(Dispatchers.IO) {
             val performanceResults = PerformanceResults()

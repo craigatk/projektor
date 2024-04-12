@@ -16,15 +16,17 @@ class GitHubCommentServiceLiveSpec : StringSpec() {
     private val gitHubAppId = "91621"
     private val gitHubApiUrl = "https://api.github.com"
 
-    private val clientConfig = GitHubClientConfig(
-        gitHubApiUrl = gitHubApiUrl
-    )
+    private val clientConfig =
+        GitHubClientConfig(
+            gitHubApiUrl = gitHubApiUrl,
+        )
 
-    private val jwtTokenConfig = JwtTokenConfig(
-        gitHubAppId = gitHubAppId,
-        pemContents = keyContents,
-        ttlMillis = ttl
-    )
+    private val jwtTokenConfig =
+        JwtTokenConfig(
+            gitHubAppId = gitHubAppId,
+            pemContents = keyContents,
+            ttlMillis = ttl,
+        )
 
     private val jwtProvider = JwtProvider(jwtTokenConfig)
 
@@ -32,25 +34,28 @@ class GitHubCommentServiceLiveSpec : StringSpec() {
         "should create comment when one does not exist" {
             val commentService = GitHubCommentService(GitHubCommentClient(clientConfig, jwtProvider))
 
-            val commentData = ReportCommentData(
-                projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
-                git = ReportCommentGitData(
-                    orgName = "craigatk",
-                    repoName = "projektor",
-                    branchName = "test-pr"
-                ),
-                publicId = "V1BMYK93MTNR",
-                createdDate = LocalDateTime.of(
-                    LocalDate.of(2020, 12, 16),
-                    LocalTime.of(14, 30)
-                ),
-                passed = true,
-                failedTestCount = 0,
-                totalTestCount = 25,
-                coverage = null,
-                performance = null,
-                project = null
-            )
+            val commentData =
+                ReportCommentData(
+                    projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
+                    git =
+                        ReportCommentGitData(
+                            orgName = "craigatk",
+                            repoName = "projektor",
+                            branchName = "test-pr",
+                        ),
+                    publicId = "V1BMYK93MTNR",
+                    createdDate =
+                        LocalDateTime.of(
+                            LocalDate.of(2020, 12, 16),
+                            LocalTime.of(14, 30),
+                        ),
+                    passed = true,
+                    failedTestCount = 0,
+                    totalTestCount = 25,
+                    coverage = null,
+                    performance = null,
+                    project = null,
+                )
 
             commentService.upsertReportComment(commentData, "12345")
         }
@@ -58,32 +63,36 @@ class GitHubCommentServiceLiveSpec : StringSpec() {
         "should update comment when one already exists" {
             val commentService = GitHubCommentService(GitHubCommentClient(clientConfig, jwtProvider))
 
-            val newCommentData = ReportCommentData(
-                projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
-                git = ReportCommentGitData(
-                    orgName = "craigatk",
-                    repoName = "projektor",
-                    branchName = "test-pr"
-                ),
-                publicId = "V1BMYK93MTNR",
-                createdDate = LocalDateTime.of(
-                    LocalDate.of(2020, 12, 17),
-                    LocalTime.of(14, 30)
-                ),
-                passed = true,
-                failedTestCount = 0,
-                totalTestCount = 30,
-                coverage = null,
-                performance = null,
-                project = null
-            )
+            val newCommentData =
+                ReportCommentData(
+                    projektorServerBaseUrl = "https://projektorlive.herokuapp.com/",
+                    git =
+                        ReportCommentGitData(
+                            orgName = "craigatk",
+                            repoName = "projektor",
+                            branchName = "test-pr",
+                        ),
+                    publicId = "V1BMYK93MTNR",
+                    createdDate =
+                        LocalDateTime.of(
+                            LocalDate.of(2020, 12, 17),
+                            LocalTime.of(14, 30),
+                        ),
+                    passed = true,
+                    failedTestCount = 0,
+                    totalTestCount = 30,
+                    coverage = null,
+                    performance = null,
+                    project = null,
+                )
 
             commentService.upsertReportComment(newCommentData, "12345")
         }
     }
 
-    private fun loadTextFromFile(filename: String) = javaClass
-        .getResourceAsStream("/$filename")
-        .bufferedReader()
-        .readText()
+    private fun loadTextFromFile(filename: String) =
+        javaClass
+            .getResourceAsStream("/$filename")
+            .bufferedReader()
+            .readText()
 }

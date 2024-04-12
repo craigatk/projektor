@@ -27,7 +27,6 @@ import strikt.assertions.isTrue
 import kotlin.test.assertNotNull
 
 class AppendGroupedResultsApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should append second grouped test results run`() {
         val repoPart = RandomStringUtils.randomAlphabetic(12)

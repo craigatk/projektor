@@ -9,5 +9,9 @@ interface TestRunMetadataRepository {
 
     suspend fun fetchResultsMetadata(publicId: PublicId): TestRunMetadata?
 
-    suspend fun updateGitMetadata(testRunId: Long, pullRequestNumber: Int?, commitSha: String?)
+    suspend fun updateGitMetadata(
+        testRunId: Long,
+        pullRequestNumber: Int?,
+        commitSha: String?,
+    )
 }

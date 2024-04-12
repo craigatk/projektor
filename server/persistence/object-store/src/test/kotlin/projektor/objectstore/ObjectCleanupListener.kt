@@ -7,13 +7,16 @@ import io.kotest.core.test.TestResult
 class ObjectCleanupListener(
     private val objectStoreClient: ObjectStoreClient,
     private val bucketName: String,
-    private val objectName: String
+    private val objectName: String,
 ) : TestListener {
     override suspend fun beforeTest(testCase: TestCase) {
         objectStoreClient.createBucketIfNotExists(bucketName)
     }
 
-    override suspend fun afterTest(testCase: TestCase, result: TestResult) {
+    override suspend fun afterTest(
+        testCase: TestCase,
+        result: TestResult,
+    ) {
         objectStoreClient.removeObject(bucketName, objectName)
     }
 }

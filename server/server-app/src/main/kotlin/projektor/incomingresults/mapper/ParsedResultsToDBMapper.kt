@@ -26,7 +26,11 @@ fun GroupedTestSuites.toDB(testRunId: Long): TestSuiteGroupDB {
     return testSuiteGroupDB
 }
 
-fun TestSuite.toDB(testRunId: Long, testGroupId: Long?, testSuiteIdx: Int): TestSuiteDB {
+fun TestSuite.toDB(
+    testRunId: Long,
+    testGroupId: Long?,
+    testSuiteIdx: Int,
+): TestSuiteDB {
     val packageAndClassName = parsePackageAndClassName(name)
 
     val testSuiteDB = TestSuiteDB()
@@ -51,7 +55,10 @@ fun TestSuite.toDB(testRunId: Long, testGroupId: Long?, testSuiteIdx: Int): Test
     return testSuiteDB
 }
 
-fun TestCase.toDB(testSuiteId: Long, testCaseIdx: Int): TestCaseDB {
+fun TestCase.toDB(
+    testSuiteId: Long,
+    testCaseIdx: Int,
+): TestCaseDB {
     val packageAndClassName = parsePackageAndClassName(className)
 
     val testCaseDB = TestCaseDB()
@@ -86,12 +93,14 @@ fun parsePackageAndClassName(classNameWithPackage: String?): Pair<String?, Strin
         if (classNameWithPackage != null) {
             val cleanedClassNameWithPackage = classNameWithPackage.replace("\\", "/")
 
-            val isFilePath = cleanedClassNameWithPackage.contains("/") &&
-                cleanedClassNameWithPackage.contains(".") &&
-                !cleanedClassNameWithPackage.contains(" ")
+            val isFilePath =
+                cleanedClassNameWithPackage.contains("/") &&
+                    cleanedClassNameWithPackage.contains(".") &&
+                    !cleanedClassNameWithPackage.contains(" ")
 
-            val isJvmPackage = cleanedClassNameWithPackage.contains('.') &&
-                !cleanedClassNameWithPackage.contains(" ")
+            val isJvmPackage =
+                cleanedClassNameWithPackage.contains('.') &&
+                    !cleanedClassNameWithPackage.contains(" ")
 
             if (isFilePath) {
                 val lastSlashIndex = cleanedClassNameWithPackage.lastIndexOf("/")

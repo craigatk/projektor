@@ -27,7 +27,7 @@ class TestRunCoverageBadgeApplicationTest : ApplicationTestCase() {
                 testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
                     publicId = publicId,
                     coverageText = JacocoXmlLoader().serverAppReduced(),
-                    repoName = repoName
+                    repoName = repoName,
                 )
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)

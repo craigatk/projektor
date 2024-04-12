@@ -12,7 +12,6 @@ import strikt.assertions.isEqualTo
 import java.math.BigDecimal
 
 class PerformanceResultsDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `should insert performance test results`() {
         val performanceResultsDatabaseRepository = PerformanceResultsDatabaseRepository(dslContext)
@@ -22,20 +21,21 @@ class PerformanceResultsDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
         val testRun = testRunDBGenerator.createEmptyTestRun(publicId)
 
-        val result = PerformanceResult(
-            name = "perf.json",
-            requestsPerSecond = BigDecimal("50.00"),
-            requestCount = 4000,
-            average = BigDecimal("18.022342"),
-            maximum = BigDecimal("56.29193"),
-            p95 = BigDecimal("45.02142")
-        )
+        val result =
+            PerformanceResult(
+                name = "perf.json",
+                requestsPerSecond = BigDecimal("50.00"),
+                requestCount = 4000,
+                average = BigDecimal("18.022342"),
+                maximum = BigDecimal("56.29193"),
+                p95 = BigDecimal("45.02142"),
+            )
 
         runBlocking {
             performanceResultsDatabaseRepository.savePerformanceResults(
                 testRun.id,
                 publicId,
-                result
+                result,
             )
         }
 

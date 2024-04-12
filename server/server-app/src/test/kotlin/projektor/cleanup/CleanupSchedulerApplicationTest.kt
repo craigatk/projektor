@@ -24,7 +24,7 @@ class CleanupSchedulerApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             val scheduler: Scheduler = application.get()
 
-            val cleanupJob = scheduler.findScheduledJob(CleanupScheduledJob.cleanupJobName)
+            val cleanupJob = scheduler.findScheduledJob(CleanupScheduledJob.CLEANUP_JOB_NAME)
             expectThat(cleanupJob)
                 .isNotNull()
                 .and {
@@ -49,7 +49,7 @@ class CleanupSchedulerApplicationTest : ApplicationTestCase() {
 
             val scheduler: Scheduler = application.get()
 
-            val cleanupJob = scheduler.findScheduledJob(CleanupScheduledJob.cleanupJobName)
+            val cleanupJob = scheduler.findScheduledJob(CleanupScheduledJob.CLEANUP_JOB_NAME)
             assertNotNull(cleanupJob)
 
             cleanupJob.runnable.run()
@@ -69,7 +69,7 @@ class CleanupSchedulerApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             val scheduler: Scheduler = application.get()
 
-            val cleanupJob = scheduler.findScheduledJob(CleanupScheduledJob.cleanupJobName)
+            val cleanupJob = scheduler.findScheduledJob(CleanupScheduledJob.CLEANUP_JOB_NAME)
             expectThat(cleanupJob).isNull()
         }
     }

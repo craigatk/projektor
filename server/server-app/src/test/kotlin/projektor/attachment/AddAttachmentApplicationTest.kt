@@ -31,9 +31,9 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
                             "testSuite1",
                             listOf("testSuite1TestCase1", "testSuite1TestCase2"),
                             listOf(),
-                            listOf()
-                        )
-                    )
+                            listOf(),
+                        ),
+                    ),
                 )
 
                 addHeader("content-length", attachmentBytes.size.toString())
@@ -62,7 +62,6 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-attachment.txt") {
-
                 addHeader("content-length", attachmentBytes.size.toString())
                 setBody(attachmentBytes)
             }.apply {
@@ -92,7 +91,6 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-attachment.txt") {
-
                 addHeader("content-length", attachmentBytes.size.toString())
                 setBody(attachmentBytes)
             }.apply {

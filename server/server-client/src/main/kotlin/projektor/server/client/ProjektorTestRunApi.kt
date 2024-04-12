@@ -15,38 +15,69 @@ import retrofit2.http.Path
 
 interface ProjektorTestRunApi {
     @GET("/run/{publicId}")
-    fun testRun(@Path("publicId") publicId: String): Call<TestRun>
+    fun testRun(
+        @Path("publicId") publicId: String,
+    ): Call<TestRun>
 
     @GET("/run/{publicId}/suites")
-    fun testSuites(@Path("publicId") publicId: String): Call<List<TestSuite>>
+    fun testSuites(
+        @Path("publicId") publicId: String,
+    ): Call<List<TestSuite>>
 
     @GET("/run/{publicId}/suite/{testSuiteIdx}")
-    fun testSuite(@Path("publicId") publicId: String, @Path("testSuiteIdx") testSuiteIdx: Int): Call<TestSuite>
+    fun testSuite(
+        @Path("publicId") publicId: String,
+        @Path("testSuiteIdx") testSuiteIdx: Int,
+    ): Call<TestSuite>
 
     @GET("/run/{publicId}/suite/{testSuiteIdx}/systemOut")
-    fun testSuiteSystemOut(@Path("publicId") publicId: String, @Path("testSuiteIdx") testSuiteIdx: Int): Call<TestOutput>
+    fun testSuiteSystemOut(
+        @Path("publicId") publicId: String,
+        @Path("testSuiteIdx") testSuiteIdx: Int,
+    ): Call<TestOutput>
 
     @GET("/run/{publicId}/suite/{testSuiteIdx}/systemErr")
-    fun testSuiteSystemErr(@Path("publicId") publicId: String, @Path("testSuiteIdx") testSuiteIdx: Int): Call<TestOutput>
+    fun testSuiteSystemErr(
+        @Path("publicId") publicId: String,
+        @Path("testSuiteIdx") testSuiteIdx: Int,
+    ): Call<TestOutput>
 
     @GET("/run/{publicId}/suite/{testSuiteIdx}/case/{testCaseIdx}")
-    fun testCase(@Path("publicId") publicId: String, @Path("testSuiteIdx") testSuiteIdx: Int, @Path("testCaseIdx") testCaseIdx: Int): Call<TestCase>
+    fun testCase(
+        @Path("publicId") publicId: String,
+        @Path("testSuiteIdx") testSuiteIdx: Int,
+        @Path("testCaseIdx") testCaseIdx: Int,
+    ): Call<TestCase>
 
     @GET("/run/{publicId}/suite/{testSuiteIdx}/case/{testCaseIdx}/systemOut")
-    fun testCaseSystemOut(@Path("publicId") publicId: String, @Path("testSuiteIdx") testSuiteIdx: Int, @Path("testCaseIdx") testCaseIdx: Int): Call<TestOutput>
+    fun testCaseSystemOut(
+        @Path("publicId") publicId: String,
+        @Path("testSuiteIdx") testSuiteIdx: Int,
+        @Path("testCaseIdx") testCaseIdx: Int,
+    ): Call<TestOutput>
 
     @GET("/run/{publicId}/coverage")
-    fun coverage(@Path("publicId") publicId: String): Call<Coverage>
+    fun coverage(
+        @Path("publicId") publicId: String,
+    ): Call<Coverage>
 
     @GET("/run/{publicId}/coverage/overall")
-    fun coverageOverallStats(@Path("publicId") publicId: String): Call<CoverageStats>
+    fun coverageOverallStats(
+        @Path("publicId") publicId: String,
+    ): Call<CoverageStats>
 
     @GET("/run/{publicId}/coverage/exists")
-    fun coverageExists(@Path("publicId") publicId: String): Call<CoverageExists>
+    fun coverageExists(
+        @Path("publicId") publicId: String,
+    ): Call<CoverageExists>
 
     @GET("/run/{publicId}/previous")
-    fun previousTestRun(@Path("publicId") publicId: String): Call<PublicId>
+    fun previousTestRun(
+        @Path("publicId") publicId: String,
+    ): Call<PublicId>
 
     @GET("/run/{publicId}/quality")
-    fun codeQualityReports(@Path("publicId") publicId: String): Call<CodeQualityReports>
+    fun codeQualityReports(
+        @Path("publicId") publicId: String,
+    ): Call<CodeQualityReports>
 }

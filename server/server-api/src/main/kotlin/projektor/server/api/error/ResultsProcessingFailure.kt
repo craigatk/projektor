@@ -7,5 +7,5 @@ data class ResultsProcessingFailure(
     val body: String,
     val bodyType: FailureBodyType,
     val createdTimestamp: Instant,
-    val failureMessage: String?
+    val failureMessage: String?,
 )

@@ -18,7 +18,6 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
 class SaveGroupedResultsWithCoveragePartialFailureApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `when one invalid coverage file should save the others and record parsing failed metric`() {
         val invalidCoverageFile = CoverageFile()
@@ -30,7 +29,10 @@ class SaveGroupedResultsWithCoveragePartialFailureApplicationTest : ApplicationT
         val validCoverageFile2 = CoverageFile()
         validCoverageFile2.reportContents = JacocoXmlLoader().junitResultsParser()
 
-        val requestBody = GroupedResultsXmlLoader().passingResultsWithCoverage(listOf(validCoverageFile1, invalidCoverageFile, validCoverageFile2))
+        val requestBody =
+            GroupedResultsXmlLoader().passingResultsWithCoverage(
+                listOf(validCoverageFile1, invalidCoverageFile, validCoverageFile2),
+            )
         val compressedBody = gzip(requestBody)
 
         withTestApplication(::createTestApplication) {

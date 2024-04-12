@@ -18,11 +18,14 @@ import projektor.server.api.coverage.CoverageExists
 import projektor.server.api.coverage.CoverageFiles
 import projektor.server.api.coverage.SaveCoverageError
 
-fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
+fun Route.coverage(
+    authService: AuthService,
+    coverageService: CoverageService,
+) {
     post("/run/{publicId}/coverage") {
         val publicId = call.parameters.getOrFail("publicId")
 
-        if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
+        if (!authService.isAuthValid(call.request.header(AuthConfig.PUBLISH_TOKEN))) {
             call.respond(HttpStatusCode.Unauthorized)
         } else {
             val reportXml = receiveCompressedOrPlainTextPayload(call)
@@ -40,7 +43,7 @@ fun Route.coverage(authService: AuthService, coverageService: CoverageService) {
     post("/run/{publicId}/coverageFile") {
         val publicId = call.parameters.getOrFail("publicId")
 
-        if (!authService.isAuthValid(call.request.header(AuthConfig.PublishToken))) {
+        if (!authService.isAuthValid(call.request.header(AuthConfig.PUBLISH_TOKEN))) {
             call.respond(HttpStatusCode.Unauthorized)
         } else {
             val incomingPayload = receiveCompressedOrPlainTextPayload(call)

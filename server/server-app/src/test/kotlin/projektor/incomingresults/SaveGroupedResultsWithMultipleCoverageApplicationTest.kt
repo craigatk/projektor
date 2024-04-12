@@ -19,21 +19,21 @@ import strikt.assertions.isNotNull
 import java.math.BigDecimal
 
 class SaveGroupedResultsWithMultipleCoverageApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should save grouped results with multiple coverage reports`() {
-        val requestBody = GroupedResultsXmlLoader().resultsWithCoverage(
-            listOf(
-                resultsXmlLoader.jestCoverageFilesTable(),
-                resultsXmlLoader.jestCoverageGraph(),
-                resultsXmlLoader.jestCoverageTable()
-            ),
-            listOf(
-                cloverXmlLoader.coverageFilesTable(),
-                cloverXmlLoader.coverageGraph(),
-                cloverXmlLoader.coverageTable()
+        val requestBody =
+            GroupedResultsXmlLoader().resultsWithCoverage(
+                listOf(
+                    resultsXmlLoader.jestCoverageFilesTable(),
+                    resultsXmlLoader.jestCoverageGraph(),
+                    resultsXmlLoader.jestCoverageTable(),
+                ),
+                listOf(
+                    cloverXmlLoader.coverageFilesTable(),
+                    cloverXmlLoader.coverageGraph(),
+                    cloverXmlLoader.coverageTable(),
+                ),
             )
-        )
 
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/groupedResults") {

@@ -9,5 +9,5 @@ data class RepositoryCurrentCoverage(
     val coveredPercentage: BigDecimal?,
     val repo: String,
     val project: String?,
-    val branch: String?
+    val branch: String?,
 )

@@ -35,30 +35,32 @@ fun loadPassingExample() {
 }
 
 fun loadAllExamples() {
-    val testResults = listOf(
-        resultsXmlLoader.passing(),
-        resultsXmlLoader.failing(),
-        resultsXmlLoader.failingLongFailureMessage(),
-        resultsXmlLoader.longOutput(),
-        resultsXmlLoader.output(),
-        resultsXmlLoader.reallyLongOutput(),
-        resultsXmlLoader.reallyLongOutput5000(),
-        resultsXmlLoader.reallyLongOutput10000(),
-        resultsXmlLoader.someIgnored(),
-        resultsXmlLoader.someIgnoredSomeFailing()
-    )
+    val testResults =
+        listOf(
+            resultsXmlLoader.passing(),
+            resultsXmlLoader.failing(),
+            resultsXmlLoader.failingLongFailureMessage(),
+            resultsXmlLoader.longOutput(),
+            resultsXmlLoader.output(),
+            resultsXmlLoader.reallyLongOutput(),
+            resultsXmlLoader.reallyLongOutput5000(),
+            resultsXmlLoader.reallyLongOutput10000(),
+            resultsXmlLoader.someIgnored(),
+            resultsXmlLoader.someIgnoredSomeFailing(),
+        )
 
     val saveResultsResponse = sendResultsToServer(testResults)
     println("View run with all tests at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
 fun loadLargeOutputExamples() {
-    val testResults = listOf(
-        resultsXmlLoader.reallyLongOutput(),
-        resultsXmlLoader.reallyLongOutput5000(),
-        resultsXmlLoader.reallyLongOutput10000(),
-        resultsXmlLoader.reallyLongOutput100k(),
-    )
+    val testResults =
+        listOf(
+            resultsXmlLoader.reallyLongOutput(),
+            resultsXmlLoader.reallyLongOutput5000(),
+            resultsXmlLoader.reallyLongOutput10000(),
+            resultsXmlLoader.reallyLongOutput100k(),
+        )
 
     val saveResultsResponse = sendResultsToServer(testResults)
     println("View run with large output at $uiBaseUrl${saveResultsResponse.uri}")
@@ -75,73 +77,96 @@ fun loadCypressExamplesWithFilePaths() {
 }
 
 fun loadCypressAndJestExamplesWithFilePaths() {
-    val groupedResults = groupedResultsXmlLoader.wrapResultsXmlsInGroup(
-        listOf(
-            resultsXmlLoader.cypressAttachmentsSpecWithFilePath(),
-            resultsXmlLoader.cypressRepositoryTimelineSpecWithFilePath(),
-            resultsXmlLoader.cypressWithFilePathAndRootSuiteNameSet(),
-            resultsXmlLoader.jestUiFilePath()
+    val groupedResults =
+        groupedResultsXmlLoader.wrapResultsXmlsInGroup(
+            listOf(
+                resultsXmlLoader.cypressAttachmentsSpecWithFilePath(),
+                resultsXmlLoader.cypressRepositoryTimelineSpecWithFilePath(),
+                resultsXmlLoader.cypressWithFilePathAndRootSuiteNameSet(),
+                resultsXmlLoader.jestUiFilePath(),
+            ),
         )
-    )
 
     val saveResultsResponse = sendGroupedResultsToServer(groupedResults)
     println("View run with Cypress and Jest tests with file paths at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
 fun loadCypressWithFilePathAndRootSuiteNameSet() {
-    val groupedResults = groupedResultsXmlLoader.wrapResultsXmlsInGroup(
-        listOf(
-            resultsXmlLoader.cypressWithFilePathAndRootSuiteNameSet()
+    val groupedResults =
+        groupedResultsXmlLoader.wrapResultsXmlsInGroup(
+            listOf(
+                resultsXmlLoader.cypressWithFilePathAndRootSuiteNameSet(),
+            ),
         )
-    )
 
     val saveResultsResponse = sendGroupedResultsToServer(groupedResults)
     println("View run with Cypress tests with file path and root suite name set at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
 fun loadFailingCypressTestWithAttachment() {
-    val resultsBody = groupedResultsXmlLoader.wrapResultsXmlsInGroup(
-        listOf(
-            resultsXmlLoader.cypressFailingAttachmentsTestWithScreenshot(),
-            resultsXmlLoader.cypressFailingDashboardTestWithScreenshots()
+    val resultsBody =
+        groupedResultsXmlLoader.wrapResultsXmlsInGroup(
+            listOf(
+                resultsXmlLoader.cypressFailingAttachmentsTestWithScreenshot(),
+                resultsXmlLoader.cypressFailingDashboardTestWithScreenshots(),
+            ),
         )
-    )
 
     val saveResultsResponse = sendGroupedResultsToServer(resultsBody)
-    sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/dashboard -- should show failed test case summaries on dashboard page (failed).png")
-    sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/dashboard -- should show test run summary data on dashboard page (failed).png")
-    sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/test run with attachments -- should list attachments on attachments page (failed).png")
+    sendAttachmentToServer(
+        saveResultsResponse.id,
+        "src/main/resources/dashboard -- should show failed test case summaries on dashboard page (failed).png",
+    )
+    sendAttachmentToServer(
+        saveResultsResponse.id,
+        "src/main/resources/dashboard -- should show test run summary data on dashboard page (failed).png",
+    )
+    sendAttachmentToServer(
+        saveResultsResponse.id,
+        "src/main/resources/test run with attachments -- should list attachments on attachments page (failed).png",
+    )
 
     println("View run with failing Cypress test with attachment screenshot at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
 fun loadFailingCypressTestWithScreenshotAndVideoAttachments() {
-    val resultsBody = groupedResultsXmlLoader.wrapResultsXmlsInGroup(
-        listOf(
-            resultsXmlLoader.cypressFailingAttachmentsTestWithScreenshot(),
-            resultsXmlLoader.cypressFailingDashboardTestWithScreenshots()
+    val resultsBody =
+        groupedResultsXmlLoader.wrapResultsXmlsInGroup(
+            listOf(
+                resultsXmlLoader.cypressFailingAttachmentsTestWithScreenshot(),
+                resultsXmlLoader.cypressFailingDashboardTestWithScreenshots(),
+            ),
         )
-    )
 
     val saveResultsResponse = sendGroupedResultsToServer(resultsBody)
-    sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/dashboard -- should show failed test case summaries on dashboard page (failed).png")
-    sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/dashboard -- should show test run summary data on dashboard page (failed).png")
-    sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/test run with attachments -- should list attachments on attachments page (failed).png")
+    sendAttachmentToServer(
+        saveResultsResponse.id,
+        "src/main/resources/dashboard -- should show failed test case summaries on dashboard page (failed).png",
+    )
+    sendAttachmentToServer(
+        saveResultsResponse.id,
+        "src/main/resources/dashboard -- should show test run summary data on dashboard page (failed).png",
+    )
+    sendAttachmentToServer(
+        saveResultsResponse.id,
+        "src/main/resources/test run with attachments -- should list attachments on attachments page (failed).png",
+    )
     sendAttachmentToServer(saveResultsResponse.id, "src/main/resources/attachments.spec.js.mp4")
 
     println("View run with failing Cypress test with screenshot and video attachments at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
 fun loadSixFailingTests() {
-    val resultsBody = groupedResultsXmlLoader.wrapResultsXmlsInGroup(
-        listOf(
-            resultsXmlLoader.failing(),
-            resultsXmlLoader.failingLongFailureMessage(),
-            resultsXmlLoader.someIgnoredSomeFailing(),
-            resultsXmlLoader.gradleSingleTestCaseSystemOutFail(),
-            resultsXmlLoader.failingAnother()
+    val resultsBody =
+        groupedResultsXmlLoader.wrapResultsXmlsInGroup(
+            listOf(
+                resultsXmlLoader.failing(),
+                resultsXmlLoader.failingLongFailureMessage(),
+                resultsXmlLoader.someIgnoredSomeFailing(),
+                resultsXmlLoader.gradleSingleTestCaseSystemOutFail(),
+                resultsXmlLoader.failingAnother(),
+            ),
         )
-    )
 
     val saveResultsResponse = sendGroupedResultsToServer(resultsBody)
 
@@ -149,7 +174,10 @@ fun loadSixFailingTests() {
 }
 
 fun loadPassingGroupedExample() {
-    val saveResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.resultsWithCoverage(resultsXmls = listOf(resultsXmlLoader.passing()), coverageXmls = listOf()))
+    val saveResultsResponse =
+        sendGroupedResultsToServer(
+            groupedResultsXmlLoader.resultsWithCoverage(resultsXmls = listOf(resultsXmlLoader.passing()), coverageXmls = listOf()),
+        )
     println("View run with passing grouped tests at at $uiBaseUrl${saveResultsResponse.uri}")
 }
 
@@ -175,7 +203,8 @@ fun loadK6Examples() {
     val k6ExampleResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXmlLoader.k6Example()))
     println("View run with k6 example results at at $uiBaseUrl${k6ExampleResponse.uri}")
 
-    val k6GetFailedTestCasesLargeResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXmlLoader.k6GetFailedTestCasesLarge()))
+    val k6GetFailedTestCasesLargeResponse =
+        sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXmlLoader.k6GetFailedTestCasesLarge()))
     println("View run with k6 getFailedTestCasesLarge results at at $uiBaseUrl${k6GetFailedTestCasesLargeResponse.uri}")
 }
 
@@ -217,13 +246,25 @@ fun loadMultipleCoverageWithPreviousRunExample() {
 }
 
 fun loadCoberturaCoverageUi() {
-    val currentResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.resultsWithCoverage(resultsXmls = listOf(resultsXmlLoader.jestUi()), coverageXmls = listOf(CoberturaXmlLoader().uiCobertura())))
+    val currentResultsResponse =
+        sendGroupedResultsToServer(
+            groupedResultsXmlLoader.resultsWithCoverage(
+                resultsXmls = listOf(resultsXmlLoader.jestUi()),
+                coverageXmls = listOf(CoberturaXmlLoader().uiCobertura()),
+            ),
+        )
 
     println("View run with Cobertura coverage and UI results at $uiBaseUrl${currentResultsResponse.uri}")
 }
 
 fun loadCoberturaCoverageNoDocType() {
-    val currentResultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.resultsWithCoverage(resultsXmls = listOf(), coverageXmls = listOf(CoberturaXmlLoader().noDoctypeCobertura())))
+    val currentResultsResponse =
+        sendGroupedResultsToServer(
+            groupedResultsXmlLoader.resultsWithCoverage(
+                resultsXmls = listOf(),
+                coverageXmls = listOf(CoberturaXmlLoader().noDoctypeCobertura()),
+            ),
+        )
 
     println("View run with Cobertura coverage without DocType at $uiBaseUrl${currentResultsResponse.uri}")
 }
@@ -239,18 +280,22 @@ fun loadCloverCoverageLarge() {
     resultsMetadata.git = gitMetadata
     resultsMetadata.ci = true
 
-    val currentResultsResponse = sendGroupedResultsToServer(
-        groupedResultsXmlLoader.resultsWithCoverage(
-            resultsXmls = listOf(resultsXmlLoader.jestUi()),
-            coverageXmls = listOf(CloverXmlLoader().uiCloverLarge()),
-            metadata = resultsMetadata
+    val currentResultsResponse =
+        sendGroupedResultsToServer(
+            groupedResultsXmlLoader.resultsWithCoverage(
+                resultsXmls = listOf(resultsXmlLoader.jestUi()),
+                coverageXmls = listOf(CloverXmlLoader().uiCloverLarge()),
+                metadata = resultsMetadata,
+            ),
         )
-    )
 
     println("View run with large Clover coverage and UI results at $uiBaseUrl${currentResultsResponse.uri}")
 }
 
-fun loadMultipleTestRunsFromSameRepoForTimeline(repoName: String = "timeline-org/timeline-repo", printLink: Boolean = true) {
+fun loadMultipleTestRunsFromSameRepoForTimeline(
+    repoName: String = "timeline-org/timeline-repo",
+    printLink: Boolean = true,
+) {
     val branchName = "main"
     val gitMetadata = GitMetadata()
     gitMetadata.repoName = repoName
@@ -261,9 +306,15 @@ fun loadMultipleTestRunsFromSameRepoForTimeline(repoName: String = "timeline-org
     resultsMetadata.ci = true
 
     sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata))
-    sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.jestUi(), metadata = resultsMetadata))
-    sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.longOutput(), metadata = resultsMetadata))
-    sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.someIgnored(), metadata = resultsMetadata))
+    sendGroupedResultsToServer(
+        groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.jestUi(), metadata = resultsMetadata),
+    )
+    sendGroupedResultsToServer(
+        groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.longOutput(), metadata = resultsMetadata),
+    )
+    sendGroupedResultsToServer(
+        groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.someIgnored(), metadata = resultsMetadata),
+    )
 
     if (printLink) {
         println("View repository test run timeline at $uiBaseUrl/repository/$repoName")
@@ -291,8 +342,12 @@ fun loadMultipleShortTestRunsFromSameRepoForTimeline() {
     resultsMetadata.ci = true
 
     sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata))
-    sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.longOutput(), metadata = resultsMetadata))
-    sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.someIgnored(), metadata = resultsMetadata))
+    sendGroupedResultsToServer(
+        groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.longOutput(), metadata = resultsMetadata),
+    )
+    sendGroupedResultsToServer(
+        groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.someIgnored(), metadata = resultsMetadata),
+    )
 
     println("View repository short test run timeline at $uiBaseUrl/repository/$repoName")
 }
@@ -308,9 +363,15 @@ fun slowTimeline() {
     resultsMetadata.git = gitMetadata
     resultsMetadata.ci = true
 
-    sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.slow(), metadata = resultsMetadata))
-    sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.slower(), metadata = resultsMetadata))
-    sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.slow(), metadata = resultsMetadata))
+    sendGroupedResultsToServer(
+        groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.slow(), metadata = resultsMetadata),
+    )
+    sendGroupedResultsToServer(
+        groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.slower(), metadata = resultsMetadata),
+    )
+    sendGroupedResultsToServer(
+        groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.slow(), metadata = resultsMetadata),
+    )
 
     println("View repository slow tests run timeline at $uiBaseUrl/repository/$repoName")
 }
@@ -380,12 +441,13 @@ fun loadCoverage75WithGit() {
     val coverageFile = CoverageFile()
     coverageFile.reportContents = JacocoXmlLoader().jacocoXmlParser75()
 
-    val resultsResponse = sendGroupedResultsToServer(
-        groupedResultsXmlLoader.passingResultsWithCoverage(
-            coverageFiles = listOf(coverageFile),
-            metadata = resultsMetadata
+    val resultsResponse =
+        sendGroupedResultsToServer(
+            groupedResultsXmlLoader.passingResultsWithCoverage(
+                coverageFiles = listOf(coverageFile),
+                metadata = resultsMetadata,
+            ),
         )
-    )
 
     println("View run 75% coverage and Git metadata at $uiBaseUrl${resultsResponse.uri}")
 }
@@ -403,12 +465,13 @@ fun loadCoverage85WithGit() {
     val coverageFile = CoverageFile()
     coverageFile.reportContents = JacocoXmlLoader().jacocoXmlParser85()
 
-    val resultsResponse = sendGroupedResultsToServer(
-        groupedResultsXmlLoader.passingResultsWithCoverage(
-            coverageFiles = listOf(coverageFile),
-            metadata = resultsMetadata
+    val resultsResponse =
+        sendGroupedResultsToServer(
+            groupedResultsXmlLoader.passingResultsWithCoverage(
+                coverageFiles = listOf(coverageFile),
+                metadata = resultsMetadata,
+            ),
         )
-    )
 
     println("View run 85% coverage and Git metadata at $uiBaseUrl${resultsResponse.uri}")
 }
@@ -448,15 +511,24 @@ fun repositoryFlakyTests() {
     branchResultsMetadata.ci = true
 
     repeat(5) {
-        sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.failing(), metadata = mainResultsMetadata))
+        sendGroupedResultsToServer(
+            groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.failing(), metadata = mainResultsMetadata),
+        )
     }
 
     repeat(6) {
-        sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.failingLongFailureMessage(), metadata = branchResultsMetadata))
+        sendGroupedResultsToServer(
+            groupedResultsXmlLoader.wrapResultsXmlInGroup(
+                resultsXml = resultsXmlLoader.failingLongFailureMessage(),
+                metadata = branchResultsMetadata,
+            ),
+        )
     }
 
     repeat(2) {
-        sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.passing(), metadata = mainResultsMetadata))
+        sendGroupedResultsToServer(
+            groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.passing(), metadata = mainResultsMetadata),
+        )
     }
 
     println("View repository with flaky tests at $uiBaseUrl/repository/$repoName/tests/flaky")
@@ -477,13 +549,15 @@ fun loadJestWithCoverageManyMissedLines() {
 }
 
 fun loadJestWithFilePaths() {
-    val resultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.jestUiFilePath()))
+    val resultsResponse =
+        sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.jestUiFilePath()))
 
     println("View run with Jest results with file paths at $uiBaseUrl${resultsResponse.uri}")
 }
 
 fun loadJestWithFailures() {
-    val resultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.jestUiFailures()))
+    val resultsResponse =
+        sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXmlLoader.jestUiFailures()))
 
     println("View run with Jest results with failures at $uiBaseUrl${resultsResponse.uri}")
 }
@@ -520,13 +594,18 @@ fun performanceSingleTestTimeline() {
     val k6GetRunResults = PerformanceResultsLoader().k6GetRun()
 
     sendGroupedResultsToServer(groupedResultsXmlLoader.wrapPerformanceResultsInGroup(testName, k6GetRunResults, resultsMetadata))
-    sendGroupedResultsToServer(groupedResultsXmlLoader.wrapPerformanceResultsInGroup(testName, k6GetFailedTestCasesLargeResults, resultsMetadata))
+    sendGroupedResultsToServer(
+        groupedResultsXmlLoader.wrapPerformanceResultsInGroup(testName, k6GetFailedTestCasesLargeResults, resultsMetadata),
+    )
     sendGroupedResultsToServer(groupedResultsXmlLoader.wrapPerformanceResultsInGroup(testName, k6GetRunResults, resultsMetadata))
 
     println("View performance test timeline with single test at $uiBaseUrl/repository/$repoName")
 }
 
-fun repositoryCoverageTimeline(repoName: String = "cov-org/cov-repo", printLink: Boolean = true) {
+fun repositoryCoverageTimeline(
+    repoName: String = "cov-org/cov-repo",
+    printLink: Boolean = true,
+) {
     val branchName = "main"
     val gitMetadata = GitMetadata()
     gitMetadata.repoName = repoName
@@ -535,12 +614,30 @@ fun repositoryCoverageTimeline(repoName: String = "cov-org/cov-repo", printLink:
     val resultsMetadata = ResultsMetadata()
     resultsMetadata.git = gitMetadata
 
-    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().jacocoXmlParser())
-    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().jacocoXmlParserReduced())
-    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().serverAppReduced())
-    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().serverApp())
-    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().junitResultsParser())
-    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id, JacocoXmlLoader().junitResultsParserReduced())
+    sendCoverageToServer(
+        sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id,
+        JacocoXmlLoader().jacocoXmlParser(),
+    )
+    sendCoverageToServer(
+        sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id,
+        JacocoXmlLoader().jacocoXmlParserReduced(),
+    )
+    sendCoverageToServer(
+        sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id,
+        JacocoXmlLoader().serverAppReduced(),
+    )
+    sendCoverageToServer(
+        sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id,
+        JacocoXmlLoader().serverApp(),
+    )
+    sendCoverageToServer(
+        sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id,
+        JacocoXmlLoader().junitResultsParser(),
+    )
+    sendCoverageToServer(
+        sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id,
+        JacocoXmlLoader().junitResultsParserReduced(),
+    )
 
     if (printLink) {
         println("View repository coverage timeline at $uiBaseUrl/repository/$repoName")
@@ -564,12 +661,30 @@ fun repositoryCoverageTimelineDifferentBranches() {
     val resultsMetadataBranch = ResultsMetadata()
     resultsMetadataBranch.git = gitMetadataBranch
 
-    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataMain)).id, JacocoXmlLoader().jacocoXmlParser())
-    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataMain)).id, JacocoXmlLoader().jacocoXmlParserReduced())
-    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataMain)).id, JacocoXmlLoader().serverAppReduced())
-    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataBranch)).id, JacocoXmlLoader().serverApp())
-    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataBranch)).id, JacocoXmlLoader().junitResultsParser())
-    sendCoverageToServer(sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataBranch)).id, JacocoXmlLoader().junitResultsParserReduced())
+    sendCoverageToServer(
+        sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataMain)).id,
+        JacocoXmlLoader().jacocoXmlParser(),
+    )
+    sendCoverageToServer(
+        sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataMain)).id,
+        JacocoXmlLoader().jacocoXmlParserReduced(),
+    )
+    sendCoverageToServer(
+        sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataMain)).id,
+        JacocoXmlLoader().serverAppReduced(),
+    )
+    sendCoverageToServer(
+        sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataBranch)).id,
+        JacocoXmlLoader().serverApp(),
+    )
+    sendCoverageToServer(
+        sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataBranch)).id,
+        JacocoXmlLoader().junitResultsParser(),
+    )
+    sendCoverageToServer(
+        sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadataBranch)).id,
+        JacocoXmlLoader().junitResultsParserReduced(),
+    )
 
     println("View repository coverage timeline with different branches at $uiBaseUrl/repository/$repoName")
 }
@@ -586,7 +701,10 @@ fun coveragePayloadWithBaseDirectory() {
 
     val resultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata))
     val publicId = resultsResponse.id
-    sendCoveragePayloadToServer(publicId, createCoverageFilePayload(JacocoXmlLoader().jacocoXmlParser(), "server/parsing/jacoco-xml-parser/src/main/kotlin"))
+    sendCoveragePayloadToServer(
+        publicId,
+        createCoverageFilePayload(JacocoXmlLoader().jacocoXmlParser(), "server/parsing/jacoco-xml-parser/src/main/kotlin"),
+    )
     sendCoveragePayloadToServer(publicId, createCoverageFilePayload(JacocoXmlLoader().serverApp(), "server/server-app/src/main/kotlin"))
 
     println("View run with coverage base directory and Git metadata at $uiBaseUrl${resultsResponse.uri}")
@@ -610,7 +728,10 @@ fun codeQualityTwoReports() {
     codeQualityReport2.contents = readFileContents("quality/server-app-ktlint.txt")
     codeQualityReport2.fileName = "server-app-ktlint.txt"
 
-    val resultsResponse = sendGroupedResultsToServer(groupedResultsXmlLoader.codeQualityResults(listOf(codeQualityReport1, codeQualityReport2), metadata = resultsMetadata))
+    val resultsResponse =
+        sendGroupedResultsToServer(
+            groupedResultsXmlLoader.codeQualityResults(listOf(codeQualityReport1, codeQualityReport2), metadata = resultsMetadata),
+        )
     println("View run with two code quality reports at $uiBaseUrl${resultsResponse.uri}")
 }
 
@@ -640,8 +761,7 @@ fun invalidResults() {
     println("View admin page with results failures at $uiBaseUrl/admin")
 }
 
-fun sendResultsToServer(resultXmlList: List<String>): SaveResultsResponse =
-    resultXmlList.joinToString("\n").let(::sendResultsToServer)
+fun sendResultsToServer(resultXmlList: List<String>): SaveResultsResponse = resultXmlList.joinToString("\n").let(::sendResultsToServer)
 
 fun sendResultsToServer(resultsBlob: String): SaveResultsResponse {
     val client = OkHttpClient()
@@ -649,10 +769,11 @@ fun sendResultsToServer(resultsBlob: String): SaveResultsResponse {
     val url = "$serverBaseUrl/results"
     val requestBody = resultsBlob.toRequestBody(plainTextMediaType)
 
-    val request = Request.Builder()
-        .url(url)
-        .post(requestBody)
-        .build()
+    val request =
+        Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
 
     val response = client.newCall(request).execute()
     val responseString = response.body?.string()
@@ -664,17 +785,21 @@ fun readFileContents(resourcesRelativePath: String): String {
     return file.readText()
 }
 
-fun sendAttachmentToServer(publicId: String, attachmentFilePath: String) {
+fun sendAttachmentToServer(
+    publicId: String,
+    attachmentFilePath: String,
+) {
     val attachmentFile = File(attachmentFilePath)
     val client = OkHttpClient()
     val mediaType = "octet/stream".toMediaType()
     val url = "$serverBaseUrl/run/$publicId/attachments/${attachmentFile.name}"
     val requestBody = attachmentFile.readBytes().toRequestBody(mediaType)
 
-    val request = Request.Builder()
-        .url(url)
-        .post(requestBody)
-        .build()
+    val request =
+        Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
 
     val response = client.newCall(request).execute()
     println("Response code ${response.code} from uploading attachment $attachmentFilePath")
@@ -686,42 +811,51 @@ fun sendGroupedResultsToServer(groupedResultsJson: String): SaveResultsResponse 
     val url = "$serverBaseUrl/groupedResults"
     val requestBody = groupedResultsJson.toRequestBody(mediaType)
 
-    val request = Request.Builder()
-        .url(url)
-        .post(requestBody)
-        .build()
+    val request =
+        Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
 
     val response = client.newCall(request).execute()
     val responseString = response.body?.string()
     return Gson().fromJson(responseString, SaveResultsResponse::class.java)
 }
 
-fun sendCoverageToServer(publicId: String, reportXml: String) {
+fun sendCoverageToServer(
+    publicId: String,
+    reportXml: String,
+) {
     val client = OkHttpClient()
 
     val mediaType = "text/plain".toMediaType()
     val url = "$serverBaseUrl/run/$publicId/coverage"
     val requestBody = reportXml.toRequestBody(mediaType)
 
-    val request = Request.Builder()
-        .url(url)
-        .post(requestBody)
-        .build()
+    val request =
+        Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
 
     client.newCall(request).execute()
 }
 
-fun sendCoveragePayloadToServer(publicId: String, reportPayload: String) {
+fun sendCoveragePayloadToServer(
+    publicId: String,
+    reportPayload: String,
+) {
     val client = OkHttpClient()
 
     val mediaType = "application/json".toMediaType()
     val url = "$serverBaseUrl/run/$publicId/coverageFile"
     val requestBody = reportPayload.toRequestBody(mediaType)
 
-    val request = Request.Builder()
-        .url(url)
-        .post(requestBody)
-        .build()
+    val request =
+        Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
 
     client.newCall(request).execute()
 }

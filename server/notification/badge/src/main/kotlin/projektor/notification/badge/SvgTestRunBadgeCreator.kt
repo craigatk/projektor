@@ -11,21 +11,24 @@ class SvgTestRunBadgeCreator(templateFileName: String = "test_run.template.svg")
         val buildLabel = BuildLabel.of(testRunPassed)
         val fillColor = buildLabel.fillColor
 
-        val displayText = if (testRunPassed) {
-            "passing"
-        } else {
-            "failing"
-        }
+        val displayText =
+            if (testRunPassed) {
+                "passing"
+            } else {
+                "failing"
+            }
 
-        val svgText = svgTemplate
-            .replace("{displayText}", displayText)
-            .replace("{fillColor}", fillColor)
+        val svgText =
+            svgTemplate
+                .replace("{displayText}", displayText)
+                .replace("{fillColor}", fillColor)
 
         return svgText
     }
 
-    private fun loadTextFromFile(filename: String) = javaClass
-        .getResourceAsStream("/$filename")
-        .bufferedReader()
-        .readText()
+    private fun loadTextFromFile(filename: String) =
+        javaClass
+            .getResourceAsStream("/$filename")
+            .bufferedReader()
+            .readText()
 }

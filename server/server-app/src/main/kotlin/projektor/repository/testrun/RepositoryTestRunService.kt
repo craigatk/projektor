@@ -8,15 +8,17 @@ import kotlin.math.min
 class RepositoryTestRunService(private val repositoryTestRunRepository: RepositoryTestRunRepository) {
     private val flakyTestCalculator = FlakyTestCalculator()
 
-    suspend fun fetchRepositoryTestRunTimeline(repoName: String, projectName: String?) =
-        repositoryTestRunRepository.fetchRepositoryTestRunTimeline(repoName, projectName)
+    suspend fun fetchRepositoryTestRunTimeline(
+        repoName: String,
+        projectName: String?,
+    ) = repositoryTestRunRepository.fetchRepositoryTestRunTimeline(repoName, projectName)
 
     suspend fun fetchFlakyTests(
         repoName: String,
         projectName: String?,
         maxRuns: Int,
         flakyFailureThreshold: Int,
-        branchType: BranchType
+        branchType: BranchType,
     ): List<RepositoryFlakyTest> {
         val failingTestCases = repositoryTestRunRepository.fetchRepositoryFailingTestCases(repoName, projectName, maxRuns, branchType)
         val totalTestRunCount = repositoryTestRunRepository.fetchTestRunCount(repoName, projectName)
@@ -25,6 +27,9 @@ class RepositoryTestRunService(private val repositoryTestRunRepository: Reposito
         return flakyTestCalculator.calculateFlakyTests(failingTestCases, flakyFailureThreshold, testRunCount)
     }
 
-    suspend fun fetchRepositoryTestRunSummaries(repoName: String, projectName: String?, limit: Int): List<TestRunSummary> =
-        repositoryTestRunRepository.fetchRepositoryTestRunSummaries(repoName, projectName, limit)
+    suspend fun fetchRepositoryTestRunSummaries(
+        repoName: String,
+        projectName: String?,
+        limit: Int,
+    ): List<TestRunSummary> = repositoryTestRunRepository.fetchRepositoryTestRunSummaries(repoName, projectName, limit)
 }

@@ -5,5 +5,5 @@ data class ReportCommentGitData(
     val repoName: String,
     val branchName: String?,
     val commitSha: String? = null,
-    val pullRequestNumber: Int? = null
+    val pullRequestNumber: Int? = null,
 )

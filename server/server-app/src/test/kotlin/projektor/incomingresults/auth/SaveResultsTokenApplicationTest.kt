@@ -25,7 +25,7 @@ class SaveResultsTokenApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/results") {
                 addHeader(HttpHeaders.ContentType, "text/plain")
-                addHeader(AuthConfig.PublishToken, validPublishToken)
+                addHeader(AuthConfig.PUBLISH_TOKEN, validPublishToken)
                 setBody(requestBody)
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
@@ -49,7 +49,7 @@ class SaveResultsTokenApplicationTest : ApplicationTestCase() {
         withTestApplication(::createTestApplication) {
             handleRequest(HttpMethod.Post, "/results") {
                 addHeader(HttpHeaders.ContentType, "text/plain")
-                addHeader(AuthConfig.PublishToken, "notPublish12345")
+                addHeader(AuthConfig.PUBLISH_TOKEN, "notPublish12345")
                 setBody(requestBody)
             }.apply {
                 expectThat(response.status()).isEqualTo(HttpStatusCode.Unauthorized)

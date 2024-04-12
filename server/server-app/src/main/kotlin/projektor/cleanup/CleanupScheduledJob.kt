@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 
 class CleanupScheduledJob(
     private val testRunCleanupService: TestRunCleanupService,
-    private val attachmentCleanupService: AttachmentCleanupService?
+    private val attachmentCleanupService: AttachmentCleanupService?,
 ) : Runnable {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
@@ -24,21 +24,22 @@ class CleanupScheduledJob(
     }
 
     companion object {
-        const val cleanupJobName = "cleanup_old_test_runs"
+        const val CLEANUP_JOB_NAME = "cleanup_old_test_runs"
 
         fun conditionallyStartCleanupScheduledJob(
             cleanupConfig: CleanupConfig,
             testRunCleanupService: TestRunCleanupService,
             attachmentCleanupService: AttachmentCleanupService?,
-            scheduler: Scheduler
+            scheduler: Scheduler,
         ) {
             if (cleanupConfig.enabled) {
                 val cleanupScheduledJob = CleanupScheduledJob(testRunCleanupService, attachmentCleanupService)
-                val job = ScheduledJob(
-                    cleanupJobName,
-                    cleanupScheduledJob,
-                    ScheduleDelay(1, TimeUnit.DAYS)
-                )
+                val job =
+                    ScheduledJob(
+                        CLEANUP_JOB_NAME,
+                        cleanupScheduledJob,
+                        ScheduleDelay(1, TimeUnit.DAYS),
+                    )
 
                 scheduler.scheduleJob(job)
             }

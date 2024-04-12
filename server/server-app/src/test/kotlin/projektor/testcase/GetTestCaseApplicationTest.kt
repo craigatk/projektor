@@ -33,15 +33,15 @@ class GetTestCaseApplicationTest : ApplicationTestCase() {
                             "testSuite1",
                             listOf("testSuite1TestCase1"),
                             listOf("testSuite1TestCase2"),
-                            listOf()
+                            listOf(),
                         ),
                         TestSuiteData(
                             "testSuite2",
                             listOf("testSuite2TestCase1", "testSuite2TestCase2", "testSuite2TestCase3"),
                             listOf(),
-                            listOf()
-                        )
-                    )
+                            listOf(),
+                        ),
+                    ),
                 )
             }.apply {
                 val responseTestCase = objectMapper.readValue(response.content, TestCase::class.java)

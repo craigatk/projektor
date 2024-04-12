@@ -10,9 +10,7 @@ import projektor.quality.CodeQualityReportRepository
 import projektor.server.api.PublicId
 import projektor.server.api.quality.CodeQualityReports
 
-fun Route.codeQuality(
-    codeQualityReportRepository: CodeQualityReportRepository
-) {
+fun Route.codeQuality(codeQualityReportRepository: CodeQualityReportRepository) {
     get("/run/{publicId}/quality") {
         val publicId = call.parameters.getOrFail("publicId")
 

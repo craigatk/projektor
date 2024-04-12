@@ -15,7 +15,6 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class MessageApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `when single global message should return it`() {
         val publicId = randomPublicId()

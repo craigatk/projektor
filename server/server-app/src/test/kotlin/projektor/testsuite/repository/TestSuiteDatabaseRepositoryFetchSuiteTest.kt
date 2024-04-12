@@ -16,7 +16,6 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 
 class TestSuiteDatabaseRepositoryFetchSuiteTest : DatabaseRepositoryTestCase() {
-
     @Test
     fun `when test suite failed should fetch test suite along with test cases and failures`() {
         val testSuiteDatabaseRepository = TestSuiteDatabaseRepository(dslContext)
@@ -29,15 +28,15 @@ class TestSuiteDatabaseRepositoryFetchSuiteTest : DatabaseRepositoryTestCase() {
                     "testSuite1",
                     listOf("testSuite1PassedTestCase1"),
                     listOf("testSuite1FailedTestCase1", "testSuite1FailedTestCase2"),
-                    listOf()
+                    listOf(),
                 ),
                 TestSuiteData(
                     "testSuite2",
                     listOf("testSuite2TestCase1", "testSuite2TestCase2", "testSuite2TestCase3"),
                     listOf(),
-                    listOf()
-                )
-            )
+                    listOf(),
+                ),
+            ),
         )
 
         val testSuite = runBlocking { testSuiteDatabaseRepository.fetchTestSuite(publicId, 1) }
@@ -96,17 +95,18 @@ class TestSuiteDatabaseRepositoryFetchSuiteTest : DatabaseRepositoryTestCase() {
     fun `should not fetch system out and err columns when fetching individual test suite`() {
         val publicId = randomPublicId()
 
-        val testRunDB = testRunDBGenerator.createTestRun(
-            publicId,
-            listOf(
-                TestSuiteData(
-                    "testSuite1",
-                    listOf("testSuite1PassedTestCase1"),
-                    listOf(),
-                    listOf()
-                )
+        val testRunDB =
+            testRunDBGenerator.createTestRun(
+                publicId,
+                listOf(
+                    TestSuiteData(
+                        "testSuite1",
+                        listOf("testSuite1PassedTestCase1"),
+                        listOf(),
+                        listOf(),
+                    ),
+                ),
             )
-        )
 
         val testSuiteIdx = 1
 
@@ -116,10 +116,11 @@ class TestSuiteDatabaseRepositoryFetchSuiteTest : DatabaseRepositoryTestCase() {
             .where(Tables.TEST_SUITE.TEST_RUN_ID.eq(testRunDB.id).and(Tables.TEST_SUITE.IDX.eq(testSuiteIdx)))
             .execute()
 
-        val testSuites = TestSuiteDatabaseRepository.selectTestSuite(dslContext)
-            .where(Tables.TEST_RUN.PUBLIC_ID.eq(publicId.id).and(Tables.TEST_SUITE.IDX.eq(testSuiteIdx)))
-            .orderBy(Tables.TEST_SUITE.ID)
-            .fetchInto(TestSuite::class.java)
+        val testSuites =
+            TestSuiteDatabaseRepository.selectTestSuite(dslContext)
+                .where(Tables.TEST_RUN.PUBLIC_ID.eq(publicId.id).and(Tables.TEST_SUITE.IDX.eq(testSuiteIdx)))
+                .orderBy(Tables.TEST_SUITE.ID)
+                .fetchInto(TestSuite::class.java)
 
         expectThat(testSuites).hasSize(1)
 

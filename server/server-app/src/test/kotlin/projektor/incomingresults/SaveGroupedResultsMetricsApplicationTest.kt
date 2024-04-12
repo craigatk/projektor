@@ -19,7 +19,6 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class SaveGroupedResultsMetricsApplicationTest : ApplicationTestCase() {
-
     @Test
     fun `should record success metric when saving grouped test results succeeds`() {
         val requestBody = GroupedResultsXmlLoader().passingGroupedResults()
