@@ -57,10 +57,10 @@ class SingleProjectCoverageFunctionalSpec extends ProjektorPluginFunctionalSpeci
             assert overallStatsResponse.successful
 
             CoverageStats overallStats = overallStatsResponse.body()
-            assert overallStats.statementStat.covered == 8
-            assert overallStats.statementStat.missed == 4
-            assert overallStats.statementStat.total == 12
-            assert overallStats.statementStat.coveredPercentage == 66.67
+            assert overallStats.statementStat.covered == 10
+            assert overallStats.statementStat.missed == 0
+            assert overallStats.statementStat.total == 10
+            assert overallStats.statementStat.coveredPercentage == 100.00
 
             assert overallStats.lineStat.covered == 2
             assert overallStats.lineStat.missed == 0

@@ -15,6 +15,7 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 import strikt.assertions.isTrue
 import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
 
 class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
 
@@ -222,7 +223,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
         val recentTestRun = runBlocking { previousTestRunService.findMostRecentRunWithCoverage(repoName, projectName, BranchSearch(branchType = BranchType.MAINLINE)) }
         expectThat(recentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newPublicId)
-            get { createdTimestamp }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC))
+            get { createdTimestamp.truncatedTo(ChronoUnit.MILLIS) }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MILLIS))
             get { branch }.isEqualTo("main")
         }
     }
@@ -263,7 +264,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
         val recentTestRun = runBlocking { previousTestRunService.findMostRecentRun(repoName, null, BranchSearch(branchType = BranchType.MAINLINE)) }
         expectThat(recentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newPublicId)
-            get { createdTimestamp }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC))
+            get { createdTimestamp.truncatedTo(ChronoUnit.MILLIS) }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MILLIS))
             get { branch }.isEqualTo("main")
         }
     }
@@ -306,7 +307,7 @@ class PreviousTestRunServiceTest : DatabaseRepositoryTestCase() {
         val recentTestRun = runBlocking { previousTestRunService.findMostRecentRun(repoName, projectName, BranchSearch(branchType = BranchType.MAINLINE)) }
         expectThat(recentTestRun).isNotNull().and {
             get { publicId }.isEqualTo(newPublicId)
-            get { createdTimestamp }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC))
+            get { createdTimestamp.truncatedTo(ChronoUnit.MILLIS) }.isEqualTo(newTestRun.createdTimestamp.toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MILLIS))
             get { branch }.isEqualTo("main")
             get { passed }.isTrue()
         }

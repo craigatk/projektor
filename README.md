@@ -74,6 +74,20 @@ including the change in coverage percentage in the PR.
 
 Details on how to set this up are at https://projektor.dev/docs/github-pull-request/
 
+## Changelog
+
+### Projektor server
+
+[Projektor server changelog](CHANGELOG.md)
+
+### Projektor Gradle plugin
+
+[Projektor Gradle plugin changelog](https://projektor.dev/docs/gradle-plugin/#changelog)
+
+### Projektor Node script
+
+[Projektor Node script changelog](https://projektor.dev/docs/node-script/#changelog)
+
 ## Development
 
 For information on how Projektor is developed, how to build it from source and deploy it yourself, and other

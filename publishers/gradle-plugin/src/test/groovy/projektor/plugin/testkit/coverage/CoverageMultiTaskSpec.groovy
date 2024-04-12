@@ -86,7 +86,7 @@ class CoverageMultiTaskSpec extends SingleProjectSpec {
         coverageFilePayloads.size() == 1
 
         coverageFilePayloads[0].reportContents.contains("MyClass")
-        coverageFilePayloads[0].reportContents.contains('<counter type="LINE" missed="0" covered="2"/>')
+        coverageFilePayloads[0].reportContents.contains('<counter type="LINE" missed="1" covered="1"/>')
 
         where:
         gradleVersion                  | _

@@ -1,7 +1,7 @@
 apply plugin: "kotlin"
 apply plugin: "org.jlleitschuh.gradle.ktlint"
 
-sourceCompatibility = 11
+sourceCompatibility = 17
 
 compileKotlin {
     kotlinOptions.jvmTarget = "$sourceCompatibility"

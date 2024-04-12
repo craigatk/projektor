@@ -51,9 +51,9 @@ dependencies {
     implementation "io.ktor:ktor-server-metrics-micrometer:$ktor_version"
     implementation 'io.micrometer:micrometer-registry-influx:1.12.5'
 
-    implementation "net.javacrumbs.shedlock:shedlock-provider-jdbc-template:4.47.0"
+    implementation "net.javacrumbs.shedlock:shedlock-provider-jdbc-template:5.12.0"
 
-    implementation 'org.simpleflatmapper:sfm-jooq:8.2.3'
+    implementation 'org.simpleflatmapper:sfm-jooq:9.0.0'
 
     implementation "ch.qos.logback:logback-classic:$logbackVersion"
     implementation "net.logstash.logback:logstash-logback-encoder:7.4"
@@ -121,7 +121,7 @@ heroku {
     includes = ["${projectDir}/build/libs/server-app-1.0-all.jar".toString(), "${projectDir}/opentelemetry/opentelemetry-javaagent.jar".toString()]
     includeBuildDir = false
     appName = "projektorlive"
-    jdkVersion = "11"
+    jdkVersion = "17"
 }
 
 deployHeroku.dependsOn('assembleFull')
