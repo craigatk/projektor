@@ -116,6 +116,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
                 "test",
             )
 
+        stopKoin()
         startKoin {
             modules(
                 createAppModule(
