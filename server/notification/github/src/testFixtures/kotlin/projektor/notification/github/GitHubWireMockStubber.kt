@@ -1,6 +1,6 @@
 package projektor.notification.github
 
-import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.patch
@@ -9,7 +9,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 
-class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
+class GitHubWireMockStubber(private val wireMockServer: WireMock) {
     fun stubRepositoryRequests(
         orgName: String,
         repoName: String,
@@ -26,7 +26,7 @@ class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
     }
 
     fun stubApp() {
-        wireMockServer.stubFor(
+        wireMockServer.register(
             get(urlEqualTo("/app"))
                 .willReturn(
                     aResponse().withBody(
@@ -72,7 +72,7 @@ class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
         repoName: String,
         installationId: Int,
     ) {
-        wireMockServer.stubFor(
+        wireMockServer.register(
             get(urlEqualTo("/repos/$orgName/$repoName/installation"))
                 .willReturn(
                     aResponse().withBody(
@@ -125,10 +125,10 @@ class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
         orgName: String,
         repoName: String,
     ) {
-        wireMockServer.stubFor(
+        wireMockServer.register(
             get(urlEqualTo("/repos/$orgName/$repoName/installation"))
                 .willReturn(
-                    aResponse().withStatus(404),
+                    aResponse().withStatus(404).withBody(""),
                 ),
         )
     }
@@ -138,7 +138,7 @@ class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
         token: String,
         repositoryId: Int,
     ) {
-        wireMockServer.stubFor(
+        wireMockServer.register(
             post(urlEqualTo("/app/installations/$installationId/access_tokens"))
                 .willReturn(
                     aResponse().withBody(
@@ -236,7 +236,7 @@ class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
         repoName: String,
         repositoryId: Int,
     ) {
-        wireMockServer.stubFor(
+        wireMockServer.register(
             get(urlEqualTo("/repos/$orgName/$repoName"))
                 .willReturn(
                     aResponse().withBody(
@@ -472,7 +472,7 @@ class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
         repoName: String,
         issueId: Int,
     ) {
-        wireMockServer.stubFor(
+        wireMockServer.register(
             get(urlEqualTo("/repos/$orgName/$repoName/issues/$issueId"))
                 .willReturn(
                     aResponse().withBody(
@@ -597,7 +597,7 @@ class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
         repoName: String,
         issueId: Int,
     ) {
-        wireMockServer.stubFor(
+        wireMockServer.register(
             post(urlEqualTo("/repos/$orgName/$repoName/issues/$issueId/comments"))
                 .willReturn(
                     aResponse().withBody(
@@ -956,7 +956,7 @@ class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
                 """.trimIndent()
             }.joinToString(",")
 
-        wireMockServer.stubFor(
+        wireMockServer.register(
             get(urlEqualTo("/repos/$orgName/$repoName/pulls?state=open"))
                 .willReturn(
                     aResponse().withBody("[$responseBody]"),
@@ -997,7 +997,7 @@ class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
 """.trimIndent()
             }
 
-        wireMockServer.stubFor(
+        wireMockServer.register(
             get(urlEqualTo("/repos/$orgName/$repoName/issues/$issueId/comments"))
                 .willReturn(
                     aResponse().withBody("""[${responseBodies.joinToString(",")}]"""),
@@ -1036,7 +1036,7 @@ class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
             }
             """.trimIndent()
 
-        wireMockServer.stubFor(
+        wireMockServer.register(
             get(urlEqualTo("/repos/$orgName/$repoName/issues/comments/$commentId"))
                 .willReturn(
                     aResponse().withBody(responseBody),
@@ -1074,7 +1074,7 @@ class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
             }
             """.trimIndent()
 
-        wireMockServer.stubFor(
+        wireMockServer.register(
             patch(urlEqualTo("/repos/$orgName/$repoName/issues/comments/$commentId"))
                 .willReturn(
                     aResponse().withBody(responseBody),
@@ -1086,15 +1086,15 @@ class GitHubWireMockStubber(private val wireMockServer: WireMockServer) {
         orgName: String,
         repoName: String,
         issueId: Int,
-    ) = wireMockServer.findRequestsMatching(
-        postRequestedFor(urlEqualTo("/repos/$orgName/$repoName/issues/$issueId/comments")).build(),
-    ).requests.map { it.bodyAsString }
+    ) = wireMockServer.find(
+        postRequestedFor(urlEqualTo("/repos/$orgName/$repoName/issues/$issueId/comments")),
+    ).map { it.bodyAsString }
 
     fun findUpdateCommentRequestBodies(
         orgName: String,
         repoName: String,
         commentId: Int,
-    ) = wireMockServer.findRequestsMatching(
-        patchRequestedFor(urlEqualTo("/repos/$orgName/$repoName/issues/comments/$commentId")).build(),
-    ).requests.map { it.bodyAsString }
+    ) = wireMockServer.find(
+        patchRequestedFor(urlEqualTo("/repos/$orgName/$repoName/issues/comments/$commentId")),
+    ).map { it.bodyAsString }
 }

@@ -1,6 +1,7 @@
 package projektor.incomingresults
 
 import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
@@ -95,7 +96,7 @@ class SaveGroupedResultsWithMetadataPullRequestCommentApplicationTest : Applicat
 
     companion object {
         private val wireMockServer = WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort())
-        private val gitHubWireMockStubber = GitHubWireMockStubber(wireMockServer)
+        private val gitHubWireMockStubber = GitHubWireMockStubber(WireMock(wireMockServer))
 
         @BeforeAll
         @JvmStatic

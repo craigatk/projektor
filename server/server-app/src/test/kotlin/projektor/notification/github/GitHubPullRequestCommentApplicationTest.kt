@@ -1,6 +1,7 @@
 package projektor.notification.github
 
 import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
@@ -27,7 +28,7 @@ import strikt.assertions.hasSize
 
 class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
     private val wireMockServer = WireMockServer(wireMockConfig().dynamicPort())
-    private val gitHubWireMockStubber = GitHubWireMockStubber(wireMockServer)
+    private val gitHubWireMockStubber = GitHubWireMockStubber(WireMock(wireMockServer))
 
     @BeforeEach
     fun startWireMock() {
