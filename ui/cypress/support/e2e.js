@@ -41,3 +41,17 @@ Cypress.Commands.add("interceptTestRunBasicRequests", (publicId) => {
 
   cy.intercept("GET", `run/${publicId}/performance`, {});
 });
+
+Cypress.on("uncaught:exception", (err, runnable) => {
+  // Recharts throws an error with "ResizeObserver loop completed with undelivered notifications"
+  // so don't fail the test when that happens
+  // Ref https://docs.cypress.io/api/cypress-api/catalog-of-events#Uncaught-Exceptions
+  if (
+    err.message.includes(
+      "ResizeObserver loop completed with undelivered notifications",
+    )
+  ) {
+    return false;
+  }
+  // We still want to ensure there are no other unexpected errors, so we let them fail the test
+});
