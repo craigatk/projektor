@@ -1,4 +1,4 @@
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 import React from "react";
 import { act, findByTestId, render } from "@testing-library/react";
 import CoverageTable from "../CoverageTable";
