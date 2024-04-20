@@ -9,6 +9,7 @@ import CleanLinkText from "../Link/CleanLinkText";
 import { makeStyles } from "@material-ui/core/styles";
 
 const showFullFailureMaxFailureCount = 5;
+const expandAllFailuresCount = 15;
 
 interface TestCaseFailurePanelListProps {
   failedTestCases: TestCase[];
@@ -37,7 +38,7 @@ const TestCaseFailurePanelList = ({
   const classes = useStyles({});
 
   const initialExpandCollapseState =
-    failedTestCases.length <= showFullFailureMaxFailureCount
+    failedTestCases.length <= expandAllFailuresCount
       ? ExpandCollapseState.EXPAND_ALL
       : ExpandCollapseState.COLLAPSE_ALL;
   const [expandCollapseAll, setExpandCollapseState] =

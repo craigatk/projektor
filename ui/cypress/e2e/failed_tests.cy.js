@@ -95,17 +95,19 @@ describe("test run with failed test cases", () => {
     cy.getCodeText().should("contain", "System err line 1");
   });
 
-  it("should show test cases collapsed initially when 6 failed test cases", () => {
+  it("should show test cases collapsed initially when 20 failed test cases", () => {
     const publicId = "321908";
 
-    const testCaseIndexes = [1, 2, 3, 4, 5, 6];
+    const testCaseIndexes = [
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    ];
 
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "test_run_summary.json",
     });
 
     cy.intercept("GET", `run/${publicId}/cases/failed`, {
-      fixture: "failed_test_cases_6.json",
+      fixture: "failed_test_cases_20.json",
     });
 
     cy.interceptTestRunBasicRequests(publicId);

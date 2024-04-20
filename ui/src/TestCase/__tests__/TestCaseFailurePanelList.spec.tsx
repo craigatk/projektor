@@ -45,6 +45,44 @@ describe("TestCaseFailureListPanel", () => {
     );
   });
 
+  it("should expand all test failures when there are 15", () => {
+    const failure: TestFailure = {
+      failureMessage: "My failure message",
+      failureText: "My longer and more descriptive failure text",
+      failureType: "",
+    };
+
+    const testCases = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
+      (idx) => createTestCaseWithFailure(idx, failure),
+    );
+
+    const { getByTestId } = render(
+      <TestCaseFailurePanelList failedTestCases={testCases} publicId="12345" />,
+    );
+
+    expect(getByTestId("test-case-summary-2-15")).toHaveClass("Mui-expanded");
+  });
+
+  it("should not expand all test failures when there are 20", () => {
+    const failure: TestFailure = {
+      failureMessage: "My failure message",
+      failureText: "My longer and more descriptive failure text",
+      failureType: "",
+    };
+
+    const testCases = [
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    ].map((idx) => createTestCaseWithFailure(idx, failure));
+
+    const { getByTestId } = render(
+      <TestCaseFailurePanelList failedTestCases={testCases} publicId="12345" />,
+    );
+
+    expect(getByTestId("test-case-summary-2-1")).not.toHaveClass(
+      "Mui-expanded",
+    );
+  });
+
   function createTestCaseWithFailure(
     idx: number,
     failure: TestFailure,
