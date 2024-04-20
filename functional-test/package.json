@@ -12,7 +12,7 @@
   "devDependencies": {
     "@testing-library/cypress": "9.0.0",
     "chai-colors": "1.0.1",
-    "cypress": "13.7.3",
+    "cypress": "13.8.0",
     "lodash": "4.17.21",
     "prettier": "3.2.5",
     "rimraf": "5.0.5"
