@@ -1,4 +1,4 @@
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 import * as React from "react";
 import { render, waitFor } from "@testing-library/react";
 import MockAdapter from "axios-mock-adapter";

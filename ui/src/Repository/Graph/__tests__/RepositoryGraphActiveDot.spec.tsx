@@ -1,6 +1,6 @@
 jest.mock("@reach/router");
 
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 import React from "react";
 import { render } from "@testing-library/react";
 import RepositoryGraphActiveDot from "../RepositoryGraphActiveDot";
