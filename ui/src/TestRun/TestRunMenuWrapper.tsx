@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     height: "42px",
   },
   appBarLabel: {
-    marginLeft: "192px",
+    marginLeft: "192px !important",
   },
   content: {
     flexGrow: 1,
