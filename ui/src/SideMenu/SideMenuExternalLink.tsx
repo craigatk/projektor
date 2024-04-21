@@ -12,11 +12,8 @@ interface SideMenuExternalLinkProps {
 
 const useStyles = makeStyles((theme) => ({
   sideNavLink: {
-    color: "white  !important",
-    textDecoration: "none !important",
-    "&:hover": {
-      textDecoration: "underline !important",
-    },
+    color: "white",
+    textDecoration: "none",
   },
 }));
 
