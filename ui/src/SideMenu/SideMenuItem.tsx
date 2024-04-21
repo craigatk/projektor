@@ -10,8 +10,8 @@ interface SideMenuItemProps {
 
 const useStyles = makeStyles(() => ({
   sideNavIcon: {
-    minWidth: "40px !important",
-    color: "white !important",
+    minWidth: "40px",
+    color: "white",
   },
 }));
 

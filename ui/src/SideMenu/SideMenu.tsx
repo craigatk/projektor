@@ -39,7 +39,7 @@ const useStyles = makeStyles(() => ({
   },
   sideNavTitle: {
     textAlign: "center",
-    fontSize: "1.5rem !important",
+    fontSize: "1.5rem",
   },
 }));
 
