@@ -25,18 +25,19 @@ class SchedulerTest : DatabaseRepositoryTestCase() {
 
         val schedulerLock = SchedulerLock(dataSource)
         val scheduler = Scheduler(schedulerLock)
+        val jobName = "my_scheduled_job"
 
         val scheduleDuration =
             measureTime {
-                scheduler.scheduleJob(ScheduledJob("my_job", scheduledJob, ScheduleDelay(4, TimeUnit.SECONDS)))
+                scheduler.scheduleJob(ScheduledJob(jobName, scheduledJob, ScheduleDelay(4, TimeUnit.SECONDS)))
 
                 await until { schedulerCalled }
             }
 
         expectThat(scheduleDuration.inWholeSeconds).isGreaterThanOrEqualTo(4)
 
-        expectThat(scheduler.findScheduledJob("my_job")).isNotNull().and {
-            get { name }.isEqualTo("my_job")
+        expectThat(scheduler.findScheduledJob(jobName)).isNotNull().and {
+            get { name }.isEqualTo(jobName)
             get { scheduleDelay }.isEqualTo(ScheduleDelay(4, TimeUnit.SECONDS))
         }
     }
