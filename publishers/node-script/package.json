@@ -29,7 +29,7 @@
     "jest": "29.7.0",
     "jest-junit": "16.0.0",
     "prettier": "3.2.5",
-    "projektor-publish": "3.12.2",
+    "projektor-publish": "3.12.3",
     "wait-for-expect": "3.0.2"
   },
   "jest": {
@@ -49,5 +49,9 @@
     "includeConsoleOutput": "true",
     "classNameTemplate": "{classname}",
     "usePathForSuiteName": "true"
+  },
+  "resolutions": {
+    "wrap-ansi": "7.0.0",
+    "string-width": "4.1.0"
   }
 }
