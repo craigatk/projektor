@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    api "org.flywaydb:flyway-core:9.22.3"
+    api "org.flywaydb:flyway-core:10.16.0"
     api "com.zaxxer:HikariCP:5.1.0"
     api 'org.jooq:jooq:3.19.7'
 
