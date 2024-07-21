@@ -41,7 +41,7 @@
     "process": "0.11.10",
     "projektor-publish": "3.12.3",
     "resize-observer-polyfill": "1.5.1",
-    "rimraf": "5.0.5",
+    "rimraf": "5.0.9",
     "start-server-and-test": "2.0.3",
     "ts-jest": "29.1.2",
     "typescript": "5.4.5",
