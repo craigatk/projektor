@@ -15,6 +15,6 @@
     "cypress": "13.8.0",
     "lodash": "4.17.21",
     "prettier": "3.2.5",
-    "rimraf": "5.0.9"
+    "rimraf": "5.0.10"
   }
 }
