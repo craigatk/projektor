@@ -1,6 +1,6 @@
 {
   "name": "projektor-publish",
-  "version": "3.12.3",
+  "version": "3.12.4",
   "homepage": "https://projektor.dev/docs/node-script/",
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
     "projektor": "env-cmd -f ~/.env projektor-publish"
   },
   "dependencies": {
-    "axios": "1.7.4",
+    "axios": "1.7.5",
     "glob": "10.3.12",
     "lodash": "4.17.21",
     "minimist": "1.2.8",
