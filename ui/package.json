@@ -80,5 +80,8 @@
     "outputDirectory": "jestResults",
     "classNameTemplate": "{classname}",
     "usePathForSuiteName": "true"
+  },
+  "resolutions": {
+    "axios": "^1.7.5"
   }
 }
