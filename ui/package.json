@@ -58,7 +58,7 @@
     "@types/react": "17.0.65",
     "@types/react-dom": "18.2.7",
     "@types/styled-components": "5.1.32",
-    "axios": "1.7.5",
+    "axios": "1.7.7",
     "axios-cache-interceptor": "1.5.1",
     "axios-case-converter": "1.1.1",
     "lodash": "4.17.21",
@@ -82,6 +82,6 @@
     "usePathForSuiteName": "true"
   },
   "resolutions": {
-    "axios": "^1.7.5"
+    "axios": "1.7.7"
   }
 }
