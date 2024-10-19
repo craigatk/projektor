@@ -4,7 +4,7 @@ import { useLocation } from "@reach/router";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { repositoryLinkUrlAPI } from "../../Repository/RepositoryLink";
 import { Chip, Fade, Link, Tooltip } from "@material-ui/core";
-import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 
 interface TestsBadgeProps {
   badgeSvg: string;

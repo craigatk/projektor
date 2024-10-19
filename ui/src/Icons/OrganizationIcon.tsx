@@ -1,5 +1,5 @@
 import * as React from "react";
-import AccountTreeOutlinedIcon from "@material-ui/icons/AccountTreeOutlined";
+import AccountTreeOutlinedIcon from "@mui/icons-material/AccountTreeOutlined";
 
 const OrganizationIcon = ({ className }: IconProps) => {
   return (

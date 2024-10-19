@@ -1,5 +1,5 @@
 import * as React from "react";
-import Error from "@material-ui/icons/Error";
+import Error from "@mui/icons-material/Error";
 
 const FailedIcon = ({ className }: IconProps) => {
   return (
