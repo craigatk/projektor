@@ -3,7 +3,7 @@ import { ResultsProcessingFailure } from "../../model/AdminModel";
 import MaterialTable from "@material-table/core";
 import moment from "moment";
 import { Link, Tooltip } from "@material-ui/core";
-import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { makeStyles } from "@material-ui/styles";
 

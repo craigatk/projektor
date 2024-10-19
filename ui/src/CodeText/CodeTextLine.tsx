@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import LinkOutlinedIcon from "@material-ui/icons/LinkOutlined";
+import LinkOutlinedIcon from "@mui/icons-material/LinkOutlined";
 
 interface CodeTextLineProps {
   line: string;

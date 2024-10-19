@@ -1,5 +1,5 @@
 import * as React from "react";
-import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 
 const CoverageIcon = ({ className }: IconProps) => {
   return (

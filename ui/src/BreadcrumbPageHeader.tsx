@@ -2,7 +2,7 @@ import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
