@@ -18,6 +18,7 @@ interface CoverageGraphProps {
 
 interface CoverageGraphStyleProps {
   inline: boolean;
+  children: React.ReactElement[];
 }
 
 const CoverageGraphWrapper = styled.div<CoverageGraphStyleProps>`
