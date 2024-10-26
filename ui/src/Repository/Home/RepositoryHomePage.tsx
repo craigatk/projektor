@@ -3,7 +3,7 @@ import { RouteComponentProps } from "@reach/router";
 import RepositoryTimelinePage from "../Timeline/RepositoryTimelinePage";
 import RepositoryCoveragePage from "../Coverage/RepositoryCoveragePage";
 import RepositoryPerformanceTimelinePage from "../Performance/RepositoryPerformanceTimelinePage";
-import { makeStyles } from "@material-ui/styles";
+import classes from "./RepositoryHomePage.module.css";
 
 interface RepositoryHomePageProps extends RouteComponentProps {
   orgPart: string;
@@ -11,19 +11,11 @@ interface RepositoryHomePageProps extends RouteComponentProps {
   projectName?: string;
 }
 
-const useStyles = makeStyles(() => ({
-  repoSection: {
-    marginBottom: "20px",
-  },
-}));
-
 const RepositoryHomePage = ({
   orgPart,
   repoPart,
   projectName,
 }: RepositoryHomePageProps) => {
-  const classes = useStyles({});
-
   return (
     <div>
       <div className={classes.repoSection}>

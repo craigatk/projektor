@@ -27,7 +27,7 @@ const CoverageGraphWrapper = styled.div<CoverageGraphStyleProps>`
 `;
 
 const CoverageGraphLabel = styled(Typography)`
-  margin-bottom: "10px";
+  margin-bottom: 10px;
   display: "inline-block";
 `;
 

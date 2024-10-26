@@ -19,7 +19,10 @@ module.exports = {
   "reporters": [ "default", "jest-junit" ],
   collectCoverage: true,
   coverageReporters: ["clover", "text"],
-  "testEnvironment": "jsdom"
+  "testEnvironment": "jsdom",
+  "moduleNameMapper": {
+    "\\.(css|less|scss|sss|styl)$": "<rootDir>/node_modules/jest-css-modules"
+  }
 }
 
 process.env = Object.assign(process.env, { API_BASE_URL: 'http://localhost:8080/' });
