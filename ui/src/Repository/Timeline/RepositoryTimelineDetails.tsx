@@ -4,7 +4,7 @@ import PageTitle from "../../PageTitle";
 import RepositoryTimelineGraph from "./RepositoryTimelineGraph";
 import { Typography } from "@material-ui/core";
 import RepositoryTestsBadge from "../../Badge/tests/RepositoryTestsBadge";
-import { makeStyles } from "@material-ui/styles";
+import classes from "./RepositoryTimelineDetails.module.css";
 
 interface RepositoryTimelineDetailsProps {
   timeline: RepositoryTimeline;
@@ -13,20 +13,12 @@ interface RepositoryTimelineDetailsProps {
   hideIfEmpty: boolean;
 }
 
-const useStyles = makeStyles(() => ({
-  badgeSection: {
-    marginLeft: "20px",
-  },
-}));
-
 const RepositoryTimelineDetails = ({
   timeline,
   repoName,
   projectName,
   hideIfEmpty,
 }: RepositoryTimelineDetailsProps) => {
-  const classes = useStyles({});
-
   return (
     <div>
       {timeline ? (

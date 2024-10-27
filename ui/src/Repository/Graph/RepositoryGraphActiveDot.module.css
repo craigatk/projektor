@@ -1,0 +1,5 @@
+.dot {
+    &:hover {
+        cursor: pointer;
+    }
+}
