@@ -1,18 +1,9 @@
 import * as React from "react";
 import { Dot } from "recharts";
 import { navigate } from "@reach/router";
-import { makeStyles } from "@material-ui/styles";
-
-const useStyles = makeStyles(() => ({
-  dot: {
-    "&:hover": {
-      cursor: "pointer",
-    },
-  },
-}));
+import classes from "./RepositoryGraphActiveDot.module.css";
 
 const RepositoryGraphActiveDot = (props) => {
-  const classes = useStyles({});
   const { cy, cx, fill, dataKey, payload } = props;
   const { publicId } = payload;
 

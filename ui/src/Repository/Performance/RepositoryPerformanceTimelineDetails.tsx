@@ -3,7 +3,7 @@ import { RepositoryPerformanceTimeline } from "../../model/RepositoryModel";
 import RepositoryPerformanceTimelineGraph from "./RepositoryPerformanceTimelineGraph";
 import PageTitle from "../../PageTitle";
 import { Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import classes from "./RepositoryPerformanceTimelineDetails.module.css";
 
 interface RepositoryPerformanceTimelineDetailsProps {
   performanceTimeline: RepositoryPerformanceTimeline;
@@ -11,21 +11,11 @@ interface RepositoryPerformanceTimelineDetailsProps {
   hideIfEmpty: boolean;
 }
 
-const useStyles = makeStyles(() => ({
-  noData: {
-    marginTop: "30px",
-  },
-  testTitle: {
-    marginLeft: "15px",
-  },
-}));
-
 const RepositoryPerformanceTimelineDetails = ({
   performanceTimeline,
   repoName,
   hideIfEmpty,
 }: RepositoryPerformanceTimelineDetailsProps) => {
-  const classes = useStyles({});
 
   if (performanceTimeline) {
     return (
@@ -35,9 +25,8 @@ const RepositoryPerformanceTimelineDetails = ({
           testid="repository-performance-title"
         />
         {performanceTimeline.testTimelines.map((testTimeline, idx) => (
-          <div>
+          <div className={classes.testTitle}>
             <Typography
-              className={classes.testTitle}
               data-testid={`performance-timeline-title-${idx + 1}`}
             >
               {testTimeline.name}
@@ -51,8 +40,8 @@ const RepositoryPerformanceTimelineDetails = ({
     );
   } else if (!hideIfEmpty) {
     return (
-      <div data-testid="repository-no-performance">
-        <Typography align="center" className={classes.noData}>
+      <div data-testid="repository-no-performance" className={classes.noData}>
+        <Typography align="center">
           No performance tests found for repository {repoName}
         </Typography>
       </div>
