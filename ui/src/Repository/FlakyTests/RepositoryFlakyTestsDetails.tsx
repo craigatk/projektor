@@ -23,7 +23,10 @@ const RepositoryFlakyTestsDetails = ({
     );
   } else if (!hideIfEmpty) {
     return (
-      <div data-testid="repository-no-flaky-tests" className={classes.noFlakyTests}>
+      <div
+        data-testid="repository-no-flaky-tests"
+        className={classes.noFlakyTests}
+      >
         <Typography align="center">
           No flaky tests found in repository {repoName}
         </Typography>

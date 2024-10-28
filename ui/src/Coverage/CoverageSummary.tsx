@@ -5,26 +5,15 @@ import { Coverage, TestRunGitMetadata } from "../model/TestRunModel";
 import { fetchCoverage } from "../service/TestRunService";
 import OverallCoverageGraphs from "./OverallCoverageGraphs";
 import CleanLink from "../Link/CleanLink";
-import { makeStyles } from "@material-ui/styles";
 import TestRunCoverageBadge from "../Badge/coverage/TestRunCoverageBadge";
+import classes from "./CoverageSummary.module.css";
 
 interface CoverageSummaryProps {
   publicId: string;
   gitMetadata?: TestRunGitMetadata;
 }
 
-const useStyles = makeStyles(() => ({
-  mainSection: {
-    marginTop: "20px",
-  },
-  coverageBadgeSection: {
-    marginLeft: "15px",
-  },
-}));
-
 const CoverageSummary = ({ publicId, gitMetadata }: CoverageSummaryProps) => {
-  const classes = useStyles({});
-
   const [coverage, setCoverage] = React.useState<Coverage>(null);
   const [loadingState, setLoadingState] = React.useState(LoadingState.Loading);
 

@@ -1,0 +1,10 @@
+.badgeLink {
+    display: inline-block;
+    margin-Left: 8px;
+    cursor: pointer;
+}
+
+.copied {
+    margin-left: 5px;
+    vertical-align: top;
+}

@@ -11,8 +11,8 @@ import GitRepoListItem from "./GitRepoListItem";
 import DashboardSummaryItem from "./DashboardSummaryItem";
 import { createGitHubUrl } from "../VersionControl/VersionControlHelpers";
 import CleanLinkText from "../Link/CleanLinkText";
-import { makeStyles } from "@material-ui/styles";
 import TestRunTestsBadge from "../Badge/tests/TestRunTestsBadge";
+import classes from "./DashboardSummary.module.css";
 
 interface DashboardSummaryProps {
   publicId: string;
@@ -20,19 +20,11 @@ interface DashboardSummaryProps {
   gitMetadata?: TestRunGitMetadata;
 }
 
-const useStyles = makeStyles(() => ({
-  testsBadgeSection: {
-    marginLeft: "15px",
-  },
-}));
-
 const DashboardSummary = ({
   publicId,
   testRunSummary,
   gitMetadata,
 }: DashboardSummaryProps) => {
-  const classes = useStyles({});
-
   const {
     totalPassingCount,
     totalFailureCount,
