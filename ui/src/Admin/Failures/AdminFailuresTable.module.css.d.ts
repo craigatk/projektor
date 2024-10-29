@@ -1,4 +1,4 @@
 declare const styles: {
-  readonly testsBadgeSection: string;
+  readonly copyLink: string;
 };
 export = styles;

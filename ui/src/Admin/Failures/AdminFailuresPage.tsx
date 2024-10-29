@@ -1,4 +1,5 @@
 import * as React from "react";
+import classes from "./AdminFailuresPage.module.css";
 import { RouteComponentProps } from "@reach/router";
 import LoadingState from "../../Loading/LoadingState";
 import PageTitle from "../../PageTitle";
@@ -7,27 +8,10 @@ import AdminFailuresDetails from "./AdminFailuresDetails";
 import { ResultsProcessingFailure } from "../../model/AdminModel";
 import { fetchRecentFailures } from "../../service/AdminService";
 import { Button, TextField } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
 
 interface AdminFailuresPageProps extends RouteComponentProps {}
 
-const useStyles = makeStyles(() => ({
-  paramSection: {
-    marginLeft: "10px",
-    marginTop: "10px",
-  },
-  textField: {
-    margin: "5px",
-    width: "180px",
-  },
-  loadButton: {
-    margin: "5px",
-  },
-}));
-
 const AdminFailuresPage = ({}: AdminFailuresPageProps) => {
-  const classes = useStyles({});
-
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
     LoadingState.Loading,
   );
