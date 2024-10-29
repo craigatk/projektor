@@ -1,4 +1,5 @@
 import * as React from "react";
+import classes from "./CoverageBadge.module.css";
 import { useLocation } from "@reach/router";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import {
@@ -7,7 +8,6 @@ import {
 } from "../../Repository/RepositoryLink";
 import { Chip, Fade, Link, Tooltip } from "@material-ui/core";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
-import classes from "./CoverageBadge.module.css";
 
 interface CoverageBadgeProps {
   badgeSvg: string;

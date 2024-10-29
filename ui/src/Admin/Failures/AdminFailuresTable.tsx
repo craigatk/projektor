@@ -1,22 +1,15 @@
 import * as React from "react";
+import classes from "./AdminFailuresTable.module.css";
 import { ResultsProcessingFailure } from "../../model/AdminModel";
 import MaterialTable from "@material-table/core";
 import moment from "moment";
 import { Link, Tooltip } from "@material-ui/core";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { makeStyles } from "@material-ui/styles";
 
 interface AdminFailuresTableProps {
   failures: ResultsProcessingFailure[];
 }
-
-const useStyles = makeStyles(() => ({
-  copyLink: {
-    cursor: "pointer",
-  },
-}));
-
 const headerStyle = {
   paddingTop: "8px",
   paddingBottom: "8px",
@@ -27,8 +20,6 @@ const cellStyle = {
 };
 
 const AdminFailuresTable = ({ failures }: AdminFailuresTableProps) => {
-  const classes = useStyles({});
-
   return (
     <div data-testid="admin-failures-table">
       <MaterialTable
