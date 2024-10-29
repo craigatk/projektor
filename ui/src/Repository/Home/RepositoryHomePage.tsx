@@ -1,9 +1,9 @@
 import * as React from "react";
+import classes from "./RepositoryHomePage.module.css";
 import { RouteComponentProps } from "@reach/router";
 import RepositoryTimelinePage from "../Timeline/RepositoryTimelinePage";
 import RepositoryCoveragePage from "../Coverage/RepositoryCoveragePage";
 import RepositoryPerformanceTimelinePage from "../Performance/RepositoryPerformanceTimelinePage";
-import classes from "./RepositoryHomePage.module.css";
 
 interface RepositoryHomePageProps extends RouteComponentProps {
   orgPart: string;
