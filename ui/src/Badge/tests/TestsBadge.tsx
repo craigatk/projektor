@@ -1,10 +1,10 @@
 import * as React from "react";
-import { makeStyles } from "@material-ui/styles";
 import { useLocation } from "@reach/router";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { repositoryLinkUrlAPI } from "../../Repository/RepositoryLink";
 import { Chip, Fade, Link, Tooltip } from "@material-ui/core";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
+import classes from "./TestsBadge.module.css";
 
 interface TestsBadgeProps {
   badgeSvg: string;
@@ -12,21 +12,7 @@ interface TestsBadgeProps {
   projectName?: string;
 }
 
-const useStyles = makeStyles(() => ({
-  badgeLink: {
-    display: "inline-block",
-    marginLeft: "8px",
-    cursor: "pointer",
-  },
-  copied: {
-    marginLeft: "5px",
-    verticalAlign: "top",
-  },
-}));
-
 const TestsBadge = ({ badgeSvg, repoName, projectName }: TestsBadgeProps) => {
-  const classes = useStyles({});
-
   const [showCopied, setShowCopied] = React.useState<boolean>(false);
 
   const location = useLocation();

@@ -16,7 +16,6 @@ const RepositoryPerformanceTimelineDetails = ({
   repoName,
   hideIfEmpty,
 }: RepositoryPerformanceTimelineDetailsProps) => {
-
   if (performanceTimeline) {
     return (
       <div>
@@ -26,9 +25,7 @@ const RepositoryPerformanceTimelineDetails = ({
         />
         {performanceTimeline.testTimelines.map((testTimeline, idx) => (
           <div className={classes.testTitle}>
-            <Typography
-              data-testid={`performance-timeline-title-${idx + 1}`}
-            >
+            <Typography data-testid={`performance-timeline-title-${idx + 1}`}>
               {testTimeline.name}
             </Typography>
             <RepositoryPerformanceTimelineGraph
