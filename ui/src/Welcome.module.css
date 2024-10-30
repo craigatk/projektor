@@ -1,25 +1,25 @@
 .appBar {
-    background-color: #1c313a;
-    padding: 5px 10px;
+  background-color: #1c313a;
+  padding: 5px 10px;
 }
 
 .appBarTitle {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .content {
-    flex-grow: 1;
-    margin-top: 50px;
-    text-align: center;
+  flex-grow: 1;
+  margin-top: 50px;
+  text-align: center;
 }
 
 .contentTitle {
-    padding-top: 15px;
-    padding-bottom: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .paper {
-    max-width: 600px;
-    margin: auto;
-    padding: 20px 40px;
+  max-width: 600px;
+  margin: auto;
+  padding: 20px 40px;
 }

@@ -1,0 +1,37 @@
+.linkIcon {
+  visibility: hidden;
+  color: blue;
+  height: 0.8em;
+  vertical-align: middle;
+  padding-left: 5px;
+}
+
+.line {
+  background-color: inherit;
+  font-size: 0.9em;
+  display: inline-block;
+  width: 100%;
+  &:hover {
+    background-color: lightgrey;
+
+    & .linkIcon {
+      visibility: visible;
+    }
+  }
+}
+
+.lineNumber {
+  cursor: pointer;
+  user-select: none;
+  display: inline-block;
+  padding-right: 15px;
+  &:hover {
+    color: blue;
+  }
+}
+
+.lineNumberValue {
+  text-align: right;
+  display: inline-block;
+  min-width: 30px;
+}

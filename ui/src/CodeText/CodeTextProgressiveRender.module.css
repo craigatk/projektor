@@ -1,0 +1,11 @@
+.wrapper {
+  display: inline-block;
+  width: fit-content;
+  min-width: 100%;
+}
+
+.renderIndicator {
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-bottom: 20px;
+}

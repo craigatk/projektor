@@ -1,0 +1,7 @@
+.paper {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #ededed;
+  border-radius: 8px;
+  overflow-x: auto;
+}

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import classes from "./CodeTextProgressiveRender.module.css";
 import { scroller } from "react-scroll";
 import CodeTextProgressBar from "./CodeTextProgressBar";
 
@@ -10,28 +10,6 @@ interface CodeTextProgressiveRenderProps {
   highlightedLine: number;
 }
 
-interface CodeTextProgressiveRenderStyleProps {
-  lineCount: number;
-  lineHeight: number;
-}
-
-const useStyles = makeStyles({
-  wrapper: ({
-    lineCount,
-    lineHeight,
-  }: CodeTextProgressiveRenderStyleProps) => ({
-    height: lineCount * lineHeight,
-    display: "inline-block",
-    width: "fit-content",
-    minWidth: "100%",
-  }),
-  renderIndicator: {
-    marginLeft: "40px",
-    marginRight: "40px",
-    marginBottom: "20px",
-  },
-});
-
 const CodeTextProgressiveRender = ({
   lineChunks,
   lineCount,
@@ -41,18 +19,13 @@ const CodeTextProgressiveRender = ({
   const [chunkIdx, setChunkIdx] = React.useState(1);
   const [rendered, setRendered] = React.useState(false);
 
-  const classes = useStyles({
-    lineCount,
-    lineHeight,
-  });
-
   const renderComplete = () => {
     if (!rendered) {
       if (highlightedLine != null) {
         scroller.scrollTo(`line-${highlightedLine}-true`, {
           duration: 0,
           delay: 0,
-          offset: -45,
+          offset: -70,
           smooth: "easeInOutQuart",
         });
       }
@@ -81,7 +54,12 @@ const CodeTextProgressiveRender = ({
           maxValue={lineChunks.length}
         />
       )}
-      <div className={classes.wrapper}>{lineChunks.slice(0, chunkIdx)}</div>
+      <div
+        className={classes.wrapper}
+        style={{ height: lineCount * lineHeight }}
+      >
+        {lineChunks.slice(0, chunkIdx)}
+      </div>
     </div>
   );
 };

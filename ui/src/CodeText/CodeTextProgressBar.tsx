@@ -1,5 +1,5 @@
 import * as React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import classes from "./CodeTextProgressBar.module.css";
 import { LinearProgress } from "@material-ui/core";
 
 interface CodeTextProgressBarProps {
@@ -7,20 +7,10 @@ interface CodeTextProgressBarProps {
   maxValue: number;
 }
 
-const useStyles = makeStyles({
-  renderIndicator: {
-    marginLeft: "40px",
-    marginRight: "40px",
-    marginBottom: "20px",
-  },
-});
-
 const CodeTextProgressBar = ({
   currentValue,
   maxValue,
 }: CodeTextProgressBarProps) => {
-  const classes = useStyles({});
-
   const renderProgressPercentage = Math.floor((currentValue / maxValue) * 100);
 
   return (
