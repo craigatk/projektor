@@ -1,15 +1,8 @@
 import * as React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import classes from "./BreadcrumbPageHeader.module.css";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-
-const useStyles = makeStyles((theme) => ({
-  wrapper: {
-    padding: theme.spacing(1, 2),
-    marginBottom: "10px",
-  },
-}));
 
 interface BreadcrumbPageHeaderProps {
   intermediateLinks?: React.ReactNode[];
@@ -20,8 +13,6 @@ const BreadcrumbPageHeader = ({
   intermediateLinks,
   endingText,
 }: BreadcrumbPageHeaderProps) => {
-  const classes = useStyles({});
-
   return (
     <div className={classes.wrapper}>
       <Breadcrumbs

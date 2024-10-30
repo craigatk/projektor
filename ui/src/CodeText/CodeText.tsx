@@ -70,7 +70,7 @@ const CodeText = ({ text }: CodeTextProps) => {
     <CodeTextLinesChunk lines={lines} key={`chunk-${idx}`} />
   ));
 
-  const lineHeight = 17.3594;
+  const lineHeight = 16;
 
   return (
     <pre data-testid="code-text">

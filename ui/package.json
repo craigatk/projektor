@@ -6,7 +6,7 @@
     "start": "parcel --dist-dir dev-dist src/index.html",
     "build": "yarn clean-dist && NODE_OPTIONS=--no-experimental-fetch parcel build --dist-dir dist src/index.html",
     "build:dev": "yarn clean-dev-dist && NODE_ENV=development NODE_OPTIONS=--no-experimental-fetch parcel build --dist-dir dev-dist src/index.html",
-    "format": "prettier --write \"src/**/*.ts*\" \"src/**/*.spec.ts*\" \"cypress/fixtures/**/*.json\" \"cypress/**/*.js\"",
+    "format": "prettier --write \"src/**/*.ts*\" \"src/**/*.spec.ts*\" \"cypress/fixtures/**/*.json\" \"cypress/**/*.js\" \"src/**/*.module.css\"",
     "test": "jest",
     "test:projektor:ci": "yarn test || yarn projektor-publish --configFile=projektor.jest.json",
     "projektor:jest:ci": "yarn projektor-publish --configFile=projektor.jest.json",

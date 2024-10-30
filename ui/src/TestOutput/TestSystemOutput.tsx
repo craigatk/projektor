@@ -1,4 +1,5 @@
 import * as React from "react";
+import classes from "./TestSystemOutput.module.css";
 import TestOutputType from "../service/TestOutputType";
 import {
   fetchTestCaseSystemOutput,
@@ -8,7 +9,6 @@ import { TestOutput } from "../model/TestRunModel";
 import LoadingState from "../Loading/LoadingState";
 import LoadingSection from "../Loading/LoadingSection";
 import CodeText from "../CodeText/CodeText";
-import { makeStyles } from "@material-ui/core/styles";
 
 interface TestSystemOutputProps {
   publicId: string;
@@ -17,24 +17,12 @@ interface TestSystemOutputProps {
   outputType: TestOutputType;
 }
 
-const useStyles = makeStyles({
-  paper: {
-    paddingTop: "10px",
-    paddingBottom: "10px",
-    backgroundColor: "#EDEDED",
-    borderRadius: "8px",
-    overflowX: "auto",
-  },
-});
-
 const TestSystemOutput = ({
   publicId,
   testSuiteIdx,
   testCaseIdx,
   outputType,
 }: TestSystemOutputProps) => {
-  const classes = useStyles({});
-
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
     LoadingState.Loading,
   );

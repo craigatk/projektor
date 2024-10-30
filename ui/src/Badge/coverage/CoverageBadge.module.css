@@ -1,10 +1,10 @@
 .badgeLink {
-    display: inline-block;
-    marginLeft: 8px;
-    cursor: pointer;
+  display: inline-block;
+  marginleft: 8px;
+  cursor: pointer;
 }
 
 .copied {
-    margin-left: 5px;
-    vertical-align: top;
+  margin-left: 5px;
+  vertical-align: top;
 }
