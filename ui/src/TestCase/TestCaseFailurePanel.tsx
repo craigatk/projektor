@@ -1,4 +1,5 @@
 import * as React from "react";
+import classes from "./TestCaseFailurePanel.module.css";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -6,7 +7,6 @@ import AccordionActions from "@material-ui/core/AccordionActions";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
-import { makeStyles } from "@material-ui/core/styles";
 import { AttachmentType, TestCase } from "../model/TestRunModel";
 import { Typography } from "@material-ui/core";
 import CleanLink from "../Link/CleanLink";
@@ -16,25 +16,6 @@ import {
   findAttachmentOfType,
   createTestCaseIdentifier,
 } from "./testCaseHelpers";
-
-const useStyles = makeStyles(() => ({
-  panelActions: {
-    justifyContent: "flex-start",
-  },
-  failureMessage: {
-    backgroundColor: "#EDEDED",
-    overflowX: "auto",
-    fontSize: "0.9em",
-  },
-  panelSummary: {
-    userSelect: "text",
-    "-webkit-user-select": "text",
-  },
-  testCaseFileName: {
-    display: "block",
-    paddingTop: "10px",
-  },
-}));
 
 interface TestCaseFailurePanelProps {
   testCase: TestCase;
@@ -49,8 +30,6 @@ const TestCaseFailurePanel = ({
   expandCollapseAll,
   showFullFailure,
 }: TestCaseFailurePanelProps) => {
-  const classes = useStyles({});
-
   const testCaseIdentifier = createTestCaseIdentifier(testCase);
 
   const defaultExpanded =

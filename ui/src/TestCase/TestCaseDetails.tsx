@@ -6,7 +6,7 @@ import {
   Redirect,
   Router,
 } from "@reach/router";
-import { makeStyles } from "@material-ui/core/styles";
+import classes from "./TestCaseDetails.module.css";
 import { AttachmentType, TestCase } from "../model/TestRunModel";
 import BreadcrumbPageHeader from "../BreadcrumbPageHeader";
 import Paper from "@material-ui/core/Paper";
@@ -23,14 +23,6 @@ import TestCaseFailureVideo from "./TestCaseFailureVideo";
 import { findAttachmentOfType } from "./testCaseHelpers";
 import TestCaseFailureScreenshot from "./TestCaseFailureScreenshot";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(1, 2),
-  },
-  detailsSection: {
-    paddingTop: "20px",
-  },
-}));
 
 interface TestCaseDetailsProps {
   publicId: string;
@@ -70,8 +62,6 @@ const buildHeaderIntermediateLinks = (
 };
 
 const TestCaseDetails = ({ publicId, testCase }: TestCaseDetailsProps) => {
-  const classes = useStyles({});
-
   const linkBase = `/tests/${publicId}/suite/${testCase.testSuiteIdx}/case/${testCase.idx}`;
 
   const defaultTab =
