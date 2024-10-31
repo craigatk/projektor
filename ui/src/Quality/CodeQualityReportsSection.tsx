@@ -1,8 +1,8 @@
-import PageTitle from "../PageTitle";
 import * as React from "react";
+import classes from "./CodeQualityReportsSection.module.css";
+import PageTitle from "../PageTitle";
 import CodeQualityReportTabs from "./CodeQualityReportTabs";
 import { CodeQualityReports } from "../model/TestRunModel";
-import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import CleanLinkText from "../Link/CleanLinkText";
 
@@ -11,23 +11,10 @@ interface CodeQualityReportsSectionProps {
   codeQualityReports: CodeQualityReports;
 }
 
-const useStyles = makeStyles(() => ({
-  noReports: {
-    marginTop: "20px",
-    marginLeft: "15px",
-    textAlign: "center",
-  },
-  noReportsDocSection: {
-    marginTop: "20px",
-  },
-}));
-
 const CodeQualityReportsSection = ({
   publicId,
   codeQualityReports,
 }: CodeQualityReportsSectionProps) => {
-  const classes = useStyles({});
-
   const reportsWithContents =
     codeQualityReports && codeQualityReports.reports
       ? codeQualityReports.reports.filter(

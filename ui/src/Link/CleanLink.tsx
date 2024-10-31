@@ -1,20 +1,19 @@
-import * as React from "react";
+import styled from "styled-components";
 import { Link } from "@reach/router";
-import { styled } from "@material-ui/core/styles";
 
 interface CleanLinkProps {
   color?: string;
 }
 
-const CleanLink = styled(Link)((props: CleanLinkProps) => ({
-  textDecoration: "none",
-  color: props.color ? props.color : "blue",
-  "&:hover": {
-    textDecoration: "underline",
-  },
-  "&:visited": {
-    color: props.color ? props.color : "blue",
-  },
-}));
+const CleanLink = styled(Link)<CleanLinkProps>`
+  text-decoration: none;
+  color: ${(props) => (props.color ? props.color : "blue")};
+  &:hover {
+    text-decoration: underline;
+  }
+  &:visited {
+    color: ${(props) => (props.color ? props.color : "blue")};
+  }
+`;
 
 export default CleanLink;

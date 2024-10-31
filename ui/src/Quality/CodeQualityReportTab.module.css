@@ -1,0 +1,8 @@
+.reportContents {
+  margin-top: 20px;
+  padding: 10px 0;
+  background-color: #ededed;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.9em;
+}
