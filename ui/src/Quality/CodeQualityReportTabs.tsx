@@ -1,6 +1,6 @@
 import * as React from "react";
+import classes from "./CodeQualityReportTabs.module.css";
 import { CodeQualityReport } from "../model/TestRunModel";
-import { makeStyles } from "@material-ui/core/styles";
 import {
   Link,
   Location,
@@ -17,24 +17,10 @@ interface CodeQualityReportTabsProps {
   codeQualityReportsWithContents: CodeQualityReport[];
 }
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(1, 2),
-  },
-  detailsSection: {
-    paddingTop: "20px",
-  },
-  tab: {
-    textTransform: "none",
-    maxWidth: "300px",
-  },
-}));
-
 const CodeQualityReportTabs = ({
   publicId,
   codeQualityReportsWithContents,
 }: CodeQualityReportTabsProps) => {
-  const classes = useStyles({});
   const linkBase = `/tests/${publicId}/quality/report`;
 
   const defaultTab = "/" + codeQualityReportsWithContents[0].idx;

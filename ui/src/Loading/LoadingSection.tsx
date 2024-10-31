@@ -1,23 +1,9 @@
 import * as React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import classes from "./LoadingSection.module.css";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import LoadingState from "./LoadingState";
 import { Paper, Typography } from "@material-ui/core";
 import CleanLink from "../Link/CleanLink";
-
-const useStyles = makeStyles((theme) => ({
-  progress: {
-    width: "90%",
-    marginLeft: "5%",
-  },
-  errorPaper: {
-    padding: "20px 40px",
-    textAlign: "center",
-    maxWidth: "600px",
-    margin: "auto",
-    border: "2px solid red",
-  },
-}));
 
 interface LoadingSectionProps {
   loadingState: LoadingState;
@@ -34,8 +20,6 @@ const LoadingSection = ({
   successComponent,
   errorComponent,
 }: LoadingSectionProps) => {
-  const classes = useStyles({});
-
   if (loadingState === LoadingState.Success) {
     return successComponent;
   } else if (loadingState === LoadingState.Error) {

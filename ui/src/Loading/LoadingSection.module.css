@@ -1,0 +1,12 @@
+.progress {
+  width: 90%;
+  margin-left: 5%;
+}
+
+.errorPaper {
+  padding: 20px 40px;
+  text-align: center;
+  max-width: 600px;
+  margin: auto;
+  border: 2px solid red;
+}
