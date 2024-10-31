@@ -1,0 +1,19 @@
+.panelActions {
+    justify-content: flex-start;
+}
+
+.failureMessage {
+    background-color: #EDEDED;
+    overflow-x: auto;
+    font-size: 0.9em;
+}
+
+.panelSummary {
+    user-select: text;
+    -webkit-user-select: text;
+}
+
+.testCaseFileName {
+    display: block;
+    padding-top: 10px;
+}

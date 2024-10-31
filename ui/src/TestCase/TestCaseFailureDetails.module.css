@@ -1,0 +1,7 @@
+.failureContents {
+    padding: 2px 10px;
+    background-color: #EDEDED;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.9em;
+}
