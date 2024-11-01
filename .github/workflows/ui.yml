@@ -9,7 +9,7 @@ on:
 
 jobs:
   ui-test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -53,7 +53,7 @@ jobs:
           yarn projektor:jest:ci
 
   ui-cypress-test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Install Cypress dependencies

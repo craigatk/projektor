@@ -9,7 +9,7 @@ name: Release server
 jobs:
   build:
     name: Create and upload release
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     services:
       database:
         image: postgres:16.4-alpine
