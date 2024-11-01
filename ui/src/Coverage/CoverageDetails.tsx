@@ -1,6 +1,7 @@
 import * as React from "react";
+import classes from "./CoverageDetails.module.css";
 import { Coverage } from "../model/TestRunModel";
-import { makeStyles, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import OverallCoverageGraphs from "./OverallCoverageGraphs";
 import CoverageTable from "./CoverageTable";
 import CoverageTableRow from "./CoverageTableRow";
@@ -10,15 +11,7 @@ interface CoverageDetailsProps {
   publicId: string;
 }
 
-const useStyles = makeStyles({
-  title: {
-    paddingLeft: "15px",
-  },
-});
-
 const CoverageDetails = ({ coverage, publicId }: CoverageDetailsProps) => {
-  const classes = useStyles({});
-
   const coverageTableRows = coverage.groups.map(
     (group) =>
       ({

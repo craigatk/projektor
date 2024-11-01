@@ -1,6 +1,7 @@
 import * as React from "react";
+import classes from "./OverallCoverageGraphs.module.css";
 import { CoverageStats } from "../model/TestRunModel";
-import { Grid, makeStyles } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import CoverageGraph from "./CoverageGraph";
 
 interface OverallCoverageGraphsProps {
@@ -8,20 +9,10 @@ interface OverallCoverageGraphsProps {
   previousTestRunId?: string;
 }
 
-const useStyles = makeStyles({
-  graphGrid: {
-    paddingLeft: "15px",
-    paddingRight: "20px",
-    marginBottom: "15px",
-  },
-});
-
 const OverallCoverageGraphs = ({
   overallStats,
   previousTestRunId,
 }: OverallCoverageGraphsProps) => {
-  const classes = useStyles({});
-
   if (overallStats) {
     return (
       <Grid container className={classes.graphGrid}>

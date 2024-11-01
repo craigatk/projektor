@@ -1,5 +1,6 @@
 import * as React from "react";
-import { ListItem, ListItemText, makeStyles } from "@material-ui/core";
+import classes from "./DashboardSummaryItem.module.css";
+import { ListItem, ListItemText } from "@material-ui/core";
 
 interface DashboardSummaryItemProps {
   label: string;
@@ -7,19 +8,11 @@ interface DashboardSummaryItemProps {
   value: any;
 }
 
-const useStyles = makeStyles({
-  label: {
-    minWidth: "105px",
-    display: "inline-block",
-  },
-});
-
 const DashboardSummaryItem = ({
   label,
   testId,
   value,
 }: DashboardSummaryItemProps) => {
-  const classes = useStyles({});
   return (
     <ListItem>
       <ListItemText

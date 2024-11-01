@@ -1,7 +1,8 @@
 import * as React from "react";
+import classes from "./CoverageTable.module.css";
 import MaterialTable from "@material-table/core";
 import CoverageGraph from "./CoverageGraph";
-import { makeStyles, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import CleanLink from "../Link/CleanLink";
 import CoverageTableRow from "./CoverageTableRow";
 
@@ -20,19 +21,11 @@ const cellStyle = {
   padding: "6px 24px 6px 16px",
 };
 
-const useStyles = makeStyles({
-  title: {
-    paddingLeft: "15px",
-  },
-});
-
 const CoverageTable = ({
   rows,
   pageTitle,
   groupHeader,
 }: CoverageTableProps) => {
-  const classes = useStyles({});
-
   const sortedRows = rows.sort(
     (a, b) =>
       a.stats.lineStat.coveredPercentage - b.stats.lineStat.coveredPercentage,
