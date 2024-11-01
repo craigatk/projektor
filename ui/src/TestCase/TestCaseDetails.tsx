@@ -23,7 +23,6 @@ import TestCaseFailureVideo from "./TestCaseFailureVideo";
 import { findAttachmentOfType } from "./testCaseHelpers";
 import TestCaseFailureScreenshot from "./TestCaseFailureScreenshot";
 
-
 interface TestCaseDetailsProps {
   publicId: string;
   testCase: TestCase;

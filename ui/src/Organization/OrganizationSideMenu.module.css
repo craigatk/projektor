@@ -1,0 +1,15 @@
+.drawer {
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.drawerPaper {
+  width: 180px;
+  background-color: #1c313a !important;
+  color: white !important;
+}
+
+.sideNavTitle {
+  text-align: center;
+  font-size: 1.5rem !important;
+}

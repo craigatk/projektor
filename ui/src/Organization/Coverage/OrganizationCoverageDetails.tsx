@@ -1,9 +1,9 @@
 import * as React from "react";
+import classes from "./OrganizationCoverageDetails.module.css";
 import { OrganizationCoverage } from "../../model/OrganizationModel";
 import CoverageTable from "../../Coverage/CoverageTable";
 import CoverageTableRow from "../../Coverage/CoverageTableRow";
 import { Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
 import { repositoryLinkUrlUI } from "../../Repository/RepositoryLink";
 
 interface OrganizationCoverageDetailsProps {
@@ -11,18 +11,10 @@ interface OrganizationCoverageDetailsProps {
   organizationCoverage: OrganizationCoverage;
 }
 
-const useStyles = makeStyles(() => ({
-  noCoverage: {
-    marginTop: "30px",
-  },
-}));
-
 const OrganizationCoverageDetails = ({
   orgName,
   organizationCoverage,
 }: OrganizationCoverageDetailsProps) => {
-  const classes = useStyles({});
-
   if (organizationCoverage) {
     const coverageTableRows = organizationCoverage.repositories
       .filter((repositoryCoverage) => repositoryCoverage.coverage != null)
@@ -54,8 +46,11 @@ const OrganizationCoverageDetails = ({
     );
   } else {
     return (
-      <div data-testid="organization-coverage-no-details">
-        <Typography align="center" className={classes.noCoverage}>
+      <div
+        data-testid="organization-coverage-no-details"
+        className={classes.noCoverage}
+      >
+        <Typography align="center">
           No repositories found with coverage in organization {orgName}
         </Typography>
       </div>

@@ -1,0 +1,25 @@
+.positive {
+  color: green;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:visited {
+    color: green;
+  }
+}
+
+.negative {
+  color: red;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:visited {
+    color: red;
+  }
+}

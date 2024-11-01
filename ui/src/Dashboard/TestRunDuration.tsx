@@ -1,5 +1,6 @@
 import * as React from "react";
-import { List, ListItem, ListItemText, makeStyles } from "@material-ui/core";
+import classes from "./TestRunDuration.module.css";
+import { List, ListItem, ListItemText } from "@material-ui/core";
 import CleanLink from "../Link/CleanLink";
 import { formatSecondsDuration } from "../dateUtils/dateUtils";
 
@@ -11,13 +12,6 @@ interface TestRunDurationProps {
   slowestTestCaseDuration: number;
 }
 
-const useStyles = makeStyles({
-  label: {
-    minWidth: "135px",
-    display: "inline-block",
-  },
-});
-
 const TestRunDuration = ({
   publicId,
   averageDuration,
@@ -25,7 +19,6 @@ const TestRunDuration = ({
   wallClockDuration,
   slowestTestCaseDuration,
 }: TestRunDurationProps) => {
-  const classes = useStyles({});
   return (
     <List dense={true}>
       <ListItem>
