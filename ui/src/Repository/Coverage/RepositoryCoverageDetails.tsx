@@ -1,8 +1,8 @@
 import * as React from "react";
+import classes from "./RepositoryCoverageDetails.module.css";
 import { RepositoryCoverageTimeline } from "../../model/RepositoryModel";
 import RepositoryCoverageTimelineGraph from "./RepositoryCoverageTimelineGraph";
 import { Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
 import RepositoryCoverageBadge from "../../Badge/coverage/RepositoryCoverageBadge";
 
 interface RepositoryCoverageDetailsProps {
@@ -12,23 +12,12 @@ interface RepositoryCoverageDetailsProps {
   hideIfEmpty?: boolean;
 }
 
-const useStyles = makeStyles(() => ({
-  noCoverage: {
-    marginTop: "30px",
-  },
-  coverageBadgeSection: {
-    marginLeft: "20px",
-  },
-}));
-
 const RepositoryCoverageDetails = ({
   coverageTimeline,
   repoName,
   projectName,
   hideIfEmpty,
 }: RepositoryCoverageDetailsProps) => {
-  const classes = useStyles({});
-
   if (coverageTimeline) {
     return (
       <div>
@@ -46,13 +35,11 @@ const RepositoryCoverageDetails = ({
       return null;
     } else {
       return (
-        <Typography
-          align="center"
-          data-testid="repo-results-no-coverage"
-          className={classes.noCoverage}
-        >
-          No coverage information available for repository {repoName}
-        </Typography>
+        <div className={classes.noCoverage}>
+          <Typography align="center" data-testid="repo-results-no-coverage">
+            No coverage information available for repository {repoName}
+          </Typography>
+        </div>
       );
     }
   }

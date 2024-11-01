@@ -27,9 +27,9 @@ const RepositoryWrapper = ({
     <div className={classes.root} data-testid="organization-wrapper">
       <AppBar className={classes.appBar}>
         <div className={classes.appBarLabel}>
-        <Typography variant="subtitle1" >
-          {repoName} {projectName || ""}
-        </Typography>
+          <Typography variant="subtitle1">
+            {repoName} {projectName || ""}
+          </Typography>
         </div>
       </AppBar>
       <RepositorySideMenu

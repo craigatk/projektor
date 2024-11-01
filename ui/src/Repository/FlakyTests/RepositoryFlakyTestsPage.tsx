@@ -1,4 +1,5 @@
 import * as React from "react";
+import classes from "./RepositoryFlakyTestsPage.module.css";
 import LoadingState from "../../Loading/LoadingState";
 import { RouteComponentProps } from "@reach/router";
 import { RepositoryFlakyTests } from "../../model/RepositoryModel";
@@ -15,7 +16,6 @@ import {
   Tooltip,
 } from "@material-ui/core";
 import PageTitle from "../../PageTitle";
-import { makeStyles } from "@material-ui/styles";
 import { NumberParam, StringParam, useQueryParam } from "use-query-params";
 
 interface RepositoryFlakyTestsPageProps extends RouteComponentProps {
@@ -25,41 +25,12 @@ interface RepositoryFlakyTestsPageProps extends RouteComponentProps {
   hideIfEmpty: boolean;
 }
 
-const useStyles = makeStyles(() => ({
-  paramSection: {
-    marginLeft: "10px",
-    marginTop: "10px",
-  },
-  textField: {
-    margin: "5px",
-    width: "180px",
-  },
-  selectControl: {
-    width: "180px",
-    margin: "5px",
-  },
-  selectLabel: {
-    marginTop: "-7px",
-  },
-  selectOption: {
-    paddingTop: "10px",
-    paddingBottom: "10px",
-    paddingLeft: "10px",
-    width: "100%",
-  },
-  searchButton: {
-    margin: "5px",
-  },
-}));
-
 const RepositoryFlakyTestsPage = ({
   orgPart,
   repoPart,
   projectName,
   hideIfEmpty,
 }: RepositoryFlakyTestsPageProps) => {
-  const classes = useStyles({});
-
   const repoName = `${orgPart}/${repoPart}`;
 
   const [flakyTests, setFlakyTests] =

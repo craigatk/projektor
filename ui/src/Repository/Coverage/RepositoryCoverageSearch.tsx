@@ -1,4 +1,5 @@
 import * as React from "react";
+import classes from "./RepositoryCoverageSearch.module.css";
 import LoadingState from "../../Loading/LoadingState";
 import { fetchRepositoryCoverageTimeline } from "../../service/RepositoryService";
 import LoadingSection from "../../Loading/LoadingSection";
@@ -13,7 +14,6 @@ import {
   Select,
 } from "@material-ui/core";
 import PageTitle from "../../PageTitle";
-import { makeStyles } from "@material-ui/styles";
 import { StringParam, useQueryParam } from "use-query-params";
 
 interface RepositoryCoverageSearchProps extends RouteComponentProps {
@@ -22,40 +22,11 @@ interface RepositoryCoverageSearchProps extends RouteComponentProps {
   hideIfEmpty?: boolean;
 }
 
-const useStyles = makeStyles(() => ({
-  paramSection: {
-    marginLeft: "10px",
-    marginTop: "10px",
-  },
-  selectControl: {
-    width: "220px",
-    margin: "5px",
-  },
-  selectBox: {
-    marginTop: "8px",
-  },
-  selectLabel: {
-    marginTop: "-7px",
-    marginLeft: "-12px",
-  },
-  selectOption: {
-    paddingTop: "10px",
-    paddingBottom: "10px",
-    paddingLeft: "10px",
-    width: "100%",
-  },
-  searchButton: {
-    margin: "15px 5px 5px 5px",
-  },
-}));
-
 const RepositoryCoverageSearch = ({
   repoName,
   projectName,
   hideIfEmpty,
 }: RepositoryCoverageSearchProps) => {
-  const classes = useStyles({});
-
   const [repositoryCoverageTimeline, setRepositoryCoverageTimeline] =
     React.useState<RepositoryCoverageTimeline>(null);
   const [branchType, setBranchType] = useQueryParam("branch", StringParam);
