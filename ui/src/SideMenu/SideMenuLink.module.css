@@ -1,0 +1,8 @@
+.sideNavLink {
+  color: white !important;
+  text-decoration: none !important;
+
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
