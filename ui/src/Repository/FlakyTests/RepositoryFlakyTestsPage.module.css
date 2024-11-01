@@ -1,0 +1,29 @@
+.paramSection {
+  margin-left: 10px !important;
+  margin-top: 10px !important;
+}
+
+.textField {
+  margin: 5px !important;
+  width: 180px !important;
+}
+
+.selectControl {
+  width: 180px !important;
+  margin: 5px !important;
+}
+
+.selectLabel {
+  margin-top: -7px !important;
+}
+
+.selectOption {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  padding-left: 10px !important;
+  width: 100% !important;
+}
+
+.searchButton {
+  margin: 5px !important;
+}

@@ -1,27 +1,9 @@
 import * as React from "react";
-import { makeStyles } from "@material-ui/styles";
 import moment from "moment-timezone";
 import { formatSecondsDuration } from "../../dateUtils/dateUtils";
-
-const useStyles = makeStyles(() => ({
-  box: {
-    outline: "1px solid black",
-    backgroundColor: "white",
-    padding: "5px 10px",
-  },
-  label: {
-    width: "120px",
-    display: "inline-block",
-  },
-  line: {
-    paddingBottom: "4px",
-    paddingTop: "4px",
-  },
-}));
+import classes from "./RepositoryTimelineGraphTooltip.module.css";
 
 const RepositoryTimelineGraphTooltip = (props) => {
-  const classes = useStyles({});
-
   if (props.payload && props.payload.length >= 1) {
     const { createdTimestamp, duration, totalTestCount, testAverageDuration } =
       props.payload[0].payload;

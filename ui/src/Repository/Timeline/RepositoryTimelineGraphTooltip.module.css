@@ -1,0 +1,15 @@
+.box {
+  outline: 1px solid black;
+  background-color: white;
+  padding: 5px 10px;
+}
+
+.label {
+  width: 120px;
+  display: inline-block;
+}
+
+.line {
+  padding-bottom: 4px;
+  padding-top: 4px;
+}

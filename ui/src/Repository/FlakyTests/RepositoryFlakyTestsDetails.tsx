@@ -1,8 +1,8 @@
 import * as React from "react";
+import classes from "./RepositoryFlakyTestsDetails.module.css";
 import { RepositoryFlakyTests } from "../../model/RepositoryModel";
 import { Typography } from "@material-ui/core";
 import RepositoryFlakyTestsTable from "./RepositoryFlakyTestsTable";
-import classes from "./RepositoryFlakyTestsDetails.module.css";
 
 interface RepositoryFlakyTestsDetailsProps {
   flakyTests: RepositoryFlakyTests;

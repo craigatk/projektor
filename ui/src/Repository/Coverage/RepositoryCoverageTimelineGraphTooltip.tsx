@@ -1,26 +1,8 @@
 import * as React from "react";
-import { makeStyles } from "@material-ui/styles";
+import classes from "./RepositoryCoverageTimelineGraphTooltip.module.css";
 import moment from "moment-timezone";
 
-const useStyles = makeStyles(() => ({
-  box: {
-    outline: "1px solid black",
-    backgroundColor: "white",
-    padding: "5px 10px",
-  },
-  label: {
-    width: "120px",
-    display: "inline-block",
-  },
-  line: {
-    paddingBottom: "4px",
-    paddingTop: "4px",
-  },
-}));
-
 const RepositoryCoverageTimelineGraphTooltip = (props) => {
-  const classes = useStyles({});
-
   if (props.payload && props.payload.length >= 1) {
     const { createdTimestamp, lineValue, branchValue } =
       props.payload[0].payload;
