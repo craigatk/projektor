@@ -1,6 +1,6 @@
 import * as React from "react";
+import classes from "./SideMenuItem.module.css";
 import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
 
 interface SideMenuItemProps {
   icon: any;
@@ -8,16 +8,7 @@ interface SideMenuItemProps {
   testId: string;
 }
 
-const useStyles = makeStyles(() => ({
-  sideNavIcon: {
-    minWidth: "40px",
-    color: "white",
-  },
-}));
-
 const SideMenuItem = ({ icon, text, testId }: SideMenuItemProps) => {
-  const classes = useStyles({});
-
   return (
     <ListItem button>
       <ListItemIcon className={classes.sideNavIcon}>{icon}</ListItemIcon>
