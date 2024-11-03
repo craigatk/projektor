@@ -1,7 +1,7 @@
 import * as React from "react";
 import classes from "./RepositoryWrapper.module.css";
 import { globalHistory, RouteComponentProps, Router } from "@reach/router";
-import { AppBar, Typography } from "@material-ui/core";
+import { AppBar, Typography } from "@mui/material";
 import RepositorySideMenu from "./RepositorySideMenu";
 import RepositoryCoveragePage from "./Coverage/RepositoryCoveragePage";
 import RepositoryTimelinePage from "./Timeline/RepositoryTimelinePage";

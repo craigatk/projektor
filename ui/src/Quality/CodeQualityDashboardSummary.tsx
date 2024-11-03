@@ -3,7 +3,7 @@ import PageTitle from "../PageTitle";
 import { fetchCodeQualityReports } from "../service/TestRunService";
 import { CodeQualityReports } from "../model/TestRunModel";
 import CleanLink from "../Link/CleanLink";
-import { List, ListItem, Typography } from "@material-ui/core";
+import { List, ListItem, Typography } from "@mui/material";
 
 interface CodeQualityDashboardSummaryProps {
   publicId: string;

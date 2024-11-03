@@ -1,7 +1,7 @@
 import * as React from "react";
 import classes from "./CoverageDetails.module.css";
 import { Coverage } from "../model/TestRunModel";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import OverallCoverageGraphs from "./OverallCoverageGraphs";
 import CoverageTable from "./CoverageTable";
 import CoverageTableRow from "./CoverageTableRow";

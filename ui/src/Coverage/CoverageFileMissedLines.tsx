@@ -1,6 +1,6 @@
 import * as React from "react";
 import GitHubFileLink from "../VersionControl/GitHubFileLink";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import { TestRunGitMetadata } from "../model/TestRunModel";
 import CleanLinkText from "../Link/CleanLinkText";
 

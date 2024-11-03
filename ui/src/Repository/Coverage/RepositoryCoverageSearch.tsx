@@ -12,7 +12,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
-} from "@material-ui/core";
+} from "@mui/material";
 import PageTitle from "../../PageTitle";
 import { StringParam, useQueryParam } from "use-query-params";
 

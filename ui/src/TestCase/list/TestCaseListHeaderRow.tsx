@@ -1,6 +1,6 @@
 import * as React from "react";
 import classes from "./TestCaseListHeaderRow.module.css";
-import { TableCell, TableRow } from "@material-ui/core";
+import { TableCell, TableRow } from "@mui/material";
 
 interface TestCaseListHeaderRowProps {
   showDurationFirst: boolean;

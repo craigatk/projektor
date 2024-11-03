@@ -1,6 +1,6 @@
 import * as React from "react";
 import classes from "./OrganizationSideMenu.module.css";
-import { Drawer, List, Typography } from "@material-ui/core";
+import { Drawer, List, Typography } from "@mui/material";
 import SideMenuLink from "../SideMenu/SideMenuLink";
 import CoverageIcon from "../Icons/CoverageIcon";
 

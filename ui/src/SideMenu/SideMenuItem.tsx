@@ -1,6 +1,6 @@
 import * as React from "react";
 import classes from "./SideMenuItem.module.css";
-import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { ListItem, ListItemIcon, ListItemText } from "@mui/material";
 
 interface SideMenuItemProps {
   icon: any;
@@ -10,7 +10,7 @@ interface SideMenuItemProps {
 
 const SideMenuItem = ({ icon, text, testId }: SideMenuItemProps) => {
   return (
-    <ListItem button>
+    <ListItem>
       <ListItemIcon className={classes.sideNavIcon}>{icon}</ListItemIcon>
       <ListItemText primary={text} data-testid={testId} />
     </ListItem>

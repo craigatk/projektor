@@ -7,7 +7,7 @@ import LoadingSection from "../../Loading/LoadingSection";
 import AdminFailuresDetails from "./AdminFailuresDetails";
 import { ResultsProcessingFailure } from "../../model/AdminModel";
 import { fetchRecentFailures } from "../../service/AdminService";
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField } from "@mui/material";
 
 interface AdminFailuresPageProps extends RouteComponentProps {}
 

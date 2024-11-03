@@ -3,7 +3,7 @@ import classes from "./CodeQualityReportsSection.module.css";
 import PageTitle from "../PageTitle";
 import CodeQualityReportTabs from "./CodeQualityReportTabs";
 import { CodeQualityReports } from "../model/TestRunModel";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import CleanLinkText from "../Link/CleanLinkText";
 
 interface CodeQualityReportsSectionProps {

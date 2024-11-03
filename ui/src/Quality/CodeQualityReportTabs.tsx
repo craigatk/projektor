@@ -9,7 +9,7 @@ import {
   Router,
 } from "@reach/router";
 import { getTabCurrentValue } from "../Tabs/TabValue";
-import { Paper, Tab, Tabs } from "@material-ui/core";
+import { Paper, Tab, Tabs } from "@mui/material";
 import CodeQualityReportTab from "./CodeQualityReportTab";
 
 interface CodeQualityReportTabsProps {

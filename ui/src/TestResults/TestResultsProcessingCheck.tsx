@@ -5,8 +5,8 @@ import {
   TestResultsProcessingStatus,
 } from "../model/TestRunModel";
 import LoadingState from "../Loading/LoadingState";
-import { Paper, Typography } from "@material-ui/core";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import { Paper, Typography } from "@mui/material";
+import LinearProgress from "@mui/material/LinearProgress";
 import { fetchTestResultsProcessing } from "../service/TestRunService";
 import { RouteComponentProps } from "@reach/router";
 

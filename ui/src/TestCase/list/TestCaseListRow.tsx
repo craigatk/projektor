@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TableCell, TableRow } from "@material-ui/core";
+import { TableCell, TableRow } from "@mui/material";
 import { TestCase } from "../../model/TestRunModel";
 import TestCaseResultIcon from "../TestCaseResultIcon";
 import { fullTestCaseName } from "../../model/TestCaseHelpers";

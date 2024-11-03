@@ -5,7 +5,7 @@ import TestCaseFailurePanel from "./TestCaseFailurePanel";
 import { ExpandCollapseState } from "./ExpandCollapseState";
 import UnfoldLessOutlinedIcon from "@mui/icons-material/UnfoldLessOutlined";
 import UnfoldMoreOutlinedIcon from "@mui/icons-material/UnfoldMoreOutlined";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import CleanLinkText from "../Link/CleanLinkText";
 
 const showFullFailureMaxFailureCount = 5;

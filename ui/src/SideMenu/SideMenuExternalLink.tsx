@@ -1,7 +1,7 @@
 import * as React from "react";
 import classes from "./SideMenuExternalLink.module.css";
 import SideMenuItem from "./SideMenuItem";
-import { Link } from "@material-ui/core";
+import { Link } from "@mui/material";
 
 interface SideMenuExternalLinkProps {
   linkTo: string;

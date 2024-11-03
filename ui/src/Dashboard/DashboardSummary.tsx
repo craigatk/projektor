@@ -1,6 +1,6 @@
 import * as React from "react";
 import { TestRunGitMetadata, TestRunSummary } from "../model/TestRunModel";
-import { Grid, Hidden, List } from "@material-ui/core";
+import { Grid, Hidden, List } from "@mui/material";
 import TestCountList from "../TestCount/TestCountList";
 import PageTitle from "../PageTitle";
 import TestRunDuration from "./TestRunDuration";

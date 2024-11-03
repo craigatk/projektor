@@ -2,7 +2,7 @@ import * as React from "react";
 import MaterialTable from "@material-table/core";
 import { CoverageFiles, TestRunGitMetadata } from "../model/TestRunModel";
 import CoverageGraph from "./CoverageGraph";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import GitHubFileLink from "../VersionControl/GitHubFileLink";
 import CoverageFileMissedLines from "./CoverageFileMissedLines";
 

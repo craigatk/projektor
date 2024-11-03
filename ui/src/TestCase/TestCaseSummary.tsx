@@ -2,7 +2,7 @@ import * as React from "react";
 import classes from "./TestCaseSummary.module.css";
 import { TestCase } from "../model/TestRunModel";
 import { RouteComponentProps } from "@reach/router";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import PassedIcon from "../Icons/PassedIcon";
 import SkippedIcon from "../Icons/SkippedIcon";
 import FailedIcon from "../Icons/FailedIcon";

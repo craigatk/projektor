@@ -1,7 +1,7 @@
 import * as React from "react";
 import classes from "./BreadcrumbPageHeader.module.css";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Typography from "@material-ui/core/Typography";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+import Typography from "@mui/material/Typography";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 interface BreadcrumbPageHeaderProps {

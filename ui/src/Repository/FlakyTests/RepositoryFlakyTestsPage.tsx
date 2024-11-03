@@ -14,7 +14,7 @@ import {
   Select,
   TextField,
   Tooltip,
-} from "@material-ui/core";
+} from "@mui/material";
 import PageTitle from "../../PageTitle";
 import { NumberParam, StringParam, useQueryParam } from "use-query-params";
 
@@ -96,15 +96,17 @@ const RepositoryFlakyTestsPage = ({
           title="How many times a test has to fail to be considered flaky"
           placement="top"
         >
-          <TextField
-            label="Flaky test threshold"
-            data-testid="flaky-tests-threshold"
-            className={classes.textField}
-            defaultValue={flakyThreshold || 5}
-            variant="outlined"
-            size="small"
-            onChange={flakyThresholdOnChange}
-          />
+          <span>
+            <TextField
+              label="Flaky test threshold"
+              data-testid="flaky-tests-threshold"
+              className={classes.textField}
+              defaultValue={flakyThreshold || 5}
+              variant="outlined"
+              size="small"
+              onChange={flakyThresholdOnChange}
+            />
+          </span>
         </Tooltip>
 
         <Tooltip

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { RouteComponentProps } from "@reach/router";
-import { AppBar, Typography, Paper } from "@material-ui/core";
+import { AppBar, Typography, Paper } from "@mui/material";
 import classes from "./Welcome.module.css";
 
 const Welcome = (props: RouteComponentProps) => {

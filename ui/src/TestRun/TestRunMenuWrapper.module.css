@@ -1,19 +1,19 @@
 .root {
-    display: flex;
+  display: flex;
 }
 
 .appBar {
-    background-color: #1c313a !important;
-    padding: 5px 10px;
-    height: 42px;
+  background-color: #1c313a !important;
+  padding: 5px 10px;
+  height: 42px;
 }
 
 .appBarLabel {
-    margin-left: 192px;
+  margin-left: 192px;
 }
 
 .content {
-    flex-grow: 1;
-    margin-top: 42px;
-    max-width: calc(100% - 180px);
+  flex-grow: 1;
+  margin-top: 42px;
+  max-width: calc(100% - 180px);
 }
