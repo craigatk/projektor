@@ -1,11 +1,11 @@
 import * as React from "react";
+import classes from "./TestResultsProcessingCheck.module.css";
 import {
   TestResultsProcessing,
   TestResultsProcessingStatus,
 } from "../model/TestRunModel";
 import LoadingState from "../Loading/LoadingState";
 import { Paper, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { fetchTestResultsProcessing } from "../service/TestRunService";
 import { RouteComponentProps } from "@reach/router";
@@ -16,22 +16,6 @@ interface TestResultsProcessingCheckProps extends RouteComponentProps {
   refreshInterval: number;
   autoRefreshTimeout: number;
 }
-
-const useStyles = makeStyles((theme) => ({
-  progress: {
-    width: "90%",
-    marginLeft: "5%",
-  },
-  paper: {
-    padding: "20px 40px",
-    textAlign: "center",
-    maxWidth: "600px",
-    margin: "auto",
-  },
-  errorMessage: {
-    whiteSpace: "pre-wrap",
-  },
-}));
 
 const resultsAreStillProcessing = (
   processing: TestResultsProcessing,
@@ -49,7 +33,6 @@ const TestResultsProcessingCheck = ({
   refreshInterval,
   autoRefreshTimeout,
 }: TestResultsProcessingCheckProps) => {
-  const classes = useStyles({});
   let totalWaitTime = 0;
 
   const [resultsProcessing, setResultsProcessing] =

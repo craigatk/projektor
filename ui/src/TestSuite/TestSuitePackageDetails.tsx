@@ -1,9 +1,9 @@
 import * as React from "react";
+import classes from "./TestSuitePackageDetails.module.css";
 import TestSuiteList from "./TestSuiteList";
 import { TestSuite } from "../model/TestRunModel";
 import PageTitle from "../PageTitle";
 import { Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 
 interface TestSuitePackageDetailsProps {
   publicId: string;
@@ -11,19 +11,11 @@ interface TestSuitePackageDetailsProps {
   testSuiteSummaries: TestSuite[];
 }
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(1, 2),
-  },
-}));
-
 const TestSuitePackageDetails = ({
   publicId,
   packageName,
   testSuiteSummaries,
 }: TestSuitePackageDetailsProps) => {
-  const classes = useStyles({});
-
   return (
     <div data-testid="test-suite-package-details">
       <PageTitle

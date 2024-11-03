@@ -1,26 +1,17 @@
 import * as React from "react";
 import { RouteComponentProps } from "@reach/router";
+import classes from "./TestRunAllTests.module.css";
 import TestSuiteList from "../TestSuite/TestSuiteList";
 import LoadingState from "../Loading/LoadingState";
 import LoadingSection from "../Loading/LoadingSection";
 import { fetchTestRun } from "../service/TestRunService";
 import { TestRun } from "../model/TestRunModel";
 import PageTitle from "../PageTitle";
-import { makeStyles } from "@material-ui/styles";
 
 interface TestRunAllTestsProps extends RouteComponentProps {
   publicId: string;
 }
-
-const useStyles = makeStyles(() => ({
-  mainSection: {
-    marginTop: "20px",
-  },
-}));
-
 const TestRunAllTests = ({ publicId }: TestRunAllTestsProps) => {
-  const classes = useStyles({});
-
   const [testRun, setTestRun] = React.useState<TestRun>(null);
   const [testRunLoadingState, setTestRunLoadingState] = React.useState(
     LoadingState.Loading,

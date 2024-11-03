@@ -1,13 +1,6 @@
 import * as React from "react";
-import { makeStyles, TableCell, TableRow } from "@material-ui/core";
-
-const useStyles = makeStyles((theme) => ({
-  resultCol: {
-    width: "10px",
-    marginRight: "8px",
-    marginLeft: "8px",
-  },
-}));
+import classes from "./TestCaseListHeaderRow.module.css";
+import { TableCell, TableRow } from "@material-ui/core";
 
 interface TestCaseListHeaderRowProps {
   showDurationFirst: boolean;
@@ -16,8 +9,6 @@ interface TestCaseListHeaderRowProps {
 const TestCaseListHeaderRow = ({
   showDurationFirst,
 }: TestCaseListHeaderRowProps) => {
-  const classes = useStyles({});
-
   let headerCells = [];
   const resultHeaderCell = (
     <TableCell

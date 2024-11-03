@@ -1,6 +1,4 @@
 import * as React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { TestSuite } from "../model/TestRunModel";
 import {
   Location,
   Link,
@@ -8,7 +6,9 @@ import {
   Redirect,
   LocationContext,
 } from "@reach/router";
+import classes from "./TestSuiteDetails.module.css";
 import { Tabs, Tab, Paper } from "@material-ui/core";
+import { TestSuite } from "../model/TestRunModel";
 import TestSuiteTestCaseList from "./TestSuiteTestCaseList";
 import TestSuiteSystemOut from "../TestOutput/TestSuiteSystemOut";
 import TestSuiteSystemErr from "../TestOutput/TestSuiteSystemErr";
@@ -20,15 +20,6 @@ interface TestSuiteDetailsProps {
   publicId: string;
   testSuite: TestSuite;
 }
-
-const useStyles = makeStyles((theme) => ({
-  detailsSection: {
-    paddingTop: "20px",
-  },
-  paper: {
-    padding: theme.spacing(2, 2),
-  },
-}));
 
 const buildHeaderIntermediateLinks = (publicId, testSuite) => {
   const headerIntermediateLinks = [];
@@ -50,8 +41,6 @@ const buildHeaderIntermediateLinks = (publicId, testSuite) => {
 
 const TestSuiteDetails = ({ publicId, testSuite }: TestSuiteDetailsProps) => {
   const linkBase = `/tests/${publicId}/suite/${testSuite.idx}`;
-
-  const classes = useStyles({});
 
   const defaultTab = "/cases";
 

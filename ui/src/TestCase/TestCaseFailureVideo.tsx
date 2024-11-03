@@ -1,6 +1,6 @@
 import * as React from "react";
+import classes from "./TestCaseFailureVideo.module.css";
 import { AttachmentType, TestCase } from "../model/TestRunModel";
-import { makeStyles } from "@material-ui/core/styles";
 import { findAttachmentOfType } from "./testCaseHelpers";
 import { RouteComponentProps } from "@reach/router";
 
@@ -9,18 +9,10 @@ interface TestCaseFailureVideoProps extends RouteComponentProps {
   publicId: string;
 }
 
-const useStyles = makeStyles(() => ({
-  failureVideo: {
-    maxWidth: "100%",
-  },
-}));
-
 const TestCaseFailureVideo = ({
   testCase,
   publicId,
 }: TestCaseFailureVideoProps) => {
-  const classes = useStyles({});
-
   const videoAttachment = findAttachmentOfType(testCase, AttachmentType.VIDEO);
 
   if (videoAttachment) {
