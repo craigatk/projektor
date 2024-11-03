@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import { Link } from "@reach/router";
+import styled from '@emotion/styled'
 
 interface CleanLinkProps {
   color?: string;
