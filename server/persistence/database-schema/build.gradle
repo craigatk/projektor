@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     api "org.flywaydb:flyway-core:9.22.3"
-    api "com.zaxxer:HikariCP:5.1.0"
+    api "com.zaxxer:HikariCP:6.0.0"
     api 'org.jooq:jooq:3.19.14'
 
     // Needs to be 'api' scope so the Flyway plugin can see it
