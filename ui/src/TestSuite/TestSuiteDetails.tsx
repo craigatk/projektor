@@ -7,7 +7,7 @@ import {
   LocationContext,
 } from "@reach/router";
 import classes from "./TestSuiteDetails.module.css";
-import { Tabs, Tab, Paper } from "@material-ui/core";
+import { Tabs, Tab, Paper } from "@mui/material";
 import { TestSuite } from "../model/TestRunModel";
 import TestSuiteTestCaseList from "./TestSuiteTestCaseList";
 import TestSuiteSystemOut from "../TestOutput/TestSuiteSystemOut";

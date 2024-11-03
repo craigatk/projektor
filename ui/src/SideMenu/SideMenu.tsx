@@ -1,6 +1,6 @@
 import * as React from "react";
 import classes from "./SideMenu.module.css";
-import { Drawer, List, Typography } from "@material-ui/core";
+import { Drawer, List, Typography } from "@mui/material";
 import { TestRunGitMetadata, TestRunSummary } from "../model/TestRunModel";
 import DashboardIcon from "../Icons/DashboardIcon";
 import FailedIcon from "../Icons/FailedIcon";

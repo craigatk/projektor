@@ -1,7 +1,7 @@
 import * as React from "react";
 import classes from "./CoveragePercentage.module.css";
 import { CoverageStat } from "../model/TestRunModel";
-import { Tooltip } from "@material-ui/core";
+import { Tooltip } from "@mui/material";
 
 interface CoveragePercentageProps {
   coverageStat: CoverageStat;

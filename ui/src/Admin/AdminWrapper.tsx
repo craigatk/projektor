@@ -1,7 +1,7 @@
 import * as React from "react";
 import classes from "./AdminWrapper.module.css";
 import { RouteComponentProps, Router } from "@reach/router";
-import { AppBar, Typography } from "@material-ui/core";
+import { AppBar, Typography } from "@mui/material";
 import AdminSideMenu from "./AdminSideMenu";
 import AdminFailuresPage from "./Failures/AdminFailuresPage";
 

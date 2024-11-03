@@ -3,7 +3,7 @@ import classes from "./AdminFailuresTable.module.css";
 import { ResultsProcessingFailure } from "../../model/AdminModel";
 import MaterialTable from "@material-table/core";
 import moment from "moment";
-import { Link, Tooltip } from "@material-ui/core";
+import { Link, Tooltip } from "@mui/material";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
@@ -73,14 +73,16 @@ const AdminFailuresTable = ({ failures }: AdminFailuresTableProps) => {
                 className={classes.copyLink}
               >
                 <Tooltip title="Copy response body to clipboard">
-                  <CopyToClipboard text={rowData.body}>
-                    <Link
-                      data-testid={`admin-failures-body-copy-${rowData.id}`}
-                    >
-                      Copy body to clipboard{" "}
-                      <FileCopyOutlinedIcon fontSize="small" />
-                    </Link>
-                  </CopyToClipboard>
+                  <span>
+                    <CopyToClipboard text={rowData.body}>
+                      <Link
+                        data-testid={`admin-failures-body-copy-${rowData.id}`}
+                      >
+                        Copy body to clipboard{" "}
+                        <FileCopyOutlinedIcon fontSize="small" />
+                      </Link>
+                    </CopyToClipboard>
+                  </span>
                 </Tooltip>
               </span>
             ),

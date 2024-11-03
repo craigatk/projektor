@@ -2,7 +2,7 @@ import * as React from "react";
 import classes from "./CoverageTable.module.css";
 import MaterialTable from "@material-table/core";
 import CoverageGraph from "./CoverageGraph";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import CleanLink from "../Link/CleanLink";
 import CoverageTableRow from "./CoverageTableRow";
 

@@ -3,7 +3,7 @@ import classes from "./TestSuitePackageDetails.module.css";
 import TestSuiteList from "./TestSuiteList";
 import { TestSuite } from "../model/TestRunModel";
 import PageTitle from "../PageTitle";
-import { Paper } from "@material-ui/core";
+import { Paper } from "@mui/material";
 
 interface TestSuitePackageDetailsProps {
   publicId: string;

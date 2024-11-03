@@ -2,7 +2,7 @@ import * as React from "react";
 import { useLocation } from "@reach/router";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { repositoryLinkUrlAPI } from "../../Repository/RepositoryLink";
-import { Chip, Fade, Link, Tooltip } from "@material-ui/core";
+import { Chip, Fade, Link, Tooltip } from "@mui/material";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import classes from "./TestsBadge.module.css";
 
@@ -42,14 +42,16 @@ const TestsBadge = ({ badgeSvg, repoName, projectName }: TestsBadgeProps) => {
         />
         <span className={classes.badgeLink}>
           <Tooltip title="Copy tests badge Markdown readme code to clipboard">
-            <CopyToClipboard onCopy={onCopy} text={badgeMarkdown}>
-              <Link
-                data-testid="tests-badge-copy-link"
-                data-badge={badgeMarkdown}
-              >
-                <FileCopyOutlinedIcon fontSize="small" />
-              </Link>
-            </CopyToClipboard>
+            <span>
+              <CopyToClipboard onCopy={onCopy} text={badgeMarkdown}>
+                <Link
+                  data-testid="tests-badge-copy-link"
+                  data-badge={badgeMarkdown}
+                >
+                  <FileCopyOutlinedIcon fontSize="small" />
+                </Link>
+              </CopyToClipboard>
+            </span>
           </Tooltip>
           <span>
             <Fade in={showCopied}>

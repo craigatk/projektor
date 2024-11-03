@@ -2,7 +2,7 @@ import * as React from "react";
 import { RepositoryPerformanceTimeline } from "../../model/RepositoryModel";
 import RepositoryPerformanceTimelineGraph from "./RepositoryPerformanceTimelineGraph";
 import PageTitle from "../../PageTitle";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import classes from "./RepositoryPerformanceTimelineDetails.module.css";
 
 interface RepositoryPerformanceTimelineDetailsProps {

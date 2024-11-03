@@ -6,7 +6,7 @@ import {
   repositoryLinkUrlAPI,
   repositoryLinkUrlUI,
 } from "../../Repository/RepositoryLink";
-import { Chip, Fade, Link, Tooltip } from "@material-ui/core";
+import { Chip, Fade, Link, Tooltip } from "@mui/material";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 
 interface CoverageBadgeProps {
@@ -48,14 +48,16 @@ const CoverageBadge = ({
         />
         <span className={classes.badgeLink}>
           <Tooltip title="Copy coverage badge Markdown readme code to clipboard">
-            <CopyToClipboard onCopy={onCopy} text={badgeMarkdown}>
-              <Link
-                data-testid="coverage-badge-copy-link"
-                data-badge={badgeMarkdown}
-              >
-                <FileCopyOutlinedIcon fontSize="small" />
-              </Link>
-            </CopyToClipboard>
+            <span>
+              <CopyToClipboard onCopy={onCopy} text={badgeMarkdown}>
+                <Link
+                  data-testid="coverage-badge-copy-link"
+                  data-badge={badgeMarkdown}
+                >
+                  <FileCopyOutlinedIcon fontSize="small" />
+                </Link>
+              </CopyToClipboard>
+            </span>
           </Tooltip>
           <span>
             <Fade in={showCopied}>

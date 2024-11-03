@@ -11,12 +11,12 @@ import Dashboard from "../Dashboard/Dashboard";
 import { TestRunGitMetadata, TestRunSummary } from "../model/TestRunModel";
 import SideMenu from "../SideMenu/SideMenu";
 import SlowTestCasesPage from "../TestCase/slow/SlowTestCasesPage";
-import { AppBar, Typography } from "@material-ui/core";
 import AttachmentsPage from "../Attachments/AttachmentsPage";
 import { PinState } from "../Pin/PinState";
 import CoveragePage from "../Coverage/CoveragePage";
 import CoverageGroupFilesPage from "../Coverage/CoverageGroupFilesPage";
 import CodeQualityReportsPage from "../Quality/CodeQualityReportsPage";
+import { AppBar, Typography } from "@mui/material";
 
 interface TestRunMenuWrapperProps {
   publicId: string;

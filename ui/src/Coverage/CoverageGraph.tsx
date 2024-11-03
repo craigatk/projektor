@@ -1,6 +1,6 @@
 import * as React from "react";
 import { CoverageStat } from "../model/TestRunModel";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import CoveragePercentage from "./CoveragePercentage";
 import CleanLink from "../Link/CleanLink";

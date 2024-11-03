@@ -9,9 +9,9 @@ import {
 import classes from "./TestCaseDetails.module.css";
 import { AttachmentType, TestCase } from "../model/TestRunModel";
 import BreadcrumbPageHeader from "../BreadcrumbPageHeader";
-import Paper from "@material-ui/core/Paper";
+import Paper from "@mui/material/Paper";
 import TestCaseFailureDetails from "./TestCaseFailureDetails";
-import { Tab, Tabs } from "@material-ui/core";
+import { Tab, Tabs } from "@mui/material";
 import TestSuiteSystemOut from "../TestOutput/TestSuiteSystemOut";
 import TestSuiteSystemErr from "../TestOutput/TestSuiteSystemErr";
 import { getTabCurrentValue } from "../Tabs/TabValue";

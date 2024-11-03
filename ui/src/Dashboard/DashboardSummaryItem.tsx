@@ -1,6 +1,6 @@
 import * as React from "react";
 import classes from "./DashboardSummaryItem.module.css";
-import { ListItem, ListItemText } from "@material-ui/core";
+import { ListItem, ListItemText } from "@mui/material";
 
 interface DashboardSummaryItemProps {
   label: string;

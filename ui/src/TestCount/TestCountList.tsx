@@ -1,7 +1,7 @@
 import * as React from "react";
 import classes from "./TestCountList.module.css";
 import classNames from "classnames/bind";
-import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import PassedIcon from "../Icons/PassedIcon";
 import FailedIcon from "../Icons/FailedIcon";
 import TotalIcon from "../Icons/TotalIcon";

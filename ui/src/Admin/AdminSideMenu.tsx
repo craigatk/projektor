@@ -1,6 +1,6 @@
 import * as React from "react";
 import classes from "./AdminSideMenu.module.css";
-import { Drawer, List, Typography } from "@material-ui/core";
+import { Drawer, List, Typography } from "@mui/material";
 import SideMenuLink from "../SideMenu/SideMenuLink";
 import FailedIcon from "../Icons/FailedIcon";
 

@@ -1,7 +1,7 @@
 import * as React from "react";
 import classes from "./OrganizationWrapper.module.css";
 import { RouteComponentProps, Router } from "@reach/router";
-import { AppBar, Typography } from "@material-ui/core";
+import { AppBar, Typography } from "@mui/material";
 import OrganizationSideMenu from "./OrganizationSideMenu";
 import OrganizationCoveragePage from "./Coverage/OrganizationCoveragePage";
 

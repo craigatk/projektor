@@ -2,7 +2,7 @@ import * as React from "react";
 import classes from "./RepositoryCoverageDetails.module.css";
 import { RepositoryCoverageTimeline } from "../../model/RepositoryModel";
 import RepositoryCoverageTimelineGraph from "./RepositoryCoverageTimelineGraph";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import RepositoryCoverageBadge from "../../Badge/coverage/RepositoryCoverageBadge";
 
 interface RepositoryCoverageDetailsProps {

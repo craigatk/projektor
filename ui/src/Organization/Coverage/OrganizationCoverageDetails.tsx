@@ -3,7 +3,7 @@ import classes from "./OrganizationCoverageDetails.module.css";
 import { OrganizationCoverage } from "../../model/OrganizationModel";
 import CoverageTable from "../../Coverage/CoverageTable";
 import CoverageTableRow from "../../Coverage/CoverageTableRow";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import { repositoryLinkUrlUI } from "../../Repository/RepositoryLink";
 
 interface OrganizationCoverageDetailsProps {
