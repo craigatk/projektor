@@ -1,20 +1,15 @@
 import * as React from "react";
 import { useQueryParam, NumberParam } from "use-query-params";
+import classes from "./CodeText.module.css";
 import { Element } from "react-scroll";
 import CodeTextProgressiveRender from "./CodeTextProgressiveRender";
 import CodeTextLine from "./CodeTextLine";
-import styled from "styled-components";
 import _ from "lodash";
 import CodeTextLinesChunk from "./CodeTextLinesChunk";
 
 interface CodeTextProps {
   text: string;
 }
-
-const LineElement = styled(Element)`
-  padding-right: 10px;
-`;
-
 const CodeText = ({ text }: CodeTextProps) => {
   if (text == null) {
     return null;
@@ -49,9 +44,10 @@ const CodeText = ({ text }: CodeTextProps) => {
     const highlighted = lineIdx === highlightedLine;
 
     return (
-      <LineElement
+      <Element
         name={`line-${lineIdx}-${highlighted}`}
         key={`line-element-${lineIdx}-${highlighted}`}
+        className={classes.line}
       >
         <CodeTextLine
           key={`code-line-${lineIdx}-${highlighted}`}
@@ -60,7 +56,7 @@ const CodeText = ({ text }: CodeTextProps) => {
           highlighted={highlighted}
           handleLineClick={handleLineClick}
         />
-      </LineElement>
+      </Element>
     );
   });
 
