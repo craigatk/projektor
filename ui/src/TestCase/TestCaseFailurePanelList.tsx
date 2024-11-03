@@ -1,4 +1,5 @@
 import * as React from "react";
+import classes from "./TestCaseFailurePanelList.module.css";
 import { TestCase } from "../model/TestRunModel";
 import TestCaseFailurePanel from "./TestCaseFailurePanel";
 import { ExpandCollapseState } from "./ExpandCollapseState";
@@ -6,7 +7,6 @@ import UnfoldLessOutlinedIcon from "@mui/icons-material/UnfoldLessOutlined";
 import UnfoldMoreOutlinedIcon from "@mui/icons-material/UnfoldMoreOutlined";
 import { Typography } from "@material-ui/core";
 import CleanLinkText from "../Link/CleanLinkText";
-import { makeStyles } from "@material-ui/core/styles";
 
 const showFullFailureMaxFailureCount = 5;
 const expandAllFailuresCount = 15;
@@ -16,27 +16,10 @@ interface TestCaseFailurePanelListProps {
   publicId: string;
 }
 
-const useStyles = makeStyles(() => ({
-  expandCollapseLink: {
-    display: "inline-block",
-    marginBottom: "10px",
-    marginLeft: "7px",
-  },
-  expandCollapseIcon: {
-    display: "inline-block",
-    verticalAlign: "middle",
-  },
-  expandCollapseLabel: {
-    display: "inline-block",
-  },
-}));
-
 const TestCaseFailurePanelList = ({
   failedTestCases,
   publicId,
 }: TestCaseFailurePanelListProps) => {
-  const classes = useStyles({});
-
   const initialExpandCollapseState =
     failedTestCases.length <= expandAllFailuresCount
       ? ExpandCollapseState.EXPAND_ALL

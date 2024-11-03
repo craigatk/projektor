@@ -1,11 +1,7 @@
 import * as React from "react";
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  makeStyles,
-} from "@material-ui/core";
+import classes from "./TestCountList.module.css";
+import classNames from "classnames/bind";
+import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import PassedIcon from "../Icons/PassedIcon";
 import FailedIcon from "../Icons/FailedIcon";
 import TotalIcon from "../Icons/TotalIcon";
@@ -19,21 +15,7 @@ interface TestCountListProps {
   horizontal: boolean;
 }
 
-interface TestCountListStyleProps {
-  horizontal: boolean;
-}
-
-const useStyles = makeStyles({
-  // style rule
-  list: ({ horizontal }: TestCountListStyleProps) =>
-    horizontal
-      ? {
-          display: "flex",
-          flexDirection: "row",
-          padding: 0,
-        }
-      : {},
-});
+const cx = classNames.bind(classes);
 
 const TestCountList = ({
   passedCount,
@@ -42,10 +24,13 @@ const TestCountList = ({
   totalCount,
   horizontal,
 }: TestCountListProps) => {
-  const classes = useStyles({ horizontal });
-
   return (
-    <List dense={true} className={classes.list}>
+    <List
+      dense={true}
+      className={cx({
+        horizontalList: horizontal,
+      })}
+    >
       <ListItem>
         <ListItemIcon>
           <PassedIcon />

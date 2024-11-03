@@ -1,7 +1,8 @@
 import * as React from "react";
+import classes from "./TestCaseSummary.module.css";
 import { TestCase } from "../model/TestRunModel";
 import { RouteComponentProps } from "@reach/router";
-import { Typography, makeStyles } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import PassedIcon from "../Icons/PassedIcon";
 import SkippedIcon from "../Icons/SkippedIcon";
 import FailedIcon from "../Icons/FailedIcon";
@@ -9,22 +10,7 @@ import FailedIcon from "../Icons/FailedIcon";
 interface TestCaseSummaryProps extends RouteComponentProps {
   testCase: TestCase;
 }
-
-const useStyles = makeStyles((theme) => ({
-  label: {
-    fontWeight: "bold",
-    minWidth: "200px",
-    display: "inline-block",
-  },
-  resultIcon: {
-    height: ".75em",
-    verticalAlign: "text-bottom",
-  },
-}));
-
 const TestCaseSummary = ({ testCase }: TestCaseSummaryProps) => {
-  const classes = useStyles({});
-
   let resultStr: string;
   let resultIcon: React.ReactNode;
 

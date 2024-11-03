@@ -1,0 +1,10 @@
+.label {
+  font-weight: bold;
+  min-width: 200px;
+  display: inline-block;
+}
+
+.resultIcon {
+  height: 0.75em;
+  vertical-align: text-bottom;
+}

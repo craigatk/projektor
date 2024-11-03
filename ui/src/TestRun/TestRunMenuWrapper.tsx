@@ -1,7 +1,7 @@
 import * as React from "react";
 import { globalHistory, Router } from "@reach/router";
 import { QueryParamProvider } from "use-query-params";
-import { makeStyles } from "@material-ui/styles";
+import classes from "./TestRunMenuWrapper.module.css";
 import TestRunAllTests from "./TestRunAllTests";
 import TestSuitePage from "../TestSuite/TestSuitePage";
 import TestSuitePackagePage from "../TestSuite/TestSuitePackagePage";
@@ -17,25 +17,6 @@ import { PinState } from "../Pin/PinState";
 import CoveragePage from "../Coverage/CoveragePage";
 import CoverageGroupFilesPage from "../Coverage/CoverageGroupFilesPage";
 import CodeQualityReportsPage from "../Quality/CodeQualityReportsPage";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-  appBar: {
-    backgroundColor: "#1c313a",
-    padding: "5px 10px",
-    height: "42px",
-  },
-  appBarLabel: {
-    marginLeft: "192px",
-  },
-  content: {
-    flexGrow: 1,
-    marginTop: "42px",
-    maxWidth: "calc(100% - 180px)",
-  },
-}));
 
 interface TestRunMenuWrapperProps {
   publicId: string;
@@ -55,8 +36,6 @@ const TestRunMenuWrapper = ({
   if (testRunSummary == null) {
     return null;
   }
-
-  const classes = useStyles({});
 
   return (
     <div className={classes.root} data-testid="test-run-menu-wrapper">

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { CoverageStat } from "../model/TestRunModel";
 import { Typography } from "@material-ui/core";
-import styled from '@emotion/styled'
+import styled from "@emotion/styled";
 import CoveragePercentage from "./CoveragePercentage";
 import CleanLink from "../Link/CleanLink";
 import CoverageGraphImpl from "./CoverageGraphImpl";

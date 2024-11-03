@@ -1,0 +1,15 @@
+.progress {
+    width: 90%;
+    margin-left: 5%;
+}
+
+.paper {
+    padding: 20px 40px;
+    text-align: center;
+    max-width: 600px;
+    margin: auto;
+}
+
+.errorMessage {
+    white-space: pre-wrap;
+}
