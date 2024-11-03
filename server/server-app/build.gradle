@@ -19,6 +19,7 @@ shadowJar {
     manifest {
         attributes 'Main-Class': mainClassName
     }
+    mergeServiceFiles() // Needed for Flyway 10 to find migration files in a shadow JAR. Ref: https://github.com/flyway/flyway/issues/3811#issuecomment-1923303046
 }
 
 jar.enabled = false // We only use the -all jar produced by Shadow
