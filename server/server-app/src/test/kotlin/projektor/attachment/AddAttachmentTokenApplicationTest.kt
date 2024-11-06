@@ -1,10 +1,9 @@
 package projektor.attachment
 
-import io.ktor.http.HttpMethod
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
-import io.ktor.server.testing.withTestApplication
+import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -14,79 +13,86 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import java.io.File
 
-@ExperimentalStdlibApi
 class AddAttachmentTokenApplicationTest : ApplicationTestCase() {
     @Test
-    fun `when token required and valid token included in header should add attachment`() {
-        val validPublishToken = "publish12345"
-        publishToken = validPublishToken
+    fun `when token required and valid token included in header should add attachment`() =
+        testSuspend {
+            val validPublishToken = "publish12345"
+            publishToken = validPublishToken
 
-        val publicId = randomPublicId()
-        attachmentsEnabled = true
+            val publicId = randomPublicId()
+            attachmentsEnabled = true
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-attachment.txt") {
-                testRunDBGenerator.createTestRun(
-                    publicId,
-                    listOf(
-                        TestSuiteData(
-                            "testSuite1",
-                            listOf("testSuite1TestCase1", "testSuite1TestCase2"),
-                            listOf(),
-                            listOf(),
-                        ),
+            startTestServer()
+
+            val attachmentBytes = File("src/test/resources/test-attachment.txt").readBytes()
+
+            testRunDBGenerator.createTestRun(
+                publicId,
+                listOf(
+                    TestSuiteData(
+                        "testSuite1",
+                        listOf("testSuite1TestCase1", "testSuite1TestCase2"),
+                        listOf(),
+                        listOf(),
                     ),
-                )
+                ),
+            )
 
-                addHeader(AuthConfig.PUBLISH_TOKEN, validPublishToken)
-                setBody(File("src/test/resources/test-attachment.txt").readBytes())
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
-            }
+            val postResponse =
+                testClient.post("/run/$publicId/attachments/test-attachment.txt") {
+                    headers {
+                        append("content-length", attachmentBytes.size.toString())
+                        append(AuthConfig.PUBLISH_TOKEN, validPublishToken)
+                    }
+                    setBody(attachmentBytes)
+                }
+            expectThat(postResponse.status).isEqualTo(HttpStatusCode.OK)
 
             waitUntilTestRunHasAttachments(publicId, 1)
 
-            handleRequest(HttpMethod.Get, "/run/$publicId/attachments/test-attachment.txt") {
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+            val getResponse = testClient.get("/run/$publicId/attachments/test-attachment.txt")
 
-                expectThat(response.byteContent?.decodeToString()).isEqualTo("Here is a test attachment file")
-            }
+            expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
+            expectThat(getResponse.bodyAsText()).isEqualTo("Here is a test attachment file")
         }
-    }
 
     @Test
-    fun `when token required and invalid token included in header should not add attachment`() {
-        val validPublishToken = "publish12345"
-        publishToken = validPublishToken
+    fun `when token required and invalid token included in header should not add attachment`() =
+        testSuspend {
+            val validPublishToken = "publish12345"
+            publishToken = validPublishToken
 
-        val publicId = randomPublicId()
-        attachmentsEnabled = true
+            val publicId = randomPublicId()
+            attachmentsEnabled = true
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/run/$publicId/attachments/test-attachment.txt") {
-                testRunDBGenerator.createTestRun(
-                    publicId,
-                    listOf(
-                        TestSuiteData(
-                            "testSuite1",
-                            listOf("testSuite1TestCase1", "testSuite1TestCase2"),
-                            listOf(),
-                            listOf(),
-                        ),
+            startTestServer()
+
+            val attachmentBytes = File("src/test/resources/test-attachment.txt").readBytes()
+
+            testRunDBGenerator.createTestRun(
+                publicId,
+                listOf(
+                    TestSuiteData(
+                        "testSuite1",
+                        listOf("testSuite1TestCase1", "testSuite1TestCase2"),
+                        listOf(),
+                        listOf(),
                     ),
-                )
+                ),
+            )
 
-                addHeader(AuthConfig.PUBLISH_TOKEN, "invalidPublishTOken")
-                setBody(File("src/test/resources/test-attachment.txt").readBytes())
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.Unauthorized)
-            }
+            val postResponse =
+                testClient.post("/run/$publicId/attachments/test-attachment.txt") {
+                    headers {
+                        append("content-length", attachmentBytes.size.toString())
+                        append(AuthConfig.PUBLISH_TOKEN, "invalidPublishToken")
+                    }
+                    setBody(attachmentBytes)
+                }
+            expectThat(postResponse.status).isEqualTo(HttpStatusCode.Unauthorized)
 
-            handleRequest(HttpMethod.Get, "/run/$publicId/attachments/test-attachment.txt") {
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.NotFound)
-            }
+            val getResponse = testClient.get("/run/$publicId/attachments/test-attachment.txt")
+            expectThat(getResponse.status).isEqualTo(HttpStatusCode.NotFound)
         }
-    }
 }

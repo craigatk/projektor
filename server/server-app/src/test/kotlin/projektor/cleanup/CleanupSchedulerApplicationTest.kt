@@ -1,6 +1,5 @@
 package projektor.cleanup
 
-import io.ktor.server.testing.withTestApplication
 import org.junit.jupiter.api.Test
 import org.koin.ktor.ext.get
 import projektor.ApplicationTestCase
@@ -21,16 +20,16 @@ class CleanupSchedulerApplicationTest : ApplicationTestCase() {
     fun `when report cleanup enabled should schedule cleanup job`() {
         reportCleanupMaxAgeDays = 30
 
-        withTestApplication(::createTestApplication) {
-            val scheduler: Scheduler = application.get()
+        val testServer = startTestServer()
 
-            val cleanupJob = scheduler.findScheduledJob(CleanupScheduledJob.CLEANUP_JOB_NAME)
-            expectThat(cleanupJob)
-                .isNotNull()
-                .and {
-                    get { scheduleDelay }.isEqualTo(ScheduleDelay(1, TimeUnit.DAYS))
-                }
-        }
+        val scheduler: Scheduler = testServer.application.get()
+
+        val cleanupJob = scheduler.findScheduledJob(CleanupScheduledJob.CLEANUP_JOB_NAME)
+        expectThat(cleanupJob)
+            .isNotNull()
+            .and {
+                get { scheduleDelay }.isEqualTo(ScheduleDelay(1, TimeUnit.DAYS))
+            }
     }
 
     @Test
@@ -38,39 +37,39 @@ class CleanupSchedulerApplicationTest : ApplicationTestCase() {
         attachmentsEnabled = true
         attachmentCleanupMaxAgeDays = 14
 
-        withTestApplication(::createTestApplication) {
-            val cleanupPublicId = randomPublicId()
-            testRunDBGenerator.createTestRun(cleanupPublicId, LocalDate.now().minusDays(16), false)
-            testRunDBGenerator.addAttachment(cleanupPublicId, "attachment", "attachment.txt")
+        val testServer = startTestServer()
 
-            val tooNewPublicId = randomPublicId()
-            testRunDBGenerator.createTestRun(tooNewPublicId, LocalDate.now().minusDays(2), false)
-            testRunDBGenerator.addAttachment(tooNewPublicId, "attachment", "attachment.txt")
+        val cleanupPublicId = randomPublicId()
+        testRunDBGenerator.createTestRun(cleanupPublicId, LocalDate.now().minusDays(16), false)
+        testRunDBGenerator.addAttachment(cleanupPublicId, "attachment", "attachment.txt")
 
-            val scheduler: Scheduler = application.get()
+        val tooNewPublicId = randomPublicId()
+        testRunDBGenerator.createTestRun(tooNewPublicId, LocalDate.now().minusDays(2), false)
+        testRunDBGenerator.addAttachment(tooNewPublicId, "attachment", "attachment.txt")
 
-            val cleanupJob = scheduler.findScheduledJob(CleanupScheduledJob.CLEANUP_JOB_NAME)
-            assertNotNull(cleanupJob)
+        val scheduler: Scheduler = testServer.application.get()
 
-            cleanupJob.runnable.run()
+        val cleanupJob = scheduler.findScheduledJob(CleanupScheduledJob.CLEANUP_JOB_NAME)
+        assertNotNull(cleanupJob)
 
-            val attachmentsAfterCleanup = attachmentDao.fetchByTestRunPublicId(cleanupPublicId.id)
-            expectThat(attachmentsAfterCleanup).hasSize(0)
+        cleanupJob.runnable.run()
 
-            val tooNewAttachmentsAfterCleanup = attachmentDao.fetchByTestRunPublicId(tooNewPublicId.id)
-            expectThat(tooNewAttachmentsAfterCleanup).hasSize(1)
-        }
+        val attachmentsAfterCleanup = attachmentDao.fetchByTestRunPublicId(cleanupPublicId.id)
+        expectThat(attachmentsAfterCleanup).hasSize(0)
+
+        val tooNewAttachmentsAfterCleanup = attachmentDao.fetchByTestRunPublicId(tooNewPublicId.id)
+        expectThat(tooNewAttachmentsAfterCleanup).hasSize(1)
     }
 
     @Test
     fun `when cleanup not enabled should not schedule cleanup job`() {
         reportCleanupMaxAgeDays = null
 
-        withTestApplication(::createTestApplication) {
-            val scheduler: Scheduler = application.get()
+        val testServer = startTestServer()
 
-            val cleanupJob = scheduler.findScheduledJob(CleanupScheduledJob.CLEANUP_JOB_NAME)
-            expectThat(cleanupJob).isNull()
-        }
+        val scheduler: Scheduler = testServer.application.get()
+
+        val cleanupJob = scheduler.findScheduledJob(CleanupScheduledJob.CLEANUP_JOB_NAME)
+        expectThat(cleanupJob).isNull()
     }
 }

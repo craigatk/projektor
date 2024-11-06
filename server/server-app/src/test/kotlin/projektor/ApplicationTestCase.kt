@@ -138,7 +138,7 @@ open class ApplicationTestCase {
     protected val meterRegistry = SimpleMeterRegistry()
 
     protected lateinit var testClient: io.ktor.client.HttpClient
-    protected var testServer: TestApplicationEngine? = null
+    private var testServer: TestApplicationEngine? = null
 
     @BeforeEach
     fun setupTelemetry() {
@@ -155,7 +155,7 @@ open class ApplicationTestCase {
         }
     }
 
-    fun startTestServer() {
+    fun startTestServer(): TestApplicationEngine {
         val theServer =
             TestApplicationEngine(
                 createTestEnvironment {
@@ -170,6 +170,8 @@ open class ApplicationTestCase {
         setUpTestDependencies(theServer.application)
 
         testServer = theServer
+
+        return theServer
     }
 
     @AfterEach

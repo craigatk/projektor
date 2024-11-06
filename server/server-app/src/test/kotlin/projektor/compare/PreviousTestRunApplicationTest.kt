@@ -1,9 +1,9 @@
 package projektor.compare
 
-import io.ktor.http.HttpMethod
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
+import io.ktor.test.dispatcher.*
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
@@ -16,57 +16,56 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
-@ExperimentalStdlibApi
 class PreviousTestRunApplicationTest : ApplicationTestCase() {
-    @Test
-    fun `should find previous test run`() {
-        val differentRepoPublicId = randomPublicId()
-        val oldestPublicId = randomPublicId()
-        val previousPublicId = randomPublicId()
-        val thisPublicId = randomPublicId()
-
-        val repoName = "${RandomStringUtils.randomAlphabetic(8)}/${RandomStringUtils.randomAlphabetic(8)}"
-
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/run/$thisPublicId/previous") {
-                val differentTestRun = testRunDBGenerator.createSimpleTestRun(differentRepoPublicId)
-                testRunDBGenerator.addGitMetadata(differentTestRun, "projektor/different", true, "main", null, null, null)
-                runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), differentRepoPublicId) }
-
-                val oldestTestRun = testRunDBGenerator.createSimpleTestRun(oldestPublicId)
-                testRunDBGenerator.addGitMetadata(oldestTestRun, repoName, true, "main", null, null, null)
-                runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), oldestPublicId) }
-
-                val newerTestRun = testRunDBGenerator.createSimpleTestRun(previousPublicId)
-                testRunDBGenerator.addGitMetadata(newerTestRun, repoName, true, "main", null, null, null)
-                runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), previousPublicId) }
-
-                val thisPublicTestRun = testRunDBGenerator.createSimpleTestRun(thisPublicId)
-                testRunDBGenerator.addGitMetadata(thisPublicTestRun, repoName, true, "main", null, null, null)
-                runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), thisPublicId) }
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
-
-                val previousId = objectMapper.readValue(response.content, PublicId::class.java)
-                assertNotNull(previousId)
-
-                expectThat(previousId).isEqualTo(previousPublicId)
-            }
-        }
-    }
+    override fun autoStartServer() = true
 
     @Test
-    fun `when no previous test run in same repo should return 204`() {
-        val publicId = randomPublicId()
-        val repoName = "${RandomStringUtils.randomAlphabetic(8)}/${RandomStringUtils.randomAlphabetic(8)}"
+    fun `should find previous test run`() =
+        testSuspend {
+            val differentRepoPublicId = randomPublicId()
+            val oldestPublicId = randomPublicId()
+            val previousPublicId = randomPublicId()
+            val thisPublicId = randomPublicId()
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/run/$publicId/previous") {
-                val differentTestRun = testRunDBGenerator.createSimpleTestRun(publicId)
-                testRunDBGenerator.addGitMetadata(differentTestRun, repoName, true, "main", null, null, null)
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.NoContent)
-            }
+            val repoName = "${RandomStringUtils.randomAlphabetic(8)}/${RandomStringUtils.randomAlphabetic(8)}"
+
+            val differentTestRun = testRunDBGenerator.createSimpleTestRun(differentRepoPublicId)
+            testRunDBGenerator.addGitMetadata(differentTestRun, "projektor/different", true, "main", null, null, null)
+            runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), differentRepoPublicId) }
+
+            val oldestTestRun = testRunDBGenerator.createSimpleTestRun(oldestPublicId)
+            testRunDBGenerator.addGitMetadata(oldestTestRun, repoName, true, "main", null, null, null)
+            runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), oldestPublicId) }
+
+            val newerTestRun = testRunDBGenerator.createSimpleTestRun(previousPublicId)
+            testRunDBGenerator.addGitMetadata(newerTestRun, repoName, true, "main", null, null, null)
+            runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), previousPublicId) }
+
+            val thisPublicTestRun = testRunDBGenerator.createSimpleTestRun(thisPublicId)
+            testRunDBGenerator.addGitMetadata(thisPublicTestRun, repoName, true, "main", null, null, null)
+            runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), thisPublicId) }
+
+            val response = testClient.get("/run/$thisPublicId/previous")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val previousId = objectMapper.readValue(response.bodyAsText(), PublicId::class.java)
+            assertNotNull(previousId)
+
+            expectThat(previousId).isEqualTo(previousPublicId)
         }
-    }
+
+    @Test
+    fun `when no previous test run in same repo should return 204`() =
+        testSuspend {
+            val publicId = randomPublicId()
+            val repoName = "${RandomStringUtils.randomAlphabetic(8)}/${RandomStringUtils.randomAlphabetic(8)}"
+
+            val differentTestRun = testRunDBGenerator.createSimpleTestRun(publicId)
+            testRunDBGenerator.addGitMetadata(differentTestRun, repoName, true, "main", null, null, null)
+
+            val response = testClient.get("/run/$publicId/previous")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.NoContent)
+        }
 }
