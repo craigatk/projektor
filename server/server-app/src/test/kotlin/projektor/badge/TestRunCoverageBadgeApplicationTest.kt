@@ -1,11 +1,9 @@
 package projektor.badge
 
-import io.ktor.http.ContentType
-import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.contentType
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -14,40 +12,39 @@ import projektor.util.randomOrgAndRepo
 import strikt.api.expectThat
 import strikt.assertions.contains
 import strikt.assertions.isEqualTo
-import strikt.assertions.isNotNull
 
 class TestRunCoverageBadgeApplicationTest : ApplicationTestCase() {
-    @Test
-    fun `should create badge for test run coverage percentage`() {
-        val publicId = randomPublicId()
-        val repoName = randomOrgAndRepo()
-
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/run/$publicId/badge/coverage") {
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = publicId,
-                    coverageText = JacocoXmlLoader().serverAppReduced(),
-                    repoName = repoName,
-                )
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
-                expectThat(response.contentType().toString()).contains(ContentType.Image.SVG.toString())
-
-                expectThat(response.content).isNotNull().contains("95%")
-            }
-        }
-    }
+    override fun autoStartServer() = true
 
     @Test
-    fun `should return 404 when test run doesn't have coverage data`() {
-        val publicId = randomPublicId()
+    fun `should create badge for test run coverage percentage`() =
+        testSuspend {
+            val publicId = randomPublicId()
+            val repoName = randomOrgAndRepo()
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/run/$publicId/badge/coverage") {
-                testRunDBGenerator.createSimpleTestRun(publicId)
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.NotFound)
-            }
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = publicId,
+                coverageText = JacocoXmlLoader().serverAppReduced(),
+                repoName = repoName,
+            )
+
+            val response = testClient.get("/run/$publicId/badge/coverage")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+            expectThat(response.contentType().toString()).contains(ContentType.Image.SVG.toString())
+
+            expectThat(response.bodyAsText()).contains("95%")
         }
-    }
+
+    @Test
+    fun `should return 404 when test run doesn't have coverage data`() =
+        testSuspend {
+            val publicId = randomPublicId()
+
+            testRunDBGenerator.createSimpleTestRun(publicId)
+
+            val response = testClient.get("/run/$publicId/badge/coverage")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.NotFound)
+        }
 }
