@@ -11,7 +11,7 @@ import com.zaxxer.hikari.HikariDataSource
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.config.MapApplicationConfig
-import io.ktor.server.testing.TestApplicationResponse
+import io.ktor.server.testing.*
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import io.opentelemetry.api.GlobalOpenTelemetry
 import io.opentelemetry.sdk.OpenTelemetrySdk
@@ -108,8 +108,6 @@ open class ApplicationTestCase {
 
     lateinit var codeQualityReportDao: CodeQualityReportDao
 
-    lateinit var application: Application
-
     protected var databaseSchema: String = "public"
 
     protected var publishToken: String? = null
@@ -139,6 +137,9 @@ open class ApplicationTestCase {
 
     protected val meterRegistry = SimpleMeterRegistry()
 
+    protected lateinit var testClient: io.ktor.client.HttpClient
+    protected lateinit var testServer: TestApplicationEngine
+
     @BeforeEach
     fun setupTelemetry() {
         // Needed when running the full test suite as the global telemetry
@@ -148,58 +149,98 @@ open class ApplicationTestCase {
         OpenTelemetrySdk.builder()
             .setTracerProvider(tracerProvider)
             .buildAndRegisterGlobal()
+
+        if (ktor3()) {
+            testServer =
+                TestApplicationEngine(
+                    createTestEnvironment {
+                        config = createApplicationConfig()
+                    },
+                )
+
+            testClient = testServer.client
+
+            testServer.start(wait = true)
+
+            setUpTestDependencies(testServer.application)
+        }
+    }
+
+    @AfterEach
+    fun stopServer() {
+        if (ktor3()) {
+            testServer.stop()
+        }
+    }
+
+    open fun ktor3(): Boolean = false
+
+    fun createApplicationConfig(): MapApplicationConfig {
+        val schema = databaseSchema
+
+        val config =
+            MapApplicationConfig().apply {
+                put("ktor.datasource.username", System.getenv("DB_USERNAME") ?: "testuser")
+                put("ktor.datasource.password", System.getenv("DB_PASSWORD") ?: "testpass")
+                put("ktor.datasource.jdbcUrl", System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5433/projektordb")
+                put("ktor.datasource.schema", schema)
+                put("ktor.datasource.maximumPoolSize", "3")
+
+                publishToken?.let { put("ktor.auth.publishToken", it) }
+
+                if (attachmentsEnabled) {
+                    put("ktor.attachment.url", "http://localhost:9000")
+                    put("ktor.attachment.bucketName", attachmentsBucketName)
+                    put("ktor.attachment.autoCreateBucket", attachmentsAutoCreateBucket.toString())
+                    put("ktor.attachment.accessKey", attachmentsAccessKey)
+                    put("ktor.attachment.secretKey", "minio_secret_key")
+                    attachmentsMaxSizeMB?.let { put("ktor.attachment.maxSizeMB", it.toString()) }
+                }
+
+                attachmentCleanupMaxAgeDays?.let {
+                    put("ktor.cleanup.maxAttachmentAgeDays", it.toString())
+                }
+
+                reportCleanupMaxAgeDays?.let {
+                    put("ktor.cleanup.maxReportAgeDays", it.toString())
+                }
+
+                if (metricsEnabled) {
+                    put("ktor.metrics.influxdb.enabled", "true")
+                    put("ktor.metrics.influxdb.uri", "http://localhost:$metricsPort")
+                    put("ktor.metrics.influxdb.autoCreateDb", "true")
+                    put("ktor.metrics.influxdb.interval", "1")
+
+                    metricsUsername?.let { username -> put("ktor.metrics.influxdb.username", username) }
+                    metricsPassword?.let { password -> put("ktor.metrics.influxdb.password", password) }
+                }
+
+                globalMessages?.let { put("ktor.message.global", it) }
+
+                gitHubBaseUrl?.let { put("ktor.versionControl.gitHubBaseUrl", it) }
+
+                serverBaseUrl?.let { put("ktor.notification.serverBaseUrl", it) }
+                gitHubApiUrl?.let { put("ktor.notification.gitHub.gitHubApiUrl", it) }
+                gitHubAppId?.let { put("ktor.notification.gitHub.gitHubAppId", it) }
+                gitHubPrivateKeyEncoded?.let { put("ktor.notification.gitHub.privateKey", it) }
+            }
+
+        return config
     }
 
     fun createTestApplication(application: Application) {
-        val schema = databaseSchema
-
         (application.environment.config as MapApplicationConfig).apply {
-            // Set here the properties
-            put("ktor.datasource.username", System.getenv("DB_USERNAME") ?: "testuser")
-            put("ktor.datasource.password", System.getenv("DB_PASSWORD") ?: "testpass")
-            put("ktor.datasource.jdbcUrl", System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5433/projektordb")
-            put("ktor.datasource.schema", schema)
-            put("ktor.datasource.maximumPoolSize", "3")
+            val config = createApplicationConfig()
 
-            publishToken?.let { put("ktor.auth.publishToken", it) }
-
-            if (attachmentsEnabled) {
-                put("ktor.attachment.url", "http://localhost:9000")
-                put("ktor.attachment.bucketName", attachmentsBucketName)
-                put("ktor.attachment.autoCreateBucket", attachmentsAutoCreateBucket.toString())
-                put("ktor.attachment.accessKey", attachmentsAccessKey)
-                put("ktor.attachment.secretKey", "minio_secret_key")
-                attachmentsMaxSizeMB?.let { put("ktor.attachment.maxSizeMB", it.toString()) }
+            config.keys().forEach { key ->
+                put(key, config.property(key).getString())
             }
-
-            attachmentCleanupMaxAgeDays?.let {
-                put("ktor.cleanup.maxAttachmentAgeDays", it.toString())
-            }
-
-            reportCleanupMaxAgeDays?.let {
-                put("ktor.cleanup.maxReportAgeDays", it.toString())
-            }
-
-            if (metricsEnabled) {
-                put("ktor.metrics.influxdb.enabled", "true")
-                put("ktor.metrics.influxdb.uri", "http://localhost:$metricsPort")
-                put("ktor.metrics.influxdb.autoCreateDb", "true")
-                put("ktor.metrics.influxdb.interval", "1")
-
-                metricsUsername?.let { username -> put("ktor.metrics.influxdb.username", username) }
-                metricsPassword?.let { password -> put("ktor.metrics.influxdb.password", password) }
-            }
-
-            globalMessages?.let { put("ktor.message.global", it) }
-
-            gitHubBaseUrl?.let { put("ktor.versionControl.gitHubBaseUrl", it) }
-
-            serverBaseUrl?.let { put("ktor.notification.serverBaseUrl", it) }
-            gitHubApiUrl?.let { put("ktor.notification.gitHub.gitHubApiUrl", it) }
-            gitHubAppId?.let { put("ktor.notification.gitHub.gitHubAppId", it) }
-            gitHubPrivateKeyEncoded?.let { put("ktor.notification.gitHub.privateKey", it) }
         }
 
+        setUpTestDependencies(application)
+    }
+
+    fun setUpTestDependencies(application: Application) {
         val meterRegistryToUse = if (metricsEnabled) null else meterRegistry
 
         application.main(meterRegistry = meterRegistryToUse)
@@ -246,8 +287,6 @@ open class ApplicationTestCase {
                 coverageService,
                 attachmentDao,
             )
-
-        this.application = application
     }
 
     fun waitUntilTestRunHasAttachments(
