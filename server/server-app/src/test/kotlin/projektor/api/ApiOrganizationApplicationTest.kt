@@ -17,7 +17,7 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class ApiOrganizationApplicationTest : ApplicationTestCase() {
-    override fun ktor3() = true
+    override fun autoStartServer() = true
 
     @Test
     fun `when three repos in org should find their coverage data`() =

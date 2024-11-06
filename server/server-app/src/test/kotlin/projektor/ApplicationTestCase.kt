@@ -138,7 +138,7 @@ open class ApplicationTestCase {
     protected val meterRegistry = SimpleMeterRegistry()
 
     protected lateinit var testClient: io.ktor.client.HttpClient
-    protected lateinit var testServer: TestApplicationEngine
+    protected var testServer: TestApplicationEngine? = null
 
     @BeforeEach
     fun setupTelemetry() {
@@ -150,30 +150,34 @@ open class ApplicationTestCase {
             .setTracerProvider(tracerProvider)
             .buildAndRegisterGlobal()
 
-        if (ktor3()) {
-            testServer =
-                TestApplicationEngine(
-                    createTestEnvironment {
-                        config = createApplicationConfig()
-                    },
-                )
-
-            testClient = testServer.client
-
-            testServer.start(wait = true)
-
-            setUpTestDependencies(testServer.application)
+        if (autoStartServer()) {
+            startTestServer()
         }
+    }
+
+    fun startTestServer() {
+        val theServer =
+            TestApplicationEngine(
+                createTestEnvironment {
+                    config = createApplicationConfig()
+                },
+            )
+
+        testClient = theServer.client
+
+        theServer.start(wait = true)
+
+        setUpTestDependencies(theServer.application)
+
+        testServer = theServer
     }
 
     @AfterEach
     fun stopServer() {
-        if (ktor3()) {
-            testServer.stop()
-        }
+        testServer?.stop()
     }
 
-    open fun ktor3(): Boolean = false
+    open fun autoStartServer(): Boolean = false
 
     fun createApplicationConfig(): MapApplicationConfig {
         val schema = databaseSchema
