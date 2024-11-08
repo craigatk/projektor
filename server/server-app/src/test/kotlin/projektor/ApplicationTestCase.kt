@@ -8,9 +8,11 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.zaxxer.hikari.HikariDataSource
+import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.config.MapApplicationConfig
+import io.ktor.server.engine.*
 import io.ktor.server.testing.*
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import io.opentelemetry.api.GlobalOpenTelemetry
@@ -181,6 +183,12 @@ open class ApplicationTestCase {
 
     open fun autoStartServer(): Boolean = false
 
+    fun getApplication(): Application {
+        assertNotNull(testServer)
+
+        return testServer!!.application
+    }
+
     fun createApplicationConfig(): MapApplicationConfig {
         val schema = databaseSchema
 
@@ -313,6 +321,23 @@ open class ApplicationTestCase {
         expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
 
         val resultsResponse = objectMapper.readValue(response.content, SaveResultsResponse::class.java)
+
+        val publicId = resultsResponse.id
+        assertNotNull(publicId)
+        expectThat(resultsResponse.uri).isEqualTo("/tests/$publicId")
+
+        await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.SUCCESS.name }
+
+        val testRun = await untilNotNull { testRunDao.fetchOneByPublicId(publicId) }
+        assertNotNull(testRun)
+
+        return Pair(PublicId(publicId), testRun)
+    }
+
+    suspend fun waitForTestRunSaveToComplete(response: HttpResponse): Pair<PublicId, TestRun> {
+        expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+        val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)
 
         val publicId = resultsResponse.id
         assertNotNull(publicId)

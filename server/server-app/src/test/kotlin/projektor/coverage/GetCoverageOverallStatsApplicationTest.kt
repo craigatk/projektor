@@ -1,27 +1,26 @@
 package projektor.coverage
 
-import io.ktor.http.HttpMethod
+import io.ktor.client.request.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
+import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 
-@ExperimentalStdlibApi
 class GetCoverageOverallStatsApplicationTest : ApplicationTestCase() {
-    @Test
-    fun `when test run has no coverage data should return 204`() {
-        val publicId = randomPublicId()
+    override fun autoStartServer(): Boolean = true
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/run/$publicId/coverage/overall") {
-                testRunDBGenerator.createSimpleTestRun(publicId)
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.NoContent)
-            }
+    @Test
+    fun `when test run has no coverage data should return 204`() =
+        testSuspend {
+            val publicId = randomPublicId()
+
+            testRunDBGenerator.createSimpleTestRun(publicId)
+
+            val response = testClient.get("/run/$publicId/coverage/overall")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.NoContent)
         }
-    }
 }
