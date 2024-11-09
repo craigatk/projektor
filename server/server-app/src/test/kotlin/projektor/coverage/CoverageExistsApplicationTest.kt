@@ -1,10 +1,9 @@
 package projektor.coverage
 
-import io.ktor.http.HttpMethod
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
-import io.ktor.server.testing.withTestApplication
+import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -17,52 +16,52 @@ import strikt.assertions.isFalse
 import strikt.assertions.isTrue
 import kotlin.test.assertNotNull
 
-@ExperimentalStdlibApi
 class CoverageExistsApplicationTest : ApplicationTestCase() {
-    @Test
-    fun `when report has coverage data should return true`() {
-        val publicId = randomPublicId()
-
-        val reportXmlBytes = JacocoXmlLoader().serverApp().toByteArray()
-
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/run/$publicId/coverage") {
-                testRunDBGenerator.createSimpleTestRun(publicId)
-
-                setBody(reportXmlBytes)
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
-
-                val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicId.id)
-                expectThat(coverageRuns).hasSize(1)
-            }
-
-            handleRequest(HttpMethod.Get, "/run/$publicId/coverage/exists").apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
-
-                val coverageExists = objectMapper.readValue(response.content, CoverageExists::class.java)
-                assertNotNull(coverageExists)
-
-                expectThat(coverageExists.exists).isTrue()
-            }
-        }
-    }
+    override fun autoStartServer(): Boolean = true
 
     @Test
-    fun `when report does not have coverage data should return false`() {
-        val publicId = randomPublicId()
+    fun `when report has coverage data should return true`() =
+        testSuspend {
+            val publicId = randomPublicId()
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/run/$publicId/coverage/exists") {
-                testRunDBGenerator.createSimpleTestRun(publicId)
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+            val reportXmlBytes = JacocoXmlLoader().serverApp().toByteArray()
 
-                val coverageExists = objectMapper.readValue(response.content, CoverageExists::class.java)
-                assertNotNull(coverageExists)
+            testRunDBGenerator.createSimpleTestRun(publicId)
 
-                expectThat(coverageExists.exists).isFalse()
-            }
+            val postResponse =
+                testClient.post("/run/$publicId/coverage") {
+                    setBody(reportXmlBytes)
+                }
+            expectThat(postResponse.status).isEqualTo(HttpStatusCode.OK)
+
+            expectThat(postResponse.status).isEqualTo(HttpStatusCode.OK)
+
+            val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicId.id)
+            expectThat(coverageRuns).hasSize(1)
+
+            val getResponse = testClient.get("/run/$publicId/coverage/exists")
+            expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
+
+            val coverageExists = objectMapper.readValue(getResponse.bodyAsText(), CoverageExists::class.java)
+            assertNotNull(coverageExists)
+
+            expectThat(coverageExists.exists).isTrue()
         }
-    }
+
+    @Test
+    fun `when report does not have coverage data should return false`() =
+        testSuspend {
+            val publicId = randomPublicId()
+
+            testRunDBGenerator.createSimpleTestRun(publicId)
+
+            val response = testClient.get("/run/$publicId/coverage/exists")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val coverageExists = objectMapper.readValue(response.bodyAsText(), CoverageExists::class.java)
+            assertNotNull(coverageExists)
+
+            expectThat(coverageExists.exists).isFalse()
+        }
 }
