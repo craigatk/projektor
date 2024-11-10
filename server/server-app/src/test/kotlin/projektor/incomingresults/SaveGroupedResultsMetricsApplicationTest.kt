@@ -1,11 +1,8 @@
 package projektor.incomingresults
 
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
+import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
-import io.ktor.server.testing.withTestApplication
+import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.Test
@@ -19,72 +16,60 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class SaveGroupedResultsMetricsApplicationTest : ApplicationTestCase() {
-    @Test
-    fun `should record success metric when saving grouped test results succeeds`() {
-        val requestBody = GroupedResultsXmlLoader().passingGroupedResults()
-
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/groupedResults") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(requestBody)
-            }.apply {
-                waitForTestRunSaveToComplete(response)
-
-                expectThat(meterRegistry.counter("results_process_start").count()).isEqualTo(1.toDouble())
-                expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(1.toDouble())
-                expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
-                expectThat(meterRegistry.counter("results_parse_failure").count()).isEqualTo(0.toDouble())
-            }
-        }
-    }
+    override fun autoStartServer(): Boolean = true
 
     @Test
-    fun `when test results fail to parse should record parse error metric`() {
-        val malformedResults = GroupedResultsXmlLoader().passingGroupedResults().replace("testsuite", "")
+    fun `should record success metric when saving grouped test results succeeds`() =
+        testSuspend {
+            val requestBody = GroupedResultsXmlLoader().passingGroupedResults()
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/groupedResults") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(malformedResults)
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.BadRequest)
-                val resultsResponse = objectMapper.readValue(response.content, SaveResultsError::class.java)
+            val response = postGroupedResultsJSON(requestBody)
 
-                val publicId = resultsResponse.id
-                assertNotNull(publicId)
+            waitForTestRunSaveToComplete(response)
 
-                await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.ERROR.name }
-
-                expectThat(meterRegistry.counter("results_process_start").count()).isEqualTo(1.toDouble())
-                expectThat(meterRegistry.counter("results_parse_failure").count()).isEqualTo(1.toDouble())
-                expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
-                expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(0.toDouble())
-            }
+            expectThat(meterRegistry.counter("results_process_start").count()).isEqualTo(1.toDouble())
+            expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(1.toDouble())
+            expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
+            expectThat(meterRegistry.counter("results_parse_failure").count()).isEqualTo(0.toDouble())
         }
-    }
 
     @Test
-    fun `when test results fail to parse because they are cut off should record parse error metric`() {
-        val malformedResults = GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().cutOffResultsGradle())
+    fun `when test results fail to parse should record parse error metric`() =
+        testSuspend {
+            val malformedResults = GroupedResultsXmlLoader().passingGroupedResults().replace("testsuite", "")
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/groupedResults") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(malformedResults)
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.BadRequest)
-                val resultsResponse = objectMapper.readValue(response.content, SaveResultsError::class.java)
+            val response = postGroupedResultsJSON(malformedResults, HttpStatusCode.BadRequest)
 
-                val publicId = resultsResponse.id
-                assertNotNull(publicId)
+            val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsError::class.java)
 
-                await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.ERROR.name }
+            val publicId = resultsResponse.id
+            assertNotNull(publicId)
 
-                expectThat(meterRegistry.counter("results_process_start").count()).isEqualTo(1.toDouble())
-                expectThat(meterRegistry.counter("results_parse_failure").count()).isEqualTo(1.toDouble())
-                expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
-                expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(0.toDouble())
-            }
+            await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.ERROR.name }
+
+            expectThat(meterRegistry.counter("results_process_start").count()).isEqualTo(1.toDouble())
+            expectThat(meterRegistry.counter("results_parse_failure").count()).isEqualTo(1.toDouble())
+            expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
+            expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(0.toDouble())
         }
-    }
+
+    @Test
+    fun `when test results fail to parse because they are cut off should record parse error metric`() =
+        testSuspend {
+            val malformedResults = GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().cutOffResultsGradle())
+
+            val response = postGroupedResultsJSON(malformedResults, HttpStatusCode.BadRequest)
+
+            val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsError::class.java)
+
+            val publicId = resultsResponse.id
+            assertNotNull(publicId)
+
+            await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.ERROR.name }
+
+            expectThat(meterRegistry.counter("results_process_start").count()).isEqualTo(1.toDouble())
+            expectThat(meterRegistry.counter("results_parse_failure").count()).isEqualTo(1.toDouble())
+            expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
+            expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(0.toDouble())
+        }
 }

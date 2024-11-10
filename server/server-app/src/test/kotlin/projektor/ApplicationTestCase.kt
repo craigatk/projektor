@@ -8,8 +8,9 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.zaxxer.hikari.HikariDataSource
+import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import io.ktor.http.HttpStatusCode
+import io.ktor.http.*
 import io.ktor.server.application.Application
 import io.ktor.server.config.MapApplicationConfig
 import io.ktor.server.engine.*
@@ -356,6 +357,38 @@ open class ApplicationTestCase {
             .getResourceAsStream("/$filename")
             .bufferedReader()
             .readText()
+
+    protected suspend fun postGroupedResultsJSON(
+        resultsJson: String,
+        expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,
+    ): HttpResponse {
+        val response =
+            testClient.post("/groupedResults") {
+                headers {
+                    append(HttpHeaders.ContentType, "application/json")
+                }
+                setBody(resultsJson)
+            }
+        expectThat(response.status).isEqualTo(expectedStatusCode)
+
+        return response
+    }
+
+    protected suspend fun postResultsPlainText(
+        resultsText: String,
+        expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,
+    ): HttpResponse {
+        val response =
+            testClient.post("/results") {
+                headers {
+                    append(HttpHeaders.ContentType, "text/plain")
+                }
+                setBody(resultsText)
+            }
+        expectThat(response.status).isEqualTo(expectedStatusCode)
+
+        return response
+    }
 
     @AfterEach
     fun closeDataSource() {
