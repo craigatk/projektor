@@ -3,11 +3,7 @@ package projektor.incomingresults
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
-import io.ktor.server.testing.withTestApplication
+import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.AfterAll
@@ -27,6 +23,8 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isTrue
 
 class SaveGroupedResultsWithMetadataPullRequestCommentApplicationTest : ApplicationTestCase() {
+    override fun autoStartServer(): Boolean = true
+
     @BeforeEach
     fun reset() {
         wireMockServer.resetAll()
@@ -34,65 +32,61 @@ class SaveGroupedResultsWithMetadataPullRequestCommentApplicationTest : Applicat
 
     @Test
     @Disabled("flaky in CI")
-    fun `should save grouped test results with Git commit SHA and pull request number and make pull request comment`() {
-        val privateKeyContents = loadTextFromFile("fake_private_key.pem")
+    fun `should save grouped test results with Git commit SHA and pull request number and make pull request comment`() =
+        testSuspend {
+            val privateKeyContents = loadTextFromFile("fake_private_key.pem")
 
-        serverBaseUrl = "http://localhost:8080"
-        gitHubApiUrl = "http://localhost:${wireMockServer.port()}"
-        gitHubAppId = "12345"
-        gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(privateKeyContents)
+            serverBaseUrl = "http://localhost:8080"
+            gitHubApiUrl = "http://localhost:${wireMockServer.port()}"
+            gitHubAppId = "12345"
+            gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(privateKeyContents)
 
-        val incomingOrgName = "craigatk"
-        val incomingRepoName = "projektor"
-        val incomingBranchName = "main"
-        val incomingCommit = "7dcdac4bb56d200cfb879da0e630210dff86e11f"
+            val incomingOrgName = "craigatk"
+            val incomingRepoName = "projektor"
+            val incomingBranchName = "main"
+            val incomingCommit = "7dcdac4bb56d200cfb879da0e630210dff86e11f"
 
-        val gitMetadata = GitMetadata()
-        gitMetadata.repoName = "$incomingOrgName/$incomingRepoName"
-        gitMetadata.branchName = incomingBranchName
-        gitMetadata.isMainBranch = true
-        gitMetadata.commitSha = incomingCommit
-        val metadata = ResultsMetadata()
-        metadata.git = gitMetadata
-        val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
+            val gitMetadata = GitMetadata()
+            gitMetadata.repoName = "$incomingOrgName/$incomingRepoName"
+            gitMetadata.branchName = incomingBranchName
+            gitMetadata.isMainBranch = true
+            gitMetadata.commitSha = incomingCommit
+            val metadata = ResultsMetadata()
+            metadata.git = gitMetadata
+            val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
-        val gitHubPullRequestNumber = 2
-        gitHubWireMockStubber.stubRepositoryRequests(incomingOrgName, incomingRepoName)
-        gitHubWireMockStubber.stubListPullRequests(incomingOrgName, incomingRepoName, listOf("another-branch", incomingBranchName))
-        gitHubWireMockStubber.stubGetIssue(incomingOrgName, incomingRepoName, gitHubPullRequestNumber)
-        gitHubWireMockStubber.stubListComments(incomingOrgName, incomingRepoName, gitHubPullRequestNumber, listOf("Some other comment"))
-        gitHubWireMockStubber.stubAddComment(incomingOrgName, incomingRepoName, gitHubPullRequestNumber)
+            val gitHubPullRequestNumber = 2
+            gitHubWireMockStubber.stubRepositoryRequests(incomingOrgName, incomingRepoName)
+            gitHubWireMockStubber.stubListPullRequests(incomingOrgName, incomingRepoName, listOf("another-branch", incomingBranchName))
+            gitHubWireMockStubber.stubGetIssue(incomingOrgName, incomingRepoName, gitHubPullRequestNumber)
+            gitHubWireMockStubber.stubListComments(incomingOrgName, incomingRepoName, gitHubPullRequestNumber, listOf("Some other comment"))
+            gitHubWireMockStubber.stubAddComment(incomingOrgName, incomingRepoName, gitHubPullRequestNumber)
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/groupedResults") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(requestBody)
-            }.apply {
-                val (_, testRun) = waitForTestRunSaveToComplete(response)
+            val response = postGroupedResultsJSON(requestBody)
 
-                await until {
-                    gitHubWireMockStubber.findAddCommentRequestBodies(
-                        incomingOrgName,
-                        incomingRepoName,
-                        gitHubPullRequestNumber,
-                    ).size == 1
-                }
+            val (_, testRun) = waitForTestRunSaveToComplete(response)
 
-                val gitMetadatas = gitMetadataDao.fetchByTestRunId(testRun.id)
-                expectThat(gitMetadatas).hasSize(1)
+            await until {
+                gitHubWireMockStubber.findAddCommentRequestBodies(
+                    incomingOrgName,
+                    incomingRepoName,
+                    gitHubPullRequestNumber,
+                ).size == 1
+            }
 
-                val gitMetadataDB = gitMetadatas[0]
-                expectThat(gitMetadataDB) {
-                    get { repoName }.isEqualTo("craigatk/projektor")
-                    get { orgName }.isEqualTo("craigatk")
-                    get { branchName }.isEqualTo("main")
-                    get { isMainBranch }.isTrue()
-                    get { commitSha }.isEqualTo(incomingCommit)
-                    get { pullRequestNumber }.isEqualTo(gitHubPullRequestNumber)
-                }
+            val gitMetadatas = gitMetadataDao.fetchByTestRunId(testRun.id)
+            expectThat(gitMetadatas).hasSize(1)
+
+            val gitMetadataDB = gitMetadatas[0]
+            expectThat(gitMetadataDB) {
+                get { repoName }.isEqualTo("craigatk/projektor")
+                get { orgName }.isEqualTo("craigatk")
+                get { branchName }.isEqualTo("main")
+                get { isMainBranch }.isTrue()
+                get { commitSha }.isEqualTo(incomingCommit)
+                get { pullRequestNumber }.isEqualTo(gitHubPullRequestNumber)
             }
         }
-    }
 
     companion object {
         private val wireMockServer = WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort())

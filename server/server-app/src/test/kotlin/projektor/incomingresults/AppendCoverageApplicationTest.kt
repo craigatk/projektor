@@ -1,10 +1,6 @@
 package projektor.incomingresults
 
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
-import io.ktor.server.testing.withTestApplication
+import io.ktor.test.dispatcher.*
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.awaitility.kotlin.await
@@ -26,41 +22,44 @@ import strikt.assertions.isNotNull
 import java.math.BigDecimal
 
 class AppendCoverageApplicationTest : ApplicationTestCase() {
+    override fun autoStartServer(): Boolean = true
+
     @Test
-    fun `should append three Jest test runs with coverage`() {
-        val repoPart = RandomStringUtils.randomAlphabetic(12)
+    fun `should append three Jest test runs with coverage`() =
+        testSuspend {
+            val repoPart = RandomStringUtils.randomAlphabetic(12)
 
-        val gitMetadata = GitMetadata()
-        gitMetadata.repoName = "craigatk/$repoPart"
-        gitMetadata.branchName = "main"
-        gitMetadata.isMainBranch = true
-        val metadata = ResultsMetadata()
-        metadata.git = gitMetadata
-        metadata.group = "B12"
+            val gitMetadata = GitMetadata()
+            gitMetadata.repoName = "craigatk/$repoPart"
+            gitMetadata.branchName = "main"
+            gitMetadata.isMainBranch = true
+            val metadata = ResultsMetadata()
+            metadata.git = gitMetadata
+            metadata.group = "B12"
 
-        val coverageFilesTableRequestBody =
-            GroupedResultsXmlLoader().resultsWithCoverage(
-                listOf(resultsXmlLoader.jestCoverageFilesTable()),
-                listOf(cloverXmlLoader.coverageFilesTable()),
-                metadata,
-            )
-        val coverageGraphRequestBody =
-            GroupedResultsXmlLoader().resultsWithCoverage(
-                listOf(resultsXmlLoader.jestCoverageGraph()),
-                listOf(cloverXmlLoader.coverageGraph()),
-                metadata,
-            )
-        val coverageTableRequestBody =
-            GroupedResultsXmlLoader().resultsWithCoverage(
-                listOf(resultsXmlLoader.jestCoverageTable()),
-                listOf(cloverXmlLoader.coverageTable()),
-                metadata,
-            )
+            val coverageFilesTableRequestBody =
+                GroupedResultsXmlLoader().resultsWithCoverage(
+                    listOf(resultsXmlLoader.jestCoverageFilesTable()),
+                    listOf(cloverXmlLoader.coverageFilesTable()),
+                    metadata,
+                )
+            val coverageGraphRequestBody =
+                GroupedResultsXmlLoader().resultsWithCoverage(
+                    listOf(resultsXmlLoader.jestCoverageGraph()),
+                    listOf(cloverXmlLoader.coverageGraph()),
+                    metadata,
+                )
+            val coverageTableRequestBody =
+                GroupedResultsXmlLoader().resultsWithCoverage(
+                    listOf(resultsXmlLoader.jestCoverageTable()),
+                    listOf(cloverXmlLoader.coverageTable()),
+                    metadata,
+                )
 
-        lateinit var publicId: PublicId
-        lateinit var testRun: TestRun
-        lateinit var coverageRun: CodeCoverageRun
-        lateinit var coverageGroup: CodeCoverageGroup
+            lateinit var publicId: PublicId
+            lateinit var testRun: TestRun
+            lateinit var coverageRun: CodeCoverageRun
+            lateinit var coverageGroup: CodeCoverageGroup
 
         /*
         ---------------------------|---------|----------|---------|---------|-------------------
@@ -80,56 +79,51 @@ class AppendCoverageApplicationTest : ApplicationTestCase() {
         ---------------------------|---------|----------|---------|---------|-------------------
          */
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/groupedResults") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(coverageFilesTableRequestBody)
-            }.apply {
-                val initialSaveComplete = waitForTestRunSaveToComplete(response)
-                publicId = initialSaveComplete.first
-                testRun = initialSaveComplete.second
+            val coverageFilesTableResponse = postGroupedResultsJSON(coverageFilesTableRequestBody)
 
-                await untilAsserted {
-                    val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
-                    expectThat(testSuites).any {
-                        get { className }.isEqualTo("CoverageFilesTable")
-                        get { passingCount }.isEqualTo(2)
-                    }
-                }
+            val initialSaveComplete = waitForTestRunSaveToComplete(coverageFilesTableResponse)
+            publicId = initialSaveComplete.first
+            testRun = initialSaveComplete.second
 
-                expectThat(testRun) {
-                    get { totalPassingCount }.isEqualTo(2)
-                }
-
-                await untilAsserted {
-                    expectThat(coverageRunDao.fetchByTestRunPublicId(publicId.id)).hasSize(1)
-                }
-                coverageRun = coverageRunDao.fetchByTestRunPublicId(publicId.id)[0]
-
-                await untilAsserted {
-                    expectThat(coverageGroupDao.fetchByCodeCoverageRunId(coverageRun.id)).hasSize(1)
-                }
-                coverageGroup = coverageGroupDao.fetchByCodeCoverageRunId(coverageRun.id)[0]
-                expectThat(coverageGroup) {
-                    get { name }.isEqualTo("All files")
-                }
-
-                val coverageFiles = runBlocking { coverageService.getCoverageGroupFiles(publicId, coverageGroup.name) }
-                expectThat(coverageFiles).hasSize(7)
-                expectThat(coverageFiles.find { it.fileName == "CoverageFilesTable.tsx" }).isNotNull().and {
-                    get { stats.lineStat.coveredPercentage }.isEqualTo(BigDecimal("90.00"))
-                    get { missedLines }.isEqualTo(arrayOf(124, 149, 172))
-                }
-                expectThat(coverageFiles.find { it.fileName == "CoverageGraph.tsx" }).isNotNull().and {
-                    get { stats.lineStat.coveredPercentage }.isEqualTo(BigDecimal("95.00"))
-                    get { missedLines }.isEqualTo(arrayOf(82))
-                }
-                expectThat(coverageFiles.find { it.fileName == "CoveragePercentage.tsx" }).isNotNull().and {
-                    get { stats.lineStat.coveredPercentage }.isEqualTo(BigDecimal("78.57"))
-                    get { missedLines }.isEqualTo(arrayOf(42, 43, 61))
+            await untilAsserted {
+                val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
+                expectThat(testSuites).any {
+                    get { className }.isEqualTo("CoverageFilesTable")
+                    get { passingCount }.isEqualTo(2)
                 }
             }
-        }
+
+            expectThat(testRun) {
+                get { totalPassingCount }.isEqualTo(2)
+            }
+
+            await untilAsserted {
+                expectThat(coverageRunDao.fetchByTestRunPublicId(publicId.id)).hasSize(1)
+            }
+            coverageRun = coverageRunDao.fetchByTestRunPublicId(publicId.id)[0]
+
+            await untilAsserted {
+                expectThat(coverageGroupDao.fetchByCodeCoverageRunId(coverageRun.id)).hasSize(1)
+            }
+            coverageGroup = coverageGroupDao.fetchByCodeCoverageRunId(coverageRun.id)[0]
+            expectThat(coverageGroup) {
+                get { name }.isEqualTo("All files")
+            }
+
+            val coverageFiles = runBlocking { coverageService.getCoverageGroupFiles(publicId, coverageGroup.name) }
+            expectThat(coverageFiles).hasSize(7)
+            expectThat(coverageFiles.find { it.fileName == "CoverageFilesTable.tsx" }).isNotNull().and {
+                get { stats.lineStat.coveredPercentage }.isEqualTo(BigDecimal("90.00"))
+                get { missedLines }.isEqualTo(arrayOf(124, 149, 172))
+            }
+            expectThat(coverageFiles.find { it.fileName == "CoverageGraph.tsx" }).isNotNull().and {
+                get { stats.lineStat.coveredPercentage }.isEqualTo(BigDecimal("95.00"))
+                get { missedLines }.isEqualTo(arrayOf(82))
+            }
+            expectThat(coverageFiles.find { it.fileName == "CoveragePercentage.tsx" }).isNotNull().and {
+                get { stats.lineStat.coveredPercentage }.isEqualTo(BigDecimal("78.57"))
+                get { missedLines }.isEqualTo(arrayOf(42, 43, 61))
+            }
 
         /*
         -------------------------|---------|----------|---------|---------|-------------------
@@ -145,50 +139,45 @@ class AppendCoverageApplicationTest : ApplicationTestCase() {
         -------------------------|---------|----------|---------|---------|-------------------
          */
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/groupedResults") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(coverageGraphRequestBody)
-            }.apply {
-                val saveComplete = waitForTestRunSaveToComplete(response)
-                val secondPublicId = saveComplete.first
-                expectThat(secondPublicId).isEqualTo(publicId)
+            val coverageGraphResponse = postGroupedResultsJSON(coverageGraphRequestBody)
 
-                val secondTestRun = saveComplete.second
-                expectThat(secondTestRun.id).isEqualTo(testRun.id)
+            val saveComplete = waitForTestRunSaveToComplete(coverageGraphResponse)
+            val secondPublicId = saveComplete.first
+            expectThat(secondPublicId).isEqualTo(publicId)
 
-                await untilAsserted {
-                    val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
-                    expectThat(testSuites).any {
-                        get { className }.isEqualTo("CoverageGraph")
-                        get { passingCount }.isEqualTo(7)
-                    }
-                }
+            val secondTestRun = saveComplete.second
+            expectThat(secondTestRun.id).isEqualTo(testRun.id)
 
-                await untilAsserted {
-                    val testRunSummary = testRunDao.fetchOneById(secondTestRun.id)
-                    expectThat(testRunSummary) {
-                        get { totalPassingCount }.isEqualTo(9)
-                    }
-                }
-
-                await untilAsserted {
-                    val coverageFiles = runBlocking { coverageService.getCoverageGroupFiles(publicId, coverageGroup.name) }
-                    expectThat(coverageFiles.find { it.fileName == "CoverageFilesTable.tsx" }).isNotNull().and {
-                        get { stats.lineStat.coveredPercentage }.isEqualTo(BigDecimal("90.00"))
-                        get { missedLines }.isEqualTo(arrayOf(124, 149, 172))
-                    }
-                    expectThat(coverageFiles.find { it.fileName == "CoverageGraph.tsx" }).isNotNull().and {
-                        get { stats.lineStat.coveredPercentage }.isEqualTo(BigDecimal("100.00"))
-                        get { missedLines }.isEqualTo(arrayOf())
-                    }
-                    expectThat(coverageFiles.find { it.fileName == "CoveragePercentage.tsx" }).isNotNull().and {
-                        get { stats.lineStat.coveredPercentage }.isEqualTo(BigDecimal("100.00"))
-                        get { missedLines }.isEqualTo(arrayOf())
-                    }
+            await untilAsserted {
+                val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
+                expectThat(testSuites).any {
+                    get { className }.isEqualTo("CoverageGraph")
+                    get { passingCount }.isEqualTo(7)
                 }
             }
-        }
+
+            await untilAsserted {
+                val testRunSummary = testRunDao.fetchOneById(secondTestRun.id)
+                expectThat(testRunSummary) {
+                    get { totalPassingCount }.isEqualTo(9)
+                }
+            }
+
+            await untilAsserted {
+                val coverageFiles = runBlocking { coverageService.getCoverageGroupFiles(publicId, coverageGroup.name) }
+                expectThat(coverageFiles.find { it.fileName == "CoverageFilesTable.tsx" }).isNotNull().and {
+                    get { stats.lineStat.coveredPercentage }.isEqualTo(BigDecimal("90.00"))
+                    get { missedLines }.isEqualTo(arrayOf(124, 149, 172))
+                }
+                expectThat(coverageFiles.find { it.fileName == "CoverageGraph.tsx" }).isNotNull().and {
+                    get { stats.lineStat.coveredPercentage }.isEqualTo(BigDecimal("100.00"))
+                    get { missedLines }.isEqualTo(arrayOf())
+                }
+                expectThat(coverageFiles.find { it.fileName == "CoveragePercentage.tsx" }).isNotNull().and {
+                    get { stats.lineStat.coveredPercentage }.isEqualTo(BigDecimal("100.00"))
+                    get { missedLines }.isEqualTo(arrayOf())
+                }
+            }
 
         /*
         -------------------------|---------|----------|---------|---------|-------------------
@@ -205,42 +194,37 @@ class AppendCoverageApplicationTest : ApplicationTestCase() {
         -------------------------|---------|----------|---------|---------|-------------------
          */
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/groupedResults") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(coverageTableRequestBody)
-            }.apply {
-                val saveComplete = waitForTestRunSaveToComplete(response)
-                val thirdPublicId = saveComplete.first
-                expectThat(thirdPublicId).isEqualTo(publicId)
+            val coverageTableResponse = postGroupedResultsJSON(coverageTableRequestBody)
 
-                val thirdTestRun = saveComplete.second
+            val coverageTableSaveComplete = waitForTestRunSaveToComplete(coverageTableResponse)
+            val thirdPublicId = coverageTableSaveComplete.first
+            expectThat(thirdPublicId).isEqualTo(publicId)
 
-                await untilAsserted {
-                    val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
-                    expectThat(testSuites).any {
-                        get { className }.isEqualTo("CoverageTable")
-                        get { passingCount }.isEqualTo(1)
-                    }
-                }
+            val thirdTestRun = coverageTableSaveComplete.second
 
-                await untilAsserted {
-                    val testRunSummary = testRunDao.fetchOneById(thirdTestRun.id)
-                    expectThat(testRunSummary) {
-                        get { totalPassingCount }.isEqualTo(10)
-                    }
-                }
-
-                await untilAsserted {
-                    val coverageTableFile =
-                        runBlocking { coverageService.getCoverageGroupFiles(publicId, coverageGroup.name) }
-                            .find { it.fileName == "CoverageTable.tsx" }
-
-                    expectThat(coverageTableFile)
-                        .isNotNull()
-                        .get { stats.lineStat.coveredPercentage }.isEqualTo(BigDecimal("100.00"))
+            await untilAsserted {
+                val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
+                expectThat(testSuites).any {
+                    get { className }.isEqualTo("CoverageTable")
+                    get { passingCount }.isEqualTo(1)
                 }
             }
+
+            await untilAsserted {
+                val testRunSummary = testRunDao.fetchOneById(thirdTestRun.id)
+                expectThat(testRunSummary) {
+                    get { totalPassingCount }.isEqualTo(10)
+                }
+            }
+
+            await untilAsserted {
+                val coverageTableFile =
+                    runBlocking { coverageService.getCoverageGroupFiles(publicId, coverageGroup.name) }
+                        .find { it.fileName == "CoverageTable.tsx" }
+
+                expectThat(coverageTableFile)
+                    .isNotNull()
+                    .get { stats.lineStat.coveredPercentage }.isEqualTo(BigDecimal("100.00"))
+            }
         }
-    }
 }

@@ -1,12 +1,8 @@
 package projektor.incomingresults
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
-import io.ktor.server.testing.withTestApplication
+import io.ktor.client.statement.*
+import io.ktor.test.dispatcher.*
 import org.apache.commons.lang3.RandomStringUtils
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
@@ -27,262 +23,233 @@ import strikt.assertions.isTrue
 import kotlin.test.assertNotNull
 
 class AppendGroupedResultsApplicationTest : ApplicationTestCase() {
-    @Test
-    fun `should append second grouped test results run`() {
-        val repoPart = RandomStringUtils.randomAlphabetic(12)
-
-        val gitMetadata = GitMetadata()
-        gitMetadata.repoName = "craigatk/$repoPart"
-        gitMetadata.branchName = "main"
-        gitMetadata.isMainBranch = true
-        val metadata = ResultsMetadata()
-        metadata.git = gitMetadata
-        metadata.group = "B12"
-
-        val initialRequestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
-
-        lateinit var publicId: PublicId
-        lateinit var testRun: TestRun
-
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/groupedResults") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(initialRequestBody)
-            }.apply {
-                val initialSaveComplete = waitForTestRunSaveToComplete(response)
-                publicId = initialSaveComplete.first
-                testRun = initialSaveComplete.second
-
-                expectThat(testRun) {
-                    get { passed }.isTrue()
-                    get { totalPassingCount }.isEqualTo(3)
-                    get { totalFailureCount }.isEqualTo(0)
-                    get { totalSkippedCount }.isEqualTo(0)
-                    get { totalTestCount }.isEqualTo(3)
-                }
-
-                val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
-                expectThat(testSuites).hasSize(3)
-
-                val testSuiteGroups = testSuiteGroupDao.fetchByTestRunId(testRun.id)
-                expectThat(testSuiteGroups)
-                    .hasSize(2)
-
-                val testSuiteGroup1 = testSuiteGroups.find { it.groupName == "Group1" }
-                assertNotNull(testSuiteGroup1)
-                expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup1.id)).hasSize(2)
-
-                val testSuiteGroup2 = testSuiteGroups.find { it.groupName == "Group2" }
-                assertNotNull(testSuiteGroup2)
-                expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2.id)).hasSize(1)
-
-                await until { resultsProcessingDao.fetchOneByPublicId(publicId.id).status == ResultsProcessingStatus.SUCCESS.name }
-            }
-        }
-
-        val secondRequestBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXmlLoader.failing(), metadata)
-
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/groupedResults") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(secondRequestBody)
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
-
-                val responseContent = response.content
-                assertNotNull(responseContent)
-                val resultsResponse: SaveResultsResponse = objectMapper.readValue(responseContent)
-
-                val secondPublicIdResponse = resultsResponse.id
-                expectThat(secondPublicIdResponse).isEqualTo(publicId.id)
-
-                val (secondPublicId, _) = waitForTestRunSaveToComplete(response)
-                expectThat(secondPublicId).isEqualTo(publicId)
-
-                await until {
-                    val updatedTestRun = testRunDao.fetchOneByPublicId(publicId.id)
-
-                    !updatedTestRun.passed
-                }
-
-                val secondTestRun = testRunDao.fetchOneByPublicId(publicId.id)
-
-                expectThat(secondTestRun) {
-                    get { passed }.isFalse()
-                    get { totalPassingCount }.isEqualTo(3)
-                    get { totalFailureCount }.isEqualTo(2)
-                    get { totalSkippedCount }.isEqualTo(0)
-                    get { totalTestCount }.isEqualTo(5)
-                }
-
-                val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
-                expectThat(testSuites).hasSize(4)
-
-                val testSuiteGroups = testSuiteGroupDao.fetchByTestRunId(testRun.id)
-                expectThat(testSuiteGroups)
-                    .hasSize(2)
-
-                val testSuiteGroup1 = testSuiteGroups.find { it.groupName == "Group1" }
-                assertNotNull(testSuiteGroup1)
-                expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup1.id)).hasSize(3)
-
-                val testSuiteGroup2 = testSuiteGroups.find { it.groupName == "Group2" }
-                assertNotNull(testSuiteGroup2)
-                expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2.id)).hasSize(1)
-            }
-        }
-    }
+    override fun autoStartServer(): Boolean = true
 
     @Test
-    fun `should append second and third grouped test results runs`() {
-        val repoPart = RandomStringUtils.randomAlphabetic(12)
+    fun `should append second grouped test results run`() =
+        testSuspend {
+            val repoPart = RandomStringUtils.randomAlphabetic(12)
 
-        val gitMetadata = GitMetadata()
-        gitMetadata.repoName = "craigatk/$repoPart"
-        gitMetadata.branchName = "main"
-        gitMetadata.isMainBranch = true
-        val metadata = ResultsMetadata()
-        metadata.git = gitMetadata
-        metadata.group = "B12"
+            val gitMetadata = GitMetadata()
+            gitMetadata.repoName = "craigatk/$repoPart"
+            gitMetadata.branchName = "main"
+            gitMetadata.isMainBranch = true
+            val metadata = ResultsMetadata()
+            metadata.git = gitMetadata
+            metadata.group = "B12"
 
-        val initialRequestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
+            val initialRequestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
-        lateinit var publicId: PublicId
-        lateinit var testRun: TestRun
+            lateinit var publicId: PublicId
+            lateinit var testRun: TestRun
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/groupedResults") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(initialRequestBody)
-            }.apply {
-                val initialSaveComplete = waitForTestRunSaveToComplete(response)
-                publicId = initialSaveComplete.first
-                testRun = initialSaveComplete.second
+            val initialResponse = postGroupedResultsJSON(initialRequestBody)
 
-                expectThat(testRun) {
-                    get { passed }.isTrue()
-                    get { totalPassingCount }.isEqualTo(3)
-                    get { totalFailureCount }.isEqualTo(0)
-                    get { totalSkippedCount }.isEqualTo(0)
-                    get { totalTestCount }.isEqualTo(3)
-                }
+            val initialSaveComplete = waitForTestRunSaveToComplete(initialResponse)
+            publicId = initialSaveComplete.first
+            testRun = initialSaveComplete.second
 
-                val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
-                expectThat(testSuites).hasSize(3)
-
-                val testSuiteGroups = testSuiteGroupDao.fetchByTestRunId(testRun.id)
-                expectThat(testSuiteGroups).hasSize(2)
-
-                val testSuiteGroup1 = testSuiteGroups.find { it.groupName == "Group1" }
-                assertNotNull(testSuiteGroup1)
-                expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup1.id)).hasSize(2)
-
-                val testSuiteGroup2 = testSuiteGroups.find { it.groupName == "Group2" }
-                assertNotNull(testSuiteGroup2)
-                expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2.id)).hasSize(1)
-
-                await until { resultsProcessingDao.fetchOneByPublicId(publicId.id).status == ResultsProcessingStatus.SUCCESS.name }
+            expectThat(testRun) {
+                get { passed }.isTrue()
+                get { totalPassingCount }.isEqualTo(3)
+                get { totalFailureCount }.isEqualTo(0)
+                get { totalSkippedCount }.isEqualTo(0)
+                get { totalTestCount }.isEqualTo(3)
             }
+
+            val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
+            expectThat(testSuites).hasSize(3)
+
+            val testSuiteGroups = testSuiteGroupDao.fetchByTestRunId(testRun.id)
+            expectThat(testSuiteGroups)
+                .hasSize(2)
+
+            val testSuiteGroup1 = testSuiteGroups.find { it.groupName == "Group1" }
+            assertNotNull(testSuiteGroup1)
+            expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup1.id)).hasSize(2)
+
+            val testSuiteGroup2 = testSuiteGroups.find { it.groupName == "Group2" }
+            assertNotNull(testSuiteGroup2)
+            expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2.id)).hasSize(1)
+
+            await until { resultsProcessingDao.fetchOneByPublicId(publicId.id).status == ResultsProcessingStatus.SUCCESS.name }
+
+            val secondRequestBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXmlLoader.failing(), metadata)
+
+            val secondResponse = postGroupedResultsJSON(secondRequestBody)
+
+            val responseContent = secondResponse.bodyAsText()
+            assertNotNull(responseContent)
+            val resultsResponse: SaveResultsResponse = objectMapper.readValue(responseContent)
+
+            val secondPublicIdResponse = resultsResponse.id
+            expectThat(secondPublicIdResponse).isEqualTo(publicId.id)
+
+            val (secondPublicId, _) = waitForTestRunSaveToComplete(secondResponse)
+            expectThat(secondPublicId).isEqualTo(publicId)
+
+            await until {
+                val updatedTestRun = testRunDao.fetchOneByPublicId(publicId.id)
+
+                !updatedTestRun.passed
+            }
+
+            val secondTestRun = testRunDao.fetchOneByPublicId(publicId.id)
+
+            expectThat(secondTestRun) {
+                get { passed }.isFalse()
+                get { totalPassingCount }.isEqualTo(3)
+                get { totalFailureCount }.isEqualTo(2)
+                get { totalSkippedCount }.isEqualTo(0)
+                get { totalTestCount }.isEqualTo(5)
+            }
+
+            val secondTestSuites = testSuiteDao.fetchByTestRunId(testRun.id)
+            expectThat(secondTestSuites).hasSize(4)
+
+            val secondTestSuiteGroups = testSuiteGroupDao.fetchByTestRunId(testRun.id)
+            expectThat(secondTestSuiteGroups)
+                .hasSize(2)
+
+            val secondTestSuiteGroup1 = testSuiteGroups.find { it.groupName == "Group1" }
+            assertNotNull(secondTestSuiteGroup1)
+            expectThat(testSuiteDao.fetchByTestSuiteGroupId(secondTestSuiteGroup1.id)).hasSize(3)
+
+            val secondTestSuiteGroup2 = testSuiteGroups.find { it.groupName == "Group2" }
+            assertNotNull(secondTestSuiteGroup2)
+            expectThat(testSuiteDao.fetchByTestSuiteGroupId(secondTestSuiteGroup2.id)).hasSize(1)
         }
 
-        val secondRequestBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXmlLoader.failing(), metadata)
+    @Test
+    fun `should append second and third grouped test results runs`() =
+        testSuspend {
+            val repoPart = RandomStringUtils.randomAlphabetic(12)
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/groupedResults") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(secondRequestBody)
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+            val gitMetadata = GitMetadata()
+            gitMetadata.repoName = "craigatk/$repoPart"
+            gitMetadata.branchName = "main"
+            gitMetadata.isMainBranch = true
+            val metadata = ResultsMetadata()
+            metadata.git = gitMetadata
+            metadata.group = "B12"
 
-                val responseContent = response.content
-                assertNotNull(responseContent)
-                val resultsResponse: SaveResultsResponse = objectMapper.readValue(responseContent)
+            val initialRequestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
-                val secondPublicIdResponse = resultsResponse.id
-                expectThat(secondPublicIdResponse).isEqualTo(publicId.id)
+            lateinit var publicId: PublicId
+            lateinit var testRun: TestRun
 
-                val (secondPublicId, _) = waitForTestRunSaveToComplete(response)
-                expectThat(secondPublicId).isEqualTo(publicId)
+            val initialResponse = postGroupedResultsJSON(initialRequestBody)
 
-                await until {
-                    val updatedTestRun = testRunDao.fetchOneByPublicId(publicId.id)
-                    !updatedTestRun.passed
-                }
+            val initialSaveComplete = waitForTestRunSaveToComplete(initialResponse)
+            publicId = initialSaveComplete.first
+            testRun = initialSaveComplete.second
 
-                val secondTestRun = testRunDao.fetchOneByPublicId(publicId.id)
-
-                expectThat(secondTestRun) {
-                    get { passed }.isFalse()
-                    get { totalPassingCount }.isEqualTo(3)
-                    get { totalFailureCount }.isEqualTo(2)
-                    get { totalSkippedCount }.isEqualTo(0)
-                    get { totalTestCount }.isEqualTo(5)
-                }
-
-                val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
-                expectThat(testSuites).hasSize(4)
-
-                val testSuiteGroups = testSuiteGroupDao.fetchByTestRunId(testRun.id)
-                expectThat(testSuiteGroups).hasSize(2)
-
-                val testSuiteGroup1 = testSuiteGroups.find { it.groupName == "Group1" }
-                assertNotNull(testSuiteGroup1)
-                expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup1.id)).hasSize(3)
-
-                val testSuiteGroup2 = testSuiteGroups.find { it.groupName == "Group2" }
-                assertNotNull(testSuiteGroup2)
-                expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2.id)).hasSize(1)
+            expectThat(testRun) {
+                get { passed }.isTrue()
+                get { totalPassingCount }.isEqualTo(3)
+                get { totalFailureCount }.isEqualTo(0)
+                get { totalSkippedCount }.isEqualTo(0)
+                get { totalTestCount }.isEqualTo(3)
             }
-        }
 
-        val thirdRequestBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXmlLoader.someIgnored(), metadata)
+            val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
+            expectThat(testSuites).hasSize(3)
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/groupedResults") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(thirdRequestBody)
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+            val testSuiteGroups = testSuiteGroupDao.fetchByTestRunId(testRun.id)
+            expectThat(testSuiteGroups).hasSize(2)
 
-                val responseContent = response.content
-                assertNotNull(responseContent)
-                val resultsResponse: SaveResultsResponse = objectMapper.readValue(responseContent)
+            val testSuiteGroup1 = testSuiteGroups.find { it.groupName == "Group1" }
+            assertNotNull(testSuiteGroup1)
+            expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup1.id)).hasSize(2)
 
-                val thirdPublicIdResponse = resultsResponse.id
-                expectThat(thirdPublicIdResponse).isEqualTo(publicId.id)
+            val testSuiteGroup2 = testSuiteGroups.find { it.groupName == "Group2" }
+            assertNotNull(testSuiteGroup2)
+            expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2.id)).hasSize(1)
 
-                val (thirdPublicId, _) = waitForTestRunSaveToComplete(response)
-                expectThat(thirdPublicId).isEqualTo(publicId)
+            await until { resultsProcessingDao.fetchOneByPublicId(publicId.id).status == ResultsProcessingStatus.SUCCESS.name }
 
-                await until {
-                    val updatedTestRun = testRunDao.fetchOneByPublicId(publicId.id)
-                    updatedTestRun.totalSkippedCount > 0
-                }
+            val secondRequestBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXmlLoader.failing(), metadata)
+            val secondResponse = postGroupedResultsJSON(secondRequestBody)
 
-                val secondTestRun = testRunDao.fetchOneByPublicId(publicId.id)
+            val responseContent = secondResponse.bodyAsText()
+            assertNotNull(responseContent)
+            val resultsResponse: SaveResultsResponse = objectMapper.readValue(responseContent)
 
-                expectThat(secondTestRun) {
-                    get { passed }.isFalse()
-                    get { totalPassingCount }.isEqualTo(10)
-                    get { totalFailureCount }.isEqualTo(2)
-                    get { totalSkippedCount }.isEqualTo(3)
-                    get { totalTestCount }.isEqualTo(15)
-                }
+            val secondPublicIdResponse = resultsResponse.id
+            expectThat(secondPublicIdResponse).isEqualTo(publicId.id)
 
-                val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
-                expectThat(testSuites).hasSize(5)
+            val (secondPublicId, _) = waitForTestRunSaveToComplete(secondResponse)
+            expectThat(secondPublicId).isEqualTo(publicId)
 
-                val testSuiteGroups = testSuiteGroupDao.fetchByTestRunId(testRun.id)
-                expectThat(testSuiteGroups).hasSize(2)
-
-                val testSuiteGroup1 = testSuiteGroups.find { it.groupName == "Group1" }
-                assertNotNull(testSuiteGroup1)
-                expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup1.id)).hasSize(4)
-
-                val testSuiteGroup2 = testSuiteGroups.find { it.groupName == "Group2" }
-                assertNotNull(testSuiteGroup2)
-                expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2.id)).hasSize(1)
+            await until {
+                val updatedTestRun = testRunDao.fetchOneByPublicId(publicId.id)
+                !updatedTestRun.passed
             }
+
+            val secondTestRun = testRunDao.fetchOneByPublicId(publicId.id)
+
+            expectThat(secondTestRun) {
+                get { passed }.isFalse()
+                get { totalPassingCount }.isEqualTo(3)
+                get { totalFailureCount }.isEqualTo(2)
+                get { totalSkippedCount }.isEqualTo(0)
+                get { totalTestCount }.isEqualTo(5)
+            }
+
+            val testSuitesSecond = testSuiteDao.fetchByTestRunId(testRun.id)
+            expectThat(testSuitesSecond).hasSize(4)
+
+            val testSuiteGroupsSecond = testSuiteGroupDao.fetchByTestRunId(testRun.id)
+            expectThat(testSuiteGroupsSecond).hasSize(2)
+
+            val testSuiteGroup1Second = testSuiteGroups.find { it.groupName == "Group1" }
+            assertNotNull(testSuiteGroup1Second)
+            expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup1Second.id)).hasSize(3)
+
+            val testSuiteGroup2Second = testSuiteGroups.find { it.groupName == "Group2" }
+            assertNotNull(testSuiteGroup2Second)
+            expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2Second.id)).hasSize(1)
+
+            val thirdRequestBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXmlLoader.someIgnored(), metadata)
+            val thirdResponse = postGroupedResultsJSON(thirdRequestBody)
+
+            val responseContentThird = thirdResponse.bodyAsText()
+            assertNotNull(responseContentThird)
+            val resultsResponseThird: SaveResultsResponse = objectMapper.readValue(responseContentThird)
+
+            val thirdPublicIdResponse = resultsResponseThird.id
+            expectThat(thirdPublicIdResponse).isEqualTo(publicId.id)
+
+            val (thirdPublicId, _) = waitForTestRunSaveToComplete(thirdResponse)
+            expectThat(thirdPublicId).isEqualTo(publicId)
+
+            await until {
+                val updatedTestRun = testRunDao.fetchOneByPublicId(publicId.id)
+                updatedTestRun.totalSkippedCount > 0
+            }
+
+            val secondTestRunThird = testRunDao.fetchOneByPublicId(publicId.id)
+
+            expectThat(secondTestRunThird) {
+                get { passed }.isFalse()
+                get { totalPassingCount }.isEqualTo(10)
+                get { totalFailureCount }.isEqualTo(2)
+                get { totalSkippedCount }.isEqualTo(3)
+                get { totalTestCount }.isEqualTo(15)
+            }
+
+            val testSuitesThird = testSuiteDao.fetchByTestRunId(testRun.id)
+            expectThat(testSuitesThird).hasSize(5)
+
+            val testSuiteGroupsThird = testSuiteGroupDao.fetchByTestRunId(testRun.id)
+            expectThat(testSuiteGroupsThird).hasSize(2)
+
+            val testSuiteGroup1Third = testSuiteGroups.find { it.groupName == "Group1" }
+            assertNotNull(testSuiteGroup1Third)
+            expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup1Third.id)).hasSize(4)
+
+            val testSuiteGroup2Third = testSuiteGroups.find { it.groupName == "Group2" }
+            assertNotNull(testSuiteGroup2Third)
+            expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2Third.id)).hasSize(1)
         }
-    }
 }

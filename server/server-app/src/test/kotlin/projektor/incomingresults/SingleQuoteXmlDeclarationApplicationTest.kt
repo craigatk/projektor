@@ -1,10 +1,6 @@
 package projektor.incomingresults
 
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
-import io.ktor.server.testing.withTestApplication
+import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.parser.GroupedResultsXmlLoader
@@ -16,33 +12,31 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
 class SingleQuoteXmlDeclarationApplicationTest : ApplicationTestCase() {
+    override fun autoStartServer(): Boolean = true
+
     @Test
-    fun `should save results with single-quoted XML declaration`() {
-        val gitMetadata = GitMetadata()
-        gitMetadata.repoName = "craigatk/projektor"
-        gitMetadata.branchName = "main"
-        gitMetadata.isMainBranch = true
-        val metadata = ResultsMetadata()
-        metadata.git = gitMetadata
+    fun `should save results with single-quoted XML declaration`() =
+        testSuspend {
+            val gitMetadata = GitMetadata()
+            gitMetadata.repoName = "craigatk/projektor"
+            gitMetadata.branchName = "main"
+            gitMetadata.isMainBranch = true
+            val metadata = ResultsMetadata()
+            metadata.git = gitMetadata
 
-        val resultXml = ResultsXmlLoader().singleQuoteXmlDeclaration()
-        val requestBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultXml, metadata)
+            val resultXml = ResultsXmlLoader().singleQuoteXmlDeclaration()
+            val requestBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultXml, metadata)
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/groupedResults") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(requestBody)
-            }.apply {
-                val (_, testRun) = waitForTestRunSaveToComplete(response)
+            val response = postGroupedResultsJSON(requestBody)
 
-                val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
+            val (_, testRun) = waitForTestRunSaveToComplete(response)
 
-                expectThat(testSuites).hasSize(1)
+            val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)
 
-                expectThat(testSuites[0]) {
-                    get { className }.isEqualTo("SingleQuoteSpec")
-                }
+            expectThat(testSuites).hasSize(1)
+
+            expectThat(testSuites[0]) {
+                get { className }.isEqualTo("SingleQuoteSpec")
             }
         }
-    }
 }

@@ -1,10 +1,7 @@
 package projektor.incomingresults
 
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
-import io.ktor.server.testing.withTestApplication
+import io.ktor.client.statement.*
+import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.Test
@@ -16,44 +13,38 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class SaveResultsMetricsApplicationTest : ApplicationTestCase() {
-    @Test
-    fun `should record success metric when saving grouped test results succeeds`() {
-        val requestBody = resultsXmlLoader.passing()
-
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/results") {
-                addHeader(HttpHeaders.ContentType, "text/plain")
-                setBody(requestBody)
-            }.apply {
-                waitForTestRunSaveToComplete(response)
-
-                expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(1.toDouble())
-                expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
-                expectThat(meterRegistry.counter("results_parse_failure").count()).isEqualTo(0.toDouble())
-            }
-        }
-    }
+    override fun autoStartServer(): Boolean = true
 
     @Test
-    fun `when test results fail to parse because they are cut off should record parse error metric`() {
-        val malformedResults = resultsXmlLoader.cutOffResultsGradle()
+    fun `should record success metric when saving grouped test results succeeds`() =
+        testSuspend {
+            val requestBody = resultsXmlLoader.passing()
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Post, "/results") {
-                addHeader(HttpHeaders.ContentType, "text/plain")
-                setBody(malformedResults)
-            }.apply {
-                val resultsResponse = objectMapper.readValue(response.content, SaveResultsResponse::class.java)
+            val response = postResultsPlainText(requestBody)
 
-                val publicId = resultsResponse.id
-                assertNotNull(publicId)
+            waitForTestRunSaveToComplete(response)
 
-                await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.ERROR.name }
-
-                expectThat(meterRegistry.counter("results_parse_failure").count()).isEqualTo(1.toDouble())
-                expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
-                expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(0.toDouble())
-            }
+            expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(1.toDouble())
+            expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
+            expectThat(meterRegistry.counter("results_parse_failure").count()).isEqualTo(0.toDouble())
         }
-    }
+
+    @Test
+    fun `when test results fail to parse because they are cut off should record parse error metric`() =
+        testSuspend {
+            val malformedResults = resultsXmlLoader.cutOffResultsGradle()
+
+            val response = postResultsPlainText(malformedResults)
+
+            val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)
+
+            val publicId = resultsResponse.id
+            assertNotNull(publicId)
+
+            await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.ERROR.name }
+
+            expectThat(meterRegistry.counter("results_parse_failure").count()).isEqualTo(1.toDouble())
+            expectThat(meterRegistry.counter("results_process_failure").count()).isEqualTo(0.toDouble())
+            expectThat(meterRegistry.counter("results_process_success").count()).isEqualTo(0.toDouble())
+        }
 }

@@ -1,10 +1,7 @@
 package projektor.incomingresults
 
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
-import io.ktor.server.testing.withTestApplication
+import io.ktor.client.statement.*
+import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
@@ -17,42 +14,37 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class SaveResultsErrorApplicationTest : ApplicationTestCase() {
+    override fun autoStartServer(): Boolean = true
+
     @Test
-    fun `should still process results after multiple failures`() {
-        val malformedResults = resultsXmlLoader.passing().replace("testsuite", "")
-        val successfulResults = resultsXmlLoader.passing()
+    fun `should still process results after multiple failures`() =
+        testSuspend {
+            val malformedResults = resultsXmlLoader.passing().replace("testsuite", "")
+            val successfulResults = resultsXmlLoader.passing()
 
-        withTestApplication(::createTestApplication) {
             (1..10).forEach { _ ->
-                handleRequest(HttpMethod.Post, "/results") {
-                    addHeader(HttpHeaders.ContentType, "application/json")
-                    setBody(malformedResults)
-                }.apply {
-                    val resultsResponse = objectMapper.readValue(response.content, SaveResultsResponse::class.java)
+                val response = postResultsPlainText(malformedResults)
 
-                    val publicId = resultsResponse.id
-                    assertNotNull(publicId)
+                val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)
 
-                    await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.ERROR.name }
+                val publicId = resultsResponse.id
+                assertNotNull(publicId)
 
-                    val resultsProcessingFailure = await untilNotNull { resultsProcessingFailureDao.fetchOneByPublicId(publicId) }
-                    expectThat(resultsProcessingFailure.body).isEqualTo(malformedResults)
-                }
+                await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.ERROR.name }
+
+                val resultsProcessingFailure = await untilNotNull { resultsProcessingFailureDao.fetchOneByPublicId(publicId) }
+                expectThat(resultsProcessingFailure.body).isEqualTo(malformedResults)
             }
 
             (1..10).forEach { _ ->
-                handleRequest(HttpMethod.Post, "/results") {
-                    addHeader(HttpHeaders.ContentType, "application/json")
-                    setBody(successfulResults)
-                }.apply {
-                    val resultsResponse = objectMapper.readValue(response.content, SaveResultsResponse::class.java)
+                val response = postResultsPlainText(successfulResults)
 
-                    val publicId = resultsResponse.id
-                    assertNotNull(publicId)
+                val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)
 
-                    await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.SUCCESS.name }
-                }
+                val publicId = resultsResponse.id
+                assertNotNull(publicId)
+
+                await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.SUCCESS.name }
             }
         }
-    }
 }
