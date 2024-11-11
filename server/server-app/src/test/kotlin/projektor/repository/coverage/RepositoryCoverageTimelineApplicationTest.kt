@@ -1,9 +1,9 @@
 package projektor.repository.coverage
 
-import io.ktor.http.HttpMethod
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
+import io.ktor.test.dispatcher.*
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
@@ -21,353 +21,351 @@ import java.time.ZoneOffset
 import kotlin.test.assertNotNull
 
 class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
-    @Test
-    fun `should fetch coverage timeline in mainline for repository without project name`() {
-        val orgName = RandomStringUtils.randomAlphabetic(12)
-        val repoName = "$orgName/repo"
-
-        val firstRunPublicId = randomPublicId()
-        val secondRunPublicId = randomPublicId()
-        val thirdRunPublicId = randomPublicId()
-
-        val runInDifferentBranchPublicId = randomPublicId()
-        val runInDifferentProjectPublicId = randomPublicId()
-        val runInDifferentRepoPublicId = randomPublicId()
-
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/repo/$repoName/coverage/timeline") {
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = firstRunPublicId,
-                    coverageText = JacocoXmlLoader().serverAppReduced(),
-                    repoName = repoName,
-                    branchName = "main",
-                )
-
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = secondRunPublicId,
-                    coverageText = JacocoXmlLoader().serverApp(),
-                    repoName = repoName,
-                    branchName = "main",
-                )
-
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = thirdRunPublicId,
-                    coverageText = JacocoXmlLoader().jacocoXmlParser(),
-                    repoName = repoName,
-                    branchName = "main",
-                )
-
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = runInDifferentBranchPublicId,
-                    coverageText = JacocoXmlLoader().jacocoXmlParser(),
-                    repoName = repoName,
-                    branchName = "feature/dev",
-                )
-
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = runInDifferentProjectPublicId,
-                    coverageText = JacocoXmlLoader().junitResultsParser(),
-                    repoName = repoName,
-                    branchName = "main",
-                    projectName = "other-project",
-                )
-
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = runInDifferentRepoPublicId,
-                    coverageText = JacocoXmlLoader().junitResultsParser(),
-                    repoName = "other/repo",
-                    branchName = "main",
-                )
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
-
-                val coverageTimeline = objectMapper.readValue(response.content, RepositoryCoverageTimeline::class.java)
-                assertNotNull(coverageTimeline)
-
-                expectThat(coverageTimeline.timelineEntries).hasSize(3)
-
-                val firstTestRunDB = testRunDao.fetchOneByPublicId(firstRunPublicId.id)
-                val firstTimelineEntry = coverageTimeline.timelineEntries.find { it.publicId == firstRunPublicId.id }
-                assertNotNull(firstTimelineEntry)
-
-                expectThat(firstTimelineEntry) {
-                    get { createdTimestamp }.isEqualTo(firstTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
-                    get { coverageStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(serverAppReducedLineCoveragePercentage)
-                }
-
-                val secondTestRunDB = testRunDao.fetchOneByPublicId(secondRunPublicId.id)
-                val secondTimelineEntry = coverageTimeline.timelineEntries.find { it.publicId == secondRunPublicId.id }
-                assertNotNull(secondTimelineEntry)
-
-                expectThat(secondTimelineEntry) {
-                    get { createdTimestamp }.isEqualTo(secondTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
-                    get { coverageStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(serverAppLineCoveragePercentage)
-                }
-
-                val thirdTestRunDB = testRunDao.fetchOneByPublicId(thirdRunPublicId.id)
-                val thirdTimelineEntry = coverageTimeline.timelineEntries.find { it.publicId == thirdRunPublicId.id }
-                assertNotNull(thirdTimelineEntry)
-
-                expectThat(thirdTimelineEntry) {
-                    get { createdTimestamp }.isEqualTo(thirdTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
-                    get { coverageStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(jacocoXmlParserLineCoveragePercentage)
-                }
-            }
-        }
-    }
+    override fun autoStartServer(): Boolean = true
 
     @Test
-    fun `should fetch coverage timeline in all branches for repository without project name`() {
-        val orgName = RandomStringUtils.randomAlphabetic(12)
-        val repoName = "$orgName/repo"
+    fun `should fetch coverage timeline in mainline for repository without project name`() =
+        testSuspend {
+            val orgName = RandomStringUtils.randomAlphabetic(12)
+            val repoName = "$orgName/repo"
 
-        val firstRunPublicId = randomPublicId()
-        val secondRunPublicId = randomPublicId()
-        val thirdRunPublicId = randomPublicId()
-        val runInDifferentBranchPublicId = randomPublicId()
+            val firstRunPublicId = randomPublicId()
+            val secondRunPublicId = randomPublicId()
+            val thirdRunPublicId = randomPublicId()
 
-        val runInDifferentProjectPublicId = randomPublicId()
-        val runInDifferentRepoPublicId = randomPublicId()
+            val runInDifferentBranchPublicId = randomPublicId()
+            val runInDifferentProjectPublicId = randomPublicId()
+            val runInDifferentRepoPublicId = randomPublicId()
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/repo/$repoName/coverage/timeline?branch=ALL") {
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = firstRunPublicId,
-                    coverageText = JacocoXmlLoader().serverAppReduced(),
-                    repoName = repoName,
-                    branchName = "main",
-                )
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = firstRunPublicId,
+                coverageText = JacocoXmlLoader().serverAppReduced(),
+                repoName = repoName,
+                branchName = "main",
+            )
 
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = secondRunPublicId,
-                    coverageText = JacocoXmlLoader().serverApp(),
-                    repoName = repoName,
-                    branchName = "main",
-                )
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = secondRunPublicId,
+                coverageText = JacocoXmlLoader().serverApp(),
+                repoName = repoName,
+                branchName = "main",
+            )
 
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = thirdRunPublicId,
-                    coverageText = JacocoXmlLoader().jacocoXmlParser(),
-                    repoName = repoName,
-                    branchName = "main",
-                )
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = thirdRunPublicId,
+                coverageText = JacocoXmlLoader().jacocoXmlParser(),
+                repoName = repoName,
+                branchName = "main",
+            )
 
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = runInDifferentBranchPublicId,
-                    coverageText = JacocoXmlLoader().jacocoXmlParser(),
-                    repoName = repoName,
-                    branchName = "feature/dev",
-                )
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = runInDifferentBranchPublicId,
+                coverageText = JacocoXmlLoader().jacocoXmlParser(),
+                repoName = repoName,
+                branchName = "feature/dev",
+            )
 
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = runInDifferentProjectPublicId,
-                    coverageText = JacocoXmlLoader().junitResultsParser(),
-                    repoName = repoName,
-                    branchName = "main",
-                    projectName = "other-project",
-                )
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = runInDifferentProjectPublicId,
+                coverageText = JacocoXmlLoader().junitResultsParser(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = "other-project",
+            )
 
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = runInDifferentRepoPublicId,
-                    coverageText = JacocoXmlLoader().junitResultsParser(),
-                    repoName = "other/repo",
-                    branchName = "main",
-                )
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = runInDifferentRepoPublicId,
+                coverageText = JacocoXmlLoader().junitResultsParser(),
+                repoName = "other/repo",
+                branchName = "main",
+            )
 
-                val coverageTimeline = objectMapper.readValue(response.content, RepositoryCoverageTimeline::class.java)
-                assertNotNull(coverageTimeline)
+            val response = testClient.get("/repo/$repoName/coverage/timeline")
 
-                expectThat(coverageTimeline.timelineEntries)
-                    .hasSize(4)
-                    .any {
-                        get { publicId }.isEqualTo(firstRunPublicId.id)
-                    }
-                    .any {
-                        get { publicId }.isEqualTo(secondRunPublicId.id)
-                    }
-                    .any {
-                        get { publicId }.isEqualTo(thirdRunPublicId.id)
-                    }
-                    .any {
-                        get { publicId }.isEqualTo(runInDifferentBranchPublicId.id)
-                    }
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val coverageTimeline = objectMapper.readValue(response.bodyAsText(), RepositoryCoverageTimeline::class.java)
+            assertNotNull(coverageTimeline)
+
+            expectThat(coverageTimeline.timelineEntries).hasSize(3)
+
+            val firstTestRunDB = testRunDao.fetchOneByPublicId(firstRunPublicId.id)
+            val firstTimelineEntry = coverageTimeline.timelineEntries.find { it.publicId == firstRunPublicId.id }
+            assertNotNull(firstTimelineEntry)
+
+            expectThat(firstTimelineEntry) {
+                get { createdTimestamp }.isEqualTo(firstTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
+                get { coverageStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(serverAppReducedLineCoveragePercentage)
+            }
+
+            val secondTestRunDB = testRunDao.fetchOneByPublicId(secondRunPublicId.id)
+            val secondTimelineEntry = coverageTimeline.timelineEntries.find { it.publicId == secondRunPublicId.id }
+            assertNotNull(secondTimelineEntry)
+
+            expectThat(secondTimelineEntry) {
+                get { createdTimestamp }.isEqualTo(secondTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
+                get { coverageStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(serverAppLineCoveragePercentage)
+            }
+
+            val thirdTestRunDB = testRunDao.fetchOneByPublicId(thirdRunPublicId.id)
+            val thirdTimelineEntry = coverageTimeline.timelineEntries.find { it.publicId == thirdRunPublicId.id }
+            assertNotNull(thirdTimelineEntry)
+
+            expectThat(thirdTimelineEntry) {
+                get { createdTimestamp }.isEqualTo(thirdTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
+                get { coverageStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(jacocoXmlParserLineCoveragePercentage)
             }
         }
-    }
 
     @Test
-    fun `should fetch coverage timeline in mainline for repository with project name`() {
-        val orgName = RandomStringUtils.randomAlphabetic(12)
-        val repoName = "$orgName/repo"
-        val projectName = "server-project"
+    fun `should fetch coverage timeline in all branches for repository without project name`() =
+        testSuspend {
+            val orgName = RandomStringUtils.randomAlphabetic(12)
+            val repoName = "$orgName/repo"
 
-        val firstRunPublicId = randomPublicId()
-        val secondRunPublicId = randomPublicId()
+            val firstRunPublicId = randomPublicId()
+            val secondRunPublicId = randomPublicId()
+            val thirdRunPublicId = randomPublicId()
+            val runInDifferentBranchPublicId = randomPublicId()
 
-        val runInDifferentBranch = randomPublicId()
-        val runInRepoWithoutProjectPublicId = randomPublicId()
-        val runInDifferentProjectPublicId = randomPublicId()
-        val runInDifferentRepoPublicId = randomPublicId()
+            val runInDifferentProjectPublicId = randomPublicId()
+            val runInDifferentRepoPublicId = randomPublicId()
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/repo/$repoName/project/$projectName/coverage/timeline") {
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = firstRunPublicId,
-                    coverageText = JacocoXmlLoader().serverAppReduced(),
-                    repoName = repoName,
-                    branchName = "main",
-                    projectName = projectName,
-                )
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = firstRunPublicId,
+                coverageText = JacocoXmlLoader().serverAppReduced(),
+                repoName = repoName,
+                branchName = "main",
+            )
 
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = secondRunPublicId,
-                    coverageText = JacocoXmlLoader().serverApp(),
-                    repoName = repoName,
-                    branchName = "main",
-                    projectName = projectName,
-                )
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = secondRunPublicId,
+                coverageText = JacocoXmlLoader().serverApp(),
+                repoName = repoName,
+                branchName = "main",
+            )
 
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = runInDifferentBranch,
-                    coverageText = JacocoXmlLoader().serverApp(),
-                    repoName = repoName,
-                    branchName = "feature/dev",
-                    projectName = projectName,
-                )
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = thirdRunPublicId,
+                coverageText = JacocoXmlLoader().jacocoXmlParser(),
+                repoName = repoName,
+                branchName = "main",
+            )
 
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = runInRepoWithoutProjectPublicId,
-                    coverageText = JacocoXmlLoader().serverAppReduced(),
-                    repoName = repoName,
-                    branchName = "main",
-                    projectName = null,
-                )
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = runInDifferentBranchPublicId,
+                coverageText = JacocoXmlLoader().jacocoXmlParser(),
+                repoName = repoName,
+                branchName = "feature/dev",
+            )
 
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = runInDifferentProjectPublicId,
-                    coverageText = JacocoXmlLoader().junitResultsParser(),
-                    repoName = repoName,
-                    branchName = "main",
-                    projectName = "other-project",
-                )
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = runInDifferentProjectPublicId,
+                coverageText = JacocoXmlLoader().junitResultsParser(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = "other-project",
+            )
 
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = runInDifferentRepoPublicId,
-                    coverageText = JacocoXmlLoader().junitResultsParser(),
-                    repoName = "other/repo",
-                    branchName = "main",
-                )
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = runInDifferentRepoPublicId,
+                coverageText = JacocoXmlLoader().junitResultsParser(),
+                repoName = "other/repo",
+                branchName = "main",
+            )
 
-                val coverageTimeline = objectMapper.readValue(response.content, RepositoryCoverageTimeline::class.java)
-                assertNotNull(coverageTimeline)
+            val response = testClient.get("/repo/$repoName/coverage/timeline?branch=ALL")
 
-                expectThat(coverageTimeline.timelineEntries).hasSize(2)
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
-                val firstTestRunDB = testRunDao.fetchOneByPublicId(firstRunPublicId.id)
-                val firstTimelineEntry = coverageTimeline.timelineEntries.find { it.publicId == firstRunPublicId.id }
-                assertNotNull(firstTimelineEntry)
+            val coverageTimeline = objectMapper.readValue(response.bodyAsText(), RepositoryCoverageTimeline::class.java)
+            assertNotNull(coverageTimeline)
 
-                expectThat(firstTimelineEntry) {
-                    get { createdTimestamp }.isEqualTo(firstTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
-                    get { coverageStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(serverAppReducedLineCoveragePercentage)
+            expectThat(coverageTimeline.timelineEntries)
+                .hasSize(4)
+                .any {
+                    get { publicId }.isEqualTo(firstRunPublicId.id)
                 }
-
-                val secondTestRunDB = testRunDao.fetchOneByPublicId(secondRunPublicId.id)
-                val secondTimelineEntry = coverageTimeline.timelineEntries.find { it.publicId == secondRunPublicId.id }
-                assertNotNull(secondTimelineEntry)
-
-                expectThat(secondTimelineEntry) {
-                    get { createdTimestamp }.isEqualTo(secondTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
-                    get { coverageStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(serverAppLineCoveragePercentage)
+                .any {
+                    get { publicId }.isEqualTo(secondRunPublicId.id)
                 }
-            }
+                .any {
+                    get { publicId }.isEqualTo(thirdRunPublicId.id)
+                }
+                .any {
+                    get { publicId }.isEqualTo(runInDifferentBranchPublicId.id)
+                }
         }
-    }
 
     @Test
-    fun `should fetch coverage timeline in all branches for repository with project name`() {
-        val orgName = RandomStringUtils.randomAlphabetic(12)
-        val repoName = "$orgName/repo"
-        val projectName = "server-project"
+    fun `should fetch coverage timeline in mainline for repository with project name`() =
+        testSuspend {
+            val orgName = RandomStringUtils.randomAlphabetic(12)
+            val repoName = "$orgName/repo"
+            val projectName = "server-project"
 
-        val firstRunPublicId = randomPublicId()
-        val secondRunPublicId = randomPublicId()
-        val runInDifferentBranch = randomPublicId()
+            val firstRunPublicId = randomPublicId()
+            val secondRunPublicId = randomPublicId()
 
-        val runInRepoWithoutProjectPublicId = randomPublicId()
-        val runInDifferentProjectPublicId = randomPublicId()
-        val runInDifferentRepoPublicId = randomPublicId()
+            val runInDifferentBranch = randomPublicId()
+            val runInRepoWithoutProjectPublicId = randomPublicId()
+            val runInDifferentProjectPublicId = randomPublicId()
+            val runInDifferentRepoPublicId = randomPublicId()
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/repo/$repoName/project/$projectName/coverage/timeline?branch=ALL") {
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = firstRunPublicId,
-                    coverageText = JacocoXmlLoader().serverAppReduced(),
-                    repoName = repoName,
-                    branchName = "main",
-                    projectName = projectName,
-                )
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = firstRunPublicId,
+                coverageText = JacocoXmlLoader().serverAppReduced(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = projectName,
+            )
 
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = secondRunPublicId,
-                    coverageText = JacocoXmlLoader().serverApp(),
-                    repoName = repoName,
-                    branchName = "main",
-                    projectName = projectName,
-                )
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = secondRunPublicId,
+                coverageText = JacocoXmlLoader().serverApp(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = projectName,
+            )
 
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = runInDifferentBranch,
-                    coverageText = JacocoXmlLoader().serverApp(),
-                    repoName = repoName,
-                    branchName = "feature/dev",
-                    projectName = projectName,
-                )
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = runInDifferentBranch,
+                coverageText = JacocoXmlLoader().serverApp(),
+                repoName = repoName,
+                branchName = "feature/dev",
+                projectName = projectName,
+            )
 
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = runInRepoWithoutProjectPublicId,
-                    coverageText = JacocoXmlLoader().serverAppReduced(),
-                    repoName = repoName,
-                    branchName = "main",
-                    projectName = null,
-                )
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = runInRepoWithoutProjectPublicId,
+                coverageText = JacocoXmlLoader().serverAppReduced(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = null,
+            )
 
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = runInDifferentProjectPublicId,
-                    coverageText = JacocoXmlLoader().junitResultsParser(),
-                    repoName = repoName,
-                    branchName = "main",
-                    projectName = "other-project",
-                )
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = runInDifferentProjectPublicId,
+                coverageText = JacocoXmlLoader().junitResultsParser(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = "other-project",
+            )
 
-                testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
-                    publicId = runInDifferentRepoPublicId,
-                    coverageText = JacocoXmlLoader().junitResultsParser(),
-                    repoName = "other/repo",
-                    branchName = "main",
-                )
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = runInDifferentRepoPublicId,
+                coverageText = JacocoXmlLoader().junitResultsParser(),
+                repoName = "other/repo",
+                branchName = "main",
+            )
 
-                val coverageTimeline = objectMapper.readValue(response.content, RepositoryCoverageTimeline::class.java)
-                assertNotNull(coverageTimeline)
+            val response = testClient.get("/repo/$repoName/project/$projectName/coverage/timeline")
 
-                expectThat(coverageTimeline.timelineEntries)
-                    .hasSize(3)
-                    .any {
-                        get { publicId }.isEqualTo(firstRunPublicId.id)
-                    }
-                    .any {
-                        get { publicId }.isEqualTo(secondRunPublicId.id)
-                    }
-                    .any {
-                        get { publicId }.isEqualTo(runInDifferentBranch.id)
-                    }
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val coverageTimeline = objectMapper.readValue(response.bodyAsText(), RepositoryCoverageTimeline::class.java)
+            assertNotNull(coverageTimeline)
+
+            expectThat(coverageTimeline.timelineEntries).hasSize(2)
+
+            val firstTestRunDB = testRunDao.fetchOneByPublicId(firstRunPublicId.id)
+            val firstTimelineEntry = coverageTimeline.timelineEntries.find { it.publicId == firstRunPublicId.id }
+            assertNotNull(firstTimelineEntry)
+
+            expectThat(firstTimelineEntry) {
+                get { createdTimestamp }.isEqualTo(firstTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
+                get { coverageStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(serverAppReducedLineCoveragePercentage)
+            }
+
+            val secondTestRunDB = testRunDao.fetchOneByPublicId(secondRunPublicId.id)
+            val secondTimelineEntry = coverageTimeline.timelineEntries.find { it.publicId == secondRunPublicId.id }
+            assertNotNull(secondTimelineEntry)
+
+            expectThat(secondTimelineEntry) {
+                get { createdTimestamp }.isEqualTo(secondTestRunDB.createdTimestamp.toInstant(ZoneOffset.UTC))
+                get { coverageStats }.get { lineStat }.get { coveredPercentage }.isEqualTo(serverAppLineCoveragePercentage)
             }
         }
-    }
+
+    @Test
+    fun `should fetch coverage timeline in all branches for repository with project name`() =
+        testSuspend {
+            val orgName = RandomStringUtils.randomAlphabetic(12)
+            val repoName = "$orgName/repo"
+            val projectName = "server-project"
+
+            val firstRunPublicId = randomPublicId()
+            val secondRunPublicId = randomPublicId()
+            val runInDifferentBranch = randomPublicId()
+
+            val runInRepoWithoutProjectPublicId = randomPublicId()
+            val runInDifferentProjectPublicId = randomPublicId()
+            val runInDifferentRepoPublicId = randomPublicId()
+
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = firstRunPublicId,
+                coverageText = JacocoXmlLoader().serverAppReduced(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = projectName,
+            )
+
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = secondRunPublicId,
+                coverageText = JacocoXmlLoader().serverApp(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = projectName,
+            )
+
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = runInDifferentBranch,
+                coverageText = JacocoXmlLoader().serverApp(),
+                repoName = repoName,
+                branchName = "feature/dev",
+                projectName = projectName,
+            )
+
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = runInRepoWithoutProjectPublicId,
+                coverageText = JacocoXmlLoader().serverAppReduced(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = null,
+            )
+
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = runInDifferentProjectPublicId,
+                coverageText = JacocoXmlLoader().junitResultsParser(),
+                repoName = repoName,
+                branchName = "main",
+                projectName = "other-project",
+            )
+
+            testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+                publicId = runInDifferentRepoPublicId,
+                coverageText = JacocoXmlLoader().junitResultsParser(),
+                repoName = "other/repo",
+                branchName = "main",
+            )
+
+            val response = testClient.get("/repo/$repoName/project/$projectName/coverage/timeline?branch=ALL")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val coverageTimeline = objectMapper.readValue(response.bodyAsText(), RepositoryCoverageTimeline::class.java)
+            assertNotNull(coverageTimeline)
+
+            expectThat(coverageTimeline.timelineEntries)
+                .hasSize(3)
+                .any {
+                    get { publicId }.isEqualTo(firstRunPublicId.id)
+                }
+                .any {
+                    get { publicId }.isEqualTo(secondRunPublicId.id)
+                }
+                .any {
+                    get { publicId }.isEqualTo(runInDifferentBranch.id)
+                }
+        }
 }
