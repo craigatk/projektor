@@ -1,9 +1,9 @@
 package projektor.metadata
 
-import io.ktor.http.HttpMethod
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
+import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -14,27 +14,28 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isTrue
 
 class ResultsMetadataApplicationTest : ApplicationTestCase() {
+    override fun autoStartServer(): Boolean = true
+
     @Test
-    fun `should get results metadata`() {
-        val publicId = randomPublicId()
-        val anotherPublicId = randomPublicId()
+    fun `should get results metadata`() =
+        testSuspend {
+            val publicId = randomPublicId()
+            val anotherPublicId = randomPublicId()
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/run/$publicId/metadata") {
-                val testRun = testRunDBGenerator.createSimpleTestRun(publicId)
-                testRunDBGenerator.addResultsMetadata(testRun, true)
+            val testRun = testRunDBGenerator.createSimpleTestRun(publicId)
+            testRunDBGenerator.addResultsMetadata(testRun, true)
 
-                val anotherTestRun = testRunDBGenerator.createSimpleTestRun(anotherPublicId)
-                testRunDBGenerator.addResultsMetadata(anotherTestRun, false)
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+            val anotherTestRun = testRunDBGenerator.createSimpleTestRun(anotherPublicId)
+            testRunDBGenerator.addResultsMetadata(anotherTestRun, false)
 
-                val metadata = objectMapper.readValue(response.content, TestRunMetadata::class.java)
+            val response = testClient.get("/run/$publicId/metadata")
 
-                expectThat(metadata).isNotNull().and {
-                    get { ci }.isTrue()
-                }
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val metadata = objectMapper.readValue(response.bodyAsText(), TestRunMetadata::class.java)
+
+            expectThat(metadata).isNotNull().and {
+                get { ci }.isTrue()
             }
         }
-    }
 }

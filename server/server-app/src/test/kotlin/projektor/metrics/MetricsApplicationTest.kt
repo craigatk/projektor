@@ -1,8 +1,7 @@
 package projektor.metrics
 
-import io.ktor.http.HttpMethod
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
+import io.ktor.client.request.*
+import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.AfterAll
@@ -19,46 +18,48 @@ class MetricsApplicationTest : ApplicationTestCase() {
     }
 
     @Test
-    fun `when metrics enabled should publish to InfluxDB`() {
-        metricsEnabled = true
-        metricsPort = metricsStubber.port()
+    fun `when metrics enabled should publish to InfluxDB`() =
+        testSuspend {
+            metricsEnabled = true
+            metricsPort = metricsStubber.port()
 
-        val publicId = randomPublicId()
+            val publicId = randomPublicId()
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/run/$publicId") {
-                testRunDBGenerator.createTestRun(
-                    publicId,
-                    listOf(),
-                )
-            }.apply {
-                await until { metricsStubber.findCreateMetricsDatabaseRequests().isNotEmpty() }
-                await until { metricsStubber.findWriteMetricsRequests().isNotEmpty() }
-            }
+            startTestServer()
+
+            testRunDBGenerator.createTestRun(
+                publicId,
+                listOf(),
+            )
+
+            testClient.get("/run/$publicId")
+
+            await until { metricsStubber.findCreateMetricsDatabaseRequests().isNotEmpty() }
+            await until { metricsStubber.findWriteMetricsRequests().isNotEmpty() }
         }
-    }
 
     @Test
-    fun `when metrics enabled with auth should publish to InfluxDB`() {
-        metricsEnabled = true
-        metricsUsername = "metricsuser"
-        metricsPassword = "metricspass"
-        metricsPort = metricsStubber.port()
+    fun `when metrics enabled with auth should publish to InfluxDB`() =
+        testSuspend {
+            metricsEnabled = true
+            metricsUsername = "metricsuser"
+            metricsPassword = "metricspass"
+            metricsPort = metricsStubber.port()
 
-        val publicId = randomPublicId()
+            val publicId = randomPublicId()
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/run/$publicId") {
-                testRunDBGenerator.createTestRun(
-                    publicId,
-                    listOf(),
-                )
-            }.apply {
-                await until { metricsStubber.findCreateMetricsDatabaseRequests().isNotEmpty() }
-                await until { metricsStubber.findWriteMetricsRequests().isNotEmpty() }
-            }
+            startTestServer()
+
+            testRunDBGenerator.createTestRun(
+                publicId,
+                listOf(),
+            )
+
+            testClient.get("/run/$publicId")
+
+            await until { metricsStubber.findCreateMetricsDatabaseRequests().isNotEmpty() }
+            await until { metricsStubber.findWriteMetricsRequests().isNotEmpty() }
         }
-    }
 
     companion object {
         private val metricsStubber = MetricsStubber()
