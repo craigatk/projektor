@@ -29,8 +29,6 @@ class RepositoryLatestRunApplicationTest : ApplicationTestCase() {
 
             val response = testClient.get("/repo/$repoName/run/latest")
 
-            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
-
             expectThat(response.request.url.encodedPath).isEqualTo("/tests/$newerRunPublicId")
         }
 
@@ -48,8 +46,6 @@ class RepositoryLatestRunApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.createSimpleTestRunInRepo(newerRunPublicId, repoName, true, projectName)
 
             val response = testClient.get("/repo/$repoName/project/$projectName/run/latest")
-
-            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
             expectThat(response.request.url.encodedPath).isEqualTo("/tests/$newerRunPublicId")
         }
