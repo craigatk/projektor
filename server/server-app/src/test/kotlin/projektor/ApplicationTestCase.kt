@@ -184,13 +184,13 @@ open class ApplicationTestCase {
 
     open fun autoStartServer(): Boolean = false
 
-    fun getApplication(): Application {
+    protected fun getApplication(): Application {
         assertNotNull(testServer)
 
         return testServer!!.application
     }
 
-    fun createApplicationConfig(): MapApplicationConfig {
+    private fun createApplicationConfig(): MapApplicationConfig {
         val schema = databaseSchema
 
         val config =
@@ -243,19 +243,7 @@ open class ApplicationTestCase {
         return config
     }
 
-    fun createTestApplication(application: Application) {
-        (application.environment.config as MapApplicationConfig).apply {
-            val config = createApplicationConfig()
-
-            config.keys().forEach { key ->
-                put(key, config.property(key).getString())
-            }
-        }
-
-        setUpTestDependencies(application)
-    }
-
-    fun setUpTestDependencies(application: Application) {
+    private fun setUpTestDependencies(application: Application) {
         val meterRegistryToUse = if (metricsEnabled) null else meterRegistry
 
         application.main(meterRegistry = meterRegistryToUse)
@@ -304,38 +292,21 @@ open class ApplicationTestCase {
             )
     }
 
-    fun waitUntilTestRunHasAttachments(
+    protected fun waitUntilTestRunHasAttachments(
         publicId: PublicId,
         attachmentCount: Int,
     ) {
         await until { attachmentDao.fetchByTestRunPublicId(publicId.id).size == attachmentCount }
     }
 
-    fun getLogContents(): String {
+    protected fun getLogContents(): String {
         val appLogger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as Logger
         val testAppender = appLogger.getAppender("test-appender") as TestLogAppender
 
         return testAppender.getLogContents()
     }
 
-    fun waitForTestRunSaveToComplete(response: TestApplicationResponse): Pair<PublicId, TestRun> {
-        expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
-
-        val resultsResponse = objectMapper.readValue(response.content, SaveResultsResponse::class.java)
-
-        val publicId = resultsResponse.id
-        assertNotNull(publicId)
-        expectThat(resultsResponse.uri).isEqualTo("/tests/$publicId")
-
-        await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.SUCCESS.name }
-
-        val testRun = await untilNotNull { testRunDao.fetchOneByPublicId(publicId) }
-        assertNotNull(testRun)
-
-        return Pair(PublicId(publicId), testRun)
-    }
-
-    suspend fun waitForTestRunSaveToComplete(response: HttpResponse): Pair<PublicId, TestRun> {
+    protected suspend fun waitForTestRunSaveToComplete(response: HttpResponse): Pair<PublicId, TestRun> {
         expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
         val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)

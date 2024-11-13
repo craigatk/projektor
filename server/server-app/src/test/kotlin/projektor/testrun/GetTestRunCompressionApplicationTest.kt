@@ -1,10 +1,10 @@
 package projektor.testrun
 
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
+import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -18,45 +18,49 @@ import strikt.assertions.isNull
 import kotlin.test.assertNotNull
 
 class GetTestRunCompressionApplicationTest : ApplicationTestCase() {
+    override fun autoStartServer(): Boolean = true
+
     @Test
-    fun `when gzip accept header included should compress test run response`() {
-        val publicId = randomPublicId()
+    fun `when gzip accept header included should compress test run response`() =
+        testSuspend {
+            val publicId = randomPublicId()
 
-        val testSuiteCount = 200
+            val testSuiteCount = 200
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/run/$publicId") {
-                testRunDBGenerator.createTestRun(
-                    publicId,
-                    (1..testSuiteCount).map {
-                        TestSuiteData(
-                            "reallyLongNameForTestSuite$it",
-                            listOf("testSuite${it}TestCase1", "testSuite${it}TestCase2"),
-                            listOf(),
-                            listOf(),
-                        )
-                    },
-                )
+            testRunDBGenerator.createTestRun(
+                publicId,
+                (1..testSuiteCount).map {
+                    TestSuiteData(
+                        "reallyLongNameForTestSuite$it",
+                        listOf("testSuite${it}TestCase1", "testSuite${it}TestCase2"),
+                        listOf(),
+                        listOf(),
+                    )
+                },
+            )
 
-                addHeader(HttpHeaders.AcceptEncoding, "gzip")
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
-                expectThat(response.headers[HttpHeaders.ContentLength]).isNull()
+            val response =
+                testClient.get("/run/$publicId") {
+                    headers {
+                        append(HttpHeaders.AcceptEncoding, "gzip")
+                    }
+                }
 
-                val responseBytes = response.byteContent
-                assertNotNull(responseBytes)
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+            expectThat(response.headers[HttpHeaders.ContentLength]).isNull()
 
-                val uncompressedResponse = ungzip(responseBytes)
+            val responseBytes = response.readBytes()
+            assertNotNull(responseBytes)
 
-                val responseRun = objectMapper.readValue(uncompressedResponse, TestRun::class.java)
-                assertNotNull(responseRun)
+            val uncompressedResponse = ungzip(responseBytes)
 
-                expectThat(responseRun.id).isEqualTo(publicId.id)
+            val responseRun = objectMapper.readValue(uncompressedResponse, TestRun::class.java)
+            assertNotNull(responseRun)
 
-                val testSuites = responseRun.testSuites
-                assertNotNull(testSuites)
-                expectThat(testSuites).hasSize(testSuiteCount)
-            }
+            expectThat(responseRun.id).isEqualTo(publicId.id)
+
+            val testSuites = responseRun.testSuites
+            assertNotNull(testSuites)
+            expectThat(testSuites).hasSize(testSuiteCount)
         }
-    }
 }

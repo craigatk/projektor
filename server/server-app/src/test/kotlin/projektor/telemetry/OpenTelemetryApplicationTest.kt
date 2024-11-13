@@ -1,9 +1,8 @@
 package projektor.telemetry
 
-import io.ktor.http.HttpMethod
+import io.ktor.client.request.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
+import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -14,36 +13,37 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
 class OpenTelemetryApplicationTest : ApplicationTestCase() {
+    override fun autoStartServer(): Boolean = true
+
     @Test
-    fun `should add custom spans when fetching test run`() {
-        val publicId = randomPublicId()
+    fun `should add custom spans when fetching test run`() =
+        testSuspend {
+            val publicId = randomPublicId()
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/run/$publicId") {
-                testRunDBGenerator.createTestRun(
-                    publicId,
-                    listOf(
-                        TestSuiteData(
-                            "testSuite1",
-                            listOf("testSuite1TestCase1", "testSuite1TestCase2"),
-                            listOf(),
-                            listOf(),
-                        ),
+            testRunDBGenerator.createTestRun(
+                publicId,
+                listOf(
+                    TestSuiteData(
+                        "testSuite1",
+                        listOf("testSuite1TestCase1", "testSuite1TestCase2"),
+                        listOf(),
+                        listOf(),
                     ),
-                )
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+                ),
+            )
 
-                val finishedSpans = exporter.finishedSpanItems
+            val response = testClient.get("/run/$publicId")
 
-                expectThat(finishedSpans).hasSize(2)
-                    .any {
-                        get { name }.isEqualTo("projektor.fetchTestRun")
-                    }
-                    .any {
-                        get { name }.isEqualTo("projektor.fetchTestRun.mapper")
-                    }
-            }
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val finishedSpans = exporter.finishedSpanItems
+
+            expectThat(finishedSpans).hasSize(2)
+                .any {
+                    get { name }.isEqualTo("projektor.fetchTestRun")
+                }
+                .any {
+                    get { name }.isEqualTo("projektor.fetchTestRun.mapper")
+                }
         }
-    }
 }
