@@ -1,10 +1,10 @@
 package projektor.testcase
 
 import com.fasterxml.jackson.core.type.TypeReference
-import io.ktor.http.HttpMethod
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
+import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.createTestCase
@@ -20,45 +20,46 @@ import strikt.assertions.map
 import java.math.BigDecimal
 
 class GetSlowTestCasesApplicationTest : ApplicationTestCase() {
+    override fun autoStartServer(): Boolean = true
+
     @Test
-    fun `should fetch slow test cases from database`() {
-        val publicId = randomPublicId()
+    fun `should fetch slow test cases from database`() =
+        testSuspend {
+            val publicId = randomPublicId()
 
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/run/${publicId.id}/cases/slow") {
-                val testRun = createTestRun(publicId, 1)
-                testRunDao.insert(testRun)
+            val testRun = createTestRun(publicId, 1)
+            testRunDao.insert(testRun)
 
-                val testSuite1 = createTestSuite(testRun.id, "ShouldGet1", 1)
-                testSuite1.packageName = "com.example"
-                testSuiteDao.insert(testSuite1)
+            val testSuite1 = createTestSuite(testRun.id, "ShouldGet1", 1)
+            testSuite1.packageName = "com.example"
+            testSuiteDao.insert(testSuite1)
 
-                (1..15).forEach { idx ->
-                    val testSuite1Case = createTestCase(testSuite1.id, "testSuite1Case$idx", idx, true)
-                    testSuite1Case.duration = BigDecimal.valueOf(10L + idx)
-                    testCaseDao.insert(testSuite1Case)
-                }
-            }.apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
-
-                val slowTestCases: List<TestCase> = objectMapper.readValue(response.content, object : TypeReference<List<TestCase>>() {})
-
-                expectThat(slowTestCases)
-                    .hasSize(10)
-                    .map(TestCase::duration)
-                    .containsExactly(
-                        BigDecimal("25.000"),
-                        BigDecimal("24.000"),
-                        BigDecimal("23.000"),
-                        BigDecimal("22.000"),
-                        BigDecimal("21.000"),
-                        BigDecimal("20.000"),
-                        BigDecimal("19.000"),
-                        BigDecimal("18.000"),
-                        BigDecimal("17.000"),
-                        BigDecimal("16.000"),
-                    )
+            (1..15).forEach { idx ->
+                val testSuite1Case = createTestCase(testSuite1.id, "testSuite1Case$idx", idx, true)
+                testSuite1Case.duration = BigDecimal.valueOf(10L + idx)
+                testCaseDao.insert(testSuite1Case)
             }
+
+            val response = testClient.get("/run/${publicId.id}/cases/slow")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val slowTestCases: List<TestCase> = objectMapper.readValue(response.bodyAsText(), object : TypeReference<List<TestCase>>() {})
+
+            expectThat(slowTestCases)
+                .hasSize(10)
+                .map(TestCase::duration)
+                .containsExactly(
+                    BigDecimal("25.000"),
+                    BigDecimal("24.000"),
+                    BigDecimal("23.000"),
+                    BigDecimal("22.000"),
+                    BigDecimal("21.000"),
+                    BigDecimal("20.000"),
+                    BigDecimal("19.000"),
+                    BigDecimal("18.000"),
+                    BigDecimal("17.000"),
+                    BigDecimal("16.000"),
+                )
         }
-    }
 }

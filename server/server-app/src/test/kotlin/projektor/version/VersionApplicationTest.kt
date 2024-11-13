@@ -1,25 +1,25 @@
 package projektor.version
 
-import io.ktor.http.HttpMethod
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
+import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import strikt.api.expectThat
 import strikt.assertions.contains
 import strikt.assertions.isEqualTo
-import strikt.assertions.isNotNull
 
 class VersionApplicationTest : ApplicationTestCase() {
-    @Test
-    fun `should provide version endpoint`() {
-        withTestApplication(::createTestApplication) {
-            handleRequest(HttpMethod.Get, "/version").apply {
-                expectThat(response.status()).isEqualTo(HttpStatusCode.OK)
+    override fun autoStartServer(): Boolean = true
 
-                expectThat(response.content).isNotNull().and { contains("version") }
-            }
+    @Test
+    fun `should provide version endpoint`() =
+        testSuspend {
+            val response = testClient.get("/version")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            expectThat(response.bodyAsText()).contains("version")
         }
-    }
 }
