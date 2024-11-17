@@ -1,6 +1,5 @@
 package projektor.incomingresults
 
-import io.ktor.test.dispatcher.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.ktor.ext.get
@@ -15,14 +14,12 @@ import strikt.assertions.isTrue
 import kotlin.test.assertNotNull
 
 class CypressResultsApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun shouldSaveCypressResultsAndReadThemBackFromDatabase() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = resultsXmlLoader.cypressResults().joinToString("\n")
 
-            val response = postResultsPlainText(requestBody)
+            val response = client.postResultsPlainText(requestBody)
 
             val (publicId, testRun) = waitForTestRunSaveToComplete(response)
 
@@ -51,7 +48,7 @@ class CypressResultsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when one Cypress test suite is empty should save other one`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody =
                 GroupedResultsXmlLoader().wrapResultsXmlsInGroup(
                     listOf(
@@ -60,7 +57,7 @@ class CypressResultsApplicationTest : ApplicationTestCase() {
                     ),
                 )
 
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             val (publicId, _) = waitForTestRunSaveToComplete(response)
 

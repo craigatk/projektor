@@ -1,10 +1,9 @@
 package projektor.coverage
 
 import io.ktor.client.request.*
+import io.ktor.client.request.headers
 import io.ktor.client.statement.*
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
+import io.ktor.http.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -20,13 +19,11 @@ import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
 class AddCoverageFileCompressedApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     private val coveragePayloadParser = CoveragePayloadParser()
 
     @Test
     fun `should save compressed coverage file with base directory path`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             val coverageGroup = "server-app"
@@ -41,7 +38,7 @@ class AddCoverageFileCompressedApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.createSimpleTestRun(publicId)
 
             val postResponse =
-                testClient.post("/run/$publicId/coverageFile") {
+                client.post("/run/$publicId/coverageFile") {
                     headers {
                         append(HttpHeaders.ContentType, "text/plain")
                         append(HttpHeaders.ContentEncoding, "gzip")
@@ -53,7 +50,7 @@ class AddCoverageFileCompressedApplicationTest : ApplicationTestCase() {
             val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicId.id)
             expectThat(coverageRuns).hasSize(1)
 
-            val getResponse = testClient.get("/run/$publicId/coverage/$coverageGroup/files")
+            val getResponse = client.get("/run/$publicId/coverage/$coverageGroup/files")
             expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
 
             val coverageFiles = objectMapper.readValue(getResponse.bodyAsText(), CoverageFiles::class.java)

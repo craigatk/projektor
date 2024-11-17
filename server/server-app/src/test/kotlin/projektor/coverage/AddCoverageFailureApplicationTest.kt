@@ -3,7 +3,6 @@ package projektor.coverage
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -17,11 +16,9 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
 class AddCoverageFailureApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `when adding coverage fails should record failure`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             val invalidReportXml = JacocoXmlLoader().serverAppInvalid()
@@ -29,7 +26,7 @@ class AddCoverageFailureApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.createSimpleTestRun(publicId)
 
             val postResponse =
-                testClient.post("/run/$publicId/coverage") {
+                client.post("/run/$publicId/coverage") {
                     setBody(invalidReportXml.toByteArray())
                 }
 
@@ -59,7 +56,7 @@ class AddCoverageFailureApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when adding malformed Jacoco report that is empty should ignore it`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             val emptyReportXml = JacocoXmlLoader().emptyReport()
@@ -67,7 +64,7 @@ class AddCoverageFailureApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.createSimpleTestRun(publicId)
 
             val postResponse =
-                testClient.post("/run/$publicId/coverage") {
+                client.post("/run/$publicId/coverage") {
                     setBody(emptyReportXml.toByteArray())
                 }
 

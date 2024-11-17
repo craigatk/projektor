@@ -4,7 +4,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -17,11 +16,9 @@ import java.time.ZoneOffset
 import kotlin.test.assertNotNull
 
 class ApiRepositoryApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer() = true
-
     @Test
     fun `should fetch current coverage for repository without project name`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomFullRepoName()
 
             val firstRunPublicId = randomPublicId()
@@ -67,7 +64,7 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
                 branchName = "main",
             )
 
-            val response = testClient.get("/api/v1/repo/$repoName/coverage/current")
+            val response = client.get("/api/v1/repo/$repoName/coverage/current")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             val responseBody = response.bodyAsText()
@@ -86,7 +83,7 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should fetch current coverage for repository with project name`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomFullRepoName()
 
             val firstRunPublicId = randomPublicId()
@@ -132,7 +129,7 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
                 branchName = "main",
             )
 
-            val response = testClient.get("/api/v1/repo/$repoName/coverage/current?project=other-project")
+            val response = client.get("/api/v1/repo/$repoName/coverage/current?project=other-project")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             val responseBody = response.bodyAsText()
@@ -152,7 +149,7 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should fetch current coverage for repository with branch name`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomFullRepoName()
 
             val firstRunPublicId = randomPublicId()
@@ -198,7 +195,7 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
                 branchName = "main",
             )
 
-            val response = testClient.get("/api/v1/repo/$repoName/coverage/current?branch=my-branch")
+            val response = client.get("/api/v1/repo/$repoName/coverage/current?branch=my-branch")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             val responseBody = response.bodyAsText()
@@ -219,7 +216,7 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when no branch specific should fetch current coverage from mainline branch`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomFullRepoName()
 
             val otherBranchRunPublicId1 = randomPublicId()
@@ -247,7 +244,7 @@ class ApiRepositoryApplicationTest : ApplicationTestCase() {
                 branchName = "other",
             )
 
-            val response = testClient.get("/api/v1/repo/$repoName/coverage/current")
+            val response = client.get("/api/v1/repo/$repoName/coverage/current")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             val responseBody = response.bodyAsText()

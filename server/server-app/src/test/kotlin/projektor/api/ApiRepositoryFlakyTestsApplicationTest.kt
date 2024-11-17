@@ -3,7 +3,6 @@ package projektor.api
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -18,11 +17,9 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class ApiRepositoryFlakyTestsApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer() = true
-
     @Test
     fun `when flaky tests without a project name should return them`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomFullRepoName()
             val projectName = null
 
@@ -48,7 +45,7 @@ class ApiRepositoryFlakyTestsApplicationTest : ApplicationTestCase() {
                 testRunDBGenerator.createTestRunInRepo(publicId, testSuiteDataList, repoName, true, projectName, "main")
             }
 
-            val response = testClient.get("/api/v1/repo/$repoName/tests/flaky")
+            val response = client.get("/api/v1/repo/$repoName/tests/flaky")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -63,7 +60,7 @@ class ApiRepositoryFlakyTestsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when flaky tests within specified max runs and threshold should find them`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomFullRepoName()
             val projectName = null
 
@@ -114,7 +111,7 @@ class ApiRepositoryFlakyTestsApplicationTest : ApplicationTestCase() {
                 )
             }
 
-            val response = testClient.get("/api/v1/repo/$repoName/tests/flaky?max_runs=10&threshold=3")
+            val response = client.get("/api/v1/repo/$repoName/tests/flaky?max_runs=10&threshold=3")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -126,7 +123,7 @@ class ApiRepositoryFlakyTestsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when flaky tests with a project name should return them`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomFullRepoName()
             val projectName = "my-project"
 
@@ -152,7 +149,7 @@ class ApiRepositoryFlakyTestsApplicationTest : ApplicationTestCase() {
                 testRunDBGenerator.createTestRunInRepo(publicId, testSuiteDataList, repoName, true, projectName)
             }
 
-            val response = testClient.get("/api/v1/repo/$repoName/tests/flaky?project=$projectName")
+            val response = client.get("/api/v1/repo/$repoName/tests/flaky?project=$projectName")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -167,7 +164,7 @@ class ApiRepositoryFlakyTestsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should find flaky tests in mainline only`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomFullRepoName()
             val projectName = null
 
@@ -246,7 +243,7 @@ class ApiRepositoryFlakyTestsApplicationTest : ApplicationTestCase() {
                 )
             }
 
-            val response = testClient.get("/api/v1/repo/$repoName/tests/flaky?max_runs=20&threshold=3&branch_type=MAINLINE")
+            val response = client.get("/api/v1/repo/$repoName/tests/flaky?max_runs=20&threshold=3&branch_type=MAINLINE")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 

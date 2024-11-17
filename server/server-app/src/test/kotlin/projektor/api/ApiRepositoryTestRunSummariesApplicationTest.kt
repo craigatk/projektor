@@ -3,7 +3,6 @@ package projektor.api
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.createTestRun
@@ -17,11 +16,9 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 class ApiRepositoryTestRunSummariesApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer() = true
-
     @Test
     fun `when no project should get test run summaries for repo`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomFullRepoName()
 
             val firstRunPublicId = randomPublicId()
@@ -50,7 +47,7 @@ class ApiRepositoryTestRunSummariesApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.addGitMetadata(otherBranchRun, repoName, false, "feature-branch", null, null, null)
             testRunDBGenerator.addResultsMetadata(otherBranchRun, true)
 
-            val response = testClient.get("/api/v1/repo/$repoName/tests/runs/summaries")
+            val response = client.get("/api/v1/repo/$repoName/tests/runs/summaries")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -67,7 +64,7 @@ class ApiRepositoryTestRunSummariesApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when no project and limit should get test run summaries for repo within limit`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomFullRepoName()
 
             val firstRunPublicId = randomPublicId()
@@ -96,7 +93,7 @@ class ApiRepositoryTestRunSummariesApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.addGitMetadata(otherBranchRun, repoName, false, "feature-branch", null, null, null)
             testRunDBGenerator.addResultsMetadata(otherBranchRun, true)
 
-            val response = testClient.get("/api/v1/repo/$repoName/tests/runs/summaries?limit=2")
+            val response = client.get("/api/v1/repo/$repoName/tests/runs/summaries?limit=2")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -112,7 +109,7 @@ class ApiRepositoryTestRunSummariesApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when project name should get test run summaries for repo and project`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomFullRepoName()
             val projectName = "my-proj"
 
@@ -142,7 +139,7 @@ class ApiRepositoryTestRunSummariesApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.addGitMetadata(otherBranchRun, repoName, false, "feature-branch", projectName, null, null)
             testRunDBGenerator.addResultsMetadata(otherBranchRun, true)
 
-            val response = testClient.get("/api/v1/repo/$repoName/tests/runs/summaries?project=$projectName")
+            val response = client.get("/api/v1/repo/$repoName/tests/runs/summaries?project=$projectName")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 

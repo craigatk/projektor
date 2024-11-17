@@ -3,7 +3,6 @@ package projektor.compare
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
@@ -17,11 +16,9 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class PreviousTestRunApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer() = true
-
     @Test
     fun `should find previous test run`() =
-        testSuspend {
+        projektorTestApplication {
             val differentRepoPublicId = randomPublicId()
             val oldestPublicId = randomPublicId()
             val previousPublicId = randomPublicId()
@@ -45,7 +42,7 @@ class PreviousTestRunApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.addGitMetadata(thisPublicTestRun, repoName, true, "main", null, null, null)
             runBlocking { coverageService.saveReport(CoverageFilePayload(JacocoXmlLoader().serverApp()), thisPublicId) }
 
-            val response = testClient.get("/run/$thisPublicId/previous")
+            val response = client.get("/run/$thisPublicId/previous")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -57,14 +54,14 @@ class PreviousTestRunApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when no previous test run in same repo should return 204`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
             val repoName = "${RandomStringUtils.randomAlphabetic(8)}/${RandomStringUtils.randomAlphabetic(8)}"
 
             val differentTestRun = testRunDBGenerator.createSimpleTestRun(publicId)
             testRunDBGenerator.addGitMetadata(differentTestRun, repoName, true, "main", null, null, null)
 
-            val response = testClient.get("/run/$publicId/previous")
+            val response = client.get("/run/$publicId/previous")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NoContent)
         }

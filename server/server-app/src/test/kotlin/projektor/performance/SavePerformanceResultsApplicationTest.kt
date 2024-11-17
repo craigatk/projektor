@@ -1,6 +1,5 @@
 package projektor.performance
 
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.database.generated.tables.daos.PerformanceResultsDao
@@ -20,7 +19,7 @@ class SavePerformanceResultsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should save results with no test results and two performance results`() =
-        testSuspend {
+        projektorTestApplication {
             val gitMetadata = GitMetadata()
             gitMetadata.repoName = "craigatk/projektor"
             gitMetadata.branchName = "main"
@@ -42,7 +41,7 @@ class SavePerformanceResultsApplicationTest : ApplicationTestCase() {
                     metadata,
                 )
 
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             val (publicId, _) = waitForTestRunSaveToComplete(response)
 

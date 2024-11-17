@@ -3,7 +3,6 @@ package projektor.badge
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -14,11 +13,9 @@ import strikt.assertions.contains
 import strikt.assertions.isEqualTo
 
 class RepositoryTestRunPassFailBadgeApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer() = true
-
     @Test
     fun `when latest build passing without project should create badge`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomOrgAndRepo()
 
             val mainlinePublicId = randomPublicId()
@@ -38,7 +35,7 @@ class RepositoryTestRunPassFailBadgeApplicationTest : ApplicationTestCase() {
                 branchName = "feature/dev",
             )
 
-            val response = testClient.get("/repo/$repoName/badge/tests")
+            val response = client.get("/repo/$repoName/badge/tests")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             expectThat(response.contentType().toString()).contains(ContentType.Image.SVG.toString())
@@ -48,7 +45,7 @@ class RepositoryTestRunPassFailBadgeApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when latest build failing without project should create badge`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomOrgAndRepo()
 
             val passingPublicId = randomPublicId()
@@ -68,7 +65,7 @@ class RepositoryTestRunPassFailBadgeApplicationTest : ApplicationTestCase() {
                 projectName = null,
             )
 
-            val response = testClient.get("/repo/$repoName/badge/tests")
+            val response = client.get("/repo/$repoName/badge/tests")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             expectThat(response.contentType().toString()).contains(ContentType.Image.SVG.toString())
@@ -78,7 +75,7 @@ class RepositoryTestRunPassFailBadgeApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when latest build passing with project should create badge`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomOrgAndRepo()
 
             val mainlinePublicId = randomPublicId()
@@ -101,7 +98,7 @@ class RepositoryTestRunPassFailBadgeApplicationTest : ApplicationTestCase() {
                 projectName = projectName,
             )
 
-            val response = testClient.get("/repo/$repoName/project/$projectName/badge/tests")
+            val response = client.get("/repo/$repoName/project/$projectName/badge/tests")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             expectThat(response.contentType().toString()).contains(ContentType.Image.SVG.toString())

@@ -3,7 +3,6 @@ package projektor.coverage
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -17,11 +16,9 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 class AddJacocoCoverageApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should add Jacoco coverage to test run then get it`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             val reportXmlBytes = JacocoXmlLoader().serverApp().toByteArray()
@@ -29,7 +26,7 @@ class AddJacocoCoverageApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.createSimpleTestRun(publicId)
 
             val postResponse =
-                testClient.post("/run/$publicId/coverage") {
+                client.post("/run/$publicId/coverage") {
                     setBody(reportXmlBytes)
                 }
             expectThat(postResponse.status).isEqualTo(HttpStatusCode.OK)
@@ -37,7 +34,7 @@ class AddJacocoCoverageApplicationTest : ApplicationTestCase() {
             val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicId.id)
             expectThat(coverageRuns).hasSize(1)
 
-            val getResponse = testClient.get("/run/$publicId/coverage/overall")
+            val getResponse = client.get("/run/$publicId/coverage/overall")
             expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
 
             val overallStats = objectMapper.readValue(getResponse.bodyAsText(), CoverageStats::class.java)
@@ -67,7 +64,7 @@ class AddJacocoCoverageApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should add server-app Jacoco coverage report and get its files`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
             val coverageGroup = "server-app"
 
@@ -76,7 +73,7 @@ class AddJacocoCoverageApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.createSimpleTestRun(publicId)
 
             val postResponse =
-                testClient.post("/run/$publicId/coverage") {
+                client.post("/run/$publicId/coverage") {
                     setBody(reportXmlBytes)
                 }
             expectThat(postResponse.status).isEqualTo(HttpStatusCode.OK)
@@ -84,7 +81,7 @@ class AddJacocoCoverageApplicationTest : ApplicationTestCase() {
             val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicId.id)
             expectThat(coverageRuns).hasSize(1)
 
-            val getResponse = testClient.get("/run/$publicId/coverage/$coverageGroup/files")
+            val getResponse = client.get("/run/$publicId/coverage/$coverageGroup/files")
             expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
 
             val coverageFiles = objectMapper.readValue(getResponse.bodyAsText(), CoverageFiles::class.java)

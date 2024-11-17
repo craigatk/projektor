@@ -1,6 +1,5 @@
 package projektor.incomingresults
 
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.parser.GroupedResultsXmlLoader
@@ -12,11 +11,9 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isTrue
 
 class SaveGroupedResultsWithMetadataApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should save grouped test results with Git metadata`() =
-        testSuspend {
+        projektorTestApplication {
             val gitMetadata = GitMetadata()
             gitMetadata.repoName = "craigatk/projektor"
             gitMetadata.branchName = "main"
@@ -25,7 +22,7 @@ class SaveGroupedResultsWithMetadataApplicationTest : ApplicationTestCase() {
             metadata.git = gitMetadata
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             val (_, testRun) = waitForTestRunSaveToComplete(response)
 
@@ -43,7 +40,7 @@ class SaveGroupedResultsWithMetadataApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should save grouped test results with Git metadata including project name`() =
-        testSuspend {
+        projektorTestApplication {
             val gitMetadata = GitMetadata()
             gitMetadata.repoName = "craigatk/projektor"
             gitMetadata.branchName = "main"
@@ -53,7 +50,7 @@ class SaveGroupedResultsWithMetadataApplicationTest : ApplicationTestCase() {
             metadata.git = gitMetadata
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             val (_, testRun) = waitForTestRunSaveToComplete(response)
 
@@ -72,7 +69,7 @@ class SaveGroupedResultsWithMetadataApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should save grouped results with results metadata`() =
-        testSuspend {
+        projektorTestApplication {
             val gitMetadata = GitMetadata()
             gitMetadata.repoName = "craigatk/projektor"
             gitMetadata.branchName = "main"
@@ -83,7 +80,7 @@ class SaveGroupedResultsWithMetadataApplicationTest : ApplicationTestCase() {
             metadata.ci = true
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             val (_, testRun) = waitForTestRunSaveToComplete(response)
 

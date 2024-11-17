@@ -1,6 +1,5 @@
 package projektor.incomingresults
 
-import io.ktor.test.dispatcher.*
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.awaitility.kotlin.await
@@ -22,11 +21,9 @@ import strikt.assertions.isNotNull
 import java.math.BigDecimal
 
 class AppendCoverageApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should append three Jest test runs with coverage`() =
-        testSuspend {
+        projektorTestApplication {
             val repoPart = RandomStringUtils.randomAlphabetic(12)
 
             val gitMetadata = GitMetadata()
@@ -79,7 +76,7 @@ class AppendCoverageApplicationTest : ApplicationTestCase() {
         ---------------------------|---------|----------|---------|---------|-------------------
          */
 
-            val coverageFilesTableResponse = postGroupedResultsJSON(coverageFilesTableRequestBody)
+            val coverageFilesTableResponse = client.postGroupedResultsJSON(coverageFilesTableRequestBody)
 
             val initialSaveComplete = waitForTestRunSaveToComplete(coverageFilesTableResponse)
             publicId = initialSaveComplete.first
@@ -139,7 +136,7 @@ class AppendCoverageApplicationTest : ApplicationTestCase() {
         -------------------------|---------|----------|---------|---------|-------------------
          */
 
-            val coverageGraphResponse = postGroupedResultsJSON(coverageGraphRequestBody)
+            val coverageGraphResponse = client.postGroupedResultsJSON(coverageGraphRequestBody)
 
             val saveComplete = waitForTestRunSaveToComplete(coverageGraphResponse)
             val secondPublicId = saveComplete.first
@@ -194,7 +191,7 @@ class AppendCoverageApplicationTest : ApplicationTestCase() {
         -------------------------|---------|----------|---------|---------|-------------------
          */
 
-            val coverageTableResponse = postGroupedResultsJSON(coverageTableRequestBody)
+            val coverageTableResponse = client.postGroupedResultsJSON(coverageTableRequestBody)
 
             val coverageTableSaveComplete = waitForTestRunSaveToComplete(coverageTableResponse)
             val thirdPublicId = coverageTableSaveComplete.first

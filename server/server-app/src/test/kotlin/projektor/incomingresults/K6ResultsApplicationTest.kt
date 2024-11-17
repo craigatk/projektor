@@ -1,6 +1,5 @@
 package projektor.incomingresults
 
-import io.ktor.test.dispatcher.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.ktor.ext.get
@@ -15,14 +14,12 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
 class K6ResultsApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should save results from k6 run to database`() =
-        testSuspend {
+        projektorTestApplication {
             val resultsBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().k6Example())
 
-            val response = postGroupedResultsJSON(resultsBody)
+            val response = client.postGroupedResultsJSON(resultsBody)
 
             val (publicId, _) = waitForTestRunSaveToComplete(response)
 

@@ -335,22 +335,6 @@ open class ApplicationTestCase {
         return response
     }
 
-    suspend fun postGroupedResultsJSON(
-        resultsJson: String,
-        expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,
-    ): HttpResponse {
-        val response =
-            testClient.post("/groupedResults") {
-                headers {
-                    append(HttpHeaders.ContentType, "application/json")
-                }
-                setBody(resultsJson)
-            }
-        expectThat(response.status).isEqualTo(expectedStatusCode)
-
-        return response
-    }
-
     protected suspend fun postResultsPlainText(
         resultsText: String,
         expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,

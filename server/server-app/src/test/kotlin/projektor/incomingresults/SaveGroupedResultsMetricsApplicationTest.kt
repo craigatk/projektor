@@ -2,7 +2,6 @@ package projektor.incomingresults
 
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.Test
@@ -16,14 +15,12 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class SaveGroupedResultsMetricsApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should record success metric when saving grouped test results succeeds`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults()
 
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             waitForTestRunSaveToComplete(response)
 
@@ -35,10 +32,10 @@ class SaveGroupedResultsMetricsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when test results fail to parse should record parse error metric`() =
-        testSuspend {
+        projektorTestApplication {
             val malformedResults = GroupedResultsXmlLoader().passingGroupedResults().replace("testsuite", "")
 
-            val response = postGroupedResultsJSON(malformedResults, HttpStatusCode.BadRequest)
+            val response = client.postGroupedResultsJSON(malformedResults, HttpStatusCode.BadRequest)
 
             val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsError::class.java)
 
@@ -55,10 +52,10 @@ class SaveGroupedResultsMetricsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when test results fail to parse because they are cut off should record parse error metric`() =
-        testSuspend {
+        projektorTestApplication {
             val malformedResults = GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().cutOffResultsGradle())
 
-            val response = postGroupedResultsJSON(malformedResults, HttpStatusCode.BadRequest)
+            val response = client.postGroupedResultsJSON(malformedResults, HttpStatusCode.BadRequest)
 
             val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsError::class.java)
 

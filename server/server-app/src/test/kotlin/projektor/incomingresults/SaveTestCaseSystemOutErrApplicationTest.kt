@@ -1,6 +1,5 @@
 package projektor.incomingresults
 
-import io.ktor.test.dispatcher.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.ktor.ext.get
@@ -19,14 +18,12 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isTrue
 
 class SaveTestCaseSystemOutErrApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should save system out and err at the test case level`() =
-        testSuspend {
+        projektorTestApplication {
             val resultsBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().gradleSingleTestCaseSystemOutFail())
 
-            val response = postGroupedResultsJSON(resultsBody)
+            val response = client.postGroupedResultsJSON(resultsBody)
 
             val (publicId, testRunDB) = waitForTestRunSaveToComplete(response)
 

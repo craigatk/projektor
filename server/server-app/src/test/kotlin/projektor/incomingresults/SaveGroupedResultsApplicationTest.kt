@@ -1,6 +1,5 @@
 package projektor.incomingresults
 
-import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.Test
@@ -13,14 +12,12 @@ import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
 class SaveGroupedResultsApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should save grouped test results`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults()
 
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             val (publicId, testRun) = waitForTestRunSaveToComplete(response)
 
