@@ -2,7 +2,6 @@ package projektor.incomingresults
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.statement.*
-import io.ktor.test.dispatcher.*
 import org.apache.commons.lang3.RandomStringUtils
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
@@ -23,11 +22,9 @@ import strikt.assertions.isTrue
 import kotlin.test.assertNotNull
 
 class AppendGroupedResultsApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should append second grouped test results run`() =
-        testSuspend {
+        projektorTestApplication {
             val repoPart = RandomStringUtils.randomAlphabetic(12)
 
             val gitMetadata = GitMetadata()
@@ -43,7 +40,7 @@ class AppendGroupedResultsApplicationTest : ApplicationTestCase() {
             lateinit var publicId: PublicId
             lateinit var testRun: TestRun
 
-            val initialResponse = postGroupedResultsJSON(initialRequestBody)
+            val initialResponse = client.postGroupedResultsJSON(initialRequestBody)
 
             val initialSaveComplete = waitForTestRunSaveToComplete(initialResponse)
             publicId = initialSaveComplete.first
@@ -76,7 +73,7 @@ class AppendGroupedResultsApplicationTest : ApplicationTestCase() {
 
             val secondRequestBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXmlLoader.failing(), metadata)
 
-            val secondResponse = postGroupedResultsJSON(secondRequestBody)
+            val secondResponse = client.postGroupedResultsJSON(secondRequestBody)
 
             val responseContent = secondResponse.bodyAsText()
             assertNotNull(responseContent)
@@ -122,7 +119,7 @@ class AppendGroupedResultsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should append second and third grouped test results runs`() =
-        testSuspend {
+        projektorTestApplication {
             val repoPart = RandomStringUtils.randomAlphabetic(12)
 
             val gitMetadata = GitMetadata()
@@ -138,7 +135,7 @@ class AppendGroupedResultsApplicationTest : ApplicationTestCase() {
             lateinit var publicId: PublicId
             lateinit var testRun: TestRun
 
-            val initialResponse = postGroupedResultsJSON(initialRequestBody)
+            val initialResponse = client.postGroupedResultsJSON(initialRequestBody)
 
             val initialSaveComplete = waitForTestRunSaveToComplete(initialResponse)
             publicId = initialSaveComplete.first
@@ -169,7 +166,7 @@ class AppendGroupedResultsApplicationTest : ApplicationTestCase() {
             await until { resultsProcessingDao.fetchOneByPublicId(publicId.id).status == ResultsProcessingStatus.SUCCESS.name }
 
             val secondRequestBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXmlLoader.failing(), metadata)
-            val secondResponse = postGroupedResultsJSON(secondRequestBody)
+            val secondResponse = client.postGroupedResultsJSON(secondRequestBody)
 
             val responseContent = secondResponse.bodyAsText()
             assertNotNull(responseContent)
@@ -211,7 +208,7 @@ class AppendGroupedResultsApplicationTest : ApplicationTestCase() {
             expectThat(testSuiteDao.fetchByTestSuiteGroupId(testSuiteGroup2Second.id)).hasSize(1)
 
             val thirdRequestBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXmlLoader.someIgnored(), metadata)
-            val thirdResponse = postGroupedResultsJSON(thirdRequestBody)
+            val thirdResponse = client.postGroupedResultsJSON(thirdRequestBody)
 
             val responseContentThird = thirdResponse.bodyAsText()
             assertNotNull(responseContentThird)

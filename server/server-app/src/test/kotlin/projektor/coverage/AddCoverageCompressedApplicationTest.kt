@@ -4,7 +4,6 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -22,7 +21,7 @@ class AddCoverageCompressedApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should save compressed coverage results`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             val coverageXmlReport = JacocoXmlLoader().serverApp()
@@ -31,7 +30,7 @@ class AddCoverageCompressedApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.createSimpleTestRun(publicId)
 
             val postResponse =
-                testClient.post("/run/$publicId/coverage") {
+                client.post("/run/$publicId/coverage") {
                     headers {
                         append(HttpHeaders.ContentType, "text/plain")
                         append(HttpHeaders.ContentEncoding, "gzip")
@@ -48,7 +47,7 @@ class AddCoverageCompressedApplicationTest : ApplicationTestCase() {
             expectThat(meterRegistry.counter("coverage_process_failure").count()).isEqualTo(0.toDouble())
             expectThat(meterRegistry.counter("coverage_parse_failure").count()).isEqualTo(0.toDouble())
 
-            val getResponse = testClient.get("/run/$publicId/coverage/overall")
+            val getResponse = client.get("/run/$publicId/coverage/overall")
 
             expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
 

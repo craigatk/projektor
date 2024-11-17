@@ -3,7 +3,6 @@ package projektor.testsuite
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -20,11 +19,9 @@ import kotlin.test.assertNotNull
 import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 
 class GetTestSuiteApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should fetch test suites from database`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
             val testSuiteIdx = 1
 
@@ -46,7 +43,7 @@ class GetTestSuiteApplicationTest : ApplicationTestCase() {
                 ),
             )
 
-            val response = testClient.get("/run/$publicId/suite/$testSuiteIdx")
+            val response = client.get("/run/$publicId/suite/$testSuiteIdx")
 
             val responseContent = response.bodyAsText()
             assertNotNull(responseContent)
@@ -75,7 +72,7 @@ class GetTestSuiteApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should fetch grouped test suite from database`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
             val testSuiteIdx = 1
 
@@ -106,7 +103,7 @@ class GetTestSuiteApplicationTest : ApplicationTestCase() {
 
             testRunDBGenerator.addTestSuiteGroupToTestRun(testSuiteGroup, testRun, listOf("TestSuite1", "TestSuite2"))
 
-            val response = testClient.get("/run/$publicId/suite/$testSuiteIdx")
+            val response = client.get("/run/$publicId/suite/$testSuiteIdx")
 
             val responseContent = response.bodyAsText()
             assertNotNull(responseContent)
@@ -122,7 +119,7 @@ class GetTestSuiteApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should get test suite with file name`() =
-        testSuspend {
+        projektorTestApplication {
             val resultsBody =
                 GroupedResultsXmlLoader().wrapResultsXmlsInGroup(
                     listOf(
@@ -132,11 +129,11 @@ class GetTestSuiteApplicationTest : ApplicationTestCase() {
 
             val testSuiteIdx = 1
 
-            val postResponse = postGroupedResultsJSON(resultsBody)
+            val postResponse = client.postGroupedResultsJSON(resultsBody)
 
             val publicId = waitForTestRunSaveToComplete(postResponse).first
 
-            val getResponse = testClient.get("/run/$publicId/suite/$testSuiteIdx")
+            val getResponse = client.get("/run/$publicId/suite/$testSuiteIdx")
 
             expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
 

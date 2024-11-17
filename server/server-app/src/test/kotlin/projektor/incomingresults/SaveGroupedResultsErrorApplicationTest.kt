@@ -4,7 +4,6 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
@@ -20,15 +19,13 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class SaveGroupedResultsErrorApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `when results fail to parse should return error response code`() =
-        testSuspend {
+        projektorTestApplication {
             val malformedResults = GroupedResultsXmlLoader().passingGroupedResults().replace("testsuite", "")
 
             val response =
-                testClient.post("/groupedResults") {
+                client.post("/groupedResults") {
                     headers {
                         append(HttpHeaders.ContentType, "application/json")
                     }
@@ -48,13 +45,13 @@ class SaveGroupedResultsErrorApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should still process results after multiple failures`() =
-        testSuspend {
+        projektorTestApplication {
             val malformedResults = GroupedResultsXmlLoader().passingGroupedResults().replace("testsuite", "")
             val successfulResults = GroupedResultsXmlLoader().passingGroupedResults()
 
             (1..10).forEach { _ ->
                 val response =
-                    testClient.post("/groupedResults") {
+                    client.post("/groupedResults") {
                         headers {
                             append(HttpHeaders.ContentType, "application/json")
                         }
@@ -73,7 +70,7 @@ class SaveGroupedResultsErrorApplicationTest : ApplicationTestCase() {
             }
 
             (1..10).forEach { _ ->
-                val response = postGroupedResultsJSON(successfulResults)
+                val response = client.postGroupedResultsJSON(successfulResults)
 
                 val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)
 
@@ -86,8 +83,8 @@ class SaveGroupedResultsErrorApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when empty results body should respond with 400`() =
-        testSuspend {
-            val response = testClient.post("/groupedResults")
+        projektorTestApplication {
+            val response = client.post("/groupedResults")
             expectThat(response.status).isEqualTo(HttpStatusCode.BadRequest)
         }
 }

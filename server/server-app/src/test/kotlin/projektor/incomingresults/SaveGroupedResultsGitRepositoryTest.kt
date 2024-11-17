@@ -1,6 +1,5 @@
 package projektor.incomingresults
 
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.parser.GroupedResultsXmlLoader
@@ -11,11 +10,9 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
 class SaveGroupedResultsGitRepositoryTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should set Git repository table with Git org and repo`() =
-        testSuspend {
+        projektorTestApplication {
             val gitMetadata = GitMetadata()
             gitMetadata.repoName = "craigatk/projektor"
             gitMetadata.branchName = "main"
@@ -24,7 +21,7 @@ class SaveGroupedResultsGitRepositoryTest : ApplicationTestCase() {
             metadata.git = gitMetadata
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
-            val response1 = postGroupedResultsJSON(requestBody)
+            val response1 = client.postGroupedResultsJSON(requestBody)
 
             waitForTestRunSaveToComplete(response1)
 
@@ -41,7 +38,7 @@ class SaveGroupedResultsGitRepositoryTest : ApplicationTestCase() {
             metadata2.git = gitMetadata2
             val requestBody2 = GroupedResultsXmlLoader().passingGroupedResults(metadata2)
 
-            val response2 = postGroupedResultsJSON(requestBody2)
+            val response2 = client.postGroupedResultsJSON(requestBody2)
             waitForTestRunSaveToComplete(response2)
 
             val gitRepositoryDB2 = gitRepositoryDao.fetchOneByRepoName("craigatk/projektor-action")

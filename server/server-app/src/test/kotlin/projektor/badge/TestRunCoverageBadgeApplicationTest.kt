@@ -3,7 +3,6 @@ package projektor.badge
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -14,11 +13,9 @@ import strikt.assertions.contains
 import strikt.assertions.isEqualTo
 
 class TestRunCoverageBadgeApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer() = true
-
     @Test
     fun `should create badge for test run coverage percentage`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
             val repoName = randomOrgAndRepo()
 
@@ -28,7 +25,7 @@ class TestRunCoverageBadgeApplicationTest : ApplicationTestCase() {
                 repoName = repoName,
             )
 
-            val response = testClient.get("/run/$publicId/badge/coverage")
+            val response = client.get("/run/$publicId/badge/coverage")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             expectThat(response.contentType().toString()).contains(ContentType.Image.SVG.toString())
@@ -38,12 +35,12 @@ class TestRunCoverageBadgeApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should return 404 when test run doesn't have coverage data`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             testRunDBGenerator.createSimpleTestRun(publicId)
 
-            val response = testClient.get("/run/$publicId/badge/coverage")
+            val response = client.get("/run/$publicId/badge/coverage")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NotFound)
         }

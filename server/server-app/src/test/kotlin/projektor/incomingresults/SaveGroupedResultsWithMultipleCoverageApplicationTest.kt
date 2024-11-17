@@ -1,6 +1,5 @@
 package projektor.incomingresults
 
-import io.ktor.test.dispatcher.*
 import kotlinx.coroutines.runBlocking
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
@@ -15,11 +14,9 @@ import strikt.assertions.isNotNull
 import java.math.BigDecimal
 
 class SaveGroupedResultsWithMultipleCoverageApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should save grouped results with multiple coverage reports`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody =
                 GroupedResultsXmlLoader().resultsWithCoverage(
                     listOf(
@@ -34,7 +31,7 @@ class SaveGroupedResultsWithMultipleCoverageApplicationTest : ApplicationTestCas
                     ),
                 )
 
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             val (publicId, _) = waitForTestRunSaveToComplete(response)
 

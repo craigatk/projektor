@@ -3,7 +3,6 @@ package projektor.badge
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -14,11 +13,9 @@ import strikt.assertions.contains
 import strikt.assertions.isEqualTo
 
 class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer() = true
-
     @Test
     fun `should create coverage badge for repository mainline branch by default`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomOrgAndRepo()
 
             val mainlinePublicId = randomPublicId()
@@ -38,7 +35,7 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
                 branchName = "feature/dev",
             )
 
-            val response = testClient.get("/repo/$repoName/badge/coverage")
+            val response = client.get("/repo/$repoName/badge/coverage")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             expectThat(response.contentType().toString()).contains(ContentType.Image.SVG.toString())
@@ -48,7 +45,7 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when no coverage in mainline should create coverage badge for repository with data from all branches`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomOrgAndRepo()
 
             val featureBranchPublicId = randomPublicId()
@@ -60,7 +57,7 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
                 branchName = "feature/dev",
             )
 
-            val response = testClient.get("/repo/$repoName/badge/coverage")
+            val response = client.get("/repo/$repoName/badge/coverage")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             expectThat(response.contentType().toString()).contains(ContentType.Image.SVG.toString())
@@ -70,7 +67,7 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when no test runs with coverage should return 404`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomOrgAndRepo()
 
             val thisPublicId = randomPublicId()
@@ -82,14 +79,14 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
                 projectName = null,
             )
 
-            val response = testClient.get("/repo/$repoName/badge/coverage")
+            val response = client.get("/repo/$repoName/badge/coverage")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NotFound)
         }
 
     @Test
     fun `should create coverage badge for repository with project`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomOrgAndRepo()
             val projectName = "my-project"
 
@@ -103,7 +100,7 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
                 projectName = projectName,
             )
 
-            val response = testClient.get("/repo/$repoName/project/$projectName/badge/coverage")
+            val response = client.get("/repo/$repoName/project/$projectName/badge/coverage")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             expectThat(response.contentType().toString()).contains(ContentType.Image.SVG.toString())
@@ -113,7 +110,7 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when no test runs with coverage in project should return 404`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomOrgAndRepo()
             val projectName = "my-project"
 
@@ -126,7 +123,7 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
                 projectName = projectName,
             )
 
-            val response = testClient.get("/repo/$repoName/project/$projectName/badge/coverage")
+            val response = client.get("/repo/$repoName/project/$projectName/badge/coverage")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NotFound)
         }

@@ -3,7 +3,6 @@ package projektor.api
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
@@ -17,11 +16,9 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class ApiOrganizationApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer() = true
-
     @Test
     fun `when three repos in org should find their coverage data`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
 
             val publicId1 = randomPublicId()
@@ -97,7 +94,7 @@ class ApiOrganizationApplicationTest : ApplicationTestCase() {
                 projectName = null,
             )
 
-            val response = testClient.get("/api/v1/org/$orgName/coverage/current")
+            val response = client.get("/api/v1/org/$orgName/coverage/current")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 

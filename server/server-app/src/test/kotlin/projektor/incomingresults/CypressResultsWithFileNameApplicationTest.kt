@@ -1,6 +1,5 @@
 package projektor.incomingresults
 
-import io.ktor.test.dispatcher.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.ktor.ext.get
@@ -18,11 +17,9 @@ import strikt.assertions.isNull
 import kotlin.test.assertNotNull
 
 class CypressResultsWithFileNameApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should save Cypress file path as package name`() =
-        testSuspend {
+        projektorTestApplication {
             val resultsBody =
                 GroupedResultsXmlLoader().wrapResultsXmlsInGroup(
                     listOf(
@@ -31,7 +28,7 @@ class CypressResultsWithFileNameApplicationTest : ApplicationTestCase() {
                     ),
                 )
 
-            val response = postGroupedResultsJSON(resultsBody)
+            val response = client.postGroupedResultsJSON(resultsBody)
 
             val (publicId, _) = waitForTestRunSaveToComplete(response)
 

@@ -1,6 +1,5 @@
 package projektor.incomingresults
 
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.parser.GroupedResultsXmlLoader
@@ -12,11 +11,9 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
 class SingleQuoteXmlDeclarationApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should save results with single-quoted XML declaration`() =
-        testSuspend {
+        projektorTestApplication {
             val gitMetadata = GitMetadata()
             gitMetadata.repoName = "craigatk/projektor"
             gitMetadata.branchName = "main"
@@ -27,7 +24,7 @@ class SingleQuoteXmlDeclarationApplicationTest : ApplicationTestCase() {
             val resultXml = ResultsXmlLoader().singleQuoteXmlDeclaration()
             val requestBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultXml, metadata)
 
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             val (_, testRun) = waitForTestRunSaveToComplete(response)
 
