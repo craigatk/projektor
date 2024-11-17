@@ -3,7 +3,6 @@ package projektor.incomingresults
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
-import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.AfterAll
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
+import projektor.ApplicationTestCaseConfig
 import projektor.notification.github.GitHubWireMockStubber
 import projektor.notification.github.auth.PrivateKeyEncoder
 import projektor.parser.GroupedResultsXmlLoader
@@ -23,8 +23,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isTrue
 
 class SaveGroupedResultsWithMetadataPullRequestCommentApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @BeforeEach
     fun reset() {
         wireMockServer.resetAll()
@@ -33,14 +31,14 @@ class SaveGroupedResultsWithMetadataPullRequestCommentApplicationTest : Applicat
     @Test
     @Disabled("flaky in CI")
     fun `should save grouped test results with Git commit SHA and pull request number and make pull request comment`() =
-        testSuspend {
-            val privateKeyContents = loadTextFromFile("fake_private_key.pem")
-
-            serverBaseUrl = "http://localhost:8080"
-            gitHubApiUrl = "http://localhost:${wireMockServer.port()}"
-            gitHubAppId = "12345"
-            gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(privateKeyContents)
-
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                serverBaseUrl = "http://localhost:8080",
+                gitHubApiUrl = "http://localhost:${wireMockServer.port()}",
+                gitHubAppId = "12345",
+                gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(loadTextFromFile("fake_private_key.pem")),
+            ),
+        ) {
             val incomingOrgName = "craigatk"
             val incomingRepoName = "projektor"
             val incomingBranchName = "main"
@@ -62,7 +60,7 @@ class SaveGroupedResultsWithMetadataPullRequestCommentApplicationTest : Applicat
             gitHubWireMockStubber.stubListComments(incomingOrgName, incomingRepoName, gitHubPullRequestNumber, listOf("Some other comment"))
             gitHubWireMockStubber.stubAddComment(incomingOrgName, incomingRepoName, gitHubPullRequestNumber)
 
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             val (_, testRun) = waitForTestRunSaveToComplete(response)
 

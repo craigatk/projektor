@@ -3,9 +3,9 @@ package projektor.attachment
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
+import projektor.ApplicationTestCaseConfig
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.attachments.Attachments
@@ -20,11 +20,12 @@ import kotlin.test.assertNotNull
 class ListAttachmentsApplicationTest : ApplicationTestCase() {
     @Test
     fun `should add attachments to test run then list them`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                attachmentsEnabled = true,
+            ),
+        ) {
             val publicId = randomPublicId()
-            attachmentsEnabled = true
-
-            startTestServer()
 
             val attachment1FileName = "test-attachment.txt"
             val attachment1Bytes = File("src/test/resources/$attachment1FileName").readBytes()
@@ -45,7 +46,7 @@ class ListAttachmentsApplicationTest : ApplicationTestCase() {
             )
 
             val postResponse1 =
-                testClient.post("/run/$publicId/attachments/$attachment1FileName") {
+                client.post("/run/$publicId/attachments/$attachment1FileName") {
                     headers {
                         append("content-length", attachment1Bytes.size.toString())
                     }
@@ -54,7 +55,7 @@ class ListAttachmentsApplicationTest : ApplicationTestCase() {
             expectThat(postResponse1.status).isEqualTo(HttpStatusCode.OK)
 
             val postResponse2 =
-                testClient.post("/run/$publicId/attachments/$attachment2FileName") {
+                client.post("/run/$publicId/attachments/$attachment2FileName") {
                     headers {
                         append("content-length", attachment2Bytes.size.toString())
                     }
@@ -64,7 +65,7 @@ class ListAttachmentsApplicationTest : ApplicationTestCase() {
 
             waitUntilTestRunHasAttachments(publicId, 2)
 
-            val getResponse = testClient.get("/run/$publicId/attachments")
+            val getResponse = client.get("/run/$publicId/attachments")
             expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
 
             val attachmentsResponse = objectMapper.readValue(getResponse.bodyAsText(), Attachments::class.java)

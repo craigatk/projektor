@@ -3,9 +3,9 @@ package projektor.metadata
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
+import projektor.ApplicationTestCaseConfig
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.metadata.TestRunGitMetadata
 import strikt.api.expectThat
@@ -19,11 +19,11 @@ import kotlin.test.assertNotNull
 class GitMetadataApplicationTest : ApplicationTestCase() {
     @Test
     fun `should get Git metadata for test run`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(),
+        ) {
             val publicId = randomPublicId()
             val anotherPublicId = randomPublicId()
-
-            startTestServer()
 
             val testRun = testRunDBGenerator.createSimpleTestRun(publicId)
             testRunDBGenerator.addGitMetadata(testRun, "projektor/projektor", true, "main", null, null, null)
@@ -31,7 +31,7 @@ class GitMetadataApplicationTest : ApplicationTestCase() {
             val anotherTestRun = testRunDBGenerator.createSimpleTestRun(anotherPublicId)
             testRunDBGenerator.addGitMetadata(anotherTestRun, "projektor/another", true, "main", null, null, null)
 
-            val response = testClient.get("/run/$publicId/metadata/git")
+            val response = client.get("/run/$publicId/metadata/git")
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
             val gitMetadata = objectMapper.readValue(response.bodyAsText(), TestRunGitMetadata::class.java)
@@ -48,11 +48,11 @@ class GitMetadataApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should get Git metadata for test run with pull request number and commit SHA`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(),
+        ) {
             val publicId = randomPublicId()
             val anotherPublicId = randomPublicId()
-
-            startTestServer()
 
             val testRun = testRunDBGenerator.createSimpleTestRun(publicId)
             testRunDBGenerator.addGitMetadata(testRun, "projektor/projektor", true, "main", null, 4, "commitSHA")
@@ -60,7 +60,7 @@ class GitMetadataApplicationTest : ApplicationTestCase() {
             val anotherTestRun = testRunDBGenerator.createSimpleTestRun(anotherPublicId)
             testRunDBGenerator.addGitMetadata(anotherTestRun, "projektor/another", true, "main", null, null, null)
 
-            val response = testClient.get("/run/$publicId/metadata/git")
+            val response = client.get("/run/$publicId/metadata/git")
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
             val gitMetadata = objectMapper.readValue(response.bodyAsText(), TestRunGitMetadata::class.java)
@@ -79,11 +79,11 @@ class GitMetadataApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should get Git metadata for test run with project name`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(),
+        ) {
             val publicId = randomPublicId()
             val anotherPublicId = randomPublicId()
-
-            startTestServer()
 
             val testRun = testRunDBGenerator.createSimpleTestRun(publicId)
             testRunDBGenerator.addGitMetadata(testRun, "projektor/projektor", true, "main", "my-project", null, null)
@@ -91,7 +91,7 @@ class GitMetadataApplicationTest : ApplicationTestCase() {
             val anotherTestRun = testRunDBGenerator.createSimpleTestRun(anotherPublicId)
             testRunDBGenerator.addGitMetadata(anotherTestRun, "projektor/another", true, "main", null, null, null)
 
-            val response = testClient.get("/run/$publicId/metadata/git")
+            val response = client.get("/run/$publicId/metadata/git")
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
             val gitMetadata = objectMapper.readValue(response.bodyAsText(), TestRunGitMetadata::class.java)
@@ -108,17 +108,17 @@ class GitMetadataApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when GitHub base URL should return it`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                gitHubBaseUrl = "http://git.localhost:8080/",
+            ),
+        ) {
             val publicId = randomPublicId()
-
-            gitHubBaseUrl = "http://git.localhost:8080/"
-
-            startTestServer()
 
             val testRun = testRunDBGenerator.createSimpleTestRun(publicId)
             testRunDBGenerator.addGitMetadata(testRun, "projektor/projektor", false, "feature/branch", null, null, null)
 
-            val response = testClient.get("/run/$publicId/metadata/git")
+            val response = client.get("/run/$publicId/metadata/git")
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
             val gitMetadata = objectMapper.readValue(response.bodyAsText(), TestRunGitMetadata::class.java)
@@ -136,14 +136,14 @@ class GitMetadataApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when no Git metadata for test run should return 204`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(),
+        ) {
             val publicId = randomPublicId()
-
-            startTestServer()
 
             testRunDBGenerator.createSimpleTestRun(publicId)
 
-            val response = testClient.get("/run/$publicId/metadata/git")
+            val response = client.get("/run/$publicId/metadata/git")
             expectThat(response.status).isEqualTo(HttpStatusCode.NoContent)
         }
 }

@@ -13,7 +13,6 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.application.Application
 import io.ktor.server.config.MapApplicationConfig
-import io.ktor.server.engine.*
 import io.ktor.server.testing.*
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import io.opentelemetry.api.GlobalOpenTelemetry
@@ -59,7 +58,6 @@ import projektor.server.api.results.SaveResultsResponse
 import projektor.server.example.coverage.CloverXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
-import java.math.BigDecimal
 import java.util.TimeZone
 import kotlin.test.assertNotNull
 
@@ -111,37 +109,11 @@ open class ApplicationTestCase {
 
     lateinit var codeQualityReportDao: CodeQualityReportDao
 
-    protected var databaseSchema: String = "public"
-
-    protected var publishToken: String? = null
-
-    protected var attachmentsEnabled: Boolean = false
-    protected var attachmentsMaxSizeMB: BigDecimal? = null
-    protected var attachmentsAccessKey = "minio_access_key"
-    protected var attachmentsBucketName = "attachmentstesting"
-    protected var attachmentsAutoCreateBucket = true
-
-    protected var attachmentCleanupMaxAgeDays: Int? = null
-    protected var reportCleanupMaxAgeDays: Int? = null
-
-    protected var metricsEnabled: Boolean = false
-    protected var metricsPort: Int = 0
-    protected var metricsUsername: String? = null
-    protected var metricsPassword: String? = null
-
-    protected var globalMessages: String? = null
-
-    protected var gitHubBaseUrl: String? = null
-
-    protected var serverBaseUrl: String? = null
-    protected var gitHubApiUrl: String? = null
-    protected var gitHubAppId: String? = null
-    protected var gitHubPrivateKeyEncoded: String? = null
-
     protected val meterRegistry = SimpleMeterRegistry()
 
     protected lateinit var testClient: io.ktor.client.HttpClient
     private var testServer: TestApplicationEngine? = null
+    private var theApplication: Application? = null
 
     @BeforeEach
     fun setupTelemetry() {
@@ -154,15 +126,15 @@ open class ApplicationTestCase {
             .buildAndRegisterGlobal()
 
         if (autoStartServer()) {
-            startTestServer()
+            startTestServer(ApplicationTestCaseConfig())
         }
     }
 
-    fun startTestServer(): TestApplicationEngine {
+    fun startTestServer(testCaseConfig: ApplicationTestCaseConfig = ApplicationTestCaseConfig()): TestApplicationEngine {
         val theServer =
             TestApplicationEngine(
                 createTestEnvironment {
-                    config = createApplicationConfig()
+                    config = createApplicationConfig(testCaseConfig)
                 },
             )
 
@@ -170,7 +142,9 @@ open class ApplicationTestCase {
 
         theServer.start(wait = true)
 
-        setUpTestDependencies(theServer.application)
+        theServer.application.main(meterRegistry = meterRegistry)
+
+        theServer.application.setUpTestDependencies()
 
         testServer = theServer
 
@@ -185,71 +159,87 @@ open class ApplicationTestCase {
     open fun autoStartServer(): Boolean = false
 
     protected fun getApplication(): Application {
-        assertNotNull(testServer)
-
-        return testServer!!.application
+        return if (testServer != null) {
+            testServer!!.application
+        } else {
+            theApplication!!
+        }
     }
 
-    private fun createApplicationConfig(): MapApplicationConfig {
-        val schema = databaseSchema
-
+    protected fun createApplicationConfig(testCaseConfig: ApplicationTestCaseConfig): MapApplicationConfig {
         val config =
             MapApplicationConfig().apply {
                 put("ktor.datasource.username", System.getenv("DB_USERNAME") ?: "testuser")
                 put("ktor.datasource.password", System.getenv("DB_PASSWORD") ?: "testpass")
                 put("ktor.datasource.jdbcUrl", System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5433/projektordb")
-                put("ktor.datasource.schema", schema)
+                put("ktor.datasource.schema", testCaseConfig.databaseSchema)
                 put("ktor.datasource.maximumPoolSize", "3")
 
-                publishToken?.let { put("ktor.auth.publishToken", it) }
+                testCaseConfig.publishToken?.let { put("ktor.auth.publishToken", it) }
 
-                if (attachmentsEnabled) {
+                if (testCaseConfig.attachmentsEnabled) {
                     put("ktor.attachment.url", "http://localhost:9000")
-                    put("ktor.attachment.bucketName", attachmentsBucketName)
-                    put("ktor.attachment.autoCreateBucket", attachmentsAutoCreateBucket.toString())
-                    put("ktor.attachment.accessKey", attachmentsAccessKey)
+                    put("ktor.attachment.bucketName", testCaseConfig.attachmentsBucketName)
+                    put("ktor.attachment.autoCreateBucket", testCaseConfig.attachmentsAutoCreateBucket.toString())
+                    put("ktor.attachment.accessKey", testCaseConfig.attachmentsAccessKey)
                     put("ktor.attachment.secretKey", "minio_secret_key")
-                    attachmentsMaxSizeMB?.let { put("ktor.attachment.maxSizeMB", it.toString()) }
+                    testCaseConfig.attachmentsMaxSizeMB?.let { put("ktor.attachment.maxSizeMB", it.toString()) }
                 }
 
-                attachmentCleanupMaxAgeDays?.let {
+                testCaseConfig.attachmentCleanupMaxAgeDays?.let {
                     put("ktor.cleanup.maxAttachmentAgeDays", it.toString())
                 }
 
-                reportCleanupMaxAgeDays?.let {
+                testCaseConfig.reportCleanupMaxAgeDays?.let {
                     put("ktor.cleanup.maxReportAgeDays", it.toString())
                 }
 
-                if (metricsEnabled) {
+                if (testCaseConfig.metricsEnabled) {
                     put("ktor.metrics.influxdb.enabled", "true")
-                    put("ktor.metrics.influxdb.uri", "http://localhost:$metricsPort")
+                    put("ktor.metrics.influxdb.uri", "http://localhost:${testCaseConfig.metricsPort}")
                     put("ktor.metrics.influxdb.autoCreateDb", "true")
                     put("ktor.metrics.influxdb.interval", "1")
 
-                    metricsUsername?.let { username -> put("ktor.metrics.influxdb.username", username) }
-                    metricsPassword?.let { password -> put("ktor.metrics.influxdb.password", password) }
+                    testCaseConfig.metricsUsername?.let { username -> put("ktor.metrics.influxdb.username", username) }
+                    testCaseConfig.metricsPassword?.let { password -> put("ktor.metrics.influxdb.password", password) }
                 }
 
-                globalMessages?.let { put("ktor.message.global", it) }
+                testCaseConfig.globalMessages?.let { put("ktor.message.global", it) }
 
-                gitHubBaseUrl?.let { put("ktor.versionControl.gitHubBaseUrl", it) }
+                testCaseConfig.gitHubBaseUrl?.let { put("ktor.versionControl.gitHubBaseUrl", it) }
 
-                serverBaseUrl?.let { put("ktor.notification.serverBaseUrl", it) }
-                gitHubApiUrl?.let { put("ktor.notification.gitHub.gitHubApiUrl", it) }
-                gitHubAppId?.let { put("ktor.notification.gitHub.gitHubAppId", it) }
-                gitHubPrivateKeyEncoded?.let { put("ktor.notification.gitHub.privateKey", it) }
+                testCaseConfig.serverBaseUrl?.let { put("ktor.notification.serverBaseUrl", it) }
+                testCaseConfig.gitHubApiUrl?.let { put("ktor.notification.gitHub.gitHubApiUrl", it) }
+                testCaseConfig.gitHubAppId?.let { put("ktor.notification.gitHub.gitHubAppId", it) }
+                testCaseConfig.gitHubPrivateKeyEncoded?.let { put("ktor.notification.gitHub.privateKey", it) }
             }
 
         return config
     }
 
-    private fun setUpTestDependencies(application: Application) {
-        val meterRegistryToUse = if (metricsEnabled) null else meterRegistry
+    fun projektorTestApplication(
+        testCaseConfig: ApplicationTestCaseConfig = ApplicationTestCaseConfig(),
+        block: suspend ApplicationTestBuilder.() -> Unit,
+    ) {
+        testApplication {
+            environment {
+                config = createApplicationConfig(testCaseConfig)
+            }
+            application {
+                main(meterRegistry = if (testCaseConfig.metricsEnabled) null else meterRegistry)
+                setUpTestDependencies()
 
-        application.main(meterRegistry = meterRegistryToUse)
+                theApplication = this
+            }
+            startApplication()
 
-        dataSource = application.get()
-        dslContext = application.get()
+            block()
+        }
+    }
+
+    fun Application.setUpTestDependencies() {
+        dataSource = get()
+        dslContext = get()
         testRunDao = TestRunDao(dslContext.configuration())
         testSuiteGroupDao = TestSuiteGroupDao(dslContext.configuration())
         testSuiteDao = TestSuiteDao(dslContext.configuration())
@@ -267,10 +257,10 @@ open class ApplicationTestCase {
         coverageFileDao = CodeCoverageFileDao(dslContext.configuration())
         coverageStatsDao = CodeCoverageStatsDao(dslContext.configuration())
 
-        val coverageRepository: CoverageRepository = application.get()
-        val previousTestRunService: PreviousTestRunService = application.get()
-        val processingFailureService: ProcessingFailureService = application.get()
-        val metricsService: MetricsService = application.get()
+        val coverageRepository: CoverageRepository = get()
+        val previousTestRunService: PreviousTestRunService = get()
+        val processingFailureService: ProcessingFailureService = get()
+        val metricsService: MetricsService = get()
         coverageService = CoverageService(coverageRepository, metricsService, previousTestRunService, processingFailureService)
 
         gitRepositoryDao = GitRepositoryDao(dslContext.configuration())
@@ -329,7 +319,23 @@ open class ApplicationTestCase {
             .bufferedReader()
             .readText()
 
-    protected suspend fun postGroupedResultsJSON(
+    suspend fun io.ktor.client.HttpClient.postGroupedResultsJSON(
+        resultsJson: String,
+        expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,
+    ): HttpResponse {
+        val response =
+            post("/groupedResults") {
+                headers {
+                    append(HttpHeaders.ContentType, "application/json")
+                }
+                setBody(resultsJson)
+            }
+        expectThat(response.status).isEqualTo(expectedStatusCode)
+
+        return response
+    }
+
+    suspend fun postGroupedResultsJSON(
         resultsJson: String,
         expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,
     ): HttpResponse {
@@ -351,6 +357,22 @@ open class ApplicationTestCase {
     ): HttpResponse {
         val response =
             testClient.post("/results") {
+                headers {
+                    append(HttpHeaders.ContentType, "text/plain")
+                }
+                setBody(resultsText)
+            }
+        expectThat(response.status).isEqualTo(expectedStatusCode)
+
+        return response
+    }
+
+    suspend fun io.ktor.client.HttpClient.postResultsPlainText(
+        resultsText: String,
+        expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,
+    ): HttpResponse {
+        val response =
+            post("/results") {
                 headers {
                     append(HttpHeaders.ContentType, "text/plain")
                 }
