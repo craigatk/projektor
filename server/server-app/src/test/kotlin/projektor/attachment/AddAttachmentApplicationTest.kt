@@ -1,11 +1,12 @@
 package projektor.attachment
 
 import io.ktor.client.request.*
+import io.ktor.client.request.headers
 import io.ktor.client.statement.*
-import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
+import io.ktor.http.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
+import projektor.ApplicationTestCaseConfig
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
 import strikt.api.expectThat
@@ -15,11 +16,12 @@ import java.io.File
 class AddAttachmentApplicationTest : ApplicationTestCase() {
     @Test
     fun `should add attachment to test run then get it`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                attachmentsEnabled = true,
+            ),
+        ) {
             val publicId = randomPublicId()
-            attachmentsEnabled = true
-
-            startTestServer()
 
             val attachmentBytes = File("src/test/resources/test-attachment.txt").readBytes()
 
@@ -36,7 +38,7 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
             )
 
             val postResponse =
-                testClient.post("/run/$publicId/attachments/test-attachment.txt") {
+                client.post("/run/$publicId/attachments/test-attachment.txt") {
                     headers {
                         append("content-length", attachmentBytes.size.toString())
                     }
@@ -46,7 +48,7 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
 
             waitUntilTestRunHasAttachments(publicId, 1)
 
-            val getResponse = testClient.get("/run/$publicId/attachments/test-attachment.txt")
+            val getResponse = client.get("/run/$publicId/attachments/test-attachment.txt")
 
             expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
 
@@ -55,16 +57,17 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `can add attachment to public ID that has no test run yet`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                attachmentsEnabled = true,
+            ),
+        ) {
             val publicId = randomPublicId()
-            attachmentsEnabled = true
-
-            startTestServer()
 
             val attachmentBytes = File("src/test/resources/test-attachment.txt").readBytes()
 
             val postResponse =
-                testClient.post("/run/$publicId/attachments/test-attachment.txt") {
+                client.post("/run/$publicId/attachments/test-attachment.txt") {
                     headers {
                         append("content-length", attachmentBytes.size.toString())
                     }
@@ -74,7 +77,7 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
 
             waitUntilTestRunHasAttachments(publicId, 1)
 
-            val getResponse = testClient.get("/run/$publicId/attachments/test-attachment.txt")
+            val getResponse = client.get("/run/$publicId/attachments/test-attachment.txt")
 
             expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
 
@@ -83,19 +86,20 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when attachment access key wrong should return error when trying to add attachment`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                attachmentsEnabled = true,
+                attachmentsAccessKey = "wrong_access_key",
+                attachmentsBucketName = "failtocreate",
+                attachmentsAutoCreateBucket = true,
+            ),
+        ) {
             val publicId = randomPublicId()
-            attachmentsEnabled = true
-            attachmentsAccessKey = "wrong_access_key"
-            attachmentsBucketName = "failtocreate"
-            attachmentsAutoCreateBucket = true
 
             val attachmentBytes = File("src/test/resources/test-attachment.txt").readBytes()
 
-            startTestServer()
-
             val postResponse =
-                testClient.post("/run/$publicId/attachments/test-attachment.txt") {
+                client.post("/run/$publicId/attachments/test-attachment.txt") {
                     headers {
                         append("content-length", attachmentBytes.size.toString())
                     }
@@ -106,18 +110,19 @@ class AddAttachmentApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when attachments not enabled should return 400 when trying to add attachment`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                attachmentsEnabled = false,
+            ),
+        ) {
             val publicId = randomPublicId()
-            attachmentsEnabled = false
 
             val attachmentBytes = File("src/test/resources/test-attachment.txt").readBytes()
-
-            startTestServer()
 
             testRunDBGenerator.createSimpleTestRun(publicId)
 
             val postResponse =
-                testClient.post("/run/$publicId/attachments/test-attachment.txt") {
+                client.post("/run/$publicId/attachments/test-attachment.txt") {
                     headers {
                         append("content-length", attachmentBytes.size.toString())
                     }

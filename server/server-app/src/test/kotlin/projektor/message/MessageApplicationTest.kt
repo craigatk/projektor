@@ -3,9 +3,9 @@ package projektor.message
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
+import projektor.ApplicationTestCaseConfig
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.messages.Messages
 import strikt.api.expectThat
@@ -17,14 +17,14 @@ import kotlin.test.assertNotNull
 class MessageApplicationTest : ApplicationTestCase() {
     @Test
     fun `when single global message should return it`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                globalMessages = "Here is a global message",
+            ),
+        ) {
             val publicId = randomPublicId()
 
-            globalMessages = "Here is a global message"
-
-            startTestServer()
-
-            val response = testClient.get("/run/$publicId/messages")
+            val response = client.get("/run/$publicId/messages")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -38,14 +38,14 @@ class MessageApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when two global messages should return them`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                globalMessages = "First global message|Second global message",
+            ),
+        ) {
             val publicId = randomPublicId()
 
-            globalMessages = "First global message|Second global message"
-
-            startTestServer()
-
-            val response = testClient.get("/run/$publicId/messages")
+            val response = client.get("/run/$publicId/messages")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -60,14 +60,14 @@ class MessageApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when no messages should return empty list`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                globalMessages = null,
+            ),
+        ) {
             val publicId = randomPublicId()
 
-            globalMessages = null
-
-            startTestServer()
-
-            val response = testClient.get("/run/$publicId/messages")
+            val response = client.get("/run/$publicId/messages")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 

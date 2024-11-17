@@ -4,9 +4,9 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
+import projektor.ApplicationTestCaseConfig
 import projektor.auth.AuthConfig
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.server.api.results.SaveResultsResponse
@@ -17,19 +17,18 @@ import kotlin.test.assertNotNull
 class SaveGroupedResultsTokenApplicationTest : ApplicationTestCase() {
     @Test
     fun `when token set and valid token included in header should save results`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                publishToken = "publish12345",
+            ),
+        ) {
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults()
 
-            val validPublishToken = "publish12345"
-            publishToken = validPublishToken
-
-            startTestServer()
-
             val postResponse =
-                testClient.post("/groupedResults") {
+                client.post("/groupedResults") {
                     headers {
                         append(HttpHeaders.ContentType, "text/plain")
-                        append(AuthConfig.PUBLISH_TOKEN, validPublishToken)
+                        append(AuthConfig.PUBLISH_TOKEN, "publish12345")
                     }
                     setBody(requestBody)
                 }
@@ -44,16 +43,15 @@ class SaveGroupedResultsTokenApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when token set and invalid token included in header should return 401`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                publishToken = "publish12345",
+            ),
+        ) {
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults()
 
-            val validPublishToken = "publish12345"
-            publishToken = validPublishToken
-
-            startTestServer()
-
             val postResponse =
-                testClient.post("/groupedResults") {
+                client.post("/groupedResults") {
                     headers {
                         append(HttpHeaders.ContentType, "text/plain")
                         append(AuthConfig.PUBLISH_TOKEN, "notPublish12345")

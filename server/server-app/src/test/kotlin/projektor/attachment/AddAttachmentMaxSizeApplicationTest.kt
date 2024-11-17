@@ -3,9 +3,9 @@ package projektor.attachment
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
+import projektor.ApplicationTestCaseConfig
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.attachments.AddAttachmentError
@@ -19,12 +19,13 @@ import java.math.BigDecimal
 class AddAttachmentMaxSizeApplicationTest : ApplicationTestCase() {
     @Test
     fun `when attachment max size configured and attachment size is over max allowed size should return error`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                attachmentsEnabled = true,
+                attachmentsMaxSizeMB = BigDecimal("0.02"),
+            ),
+        ) {
             val publicId = randomPublicId()
-            attachmentsEnabled = true
-            attachmentsMaxSizeMB = BigDecimal("0.02")
-
-            startTestServer()
 
             testRunDBGenerator.createTestRun(
                 publicId,
@@ -39,7 +40,7 @@ class AddAttachmentMaxSizeApplicationTest : ApplicationTestCase() {
             )
 
             val response =
-                testClient.post("/run/$publicId/attachments/test-run-summary.png") {
+                client.post("/run/$publicId/attachments/test-run-summary.png") {
                     headers {
                         append("content-length", "23342")
                     }
@@ -53,12 +54,13 @@ class AddAttachmentMaxSizeApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when attachment max size configured and attachment size is under max allowed size should succeed`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                attachmentsEnabled = true,
+                attachmentsMaxSizeMB = BigDecimal("0.04"),
+            ),
+        ) {
             val publicId = randomPublicId()
-            attachmentsEnabled = true
-            attachmentsMaxSizeMB = BigDecimal("0.04")
-
-            startTestServer()
 
             testRunDBGenerator.createTestRun(
                 publicId,
@@ -73,7 +75,7 @@ class AddAttachmentMaxSizeApplicationTest : ApplicationTestCase() {
             )
 
             val response =
-                testClient.post("/run/$publicId/attachments/test-run-summary.png") {
+                client.post("/run/$publicId/attachments/test-run-summary.png") {
                     headers {
                         append("content-length", "23342")
                     }

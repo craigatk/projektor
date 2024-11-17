@@ -4,9 +4,9 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
+import projektor.ApplicationTestCaseConfig
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.TestCase
@@ -21,12 +21,12 @@ import kotlin.test.assertNotNull
 class GetFailedTestCasesAttachmentsApplicationTest : ApplicationTestCase() {
     @Test
     fun `should include screenshot attachment when test case has one`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                attachmentsEnabled = true,
+            ),
+        ) {
             val publicId = randomPublicId()
-
-            attachmentsEnabled = true
-
-            startTestServer()
 
             testRunDBGenerator.createTestRun(
                 publicId,
@@ -43,7 +43,7 @@ class GetFailedTestCasesAttachmentsApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.addAttachment(publicId, "object-1", "testSuite1 FailedTestCase 1.png")
             testRunDBGenerator.addAttachment(publicId, "object-2", "testSuite1 FailedTestCase 2.png")
 
-            val response = testClient.get("/run/${publicId.id}/cases/failed")
+            val response = client.get("/run/${publicId.id}/cases/failed")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -78,12 +78,12 @@ class GetFailedTestCasesAttachmentsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should include screenshot and video attachments when test case has them`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                attachmentsEnabled = true,
+            ),
+        ) {
             val publicId = randomPublicId()
-
-            attachmentsEnabled = true
-
-            startTestServer()
 
             testRunDBGenerator.createTestRun(
                 publicId,
@@ -102,7 +102,7 @@ class GetFailedTestCasesAttachmentsApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.addAttachment(publicId, "video-1", "testSuite1.spec.js.mp4")
             testRunDBGenerator.addAttachment(publicId, "screenshot-2", "testSuite1 FailedTestCase 2.png")
 
-            val response = testClient.get("/run/${publicId.id}/cases/failed")
+            val response = client.get("/run/${publicId.id}/cases/failed")
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
             val responseContent = response.bodyAsText()

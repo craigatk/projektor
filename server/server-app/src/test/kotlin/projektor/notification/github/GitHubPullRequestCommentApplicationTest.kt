@@ -3,13 +3,13 @@ package projektor.notification.github
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
-import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
+import projektor.ApplicationTestCaseConfig
 import projektor.notification.github.auth.PrivateKeyEncoder
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.grouped.model.CoverageFile
@@ -39,14 +39,14 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when all GitHub notification properties set should publish comment to pull request`() =
-        testSuspend {
-            val privateKeyContents = loadTextFromFile("fake_private_key.pem")
-
-            serverBaseUrl = "http://localhost:8080"
-            gitHubApiUrl = "http://localhost:${wireMockServer.port()}"
-            gitHubAppId = "12345"
-            gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(privateKeyContents)
-
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                serverBaseUrl = "http://localhost:8080",
+                gitHubApiUrl = "http://localhost:${wireMockServer.port()}",
+                gitHubAppId = "12345",
+                gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(loadTextFromFile("fake_private_key.pem")),
+            ),
+        ) {
             val orgName = "craigatk"
             val repoName = "projektor"
             val branchName = "main"
@@ -66,9 +66,7 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
             metadata.git = gitMetadata
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
-            startTestServer()
-
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             val (publicId, _) = waitForTestRunSaveToComplete(response)
 
@@ -81,12 +79,14 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when creating a comment on the GitHub PR fails should still save test run`() =
-        testSuspend {
-            serverBaseUrl = "http://localhost:8080"
-            gitHubApiUrl = "http://localhost:${wireMockServer.port()}"
-            gitHubAppId = "12345"
-            gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode("invalid-private-key")
-
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                serverBaseUrl = "http://localhost:8080",
+                gitHubApiUrl = "http://localhost:${wireMockServer.port()}",
+                gitHubAppId = "12345",
+                gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode("invalid-key"),
+            ),
+        ) {
             val orgName = "craigatk"
             val repoName = "projektor"
             val branchName = "main"
@@ -106,9 +106,7 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
             metadata.git = gitMetadata
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
-            startTestServer()
-
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             waitForTestRunSaveToComplete(response)
 
@@ -117,14 +115,14 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when report includes coverage data should include it in PR comment`() =
-        testSuspend {
-            val privateKeyContents = loadTextFromFile("fake_private_key.pem")
-
-            serverBaseUrl = "http://localhost:8080"
-            gitHubApiUrl = "http://localhost:${wireMockServer.port()}"
-            gitHubAppId = "12345"
-            gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(privateKeyContents)
-
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                serverBaseUrl = "http://localhost:8080",
+                gitHubApiUrl = "http://localhost:${wireMockServer.port()}",
+                gitHubAppId = "12345",
+                gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(loadTextFromFile("fake_private_key.pem")),
+            ),
+        ) {
             val orgName = "craigatk"
             val repoName = "projektor"
             val branchName = "main"
@@ -147,9 +145,7 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
             metadata.git = gitMetadata
             val requestBody = GroupedResultsXmlLoader().passingResultsWithCoverage(listOf(coverageFile), metadata)
 
-            startTestServer()
-
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             waitForTestRunSaveToComplete(response)
 
@@ -162,14 +158,14 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when results include performance data should include it in PR comment`() =
-        testSuspend {
-            val privateKeyContents = loadTextFromFile("fake_private_key.pem")
-
-            serverBaseUrl = "http://localhost:8080"
-            gitHubApiUrl = "http://localhost:${wireMockServer.port()}"
-            gitHubAppId = "12345"
-            gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(privateKeyContents)
-
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                serverBaseUrl = "http://localhost:8080",
+                gitHubApiUrl = "http://localhost:${wireMockServer.port()}",
+                gitHubAppId = "12345",
+                gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(loadTextFromFile("fake_private_key.pem")),
+            ),
+        ) {
             val orgName = "craigatk"
             val repoName = "projektor"
             val branchName = "main"
@@ -194,9 +190,7 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
                     metadata,
                 )
 
-            startTestServer()
-
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             waitForTestRunSaveToComplete(response)
 
@@ -209,14 +203,14 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should find pull request by commit SHA and add comment to it`() =
-        testSuspend {
-            val privateKeyContents = loadTextFromFile("fake_private_key.pem")
-
-            serverBaseUrl = "http://localhost:8080"
-            gitHubApiUrl = "http://localhost:${wireMockServer.port()}"
-            gitHubAppId = "12345"
-            gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(privateKeyContents)
-
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                serverBaseUrl = "http://localhost:8080",
+                gitHubApiUrl = "http://localhost:${wireMockServer.port()}",
+                gitHubAppId = "12345",
+                gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(loadTextFromFile("fake_private_key.pem")),
+            ),
+        ) {
             val orgName = "craigatk"
             val repoName = "projektor"
             val branchName = "main"
@@ -238,9 +232,7 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
             metadata.git = gitMetadata
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
-            startTestServer()
-
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             val (publicId, _) = waitForTestRunSaveToComplete(response)
 
@@ -253,14 +245,14 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should find pull request by pull request number and add comment to it`() =
-        testSuspend {
-            val privateKeyContents = loadTextFromFile("fake_private_key.pem")
-
-            serverBaseUrl = "http://localhost:8080"
-            gitHubApiUrl = "http://localhost:${wireMockServer.port()}"
-            gitHubAppId = "12345"
-            gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(privateKeyContents)
-
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                serverBaseUrl = "http://localhost:8080",
+                gitHubApiUrl = "http://localhost:${wireMockServer.port()}",
+                gitHubAppId = "12345",
+                gitHubPrivateKeyEncoded = PrivateKeyEncoder.base64Encode(loadTextFromFile("fake_private_key.pem")),
+            ),
+        ) {
             val orgName = "craigatk"
             val repoName = "projektor"
             val pullRequestNumber = 2
@@ -277,9 +269,7 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
             metadata.git = gitMetadata
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
-            startTestServer()
-
-            val response = postGroupedResultsJSON(requestBody)
+            val response = client.postGroupedResultsJSON(requestBody)
 
             val (publicId, _) = waitForTestRunSaveToComplete(response)
 

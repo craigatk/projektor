@@ -3,12 +3,12 @@ package projektor.database
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.jooq.exception.DataAccessException
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
+import projektor.ApplicationTestCaseConfig
 import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
 import strikt.assertions.contains
@@ -19,17 +19,17 @@ import kotlin.test.assertNotNull
 class DatabaseSchemaApplicationTest : ApplicationTestCase() {
     @Test
     fun `should support saving results to a different schema`() =
-        testSuspend {
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                databaseSchema = "projektor",
+            ),
+        ) {
             val requestBody = resultsXmlLoader.passing()
-
-            databaseSchema = "projektor"
-
-            startTestServer()
 
             dslContext.execute("CREATE SCHEMA IF NOT EXISTS projektor;")
 
             val postResponse =
-                testClient.post("/results") {
+                client.post("/results") {
                     headers {
                         append(HttpHeaders.ContentType, "text/plain")
                     }
