@@ -1,8 +1,5 @@
 package projektor.coverage
 
-import io.ktor.client.request.*
-import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import kotlinx.coroutines.runBlocking
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilAsserted
@@ -19,25 +16,16 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 class SaveCoberturaCoverageApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should save Cobertura coverage and test results`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody =
                 GroupedResultsXmlLoader().resultsWithCoverage(
                     resultsXmls = listOf(ResultsXmlLoader().jestUi()),
                     coverageXmls = listOf(CoberturaXmlLoader().uiCobertura()),
                 )
 
-            val postResponse =
-                testClient.post("/groupedResults") {
-                    headers {
-                        append(HttpHeaders.ContentType, "application/json")
-                    }
-                    setBody(requestBody)
-                }
-            expectThat(postResponse.status).isEqualTo(HttpStatusCode.OK)
+            val postResponse = client.postGroupedResultsJSON(requestBody)
 
             val (publicId, _) = waitForTestRunSaveToComplete(postResponse)
 
@@ -79,21 +67,14 @@ class SaveCoberturaCoverageApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should save Cobertura coverage without branch field on line and test results`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody =
                 GroupedResultsXmlLoader().resultsWithCoverage(
                     resultsXmls = listOf(ResultsXmlLoader().jestUi()),
                     coverageXmls = listOf(CoberturaXmlLoader().noBranchCobertura()),
                 )
 
-            val postResponse =
-                testClient.post("/groupedResults") {
-                    headers {
-                        append(HttpHeaders.ContentType, "application/json")
-                    }
-                    setBody(requestBody)
-                }
-            expectThat(postResponse.status).isEqualTo(HttpStatusCode.OK)
+            val postResponse = client.postGroupedResultsJSON(requestBody)
 
             val (publicId, _) = waitForTestRunSaveToComplete(postResponse)
 

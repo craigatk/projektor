@@ -1,6 +1,5 @@
 package projektor.incomingresults
 
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import strikt.api.expectThat
@@ -10,14 +9,12 @@ import strikt.assertions.isFalse
 import strikt.assertions.isTrue
 
 class PythonResultsApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should save passing pytest results`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = resultsXmlLoader.pytestPassing()
 
-            val response = postResultsPlainText(requestBody)
+            val response = client.postResultsPlainText(requestBody)
 
             val (_, testRun) = waitForTestRunSaveToComplete(response)
 
@@ -40,10 +37,10 @@ class PythonResultsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should save failing pytest results`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = resultsXmlLoader.pytestFailing()
 
-            val response = postResultsPlainText(requestBody)
+            val response = client.postResultsPlainText(requestBody)
 
             val (_, testRun) = waitForTestRunSaveToComplete(response)
 

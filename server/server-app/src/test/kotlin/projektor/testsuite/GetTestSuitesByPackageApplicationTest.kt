@@ -4,7 +4,6 @@ package projektor.testsuite
 import com.fasterxml.jackson.core.type.TypeReference
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.createTestRun
@@ -17,11 +16,9 @@ import strikt.assertions.hasSize
 import strikt.assertions.map
 
 class GetTestSuitesByPackageApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should get test suites by package`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             val testRun = createTestRun(publicId, 1)
@@ -43,7 +40,7 @@ class GetTestSuitesByPackageApplicationTest : ApplicationTestCase() {
             testSuiteDB4.packageName = "com.something.else"
             testSuiteDao.insert(testSuiteDB4)
 
-            val response = testClient.get("/run/$publicId/suites?package=com.example")
+            val response = client.get("/run/$publicId/suites?package=com.example")
 
             val responseSuites: List<TestSuite> =
                 objectMapper.readValue(

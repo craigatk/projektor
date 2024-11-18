@@ -2,7 +2,6 @@ package projektor.incomingresults
 
 import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.util.gzip
@@ -15,16 +14,14 @@ import strikt.assertions.isTrue
 import java.math.BigDecimal
 
 class SaveResultsCompressedApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should uncompress gzipped results and save them`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = resultsXmlLoader.passing()
             val compressedBody = gzip(requestBody)
 
             val postResponse =
-                testClient.post("/results") {
+                client.post("/results") {
                     headers {
                         append(HttpHeaders.ContentType, "text/plain")
                         append(HttpHeaders.ContentEncoding, "gzip")

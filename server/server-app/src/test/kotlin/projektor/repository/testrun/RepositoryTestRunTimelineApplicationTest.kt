@@ -3,7 +3,6 @@ package projektor.repository.testrun
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
@@ -17,11 +16,9 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 class RepositoryTestRunTimelineApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should fetch test run timeline without project name`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
 
@@ -44,7 +41,7 @@ class RepositoryTestRunTimelineApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.addGitMetadata(thirdTestRun, repoName, true, "main", null, null, null)
             testRunDBGenerator.addResultsMetadata(thirdTestRun, true)
 
-            val response = testClient.get("/repo/$repoName/timeline")
+            val response = client.get("/repo/$repoName/timeline")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -80,7 +77,7 @@ class RepositoryTestRunTimelineApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should fetch test run timeline with project name`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
             val projectName = "my-project"
@@ -104,7 +101,7 @@ class RepositoryTestRunTimelineApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.addGitMetadata(thirdTestRun, repoName, true, "main", projectName, null, null)
             testRunDBGenerator.addResultsMetadata(thirdTestRun, true)
 
-            val response = testClient.get("/repo/$repoName/project/$projectName/timeline")
+            val response = client.get("/repo/$repoName/project/$projectName/timeline")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 

@@ -3,7 +3,6 @@ package projektor.repository.testrun
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
@@ -18,11 +17,9 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `when flaky tests without a project name should return them`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
             val projectName = null
@@ -49,7 +46,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
                 testRunDBGenerator.createTestRunInRepo(publicId, testSuiteDataList, repoName, true, projectName)
             }
 
-            val response = testClient.get("/repo/$repoName/tests/flaky")
+            val response = client.get("/repo/$repoName/tests/flaky")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -64,7 +61,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when flaky tests within specified max runs and threshold should find them`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
             val projectName = null
@@ -104,7 +101,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
                 testRunDBGenerator.createTestRunInRepo(publicId, passingTestSuiteDataList, repoName, true, projectName)
             }
 
-            val response = testClient.get("/repo/$repoName/tests/flaky?max_runs=10&threshold=3")
+            val response = client.get("/repo/$repoName/tests/flaky?max_runs=10&threshold=3")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -116,7 +113,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when flaky tests are beyond specified max runs and threshold should return 204`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
             val projectName = null
@@ -156,14 +153,14 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
                 testRunDBGenerator.createTestRunInRepo(publicId, passingTestSuiteDataList, repoName, true, projectName)
             }
 
-            val response = testClient.get("/repo/$repoName/tests/flaky?max_runs=10&threshold=3")
+            val response = client.get("/repo/$repoName/tests/flaky?max_runs=10&threshold=3")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NoContent)
         }
 
     @Test
     fun `when no flaky tests without a project name should return 204`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
             val projectName = null
@@ -184,14 +181,14 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
                 testRunDBGenerator.createTestRunInRepo(publicId, testSuiteDataList, repoName, true, projectName)
             }
 
-            val response = testClient.get("/repo/$repoName/tests/flaky")
+            val response = client.get("/repo/$repoName/tests/flaky")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NoContent)
         }
 
     @Test
     fun `when flaky tests with a project name should return them`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
             val projectName = "my-project"
@@ -218,7 +215,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
                 testRunDBGenerator.createTestRunInRepo(publicId, testSuiteDataList, repoName, true, projectName)
             }
 
-            val response = testClient.get("/repo/$repoName/project/$projectName/tests/flaky")
+            val response = client.get("/repo/$repoName/project/$projectName/tests/flaky")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -233,7 +230,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should find flaky tests in mainline only`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
             val projectName = null
@@ -300,7 +297,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
                 testRunDBGenerator.createTestRunInRepo(publicId, passingTestSuiteDataList, repoName, true, projectName)
             }
 
-            val response = testClient.get("/repo/$repoName/tests/flaky?max_runs=20&threshold=3&branch_type=MAINLINE")
+            val response = client.get("/repo/$repoName/tests/flaky?max_runs=20&threshold=3&branch_type=MAINLINE")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -324,7 +321,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should find flaky tests in all branches`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
             val projectName = null
@@ -391,7 +388,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
                 testRunDBGenerator.createTestRunInRepo(publicId, passingTestSuiteDataList, repoName, true, projectName)
             }
 
-            val response = testClient.get("/repo/$repoName/tests/flaky?max_runs=20&threshold=3&branch_type=ALL")
+            val response = client.get("/repo/$repoName/tests/flaky?max_runs=20&threshold=3&branch_type=ALL")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -415,7 +412,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when no flaky tests with a project name should return 204`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
             val projectName = "my-project"
@@ -436,7 +433,7 @@ class RepositoryFlakyTestApplicationTest : ApplicationTestCase() {
                 testRunDBGenerator.createTestRunInRepo(publicId, testSuiteDataList, repoName, true, projectName)
             }
 
-            val response = testClient.get("/repo/$repoName/project/$projectName/tests/flaky")
+            val response = client.get("/repo/$repoName/project/$projectName/tests/flaky")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NoContent)
         }

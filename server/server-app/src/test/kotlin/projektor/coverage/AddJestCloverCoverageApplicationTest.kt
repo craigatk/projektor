@@ -3,7 +3,6 @@ package projektor.coverage
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -17,11 +16,9 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 class AddJestCloverCoverageApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should add Jest coverage to test run then get it`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             val reportXmlBytes = CloverXmlLoader().uiClover().toByteArray()
@@ -29,7 +26,7 @@ class AddJestCloverCoverageApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.createSimpleTestRun(publicId)
 
             val postResponse =
-                testClient.post("/run/$publicId/coverage") {
+                client.post("/run/$publicId/coverage") {
                     setBody(reportXmlBytes)
                 }
             expectThat(postResponse.status).isEqualTo(HttpStatusCode.OK)
@@ -37,7 +34,7 @@ class AddJestCloverCoverageApplicationTest : ApplicationTestCase() {
             val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicId.id)
             expectThat(coverageRuns).hasSize(1)
 
-            val getResponse = testClient.get("/run/$publicId/coverage/overall")
+            val getResponse = client.get("/run/$publicId/coverage/overall")
             expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
 
             val overallStats = objectMapper.readValue(getResponse.bodyAsText(), CoverageStats::class.java)
@@ -66,7 +63,7 @@ class AddJestCloverCoverageApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should add Jest coverage and get its files`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             val reportXmlBytes = CloverXmlLoader().uiClover2().toByteArray()
@@ -74,7 +71,7 @@ class AddJestCloverCoverageApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.createSimpleTestRun(publicId)
 
             val postResponse =
-                testClient.post("/run/$publicId/coverage") {
+                client.post("/run/$publicId/coverage") {
                     setBody(reportXmlBytes)
                 }
             expectThat(postResponse.status).isEqualTo(HttpStatusCode.OK)
@@ -82,7 +79,7 @@ class AddJestCloverCoverageApplicationTest : ApplicationTestCase() {
             val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicId.id)
             expectThat(coverageRuns).hasSize(1)
 
-            val getResponse = testClient.get("/run/$publicId/coverage/All%20files/files")
+            val getResponse = client.get("/run/$publicId/coverage/All%20files/files")
 
             expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
 

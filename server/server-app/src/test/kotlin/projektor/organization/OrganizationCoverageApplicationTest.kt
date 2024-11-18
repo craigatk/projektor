@@ -3,7 +3,6 @@ package projektor.organization
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
@@ -21,11 +20,9 @@ import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
 class OrganizationCoverageApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `when three repos in org should find their coverage data`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
 
             val publicId1 = randomPublicId()
@@ -91,7 +88,7 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
                 repoName = anotherRepo,
             )
 
-            val response = testClient.get("/org/$orgName/coverage")
+            val response = client.get("/org/$orgName/coverage")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -138,7 +135,7 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should only find main branch runs`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
 
@@ -159,7 +156,7 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
                 branchName = "feature/branch",
             )
 
-            val response = testClient.get("/org/$orgName/coverage")
+            val response = client.get("/org/$orgName/coverage")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -173,10 +170,10 @@ class OrganizationCoverageApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when no org with name should return 204 response`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
 
-            val response = testClient.get("/org/$orgName/coverage")
+            val response = client.get("/org/$orgName/coverage")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NoContent)
         }

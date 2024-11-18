@@ -1,10 +1,9 @@
 package projektor.testrun
 
 import io.ktor.client.request.*
+import io.ktor.client.request.headers
 import io.ktor.client.statement.*
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
+import io.ktor.http.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -18,11 +17,9 @@ import strikt.assertions.isNull
 import kotlin.test.assertNotNull
 
 class GetTestRunCompressionApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `when gzip accept header included should compress test run response`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             val testSuiteCount = 200
@@ -40,7 +37,7 @@ class GetTestRunCompressionApplicationTest : ApplicationTestCase() {
             )
 
             val response =
-                testClient.get("/run/$publicId") {
+                client.get("/run/$publicId") {
                     headers {
                         append(HttpHeaders.AcceptEncoding, "gzip")
                     }

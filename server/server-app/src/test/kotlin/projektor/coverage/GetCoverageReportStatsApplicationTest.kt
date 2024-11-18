@@ -3,7 +3,6 @@ package projektor.coverage
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -16,11 +15,9 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 class GetCoverageReportStatsApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `when one coverage report should get its stats`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             testRunDBGenerator.createSimpleTestRun(publicId)
@@ -28,7 +25,7 @@ class GetCoverageReportStatsApplicationTest : ApplicationTestCase() {
             val reportXmlBytes = JacocoXmlLoader().serverApp().toByteArray()
 
             val postResponse =
-                testClient.post("/run/$publicId/coverage") {
+                client.post("/run/$publicId/coverage") {
                     setBody(reportXmlBytes)
                 }
             expectThat(postResponse.status).isEqualTo(HttpStatusCode.OK)
@@ -36,7 +33,7 @@ class GetCoverageReportStatsApplicationTest : ApplicationTestCase() {
             val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicId.id)
             expectThat(coverageRuns).hasSize(1)
 
-            val getResponse = testClient.get("/run/$publicId/coverage")
+            val getResponse = client.get("/run/$publicId/coverage")
             expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
 
             val coverage = objectMapper.readValue(getResponse.bodyAsText(), Coverage::class.java)
@@ -95,7 +92,7 @@ class GetCoverageReportStatsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when two coverage reports should get their stats`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             testRunDBGenerator.createSimpleTestRun(publicId)
@@ -104,7 +101,7 @@ class GetCoverageReportStatsApplicationTest : ApplicationTestCase() {
             val junitResultsParserXmlBytes = JacocoXmlLoader().junitResultsParser().toByteArray()
 
             val postServerAppResponse =
-                testClient.post("/run/$publicId/coverage") {
+                client.post("/run/$publicId/coverage") {
                     setBody(serverAppReportXmlBytes)
                 }
             expectThat(postServerAppResponse.status).isEqualTo(HttpStatusCode.OK)
@@ -114,7 +111,7 @@ class GetCoverageReportStatsApplicationTest : ApplicationTestCase() {
             expectThat(coverageGroupDao.fetchByCodeCoverageRunId(coverageRunsFirst[0].id)).hasSize(1)
 
             val postJUnitResponse =
-                testClient.post("/run/$publicId/coverage") {
+                client.post("/run/$publicId/coverage") {
                     setBody(junitResultsParserXmlBytes)
                 }
             expectThat(postJUnitResponse.status).isEqualTo(HttpStatusCode.OK)
@@ -123,7 +120,7 @@ class GetCoverageReportStatsApplicationTest : ApplicationTestCase() {
             expectThat(coverageRunsSecond).hasSize(1)
             expectThat(coverageGroupDao.fetchByCodeCoverageRunId(coverageRunsSecond[0].id)).hasSize(2)
 
-            val getResponse = testClient.get("/run/$publicId/coverage")
+            val getResponse = client.get("/run/$publicId/coverage")
             expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
 
             val coverage = objectMapper.readValue(getResponse.bodyAsText(), Coverage::class.java)

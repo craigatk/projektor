@@ -3,7 +3,6 @@ package projektor.coverage
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -17,11 +16,9 @@ import strikt.assertions.isTrue
 import kotlin.test.assertNotNull
 
 class CoverageExistsApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `when report has coverage data should return true`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             val reportXmlBytes = JacocoXmlLoader().serverApp().toByteArray()
@@ -29,7 +26,7 @@ class CoverageExistsApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.createSimpleTestRun(publicId)
 
             val postResponse =
-                testClient.post("/run/$publicId/coverage") {
+                client.post("/run/$publicId/coverage") {
                     setBody(reportXmlBytes)
                 }
             expectThat(postResponse.status).isEqualTo(HttpStatusCode.OK)
@@ -39,7 +36,7 @@ class CoverageExistsApplicationTest : ApplicationTestCase() {
             val coverageRuns = coverageRunDao.fetchByTestRunPublicId(publicId.id)
             expectThat(coverageRuns).hasSize(1)
 
-            val getResponse = testClient.get("/run/$publicId/coverage/exists")
+            val getResponse = client.get("/run/$publicId/coverage/exists")
             expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
 
             val coverageExists = objectMapper.readValue(getResponse.bodyAsText(), CoverageExists::class.java)
@@ -50,12 +47,12 @@ class CoverageExistsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when report does not have coverage data should return false`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             testRunDBGenerator.createSimpleTestRun(publicId)
 
-            val response = testClient.get("/run/$publicId/coverage/exists")
+            val response = client.get("/run/$publicId/coverage/exists")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 

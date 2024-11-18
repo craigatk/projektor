@@ -3,7 +3,6 @@ package projektor.repository.coverage
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
@@ -21,11 +20,9 @@ import java.time.ZoneOffset
 import kotlin.test.assertNotNull
 
 class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should fetch coverage timeline in mainline for repository without project name`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
 
@@ -80,7 +77,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                 branchName = "main",
             )
 
-            val response = testClient.get("/repo/$repoName/coverage/timeline")
+            val response = client.get("/repo/$repoName/coverage/timeline")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -119,7 +116,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should fetch coverage timeline in all branches for repository without project name`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
 
@@ -174,7 +171,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                 branchName = "main",
             )
 
-            val response = testClient.get("/repo/$repoName/coverage/timeline?branch=ALL")
+            val response = client.get("/repo/$repoName/coverage/timeline?branch=ALL")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -199,7 +196,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should fetch coverage timeline in mainline for repository with project name`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
             val projectName = "server-project"
@@ -259,7 +256,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                 branchName = "main",
             )
 
-            val response = testClient.get("/repo/$repoName/project/$projectName/coverage/timeline")
+            val response = client.get("/repo/$repoName/project/$projectName/coverage/timeline")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -289,7 +286,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should fetch coverage timeline in all branches for repository with project name`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
             val projectName = "server-project"
@@ -349,7 +346,7 @@ class RepositoryCoverageTimelineApplicationTest : ApplicationTestCase() {
                 branchName = "main",
             )
 
-            val response = testClient.get("/repo/$repoName/project/$projectName/coverage/timeline?branch=ALL")
+            val response = client.get("/repo/$repoName/project/$projectName/coverage/timeline?branch=ALL")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 

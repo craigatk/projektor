@@ -2,7 +2,6 @@ package projektor.telemetry
 
 import io.ktor.client.request.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -13,11 +12,9 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
 class OpenTelemetryApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should add custom spans when fetching test run`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             testRunDBGenerator.createTestRun(
@@ -32,7 +29,7 @@ class OpenTelemetryApplicationTest : ApplicationTestCase() {
                 ),
             )
 
-            val response = testClient.get("/run/$publicId")
+            val response = client.get("/run/$publicId")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 

@@ -2,7 +2,6 @@ package projektor.incomingresults
 
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilNotNull
 import org.junit.jupiter.api.Test
@@ -21,14 +20,12 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 class SaveResultsApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should parse request and save results for passing test`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = resultsXmlLoader.passing()
 
-            val response = postResultsPlainText(requestBody)
+            val response = client.postResultsPlainText(requestBody)
 
             val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)
 
@@ -64,10 +61,10 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should parse request and save results for failing test`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = resultsXmlLoader.failing()
 
-            val response = postResultsPlainText(requestBody)
+            val response = client.postResultsPlainText(requestBody)
 
             val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)
 
@@ -110,10 +107,10 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should parse request and save results for both passing and failing tests`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = listOf(resultsXmlLoader.passing(), resultsXmlLoader.failing()).joinToString("\n")
 
-            val response = postResultsPlainText(requestBody)
+            val response = client.postResultsPlainText(requestBody)
 
             val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)
 
@@ -151,10 +148,10 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should parse and save results with system out and system err`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = resultsXmlLoader.output()
 
-            val response = postResultsPlainText(requestBody)
+            val response = client.postResultsPlainText(requestBody)
 
             val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)
 
@@ -181,10 +178,10 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should parse and save results with some skipped test cases`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = resultsXmlLoader.someIgnored()
 
-            val response = postResultsPlainText(requestBody)
+            val response = client.postResultsPlainText(requestBody)
 
             val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)
 
@@ -214,10 +211,10 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should filter out test suites that have no test cases`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = resultsXmlLoader.cypressResults().joinToString("\n")
 
-            val response = postResultsPlainText(requestBody)
+            val response = client.postResultsPlainText(requestBody)
 
             val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)
 
@@ -238,9 +235,9 @@ class SaveResultsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when missing results should return 400`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = ""
 
-            postResultsPlainText(requestBody, HttpStatusCode.BadRequest)
+            client.postResultsPlainText(requestBody, HttpStatusCode.BadRequest)
         }
 }

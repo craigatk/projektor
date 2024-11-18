@@ -2,7 +2,6 @@ package projektor.incomingresults
 
 import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import kotlinx.coroutines.runBlocking
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
@@ -21,11 +20,9 @@ import strikt.assertions.isNotNull
 import java.math.BigDecimal
 
 class SaveGroupedResultsWithCoverageApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should save grouped results with coverage`() =
-        testSuspend {
+        projektorTestApplication {
             val incomingCoverageFile = CoverageFile()
             incomingCoverageFile.reportContents = JacocoXmlLoader().serverApp()
 
@@ -33,7 +30,7 @@ class SaveGroupedResultsWithCoverageApplicationTest : ApplicationTestCase() {
             val compressedBody = gzip(requestBody)
 
             val response =
-                testClient.post("/groupedResults") {
+                client.post("/groupedResults") {
                     headers {
                         append(HttpHeaders.ContentType, "application/json")
                         append(HttpHeaders.ContentEncoding, "gzip")

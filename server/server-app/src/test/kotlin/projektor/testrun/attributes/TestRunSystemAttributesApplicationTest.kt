@@ -3,7 +3,6 @@ package projektor.testrun.attributes
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.database.generated.tables.pojos.TestRunSystemAttributes
@@ -16,11 +15,9 @@ import strikt.assertions.isTrue
 import kotlin.test.assertNotNull
 
 class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should fetch test run attributes`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             testRunDBGenerator.createTestRun(
@@ -30,7 +27,7 @@ class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
 
             testRunSystemAttributesDao.insert(TestRunSystemAttributes(publicId.id, true))
 
-            val response = testClient.get("/run/$publicId/attributes")
+            val response = client.get("/run/$publicId/attributes")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -42,15 +39,15 @@ class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when system attributes does not exist should return 404`() =
-        testSuspend {
-            val response = testClient.get("/run/iddoesnotexist/attributes")
+        projektorTestApplication {
+            val response = client.get("/run/iddoesnotexist/attributes")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NotFound)
         }
 
     @Test
     fun `should pin test run`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             testRunDBGenerator.createTestRun(
@@ -60,7 +57,7 @@ class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
 
             testRunSystemAttributesDao.insert(TestRunSystemAttributes(publicId.id, false))
 
-            val response = testClient.post("/run/$publicId/attributes/pin")
+            val response = client.post("/run/$publicId/attributes/pin")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -71,15 +68,15 @@ class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when trying to pin a test run that does not exist should return 404`() =
-        testSuspend {
-            val response = testClient.post("/run/doesnotexist/attributes/pin")
+        projektorTestApplication {
+            val response = client.post("/run/doesnotexist/attributes/pin")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NotFound)
         }
 
     @Test
     fun `should unpin test run`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             testRunDBGenerator.createTestRun(
@@ -89,7 +86,7 @@ class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
 
             testRunSystemAttributesDao.insert(TestRunSystemAttributes(publicId.id, true))
 
-            val response = testClient.post("/run/$publicId/attributes/unpin")
+            val response = client.post("/run/$publicId/attributes/unpin")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -100,8 +97,8 @@ class TestRunSystemAttributesApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when trying to unpin a test run that does not exist should return 404`() =
-        testSuspend {
-            val response = testClient.post("/run/doesnotexist/attributes/unpin")
+        projektorTestApplication {
+            val response = client.post("/run/doesnotexist/attributes/unpin")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NotFound)
         }

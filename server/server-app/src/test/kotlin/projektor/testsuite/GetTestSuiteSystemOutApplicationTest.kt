@@ -3,7 +3,6 @@ package projektor.testsuite
 
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.createTestRun
@@ -15,11 +14,9 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class GetTestSuiteSystemOutApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun shouldFetchTestSuiteSystemOutFromDatabase() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
             val testSuiteIdx = 1
             val systemOut =
@@ -42,7 +39,7 @@ class GetTestSuiteSystemOutApplicationTest : ApplicationTestCase() {
             testSuiteDB2.systemErr = "Some other system err"
             testSuiteDao.insert(testSuiteDB2)
 
-            val response = testClient.get("/run/$publicId/suite/$testSuiteIdx/systemOut")
+            val response = client.get("/run/$publicId/suite/$testSuiteIdx/systemOut")
 
             val responseOutput = objectMapper.readValue(response.bodyAsText(), TestOutput::class.java)
             assertNotNull(responseOutput)

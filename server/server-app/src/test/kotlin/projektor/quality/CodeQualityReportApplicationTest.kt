@@ -4,7 +4,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.database.generated.tables.pojos.CodeQualityReport
@@ -17,11 +16,9 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class CodeQualityReportApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `when code quality reports for test run should get them`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             val testRun = testRunDBGenerator.createEmptyTestRun(publicId)
@@ -41,7 +38,7 @@ class CodeQualityReportApplicationTest : ApplicationTestCase() {
 
             codeQualityReportDao.insert(codeQualityReports)
 
-            val response = testClient.get("/run/$publicId/quality")
+            val response = client.get("/run/$publicId/quality")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             val responseContent = response.bodyAsText()
@@ -71,7 +68,7 @@ class CodeQualityReportApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when no code quality reports for test run should return 204`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
             val otherPublicId = randomPublicId()
 
@@ -87,7 +84,7 @@ class CodeQualityReportApplicationTest : ApplicationTestCase() {
 
             codeQualityReportDao.insert(codeQualityReportForOtherTestRun)
 
-            val response = testClient.get("/run/$publicId/quality")
+            val response = client.get("/run/$publicId/quality")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NoContent)
         }

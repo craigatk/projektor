@@ -1,7 +1,6 @@
 package projektor.incomingresults
 
 import io.ktor.client.statement.*
-import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
@@ -14,16 +13,14 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class SaveResultsErrorApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should still process results after multiple failures`() =
-        testSuspend {
+        projektorTestApplication {
             val malformedResults = resultsXmlLoader.passing().replace("testsuite", "")
             val successfulResults = resultsXmlLoader.passing()
 
             (1..10).forEach { _ ->
-                val response = postResultsPlainText(malformedResults)
+                val response = client.postResultsPlainText(malformedResults)
 
                 val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)
 
@@ -37,7 +34,7 @@ class SaveResultsErrorApplicationTest : ApplicationTestCase() {
             }
 
             (1..10).forEach { _ ->
-                val response = postResultsPlainText(successfulResults)
+                val response = client.postResultsPlainText(successfulResults)
 
                 val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)
 

@@ -17,8 +17,6 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 class AddCoverageCompressedApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should save compressed coverage results`() =
         projektorTestApplication {

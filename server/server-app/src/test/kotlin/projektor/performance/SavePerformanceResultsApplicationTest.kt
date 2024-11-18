@@ -15,8 +15,6 @@ import strikt.assertions.isNotNull
 import java.math.BigDecimal
 
 class SavePerformanceResultsApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should save results with no test results and two performance results`() =
         projektorTestApplication {
