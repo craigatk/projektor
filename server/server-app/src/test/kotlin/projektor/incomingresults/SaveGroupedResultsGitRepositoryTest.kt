@@ -22,7 +22,6 @@ class SaveGroupedResultsGitRepositoryTest : ApplicationTestCase() {
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
             val response1 = client.postGroupedResultsJSON(requestBody)
-
             waitForTestRunSaveToComplete(response1)
 
             val gitRepositoryDB = gitRepositoryDao.fetchOneByRepoName("craigatk/projektor")

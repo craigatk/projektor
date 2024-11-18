@@ -25,7 +25,6 @@ class SingleQuoteXmlDeclarationApplicationTest : ApplicationTestCase() {
             val requestBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultXml, metadata)
 
             val response = client.postGroupedResultsJSON(requestBody)
-
             val (_, testRun) = waitForTestRunSaveToComplete(response)
 
             val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)

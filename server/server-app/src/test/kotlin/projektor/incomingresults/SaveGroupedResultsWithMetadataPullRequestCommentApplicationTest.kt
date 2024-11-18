@@ -61,7 +61,6 @@ class SaveGroupedResultsWithMetadataPullRequestCommentApplicationTest : Applicat
             gitHubWireMockStubber.stubAddComment(incomingOrgName, incomingRepoName, gitHubPullRequestNumber)
 
             val response = client.postGroupedResultsJSON(requestBody)
-
             val (_, testRun) = waitForTestRunSaveToComplete(response)
 
             await until {

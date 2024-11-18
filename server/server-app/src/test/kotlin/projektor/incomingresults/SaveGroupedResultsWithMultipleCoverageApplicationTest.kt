@@ -32,7 +32,6 @@ class SaveGroupedResultsWithMultipleCoverageApplicationTest : ApplicationTestCas
                 )
 
             val response = client.postGroupedResultsJSON(requestBody)
-
             val (publicId, _) = waitForTestRunSaveToComplete(response)
 
             await until { coverageRunDao.fetchByTestRunPublicId(publicId.id).size == 1 }

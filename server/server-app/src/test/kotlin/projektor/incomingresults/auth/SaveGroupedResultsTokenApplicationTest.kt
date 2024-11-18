@@ -33,6 +33,7 @@ class SaveGroupedResultsTokenApplicationTest : ApplicationTestCase() {
                     setBody(requestBody)
                 }
             expectThat(postResponse.status).isEqualTo(HttpStatusCode.OK)
+            waitForTestRunSaveToComplete(postResponse)
 
             val resultsResponse = objectMapper.readValue(postResponse.bodyAsText(), SaveResultsResponse::class.java)
 

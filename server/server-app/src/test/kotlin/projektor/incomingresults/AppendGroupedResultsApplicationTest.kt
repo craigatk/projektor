@@ -136,6 +136,7 @@ class AppendGroupedResultsApplicationTest : ApplicationTestCase() {
             lateinit var testRun: TestRun
 
             val initialResponse = client.postGroupedResultsJSON(initialRequestBody)
+            waitForTestRunSaveToComplete(initialResponse)
 
             val initialSaveComplete = waitForTestRunSaveToComplete(initialResponse)
             publicId = initialSaveComplete.first
@@ -167,6 +168,7 @@ class AppendGroupedResultsApplicationTest : ApplicationTestCase() {
 
             val secondRequestBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXmlLoader.failing(), metadata)
             val secondResponse = client.postGroupedResultsJSON(secondRequestBody)
+            waitForTestRunSaveToComplete(secondResponse)
 
             val responseContent = secondResponse.bodyAsText()
             assertNotNull(responseContent)
@@ -209,6 +211,7 @@ class AppendGroupedResultsApplicationTest : ApplicationTestCase() {
 
             val thirdRequestBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(resultsXmlLoader.someIgnored(), metadata)
             val thirdResponse = client.postGroupedResultsJSON(thirdRequestBody)
+            waitForTestRunSaveToComplete(thirdResponse)
 
             val responseContentThird = thirdResponse.bodyAsText()
             assertNotNull(responseContentThird)

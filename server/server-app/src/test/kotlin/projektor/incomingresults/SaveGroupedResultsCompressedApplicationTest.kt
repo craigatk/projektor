@@ -26,7 +26,6 @@ class SaveGroupedResultsCompressedApplicationTest : ApplicationTestCase() {
                     setBody(compressedBody)
                 }
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
-
             val (_, testRun) = waitForTestRunSaveToComplete(response)
 
             val testSuites = testSuiteDao.fetchByTestRunId(testRun.id)

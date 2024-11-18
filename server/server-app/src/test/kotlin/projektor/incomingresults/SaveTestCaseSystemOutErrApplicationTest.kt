@@ -24,7 +24,6 @@ class SaveTestCaseSystemOutErrApplicationTest : ApplicationTestCase() {
             val resultsBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().gradleSingleTestCaseSystemOutFail())
 
             val response = client.postGroupedResultsJSON(resultsBody)
-
             val (publicId, testRunDB) = waitForTestRunSaveToComplete(response)
 
             val testRunService: TestRunService = getApplication().get()
