@@ -3,7 +3,6 @@ package projektor.performance
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.ktor.ext.get
@@ -19,11 +18,9 @@ import kotlin.test.assertNotNull
 import projektor.incomingresults.model.PerformanceResult as IncomingPerformanceResult
 
 class GetPerformanceResultsApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `when performance results should return them`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             val savedPerfResult1 =
@@ -52,7 +49,7 @@ class GetPerformanceResultsApplicationTest : ApplicationTestCase() {
             runBlocking { performanceResultsRepository.savePerformanceResults(testRun.id, publicId, savedPerfResult1) }
             runBlocking { performanceResultsRepository.savePerformanceResults(testRun.id, publicId, savedPerfResult2) }
 
-            val response = testClient.get("/run/$publicId/performance")
+            val response = client.get("/run/$publicId/performance")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -82,12 +79,12 @@ class GetPerformanceResultsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when no performance results for test run should return 204`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             testRunDBGenerator.createSimpleTestRun(publicId)
 
-            val response = testClient.get("/run/$publicId/performance")
+            val response = client.get("/run/$publicId/performance")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NoContent)
         }

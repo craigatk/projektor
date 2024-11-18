@@ -3,7 +3,6 @@ package projektor.coverage
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -17,11 +16,9 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 class ComparePreviousCoverageApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `when coverage went down should compare coverage with previous test run`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomOrgAndRepo()
 
             val previousPublicId = randomPublicId()
@@ -39,7 +36,7 @@ class ComparePreviousCoverageApplicationTest : ApplicationTestCase() {
                 repoName = repoName,
             )
 
-            val response = testClient.get("/run/$thisPublicId/coverage")
+            val response = client.get("/run/$thisPublicId/coverage")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -80,7 +77,7 @@ class ComparePreviousCoverageApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when coverage went up should compare coverage with previous test run`() =
-        testSuspend {
+        projektorTestApplication {
             val repoName = randomOrgAndRepo()
 
             val previousPublicId = randomPublicId()
@@ -98,7 +95,7 @@ class ComparePreviousCoverageApplicationTest : ApplicationTestCase() {
                 repoName = repoName,
             )
 
-            val response = testClient.get("/run/$thisPublicId/coverage")
+            val response = client.get("/run/$thisPublicId/coverage")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 

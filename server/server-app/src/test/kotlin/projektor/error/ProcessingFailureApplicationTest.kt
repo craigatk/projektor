@@ -4,7 +4,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.ktor.ext.get
@@ -19,11 +18,9 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class ProcessingFailureApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should fetch processing failures`() =
-        testSuspend {
+        projektorTestApplication {
             val tooOldPublicIds = (1..5).map { randomPublicId() }
             val recentPublicIds = (1..5).map { randomPublicId() }
 
@@ -51,7 +48,7 @@ class ProcessingFailureApplicationTest : ApplicationTestCase() {
                 }
             }
 
-            val response = testClient.get("/failures/recent?count=5")
+            val response = client.get("/failures/recent?count=5")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -20,11 +19,9 @@ import strikt.assertions.map
 import kotlin.test.assertNotNull
 
 class GetFailedTestCasesApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should fetch failed test cases from database`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             testRunDBGenerator.createTestRun(
@@ -45,7 +42,7 @@ class GetFailedTestCasesApplicationTest : ApplicationTestCase() {
                 ),
             )
 
-            val response = testClient.get("/run/${publicId.id}/cases/failed")
+            val response = client.get("/run/${publicId.id}/cases/failed")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 

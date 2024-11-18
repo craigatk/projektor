@@ -1,6 +1,5 @@
 package projektor.incomingresults
 
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import strikt.api.expectThat
@@ -9,14 +8,12 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class SaveResultsParentXmlApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun shouldParseRequestAndSaveResultsWithMultipleResultsWrappedInParentXmlTest() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = listOf(resultsXmlLoader.passing(), resultsXmlLoader.failing()).joinToString("\n")
 
-            val response = postResultsPlainText(requestBody)
+            val response = client.postResultsPlainText(requestBody)
 
             val (_, testRun) = waitForTestRunSaveToComplete(response)
 

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
@@ -18,11 +17,9 @@ import strikt.assertions.isTrue
 import kotlin.test.assertNotNull
 
 class RepositoryCoverageExistsApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `when repo has coverage should exist`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
 
@@ -52,7 +49,7 @@ class RepositoryCoverageExistsApplicationTest : ApplicationTestCase() {
                 branchName = "main",
             )
 
-            val response = testClient.get("/repo/$repoName/coverage/exists")
+            val response = client.get("/repo/$repoName/coverage/exists")
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
             val responseBody = response.bodyAsText()
@@ -64,7 +61,7 @@ class RepositoryCoverageExistsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when coverage exists only in project should not exist`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
 
@@ -86,7 +83,7 @@ class RepositoryCoverageExistsApplicationTest : ApplicationTestCase() {
                 branchName = "main",
             )
 
-            val response = testClient.get("/repo/$repoName/coverage/exists")
+            val response = client.get("/repo/$repoName/coverage/exists")
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
             val responseBody = response.bodyAsText()
@@ -98,7 +95,7 @@ class RepositoryCoverageExistsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when repo and project has coverage should exist`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
 
@@ -130,7 +127,7 @@ class RepositoryCoverageExistsApplicationTest : ApplicationTestCase() {
                 branchName = "main",
             )
 
-            val response = testClient.get("/repo/$repoName/project/$projectName/coverage/exists")
+            val response = client.get("/repo/$repoName/project/$projectName/coverage/exists")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             val responseBody = response.bodyAsText()
@@ -142,7 +139,7 @@ class RepositoryCoverageExistsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when coverage only in null project should not exist`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
 
@@ -165,7 +162,7 @@ class RepositoryCoverageExistsApplicationTest : ApplicationTestCase() {
                 branchName = "main",
             )
 
-            val response = testClient.get("/repo/$repoName/project/$projectName/coverage/exists")
+            val response = client.get("/repo/$repoName/project/$projectName/coverage/exists")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             val responseBody = response.bodyAsText()

@@ -2,7 +2,6 @@ package projektor.incomingresults
 
 import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.Test
@@ -16,11 +15,9 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
 class SaveGroupedResultsWithCoveragePartialFailureApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `when one invalid coverage file should save the others and record parsing failed metric`() =
-        testSuspend {
+        projektorTestApplication {
             val invalidCoverageFile = CoverageFile()
             invalidCoverageFile.reportContents = JacocoXmlLoader().serverAppInvalid()
 
@@ -37,7 +34,7 @@ class SaveGroupedResultsWithCoveragePartialFailureApplicationTest : ApplicationT
             val compressedBody = gzip(requestBody)
 
             val response =
-                testClient.post("/groupedResults") {
+                client.post("/groupedResults") {
                     headers {
                         append(HttpHeaders.ContentType, "application/json")
                         append(HttpHeaders.ContentEncoding, "gzip")

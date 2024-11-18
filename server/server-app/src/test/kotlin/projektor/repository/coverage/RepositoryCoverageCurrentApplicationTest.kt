@@ -4,7 +4,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
@@ -19,11 +18,9 @@ import java.time.ZoneOffset
 import kotlin.test.assertNotNull
 
 class RepositoryCoverageCurrentApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should fetch current coverage for repository without project name`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
 
@@ -70,7 +67,7 @@ class RepositoryCoverageCurrentApplicationTest : ApplicationTestCase() {
                 branchName = "main",
             )
 
-            val response = testClient.get("/repo/$repoName/coverage/current")
+            val response = client.get("/repo/$repoName/coverage/current")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             val responseBody = response.bodyAsText()
@@ -88,7 +85,7 @@ class RepositoryCoverageCurrentApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should fetch current coverage for repository with project name`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
             val projectName = "server-project"
@@ -139,7 +136,7 @@ class RepositoryCoverageCurrentApplicationTest : ApplicationTestCase() {
                 branchName = "main",
             )
 
-            val response = testClient.get("/repo/$repoName/project/$projectName/coverage/current")
+            val response = client.get("/repo/$repoName/project/$projectName/coverage/current")
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
             val responseBody = response.bodyAsText()
             assertNotNull(responseBody)
@@ -156,7 +153,7 @@ class RepositoryCoverageCurrentApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when no mainline reports with coverage should return 204`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
 
@@ -186,7 +183,7 @@ class RepositoryCoverageCurrentApplicationTest : ApplicationTestCase() {
                 branchName = "main",
             )
 
-            val response = testClient.get("/repo/$repoName/coverage/current")
+            val response = client.get("/repo/$repoName/coverage/current")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NoContent)
         }

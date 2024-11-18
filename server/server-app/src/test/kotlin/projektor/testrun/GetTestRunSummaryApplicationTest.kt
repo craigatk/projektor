@@ -3,7 +3,6 @@ package projektor.testrun
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -17,11 +16,9 @@ import kotlin.test.assertNotNull
 import projektor.database.generated.tables.pojos.TestRun as TestRunDB
 
 class GetTestRunSummaryApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun shouldFetchTestRunSummaryFromDatabase() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             val testRun =
@@ -39,7 +36,7 @@ class GetTestRunSummaryApplicationTest : ApplicationTestCase() {
 
             testRunDao.insert(testRun)
 
-            val response = testClient.get("/run/$publicId/summary")
+            val response = client.get("/run/$publicId/summary")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 

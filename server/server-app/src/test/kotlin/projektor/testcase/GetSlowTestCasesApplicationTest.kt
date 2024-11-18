@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.createTestCase
@@ -20,11 +19,9 @@ import strikt.assertions.map
 import java.math.BigDecimal
 
 class GetSlowTestCasesApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should fetch slow test cases from database`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             val testRun = createTestRun(publicId, 1)
@@ -40,7 +37,7 @@ class GetSlowTestCasesApplicationTest : ApplicationTestCase() {
                 testCaseDao.insert(testSuite1Case)
             }
 
-            val response = testClient.get("/run/${publicId.id}/cases/slow")
+            val response = client.get("/run/${publicId.id}/cases/slow")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 

@@ -1,7 +1,6 @@
 package projektor.incomingresults
 
 import io.ktor.client.statement.*
-import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.Test
@@ -13,14 +12,12 @@ import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
 class SaveResultsMetricsApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should record success metric when saving grouped test results succeeds`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = resultsXmlLoader.passing()
 
-            val response = postResultsPlainText(requestBody)
+            val response = client.postResultsPlainText(requestBody)
 
             waitForTestRunSaveToComplete(response)
 
@@ -31,10 +28,10 @@ class SaveResultsMetricsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when test results fail to parse because they are cut off should record parse error metric`() =
-        testSuspend {
+        projektorTestApplication {
             val malformedResults = resultsXmlLoader.cutOffResultsGradle()
 
-            val response = postResultsPlainText(malformedResults)
+            val response = client.postResultsPlainText(malformedResults)
 
             val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)
 

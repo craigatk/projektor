@@ -3,7 +3,6 @@ package projektor.testrun
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.TestSuiteData
@@ -17,11 +16,9 @@ import strikt.assertions.isNotNull
 import kotlin.test.assertNotNull
 
 class GetTestRunApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should fetch test run from database`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             testRunDBGenerator.createTestRun(
@@ -42,7 +39,7 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
                 ),
             )
 
-            val response = testClient.get("/run/$publicId")
+            val response = client.get("/run/$publicId")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -64,7 +61,7 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should fetch test run from database when URL has trailing slash`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             testRunDBGenerator.createTestRun(
@@ -79,7 +76,7 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
                 ),
             )
 
-            val response = testClient.get("/run/$publicId")
+            val response = client.get("/run/$publicId")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -95,7 +92,7 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should fetch grouped test run from database`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
 
             val testRun =
@@ -132,7 +129,7 @@ class GetTestRunApplicationTest : ApplicationTestCase() {
             testRunDBGenerator.addTestSuiteGroupToTestRun(testSuiteGroup1, testRun, listOf("TestSuite1"))
             testRunDBGenerator.addTestSuiteGroupToTestRun(testSuiteGroup2, testRun, listOf("TestSuite2"))
 
-            val response = testClient.get("/run/$publicId")
+            val response = client.get("/run/$publicId")
 
             val responseRun = objectMapper.readValue(response.bodyAsText(), TestRun::class.java)
             assertNotNull(responseRun)

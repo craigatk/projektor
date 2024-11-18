@@ -3,7 +3,6 @@ package projektor.metadata
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
@@ -14,11 +13,9 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isTrue
 
 class ResultsMetadataApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should get results metadata`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
             val anotherPublicId = randomPublicId()
 
@@ -28,7 +25,7 @@ class ResultsMetadataApplicationTest : ApplicationTestCase() {
             val anotherTestRun = testRunDBGenerator.createSimpleTestRun(anotherPublicId)
             testRunDBGenerator.addResultsMetadata(anotherTestRun, false)
 
-            val response = testClient.get("/run/$publicId/metadata")
+            val response = client.get("/run/$publicId/metadata")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 

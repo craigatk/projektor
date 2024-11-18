@@ -2,7 +2,6 @@ package projektor.incomingresults
 
 import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.parser.GroupedResultsXmlLoader
@@ -13,11 +12,9 @@ import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
 class SaveGroupedResultsCodeQualityApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should save results with code quality files`() =
-        testSuspend {
+        projektorTestApplication {
             val codeQualityReports =
                 (1..2).map { idx ->
                     val codeQualityReport = projektor.parser.grouped.model.CodeQualityReport()
@@ -30,7 +27,7 @@ class SaveGroupedResultsCodeQualityApplicationTest : ApplicationTestCase() {
             val compressedBody = gzip(requestBody)
 
             val response =
-                testClient.post("/groupedResults") {
+                client.post("/groupedResults") {
                     headers {
                         append(HttpHeaders.ContentType, "application/json")
                         append(HttpHeaders.ContentEncoding, "gzip")

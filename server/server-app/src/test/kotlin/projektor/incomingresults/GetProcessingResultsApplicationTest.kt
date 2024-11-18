@@ -3,7 +3,6 @@ package projektor.incomingresults
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
@@ -20,14 +19,12 @@ import java.time.LocalDateTime
 import kotlin.test.assertNotNull
 
 class GetProcessingResultsApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should get processing results after parsing saving test results`() =
-        testSuspend {
+        projektorTestApplication {
             val requestBody = resultsXmlLoader.passing()
 
-            val postResponse = postResultsPlainText(requestBody)
+            val postResponse = client.postResultsPlainText(requestBody)
 
             val resultsResponse = objectMapper.readValue(postResponse.bodyAsText(), SaveResultsResponse::class.java)
 
@@ -38,7 +35,7 @@ class GetProcessingResultsApplicationTest : ApplicationTestCase() {
 
             await until { resultsProcessingDao.fetchOneByPublicId(publicId).status == ResultsProcessingStatus.SUCCESS.name }
 
-            val getResponse = testClient.get("/results/$publicId/status")
+            val getResponse = client.get("/results/$publicId/status")
             expectThat(getResponse.status).isEqualTo(HttpStatusCode.OK)
 
             val processingResponse = objectMapper.readValue(getResponse.bodyAsText(), ResultsProcessing::class.java)
@@ -63,10 +60,10 @@ class GetProcessingResultsApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when trying to fetch processing results status for ID that does not exist should return 404 response`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = "doesNotExist"
 
-            val response = testClient.get("/results/$publicId/status")
+            val response = client.get("/results/$publicId/status")
             expectThat(response.status).isEqualTo(HttpStatusCode.NotFound)
         }
 }

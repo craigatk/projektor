@@ -3,7 +3,6 @@ package projektor.repository.performance
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
-import io.ktor.test.dispatcher.*
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
@@ -21,11 +20,9 @@ import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
 class RepositoryPerformanceTimelineApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should fetch performance timeline for repository without project name`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
 
@@ -94,7 +91,7 @@ class RepositoryPerformanceTimelineApplicationTest : ApplicationTestCase() {
                 )
             }
 
-            val response = testClient.get("/repo/$repoName/performance/timeline")
+            val response = client.get("/repo/$repoName/performance/timeline")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -139,7 +136,7 @@ class RepositoryPerformanceTimelineApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `should fetch performance timeline for repository with project name`() =
-        testSuspend {
+        projektorTestApplication {
             val orgName = RandomStringUtils.randomAlphabetic(12)
             val repoName = "$orgName/repo"
             val projectName = "server-project"
@@ -209,7 +206,7 @@ class RepositoryPerformanceTimelineApplicationTest : ApplicationTestCase() {
                 )
             }
 
-            val response = testClient.get("/repo/$repoName/project/$projectName/performance/timeline")
+            val response = client.get("/repo/$repoName/project/$projectName/performance/timeline")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 

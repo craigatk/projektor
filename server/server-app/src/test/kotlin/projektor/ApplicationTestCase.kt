@@ -111,8 +111,6 @@ open class ApplicationTestCase {
 
     protected val meterRegistry = SimpleMeterRegistry()
 
-    protected lateinit var testClient: io.ktor.client.HttpClient
-    private var testServer: TestApplicationEngine? = null
     private var theApplication: Application? = null
 
     @BeforeEach
@@ -124,47 +122,9 @@ open class ApplicationTestCase {
         OpenTelemetrySdk.builder()
             .setTracerProvider(tracerProvider)
             .buildAndRegisterGlobal()
-
-        if (autoStartServer()) {
-            startTestServer(ApplicationTestCaseConfig())
-        }
     }
 
-    fun startTestServer(testCaseConfig: ApplicationTestCaseConfig = ApplicationTestCaseConfig()): TestApplicationEngine {
-        val theServer =
-            TestApplicationEngine(
-                createTestEnvironment {
-                    config = createApplicationConfig(testCaseConfig)
-                },
-            )
-
-        testClient = theServer.client
-
-        theServer.start(wait = true)
-
-        theServer.application.main(meterRegistry = meterRegistry)
-
-        theServer.application.setUpTestDependencies()
-
-        testServer = theServer
-
-        return theServer
-    }
-
-    @AfterEach
-    fun stopServer() {
-        testServer?.stop()
-    }
-
-    open fun autoStartServer(): Boolean = false
-
-    protected fun getApplication(): Application {
-        return if (testServer != null) {
-            testServer!!.application
-        } else {
-            theApplication!!
-        }
-    }
+    protected fun getApplication(): Application = theApplication!!
 
     protected fun createApplicationConfig(testCaseConfig: ApplicationTestCaseConfig): MapApplicationConfig {
         val config =
@@ -329,22 +289,6 @@ open class ApplicationTestCase {
                     append(HttpHeaders.ContentType, "application/json")
                 }
                 setBody(resultsJson)
-            }
-        expectThat(response.status).isEqualTo(expectedStatusCode)
-
-        return response
-    }
-
-    protected suspend fun postResultsPlainText(
-        resultsText: String,
-        expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,
-    ): HttpResponse {
-        val response =
-            testClient.post("/results") {
-                headers {
-                    append(HttpHeaders.ContentType, "text/plain")
-                }
-                setBody(resultsText)
             }
         expectThat(response.status).isEqualTo(expectedStatusCode)
 

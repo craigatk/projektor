@@ -18,11 +18,9 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isTrue
 
 class GetTestCaseApplicationTest : ApplicationTestCase() {
-    override fun autoStartServer(): Boolean = true
-
     @Test
     fun `should fetch test case from database`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
             val testSuiteIdx = 1
             val testCaseIdx = 2
@@ -45,7 +43,7 @@ class GetTestCaseApplicationTest : ApplicationTestCase() {
                 ),
             )
 
-            val response = testClient.get("/run/$publicId/suite/$testSuiteIdx/case/$testCaseIdx")
+            val response = client.get("/run/$publicId/suite/$testSuiteIdx/case/$testCaseIdx")
 
             val responseTestCase = objectMapper.readValue(response.bodyAsText(), TestCase::class.java)
 
@@ -73,7 +71,7 @@ class GetTestCaseApplicationTest : ApplicationTestCase() {
 
     @Test
     fun `when test suite has system out and err should include it in test case properties`() =
-        testSuspend {
+        projektorTestApplication {
             val publicId = randomPublicId()
             val testSuiteIdx = 1
             val testCaseIdx = 2
@@ -90,7 +88,7 @@ class GetTestCaseApplicationTest : ApplicationTestCase() {
             val testSuite1Case = createTestCase(testSuite1.id, "testSuite1Case", testCaseIdx, true)
             testCaseDao.insert(testSuite1Case)
 
-            val response = testClient.get("/run/$publicId/suite/$testSuiteIdx/case/$testCaseIdx")
+            val response = client.get("/run/$publicId/suite/$testSuiteIdx/case/$testCaseIdx")
 
             val responseTestCase = objectMapper.readValue(response.bodyAsText(), TestCase::class.java)
 
