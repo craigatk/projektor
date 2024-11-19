@@ -71,6 +71,7 @@ class SaveGroupedResultsErrorApplicationTest : ApplicationTestCase() {
 
             (1..10).forEach { _ ->
                 val response = client.postGroupedResultsJSON(successfulResults)
+                waitForTestRunSaveToComplete(response)
 
                 val resultsResponse = objectMapper.readValue(response.bodyAsText(), SaveResultsResponse::class.java)
 

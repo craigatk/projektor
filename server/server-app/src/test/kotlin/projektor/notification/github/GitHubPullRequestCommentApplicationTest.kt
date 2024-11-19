@@ -67,7 +67,6 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
             val response = client.postGroupedResultsJSON(requestBody)
-
             val (publicId, _) = waitForTestRunSaveToComplete(response)
 
             await until { gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber).size == 1 }
@@ -146,7 +145,6 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
             val requestBody = GroupedResultsXmlLoader().passingResultsWithCoverage(listOf(coverageFile), metadata)
 
             val response = client.postGroupedResultsJSON(requestBody)
-
             waitForTestRunSaveToComplete(response)
 
             await until { gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber).size == 1 }
@@ -191,7 +189,6 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
                 )
 
             val response = client.postGroupedResultsJSON(requestBody)
-
             waitForTestRunSaveToComplete(response)
 
             await until { gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber).size == 1 }
@@ -233,7 +230,6 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
             val response = client.postGroupedResultsJSON(requestBody)
-
             val (publicId, _) = waitForTestRunSaveToComplete(response)
 
             await until { gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber).size == 1 }
@@ -270,7 +266,6 @@ class GitHubPullRequestCommentApplicationTest : ApplicationTestCase() {
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
             val response = client.postGroupedResultsJSON(requestBody)
-
             val (publicId, _) = waitForTestRunSaveToComplete(response)
 
             await until { gitHubWireMockStubber.findAddCommentRequestBodies(orgName, repoName, pullRequestNumber).size == 1 }

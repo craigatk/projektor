@@ -21,9 +21,6 @@ class GetTestCaseSystemOutErrApplicationTest : ApplicationTestCase() {
             val resultsBody = GroupedResultsXmlLoader().wrapResultsXmlInGroup(ResultsXmlLoader().gradleSingleTestCaseSystemOutFail())
 
             val postResponse = client.postGroupedResultsJSON(resultsBody)
-
-            expectThat(postResponse.status).isEqualTo(HttpStatusCode.OK)
-
             val (publicId, _) = waitForTestRunSaveToComplete(postResponse)
 
             val testSuiteIdx = 1

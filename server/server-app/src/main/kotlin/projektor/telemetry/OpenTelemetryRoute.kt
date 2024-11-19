@@ -2,7 +2,7 @@ package projektor.telemetry
 
 import io.ktor.server.application.Application
 import io.ktor.server.application.BaseApplicationPlugin
-import io.ktor.server.routing.Routing
+import io.ktor.server.routing.*
 import io.ktor.util.AttributeKey
 import io.opentelemetry.api.trace.Span
 
@@ -20,7 +20,7 @@ class OpenTelemetryRoute {
         ): OpenTelemetryRoute {
             val configuration = Configuration().apply(configure)
 
-            pipeline.environment.monitor.subscribe(Routing.RoutingCallStarted) { call ->
+            pipeline.monitor.subscribe(RoutingRoot.RoutingCallStarted) { call ->
                 val routeWithMethod = call.route.toString()
 
                 // By default, Ktor's route value includes the HTTP method such as "/run/{publicId}/(method: 'GET')"

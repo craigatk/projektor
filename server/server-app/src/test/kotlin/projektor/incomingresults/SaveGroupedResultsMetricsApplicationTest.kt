@@ -21,7 +21,6 @@ class SaveGroupedResultsMetricsApplicationTest : ApplicationTestCase() {
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults()
 
             val response = client.postGroupedResultsJSON(requestBody)
-
             waitForTestRunSaveToComplete(response)
 
             expectThat(meterRegistry.counter("results_process_start").count()).isEqualTo(1.toDouble())

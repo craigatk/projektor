@@ -130,7 +130,6 @@ class GetTestSuiteApplicationTest : ApplicationTestCase() {
             val testSuiteIdx = 1
 
             val postResponse = client.postGroupedResultsJSON(resultsBody)
-
             val publicId = waitForTestRunSaveToComplete(postResponse).first
 
             val getResponse = client.get("/run/$publicId/suite/$testSuiteIdx")

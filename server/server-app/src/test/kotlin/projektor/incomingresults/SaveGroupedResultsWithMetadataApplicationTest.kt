@@ -23,7 +23,6 @@ class SaveGroupedResultsWithMetadataApplicationTest : ApplicationTestCase() {
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
             val response = client.postGroupedResultsJSON(requestBody)
-
             val (_, testRun) = waitForTestRunSaveToComplete(response)
 
             val gitMetadatas = gitMetadataDao.fetchByTestRunId(testRun.id)
@@ -51,7 +50,6 @@ class SaveGroupedResultsWithMetadataApplicationTest : ApplicationTestCase() {
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
             val response = client.postGroupedResultsJSON(requestBody)
-
             val (_, testRun) = waitForTestRunSaveToComplete(response)
 
             val gitMetadatas = gitMetadataDao.fetchByTestRunId(testRun.id)
@@ -81,7 +79,6 @@ class SaveGroupedResultsWithMetadataApplicationTest : ApplicationTestCase() {
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults(metadata)
 
             val response = client.postGroupedResultsJSON(requestBody)
-
             val (_, testRun) = waitForTestRunSaveToComplete(response)
 
             val resultsMetadataList = resultsMetadataDao.fetchByTestRunId(testRun.id)

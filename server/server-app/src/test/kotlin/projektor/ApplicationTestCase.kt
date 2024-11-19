@@ -24,7 +24,6 @@ import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
 import org.jooq.DSLContext
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.koin.ktor.ext.get
 import org.slf4j.LoggerFactory
@@ -84,7 +83,6 @@ open class ApplicationTestCase {
             .addSpanProcessor(SimpleSpanProcessor.create(exporter))
             .build()
 
-    lateinit var dataSource: HikariDataSource
     lateinit var dslContext: DSLContext
     lateinit var testRunDao: TestRunDao
     lateinit var testSuiteGroupDao: TestSuiteGroupDao
@@ -194,11 +192,14 @@ open class ApplicationTestCase {
             startApplication()
 
             block()
+
+            val theDatasource: HikariDataSource = getApplication().get()
+
+            theDatasource.close()
         }
     }
 
-    fun Application.setUpTestDependencies() {
-        dataSource = get()
+    private fun Application.setUpTestDependencies() {
         dslContext = get()
         testRunDao = TestRunDao(dslContext.configuration())
         testSuiteGroupDao = TestSuiteGroupDao(dslContext.configuration())
@@ -309,10 +310,5 @@ open class ApplicationTestCase {
         expectThat(response.status).isEqualTo(expectedStatusCode)
 
         return response
-    }
-
-    @AfterEach
-    fun closeDataSource() {
-        dataSource.close()
     }
 }

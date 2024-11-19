@@ -14,7 +14,6 @@ class SaveGroupedResultsTelemetryApplicationTest : ApplicationTestCase() {
             val requestBody = GroupedResultsXmlLoader().passingGroupedResults()
 
             val response = client.postGroupedResultsJSON(requestBody)
-
             waitForTestRunSaveToComplete(response)
 
             val finishedSpans = exporter.finishedSpanItems
