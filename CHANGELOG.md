@@ -4,6 +4,8 @@
 
 Full list of releases and packaged server .jar file for each release: https://github.com/craigatk/projektor/releases
 
+* v5.1.0
+  * Upgrading server to ktor 3 - along with additional dependency updates
 * v5.0.0
   * BREAKING CHANGE: Projektor server is now built with Java 17 and requires Java 17+ to run
 * v4.39.0
