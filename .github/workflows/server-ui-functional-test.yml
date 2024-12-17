@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-24.04
     services:
       database:
-        image: postgres:17.1-alpine
+        image: postgres:17.2-alpine
         ports:
           - 5432:5432
         env:
