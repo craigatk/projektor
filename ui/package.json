@@ -43,7 +43,7 @@
     "projektor-publish": "3.12.4",
     "resize-observer-polyfill": "1.5.1",
     "rimraf": "6.0.1",
-    "start-server-and-test": "2.0.8",
+    "start-server-and-test": "2.0.9",
     "ts-jest": "29.2.5",
     "typescript": "5.4.5",
     "typescript-plugin-css-modules": "5.1.0",
