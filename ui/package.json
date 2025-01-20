@@ -50,8 +50,8 @@
     "wait-for-expect": "3.0.2"
   },
   "dependencies": {
-    "@emotion/react": "11.13.5",
-    "@emotion/styled": "11.13.5",
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.0",
     "@material-table/core": "6.4.4",
     "@mui/icons-material": "6.1.9",
     "@mui/material": "6.1.9",
