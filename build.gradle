@@ -12,7 +12,7 @@ buildscript {
 
 plugins {
     id "dev.projektor.publish" version "9.0.0"
-    id "com.atkinsondev.opentelemetry-build" version "2.2.0"
+    id "com.atkinsondev.opentelemetry-build" version "3.1.1"
     id 'com.github.psxpaul.execfork' version '0.2.2' apply false
 }
 
