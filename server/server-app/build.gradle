@@ -84,6 +84,10 @@ dependencies {
 }
 
 test {
+    // Re-run the tests if one of the Docker config files changes
+    inputs.file("$rootDir/docker-compose.yml")
+    inputs.dir("$rootDir/.github/workflows")
+
     maxParallelForks = Math.floorDiv(Runtime.runtime.availableProcessors(), 2) + 1
 }
 
