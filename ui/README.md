@@ -18,6 +18,11 @@ This will start the server on `http://localhost:1234`
 By default, when running locally the API backend points to `http://localhost:8080`
 which is the default port of the server. Start up the server separately using Gradle.
 
+You can point to an alternative API backend by creating an `.env.local` file looking like:
+```
+API_BASE_URL=https://projektor.my.company.com/
+```
+
 ## Testing
 
 The UI is tested by a combination of React Testing Library unit tests
