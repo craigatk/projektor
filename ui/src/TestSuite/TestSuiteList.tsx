@@ -79,7 +79,9 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
           },
           { title: "Passed", field: "passed", cellStyle, headerStyle },
           { title: "Failed", field: "failed", cellStyle, headerStyle },
-          { title: "Duration", field: "duration", cellStyle, headerStyle },
+          { title: "Duration", field: "duration", render: (rowData) => (
+              <>{rowData.duration}s</>
+            ), cellStyle, headerStyle },
         ]}
         data={testSuites.map((testSuite) => ({
           fileName: testSuite.fileName,
@@ -87,7 +89,7 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
           group: testSuite.groupName || "",
           passed: testSuite.passingCount,
           failed: testSuite.failureCount,
-          duration: `${testSuite.duration}s`,
+          duration: testSuite.duration,
           idx: testSuite.idx,
         }))}
       />

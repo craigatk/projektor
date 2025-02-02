@@ -11,3 +11,5 @@ jestResults/
 test-results/
 
 /coverage/
+
+.env.local
