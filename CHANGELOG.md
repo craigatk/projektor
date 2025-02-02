@@ -4,6 +4,8 @@
 
 Full list of releases and packaged server .jar file for each release: https://github.com/craigatk/projektor/releases
 
+* v5.1.1
+  * Fix sorting by duration on all-tests page
 * v5.1.0
   * Upgrading server to ktor 3 - along with additional dependency updates
 * v5.0.0
