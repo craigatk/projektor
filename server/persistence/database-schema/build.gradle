@@ -1,7 +1,7 @@
 plugins {
     id "com.avast.gradle.docker-compose" version "0.17.12"
     id 'nu.studer.jooq' version '9.0'
-    id "org.flywaydb.flyway" version "11.3.0"
+    id "org.flywaydb.flyway" version "11.3.3"
     id "java-library"
 }
 
@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    api "org.flywaydb:flyway-database-postgresql:11.3.0"
+    api "org.flywaydb:flyway-database-postgresql:11.3.3"
     api "com.zaxxer:HikariCP:6.2.1"
     api 'org.jooq:jooq:3.19.18'
 
