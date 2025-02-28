@@ -1,0 +1,23 @@
+plugins {
+    id "java-test-fixtures"
+    id 'jacoco'
+}
+
+apply from: "../../../gradle/kotlin.gradle"
+
+dependencies {
+    implementation(project(":server:ai:analysis"))
+
+    implementation("com.openai:openai-java:0.29.0") // https://github.com/openai/openai-java
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1") // https://stackoverflow.com/questions/63828071/convert-completablefuture-to-coroutine
+
+    implementation "ch.qos.logback:logback-classic:$logbackVersion"
+
+    testImplementation "com.github.tomakehurst:wiremock-jre8:$wiremockVersion"
+
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.11.4"
+
+    testFixturesImplementation "com.github.tomakehurst:wiremock-jre8:$wiremockVersion"
+    testFixturesImplementation("com.openai:openai-java:0.29.0") // https://github.com/openai/openai-java
+}

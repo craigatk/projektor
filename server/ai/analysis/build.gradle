@@ -1,0 +1,5 @@
+plugins {
+    id "java-test-fixtures"
+}
+
+apply from: "../../../gradle/kotlin.gradle"
