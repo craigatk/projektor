@@ -5,6 +5,8 @@ plugins {
 include 'functional-test',
         'publishers:gradle-plugin',
         'publishers:node-script:publish-functional-test',
+        'server:ai:analysis',
+        'server:ai:openai',
         'server:notification:badge',
         'server:notification:github',
         'server:parsing:cobertura-xml-parser',
