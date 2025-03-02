@@ -1,13 +1,16 @@
 package projektor.testcase
 
+import projektor.ai.analysis.AITestFailureAnalyzer
 import projektor.attachment.AttachmentService
 import projektor.server.api.PublicId
 import projektor.server.api.TestCase
 import projektor.server.api.TestOutput
+import projektor.server.api.ai.TestCaseFailureAnalysis
 
 class TestCaseService(
     private val testCaseRepository: TestCaseRepository,
     private val attachmentService: AttachmentService?,
+    private val testFailureAnalyzer: AITestFailureAnalyzer?,
 ) {
     private val attachmentMatchers =
         listOf(
@@ -71,4 +74,25 @@ class TestCaseService(
         testSuiteIdx: Int,
         testCaseIdx: Int,
     ): TestOutput = testCaseRepository.fetchTestCaseSystemOut(publicId, testSuiteIdx, testCaseIdx)
+
+    suspend fun analyzeTestCaseFailure(
+        publicId: PublicId,
+        testSuiteIdx: Int,
+        testCaseIdx: Int,
+    ): TestCaseFailureAnalysis? =
+        if (testFailureAnalyzer != null) {
+            val testCase = testCaseRepository.fetchTestCase(publicId, testSuiteIdx, testCaseIdx)
+
+            val failureTextToAnalyze = testCase?.failure?.failureText ?: testCase?.failure?.failureMessage
+
+            val failureAnalysis = failureTextToAnalyze?.let { testFailureAnalyzer.analyzeTestFailure(it)?.analysis }
+
+            failureAnalysis?.let {
+                TestCaseFailureAnalysis(
+                    it,
+                )
+            }
+        } else {
+            null
+        }
 }

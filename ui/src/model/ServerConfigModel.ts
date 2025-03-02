@@ -3,8 +3,13 @@ interface ServerCleanupConfig {
   maxReportAgeInDays?: number;
 }
 
+interface AIServerConfig {
+  testCaseFailureAnalysisEnabled: boolean;
+}
+
 interface ServerConfig {
+  aiConfig: AIServerConfig;
   cleanup: ServerCleanupConfig;
 }
 
-export { ServerConfig, ServerCleanupConfig };
+export { AIServerConfig, ServerConfig, ServerCleanupConfig };
