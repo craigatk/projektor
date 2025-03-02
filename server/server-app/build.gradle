@@ -28,6 +28,8 @@ group 'dev.projektor'
 version '1.0'
 
 dependencies {
+    implementation project(':server:ai:analysis')
+    implementation project(':server:ai:openai')
     implementation project(':server:notification:badge')
     implementation project(':server:notification:github')
     implementation project(':server:persistence:database-schema')
@@ -70,6 +72,7 @@ dependencies {
 
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
 
+    testImplementation(testFixtures(project(":server:ai:analysis")))
     testImplementation(testFixtures(project(":server:notification:github")))
     testImplementation(project(':server:test:coverage-fixtures'))
     testImplementation(project(':server:test:performance-fixtures'))

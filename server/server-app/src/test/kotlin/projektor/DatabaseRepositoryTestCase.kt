@@ -12,6 +12,7 @@ import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
 import org.koin.test.get
 import org.koin.test.inject
+import projektor.ai.analysis.MockAITestFailureAnalyzer
 import projektor.attachment.AttachmentConfig
 import projektor.attachment.AttachmentService
 import projektor.auth.AuthConfig
@@ -80,6 +81,8 @@ open class DatabaseRepositoryTestCase : KoinTest {
     var attachmentsEnabled = false
     lateinit var attachmentService: AttachmentService
 
+    var aiTestFailureAnalyzerEnabled = false
+
     @BeforeEach
     fun setup() {
         val hikariConfig = HikariConfig()
@@ -103,6 +106,8 @@ open class DatabaseRepositoryTestCase : KoinTest {
         DataSourceConfig.flywayMigrate(dataSource, dataSourceConfig)
 
         dslContext = DSL.using(dataSource, SQLDialect.POSTGRES)
+
+        val testFailureAnalyzer = if (aiTestFailureAnalyzerEnabled) MockAITestFailureAnalyzer() else null
 
         val metricsConfig =
             InfluxMetricsConfig(
@@ -129,6 +134,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
                     ProcessingConfig(GroupedResultsParser.DEFAULT_MAX_PAYLOAD_SIZE),
                     null,
                     null,
+                    testFailureAnalyzer,
                 ),
             )
         }

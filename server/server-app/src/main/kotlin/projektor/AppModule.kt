@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariDataSource
 import io.micrometer.core.instrument.MeterRegistry
 import org.jooq.DSLContext
 import org.koin.dsl.module
+import projektor.ai.analysis.AITestFailureAnalyzer
 import projektor.attachment.AttachmentDatabaseRepository
 import projektor.attachment.AttachmentRepository
 import projektor.attachment.AttachmentService
@@ -84,6 +85,7 @@ fun createAppModule(
     processingConfig: ProcessingConfig,
     gitHubCommentService: GitHubCommentService?,
     attachmentService: AttachmentService?,
+    aiTestFailureAnalyzer: AITestFailureAnalyzer?,
 ) = module {
     single { dataSource }
     single { TestResultsProcessor() }
@@ -122,7 +124,7 @@ fun createAppModule(
     single { MessageService(messageConfig) }
     single { PreviousTestRunService(get()) }
     single { ProcessingFailureService(get()) }
-    single { TestCaseService(get(), attachmentService) }
+    single { TestCaseService(get(), attachmentService, aiTestFailureAnalyzer) }
     single { TestSuiteService(get()) }
     single { TestResultsProcessingService(get()) }
     single { TestResultsService(get(), get(), get(), get()) }

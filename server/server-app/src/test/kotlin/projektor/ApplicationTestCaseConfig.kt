@@ -22,4 +22,5 @@ data class ApplicationTestCaseConfig(
     val gitHubApiUrl: String? = null,
     val gitHubAppId: String? = null,
     val gitHubPrivateKeyEncoded: String? = null,
+    val openAIApiKey: String? = null,
 )

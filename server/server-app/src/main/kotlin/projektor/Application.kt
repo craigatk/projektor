@@ -24,6 +24,9 @@ import io.micrometer.core.instrument.MeterRegistry
 import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.SLF4JLogger
+import projektor.ai.AIConfig
+import projektor.ai.analysis.AITestFailureAnalyzer
+import projektor.ai.openai.OpenAIAnalysisClient
 import projektor.attachment.AttachmentConfig
 import projektor.attachment.AttachmentDatabaseRepository
 import projektor.attachment.AttachmentRepository
@@ -87,6 +90,8 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     DataSourceConfig.flywayMigrate(dataSource, dataSourceConfig)
     val dslContext = DataSourceConfig.createDSLContext(dataSource, dataSourceConfig)
 
+    val aiConfig = AIConfig.createAIConfig(applicationConfig)
+
     val cleanupConfig = CleanupConfig.createCleanupConfig(applicationConfig)
 
     val messageConfig = MessageConfig.createMessageConfig(applicationConfig)
@@ -102,6 +107,8 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     val attachmentService = conditionallyCreateAttachmentService(applicationConfig, attachmentRepository)
     attachmentService?.conditionallyCreateBucketIfNotExists()
 
+    val aiTestFailureAnalyzer: AITestFailureAnalyzer? = conditionallyCreateAITestFailureAnalyzer(aiConfig)
+
     val appModule =
         createAppModule(
             dataSource = dataSource,
@@ -113,6 +120,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
             processingConfig = processingConfig,
             gitHubCommentService = gitHubCommentService,
             attachmentService = attachmentService,
+            aiTestFailureAnalyzer = aiTestFailureAnalyzer,
         )
 
     install(CORS) {
@@ -203,7 +211,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
         badgeCoverage(coverageBadgeService)
         badgeTests(testRunBadgeService)
         codeQuality(codeQualityReportRepository)
-        config(cleanupConfig)
+        config(cleanupConfig, aiConfig)
         coverage(authService, coverageService)
         failure(processingFailureService)
         health()
@@ -261,3 +269,5 @@ private fun conditionallyCreateGitHubCommentService(applicationConfig: Applicati
         null
     }
 }
+
+private fun conditionallyCreateAITestFailureAnalyzer(aiConfig: AIConfig) = aiConfig.openAIApiKey?.let { OpenAIAnalysisClient(it) }

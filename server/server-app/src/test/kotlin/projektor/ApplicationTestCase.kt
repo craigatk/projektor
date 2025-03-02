@@ -124,7 +124,7 @@ open class ApplicationTestCase {
 
     protected fun getApplication(): Application = theApplication!!
 
-    protected fun createApplicationConfig(testCaseConfig: ApplicationTestCaseConfig): MapApplicationConfig {
+    private fun createApplicationConfig(testCaseConfig: ApplicationTestCaseConfig): MapApplicationConfig {
         val config =
             MapApplicationConfig().apply {
                 put("ktor.datasource.username", System.getenv("DB_USERNAME") ?: "testuser")
@@ -170,6 +170,8 @@ open class ApplicationTestCase {
                 testCaseConfig.gitHubApiUrl?.let { put("ktor.notification.gitHub.gitHubApiUrl", it) }
                 testCaseConfig.gitHubAppId?.let { put("ktor.notification.gitHub.gitHubAppId", it) }
                 testCaseConfig.gitHubPrivateKeyEncoded?.let { put("ktor.notification.gitHub.privateKey", it) }
+
+                testCaseConfig.openAIApiKey?.let { put("ktor.ai.openAIApiKey", it) }
             }
 
         return config

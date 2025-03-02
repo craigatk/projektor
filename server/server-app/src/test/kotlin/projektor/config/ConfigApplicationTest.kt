@@ -45,4 +45,34 @@ class ConfigApplicationTest : ApplicationTestCase() {
             expectThat(serverConfig.cleanup.enabled).isFalse()
             expectThat(serverConfig.cleanup.maxReportAgeInDays).isNull()
         }
+
+    @Test
+    fun `should return test case failure analysis enabled when OpenAI API key is set`() =
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                openAIApiKey = "bXktYXBpLWtleQo=",
+            ),
+        ) {
+            val response = client.get("/config")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val serverConfig = objectMapper.readValue(response.bodyAsText(), ServerConfig::class.java)
+            expectThat(serverConfig.aiConfig.testCaseFailureAnalysisEnabled).isTrue()
+        }
+
+    @Test
+    fun `should return test case failure analysis disabled when OpenAI API key is not set`() =
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                openAIApiKey = null,
+            ),
+        ) {
+            val response = client.get("/config")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val serverConfig = objectMapper.readValue(response.bodyAsText(), ServerConfig::class.java)
+            expectThat(serverConfig.aiConfig.testCaseFailureAnalysisEnabled).isFalse()
+        }
 }

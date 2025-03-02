@@ -52,4 +52,17 @@ fun Route.testCases(testCaseService: TestCaseService) {
 
         call.respond(HttpStatusCode.OK, systemOut)
     }
+    get("/run/{publicId}/suite/{testSuiteIdx}/case/{testCaseIdx}/analysis") {
+        val publicId = call.parameters.getOrFail("publicId")
+        val testSuiteIdx = call.parameters.getOrFail("testSuiteIdx").toInt()
+        val testCaseIdx = call.parameters.getOrFail("testCaseIdx").toInt()
+
+        val analysis = testCaseService.analyzeTestCaseFailure(PublicId(publicId), testSuiteIdx, testCaseIdx)
+
+        if (analysis != null) {
+            call.respond(HttpStatusCode.OK, analysis)
+        } else {
+            call.respond(HttpStatusCode.NoContent)
+        }
+    }
 }

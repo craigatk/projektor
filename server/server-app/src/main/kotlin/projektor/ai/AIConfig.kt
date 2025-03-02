@@ -1,16 +1,24 @@
 package projektor.ai
 
 import io.ktor.server.config.*
+import projektor.server.api.config.AIServerConfig
+import java.util.*
 
 data class AIConfig(val openAIApiKey: String?) {
     companion object {
         fun createAIConfig(applicationConfig: ApplicationConfig): AIConfig {
-            val openAIApiKey: String? =
+            val encodedOpenAIApiKey: String? =
                 applicationConfig.propertyOrNull(
                     "ktor.ai.openAIApiKey",
-                )?.toString()
+                )?.getString()?.trim()
 
-            return AIConfig(openAIApiKey)
+            val decodedOpenAIApiKey = encodedOpenAIApiKey?.let { base64Decode(it) }?.trim()
+
+            return AIConfig(decodedOpenAIApiKey)
         }
+
+        private fun base64Decode(encodedKeyContents: String): String = String(Base64.getDecoder().decode(encodedKeyContents))
     }
+
+    fun toServerConfig(): AIServerConfig = AIServerConfig(testCaseFailureAnalysisEnabled = !openAIApiKey.isNullOrBlank())
 }
