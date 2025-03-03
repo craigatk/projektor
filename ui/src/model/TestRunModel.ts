@@ -185,6 +185,10 @@ interface CodeQualityReports {
   reports: CodeQualityReport[];
 }
 
+interface TestCaseFailureAnalysis {
+  analysis?: string;
+}
+
 export {
   Attachment,
   Attachments,
@@ -206,6 +210,7 @@ export {
   TestSuite,
   TestOutput,
   TestCase,
+  TestCaseFailureAnalysis,
   TestFailure,
   TestRunGitMetadata,
   TestResultsProcessingStatus,

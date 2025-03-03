@@ -10,6 +10,10 @@ context("repository flaky tests", () => {
       { fixture: "repository/flaky_tests.json" },
     );
 
+    cy.intercept("GET", "config", {
+      fixture: "config/server_config_disabled.json",
+    });
+
     cy.visit(`http://localhost:1234/repository/${repoName}`);
 
     cy.getByTestId("nav-link-repo-flaky-tests").click();
@@ -70,6 +74,10 @@ context("repository flaky tests", () => {
       { fixture: "repository/flaky_tests.json" },
     );
 
+    cy.intercept("GET", "config", {
+      fixture: "config/server_config_disabled.json",
+    });
+
     const publicId = "32FBHG6FDL8S";
     const testSuiteIdx = 1;
     const testCaseIdx = 1;
@@ -106,6 +114,10 @@ context("repository flaky tests", () => {
       `repo/${repoName}/tests/flaky?threshold=5&max_runs=50&branch_type=MAINLINE`,
       { fixture: "repository/flaky_tests.json" },
     );
+
+    cy.intercept("GET", "config", {
+      fixture: "config/server_config_disabled.json",
+    });
 
     cy.visit(`http://localhost:1234/repository/${repoName}`);
 
@@ -166,6 +178,10 @@ context("repository flaky tests", () => {
     cy.visit(
       `http://localhost:1234/repository/${repoName}/tests/flaky?max=30&threshold=4&branch_type=all`,
     );
+
+    cy.intercept("GET", "config", {
+      fixture: "config/server_config_disabled.json",
+    });
 
     cy.testIdShouldExist("repository-flaky-tests-table");
 

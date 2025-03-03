@@ -17,6 +17,7 @@ import CoveragePage from "../Coverage/CoveragePage";
 import CoverageGroupFilesPage from "../Coverage/CoverageGroupFilesPage";
 import CodeQualityReportsPage from "../Quality/CodeQualityReportsPage";
 import { AppBar, Typography } from "@mui/material";
+import { AIState } from "../AI/AIContext";
 
 interface TestRunMenuWrapperProps {
   publicId: string;
@@ -40,58 +41,60 @@ const TestRunMenuWrapper = ({
   return (
     <div className={classes.root} data-testid="test-run-menu-wrapper">
       <PinState publicId={publicId}>
-        <AppBar className={classes.appBar}>
-          {gitMetadata && gitMetadata.repoName && (
-            <Typography variant="subtitle1" className={classes.appBarLabel}>
-              {gitMetadata.repoName}
-            </Typography>
-          )}
-        </AppBar>
-        <SideMenu
-          publicId={publicId}
-          testRunSummary={testRunSummary}
-          hasAttachments={hasAttachments}
-          hasCoverage={hasCoverage}
-          gitMetadata={gitMetadata}
-        />
-        <main className={classes.content}>
-          <QueryParamProvider reachHistory={globalHistory}>
-            <Router>
-              <Dashboard
-                path="/"
-                publicId={publicId}
-                testRunSummary={testRunSummary}
-                gitMetadata={gitMetadata}
-              />
-              <TestRunAllTests path="/all" publicId={publicId} />
-              <FailedTestCases path="/failed" publicId={publicId} />
-              <SlowTestCasesPage path="/slow" publicId={publicId} />
-              <TestSuitePage
-                path="/suite/:testSuiteIdx/*"
-                publicId={publicId}
-                testSuiteIdx={0}
-              />
-              <TestSuitePackagePage
-                path="/suites/package"
-                publicId={publicId}
-              />
-              <TestCasePage
-                path="/suite/:testSuiteIdx/case/:testCaseIdx/*"
-                publicId={publicId}
-                testSuiteIdx={0}
-                testCaseIdx={0}
-              />
-              <AttachmentsPage path="/attachments" publicId={publicId} />
-              <CoverageGroupFilesPage
-                path="/coverage/:coverageGroupName/files"
-                publicId={publicId}
-                coverageGroupName=""
-              />
-              <CoveragePage path="/coverage" publicId={publicId} />
-              <CodeQualityReportsPage path="/quality/*" publicId={publicId} />
-            </Router>
-          </QueryParamProvider>
-        </main>
+        <AIState>
+          <AppBar className={classes.appBar}>
+            {gitMetadata && gitMetadata.repoName && (
+              <Typography variant="subtitle1" className={classes.appBarLabel}>
+                {gitMetadata.repoName}
+              </Typography>
+            )}
+          </AppBar>
+          <SideMenu
+            publicId={publicId}
+            testRunSummary={testRunSummary}
+            hasAttachments={hasAttachments}
+            hasCoverage={hasCoverage}
+            gitMetadata={gitMetadata}
+          />
+          <main className={classes.content}>
+            <QueryParamProvider reachHistory={globalHistory}>
+              <Router>
+                <Dashboard
+                  path="/"
+                  publicId={publicId}
+                  testRunSummary={testRunSummary}
+                  gitMetadata={gitMetadata}
+                />
+                <TestRunAllTests path="/all" publicId={publicId} />
+                <FailedTestCases path="/failed" publicId={publicId} />
+                <SlowTestCasesPage path="/slow" publicId={publicId} />
+                <TestSuitePage
+                  path="/suite/:testSuiteIdx/*"
+                  publicId={publicId}
+                  testSuiteIdx={0}
+                />
+                <TestSuitePackagePage
+                  path="/suites/package"
+                  publicId={publicId}
+                />
+                <TestCasePage
+                  path="/suite/:testSuiteIdx/case/:testCaseIdx/*"
+                  publicId={publicId}
+                  testSuiteIdx={0}
+                  testCaseIdx={0}
+                />
+                <AttachmentsPage path="/attachments" publicId={publicId} />
+                <CoverageGroupFilesPage
+                  path="/coverage/:coverageGroupName/files"
+                  publicId={publicId}
+                  coverageGroupName=""
+                />
+                <CoveragePage path="/coverage" publicId={publicId} />
+                <CodeQualityReportsPage path="/quality/*" publicId={publicId} />
+              </Router>
+            </QueryParamProvider>
+          </main>
+        </AIState>
       </PinState>
     </div>
   );

@@ -79,9 +79,13 @@ const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
           },
           { title: "Passed", field: "passed", cellStyle, headerStyle },
           { title: "Failed", field: "failed", cellStyle, headerStyle },
-          { title: "Duration", field: "duration", render: (rowData) => (
-              <>{rowData.duration}s</>
-            ), cellStyle, headerStyle },
+          {
+            title: "Duration",
+            field: "duration",
+            render: (rowData) => <>{rowData.duration}s</>,
+            cellStyle,
+            headerStyle,
+          },
         ]}
         data={testSuites.map((testSuite) => ({
           fileName: testSuite.fileName,

@@ -1,0 +1,50 @@
+import "@testing-library/jest-dom";
+import React from "react";
+import MockAdapter from "axios-mock-adapter";
+import { render, waitFor } from "@testing-library/react";
+import { axiosInstance } from "../../service/AxiosService";
+import { TestCaseFailureAnalysis } from "../../model/TestRunModel";
+import TestCaseFailureAnalysisSection from "../TestCaseFailureAnalysisSection";
+
+describe("TestCaseFailureAnalysisSection", () => {
+  let mockAxios;
+
+  beforeEach(() => {
+    // @ts-ignore
+    mockAxios = new MockAdapter(axiosInstance);
+  });
+
+  afterEach(() => {
+    mockAxios.restore();
+  });
+
+  it("should load and display failure analysis", async () => {
+    const publicId = "12345";
+    const testSuiteIdx = 1;
+    const testCaseIdx = 2;
+
+    const failureAnalysis = {
+      analysis: "The test failure analysis",
+    } as TestCaseFailureAnalysis;
+
+    mockAxios
+      .onGet(
+        `http://localhost:8080/run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/analysis`,
+      )
+      .reply(200, failureAnalysis);
+
+    const { getByTestId } = render(
+      <TestCaseFailureAnalysisSection
+        publicId={publicId}
+        testSuiteIdx={testSuiteIdx}
+        testCaseIdx={testCaseIdx}
+      />,
+    );
+
+    await waitFor(() => getByTestId("test-case-failure-analysis-text"));
+
+    expect(getByTestId("test-case-failure-analysis-text")).toHaveTextContent(
+      "The test failure analysis",
+    );
+  });
+});

@@ -17,3 +17,9 @@
   display: block;
   padding-top: 10px;
 }
+
+.icon {
+  height: 0.75em !important;
+  vertical-align: text-bottom;
+  margin-left: -4px;
+}

@@ -6,6 +6,10 @@ context("test case", () => {
     const testSuiteIdx = 1;
     const testCaseIdx = 2;
 
+    cy.intercept("GET", "config", {
+      fixture: "config/server_config_disabled.json",
+    });
+
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "test_run_summary.json",
     });
@@ -65,6 +69,10 @@ context("test case", () => {
     const testSuiteIdx = 1;
     const testCaseIdx = 1;
 
+    cy.intercept("GET", "config", {
+      fixture: "config/server_config_disabled.json",
+    });
+
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "one_passing/test_run_summary.json",
     });
@@ -104,6 +112,10 @@ context("test case", () => {
     const publicId = "12345";
     const testSuiteIdx = 5;
     const testCaseIdx = 1;
+
+    cy.intercept("GET", "config", {
+      fixture: "config/server_config_disabled.json",
+    });
 
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "cypress/test_run_summary.json",
@@ -152,6 +164,10 @@ context("test case", () => {
 
     const testSuiteIdx = 1;
     const testCaseIdx = 2;
+
+    cy.intercept("GET", "config", {
+      fixture: "config/server_config_disabled.json",
+    });
 
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "test_run_summary.json",

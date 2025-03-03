@@ -3,6 +3,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import { TestCase, TestFailure } from "../../model/TestRunModel";
 import TestCaseFailurePanelList from "../TestCaseFailurePanelList";
+import { AIState } from "../../AI/AIContext";
 
 describe("TestCaseFailureListPanel", () => {
   it("should render longer failure text when less than 5 failures", () => {
@@ -17,7 +18,12 @@ describe("TestCaseFailureListPanel", () => {
     );
 
     const { getByTestId } = render(
-      <TestCaseFailurePanelList failedTestCases={testCases} publicId="12345" />,
+      <AIState>
+        <TestCaseFailurePanelList
+          failedTestCases={testCases}
+          publicId="12345"
+        />
+      </AIState>,
     );
 
     expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
@@ -37,7 +43,12 @@ describe("TestCaseFailureListPanel", () => {
     );
 
     const { getByTestId } = render(
-      <TestCaseFailurePanelList failedTestCases={testCases} publicId="12345" />,
+      <AIState>
+        <TestCaseFailurePanelList
+          failedTestCases={testCases}
+          publicId="12345"
+        />
+      </AIState>,
     );
 
     expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
@@ -57,7 +68,12 @@ describe("TestCaseFailureListPanel", () => {
     );
 
     const { getByTestId } = render(
-      <TestCaseFailurePanelList failedTestCases={testCases} publicId="12345" />,
+      <AIState>
+        <TestCaseFailurePanelList
+          failedTestCases={testCases}
+          publicId="12345"
+        />
+      </AIState>,
     );
 
     expect(getByTestId("test-case-summary-2-15")).toHaveClass("Mui-expanded");
@@ -75,7 +91,12 @@ describe("TestCaseFailureListPanel", () => {
     ].map((idx) => createTestCaseWithFailure(idx, failure));
 
     const { getByTestId } = render(
-      <TestCaseFailurePanelList failedTestCases={testCases} publicId="12345" />,
+      <AIState>
+        <TestCaseFailurePanelList
+          failedTestCases={testCases}
+          publicId="12345"
+        />
+      </AIState>,
     );
 
     expect(getByTestId("test-case-summary-2-1")).not.toHaveClass(
