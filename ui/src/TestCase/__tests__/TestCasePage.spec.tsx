@@ -5,6 +5,7 @@ import { render, waitFor } from "@testing-library/react";
 import { TestCase } from "../../model/TestRunModel";
 import { axiosInstance } from "../../service/AxiosService";
 import TestCasePage from "../TestCasePage";
+import { AIState } from "../../AI/AIContext";
 
 describe("TestCasePage", () => {
   let mockAxios;
@@ -47,11 +48,13 @@ describe("TestCasePage", () => {
       .reply(200, testCase);
 
     const { getByTestId, queryByTestId } = render(
-      <TestCasePage
-        publicId={publicId}
-        testSuiteIdx={testSuiteIdx}
-        testCaseIdx={testCaseIdx}
-      />,
+      <AIState>
+        <TestCasePage
+          publicId={publicId}
+          testSuiteIdx={testSuiteIdx}
+          testCaseIdx={testCaseIdx}
+        />
+      </AIState>,
     );
 
     await waitFor(() => getByTestId("test-case-details"));

@@ -23,7 +23,9 @@ Cypress.Commands.add("interceptTestRunBasicRequests", (publicId) => {
     fixture: "metadata/git-metadata-with-github-base-url.json",
   });
 
-  cy.intercept("GET", "config", {});
+  cy.intercept("GET", "config", {
+    fixture: "config/server_config_disabled.json",
+  });
 
   cy.intercept("GET", `run/${publicId}/coverage/exists`, {
     fixture: "coverage/coverage-does-not-exist.json",
@@ -38,6 +40,7 @@ Cypress.Commands.add("interceptTestRunBasicRequests", (publicId) => {
   });
 
   cy.intercept("GET", `run/${publicId}/badge/coverage`, "");
+  cy.intercept("GET", `run/${publicId}/badge/tests`, "");
 
   cy.intercept("GET", `run/${publicId}/performance`, {});
 });

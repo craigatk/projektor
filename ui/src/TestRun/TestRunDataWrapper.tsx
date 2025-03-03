@@ -33,7 +33,10 @@ const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
         setTestRunSummary(response.data);
         setLoadingState(LoadingState.Success);
       })
-      .catch(() => setLoadingState(LoadingState.Error));
+      .catch(() => {
+        console.log("**** Got error loading test run");
+        setLoadingState(LoadingState.Error);
+      });
   };
 
   React.useEffect(loadTestRunSummary, [setTestRunSummary, setLoadingState]);

@@ -4,6 +4,7 @@ import { render } from "@testing-library/react";
 import { Attachment, AttachmentType, TestCase } from "../../model/TestRunModel";
 import TestCaseDetails from "../TestCaseDetails";
 import moment from "moment";
+import { AIState } from "../../AI/AIContext";
 
 describe("TestCaseDetails", () => {
   it("should render failure tab when the test case failed", () => {
@@ -30,7 +31,9 @@ describe("TestCaseDetails", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseDetails testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseDetails testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     expect(queryByTestId("test-case-tab-summary")).not.toBeNull();
@@ -64,7 +67,9 @@ describe("TestCaseDetails", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseDetails testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseDetails testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     expect(queryByTestId("test-case-tab-summary")).not.toBeNull();
@@ -98,7 +103,9 @@ describe("TestCaseDetails", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseDetails testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseDetails testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     expect(queryByTestId("test-case-tab-system-out")).not.toBeNull();
@@ -129,7 +136,9 @@ describe("TestCaseDetails", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseDetails testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseDetails testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     expect(queryByTestId("test-case-tab-system-err")).not.toBeNull();
@@ -167,7 +176,9 @@ describe("TestCaseDetails", () => {
     };
 
     const { findByTestId } = render(
-      <TestCaseDetails testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseDetails testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     (await findByTestId("test-case-tab-screenshot")).click();
@@ -204,7 +215,9 @@ describe("TestCaseDetails", () => {
     };
 
     const { findByTestId } = render(
-      <TestCaseDetails testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseDetails testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     (await findByTestId("test-case-tab-video")).click();

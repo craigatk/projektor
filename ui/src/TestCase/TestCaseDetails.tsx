@@ -22,6 +22,8 @@ import TestCaseSystemErr from "../TestOutput/TestCaseSystemErr";
 import TestCaseFailureVideo from "./TestCaseFailureVideo";
 import { findAttachmentOfType } from "./testCaseHelpers";
 import TestCaseFailureScreenshot from "./TestCaseFailureScreenshot";
+import { AIContext, AIState } from "../AI/AIContext";
+import TestCaseFailureAnalysisSection from "./TestCaseFailureAnalysisSection";
 
 interface TestCaseDetailsProps {
   publicId: string;
@@ -61,6 +63,8 @@ const buildHeaderIntermediateLinks = (
 };
 
 const TestCaseDetails = ({ publicId, testCase }: TestCaseDetailsProps) => {
+  const { aiConfig } = React.useContext(AIContext);
+
   const linkBase = `/tests/${publicId}/suite/${testCase.testSuiteIdx}/case/${testCase.idx}`;
 
   const defaultTab =
@@ -81,129 +85,150 @@ const TestCaseDetails = ({ publicId, testCase }: TestCaseDetailsProps) => {
   );
 
   return (
-    <div data-testid="test-case-details">
-      <BreadcrumbPageHeader
-        intermediateLinks={headerIntermediateLinks}
-        endingText={testCase.name}
-      />
-      <Paper elevation={1} className={classes.paper}>
-        <Location>
-          {({ location }: LocationContext) => (
-            <Tabs
-              value={getTabCurrentValue(location, defaultTab)}
-              indicatorColor="primary"
-              textColor="primary"
-            >
-              <Tab
-                label="Summary"
-                value="/summary"
-                data-testid="test-case-tab-summary"
-                component={Link}
-                to={`${linkBase}/summary`}
-              />
-              {!testCase.passed && !testCase.skipped ? (
+    <AIState>
+      <div data-testid="test-case-details">
+        <BreadcrumbPageHeader
+          intermediateLinks={headerIntermediateLinks}
+          endingText={testCase.name}
+        />
+        <Paper elevation={1} className={classes.paper}>
+          <Location>
+            {({ location }: LocationContext) => (
+              <Tabs
+                value={getTabCurrentValue(location, defaultTab)}
+                indicatorColor="primary"
+                textColor="primary"
+              >
                 <Tab
-                  label="Failure details"
-                  value="/failure"
-                  data-testid="test-case-tab-failure"
+                  label="Summary"
+                  value="/summary"
+                  data-testid="test-case-tab-summary"
                   component={Link}
-                  to={`${linkBase}/failure`}
+                  to={`${linkBase}/summary`}
                 />
-              ) : null}
-              {testCase.hasSystemOut && (
-                <Tab
-                  label="System out"
-                  value="/systemOut"
-                  data-testid="test-case-tab-system-out"
-                  component={Link}
-                  to={`${linkBase}/systemOut`}
-                />
-              )}
-              {testCase.hasSystemErr && (
-                <Tab
-                  value="/systemErr"
-                  label="System err"
-                  data-testid="test-case-tab-system-err"
-                  component={Link}
-                  to={`${linkBase}/systemErr`}
-                />
-              )}
-              {hasScreenshotAttachment && (
-                <Tab
-                  value="/screenshot"
-                  label="Screenshot"
-                  data-testid="test-case-tab-screenshot"
-                  component={Link}
-                  to={`${linkBase}/screenshot`}
-                />
-              )}
-              {hasVideoAttachment && (
-                <Tab
-                  value="/video"
-                  label="Video"
-                  data-testid="test-case-tab-video"
-                  component={Link}
-                  to={`${linkBase}/video`}
-                />
-              )}
-            </Tabs>
-          )}
-        </Location>
+                {!testCase.passed && !testCase.skipped ? (
+                  <Tab
+                    label="Failure details"
+                    value="/failure"
+                    data-testid="test-case-tab-failure"
+                    component={Link}
+                    to={`${linkBase}/failure`}
+                  />
+                ) : null}
+                {testCase.hasSystemOut && (
+                  <Tab
+                    label="System out"
+                    value="/systemOut"
+                    data-testid="test-case-tab-system-out"
+                    component={Link}
+                    to={`${linkBase}/systemOut`}
+                  />
+                )}
+                {testCase.hasSystemErr && (
+                  <Tab
+                    value="/systemErr"
+                    label="System err"
+                    data-testid="test-case-tab-system-err"
+                    component={Link}
+                    to={`${linkBase}/systemErr`}
+                  />
+                )}
+                {hasScreenshotAttachment && (
+                  <Tab
+                    value="/screenshot"
+                    label="Screenshot"
+                    data-testid="test-case-tab-screenshot"
+                    component={Link}
+                    to={`${linkBase}/screenshot`}
+                  />
+                )}
+                {hasVideoAttachment && (
+                  <Tab
+                    value="/video"
+                    label="Video"
+                    data-testid="test-case-tab-video"
+                    component={Link}
+                    to={`${linkBase}/video`}
+                  />
+                )}
+                {aiConfig && aiConfig.testCaseFailureAnalysisEnabled && (
+                  <Tab
+                    value="/analysis"
+                    label="Failure Analysis"
+                    data-testid="test-case-tab-failure-analysis"
+                    component={Link}
+                    to={`${linkBase}/analysis`}
+                  />
+                )}
+              </Tabs>
+            )}
+          </Location>
 
-        <div className={classes.detailsSection}>
-          <Router>
-            <Redirect from="/" to={`${linkBase}${defaultTab}`} noThrow={true} />
-            <TestCaseSummary path="/summary" testCase={testCase} />
-            <TestCaseFailureDetails
-              path="/failure"
-              failure={testCase.failure}
-            />
-            {testCase.hasSystemOutTestCase ? (
-              <TestCaseSystemOut
-                path="/systemOut"
+          <div className={classes.detailsSection}>
+            <Router>
+              <Redirect
+                from="/"
+                to={`${linkBase}${defaultTab}`}
+                noThrow={true}
+              />
+              <TestCaseSummary path="/summary" testCase={testCase} />
+              <TestCaseFailureDetails
+                path="/failure"
+                failure={testCase.failure}
+              />
+              {testCase.hasSystemOutTestCase ? (
+                <TestCaseSystemOut
+                  path="/systemOut"
+                  publicId={publicId}
+                  testSuiteIdx={testCase.testSuiteIdx}
+                  testCaseIdx={testCase.idx}
+                  data-testid="test-case-system-out"
+                />
+              ) : (
+                <TestSuiteSystemOut
+                  path="/systemOut"
+                  publicId={publicId}
+                  testSuiteIdx={testCase.testSuiteIdx}
+                  data-testid="test-case-system-out"
+                />
+              )}
+              {testCase.hasSystemErrTestCase ? (
+                <TestCaseSystemErr
+                  path="/systemErr"
+                  publicId={publicId}
+                  testSuiteIdx={testCase.testSuiteIdx}
+                  testCaseIdx={testCase.idx}
+                  data-testid="test-case-system-err"
+                />
+              ) : (
+                <TestSuiteSystemErr
+                  path="/systemErr"
+                  publicId={publicId}
+                  testSuiteIdx={testCase.testSuiteIdx}
+                  data-testid="test-case-system-err"
+                />
+              )}
+              <TestCaseFailureScreenshot
+                path="/screenshot"
+                testCase={testCase}
+                publicId={publicId}
+              />
+              <TestCaseFailureVideo
+                path="/video"
+                testCase={testCase}
+                publicId={publicId}
+              />
+              <TestCaseFailureAnalysisSection
+                path="/analysis"
                 publicId={publicId}
                 testSuiteIdx={testCase.testSuiteIdx}
                 testCaseIdx={testCase.idx}
-                data-testid="test-case-system-out"
               />
-            ) : (
-              <TestSuiteSystemOut
-                path="/systemOut"
-                publicId={publicId}
-                testSuiteIdx={testCase.testSuiteIdx}
-                data-testid="test-case-system-out"
-              />
-            )}
-            {testCase.hasSystemErrTestCase ? (
-              <TestCaseSystemErr
-                path="/systemErr"
-                publicId={publicId}
-                testSuiteIdx={testCase.testSuiteIdx}
-                testCaseIdx={testCase.idx}
-                data-testid="test-case-system-err"
-              />
-            ) : (
-              <TestSuiteSystemErr
-                path="/systemErr"
-                publicId={publicId}
-                testSuiteIdx={testCase.testSuiteIdx}
-                data-testid="test-case-system-err"
-              />
-            )}
-            <TestCaseFailureScreenshot
-              path="/screenshot"
-              testCase={testCase}
-              publicId={publicId}
-            />
-            <TestCaseFailureVideo
-              path="/video"
-              testCase={testCase}
-              publicId={publicId}
-            />
-          </Router>
-        </div>
-      </Paper>
-    </div>
+            </Router>
+          </div>
+        </Paper>
+      </div>
+    </AIState>
   );
 };
 

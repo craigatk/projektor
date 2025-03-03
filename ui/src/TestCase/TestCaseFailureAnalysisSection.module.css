@@ -1,0 +1,10 @@
+.analysisContents {
+  padding: 2px 10px;
+  background-color: #ededed;
+  border-radius: 8px;
+  font-size: 0.9em;
+}
+
+.analysisText {
+  white-space: pre-line;
+}

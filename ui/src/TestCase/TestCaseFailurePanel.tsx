@@ -16,6 +16,8 @@ import {
   findAttachmentOfType,
   createTestCaseIdentifier,
 } from "./testCaseHelpers";
+import { AIContext, AIState } from "../AI/AIContext";
+import AIIcon from "../Icons/AIIcon";
 
 interface TestCaseFailurePanelProps {
   testCase: TestCase;
@@ -30,6 +32,8 @@ const TestCaseFailurePanel = ({
   expandCollapseAll,
   showFullFailure,
 }: TestCaseFailurePanelProps) => {
+  const { aiConfig } = React.useContext(AIContext);
+
   const testCaseIdentifier = createTestCaseIdentifier(testCase);
 
   const defaultExpanded =
@@ -159,6 +163,18 @@ const TestCaseFailurePanel = ({
               data-testid={`test-case-video-link-${testCaseIdentifier}`}
             >
               Video
+            </CleanLink>
+          </Button>
+        )}
+        {aiConfig && aiConfig.testCaseFailureAnalysisEnabled && (
+          <Button>
+            <CleanLink
+              to={`/tests/${publicId}/suite/${testCase.testSuiteIdx}/case/${testCase.idx}/analysis`}
+              data-testid={`test-case-summary-failure-analysis-link-${testCaseIdentifier}`}
+            >
+              <div title="Analyze failure with AI">
+                <span>Analyze Failure</span> <AIIcon className={classes.icon} />
+              </div>
             </CleanLink>
           </Button>
         )}

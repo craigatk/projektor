@@ -80,7 +80,7 @@ context("dashboard", () => {
   });
 
   it("when fetching test run fails should render error message", () => {
-    const publicId = "18932";
+    const publicId = "18952";
 
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "one_passing/test_run_summary.json",

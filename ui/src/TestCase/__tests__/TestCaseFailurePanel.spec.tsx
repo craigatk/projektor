@@ -10,6 +10,7 @@ import {
 import moment from "moment";
 import waitForExpect from "wait-for-expect";
 import TestCaseFailurePanel from "../TestCaseFailurePanel";
+import { AIState } from "../../AI/AIContext";
 
 describe("TestCaseFailurePanel", () => {
   it("should render failure details link when the test case failed", () => {
@@ -36,7 +37,9 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     expect(queryByTestId("test-case-summary-failure-link-2-1")).not.toBeNull();
@@ -69,7 +72,9 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     expect(queryByTestId("test-case-summary-failure-link-2-1")).toBeNull();
@@ -102,7 +107,9 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     expect(
@@ -135,7 +142,9 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     expect(queryByTestId("test-case-summary-system-out-link-2-1")).toBeNull();
@@ -168,7 +177,9 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     expect(
@@ -189,7 +200,9 @@ describe("TestCaseFailurePanel", () => {
     const testCase = createTestCaseWithFailure(failure);
 
     const { getByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
@@ -207,7 +220,9 @@ describe("TestCaseFailurePanel", () => {
     const testCase = createTestCaseWithFailure(failure);
 
     const { getByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
@@ -225,11 +240,13 @@ describe("TestCaseFailurePanel", () => {
     const testCase = createTestCaseWithFailure(failure);
 
     const { getByTestId } = render(
-      <TestCaseFailurePanel
-        testCase={testCase}
-        publicId="12345"
-        showFullFailure={true}
-      />,
+      <AIState>
+        <TestCaseFailurePanel
+          testCase={testCase}
+          publicId="12345"
+          showFullFailure={true}
+        />
+      </AIState>,
     );
 
     expect(getByTestId("test-case-failure-text-2-1")).toHaveTextContent(
@@ -247,11 +264,13 @@ describe("TestCaseFailurePanel", () => {
     const testCase = createTestCaseWithFailure(failure);
 
     const { getByTestId } = render(
-      <TestCaseFailurePanel
-        testCase={testCase}
-        publicId="12345"
-        showFullFailure={true}
-      />,
+      <AIState>
+        <TestCaseFailurePanel
+          testCase={testCase}
+          publicId="12345"
+          showFullFailure={true}
+        />
+      </AIState>,
     );
 
     getByTestId("test-case-summary-header-2-1").click();
@@ -274,11 +293,13 @@ describe("TestCaseFailurePanel", () => {
     const testCase = createTestCaseWithFailure(failure);
 
     const { getByTestId } = render(
-      <TestCaseFailurePanel
-        testCase={testCase}
-        publicId="12345"
-        showFullFailure={true}
-      />,
+      <AIState>
+        <TestCaseFailurePanel
+          testCase={testCase}
+          publicId="12345"
+          showFullFailure={true}
+        />
+      </AIState>,
     );
 
     getByTestId("test-case-expand-collapse-icon-2-1").click();
@@ -301,11 +322,13 @@ describe("TestCaseFailurePanel", () => {
     const testCase = createTestCaseWithFailure(failure);
 
     const { getByTestId } = render(
-      <TestCaseFailurePanel
-        testCase={testCase}
-        publicId="12345"
-        showFullFailure={true}
-      />,
+      <AIState>
+        <TestCaseFailurePanel
+          testCase={testCase}
+          publicId="12345"
+          showFullFailure={true}
+        />
+      </AIState>,
     );
 
     getByTestId("test-case-failure-text-2-1").click();
@@ -353,7 +376,9 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     expect(queryByTestId("test-case-failure-screenshot-2-1")).not.toBeNull();
@@ -383,7 +408,9 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     expect(queryByTestId("test-case-title-2-1")).toHaveTextContent(
@@ -415,7 +442,9 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     expect(queryByTestId("test-case-title-2-1")).toHaveTextContent(
@@ -448,7 +477,9 @@ describe("TestCaseFailurePanel", () => {
     };
 
     const { queryByTestId } = render(
-      <TestCaseFailurePanel testCase={testCase} publicId="12345" />,
+      <AIState>
+        <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      </AIState>,
     );
 
     expect(queryByTestId("test-case-file-name-2-1")).toHaveTextContent(
