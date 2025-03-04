@@ -2,8 +2,10 @@
 
 ## Projektor server
 
-Full list of releases and packaged server .jar file for each release: https://github.com/craigatk/projektor/releases
+Full list of releases and the packaged server .jar file for each release at: https://github.com/craigatk/projektor/releases
 
+* v5.2.0
+  * Adding support for test case failure analysis with ChatGPT
 * v5.1.1
   * Fix sorting by duration on all-tests page
 * v5.1.0
