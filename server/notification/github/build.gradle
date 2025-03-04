@@ -15,11 +15,11 @@ dependencies {
 
     implementation "ch.qos.logback:logback-classic:$logbackVersion"
 
-    testImplementation "com.github.tomakehurst:wiremock-jre8:$wiremockVersion"
+    testImplementation "org.wiremock:wiremock:$wiremockVersion"
 
     testImplementation(platform('org.junit:junit-bom:5.11.4'))
     testImplementation('org.junit.jupiter:junit-jupiter')
     testRuntimeOnly('org.junit.platform:junit-platform-launcher')
 
-    testFixturesImplementation "com.github.tomakehurst:wiremock-jre8:$wiremockVersion"
+    testFixturesImplementation "org.wiremock:wiremock:$wiremockVersion"
 }
