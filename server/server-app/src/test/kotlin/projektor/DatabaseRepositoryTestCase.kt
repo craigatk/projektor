@@ -69,7 +69,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
     lateinit var coverageStatsDao: CodeCoverageStatsDao
     lateinit var coverageService: CoverageService
 
-    val attachmentConfig =
+    private val attachmentConfig =
         AttachmentConfig(
             url = "http://localhost:9000",
             bucketName = "attachmentstesting",
@@ -93,7 +93,7 @@ open class DatabaseRepositoryTestCase : KoinTest {
                 System.getenv("DB_USERNAME") ?: "testuser",
                 System.getenv("DB_PASSWORD") ?: "testpass",
                 "public",
-                3,
+                2,
             )
 
         hikariConfig.username = dataSourceConfig.username
