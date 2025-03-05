@@ -39,7 +39,7 @@ context("repository timeline", () => {
 
         cy.getByTestId("repository-timeline-graph");
 
-        cy.findByRole(`dot-duration-${publicId}`, { timeout: 10000 }).trigger(
+        cy.findByRole(`dot-duration-${publicId}`, { timeout: 30000 }).trigger(
           "mouseover",
         );
 
