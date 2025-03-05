@@ -7,9 +7,9 @@ Cypress.Commands.add("loadFixture", (fixturePath, visitUri = "") =>
       .then((resp) =>
         cy.visit(`http://localhost:8080/tests/${resp.body.id}${visitUri}`, {
           retryOnStatusCodeFailure: true,
-        })
-      )
-  )
+        }),
+      ),
+  ),
 );
 
 Cypress.Commands.add(
@@ -36,7 +36,7 @@ Cypress.Commands.add(
             retryOnStatusCodeFailure: true,
           });
         }
-      })
+      }),
 );
 
 Cypress.Commands.add("loadGroupedFixtureData", (fixtureData) =>
@@ -46,7 +46,7 @@ Cypress.Commands.add("loadGroupedFixtureData", (fixtureData) =>
       const publicId = resp.body.id;
 
       return publicId;
-    })
+    }),
 );
 
 Cypress.Commands.add(
@@ -58,9 +58,9 @@ Cypress.Commands.add(
         cy.loadGroupedFixtureDataAndVisitTestRun(
           resultsBlob,
           visitUri,
-          loadingFunc
-        )
-      )
+          loadingFunc,
+        ),
+      ),
 );
 
 Cypress.Commands.add(
@@ -89,8 +89,8 @@ Cypress.Commands.add(
                 retryOnStatusCodeFailure: true,
               });
             });
-        })
-    )
+        }),
+    ),
 );
 
 Cypress.Commands.add("loadCoverageReport", (fileName, publicId) => {
@@ -100,6 +100,6 @@ Cypress.Commands.add("loadCoverageReport", (fileName, publicId) => {
       url: `http://localhost:8080/run/${publicId}/coverage`,
       body: coverageFileContents,
       retryOnStatusCodeFailure: true,
-    })
+    }),
   );
 });

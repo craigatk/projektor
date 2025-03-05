@@ -9,16 +9,16 @@ describe("test failure", () => {
           attachmentName:
             "test run with attachments -- should list attachments on attachments page (failed).png",
         },
-      ]
+      ],
     );
 
     cy.findByTestId("test-case-title-1-1").should(
       "contain",
-      "Test Run with Attachments"
+      "Test Run with Attachments",
     );
     cy.findByTestId("test-case-title-1-1").should(
       "contain",
-      "should list attachments on attachments page"
+      "should list attachments on attachments page",
     );
   });
 });

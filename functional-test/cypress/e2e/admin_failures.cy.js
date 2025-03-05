@@ -3,7 +3,7 @@
 context("admin failures", () => {
   it("should display recent failure", () => {
     cy.loadGroupedFixture(
-      "cypress/fixtures/grouped-invalid-tests-payload.json"
+      "cypress/fixtures/grouped-invalid-tests-payload.json",
     );
 
     cy.url().then((url) => {
@@ -17,15 +17,15 @@ context("admin failures", () => {
 
       cy.getByTestId(`admin-failures-id-${publicId}`).should(
         "contain",
-        publicId
+        publicId,
       );
       cy.getByTestId(`admin-failures-message-${publicId}`).should(
         "contain",
-        "Problem parsing test results: Unexpected close tag"
+        "Problem parsing test results: Unexpected close tag",
       );
       cy.getByTestId(`admin-failures-body-type-${publicId}`).should(
         "contain",
-        "TEST_RESULTS"
+        "TEST_RESULTS",
       );
       cy.testIdShouldExist(`admin-failures-body-${publicId}`);
       cy.testIdShouldExist(`admin-failures-created-timestamp-${publicId}`);

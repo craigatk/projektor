@@ -14,7 +14,7 @@ context("repository timeline", () => {
           resultsBlob.metadata.git.repoName = repoName;
 
           cy.loadGroupedFixtureDataAndVisitTestRun(resultsBlob, "");
-        }
+        },
       );
     });
 
@@ -26,12 +26,12 @@ context("repository timeline", () => {
 
     cy.getByTestId("flaky-test-case-name-1").should(
       "contain",
-      "projektor.example.spock.FailingSpec"
+      "projektor.example.spock.FailingSpec",
     );
     cy.getByTestId("flaky-test-case-failure-count-1").should("contain", "5");
     cy.getByTestId("flaky-test-case-failure-percentage-1").should(
       "contain",
-      "100%"
+      "100%",
     );
   });
 });

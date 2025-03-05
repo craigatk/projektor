@@ -10,7 +10,7 @@ context("organization coverage", () => {
     const loadLessCoverageFunc = (publicId) =>
       cy.loadCoverageReport(
         "server-app-reduced-jacocoTestReport.xml",
-        publicId
+        publicId,
       );
 
     cy.readFile("cypress/fixtures/grouped-passing-tests-with-git.json").then(
@@ -20,9 +20,9 @@ context("organization coverage", () => {
         cy.loadGroupedFixtureDataAndVisitTestRun(
           resultsBlob,
           "",
-          loadMoreCoverageFunc
+          loadMoreCoverageFunc,
         );
-      }
+      },
     );
 
     cy.readFile("cypress/fixtures/grouped-passing-tests-with-git.json").then(
@@ -32,9 +32,9 @@ context("organization coverage", () => {
         cy.loadGroupedFixtureDataAndVisitTestRun(
           resultsBlob,
           "",
-          loadLessCoverageFunc
+          loadLessCoverageFunc,
         );
-      }
+      },
     );
 
     cy.getByTestId("nav-link-organization").click();
@@ -44,28 +44,28 @@ context("organization coverage", () => {
 
     cy.getByTestId("line-coverage-row-1-covered-percentage").should(
       "contain",
-      "87.22%"
+      "87.22%",
     );
     cy.getByTestId("statement-coverage-row-1-covered-percentage").should(
       "contain",
-      "94.15%"
+      "94.15%",
     );
     cy.getByTestId("branch-coverage-row-1-covered-percentage").should(
       "contain",
-      "60.89%"
+      "60.89%",
     );
 
     cy.getByTestId("line-coverage-row-2-covered-percentage").should(
       "contain",
-      "97.44%"
+      "97.44%",
     );
     cy.getByTestId("statement-coverage-row-2-covered-percentage").should(
       "contain",
-      "96.34%"
+      "96.34%",
     );
     cy.getByTestId("branch-coverage-row-2-covered-percentage").should(
       "contain",
-      "77.02%"
+      "77.02%",
     );
   });
 });
