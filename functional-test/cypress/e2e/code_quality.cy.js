@@ -3,12 +3,12 @@ context("code quality reports", () => {
     cy.readFile("cypress/fixtures/grouped-code-quality.json").then(
       (resultsBlob) => {
         cy.loadGroupedFixtureDataAndVisitTestRun(resultsBlob, "");
-      }
+      },
     );
 
     cy.findByTestId("code-quality-summary-title").should(
       "contain",
-      "Code quality"
+      "Code quality",
     );
 
     cy.findByText("code_quality.txt");

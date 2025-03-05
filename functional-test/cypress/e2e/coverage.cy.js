@@ -8,20 +8,20 @@ context("test coverage data", () => {
     cy.loadGroupedFixture(
       "cypress/fixtures/grouped-passing-tests.json",
       "",
-      loadCoverageFunc
+      loadCoverageFunc,
     );
 
     cy.getByTestId("coverage-graph-title-line").should(
       "contain",
-      "Line 97.44%"
+      "Line 97.44%",
     );
     cy.getByTestId("coverage-graph-title-statement").should(
       "contain",
-      "Statement 96.34%"
+      "Statement 96.34%",
     );
     cy.getByTestId("coverage-graph-title-branch").should(
       "contain",
-      "Branch 77.02%"
+      "Branch 77.02%",
     );
 
     cy.getByTestId("nav-link-coverage").click();
@@ -30,15 +30,15 @@ context("test coverage data", () => {
 
     cy.getByTestId("coverage-graph-title-line").should(
       "contain",
-      "Line 97.44%"
+      "Line 97.44%",
     );
     cy.getByTestId("coverage-graph-title-statement").should(
       "contain",
-      "Statement 96.34%"
+      "Statement 96.34%",
     );
     cy.getByTestId("coverage-graph-title-branch").should(
       "contain",
-      "Branch 77.02%"
+      "Branch 77.02%",
     );
   });
 
@@ -49,7 +49,7 @@ context("test coverage data", () => {
     cy.loadGroupedFixture(
       "cypress/fixtures/grouped-passing-tests.json",
       "",
-      loadCoverageFunc
+      loadCoverageFunc,
     );
 
     cy.getByTestId("nav-link-coverage").click();
@@ -63,18 +63,18 @@ context("test coverage data", () => {
 
     cy.getByTestId("coverage-file-name-1").should(
       "contain",
-      "projektor/cleanup/CleanupScheduledJob.kt"
+      "projektor/cleanup/CleanupScheduledJob.kt",
     );
     cy.getByTestId(
-      "coverage-file-line-coverage-row-1-covered-percentage"
+      "coverage-file-line-coverage-row-1-covered-percentage",
     ).should("contain", "71.43%");
     cy.getByTestId("branch-coverage-row-1-covered-percentage").should(
       "contain",
-      "100%"
+      "100%",
     );
     cy.getByTestId("coverage-file-missed-lines-1").should(
       "contain",
-      "16, 18, 20, 21"
+      "16, 18, 20, 21",
     );
     cy.getByTestId("coverage-file-partial-lines-1").should("be.empty");
   });

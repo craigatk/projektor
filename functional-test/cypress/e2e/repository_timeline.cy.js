@@ -12,7 +12,16 @@ context("repository timeline", () => {
         resultsBlob.metadata.git.repoName = repoName;
 
         cy.loadGroupedFixtureDataAndVisitTestRun(resultsBlob, "");
-      }
+      },
+    );
+
+    cy.readFile("cypress/fixtures/grouped-passing-tests-with-git.json").then(
+      (resultsBlob) => {
+        resultsBlob.metadata.ci = true;
+        resultsBlob.metadata.git.repoName = repoName;
+
+        cy.loadGroupedFixtureDataAndVisitTestRun(resultsBlob, "");
+      },
     );
 
     cy.readFile("cypress/fixtures/grouped-passing-tests-with-git.json")
@@ -36,11 +45,11 @@ context("repository timeline", () => {
         cy.getByTestId("timeline-tooltip-duration").should("contain", "0.460s");
         cy.getByTestId("timeline-tooltip-test-count").should(
           "contain",
-          "3 tests"
+          "3 tests",
         );
         cy.getByTestId("timeline-tooltip-average-duration").should(
           "contain",
-          "0.153s"
+          "0.153s",
         );
       });
   });

@@ -9,7 +9,7 @@ context("attachments", () => {
           attachmentPath: "cypress/fixtures/test-attachment.txt",
           attachmentName: "test-attachment.txt",
         },
-      ]
+      ],
     );
 
     cy.getByTestId("test-suite-group-name-1").should("contain", "Group1");
@@ -20,7 +20,7 @@ context("attachments", () => {
 
     cy.getByTestId("attachment-file-name-test-attachment.txt").should(
       "contain",
-      "test-attachment.txt"
+      "test-attachment.txt",
     );
 
     cy.getByTestId("attachment-file-name-test-attachment.txt").click();

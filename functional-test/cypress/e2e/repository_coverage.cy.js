@@ -12,7 +12,7 @@ context("repository coverage", () => {
     const loadLessCoverageFunc = (publicId) =>
       cy.loadCoverageReport(
         "server-app-reduced-jacocoTestReport.xml",
-        publicId
+        publicId,
       );
 
     cy.readFile("cypress/fixtures/grouped-passing-tests-with-git.json").then(
@@ -22,9 +22,9 @@ context("repository coverage", () => {
         cy.loadGroupedFixtureDataAndVisitTestRun(
           resultsBlob,
           "",
-          loadMoreCoverageFunc
+          loadMoreCoverageFunc,
         );
-      }
+      },
     );
 
     cy.readFile("cypress/fixtures/grouped-passing-tests-with-git.json").then(
@@ -34,9 +34,9 @@ context("repository coverage", () => {
         cy.loadGroupedFixtureDataAndVisitTestRun(
           resultsBlob,
           "",
-          loadLessCoverageFunc
+          loadLessCoverageFunc,
         );
-      }
+      },
     );
 
     cy.getByTestId("nav-link-repository").click();

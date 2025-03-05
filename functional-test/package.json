@@ -6,7 +6,7 @@
   "scripts": {
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "format": "prettier --write cypress/integration/*.js cypress/support/*.js",
+    "format": "prettier --write cypress/e2e/*.js cypress/support/*.js",
     "clean-results": "rimraf test-results/*.xml"
   },
   "devDependencies": {
