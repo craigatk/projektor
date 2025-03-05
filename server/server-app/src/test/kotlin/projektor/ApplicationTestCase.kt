@@ -131,7 +131,7 @@ open class ApplicationTestCase {
                 put("ktor.datasource.password", System.getenv("DB_PASSWORD") ?: "testpass")
                 put("ktor.datasource.jdbcUrl", System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5433/projektordb")
                 put("ktor.datasource.schema", testCaseConfig.databaseSchema)
-                put("ktor.datasource.maximumPoolSize", "3")
+                put("ktor.datasource.maximumPoolSize", "2")
 
                 testCaseConfig.publishToken?.let { put("ktor.auth.publishToken", it) }
 
