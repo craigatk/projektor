@@ -6,51 +6,47 @@ context("repository timeline", () => {
     const repoPart = "timeline-repo";
     const repoName = `${orgPart}/${repoPart}`;
 
-    cy.readFile("cypress/fixtures/grouped-passing-tests-with-git.json").then(
-      (resultsBlob) => {
-        resultsBlob.metadata.ci = true;
-        resultsBlob.metadata.git.repoName = repoName;
-
-        cy.loadGroupedFixtureDataAndVisitTestRun(resultsBlob, "");
-      },
-    );
-
-    cy.readFile("cypress/fixtures/grouped-passing-tests-with-git.json").then(
-      (resultsBlob) => {
-        resultsBlob.metadata.ci = true;
-        resultsBlob.metadata.git.repoName = repoName;
-
-        cy.loadGroupedFixtureDataAndVisitTestRun(resultsBlob, "");
-      },
-    );
-
     cy.readFile("cypress/fixtures/grouped-passing-tests-with-git.json")
       .then((resultsBlob) => {
         resultsBlob.metadata.ci = true;
         resultsBlob.metadata.git.repoName = repoName;
 
-        return cy.loadGroupedFixtureData(resultsBlob);
+        cy.loadGroupedFixtureDataAndVisitTestRun(resultsBlob, "");
+
+        cy.getByTestId("test-count-list-passed").should("contain", "3");
       })
-      .then((publicId) => {
-        cy.getByTestId("nav-link-repository").click(); // From the test run page
+      .then(() => {
+        cy.readFile("cypress/fixtures/grouped-passing-tests-with-git.json")
+          .then((resultsBlob) => {
+            resultsBlob.metadata.ci = true;
+            resultsBlob.metadata.git.repoName = repoName;
 
-        cy.getByTestId("nav-link-repo-timeline").click(); // From the repo page
+            return cy.loadGroupedFixtureData(resultsBlob);
+          })
+          .then((publicId) => {
+            cy.getByTestId("nav-link-repository").click(); // From the test run page
 
-        cy.getByTestId("repository-timeline-graph");
+            cy.getByTestId("nav-link-repo-timeline").click(); // From the repo page
 
-        cy.getByRole(`dot-duration-${publicId}`).trigger("mouseover");
+            cy.getByTestId("repository-timeline-graph");
 
-        cy.testIdShouldExist("timeline-graph-tooltip");
+            cy.findByRole(`dot-duration-${publicId}`).trigger("mouseover");
 
-        cy.getByTestId("timeline-tooltip-duration").should("contain", "0.460s");
-        cy.getByTestId("timeline-tooltip-test-count").should(
-          "contain",
-          "3 tests",
-        );
-        cy.getByTestId("timeline-tooltip-average-duration").should(
-          "contain",
-          "0.153s",
-        );
+            cy.testIdShouldExist("timeline-graph-tooltip");
+
+            cy.getByTestId("timeline-tooltip-duration").should(
+              "contain",
+              "0.460s",
+            );
+            cy.getByTestId("timeline-tooltip-test-count").should(
+              "contain",
+              "3 tests",
+            );
+            cy.getByTestId("timeline-tooltip-average-duration").should(
+              "contain",
+              "0.153s",
+            );
+          });
       });
   });
 });
