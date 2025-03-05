@@ -17,6 +17,8 @@ context("repository timeline", () => {
       },
     );
 
+    cy.wait(1000);
+
     cy.readFile("cypress/fixtures/grouped-passing-tests-with-git.json")
       .then((resultsBlob) => {
         resultsBlob.metadata.ci = true;
