@@ -5,6 +5,9 @@ import MockAdapter from "axios-mock-adapter";
 import { axiosInstanceWithoutCache } from "../../service/AxiosService";
 import { Attachment, Attachments } from "../../model/TestRunModel";
 import AttachmentsPage from "../AttachmentsPage";
+jest.mock("../byteFormat", () => ({
+  formatBytes: jest.fn(),
+}));
 
 describe("AttachmentsPage", () => {
   let mockAxios;
