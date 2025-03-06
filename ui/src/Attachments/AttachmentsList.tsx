@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Attachments } from "../model/TestRunModel";
 import MaterialTable from "@material-table/core";
-import prettyBytes from "pretty-bytes";
+import AttachmentSize from "./AttachmentSize";
 
 interface AttachmentsListProps {
   publicId: string;
@@ -35,7 +35,7 @@ const AttachmentsList = ({ publicId, attachments }: AttachmentsListProps) => {
             field: "fileSize",
             render: (rowData) => (
               <span data-testid={`attachment-file-size-${rowData.fileName}`}>
-                {rowData.fileSize ? prettyBytes(rowData.fileSize) : ""}
+                <AttachmentSize fileSize={rowData.fileSize} />
               </span>
             ),
           },

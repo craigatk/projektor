@@ -34,7 +34,6 @@ const TestRunDataWrapper = ({ publicId }: TestRunDataWrapperProps) => {
         setLoadingState(LoadingState.Success);
       })
       .catch(() => {
-        console.log("**** Got error loading test run");
         setLoadingState(LoadingState.Error);
       });
   };

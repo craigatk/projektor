@@ -8,6 +8,9 @@ import {
   axiosInstanceWithoutCache,
 } from "../../service/AxiosService";
 import TestRunDataWrapper from "../TestRunDataWrapper";
+jest.mock("../../Attachments/byteFormat", () => ({
+  formatBytes: jest.fn(),
+}));
 
 describe("TestRunDataWrapper", () => {
   let mockAxios;
