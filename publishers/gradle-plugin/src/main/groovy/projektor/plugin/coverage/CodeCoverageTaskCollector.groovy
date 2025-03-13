@@ -148,14 +148,20 @@ class CodeCoverageTaskCollector {
         List<File> sourceDirectoriesWithFiles = srcDirs.files.toList()
         File projectRootDir = koverReportTask.project.rootDir
 
-        return findBaseDirectoryPath(sourceDirectoriesWithFiles, projectRootDir)
+        return findBaseDirectoryPath(sourceDirectoriesWithFiles, projectRootDir, ["/java"])
     }
 
-    private String findBaseDirectoryPath(List<File> sourceDirectoriesWithFiles, File projectRootDir) {
+    private String findBaseDirectoryPath(List<File> sourceDirectoriesWithFiles, File projectRootDir, List<String> sourceDirectoryPatternsToExclude = []) {
         List<File> filteredSourceDirectories = sourceDirectoriesWithFiles
                 .findAll { !it.path.contains("src/main/resources") }
                 .findAll { !it.path.contains("/build/") }
                 .findAll { !it.path.contains("/caches/") }
+
+        if (sourceDirectoryPatternsToExclude.size() > 0) {
+            sourceDirectoryPatternsToExclude.each { toExclude ->
+                filteredSourceDirectories = filteredSourceDirectories.findAll { !it.path.contains(toExclude) }
+            }
+        }
 
         if (filteredSourceDirectories.size() == 1) {
             return DirectoryUtil.findSubDirectoryPath(projectRootDir, filteredSourceDirectories.first())

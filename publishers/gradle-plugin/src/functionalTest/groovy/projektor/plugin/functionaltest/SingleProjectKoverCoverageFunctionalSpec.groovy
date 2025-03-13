@@ -75,8 +75,7 @@ class SingleProjectKoverCoverageFunctionalSpec extends ProjektorPluginFunctional
 
         where:
         koverVersion || _
-        "0.4.4"      || _
-        "0.6.0"      || _
         "0.7.2"      || _
+        "0.9.1"      || _
     }
 }

@@ -13,6 +13,7 @@ import static projektor.plugin.CodeUnderTestWriter.writeSourceCodeFile
 import static projektor.plugin.ProjectDirectoryWriter.createIntegrationTestDirectory
 import static projektor.plugin.ProjectDirectoryWriter.createSourceDirectory
 import static projektor.plugin.ProjectDirectoryWriter.createTestDirectory
+import static projektor.plugin.ProjektorPluginVersion.getMINIMUM_GRADLE_VERSION
 
 class CoverageMultiTaskSpec extends SingleProjectSpec {
 
@@ -70,7 +71,7 @@ class CoverageMultiTaskSpec extends SingleProjectSpec {
         def result = runSuccessfulBuildWithEnvironmentAndGradleVersion(
                 ["CI": "true"],
                 gradleVersion,
-                'test', 'jacocoTestReport', '-i'
+                'test', 'jacocoTestReport', '-i', '--stacktrace'
         )
 
         then:
@@ -89,8 +90,8 @@ class CoverageMultiTaskSpec extends SingleProjectSpec {
         coverageFilePayloads[0].reportContents.contains('<counter type="LINE" missed="1" covered="1"/>')
 
         where:
-        gradleVersion                  | _
-        GradleVersion.version("7.6.1") | _
-        GradleVersion.current()        | _
+        gradleVersion                                 | _
+        GradleVersion.version(MINIMUM_GRADLE_VERSION) | _
+        GradleVersion.current()                       | _
     }
 }

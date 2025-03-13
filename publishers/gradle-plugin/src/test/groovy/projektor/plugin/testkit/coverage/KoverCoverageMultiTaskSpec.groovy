@@ -1,6 +1,7 @@
 package projektor.plugin.testkit.coverage
 
 import org.gradle.util.GradleVersion
+import projektor.plugin.ProjektorPluginVersion
 import projektor.plugin.coverage.model.CoverageFilePayload
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.testkit.SingleProjectSpec
@@ -47,7 +48,7 @@ class KoverCoverageMultiTaskSpec extends SingleProjectSpec {
             }
 
             kover {
-              coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO)
+              useJacoco("0.8.12")
             }
 
             integrationTest {
@@ -96,7 +97,7 @@ class KoverCoverageMultiTaskSpec extends SingleProjectSpec {
 
         where:
         gradleVersion                  | _
-        GradleVersion.version("7.6.1") | _
+        GradleVersion.version(ProjektorPluginVersion.MINIMUM_GRADLE_VERSION) | _
         GradleVersion.current()        | _
     }
 }

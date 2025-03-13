@@ -29,7 +29,7 @@ import projektor.database.generated.tables.TestSuite;
 /**
  * A class modelling indexes of tables in public.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Indexes {
 
     // -------------------------------------------------------------------------

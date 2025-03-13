@@ -2,6 +2,7 @@ package projektor.plugin.testkit.coverage
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.util.GradleVersion
+import projektor.plugin.ProjektorPluginVersion
 import projektor.plugin.coverage.model.CoverageFilePayload
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.testkit.SingleProjectSpec
@@ -63,7 +64,7 @@ class Kover04CoverageSingleProjectSpec extends SingleProjectSpec {
 
         where:
         gradleVersion                  | _
-        GradleVersion.version("7.6.1") | _
+        GradleVersion.version(ProjektorPluginVersion.MINIMUM_GRADLE_VERSION) | _
         GradleVersion.current()        | _
     }
 
