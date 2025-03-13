@@ -43,7 +43,7 @@ class BuildFileWriter {
             dependencies {
                 implementation('org.codehaus.groovy:groovy-all:3.0.21')
 
-                testImplementation('org.spockframework:spock-core:2.3-groovy-3.0')
+                testImplementation('org.spockframework:spock-core:2.4-M5-groovy-3.0')
             }
 
             test {
@@ -65,11 +65,8 @@ class BuildFileWriter {
         if (config.includeKoverPlugin) {
             if (config.koverPluginVersion.contains("0.7")) {
                 koverCoverageEngine = "kover { useJacoco() }"
-            }  else if (config.koverPluginVersion.contains("0.6")) {
-                // https://github.com/Kotlin/kotlinx-kover/blob/v0.6.0/docs/migration-to-0.6.0.md#properties-coverageengine-intellijengineversion-and-jacocoengineversion-were-removed
-                koverCoverageEngine = "kover { engine = kotlinx.kover.api.DefaultJacocoEngine.INSTANCE }"
             } else {
-                koverCoverageEngine = "kover { coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO) }"
+                koverCoverageEngine = "kover { useJacoco(\"0.8.12\") }"
             }
         }
 
@@ -78,10 +75,6 @@ class BuildFileWriter {
         if (config.includeKoverPlugin) {
             if (config.koverPluginVersion.contains("0.7")) {
                 koverConfigSetup = """tasks.withType(kotlinx.kover.gradle.plugin.tasks.reports.KoverXmlTask) {
-                    dependsOn(test)
-                }"""
-            } else if (config.koverPluginVersion.contains("0.6")) {
-                koverConfigSetup = """tasks.withType(kotlinx.kover.tasks.KoverXmlTask) {
                     dependsOn(test)
                 }"""
             } else {
@@ -96,7 +89,7 @@ class BuildFileWriter {
                 }
 
                 dependencies {
-                    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22"
+                    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.10"
                 }
             }
 
@@ -112,10 +105,10 @@ class BuildFileWriter {
             }
             
             dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
-                implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.22"
+                implementation "org.jetbrains.kotlin:kotlin-stdlib:2.1.10"
+                implementation "org.jetbrains.kotlin:kotlin-reflect:2.1.10"
             
-                testImplementation "io.kotest:kotest-runner-junit5-jvm:5.6.2"
+                testImplementation "io.kotest:kotest-runner-junit5-jvm:5.9.1"
                 testImplementation "io.strikt:strikt-core:0.34.1"
             }
             

@@ -8,6 +8,7 @@ import projektor.plugin.testkit.SingleProjectSpec
 import spock.lang.Unroll
 
 import static projektor.plugin.PluginOutput.verifyOutputContainsReportLink
+import static projektor.plugin.ProjektorPluginVersion.MINIMUM_GRADLE_VERSION
 
 class ResultsGradleVersionSingleProjectSpec extends SingleProjectSpec {
     @Unroll
@@ -40,8 +41,8 @@ class ResultsGradleVersionSingleProjectSpec extends SingleProjectSpec {
         resultsRequests.size() == 1
 
         where:
-        gradleVersion                          | _
-        GradleVersion.version("7.6.1").version | _
-        GradleVersion.current().version        | _
+        gradleVersion                                         | _
+        GradleVersion.version(MINIMUM_GRADLE_VERSION).version | _
+        GradleVersion.current().version                       | _
     }
 }

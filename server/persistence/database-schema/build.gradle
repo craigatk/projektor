@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.flywaydb:flyway-database-postgresql:11.3.4")
+    }
+}
+
 plugins {
     id "com.avast.gradle.docker-compose" version "0.17.12"
     id 'nu.studer.jooq' version '9.0'
@@ -12,7 +21,7 @@ repositories {
 dependencies {
     api "org.flywaydb:flyway-database-postgresql:11.3.4"
     api "com.zaxxer:HikariCP:6.2.1"
-    api 'org.jooq:jooq:3.19.18'
+    api 'org.jooq:jooq:3.20.2'
 
     // Needs to be 'api' scope so the Flyway plugin can see it
     api "org.postgresql:postgresql:$postgresDriverVersion"
@@ -27,7 +36,7 @@ flyway {
 }
 
 jooq {
-    version = '3.16.2'
+    version = '3.20.2'
 
     configurations {
         main {
@@ -68,9 +77,14 @@ jooq {
     }
 }
 
+dockerCompose { // https://github.com/avast/gradle-docker-compose-plugin?tab=readme-ov-file#usage
+    captureContainersOutput = true
+    waitForTcpPorts = true
+}
+
 generateJooq.inputs.dir("${projectDir}/src/main/resources/db/migration")
 generateJooq.outputs.cacheIf { true }
 
-flywayMigrate.dependsOn composeUp
+//flywayMigrate.dependsOn composeUp
 generateJooq.dependsOn flywayMigrate
-generateJooq.finalizedBy composeDownForced
+//generateJooq.finalizedBy composeDownForced

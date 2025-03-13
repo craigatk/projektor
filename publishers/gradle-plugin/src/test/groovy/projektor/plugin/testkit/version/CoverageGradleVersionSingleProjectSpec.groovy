@@ -1,6 +1,7 @@
 package projektor.plugin.testkit.version
 
 import org.gradle.util.GradleVersion
+import projektor.plugin.ProjektorPluginVersion
 import projektor.plugin.coverage.model.CoverageFilePayload
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.testkit.SingleProjectSpec
@@ -12,6 +13,7 @@ import static projektor.plugin.CodeUnderTestWriter.writeSourceCodeFile
 import static projektor.plugin.PluginOutput.verifyOutputContainsReportLink
 import static projektor.plugin.ProjectDirectoryWriter.createSourceDirectory
 import static projektor.plugin.ProjectDirectoryWriter.createTestDirectory
+import static projektor.plugin.ProjektorPluginVersion.MINIMUM_GRADLE_VERSION
 
 class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
     @Override
@@ -68,8 +70,8 @@ class CoverageGradleVersionSingleProjectSpec extends SingleProjectSpec {
         coverageFilePayloads[0].baseDirectoryPath == "src/main/groovy"
 
         where:
-        gradleVersion                  | _
-        GradleVersion.version("7.6.1") | _
-        GradleVersion.current()        | _
+        gradleVersion                                 | _
+        GradleVersion.version(MINIMUM_GRADLE_VERSION) | _
+        GradleVersion.current()                       | _
     }
 }

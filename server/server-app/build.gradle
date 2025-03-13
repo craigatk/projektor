@@ -133,7 +133,7 @@ heroku {
     includes = ["${projectDir}/build/libs/server-app-1.0-all.jar".toString(), "${projectDir}/opentelemetry/opentelemetry-javaagent.jar".toString()]
     includeBuildDir = false
     appName = "projektorlive"
-    jdkVersion = "17"
+    jdkVersion = "21"
 }
 
 deployHeroku.dependsOn('assembleFull')
