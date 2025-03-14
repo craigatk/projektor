@@ -8,3 +8,8 @@
 .analysisText {
   white-space: pre-line;
 }
+
+.mention {
+  margin-top: 10px;
+  font-style: italic;
+}
