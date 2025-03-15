@@ -4,6 +4,8 @@
 
 Full list of releases and the packaged server .jar file for each release at: https://github.com/craigatk/projektor/releases
 
+* v6.0.0
+  * BREAKING CHANGE: Projektor server is now built with Java 21 and requires Java 21+ to run
 * v5.2.0
   * Adding support for test case failure analysis with ChatGPT
 * v5.1.1
