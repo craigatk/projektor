@@ -75,7 +75,7 @@
     "react-horizontal-stacked-bar-chart": "8.15.2",
     "react-scroll": "1.9.3",
     "recharts": "2.15.1",
-    "use-query-params": "1.2.3"
+    "use-query-params": "2.2.1"
   },
   "jest-junit": {
     "includeConsoleOutput": "true",
