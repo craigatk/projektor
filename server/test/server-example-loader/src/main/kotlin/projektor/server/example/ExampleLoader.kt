@@ -20,6 +20,7 @@ import projektor.server.example.coverage.JacocoXmlLoader
 import projektor.server.example.performance.PerformanceResultsLoader
 import java.io.File
 import java.math.BigDecimal
+import java.time.Instant
 
 val serverBaseUrl = System.getenv("SERVER_URL") ?: "http://localhost:8080"
 val uiBaseUrl = System.getenv("SERVER_URL") ?: "http://localhost:1234"
@@ -614,26 +615,39 @@ fun repositoryCoverageTimeline(
     val resultsMetadata = ResultsMetadata()
     resultsMetadata.git = gitMetadata
 
+    val now = Instant.now()
+
+    resultsMetadata.createdTimestamp = now
     sendCoverageToServer(
         sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id,
         JacocoXmlLoader().jacocoXmlParser(),
     )
+
+    resultsMetadata.createdTimestamp = now.minusSeconds(60 * 60 * 24)
     sendCoverageToServer(
         sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id,
         JacocoXmlLoader().jacocoXmlParserReduced(),
     )
+
+    resultsMetadata.createdTimestamp = now.minusSeconds(60 * 60 * 24 * 2)
     sendCoverageToServer(
         sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id,
         JacocoXmlLoader().serverAppReduced(),
     )
+
+    resultsMetadata.createdTimestamp = now.minusSeconds(60 * 60 * 24 * 3)
     sendCoverageToServer(
         sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id,
         JacocoXmlLoader().serverApp(),
     )
+
+    resultsMetadata.createdTimestamp = now.minusSeconds(60 * 60 * 24 * 4)
     sendCoverageToServer(
         sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id,
         JacocoXmlLoader().junitResultsParser(),
     )
+
+    resultsMetadata.createdTimestamp = now.minusSeconds(60 * 60 * 24 * 5)
     sendCoverageToServer(
         sendGroupedResultsToServer(groupedResultsXmlLoader.passingGroupedResults(metadata = resultsMetadata)).id,
         JacocoXmlLoader().junitResultsParserReduced(),

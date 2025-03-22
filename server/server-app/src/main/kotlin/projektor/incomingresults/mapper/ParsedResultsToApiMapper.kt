@@ -12,6 +12,7 @@ fun toTestRunSummary(
     publicId: PublicId,
     testSuites: List<ParsedTestSuite>,
     wallClockDuration: BigDecimal?,
+    createdTimestamp: Instant?,
 ): TestRunSummary {
     val totalTestCount = testSuites.sumOf { it.tests }
     val totalFailureCount = testSuites.sumOf { it.failures }
@@ -38,7 +39,7 @@ fun toTestRunSummary(
         cumulativeDuration,
         averageDuration,
         slowestTestCaseDuration,
-        Instant.now(),
+        createdTimestamp ?: Instant.now(),
         wallClockDuration,
     )
 }
@@ -47,6 +48,7 @@ fun toTestRunSummaryFromApi(
     publicId: PublicId,
     testSuites: List<TestSuiteApi>,
     wallClockDuration: BigDecimal?,
+    createdTimestamp: Instant?,
 ): TestRunSummary {
     val totalTestCount = testSuites.sumOf { it.testCount }
     val totalFailureCount = testSuites.sumOf { it.failureCount }
@@ -73,7 +75,7 @@ fun toTestRunSummaryFromApi(
         cumulativeDuration,
         averageDuration,
         slowestTestCaseDuration,
-        Instant.now(),
+        createdTimestamp ?: Instant.now(),
         wallClockDuration,
     )
 }

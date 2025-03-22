@@ -62,9 +62,9 @@ class AddCoverageFileCompressedApplicationTest : ApplicationTestCase() {
 
             expectThat(resultsProcessingDatabaseRepositoryFile)
                 .isNotNull().and {
-                    get { directoryName }.isEqualTo("projektor/incomingresults/processing")
+                    get { directoryName }.isEqualTo("incomingresults/processing")
                     get { filePath }.isEqualTo(
-                        "server/server-app/src/main/kotlin/projektor/incomingresults/processing/ResultsProcessingDatabaseRepository.kt",
+                        "server/server-app/src/main/kotlin/incomingresults/processing/ResultsProcessingDatabaseRepository.kt",
                     )
                 }
         }

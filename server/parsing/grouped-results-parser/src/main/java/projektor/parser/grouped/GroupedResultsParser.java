@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.StreamReadConstraints;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import projektor.parser.grouped.model.GroupedResults;
 
 import java.io.IOException;
@@ -19,7 +20,8 @@ public class GroupedResultsParser {
 
     public GroupedResultsParser(Integer maxPayloadSize) {
         this.mapper = new ObjectMapper()
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .registerModule(new JavaTimeModule());
 
         this.mapper.getFactory()
                 .setStreamReadConstraints(StreamReadConstraints.builder().maxStringLength(maxPayloadSize).build());

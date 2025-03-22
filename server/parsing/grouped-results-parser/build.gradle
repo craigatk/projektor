@@ -6,6 +6,7 @@ plugins {
 
 dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonDatabindVersion"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion"
 
     testImplementation "org.spockframework:spock-core:$spockVersion"
 

@@ -36,6 +36,7 @@ import projektor.server.api.TestSuite
 import projektor.telemetry.startSpanWithParent
 import projektor.util.addPrefixToFields
 import java.math.BigDecimal
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -57,7 +58,7 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
         publicId: PublicId,
         testSuites: List<ParsedTestSuite>,
     ) = withContext(Dispatchers.IO) {
-        val testRunSummary = toTestRunSummary(publicId, testSuites, null)
+        val testRunSummary = toTestRunSummary(publicId, testSuites, null, null)
         val testRunDB = testRunSummary.toDB()
 
         dslContext.transaction { configuration ->
@@ -78,7 +79,8 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
         groupedResults: GroupedResults,
     ) = withContext(Dispatchers.IO) {
         val testSuites = groupedResults.groupedTestSuites.flatMap { it.testSuites }
-        val testRunSummary = toTestRunSummary(publicId, testSuites, groupedResults.wallClockDuration)
+        val testRunSummary =
+            toTestRunSummary(publicId, testSuites, groupedResults.wallClockDuration, groupedResults.metadata?.createdTimestamp)
         val testRunDB = testRunSummary.toDB()
 
         logger.info("Starting inserting test run $publicId")
@@ -162,7 +164,8 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
 
             val updatedWallClockDuration: BigDecimal = (existingTestRun.wallClockDuration ?: BigDecimal.ZERO) + (wallClockDuration ?: BigDecimal.ZERO)
 
-            val testRunSummary = toTestRunSummaryFromApi(PublicId(existingTestRun.publicId), testSuites, updatedWallClockDuration)
+            val testRunSummary =
+                toTestRunSummaryFromApi(PublicId(existingTestRun.publicId), testSuites, updatedWallClockDuration, Instant.now())
             existingTestRun.averageDuration = testRunSummary.averageDuration
             existingTestRun.cumulativeDuration = testRunSummary.cumulativeDuration
             existingTestRun.passed = testRunSummary.passed
