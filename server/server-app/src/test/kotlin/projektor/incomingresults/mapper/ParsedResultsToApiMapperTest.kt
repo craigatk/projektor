@@ -13,7 +13,7 @@ class ParsedResultsToApiMapperTest {
     fun `should be able to parse empty test suite list`() {
         val publicId = randomPublicId()
 
-        val testRunSummary = toTestRunSummary(publicId, listOf(), null)
+        val testRunSummary = toTestRunSummary(publicId, listOf(), null, null)
 
         expectThat(testRunSummary).and {
             get { totalTestCount }.isEqualTo(0)
@@ -38,7 +38,7 @@ class ParsedResultsToApiMapperTest {
         testSuite2.time = BigDecimal.ZERO
         testSuite2.testCases = listOf(TestCase())
 
-        val testRunSummary = toTestRunSummary(publicId, listOf(testSuite1, testSuite2), null)
+        val testRunSummary = toTestRunSummary(publicId, listOf(testSuite1, testSuite2), null, null)
 
         expectThat(testRunSummary).and {
             get { averageDuration }.isEqualTo(BigDecimal.ZERO)

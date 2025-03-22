@@ -21,7 +21,7 @@ class JacocoXmlReportParserFileSpec extends Specification {
         report.packages.size() == 18
 
         and:
-        ReportPackage cleanupPackage = report.packages.find { it.name == "projektor/cleanup" }
+        ReportPackage cleanupPackage = report.packages.find { it.name == "cleanup" }
         cleanupPackage != null
 
         and:

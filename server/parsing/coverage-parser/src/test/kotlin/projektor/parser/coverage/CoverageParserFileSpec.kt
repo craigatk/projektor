@@ -27,7 +27,7 @@ class CoverageParserFileSpec : StringSpec({
 
         val cleanupScheduledJobFile = coverageReportFiles.find { it.fileName == "CleanupScheduledJob.kt" }
         expectThat(cleanupScheduledJobFile).isNotNull().and {
-            get { directoryName }.isEqualTo("projektor/cleanup")
+            get { directoryName }.isEqualTo("cleanup")
             get { missedLines }.hasSize(4).contains(16, 18, 20, 21)
             get { partialLines }.hasSize(0)
             get { stats }.and {
@@ -38,7 +38,7 @@ class CoverageParserFileSpec : StringSpec({
 
         val gzipUtilFile = coverageReportFiles.find { it.fileName == "GzipUtil.kt" }
         expectThat(gzipUtilFile).isNotNull().and {
-            get { directoryName }.isEqualTo("projektor/util")
+            get { directoryName }.isEqualTo("util")
             get { missedLines }.hasSize(0)
             get { partialLines }.hasSize(2).contains(9, 14)
             get { stats }.and {
@@ -58,8 +58,8 @@ class CoverageParserFileSpec : StringSpec({
 
         val cleanupScheduledJobFile = coverageReportFiles?.find { it.fileName == "CleanupScheduledJob.kt" }
         expectThat(cleanupScheduledJobFile).isNotNull().and {
-            get { directoryName }.isEqualTo("projektor/cleanup")
-            get { filePath }.isNotNull().isEqualTo("server/server-app/src/main/kotlin/projektor/cleanup/CleanupScheduledJob.kt")
+            get { directoryName }.isEqualTo("cleanup")
+            get { filePath }.isNotNull().isEqualTo("server/server-app/src/main/kotlin/cleanup/CleanupScheduledJob.kt")
         }
     }
 

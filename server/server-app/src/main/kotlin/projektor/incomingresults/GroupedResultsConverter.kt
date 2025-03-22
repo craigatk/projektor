@@ -52,6 +52,7 @@ class GroupedResultsConverter(
                             },
                         ci = metadata.ci,
                         group = metadata.group,
+                        createdTimestamp = metadata.createdTimestamp,
                     )
                 }
 
