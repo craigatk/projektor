@@ -53,7 +53,7 @@ dependencies {
         exclude group: 'org.codehaus.groovy'
     }
     testImplementation "org.spockframework:spock-junit4:$spockVersion"
-    testImplementation "net.bytebuddy:byte-buddy:1.17.3"
+    testImplementation "net.bytebuddy:byte-buddy:1.17.4"
     testImplementation 'org.objenesis:objenesis:3.4'
 
     testImplementation "org.wiremock:wiremock:$wiremockVersion"
