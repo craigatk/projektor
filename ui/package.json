@@ -44,7 +44,7 @@
     "resize-observer-polyfill": "1.5.1",
     "rimraf": "6.0.1",
     "start-server-and-test": "2.0.11",
-    "ts-jest": "29.2.6",
+    "ts-jest": "29.3.0",
     "typescript": "5.8.2",
     "typescript-plugin-css-modules": "5.1.0",
     "wait-for-expect": "3.0.2"
