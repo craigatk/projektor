@@ -8,8 +8,7 @@ import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
 import io.ktor.http.content.CachingOptions
 import io.ktor.serialization.jackson.jackson
-import io.ktor.server.application.Application
-import io.ktor.server.application.install
+import io.ktor.server.application.*
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.metrics.micrometer.MicrometerMetrics
 import io.ktor.server.plugins.cachingheaders.CachingHeaders
@@ -164,6 +163,12 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
         }
     }
     install(IgnoreTrailingSlash) // Needed to treat /tests/ and /tests as the same URL
+
+    environment.monitor.subscribe(ApplicationStopped) {
+        log.info("Application stopping")
+        dataSource.close()
+        log.info("Datasource closed")
+    }
 
     val authService: AuthService by inject()
     val messageService: MessageService by inject()
