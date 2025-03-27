@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import com.zaxxer.hikari.HikariDataSource
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -194,10 +193,6 @@ open class ApplicationTestCase {
             startApplication()
 
             block()
-
-            val theDatasource: HikariDataSource = getApplication().get()
-
-            theDatasource.close()
         }
     }
 
