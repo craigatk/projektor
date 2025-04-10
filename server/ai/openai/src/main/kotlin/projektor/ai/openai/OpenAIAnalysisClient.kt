@@ -3,8 +3,8 @@ package projektor.ai.openai
 import com.openai.client.OpenAIClient
 import com.openai.client.okhttp.OpenAIOkHttpClient
 import com.openai.credential.BearerTokenCredential
-import com.openai.models.ChatCompletionCreateParams
 import com.openai.models.ChatModel
+import com.openai.models.chat.completions.ChatCompletionCreateParams
 import kotlinx.coroutines.future.await
 import org.slf4j.LoggerFactory
 import projektor.ai.analysis.AITestFailureAnalyzer
