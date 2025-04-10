@@ -3,10 +3,9 @@ package projektor.ai.openai
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.*
-import com.openai.models.ChatCompletion
-import com.openai.models.ChatCompletion.Choice
-import com.openai.models.ChatCompletionMessage
 import com.openai.models.ChatModel
+import com.openai.models.chat.completions.ChatCompletion
+import com.openai.models.chat.completions.ChatCompletionMessage
 import java.util.*
 
 class OpenAIWireMockStubber(private val wireMockServer: WireMock) {
@@ -16,11 +15,11 @@ class OpenAIWireMockStubber(private val wireMockServer: WireMock) {
             ChatCompletion.builder()
                 .choices(
                     listOf(
-                        Choice.builder()
+                        ChatCompletion.Choice.builder()
                             .message(
                                 ChatCompletionMessage.builder().content(content).refusal("").build(),
                             )
-                            .finishReason(Choice.FinishReason.LENGTH)
+                            .finishReason(ChatCompletion.Choice.FinishReason.LENGTH)
                             .index(0)
                             .logprobs(Optional.empty())
                             .build(),
