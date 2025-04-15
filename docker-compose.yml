@@ -12,7 +12,7 @@ services:
     ports:
       - "5433:5432"
   objectstorage:
-    image: bitnami/minio:2020.12.29-debian-10-r17
+    image: bitnami/minio:2025.4.8-debian-12-r3
     ports:
       - "9000:9000"
     volumes:
