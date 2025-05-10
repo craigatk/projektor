@@ -2,7 +2,7 @@ version: '3'
 
 services:
   postgres:
-    image: postgres:17.4-alpine
+    image: postgres:17.5-alpine
     command: -c 'max_connections=200'
     environment:
       - POSTGRES_USER=testuser
