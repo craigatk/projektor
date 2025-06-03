@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:11.8.2")
+        classpath("org.flywaydb:flyway-database-postgresql:11.9.0")
     }
 }
 
@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    api "org.flywaydb:flyway-database-postgresql:11.8.2"
+    api "org.flywaydb:flyway-database-postgresql:11.9.0"
     api "com.zaxxer:HikariCP:6.3.0"
     api 'org.jooq:jooq:3.20.4'
 
