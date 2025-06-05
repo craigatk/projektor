@@ -3,14 +3,14 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:11.9.0")
+        classpath("org.flywaydb:flyway-database-postgresql:11.9.1")
     }
 }
 
 plugins {
     id "com.avast.gradle.docker-compose" version "0.17.12"
     id 'nu.studer.jooq' version '10.1'
-    id "org.flywaydb.flyway" version "11.8.2"
+    id "org.flywaydb.flyway" version "11.9.1"
     id "java-library"
 }
 
@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    api "org.flywaydb:flyway-database-postgresql:11.9.0"
+    api "org.flywaydb:flyway-database-postgresql:11.9.1"
     api "com.zaxxer:HikariCP:6.3.0"
     api 'org.jooq:jooq:3.20.4'
 
