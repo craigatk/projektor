@@ -6895,10 +6895,10 @@ readdirp@^4.0.1:
   resolved "https://registry.yarnpkg.com/readdirp/-/readdirp-4.0.2.tgz#388fccb8b75665da3abffe2d8f8ed59fe74c230a"
   integrity sha512-yDMz9g+VaZkqBYS/ozoBJwaBhTbZo3UNYQHNRw1D3UFQB8oHB4uS/tAODO+ZLjGWmUbKnIlOWO+aaIiAxrUWHA==
 
-recharts@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/recharts/-/recharts-3.0.0.tgz#86354f9aa0464a5414ea152b568773b9b3bb5742"
-  integrity sha512-GODedlXZEOQ/KN15puHqaEk9JaiUvFr+Wef/nSagi7g9wHPFLB7prH1/J8vyEBtA2Es6r8qGY1t2OqkuAIpgBg==
+recharts@3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/recharts/-/recharts-3.0.2.tgz#f81f411f57d5e41a9ab9fc5817be4a58a2181046"
+  integrity sha512-eDc3ile9qJU9Dp/EekSthQPhAVPG48/uM47jk+PF7VBQngxeW3cwQpPHb/GHC1uqwyCRWXcIrDzuHRVrnRryoQ==
   dependencies:
     "@reduxjs/toolkit" "1.x.x || 2.x.x"
     clsx "^2.1.1"
