@@ -13,7 +13,7 @@
     "env-cmd": "10.1.0",
     "jest": "30.0.3",
     "jest-junit": "16.0.0",
-    "prettier": "3.6.1",
+    "prettier": "3.6.2",
     "projektor-publish": "file:../",
     "wait-for-expect": "3.0.2"
   }
