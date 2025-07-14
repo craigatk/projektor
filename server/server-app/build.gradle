@@ -52,7 +52,7 @@ dependencies {
     implementation "io.insert-koin:koin-logger-slf4j:$koin_version"
 
     implementation "io.ktor:ktor-server-metrics-micrometer:$ktor_version"
-    implementation 'io.micrometer:micrometer-registry-influx:1.15.1'
+    implementation 'io.micrometer:micrometer-registry-influx:1.15.2'
 
     implementation "net.javacrumbs.shedlock:shedlock-provider-jdbc-template:6.9.2"
 
