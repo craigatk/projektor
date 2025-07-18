@@ -8,7 +8,7 @@ apply from: "../../../gradle/kotlin.gradle"
 dependencies {
     implementation(project(":server:ai:analysis"))
 
-    implementation("com.openai:openai-java:2.12.4") // https://github.com/openai/openai-java
+    implementation("com.openai:openai-java:2.16.0") // https://github.com/openai/openai-java
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2") // https://stackoverflow.com/questions/63828071/convert-completablefuture-to-coroutine
 
@@ -19,5 +19,5 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.13.3"
 
     testFixturesImplementation "org.wiremock:wiremock:$wiremockVersion"
-    testFixturesImplementation("com.openai:openai-java:2.12.4") // https://github.com/openai/openai-java
+    testFixturesImplementation("com.openai:openai-java:2.16.0") // https://github.com/openai/openai-java
 }
