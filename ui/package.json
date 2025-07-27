@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@testing-library/cypress": "10.0.3",
-    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/jest-dom": "6.6.4",
     "@testing-library/react": "16.3.0",
     "@types/jest": "30.0.0",
     "axios-mock-adapter": "2.1.0",
