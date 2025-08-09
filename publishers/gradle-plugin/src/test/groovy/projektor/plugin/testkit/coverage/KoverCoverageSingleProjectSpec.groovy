@@ -2,7 +2,6 @@ package projektor.plugin.testkit.coverage
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.util.GradleVersion
-import projektor.plugin.ProjektorPluginVersion
 import projektor.plugin.coverage.model.CoverageFilePayload
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.testkit.SingleProjectSpec
@@ -13,16 +12,11 @@ import static projektor.plugin.CodeUnderTestWriter.*
 import static projektor.plugin.ProjectDirectoryWriter.*
 import static projektor.plugin.ProjektorPluginVersion.MINIMUM_GRADLE_VERSION
 
-class Kover07CoverageSingleProjectSpec extends SingleProjectSpec {
+class KoverCoverageSingleProjectSpec extends SingleProjectSpec {
 
     @Override
     boolean includeKoverPlugin() {
         return true
-    }
-
-    @Override
-    String koverPluginVersion() {
-        return "0.7.2"
     }
 
     @Unroll
@@ -65,8 +59,8 @@ class Kover07CoverageSingleProjectSpec extends SingleProjectSpec {
         coverageFilePayloads[0].baseDirectoryPath == "src/main/kotlin"
 
         where:
-        gradleVersion                  | _
+        gradleVersion                                 | _
         GradleVersion.version(MINIMUM_GRADLE_VERSION) | _
-        GradleVersion.current()        | _
+        GradleVersion.current()                       | _
     }
 }

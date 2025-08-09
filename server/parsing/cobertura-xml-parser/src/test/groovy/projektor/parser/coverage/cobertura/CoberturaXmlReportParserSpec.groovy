@@ -46,17 +46,17 @@ class CoberturaXmlReportParserSpec extends Specification {
         List<CoverageLine> coverageDetailsClassLines = coverageDetailsClass.lines.lines
         coverageDetailsClassLines.size() == 11
 
-        coverageDetailsClassLines.find { it.number == 1 }?.covered
-        coverageDetailsClassLines.find { it.number == 3 }?.covered
-        coverageDetailsClassLines.find { it.number == 4 }?.covered
-        coverageDetailsClassLines.find { it.number == 5 }?.covered
-        coverageDetailsClassLines.find { it.number == 12 }?.covered
-        coverageDetailsClassLines.find { it.number == 18 }?.covered
-        !coverageDetailsClassLines.find { it.number == 19 }?.covered
-        !coverageDetailsClassLines.find { it.number == 21 }?.covered
-        !coverageDetailsClassLines.find { it.number == 23 }?.covered
-        !coverageDetailsClassLines.find { it.number == 31 }?.covered
-        coverageDetailsClassLines.find { it.number == 51 }?.covered
+        coverageDetailsClassLines.find { it.number == 1 }?.isCovered()
+        coverageDetailsClassLines.find { it.number == 3 }?.isCovered()
+        coverageDetailsClassLines.find { it.number == 4 }?.isCovered()
+        coverageDetailsClassLines.find { it.number == 5 }?.isCovered()
+        coverageDetailsClassLines.find { it.number == 12 }?.isCovered()
+        coverageDetailsClassLines.find { it.number == 18 }?.isCovered()
+        !coverageDetailsClassLines.find { it.number == 19 }?.isCovered()
+        !coverageDetailsClassLines.find { it.number == 21 }?.isCovered()
+        !coverageDetailsClassLines.find { it.number == 23 }?.isCovered()
+        !coverageDetailsClassLines.find { it.number == 31 }?.isCovered()
+        coverageDetailsClassLines.find { it.number == 51 }?.isCovered()
     }
 
     @Unroll

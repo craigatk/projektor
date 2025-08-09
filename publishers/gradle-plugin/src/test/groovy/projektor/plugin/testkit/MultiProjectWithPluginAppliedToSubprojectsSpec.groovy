@@ -73,6 +73,7 @@ include 'project1', 'project2', 'project3'
             
             dependencies {
                 testImplementation('org.spockframework:spock-core:2.4-M5-groovy-4.0')
+                testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
             }
 
             test {

@@ -9,6 +9,7 @@ dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion"
 
     testImplementation "org.spockframework:spock-core:$spockVersion"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 
     testImplementation(project(':server:test:test-fixtures'))
 }
