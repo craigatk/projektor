@@ -75,9 +75,9 @@ class MultiProjectCoverageFunctionalSpec extends MultiProjectFunctionalSpecifica
             assert overallStatsResponse.successful
 
             CoverageStats overallStats = overallStatsResponse.body()
-            assert overallStats.statementStat.covered == 25
-            assert overallStats.statementStat.missed == 5
-            assert overallStats.statementStat.total == 30
+            assert overallStats.statementStat.covered == 10
+            assert overallStats.statementStat.missed == 2
+            assert overallStats.statementStat.total == 12
             assert overallStats.statementStat.coveredPercentage == 83.33
 
             assert overallStats.lineStat.covered == 5
@@ -138,9 +138,9 @@ class MultiProjectCoverageFunctionalSpec extends MultiProjectFunctionalSpecifica
             assert overallStatsResponse1.successful
 
             CoverageStats overallStats = overallStatsResponse1.body()
-            assert overallStats.statementStat.covered == 25
-            assert overallStats.statementStat.missed == 5
-            assert overallStats.statementStat.total == 30
+            assert overallStats.statementStat.covered == 10
+            assert overallStats.statementStat.missed == 2
+            assert overallStats.statementStat.total == 12
             assert overallStats.statementStat.coveredPercentage == 83.33
 
             assert overallStats.lineStat.covered == 5

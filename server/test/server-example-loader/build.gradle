@@ -1,7 +1,9 @@
 apply from: "../../../gradle/kotlin.gradle"
 apply plugin: "application"
 
-mainClassName = "projektor.server.example.MainKt"
+application {
+    mainClass = "projektor.server.example.MainKt"
+}
 
 dependencies {
     implementation project(":server:server-api")

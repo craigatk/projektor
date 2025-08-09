@@ -5,15 +5,11 @@ import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.testkit.MultiProjectSpec
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import static org.gradle.testkit.runner.TaskOutcome.UP_TO_DATE
 import static projektor.plugin.CodeUnderTestWriter.writeKotlinSourceCodeFile
 import static projektor.plugin.CodeUnderTestWriter.writePartialCoverageKotestFile
-import static projektor.plugin.CodeUnderTestWriter.writePartialCoverageSpecFile
-import static projektor.plugin.CodeUnderTestWriter.writeSourceCodeFile
 import static projektor.plugin.ProjectDirectoryWriter.createKotlinSourceDirectory
-import static projektor.plugin.ProjectDirectoryWriter.createSourceDirectory
 
-class Kover07CoverageMultiProjectSpec extends MultiProjectSpec {
+class KoverCoverageMultiProjectSpec extends MultiProjectSpec {
     File sourceDirectory1
     File sourceDirectory2
     File sourceDirectory3
@@ -21,11 +17,6 @@ class Kover07CoverageMultiProjectSpec extends MultiProjectSpec {
     @Override
     boolean includeKoverPlugin() {
         return true
-    }
-
-    @Override
-    String koverPluginVersion() {
-        return "0.7.2"
     }
 
     def setup() {

@@ -5,7 +5,6 @@ import projektor.plugin.ProjektorPluginVersion
 import projektor.plugin.coverage.model.CoverageFilePayload
 import projektor.plugin.results.grouped.GroupedResults
 import projektor.plugin.testkit.SingleProjectSpec
-import spock.lang.See
 import spock.lang.Unroll
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
@@ -22,7 +21,6 @@ class KoverCoverageMultiTaskSpec extends SingleProjectSpec {
         return true
     }
 
-    @See("https://github.com/Kotlin/kotlinx-kover - Minimal supported Gradle version: 6.4")
     @Unroll
     def "should publish coverage results from unit and integration tests to server with Gradle version #gradleVersion"() {
         given:
@@ -36,7 +34,7 @@ class KoverCoverageMultiTaskSpec extends SingleProjectSpec {
             
             configurations {
                 intTestImplementation.extendsFrom testImplementation
-                intTestRuntimeOnly.extendsFrom runtimeOnly
+                intTestRuntimeOnly.extendsFrom runtimeOnly, testRuntimeOnly
             }
 
             task integrationTest(type: Test) {
@@ -55,6 +53,7 @@ class KoverCoverageMultiTaskSpec extends SingleProjectSpec {
                 kover {
                     enabled = true
                 }
+                useJUnitPlatform()
             }
 
             projektor {
@@ -93,11 +92,11 @@ class KoverCoverageMultiTaskSpec extends SingleProjectSpec {
         List<CoverageFilePayload> coverageFilePayloads = resultsRequestBodies[0].coverageFiles
         coverageFilePayloads.size() == 1
 
-        coverageFilePayloads[0].reportContents.contains('<counter type="LINE" missed="4" covered="0"/>')
+        coverageFilePayloads[0].reportContents.contains('<counter type="LINE" missed="0" covered="4"/>')
 
         where:
-        gradleVersion                  | _
+        gradleVersion                                                        | _
         GradleVersion.version(ProjektorPluginVersion.MINIMUM_GRADLE_VERSION) | _
-        GradleVersion.current()        | _
+        GradleVersion.current()                                              | _
     }
 }

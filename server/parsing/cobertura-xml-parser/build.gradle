@@ -16,6 +16,7 @@ dependencies {
     testImplementation "org.spockframework:spock-core:$spockVersion"
 
     testImplementation(project(':server:test:coverage-fixtures'))
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 }
 
 test {
