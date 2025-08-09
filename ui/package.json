@@ -47,7 +47,7 @@
     "ts-jest": "29.4.1",
     "typescript": "5.9.2",
     "typescript-plugin-css-modules": "5.2.0",
-    "wait-for-expect": "3.0.2"
+    "wait-for-expect": "4.0.0"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
