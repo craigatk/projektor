@@ -41,9 +41,10 @@ class BuildFileWriter {
             }
             
             dependencies {
-                implementation('org.codehaus.groovy:groovy-all:3.0.21')
+                implementation('org.apache.groovy:groovy-all:4.0.28')
 
-                testImplementation('org.spockframework:spock-core:2.4-M5-groovy-3.0')
+                testImplementation('org.spockframework:spock-core:2.4-M6-groovy-4.0')
+                testRuntimeOnly('org.junit.platform:junit-platform-launcher')
             }
 
             test {
@@ -89,7 +90,7 @@ class BuildFileWriter {
                 }
 
                 dependencies {
-                    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.10"
+                    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0"
                 }
             }
 
@@ -105,11 +106,12 @@ class BuildFileWriter {
             }
             
             dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-stdlib:2.1.10"
-                implementation "org.jetbrains.kotlin:kotlin-reflect:2.1.10"
+                implementation "org.jetbrains.kotlin:kotlin-stdlib:2.2.0"
+                implementation "org.jetbrains.kotlin:kotlin-reflect:2.2.0"
             
                 testImplementation "io.kotest:kotest-runner-junit5-jvm:5.9.1"
                 testImplementation "io.strikt:strikt-core:0.34.1"
+                testRuntimeOnly "org.junit.platform:junit-platform-launcher"
             }
             
             ${koverConfigSetup}

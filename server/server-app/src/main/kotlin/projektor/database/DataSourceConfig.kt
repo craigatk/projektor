@@ -56,6 +56,7 @@ data class DataSourceConfig(
                     .dataSource(dataSource)
                     .schemas(dataSourceConfig.schema)
                     .locations("classpath:db/migration")
+                    .validateMigrationNaming(true)
                     .load()
 
             flyway.migrate()

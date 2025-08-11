@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "8.1.1"
+    id "com.gradleup.shadow" version "9.0.1"
     id "com.heroku.sdk.heroku-gradle" version "3.0.0"
     id "application"
     id 'jacoco'
@@ -12,14 +12,17 @@ repositories {
     mavenCentral()
 }
 
-mainClassName = 'io.ktor.server.netty.EngineMain'
+application {
+    mainClass = 'io.ktor.server.netty.EngineMain'
+}
 
 // This task will generate your fat JAR and put it in the ./build/libs/ directory
 shadowJar {
     manifest {
-        attributes 'Main-Class': mainClassName
+        attributes 'Main-Class': 'io.ktor.server.netty.EngineMain'
     }
     mergeServiceFiles() // Needed for Flyway 10 to find migration files in a shadow JAR. Ref: https://github.com/flyway/flyway/issues/3811#issuecomment-1923303046
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 jar.enabled = false // We only use the -all jar produced by Shadow
