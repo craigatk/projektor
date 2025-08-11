@@ -43,7 +43,7 @@ jobs:
           MINIO_SECRET_KEY: minio_secret_key
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
