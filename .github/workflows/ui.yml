@@ -11,7 +11,7 @@ jobs:
   ui-test:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -55,7 +55,7 @@ jobs:
   ui-cypress-test:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install Cypress dependencies # https://docs.cypress.io/app/get-started/install-cypress#UbuntuDebian
         run: |
           sudo apt-get update
