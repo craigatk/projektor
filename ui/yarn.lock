@@ -3158,10 +3158,10 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.10.0.tgz#a17b3a8ea811060e74d47d306122400ad4497ae2"
   integrity sha512-3YDiu347mtVtjpyV3u5kVqQLP242c06zwDOgpeRnybmXlYYsLbtTrUBUm8i8srONt+FWobl5aibnU1030PeeuA==
 
-axios-cache-interceptor@1.8.0:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/axios-cache-interceptor/-/axios-cache-interceptor-1.8.0.tgz#2a061585569d57f340a66915faeab7e5ca4d0307"
-  integrity sha512-cTNnPGJyQkxnWp0EWvE3NRvgURU5cWw/Qx3dIhXyHSM4Ip0c7EEe0I3an0Jwa549m1CAOg57ibj27YRNLmQCcg==
+axios-cache-interceptor@1.8.2:
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/axios-cache-interceptor/-/axios-cache-interceptor-1.8.2.tgz#afaec587d15786b6c44459ff090e0c9e28861f8b"
+  integrity sha512-NadGy8D06MrkpY+vlR5yTt1kGsmhSfON8mbriTpt7diByh81Vj3tViBrtPjGTwIvZxH9CUll2dZaWmGd9qQOiA==
   dependencies:
     cache-parser "1.2.5"
     fast-defer "1.1.8"
