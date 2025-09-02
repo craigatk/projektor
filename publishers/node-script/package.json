@@ -52,6 +52,6 @@
   },
   "resolutions": {
     "wrap-ansi": "9.0.0",
-    "string-width": "7.2.0"
+    "string-width": "8.1.0"
   }
 }
