@@ -3,7 +3,7 @@ package projektor
 import ch.qos.logback.classic.Logger
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
@@ -71,7 +71,7 @@ open class ApplicationTestCase {
         ObjectMapper()
             .registerKotlinModule()
             .registerModule(JavaTimeModule())
-            .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+            .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 

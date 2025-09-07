@@ -1,7 +1,7 @@
 package projektor.plugin.testkit.notification
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import projektor.plugin.SpecWriter
 import projektor.plugin.notification.link.LinkModel
 import projektor.plugin.testkit.SingleProjectSpec
@@ -11,7 +11,7 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class LinkFileSingleProjectSpec extends SingleProjectSpec {
     ObjectMapper objectMapper = new ObjectMapper()
-            .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+            .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
 
     def "when link file enabled and in CI should write link file"() {
         given:

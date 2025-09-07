@@ -1,12 +1,12 @@
 package projektor.plugin.notification.link
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import projektor.plugin.notification.NotificationConfig
 
 class LinkMessageWriter {
     final ObjectMapper objectMapper = new ObjectMapper()
-            .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+            .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
 
     File writeLinkFile(
             LinkModel linkModel,
