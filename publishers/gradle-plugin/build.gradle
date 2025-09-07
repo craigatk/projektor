@@ -43,7 +43,7 @@ dependencies {
 
     // Needs to stay at Jackson 2.15.x until Projektor Gradle plugin requires Gradle 8.4 or above
     // Ref https://stackoverflow.com/questions/77225378/gradle-clean-fails-with-gradleexception-failed-to-create-jar-file
-    implementation "com.fasterxml.jackson.core:jackson-databind:2.19.2"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.20.0"
 
     implementation "io.github.resilience4j:resilience4j-retry:2.3.0"
 
