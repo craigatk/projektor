@@ -1,7 +1,7 @@
 package projektor.plugin.testkit.notification
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import projektor.plugin.SettingsFileWriter
 import projektor.plugin.SpecWriter
 import projektor.plugin.notification.slack.message.SlackAttachment
@@ -13,7 +13,7 @@ import static projektor.plugin.PluginOutput.verifyOutputContainsReportLink
 
 class SlackMessageNotificationSingleProjectSpec extends SingleProjectSpec {
     ObjectMapper objectMapper = new ObjectMapper()
-            .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+            .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
 
     def "when Slack message enabled should write it"() {
         given:
