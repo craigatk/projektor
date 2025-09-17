@@ -49,14 +49,14 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       objectstorage:
-        image: bitnami/minio:2020.12.29-debian-10-r17
+        image: minio/minio:edge-cicd
         ports:
           - "9000:9000"
         volumes:
           - /tmp:/data
         env:
-          MINIO_ACCESS_KEY: minio_access_key
-          MINIO_SECRET_KEY: minio_secret_key
+          MINIO_ROOT_USER: minio_access_key
+          MINIO_ROOT_PASSWORD: minio_secret_key
 
     steps:
       - uses: actions/checkout@v5
