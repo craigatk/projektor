@@ -1,6 +1,6 @@
 package projektor.testcase
 
-import io.kotest.common.runBlocking
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.test.inject
 import projektor.DatabaseRepositoryTestCase

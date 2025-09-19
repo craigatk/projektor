@@ -1,5 +1,6 @@
 package projektor.objectstore
 
+import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.style.StringSpec
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
@@ -15,7 +16,8 @@ class ObjectStoreClientObjectSpec : StringSpec() {
     private val bucketName = "objectbucket"
     private val objectName = "thetestobject"
 
-    override fun listeners() = listOf(ObjectCleanupListener(client, bucketName, objectName))
+    override val extensions: List<Extension>
+        get() = listOf(ObjectCleanupListener(client, bucketName, objectName))
 
     init {
         "should store and retrieve object" {
