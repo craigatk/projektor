@@ -2,7 +2,7 @@ package projektor.objectstore
 
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
+import io.kotest.engine.test.TestResult
 
 class ObjectCleanupListener(
     private val objectStoreClient: ObjectStoreClient,
