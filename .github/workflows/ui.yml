@@ -104,7 +104,7 @@ jobs:
         env:
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
         with:
-          project: ./ui
+          working-directory: ui
           start: yarn cy:test:projektor:ci
           browser: chrome
 
