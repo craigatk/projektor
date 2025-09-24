@@ -103,10 +103,12 @@ jobs:
         uses: cypress-io/github-action@v6 # https://github.com/cypress-io/github-action
         env:
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
+          DEBUG: '@cypress/github-action'
         with:
           working-directory: ui
           start: yarn cy:test:projektor:ci
           install: false
+          parallel: false
 
       - name: Projektor publish
         if: success()
