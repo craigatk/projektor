@@ -59,7 +59,7 @@ jobs:
       - name: Install Cypress dependencies # https://docs.cypress.io/app/get-started/install-cypress#UbuntuDebian
         run: |
           sudo apt-get update
-          sudo apt-get install libgtk2.0-0t64 libgtk-3-0t64 libgbm-dev libnotify-dev libnss3 libxss1 libasound2t64 libxtst6 xauth xvfb
+          sudo apt-get install libgtk2.0-0t64 libgtk-3-0t64 libgbm-dev libnotify-dev libnss3 libxss1 libasound2t64 libxtst6 xauth xvfb dbus
       - name: Install Node.js
         uses: actions/setup-node@v5
         with:
@@ -91,6 +91,11 @@ jobs:
       - name: Increase file watchers
         run: |
           sudo sysctl fs.inotify.max_user_watches=1048576
+
+      - name: delete parcel cache
+        run: |
+          cd ui
+          rm -rf .parcel-cache
 
       - name: UI Cypress run
         env:
