@@ -97,12 +97,20 @@ jobs:
           cd ui
           rm -rf .parcel-cache
 
-      - name: UI Cypress run
+#      - name: UI Cypress run
+#        env:
+#          PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
+#        run: |
+#          cd ui
+#          yarn cy:test:projektor:ci
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
         env:
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
-        run: |
-          cd ui
-          yarn cy:test:projektor:ci
+        with:
+          start: cd ui; yarn cy:test:projektor:ci
+          browser: chrome
 
       - name: Projektor publish
         if: success()
