@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "vite serve src --port 1234",
-    "build": "yarn clean-dist && NODE_OPTIONS=--no-experimental-fetch vite build src",
+    "build": "yarn clean-dist && NODE_OPTIONS=--no-experimental-fetch vite build src --outDir ../dist",
     "build:dev": "yarn clean-dev-dist && NODE_ENV=development NODE_OPTIONS=--no-experimental-fetch vite build src",
     "format": "prettier --write \"src/**/*.ts*\" \"src/**/*.spec.ts*\" \"cypress/fixtures/**/*.json\" \"cypress/**/*.js\" \"src/**/*.module.css\"",
     "test": "jest",
