@@ -25,14 +25,16 @@ const RepositoryTimelineGraph = ({
   timeline,
   graphWidth,
 }: RepositoryTimelineGraphProps) => {
-  const data = timeline.timelineEntries.map((entry) => ({
-    date: moment.utc(entry.createdTimestamp).format("YYYY-MM-DD hh:mm:ss"),
-    createdTimestamp: entry.createdTimestamp,
-    publicId: entry.publicId,
-    duration: entry.cumulativeDuration,
-    totalTestCount: entry.totalTestCount,
-    testAverageDuration: entry.testAverageDuration,
-  }));
+  const data = timeline.timelineEntries
+    ? timeline.timelineEntries.map((entry) => ({
+        date: moment.utc(entry.createdTimestamp).format("YYYY-MM-DD hh:mm:ss"),
+        createdTimestamp: entry.createdTimestamp,
+        publicId: entry.publicId,
+        duration: entry.cumulativeDuration,
+        totalTestCount: entry.totalTestCount,
+        testAverageDuration: entry.testAverageDuration,
+      }))
+    : [];
 
   const xAxisTickFormatter = (value) => moment(value).format("MMM Do YYYY");
 

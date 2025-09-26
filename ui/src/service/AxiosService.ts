@@ -10,7 +10,8 @@ const cacheOptions: CacheOptions = {
 
 const myAxios = setupCache(
   axios.create({
-    baseURL: process.env.API_BASE_URL,
+    // @ts-ignore
+    baseURL: import.meta.env.VITE_API_BASE_URL,
   }),
   cacheOptions,
 );
@@ -20,7 +21,8 @@ const axiosInstance = applyCaseConverters(myAxios);
 const axiosInstanceWithoutCache = applyCaseConverters(
   // @ts-ignore
   axios.create({
-    baseURL: process.env.API_BASE_URL,
+    // @ts-ignore
+    baseURL: import.meta.env.VITE_API_BASE_URL,
   }),
 );
 

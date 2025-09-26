@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "parcel --dist-dir dev-dist src/index.html",
-    "build": "yarn clean-dist && NODE_OPTIONS=--no-experimental-fetch parcel build --dist-dir dist src/index.html",
-    "build:dev": "yarn clean-dev-dist && NODE_ENV=development NODE_OPTIONS=--no-experimental-fetch parcel build --dist-dir dev-dist src/index.html",
+    "start": "vite serve src --port 1234",
+    "build": "yarn clean-dist && NODE_OPTIONS=--no-experimental-fetch vite build src",
+    "build:dev": "yarn clean-dev-dist && NODE_ENV=development NODE_OPTIONS=--no-experimental-fetch vite build src",
     "format": "prettier --write \"src/**/*.ts*\" \"src/**/*.spec.ts*\" \"cypress/fixtures/**/*.json\" \"cypress/**/*.js\" \"src/**/*.module.css\"",
     "test": "jest",
     "test:projektor:ci": "yarn test || yarn projektor-publish --configFile=projektor.jest.json",
@@ -37,7 +37,6 @@
     "jest-css-modules": "2.1.0",
     "jest-environment-jsdom": "30.1.2",
     "jest-junit": "16.0.0",
-    "parcel": "2.13.3",
     "prettier": "3.6.2",
     "process": "0.11.10",
     "projektor-publish": "3.13.1",
@@ -47,6 +46,7 @@
     "ts-jest": "29.4.4",
     "typescript": "5.9.2",
     "typescript-plugin-css-modules": "5.2.0",
+    "vite": "7.1.7",
     "wait-for-expect": "4.0.0"
   },
   "dependencies": {
