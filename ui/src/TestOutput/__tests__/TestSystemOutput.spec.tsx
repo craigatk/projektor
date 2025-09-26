@@ -1,13 +1,17 @@
 import "@testing-library/jest-dom";
 import React from "react";
 import MockAdapter from "axios-mock-adapter";
-import { findByTestId, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { TestOutput } from "../../model/TestRunModel";
 import { axiosInstance } from "../../service/AxiosService";
 import TestOutputType from "../../service/TestOutputType";
 import TestSystemOutput from "../TestSystemOutput";
 import { globalHistory } from "@reach/router";
 import { QueryParamProvider } from "use-query-params";
+
+jest.mock("../../service/EnvService", () => ({
+  baseUrl: (): string => "http://localhost:8080/",
+}));
 
 describe("TestSystemOut", () => {
   let mockAxios;

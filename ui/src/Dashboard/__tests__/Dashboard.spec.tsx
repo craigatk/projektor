@@ -7,6 +7,10 @@ import { TestRun, TestRunSummary, TestSuite } from "../../model/TestRunModel";
 import Dashboard from "../Dashboard";
 import { PinState } from "../../Pin/PinState";
 
+jest.mock("../../service/EnvService", () => ({
+  baseUrl: (): string => "http://localhost:8080/",
+}));
+
 describe("Dashboard", () => {
   let mockAxios;
 

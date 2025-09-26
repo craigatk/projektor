@@ -11,6 +11,9 @@ import TestRunDataWrapper from "../TestRunDataWrapper";
 jest.mock("../../Attachments/byteFormat", () => ({
   formatBytes: jest.fn(),
 }));
+jest.mock("../../service/EnvService", () => ({
+  baseUrl: (): string => "http://localhost:8080/",
+}));
 
 describe("TestRunDataWrapper", () => {
   let mockAxios;

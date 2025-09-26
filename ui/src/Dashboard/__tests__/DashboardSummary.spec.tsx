@@ -15,6 +15,10 @@ function createMatchMedia(width) {
   });
 }
 
+jest.mock("../../service/EnvService", () => ({
+  baseUrl: (): string => "http://localhost:8080/",
+}));
+
 describe("Dashboard summary", () => {
   const publicId = "34567";
 

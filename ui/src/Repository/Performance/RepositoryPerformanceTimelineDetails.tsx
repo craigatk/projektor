@@ -23,16 +23,20 @@ const RepositoryPerformanceTimelineDetails = ({
           title="Performance tests over time"
           testid="repository-performance-title"
         />
-        {performanceTimeline.testTimelines.map((testTimeline, idx) => (
-          <div className={classes.testTitle}>
-            <Typography data-testid={`performance-timeline-title-${idx + 1}`}>
-              {testTimeline.name}
-            </Typography>
-            <RepositoryPerformanceTimelineGraph
-              performanceTestTimeline={testTimeline}
-            />
-          </div>
-        ))}
+        {performanceTimeline.testTimelines
+          ? performanceTimeline.testTimelines.map((testTimeline, idx) => (
+              <div className={classes.testTitle}>
+                <Typography
+                  data-testid={`performance-timeline-title-${idx + 1}`}
+                >
+                  {testTimeline.name}
+                </Typography>
+                <RepositoryPerformanceTimelineGraph
+                  performanceTestTimeline={testTimeline}
+                />
+              </div>
+            ))
+          : null}
       </div>
     );
   } else if (!hideIfEmpty) {

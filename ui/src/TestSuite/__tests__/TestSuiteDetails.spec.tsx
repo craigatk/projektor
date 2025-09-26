@@ -4,6 +4,10 @@ import { render } from "@testing-library/react";
 import { TestSuite } from "../../model/TestRunModel";
 import TestSuiteDetails from "../TestSuiteDetails";
 
+jest.mock("../../service/EnvService", () => ({
+  baseUrl: (): string => "http://localhost:8080/",
+}));
+
 describe("TestSuiteDetails", () => {
   it("should display system out tab if test suite has it", () => {
     const testSuite: TestSuite = {

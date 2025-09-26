@@ -5,6 +5,10 @@ import { TestCase, TestFailure } from "../../model/TestRunModel";
 import TestCaseFailurePanelList from "../TestCaseFailurePanelList";
 import { AIState } from "../../AI/AIContext";
 
+jest.mock("../../service/EnvService", () => ({
+  baseUrl: (): string => "http://localhost:8080/",
+}));
+
 describe("TestCaseFailureListPanel", () => {
   it("should render longer failure text when less than 5 failures", () => {
     const failure: TestFailure = {

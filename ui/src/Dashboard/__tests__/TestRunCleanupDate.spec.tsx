@@ -13,6 +13,10 @@ import { act } from "react-dom/test-utils";
 import { PinState } from "../../Pin/PinState";
 import moment from "moment";
 
+jest.mock("../../service/EnvService", () => ({
+  baseUrl: (): string => "http://localhost:8080/",
+}));
+
 describe("TestRunCleanupDate", () => {
   let mockAxios;
 

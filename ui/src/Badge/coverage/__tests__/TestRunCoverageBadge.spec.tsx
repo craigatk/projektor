@@ -10,6 +10,10 @@ import {
 } from "@reach/router";
 import TestRunCoverageBadge from "../TestRunCoverageBadge";
 
+jest.mock("../../../service/EnvService", () => ({
+  baseUrl: (): string => "http://localhost:8080/",
+}));
+
 describe("TestRunCoverageBadge", () => {
   let mockAxios;
 

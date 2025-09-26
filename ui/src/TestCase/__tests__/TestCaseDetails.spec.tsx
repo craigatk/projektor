@@ -6,6 +6,10 @@ import TestCaseDetails from "../TestCaseDetails";
 import moment from "moment";
 import { AIState } from "../../AI/AIContext";
 
+jest.mock("../../service/EnvService", () => ({
+  baseUrl: (): string => "http://localhost:8080/",
+}));
+
 describe("TestCaseDetails", () => {
   it("should render failure tab when the test case failed", () => {
     const testCase: TestCase = {

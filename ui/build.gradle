@@ -13,7 +13,7 @@ task verifyAssemble(type: projektor.gradle.UIRestUrlVerificationTask) { }
 task assemble(type: YarnTask) {
     args = ['build']
     inputs.dir('src')
-    inputs.file('.env.production')
+    inputs.file('src/.env.production')
     inputs.file('package.json')
     inputs.file('tsconfig.json')
     inputs.file('yarn.lock')
