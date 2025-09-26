@@ -14,6 +14,10 @@ import {
   CoverageStats,
 } from "../../../model/TestRunModel";
 
+jest.mock("../../../service/EnvService", () => ({
+  baseUrl: (): string => "http://localhost:8080/",
+}));
+
 describe("OrganizationCoveragePage", () => {
   let mockAxios;
 

@@ -6,6 +6,10 @@ import { axiosInstance } from "../../service/AxiosService";
 import { TestCaseFailureAnalysis } from "../../model/TestRunModel";
 import TestCaseFailureAnalysisSection from "../TestCaseFailureAnalysisSection";
 
+jest.mock("../../service/EnvService", () => ({
+  baseUrl: (): string => "http://localhost:8080/",
+}));
+
 describe("TestCaseFailureAnalysisSection", () => {
   let mockAxios;
 

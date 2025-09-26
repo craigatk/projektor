@@ -12,6 +12,10 @@ import waitForExpect from "wait-for-expect";
 import TestCaseFailurePanel from "../TestCaseFailurePanel";
 import { AIState } from "../../AI/AIContext";
 
+jest.mock("../../service/EnvService", () => ({
+  baseUrl: (): string => "http://localhost:8080/",
+}));
+
 describe("TestCaseFailurePanel", () => {
   it("should render failure details link when the test case failed", () => {
     const testCase: TestCase = {

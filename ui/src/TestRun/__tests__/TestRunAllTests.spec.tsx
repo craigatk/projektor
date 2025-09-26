@@ -6,6 +6,10 @@ import { TestRun, TestSuite } from "../../model/TestRunModel";
 import TestRunAllTests from "../TestRunAllTests";
 import { axiosInstance } from "../../service/AxiosService";
 
+jest.mock("../../service/EnvService", () => ({
+  baseUrl: (): string => "http://localhost:8080/",
+}));
+
 describe("TestRunAllTests", () => {
   let mockAxios;
 
