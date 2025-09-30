@@ -16,7 +16,7 @@ dependencies {
 
     testImplementation "org.wiremock:wiremock:$wiremockVersion"
 
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.13.4"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.14.0"
 
     testFixturesImplementation "org.wiremock:wiremock:$wiremockVersion"
     testFixturesImplementation("com.openai:openai-java:3.7.1") // https://github.com/openai/openai-java
