@@ -5,6 +5,6 @@
   "license": "MIT",
   "devDependencies": {
     "chai-colors": "1.0.1",
-    "cypress": "15.3.0"
+    "cypress": "15.4.0"
   }
 }
