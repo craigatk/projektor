@@ -1,9 +1,9 @@
 package projektor.logging
 
 import ch.qos.logback.classic.spi.ILoggingEvent
-import com.fasterxml.jackson.core.JsonGenerator
 import net.logstash.logback.composite.AbstractFieldJsonProvider
 import net.logstash.logback.composite.JsonWritingUtils
+import tools.jackson.core.JsonGenerator
 
 class TimeMillisJsonLoggingProvider : AbstractFieldJsonProvider<ILoggingEvent> {
     constructor() {
