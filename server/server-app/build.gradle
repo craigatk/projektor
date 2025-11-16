@@ -65,7 +65,7 @@ dependencies {
     implementation "net.logstash.logback:logstash-logback-encoder:9.0"
     implementation "org.codehaus.janino:janino:3.1.12" // Needed for conditionals in logback.xml
 
-    implementation "org.apache.commons:commons-lang3:3.19.0"
+    implementation "org.apache.commons:commons-lang3:3.20.0"
 
     implementation platform("io.opentelemetry:opentelemetry-bom:$opentelemetry_version")
     implementation 'io.opentelemetry:opentelemetry-api'
