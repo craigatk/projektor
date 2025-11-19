@@ -39,7 +39,7 @@
     "jest-junit": "16.0.0",
     "prettier": "3.6.2",
     "process": "0.11.10",
-    "projektor-publish": "3.13.1",
+    "projektor-publish": "3.13.2",
     "resize-observer-polyfill": "1.5.1",
     "rimraf": "6.1.0",
     "start-server-and-test": "2.1.2",
