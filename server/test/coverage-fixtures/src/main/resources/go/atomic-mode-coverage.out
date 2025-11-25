@@ -1,0 +1,4 @@
+mode: atomic
+github.com/user/project/internal/handler/handler.go:10.40,15.2 3 100
+github.com/user/project/internal/handler/handler.go:17.45,22.2 3 50
+github.com/user/project/internal/handler/handler.go:24.35,28.2 2 0

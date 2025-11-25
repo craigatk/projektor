@@ -1,0 +1,21 @@
+plugins {
+    id 'java-library'
+    id 'groovy'
+    id 'jacoco'
+}
+
+apply from: "../../../gradle/kotlin.gradle"
+
+group 'dev.projektor'
+version '1.0-SNAPSHOT'
+
+dependencies {
+    testImplementation "org.spockframework:spock-core:$spockVersion"
+
+    testImplementation(project(':server:test:coverage-fixtures'))
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+}
+
+test {
+    useJUnitPlatform()
+}

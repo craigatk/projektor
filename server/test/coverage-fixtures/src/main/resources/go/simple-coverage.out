@@ -1,0 +1,5 @@
+mode: set
+github.com/user/project/pkg/calculator/calculator.go:5.24,7.2 1 1
+github.com/user/project/pkg/calculator/calculator.go:9.29,11.2 1 1
+github.com/user/project/pkg/calculator/calculator.go:13.32,15.2 1 0
+github.com/user/project/pkg/calculator/calculator.go:17.29,19.2 1 0
