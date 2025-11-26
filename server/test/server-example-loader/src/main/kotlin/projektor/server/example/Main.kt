@@ -45,4 +45,7 @@ fun main() {
     appendTwoAdditionalTestRuns()
     invalidResults()
     loadLargeOutputExamples()
+    loadGoSimpleCoverage()
+    loadGoMultiFileCoverage()
+    loadGoAtomicModeCoverage()
 }

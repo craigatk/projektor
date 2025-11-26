@@ -16,6 +16,7 @@ import projektor.server.api.results.SaveResultsResponse
 import projektor.server.example.coverage.CloverXmlLoader
 import projektor.server.example.coverage.CoberturaXmlLoader
 import projektor.server.example.coverage.CoverageFileWrapper.createCoverageFilePayload
+import projektor.server.example.coverage.GoCoverageLoader
 import projektor.server.example.coverage.JacocoXmlLoader
 import projektor.server.example.performance.PerformanceResultsLoader
 import java.io.File
@@ -291,6 +292,75 @@ fun loadCloverCoverageLarge() {
         )
 
     println("View run with large Clover coverage and UI results at $uiBaseUrl${currentResultsResponse.uri}")
+}
+
+fun loadGoSimpleCoverage() {
+    val repoName = "go-coverage/simple"
+    val branchName = "main"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+    resultsMetadata.ci = true
+
+    val currentResultsResponse =
+        sendGroupedResultsToServer(
+            groupedResultsXmlLoader.resultsWithCoverage(
+                resultsXmls = listOf(),
+                coverageXmls = listOf(GoCoverageLoader().simpleCoverage()),
+                metadata = resultsMetadata,
+            ),
+        )
+
+    println("View simple Go coverage at $uiBaseUrl${currentResultsResponse.uri}")
+}
+
+fun loadGoMultiFileCoverage() {
+    val repoName = "go-coverage/multi-file"
+    val branchName = "main"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+    resultsMetadata.ci = true
+
+    val currentResultsResponse =
+        sendGroupedResultsToServer(
+            groupedResultsXmlLoader.resultsWithCoverage(
+                resultsXmls = listOf(),
+                coverageXmls = listOf(GoCoverageLoader().multiFileCoverage()),
+                metadata = resultsMetadata,
+            ),
+        )
+
+    println("View multi-file Go coverage at $uiBaseUrl${currentResultsResponse.uri}")
+}
+
+fun loadGoAtomicModeCoverage() {
+    val repoName = "go-coverage/atomic-mode"
+    val branchName = "main"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = branchName
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+    resultsMetadata.ci = true
+
+    val currentResultsResponse =
+        sendGroupedResultsToServer(
+            groupedResultsXmlLoader.resultsWithCoverage(
+                resultsXmls = listOf(),
+                coverageXmls = listOf(GoCoverageLoader().atomicModeCoverage()),
+                metadata = resultsMetadata,
+            ),
+        )
+
+    println("View atomic mode Go coverage at $uiBaseUrl${currentResultsResponse.uri}")
 }
 
 fun loadMultipleTestRunsFromSameRepoForTimeline(
