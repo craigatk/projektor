@@ -4,4 +4,5 @@ enum class CoverageReportType {
     JACOCO,
     CLOVER,
     COBERTURA,
+    GO,
 }

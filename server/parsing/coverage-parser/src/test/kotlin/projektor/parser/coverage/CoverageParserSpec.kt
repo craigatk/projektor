@@ -3,6 +3,7 @@ package projektor.parser.coverage
 import io.kotest.core.spec.style.StringSpec
 import projektor.server.example.coverage.CloverXmlLoader
 import projektor.server.example.coverage.CoberturaXmlLoader
+import projektor.server.example.coverage.GoCoverageLoader
 import projektor.server.example.coverage.JacocoXmlLoader
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
@@ -120,5 +121,46 @@ class CoverageParserSpec : StringSpec({
 
     "when unknown report type should return null" {
         expectThat(CoverageParser.parseReport("unknown", null)).isNull()
+    }
+
+    "should parse Go coverage report" {
+        val goCoverageReport = GoCoverageLoader().simpleCoverage()
+
+        val coverageReport = CoverageParser.parseReport(goCoverageReport, null)
+
+        expectThat(coverageReport).isNotNull().and {
+            get { name }.isEqualTo("Coverage")
+
+            get { totalStats.lineStat.covered }.isEqualTo(6)
+            get { totalStats.lineStat.missed }.isEqualTo(6)
+            get { totalStats.lineStat.total }.isEqualTo(12)
+            get { totalStats.lineStat.percentCovered }.isEqualTo(BigDecimal("50.00"))
+
+            get { totalStats.statementStat.covered }.isEqualTo(2)
+            get { totalStats.statementStat.missed }.isEqualTo(2)
+            get { totalStats.statementStat.total }.isEqualTo(4)
+            get { totalStats.statementStat.percentCovered }.isEqualTo(BigDecimal("50.00"))
+
+            get { totalStats.branchStat.covered }.isEqualTo(0)
+            get { totalStats.branchStat.missed }.isEqualTo(0)
+            get { totalStats.branchStat.total }.isEqualTo(0)
+        }
+    }
+
+    "should parse Go multi-file coverage report" {
+        val goCoverageReport = GoCoverageLoader().multiFileCoverage()
+
+        val coverageReport = CoverageParser.parseReport(goCoverageReport, null)
+
+        expectThat(coverageReport).isNotNull().and {
+            get { name }.isEqualTo("Coverage")
+            get { files?.size }.isEqualTo(3)
+        }
+
+        val calculatorFile = coverageReport?.files?.find { it.fileName == "calculator.go" }
+        expectThat(calculatorFile).isNotNull().and {
+            get { directoryName }.isEqualTo("github.com/user/project/pkg/calculator")
+            get { filePath }.isEqualTo("github.com/user/project/pkg/calculator/calculator.go")
+        }
     }
 })
