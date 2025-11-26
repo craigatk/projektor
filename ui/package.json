@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start": "vite serve src --port 1234",
-    "build": "yarn clean-dist && NODE_OPTIONS=--no-experimental-fetch vite build src --outDir ../dist",
-    "build:dev": "yarn clean-dev-dist && NODE_ENV=development NODE_OPTIONS=--no-experimental-fetch vite build src",
+    "build": "yarn clean-dist && vite build src --outDir ../dist",
+    "build:dev": "yarn clean-dev-dist && NODE_ENV=development vite build src",
     "format": "prettier --write \"src/**/*.ts*\" \"src/**/*.spec.ts*\" \"cypress/fixtures/**/*.json\" \"cypress/**/*.js\" \"src/**/*.module.css\"",
     "test": "jest",
     "test:projektor:ci": "yarn test || yarn projektor-publish --configFile=projektor.jest.json",
@@ -54,6 +54,7 @@
     "@emotion/styled": "11.14.1",
     "@material-table/core": "6.5.2",
     "@mui/icons-material": "6.5.0",
+    "@mui/lab": "6.0.1-beta.36",
     "@mui/material": "6.5.0",
     "@reach/router": "1.3.4",
     "@types/node": "24.10.1",
