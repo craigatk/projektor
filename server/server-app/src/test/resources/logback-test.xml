@@ -11,6 +11,10 @@
         <AppenderRef ref="STDOUT"/>
     </Logger>
 
+    <Logger name="io.ktor.server.plugins.cors.CORS" level="warn">
+        <AppenderRef ref="Console"/>
+    </Logger>
+
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="test-appender"/>
