@@ -57,7 +57,7 @@ dependencies {
     implementation "io.ktor:ktor-server-metrics-micrometer:$ktor_version"
     implementation 'io.micrometer:micrometer-registry-influx:1.16.0'
 
-    implementation "net.javacrumbs.shedlock:shedlock-provider-jdbc-template:7.2.0"
+    implementation "net.javacrumbs.shedlock:shedlock-provider-jdbc-template:7.2.1"
 
     implementation 'org.simpleflatmapper:sfm-jooq:9.0.2'
 
