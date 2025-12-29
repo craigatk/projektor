@@ -62,7 +62,7 @@
     "@types/react": "18.3.27",
     "@types/react-dom": "18.3.7",
     "axios": "1.13.2",
-    "axios-cache-interceptor": "1.10.0",
+    "axios-cache-interceptor": "1.11.2",
     "axios-case-converter": "1.1.1",
     "classnames": "2.5.1",
     "lodash": "4.17.21",

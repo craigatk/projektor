@@ -2632,13 +2632,14 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.10.0.tgz#a17b3a8ea811060e74d47d306122400ad4497ae2"
   integrity sha512-3YDiu347mtVtjpyV3u5kVqQLP242c06zwDOgpeRnybmXlYYsLbtTrUBUm8i8srONt+FWobl5aibnU1030PeeuA==
 
-axios-cache-interceptor@1.10.0:
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/axios-cache-interceptor/-/axios-cache-interceptor-1.10.0.tgz#85b78f1640216b81aaf6d1736d625613593e52b9"
-  integrity sha512-E43TJynfg/JDktNa7d8byRXq+8WrudaBLGu44LAUY8cpiXdwDPWlhv3lre088Spe0XKAMK55oyuGP0DMT+hoog==
+axios-cache-interceptor@1.11.2:
+  version "1.11.2"
+  resolved "https://registry.yarnpkg.com/axios-cache-interceptor/-/axios-cache-interceptor-1.11.2.tgz#29317e7f17e08e7bdf9d813b67b4c7832c4b55a8"
+  integrity sha512-zojcFOgChlWegTYmgKn0zd/MJMrdWPrwqq3SwR+bkW3DOMcDKJLOhM2y9uR6nt75jNTAVtKobLz7SsPmYE+Bjg==
   dependencies:
     cache-parser "^1.2.6"
     fast-defer "^1.1.9"
+    http-vary "^1.0.3"
     object-code "^2.0.0"
     try "^1.0.3"
 
@@ -4224,6 +4225,11 @@ http-signature@~1.4.0:
     assert-plus "^1.0.0"
     jsprim "^2.0.2"
     sshpk "^1.18.0"
+
+http-vary@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/http-vary/-/http-vary-1.0.3.tgz#bacf8fccf31294577c1dc97d6cec479dde1e7741"
+  integrity sha512-sx7Y8YTqF3o0mFJJvF66n8dbaE8v3liV1RgCz46XP5xK7dnzyZHvwMWRA115q5kjbCPBV65/nOMlgW54WLyiag==
 
 https-proxy-agent@^7.0.6:
   version "7.0.6"
