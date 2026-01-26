@@ -4,6 +4,10 @@ on:
     tags:
       - 'node_*' # Push events to matching node_*, i.e. node_1.0, node_20.15.10
 
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 name: Release Node script
 
 jobs:
@@ -29,8 +33,6 @@ jobs:
           yarn install
 
       - name: Node script publish
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           cd publishers/node-script
           mv .npmrc-publish .npmrc
