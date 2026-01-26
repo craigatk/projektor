@@ -12,16 +12,13 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
-      - name: Install Node.js
+      - name: node-script test
         uses: actions/setup-node@v6
         with:
           node-version: 24
-
-      - name: node-script test
-        run: |
-          cd publishers/node-script
-          yarn install
-          yarn test
+      - run: cd publishers/node-script
+      - run: yarn install
+      - run: yarn test
 
       - name: Projektor publish
         if: failure() || success()
