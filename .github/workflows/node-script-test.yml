@@ -19,15 +19,15 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24
-      - run: yarn install
-      - run: yarn test
+      - run: npm install
+      - run: npm run test
 
       - name: Projektor publish
         if: failure() || success()
         env:
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
         run: |
-          yarn projektor-publish
+          npm exec projektor-publish
 
   node-script-functional-test:
     runs-on: ubuntu-24.04
