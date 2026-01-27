@@ -10,25 +10,23 @@ on:
 jobs:
   node-script-test:
     runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: 'publishers/node-script'
     steps:
       - uses: actions/checkout@v6
-      - name: Install Node.js
+      - name: node-script test
         uses: actions/setup-node@v6
         with:
           node-version: 24
-
-      - name: node-script test
-        run: |
-          cd publishers/node-script
-          yarn install
-          yarn test
+      - run: yarn install
+      - run: yarn test
 
       - name: Projektor publish
         if: failure() || success()
         env:
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
         run: |
-          cd publishers/node-script
           yarn projektor-publish
 
   node-script-functional-test:

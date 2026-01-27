@@ -14,26 +14,23 @@ jobs:
   build:
     name: Publish Node script release
     runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: 'publishers/node-script'
     steps:
       - name: Checkout code
         uses: actions/checkout@master
-      - name: Install Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
 
       - name: Set env
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:11})
 
-      - name: Node script install
-        run: |
-          cd publishers/node-script
-          yarn install
-
-      - name: Node script publish
-        run: |
-          cd publishers/node-script
-          mv .npmrc-publish .npmrc
-          npm publish --access public
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+      - run: yarn install
+      - run: mv .npmrc-publish .npmrc
+      - run: npm publish
