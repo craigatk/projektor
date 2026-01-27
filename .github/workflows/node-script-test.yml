@@ -27,7 +27,7 @@ jobs:
         env:
           PROJEKTOR_TOKEN: ${{ secrets.PROJEKTOR_TOKEN }}
         run: |
-          npm run projektor-publish
+          npm exec projektor-publish
 
   node-script-functional-test:
     runs-on: ubuntu-24.04
