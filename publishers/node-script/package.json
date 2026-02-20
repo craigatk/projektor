@@ -51,7 +51,7 @@
     "usePathForSuiteName": "true"
   },
   "resolutions": {
-    "wrap-ansi": "9.0.2",
+    "wrap-ansi": "10.0.0",
     "string-width": "8.2.0"
   }
 }
