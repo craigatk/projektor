@@ -6,7 +6,10 @@ import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import projektor.plugin.attachments.AttachmentsClient
 import projektor.plugin.attachments.AttachmentsPublisher
 import projektor.plugin.client.ResultsClient
@@ -21,6 +24,7 @@ import projektor.plugin.results.grouped.ResultsMetadata
 
 import static projektor.plugin.MetadataResolver.isCI
 
+@DisableCachingByDefault
 class ProjektorManualPublishTask extends DefaultTask {
 
     @Input
@@ -35,6 +39,7 @@ class ProjektorManualPublishTask extends DefaultTask {
     List<String> additionalResultsDirs = []
 
     @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
     @Optional
     List<FileTree> attachments = []
 
