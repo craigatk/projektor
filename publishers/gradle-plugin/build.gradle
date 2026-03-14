@@ -45,7 +45,7 @@ dependencies {
     // Ref https://stackoverflow.com/questions/77225378/gradle-clean-fails-with-gradleexception-failed-to-create-jar-file
     implementation "com.fasterxml.jackson.core:jackson-databind:2.21.1"
 
-    implementation "io.github.resilience4j:resilience4j-retry:2.3.0"
+    implementation "io.github.resilience4j:resilience4j-retry:2.4.0"
 
     implementation "org.eclipse.jgit:org.eclipse.jgit:7.6.0.202603022253-r"
 
