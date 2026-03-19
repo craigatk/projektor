@@ -302,8 +302,19 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
 
             val testRunSummary =
                 dslContext
-                    .select(TEST_RUN.PUBLIC_ID.`as`("id"))
-                    .select(TEST_RUN.fields().filterNot { it.name == "id" }.toList())
+                    .select(
+                        TEST_RUN.PUBLIC_ID.`as`("id"),
+                        TEST_RUN.TOTAL_TEST_COUNT,
+                        TEST_RUN.TOTAL_PASSING_COUNT,
+                        TEST_RUN.TOTAL_SKIPPED_COUNT,
+                        TEST_RUN.TOTAL_FAILURE_COUNT,
+                        TEST_RUN.PASSED,
+                        TEST_RUN.CUMULATIVE_DURATION,
+                        TEST_RUN.AVERAGE_DURATION,
+                        TEST_RUN.SLOWEST_TEST_CASE_DURATION,
+                        TEST_RUN.CREATED_TIMESTAMP,
+                        TEST_RUN.WALL_CLOCK_DURATION,
+                    )
                     .from(TEST_RUN)
                     .where(TEST_RUN.PUBLIC_ID.eq(publicId.id))
                     .fetchOneInto(TestRunSummary::class.java)

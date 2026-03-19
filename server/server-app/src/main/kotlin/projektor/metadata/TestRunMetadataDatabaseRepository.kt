@@ -13,7 +13,15 @@ import projektor.server.api.metadata.TestRunMetadata
 class TestRunMetadataDatabaseRepository(private val dslContext: DSLContext) : TestRunMetadataRepository {
     override suspend fun fetchGitMetadata(publicId: PublicId): TestRunGitMetadata? =
         withContext(Dispatchers.IO) {
-            dslContext.select(GIT_METADATA.fields().toList())
+            dslContext.select(
+                GIT_METADATA.REPO_NAME,
+                GIT_METADATA.ORG_NAME,
+                GIT_METADATA.BRANCH_NAME,
+                GIT_METADATA.PROJECT_NAME,
+                GIT_METADATA.IS_MAIN_BRANCH,
+                GIT_METADATA.PULL_REQUEST_NUMBER,
+                GIT_METADATA.COMMIT_SHA,
+            )
                 .from(GIT_METADATA)
                 .innerJoin(TEST_RUN).on(GIT_METADATA.TEST_RUN_ID.eq(TEST_RUN.ID))
                 .where(TEST_RUN.PUBLIC_ID.eq(publicId.id))

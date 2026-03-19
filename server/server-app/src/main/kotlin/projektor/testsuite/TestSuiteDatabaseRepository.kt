@@ -17,6 +17,7 @@ import projektor.server.api.TestOutput
 import projektor.server.api.TestSuite
 import projektor.util.addPrefixToFields
 import kotlin.streams.toList
+import kotlin.use
 
 class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuiteRepository {
     private val testSuiteMapper =
@@ -59,13 +60,15 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
                 conditions.add(TEST_SUITE.FAILURE_COUNT.ge(1))
             }
 
-            val testSuites =
-                dslContext
-                    .select(TEST_SUITE.fields().toList())
-                    .from(TEST_SUITE)
-                    .innerJoin(TEST_RUN).on(TEST_SUITE.TEST_RUN_ID.eq(TEST_RUN.ID))
+            val resultSet =
+                selectTestSuite(dslContext)
                     .where(conditions)
-                    .fetchInto(TestSuite::class.java)
+                    .fetchResultSet()
+
+            val testSuites =
+                resultSet.use {
+                    testSuiteMapper.stream(resultSet).toList()
+                }
 
             testSuites
         }
