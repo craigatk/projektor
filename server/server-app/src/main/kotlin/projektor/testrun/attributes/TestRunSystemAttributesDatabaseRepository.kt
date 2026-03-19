@@ -12,7 +12,7 @@ class TestRunSystemAttributesDatabaseRepository(private val dslContext: DSLConte
     override suspend fun fetchAttributes(publicId: PublicId): TestRunSystemAttributes? =
         withContext(Dispatchers.IO) {
             dslContext
-                .select(TEST_RUN_SYSTEM_ATTRIBUTES.fields().toList())
+                .select(TEST_RUN_SYSTEM_ATTRIBUTES.PINNED)
                 .from(TEST_RUN_SYSTEM_ATTRIBUTES)
                 .where(TEST_RUN_SYSTEM_ATTRIBUTES.TEST_RUN_PUBLIC_ID.eq(publicId.id))
                 .fetchOneInto(TestRunSystemAttributes::class.java)
