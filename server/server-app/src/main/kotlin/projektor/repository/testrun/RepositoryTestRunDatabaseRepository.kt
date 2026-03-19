@@ -70,10 +70,34 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
         withContext(Dispatchers.IO) {
             val span = tracer.startSpanWithParent("projektor.fetchRepositoryTestRunSummaries")
 
+            /*
+            val totalTestCount: Int,
+    val totalPassingCount: Int,
+    val totalSkippedCount: Int,
+    val totalFailureCount: Int,
+    val passed: Boolean,
+    val cumulativeDuration: BigDecimal,
+    val averageDuration: BigDecimal,
+    val slowestTestCaseDuration: BigDecimal,
+    val createdTimestamp: Instant,
+    val wallClockDuration: BigDecimal?,
+             */
+
             val testRunSummaries =
                 dslContext
                     .select(TEST_RUN.PUBLIC_ID.`as`("id"))
-                    .select(TEST_RUN.fields().filterNot { it.name == "id" }.toList())
+                    .select(
+                        TEST_RUN.TOTAL_TEST_COUNT,
+                        TEST_RUN.TOTAL_PASSING_COUNT,
+                        TEST_RUN.TOTAL_SKIPPED_COUNT,
+                        TEST_RUN.TOTAL_FAILURE_COUNT,
+                        TEST_RUN.PASSED,
+                        TEST_RUN.CUMULATIVE_DURATION,
+                        TEST_RUN.AVERAGE_DURATION,
+                        TEST_RUN.SLOWEST_TEST_CASE_DURATION,
+                        TEST_RUN.CREATED_TIMESTAMP,
+                        TEST_RUN.WALL_CLOCK_DURATION,
+                    )
                     .from(TEST_RUN)
                     .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
                     .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))

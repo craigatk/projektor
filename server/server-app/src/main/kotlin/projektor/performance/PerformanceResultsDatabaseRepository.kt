@@ -41,7 +41,15 @@ class PerformanceResultsDatabaseRepository(private val dslContext: DSLContext) :
     override suspend fun fetchResults(publicId: PublicId): List<PerformanceResult> =
         withContext(Dispatchers.IO) {
             dslContext
-                .selectFrom(PERFORMANCE_RESULTS)
+                .select(
+                    PERFORMANCE_RESULTS.NAME,
+                    PERFORMANCE_RESULTS.REQUESTS_PER_SECOND,
+                    PERFORMANCE_RESULTS.REQUEST_COUNT,
+                    PERFORMANCE_RESULTS.AVERAGE,
+                    PERFORMANCE_RESULTS.MAXIMUM,
+                    PERFORMANCE_RESULTS.P95,
+                )
+                .from(PERFORMANCE_RESULTS)
                 .where(PERFORMANCE_RESULTS.TEST_RUN_PUBLIC_ID.eq(publicId.id))
                 .fetchInto(PerformanceResult::class.java)
         }
