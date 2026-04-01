@@ -13,7 +13,7 @@
     "@testing-library/cypress": "10.1.0",
     "chai-colors": "1.0.1",
     "cypress": "15.13.0",
-    "lodash": "4.17.23",
+    "lodash": "4.18.1",
     "prettier": "3.8.1",
     "rimraf": "6.1.3"
   }
