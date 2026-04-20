@@ -46,7 +46,7 @@
     "ts-jest": "29.4.9",
     "typescript": "6.0.3",
     "typescript-plugin-css-modules": "5.2.0",
-    "vite": "8.0.8",
+    "vite": "8.0.9",
     "wait-for-expect": "4.0.0"
   },
   "dependencies": {
