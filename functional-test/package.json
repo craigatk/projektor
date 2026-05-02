@@ -10,7 +10,7 @@
     "clean-results": "rimraf test-results/*.xml"
   },
   "devDependencies": {
-    "@testing-library/cypress": "10.1.0",
+    "@testing-library/cypress": "10.1.3",
     "chai-colors": "1.0.1",
     "cypress": "15.14.2",
     "lodash": "4.18.1",
