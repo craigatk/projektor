@@ -33,7 +33,7 @@
     "cypress": "15.14.2",
     "del": "8.0.1",
     "env-cmd": "11.0.0",
-    "jest": "30.4.1",
+    "jest": "30.4.2",
     "jest-css-modules": "2.1.0",
     "jest-environment-jsdom": "30.4.1",
     "jest-junit": "17.0.0",
