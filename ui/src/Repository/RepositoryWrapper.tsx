@@ -1,6 +1,6 @@
 import * as React from "react";
 import classes from "./RepositoryWrapper.module.css";
-import { globalHistory, RouteComponentProps, Router } from "@reach/router";
+import { RouteComponentProps, Router } from "@reach/router";
 import { AppBar, Typography } from "@mui/material";
 import RepositorySideMenu from "./RepositorySideMenu";
 import RepositoryCoveragePage from "./Coverage/RepositoryCoveragePage";
@@ -9,6 +9,7 @@ import RepositoryHomePage from "./Home/RepositoryHomePage";
 import RepositoryFlakyTestsPage from "./FlakyTests/RepositoryFlakyTestsPage";
 import RepositoryPerformanceTimelinePage from "./Performance/RepositoryPerformanceTimelinePage";
 import { QueryParamProvider } from "use-query-params";
+import { ReachAdapter } from "use-query-params/adapters/reach";
 
 interface RepositoryWrapperProps extends RouteComponentProps {
   orgPart: string;
@@ -38,7 +39,7 @@ const RepositoryWrapper = ({
         projectName={projectName}
       />
       <main className={classes.content}>
-        <QueryParamProvider reachHistory={globalHistory}>
+        <QueryParamProvider adapter={ReachAdapter}>
           <Router>
             <RepositoryHomePage
               path="/"

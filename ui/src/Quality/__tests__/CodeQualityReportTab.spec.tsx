@@ -3,8 +3,8 @@ import React from "react";
 import { queryByText, render } from "@testing-library/react";
 import { CodeQualityReport } from "../../model/TestRunModel";
 import CodeQualityReportTab from "../CodeQualityReportTab";
-import { globalHistory } from "@reach/router";
 import { QueryParamProvider } from "use-query-params";
+import { ReachAdapter } from "use-query-params/adapters/reach";
 
 describe("CodeQualityReportTab", () => {
   it("should show report contents for given report index", () => {
@@ -27,7 +27,7 @@ describe("CodeQualityReportTab", () => {
     ];
 
     const { queryByText } = render(
-      <QueryParamProvider reachHistory={globalHistory}>
+      <QueryParamProvider adapter={ReachAdapter}>
         <CodeQualityReportTab
           codeQualityReportsWithContents={reports}
           idx="2"
