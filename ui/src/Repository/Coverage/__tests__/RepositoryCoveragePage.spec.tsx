@@ -13,11 +13,11 @@ import RepositoryCoveragePage from "../RepositoryCoveragePage";
 import {
   createHistory,
   createMemorySource,
-  globalHistory,
   LocationProvider,
 } from "@reach/router";
 import ResizeObserver from "resize-observer-polyfill";
 import { QueryParamProvider } from "use-query-params";
+import { ReachAdapter } from "use-query-params/adapters/reach";
 import { CoverageExists } from "../../../model/TestRunModel";
 
 window.ResizeObserver = ResizeObserver;
@@ -75,7 +75,7 @@ describe("RepositoryCoveragePage", () => {
 
     const { findByTestId } = render(
       <LocationProvider history={createHistory(createMemorySource("/ui"))}>
-        <QueryParamProvider reachHistory={globalHistory}>
+        <QueryParamProvider adapter={ReachAdapter}>
           <RepositoryCoveragePage orgPart="my-org" repoPart="my-repo" />
         </QueryParamProvider>
       </LocationProvider>,
@@ -97,7 +97,7 @@ describe("RepositoryCoveragePage", () => {
 
     const { findByTestId } = render(
       <LocationProvider history={createHistory(createMemorySource("/ui"))}>
-        <QueryParamProvider reachHistory={globalHistory}>
+        <QueryParamProvider adapter={ReachAdapter}>
           <RepositoryCoveragePage
             orgPart="my-org"
             repoPart="my-no-coverage-repo"
@@ -126,7 +126,7 @@ describe("RepositoryCoveragePage", () => {
 
     const { findByTestId } = render(
       <LocationProvider history={createHistory(createMemorySource("/ui"))}>
-        <QueryParamProvider reachHistory={globalHistory}>
+        <QueryParamProvider adapter={ReachAdapter}>
           <RepositoryCoveragePage
             orgPart="my-org"
             repoPart="my-no-coverage-branch"

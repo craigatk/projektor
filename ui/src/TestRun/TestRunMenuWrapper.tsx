@@ -1,6 +1,7 @@
 import * as React from "react";
-import { globalHistory, Router } from "@reach/router";
+import { Router } from "@reach/router";
 import { QueryParamProvider } from "use-query-params";
+import { ReachAdapter } from "use-query-params/adapters/reach";
 import classes from "./TestRunMenuWrapper.module.css";
 import TestRunAllTests from "./TestRunAllTests";
 import TestSuitePage from "../TestSuite/TestSuitePage";
@@ -57,7 +58,7 @@ const TestRunMenuWrapper = ({
             gitMetadata={gitMetadata}
           />
           <main className={classes.content}>
-            <QueryParamProvider reachHistory={globalHistory}>
+            <QueryParamProvider adapter={ReachAdapter}>
               <Router>
                 <Dashboard
                   path="/"

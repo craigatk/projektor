@@ -5,8 +5,8 @@ import { render, getNodeText } from "@testing-library/react";
 import { TestOutput } from "../../model/TestRunModel";
 import { axiosInstance } from "../../service/AxiosService";
 import TestSuiteSystemErr from "../TestSuiteSystemErr";
-import { globalHistory } from "@reach/router";
 import { QueryParamProvider } from "use-query-params";
+import { ReachAdapter } from "use-query-params/adapters/reach";
 
 jest.mock("../../service/EnvService", () => ({
   baseUrl: (): string => "http://localhost:8080/",
@@ -39,7 +39,7 @@ describe("TestSuiteSystemErr", () => {
       .reply(200, systemErr);
 
     const { findByTestId, queryByTestId } = render(
-      <QueryParamProvider reachHistory={globalHistory}>
+      <QueryParamProvider adapter={ReachAdapter}>
         <TestSuiteSystemErr publicId={publicId} testSuiteIdx={testSuiteIdx} />
       </QueryParamProvider>,
     );

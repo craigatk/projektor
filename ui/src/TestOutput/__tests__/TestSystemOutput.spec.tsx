@@ -6,8 +6,8 @@ import { TestOutput } from "../../model/TestRunModel";
 import { axiosInstance } from "../../service/AxiosService";
 import TestOutputType from "../../service/TestOutputType";
 import TestSystemOutput from "../TestSystemOutput";
-import { globalHistory } from "@reach/router";
 import { QueryParamProvider } from "use-query-params";
+import { ReachAdapter } from "use-query-params/adapters/reach";
 
 jest.mock("../../service/EnvService", () => ({
   baseUrl: (): string => "http://localhost:8080/",
@@ -41,7 +41,7 @@ describe("TestSystemOut", () => {
       .reply(200, testSuiteOutput);
 
     const { findByTestId, queryByTestId } = render(
-      <QueryParamProvider reachHistory={globalHistory}>
+      <QueryParamProvider adapter={ReachAdapter}>
         <TestSystemOutput
           publicId={publicId}
           testSuiteIdx={testSuiteIdx}
@@ -71,7 +71,7 @@ describe("TestSystemOut", () => {
       .reply(200, testCaseOutput);
 
     const { findByTestId, queryByTestId } = render(
-      <QueryParamProvider reachHistory={globalHistory}>
+      <QueryParamProvider adapter={ReachAdapter}>
         <TestSystemOutput
           publicId={publicId}
           testSuiteIdx={testSuiteIdx}
@@ -102,7 +102,7 @@ describe("TestSystemOut", () => {
       .reply(200, testCaseOutput);
 
     const { findByTestId, queryByTestId } = render(
-      <QueryParamProvider reachHistory={globalHistory}>
+      <QueryParamProvider adapter={ReachAdapter}>
         <TestSystemOutput
           publicId={publicId}
           testSuiteIdx={testSuiteIdx}
@@ -128,7 +128,7 @@ describe("TestSystemOut", () => {
       .reply(404, {});
 
     const { findByTestId, queryByTestId } = render(
-      <QueryParamProvider reachHistory={globalHistory}>
+      <QueryParamProvider adapter={ReachAdapter}>
         <TestSystemOutput
           publicId={publicId}
           testSuiteIdx={testSuiteIdx}

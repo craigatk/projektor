@@ -2,15 +2,15 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { render } from "@testing-library/react";
 import CodeText from "../CodeText";
-import { globalHistory } from "@reach/router";
 import { QueryParamProvider } from "use-query-params";
+import { ReachAdapter } from "use-query-params/adapters/reach";
 
 describe("CodeText", () => {
   it("should split output into lines", async () => {
     const text = "line 1\nline 2";
 
     const { findByTestId, queryByTestId } = render(
-      <QueryParamProvider reachHistory={globalHistory}>
+      <QueryParamProvider adapter={ReachAdapter}>
         <CodeText text={text} />
       </QueryParamProvider>,
     );
@@ -38,7 +38,7 @@ describe("CodeText", () => {
     const text = "";
 
     const { findByTestId, queryByTestId } = render(
-      <QueryParamProvider reachHistory={globalHistory}>
+      <QueryParamProvider adapter={ReachAdapter}>
         <CodeText text={text} />
       </QueryParamProvider>,
     );
