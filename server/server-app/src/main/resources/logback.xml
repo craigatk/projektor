@@ -1,5 +1,8 @@
 <configuration>
-    <if condition='isDefined("JSON_LOGGER")'>
+    <if>
+        <condition class="ch.qos.logback.core.boolex.IsPropertyDefinedCondition">
+            <key>JSON_LOGGER</key>
+        </condition>
         <then>
             <appender name="base.appender" class="ch.qos.logback.core.ConsoleAppender">
                 <encoder class="net.logstash.logback.encoder.LogstashEncoder">
