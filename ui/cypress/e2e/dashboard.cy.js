@@ -82,12 +82,14 @@ context("dashboard", () => {
   it("when fetching test run fails should render error message", () => {
     const publicId = "18952";
 
+    cy.interceptTestRunBasicRequests(publicId);
+
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "one_passing/test_run_summary.json",
     });
-    cy.intercept("GET", `run/${publicId}`, {
-      status: 404,
-      response: {},
+    cy.intercept("GET", new RegExp(`run/${publicId}$`), {
+      statusCode: 404,
+      body: {},
     });
 
     cy.visit(`http://localhost:1234/tests/${publicId}`);
