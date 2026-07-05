@@ -87,7 +87,7 @@ context("dashboard", () => {
     cy.intercept("GET", `run/${publicId}/summary`, {
       fixture: "one_passing/test_run_summary.json",
     });
-    cy.intercept("GET", `run/${publicId}`, {
+    cy.intercept("GET", new RegExp(`run/${publicId}$`), {
       statusCode: 404,
       body: {},
     });
