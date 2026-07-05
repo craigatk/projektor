@@ -140,12 +140,22 @@ reliably lands on whichever circle is topmost at release time).
    need a mock to apply to exactly one path and not its sub-paths, anchor it with a regex:
    `cy.intercept("GET", new RegExp("run/123$"), ...)`.
 
-3. **A test can be missing a shared setup helper.** If a component tree has a gating
-   fetch that other tests mock via a shared helper (e.g. this repo's
-   `cy.interceptTestRunBasicRequests(publicId)`, which stubs `results/{id}/status`), a test
-   that skips that helper will hit the real backend for that one endpoint and hang/loop
-   behind a "still processing" style gate, timing out on an assertion that looks unrelated.
-   When a test fails but its siblings in the same file pass, diff their setup blocks first.
+3. **A test can be missing a shared setup helper — and a page can have more than one
+   independent fetch that needs it.** If a component tree has a gating fetch that other
+   tests mock via a shared helper (e.g. this repo's `cy.interceptTestRunBasicRequests(publicId)`,
+   which stubs `results/{id}/status`, `run/{id}/metadata/git`, `run/{id}/coverage(/exists)`,
+   `run/{id}/messages`, both badge endpoints, and `run/{id}/performance`), a test that skips
+   that helper will hit the real backend and can hang/loop behind a "still processing" gate,
+   timing out on an assertion that looks unrelated. **Don't stop at fixing the one endpoint
+   your assertion complains about** — a dashboard-style page often has several sibling
+   sections each fetching independently (a coverage summary, a performance section, a code
+   quality section...); if only one is mocked, the others 404 against a real/absent backend
+   too. Several sections using a bare `LoadingSection` with no custom `errorComponent` render
+   the *exact same* generic "Error loading data from server" text, so **N unmocked sections
+   can look like the same error repeated N times** rather than N different failures — don't
+   assume it's one component rendering twice. When a test fails but its siblings in the same
+   file pass, diff their setup blocks first, and prefer calling the *whole* shared helper over
+   hand-adding just the one intercept that seems relevant.
 
 ## Verifying a fix is real, not timing-masked
 
