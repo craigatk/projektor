@@ -15,7 +15,7 @@ const RepositoryGraphDot = (props) => {
   return (
     <Dot
       {...props}
-      onClick={dotOnClick}
+      onMouseUp={dotOnClick}
       className={className ? `${className} ${classes.dot}` : classes.dot}
       role={`dot-${dataKey}-${publicId}`}
       name={`dot-${dataKey}-${value}`}

@@ -16,7 +16,7 @@ const RepositoryGraphActiveDot = (props) => {
       cy={cy}
       cx={cx}
       fill={fill}
-      onClick={dotOnClick}
+      onMouseUp={dotOnClick}
       className={classes.dot}
       role={`active-dot-${dataKey}-${publicId}`}
     />

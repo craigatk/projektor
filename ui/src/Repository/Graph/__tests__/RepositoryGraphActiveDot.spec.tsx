@@ -2,7 +2,7 @@ jest.mock("@reach/router");
 
 import "@testing-library/jest-dom";
 import React from "react";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import RepositoryGraphActiveDot from "../RepositoryGraphActiveDot";
 import { navigate } from "@reach/router";
 
@@ -27,7 +27,7 @@ describe("RepositoryGraphActiveDot", () => {
 
     const { getByRole } = render(<RepositoryGraphActiveDot {...props} />);
 
-    getByRole(`active-dot-lineValue-${publicId}`).click();
+    fireEvent.mouseUp(getByRole(`active-dot-lineValue-${publicId}`));
 
     expect(navigate).toHaveBeenCalledWith(`/tests/${publicId}`);
   });
