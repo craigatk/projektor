@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 import { Router } from "@reach/router";
 import Welcome from "./Welcome";
 import TestRunDataWrapper from "./TestRun/TestRunDataWrapper";
@@ -28,4 +28,5 @@ const App = () => {
   );
 };
 
-render(<App />, document.getElementById("root"));
+const root = createRoot(document.getElementById("root")!);
+root.render(<App />);
