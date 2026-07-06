@@ -1,6 +1,6 @@
 import * as React from "react";
 import { TestRunGitMetadata, TestRunSummary } from "../model/TestRunModel";
-import { Grid, Hidden, List } from "@mui/material";
+import { Grid, List } from "@mui/material";
 import TestCountList from "../TestCount/TestCountList";
 import PageTitle from "../PageTitle";
 import TestRunDuration from "./TestRunDuration";
@@ -80,24 +80,23 @@ const DashboardSummary = ({
           </Grid>
         ) : null}
         {totalTestCount > 0 ? (
-          <Hidden xsDown>
-            <Grid
-              item
-              sm={3}
-              xs={12}
-              data-testid="dashboard-summary-duration-section"
-            >
-              {hasDurationData && (
-                <TestRunDuration
-                  publicId={publicId}
-                  averageDuration={averageDuration}
-                  cumulativeDuration={cumulativeDuration}
-                  wallClockDuration={wallClockDuration}
-                  slowestTestCaseDuration={slowestTestCaseDuration}
-                />
-              )}
-            </Grid>
-          </Hidden>
+          <Grid
+            item
+            sm={3}
+            xs={12}
+            sx={{ display: { xs: "none", sm: "block" } }}
+            data-testid="dashboard-summary-duration-section"
+          >
+            {hasDurationData && (
+              <TestRunDuration
+                publicId={publicId}
+                averageDuration={averageDuration}
+                cumulativeDuration={cumulativeDuration}
+                wallClockDuration={wallClockDuration}
+                slowestTestCaseDuration={slowestTestCaseDuration}
+              />
+            )}
+          </Grid>
         ) : null}
         <Grid
           item
