@@ -13,6 +13,7 @@ import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.metrics.micrometer.MicrometerMetrics
 import io.ktor.server.plugins.cachingheaders.CachingHeaders
 import io.ktor.server.plugins.compression.Compression
+import io.ktor.server.plugins.compression.CompressionConfig
 import io.ktor.server.plugins.compression.gzip
 import io.ktor.server.plugins.compression.matchContentType
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
@@ -158,6 +159,8 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
         }
     }
     install(Compression) {
+        // Response compression only; requests are decompressed manually (see CompressionRequest).
+        mode = CompressionConfig.Mode.CompressResponse
         gzip {
             matchContentType(ContentType.Application.Json, ContentType.Application.JavaScript)
         }
