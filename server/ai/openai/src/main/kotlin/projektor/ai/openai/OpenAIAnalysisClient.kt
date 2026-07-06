@@ -25,7 +25,7 @@ class OpenAIAnalysisClient(
                 .build()
         } else {
             OpenAIOkHttpClient.builder().baseUrl(baseUrl).credential(
-                BearerTokenCredential.Companion.create(bearerToken ?: ""),
+                BearerTokenCredential.Companion.create(bearerToken?.takeIf { it.isNotEmpty() } ?: apiKey),
             ).build()
         }
 
