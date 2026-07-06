@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useMemo } from "react";
 import classes from "./OrganizationCoverageDetails.module.css";
 import { OrganizationCoverage } from "../../model/OrganizationModel";
 import CoverageTable from "../../Coverage/CoverageTable";
@@ -15,26 +16,33 @@ const OrganizationCoverageDetails = ({
   orgName,
   organizationCoverage,
 }: OrganizationCoverageDetailsProps) => {
-  if (organizationCoverage) {
-    const coverageTableRows = organizationCoverage.repositories
-      .filter((repositoryCoverage) => repositoryCoverage.coverage != null)
-      .map(
-        (repositoryCoverage) =>
-          ({
-            name: repositoryCoverage.projectName
-              ? `${repositoryCoverage.repoName} ${repositoryCoverage.projectName}`
-              : repositoryCoverage.repoName,
-            stats: repositoryCoverage.coverage.overallStats,
-            previousTestRunId: repositoryCoverage.coverage.previousTestRunId,
-            nameLinkUrl: repositoryLinkUrlUI(
-              repositoryCoverage.repoName,
-              repositoryCoverage.projectName,
-              null,
-            ),
-            coveredPercentageLink: `/tests/${repositoryCoverage.publicId}/`,
-          }) as CoverageTableRow,
-      );
+  const coverageTableRows = useMemo(
+    () =>
+      organizationCoverage
+        ? organizationCoverage.repositories
+            .filter((repositoryCoverage) => repositoryCoverage.coverage != null)
+            .map(
+              (repositoryCoverage) =>
+                ({
+                  name: repositoryCoverage.projectName
+                    ? `${repositoryCoverage.repoName} ${repositoryCoverage.projectName}`
+                    : repositoryCoverage.repoName,
+                  stats: repositoryCoverage.coverage.overallStats,
+                  previousTestRunId:
+                    repositoryCoverage.coverage.previousTestRunId,
+                  nameLinkUrl: repositoryLinkUrlUI(
+                    repositoryCoverage.repoName,
+                    repositoryCoverage.projectName,
+                    null,
+                  ),
+                  coveredPercentageLink: `/tests/${repositoryCoverage.publicId}/`,
+                }) as CoverageTableRow,
+            )
+        : [],
+    [organizationCoverage],
+  );
 
+  if (organizationCoverage) {
     return (
       <div data-testid="organization-coverage-details">
         <CoverageTable

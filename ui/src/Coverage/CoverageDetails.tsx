@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useMemo } from "react";
 import classes from "./CoverageDetails.module.css";
 import { Coverage } from "../model/TestRunModel";
 import { Typography } from "@mui/material";
@@ -12,14 +13,18 @@ interface CoverageDetailsProps {
 }
 
 const CoverageDetails = ({ coverage, publicId }: CoverageDetailsProps) => {
-  const coverageTableRows = coverage.groups.map(
-    (group) =>
-      ({
-        name: group.name,
-        stats: group.stats,
-        previousTestRunId: coverage.previousTestRunId,
-        nameLinkUrl: `/tests/${publicId}/coverage/${group.name}/files`,
-      }) as CoverageTableRow,
+  const coverageTableRows = useMemo(
+    () =>
+      coverage.groups.map(
+        (group) =>
+          ({
+            name: group.name,
+            stats: group.stats,
+            previousTestRunId: coverage.previousTestRunId,
+            nameLinkUrl: `/tests/${publicId}/coverage/${group.name}/files`,
+          }) as CoverageTableRow,
+      ),
+    [coverage, publicId],
   );
 
   return (

@@ -31,7 +31,7 @@ const CoverageGraphLabel = styled(Typography)`
   display: inline-block;
 `;
 
-const CoverageGraph = ({
+const CoverageGraph = React.memo(function CoverageGraph({
   coverageStat,
   type,
   height,
@@ -39,7 +39,7 @@ const CoverageGraph = ({
   coveredPercentageLink,
   previousTestRunId,
   testIdPrefix,
-}: CoverageGraphProps) => {
+}: CoverageGraphProps) {
   if (coverageStat.total > 0) {
     return (
       <CoverageGraphWrapper inline={inline}>
@@ -82,6 +82,6 @@ const CoverageGraph = ({
   } else {
     return null;
   }
-};
+});
 
 export default CoverageGraph;

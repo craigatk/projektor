@@ -1,11 +1,16 @@
 import * as React from "react";
+import { useMemo } from "react";
+import {
+  MaterialReactTable,
+  type MRT_ColumnDef,
+  useMaterialReactTable,
+} from "material-react-table";
 import { TestSuite } from "../model/TestRunModel";
 import CleanLink from "../Link/CleanLink";
 import {
   anyTestSuiteHasGroupName,
   fullTestSuiteName,
 } from "../model/TestSuiteHelpers";
-import MaterialTable from "@material-table/core";
 
 interface TestSuiteListProps {
   publicId: string;
@@ -21,82 +26,133 @@ const cellStyle = {
   padding: "6px 24px 6px 16px",
 };
 
+interface TestSuiteRow {
+  idx: number;
+  fileName?: string;
+  name: string;
+  group: string;
+  passed: number;
+  failed: number;
+  duration: number;
+}
+
 const TestSuiteList = ({ publicId, testSuites }: TestSuiteListProps) => {
+  const hasFileName = testSuites?.some((suite) => suite.fileName);
+  const hasGroupName = testSuites && anyTestSuiteHasGroupName(testSuites);
+
+  const data: TestSuiteRow[] = useMemo(
+    () =>
+      testSuites?.map((testSuite) => ({
+        fileName: testSuite.fileName,
+        name: fullTestSuiteName(testSuite),
+        group: testSuite.groupName || "",
+        passed: testSuite.passingCount,
+        failed: testSuite.failureCount,
+        duration: testSuite.duration,
+        idx: testSuite.idx,
+      })) ?? [],
+    [testSuites],
+  );
+
+  const columns = useMemo<MRT_ColumnDef<TestSuiteRow>[]>(() => {
+    const cols: MRT_ColumnDef<TestSuiteRow>[] = [
+      {
+        header: "Test Suite",
+        accessorKey: "name",
+        Cell: ({ row }) => (
+          <CleanLink
+            to={`/tests/${publicId}/suite/${row.original.idx}/`}
+            data-testid={`test-suite-class-name-${row.original.idx}`}
+          >
+            {row.original.name}
+          </CleanLink>
+        ),
+        muiTableBodyCellProps: { sx: cellStyle },
+        muiTableHeadCellProps: { sx: headerStyle },
+      },
+    ];
+
+    if (hasFileName) {
+      cols.push({
+        header: "Test File",
+        accessorKey: "fileName",
+        Cell: ({ row }) => (
+          <CleanLink
+            to={`/tests/${publicId}/suite/${row.original.idx}/`}
+            data-testid={`test-suite-file-name-${row.original.idx}`}
+          >
+            {row.original.fileName}
+          </CleanLink>
+        ),
+      });
+    }
+
+    if (hasGroupName) {
+      cols.push({
+        header: "Group",
+        accessorKey: "group",
+        Cell: ({ row }) => (
+          <span data-testid={`test-suite-group-name-${row.original.idx}`}>
+            {row.original.group}
+          </span>
+        ),
+        muiTableBodyCellProps: { sx: cellStyle },
+        muiTableHeadCellProps: { sx: headerStyle },
+      });
+    }
+
+    cols.push(
+      {
+        header: "Passed",
+        accessorKey: "passed",
+        muiTableBodyCellProps: { sx: cellStyle },
+        muiTableHeadCellProps: { sx: headerStyle },
+      },
+      {
+        header: "Failed",
+        accessorKey: "failed",
+        muiTableBodyCellProps: { sx: cellStyle },
+        muiTableHeadCellProps: { sx: headerStyle },
+      },
+      {
+        header: "Duration",
+        accessorKey: "duration",
+        Cell: ({ row }) => <>{row.original.duration}s</>,
+        muiTableBodyCellProps: { sx: cellStyle },
+        muiTableHeadCellProps: { sx: headerStyle },
+      },
+    );
+
+    return cols;
+  }, [publicId, hasFileName, hasGroupName]);
+
+  const table = useMaterialReactTable({
+    columns,
+    data,
+    enableSorting: true,
+    sortDescFirst: false,
+    enableTopToolbar: true,
+    enableGlobalFilter: true,
+    enableBottomToolbar: false,
+    enablePagination: false,
+    enableColumnActions: false,
+    enableColumnFilters: false,
+    enableDensityToggle: false,
+    enableFullScreenToggle: false,
+    enableHiding: false,
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: { boxShadow: "none" },
+    },
+  });
+
   if (!testSuites) {
     return null;
   }
 
-  const hasFileName = testSuites.some((suite) => suite.fileName);
-
   return (
     <div data-testid="test-suite-list">
-      <MaterialTable
-        title=""
-        style={{ boxShadow: "none" }}
-        options={{
-          sorting: true,
-          paging: false,
-        }}
-        columns={[
-          {
-            title: "Test Suite",
-            field: "name",
-            render: (rowData) => (
-              <CleanLink
-                to={`/tests/${publicId}/suite/${rowData.idx}/`}
-                data-testid={`test-suite-class-name-${rowData.idx}`}
-              >
-                {rowData.name}
-              </CleanLink>
-            ),
-            cellStyle,
-            headerStyle,
-          },
-          {
-            title: "Test File",
-            field: "fileName",
-            hidden: !hasFileName,
-            render: (rowData) => (
-              <CleanLink
-                to={`/tests/${publicId}/suite/${rowData.idx}/`}
-                data-testid={`test-suite-file-name-${rowData.idx}`}
-              >
-                {rowData.fileName}
-              </CleanLink>
-            ),
-          },
-          {
-            title: "Group",
-            field: "group",
-            hidden: !anyTestSuiteHasGroupName(testSuites),
-            render: (rowData) => (
-              <span data-testid={`test-suite-group-name-${rowData.idx}`}>
-                {rowData.group}
-              </span>
-            ),
-            cellStyle,
-            headerStyle,
-          },
-          { title: "Passed", field: "passed", cellStyle, headerStyle },
-          { title: "Failed", field: "failed", cellStyle, headerStyle },
-          {
-            title: "Duration",
-            field: "duration",
-            render: (rowData) => <>{rowData.duration}s</>,
-            cellStyle,
-            headerStyle,
-          },
-        ]}
-        data={testSuites.map((testSuite) => ({
-          fileName: testSuite.fileName,
-          name: fullTestSuiteName(testSuite),
-          group: testSuite.groupName || "",
-          passed: testSuite.passingCount,
-          failed: testSuite.failureCount,
-          duration: testSuite.duration,
-          idx: testSuite.idx,
-        }))}
-      />
+      <MaterialReactTable table={table} />
     </div>
   );
 };

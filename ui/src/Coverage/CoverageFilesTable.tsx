@@ -1,6 +1,15 @@
 import * as React from "react";
-import MaterialTable from "@material-table/core";
-import { CoverageFiles, TestRunGitMetadata } from "../model/TestRunModel";
+import { useMemo } from "react";
+import {
+  MaterialReactTable,
+  type MRT_ColumnDef,
+  useMaterialReactTable,
+} from "material-react-table";
+import {
+  CoverageFiles,
+  CoverageStat,
+  TestRunGitMetadata,
+} from "../model/TestRunModel";
 import CoverageGraph from "./CoverageGraph";
 import { Typography } from "@mui/material";
 import GitHubFileLink from "../VersionControl/GitHubFileLink";
@@ -25,12 +34,34 @@ const cellStyle = {
 const calculateFullName = (directoryName: string, fileName: string): string =>
   directoryName.replace(".", "/").replace("\\", "/") + "/" + fileName;
 
+interface CoverageFileRow {
+  fileName: string;
+  directoryName: string;
+  fullName: string;
+  filePath: string;
+  lineStat: CoverageStat;
+  lineCoveredPercentage: number;
+  branchStat: CoverageStat;
+  branchCoveredPercentage: number;
+  missedLines: number[];
+  partialLines: number[];
+  idx: number;
+}
+
 const CoverageFilesTable = ({
   coverageFiles,
   coverageGroupName,
   gitMetadata,
 }: CoverageFilesTableProps) => {
-  if (coverageFiles && coverageFiles.files && coverageFiles.files.length > 0) {
+  const data: CoverageFileRow[] = useMemo(() => {
+    if (
+      !coverageFiles ||
+      !coverageFiles.files ||
+      coverageFiles.files.length === 0
+    ) {
+      return [];
+    }
+
     const rows = coverageFiles.files
       .filter((file) => file.stats.lineStat.total > 0)
       .map((file) => ({
@@ -46,119 +77,133 @@ const CoverageFilesTable = ({
         partialLines: file.partialLines,
       }));
 
-    const sortedRows = rows
-      .sort(
-        (a, b) => a.lineStat.coveredPercentage - b.lineStat.coveredPercentage,
-      )
+    return rows
+      .sort((a, b) => a.lineStat.coveredPercentage - b.lineStat.coveredPercentage)
       .map((row, idx) => ({
         ...row,
         idx: idx + 1,
       }));
+  }, [coverageFiles]);
 
-    return (
-      <div>
-        <MaterialTable
-          title=""
-          style={{ boxShadow: "none" }}
-          options={{
-            sorting: true,
-            paging: false,
-          }}
-          columns={[
-            {
-              title: "File",
-              field: "fullName",
-              render: (rowData) => (
-                <Typography
-                  data-testid={`coverage-file-name-${rowData.idx}`}
-                  variant="caption"
-                >
-                  <GitHubFileLink
-                    gitMetadata={gitMetadata}
-                    filePath={rowData.filePath}
-                    linkText={rowData.fullName}
-                    testId={`coverage-file-${rowData.idx}-file-name-link`}
-                  />
-                </Typography>
-              ),
-              cellStyle,
-              headerStyle,
-            },
-            {
-              title: "Line",
-              field: "lineCoveredPercentage",
-              render: (rowData) => (
-                <CoverageGraph
-                  coverageStat={rowData.lineStat}
-                  type="Line"
-                  height={10}
-                  inline={true}
-                  testIdPrefix={`coverage-file-line-coverage-row-${rowData.idx}`}
-                />
-              ),
-              cellStyle,
-              headerStyle,
-            },
-            {
-              title: "Branch",
-              field: "branchCoveredPercentage",
-              render: (rowData) => (
-                <CoverageGraph
-                  coverageStat={rowData.branchStat}
-                  type="Branch"
-                  height={10}
-                  inline={true}
-                  testIdPrefix={`branch-coverage-row-${rowData.idx}`}
-                />
-              ),
-              cellStyle,
-              headerStyle,
-            },
-            {
-              title: "Missed lines",
-              field: "missedLines",
-              render: (rowData) => (
-                <CoverageFileMissedLines
-                  missedLines={rowData.missedLines}
-                  filePath={rowData.filePath}
-                  fileIdx={rowData.idx}
+  const columns = useMemo<MRT_ColumnDef<CoverageFileRow>[]>(
+    () => [
+      {
+        header: "File",
+        accessorKey: "fullName",
+        Cell: ({ row }) => (
+          <Typography
+            data-testid={`coverage-file-name-${row.original.idx}`}
+            variant="caption"
+          >
+            <GitHubFileLink
+              gitMetadata={gitMetadata}
+              filePath={row.original.filePath}
+              linkText={row.original.fullName}
+              testId={`coverage-file-${row.original.idx}-file-name-link`}
+            />
+          </Typography>
+        ),
+        muiTableBodyCellProps: { sx: cellStyle },
+        muiTableHeadCellProps: { sx: headerStyle },
+      },
+      {
+        header: "Line",
+        accessorKey: "lineCoveredPercentage",
+        Cell: ({ row }) => (
+          <CoverageGraph
+            coverageStat={row.original.lineStat}
+            type="Line"
+            height={10}
+            inline={true}
+            testIdPrefix={`coverage-file-line-coverage-row-${row.original.idx}`}
+          />
+        ),
+        muiTableBodyCellProps: { sx: cellStyle },
+        muiTableHeadCellProps: { sx: headerStyle },
+      },
+      {
+        header: "Branch",
+        accessorKey: "branchCoveredPercentage",
+        Cell: ({ row }) => (
+          <CoverageGraph
+            coverageStat={row.original.branchStat}
+            type="Branch"
+            height={10}
+            inline={true}
+            testIdPrefix={`branch-coverage-row-${row.original.idx}`}
+          />
+        ),
+        muiTableBodyCellProps: { sx: cellStyle },
+        muiTableHeadCellProps: { sx: headerStyle },
+      },
+      {
+        header: "Missed lines",
+        accessorKey: "missedLines",
+        Cell: ({ row }) => (
+          <CoverageFileMissedLines
+            missedLines={row.original.missedLines}
+            filePath={row.original.filePath}
+            fileIdx={row.original.idx}
+            gitMetadata={gitMetadata}
+          />
+        ),
+        muiTableBodyCellProps: { sx: cellStyle },
+        muiTableHeadCellProps: { sx: headerStyle },
+      },
+      {
+        header: "Partial lines",
+        accessorKey: "partialLines",
+        Cell: ({ row }) => (
+          <Typography
+            data-testid={`coverage-file-partial-lines-${row.original.idx}`}
+            variant="caption"
+          >
+            {row.original.partialLines.map((partialLine, idx) => (
+              <span key={partialLine}>
+                <GitHubFileLink
                   gitMetadata={gitMetadata}
+                  filePath={row.original.filePath}
+                  linkText={partialLine.toString()}
+                  lineNumber={partialLine}
+                  testId={`coverage-file-${row.original.idx}-partial-line-link-${partialLine}`}
                 />
-              ),
-              cellStyle,
-              headerStyle,
-            },
-            {
-              title: "Partial lines",
-              field: "partialLines",
-              render: (rowData) => (
-                <Typography
-                  data-testid={`coverage-file-partial-lines-${rowData.idx}`}
-                  variant="caption"
-                >
-                  {rowData.partialLines.map((partialLine, idx) => (
-                    <span>
-                      <GitHubFileLink
-                        gitMetadata={gitMetadata}
-                        filePath={rowData.filePath}
-                        linkText={partialLine.toString()}
-                        lineNumber={partialLine}
-                        testId={`coverage-file-${rowData.idx}-partial-line-link-${partialLine}`}
-                      />
-                      {idx < rowData.partialLines.length - 1 && <span>, </span>}
-                    </span>
-                  ))}
-                </Typography>
-              ),
-              cellStyle,
-              headerStyle,
-            },
-          ]}
-          data={sortedRows}
-        />
-      </div>
-    );
-  } else {
+                {idx < row.original.partialLines.length - 1 && <span>, </span>}
+              </span>
+            ))}
+          </Typography>
+        ),
+        muiTableBodyCellProps: { sx: cellStyle },
+        muiTableHeadCellProps: { sx: headerStyle },
+      },
+    ],
+    [gitMetadata],
+  );
+
+  const table = useMaterialReactTable({
+    columns,
+    data,
+    enableSorting: true,
+    sortDescFirst: false,
+    enableTopToolbar: true,
+    enableGlobalFilter: true,
+    enableBottomToolbar: false,
+    enablePagination: false,
+    enableColumnActions: false,
+    enableColumnFilters: false,
+    enableDensityToggle: false,
+    enableFullScreenToggle: false,
+    enableHiding: false,
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: { boxShadow: "none" },
+    },
+  });
+
+  if (
+    !coverageFiles ||
+    !coverageFiles.files ||
+    coverageFiles.files.length === 0
+  ) {
     return (
       <div>
         <Typography>
@@ -167,6 +212,12 @@ const CoverageFilesTable = ({
       </div>
     );
   }
+
+  return (
+    <div>
+      <MaterialReactTable table={table} />
+    </div>
+  );
 };
 
 export default CoverageFilesTable;
