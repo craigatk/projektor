@@ -1,20 +1,7 @@
 <configuration>
-    <if condition='isDefined("JSON_LOGGER")'>
-        <then>
-            <appender name="base.appender" class="ch.qos.logback.core.ConsoleAppender">
-                <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-                    <provider class="projektor.logging.TimeMillisJsonLoggingProvider" />
-                </encoder>
-            </appender>
-        </then>
-        <else>
-            <appender name="base.appender" class="ch.qos.logback.core.ConsoleAppender">
-                <encoder>
-                    <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-                </encoder>
-            </appender>
-        </else>
-    </if>
+    <appender name="base.appender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="projektor.logging.ConditionalConsoleEncoder" />
+    </appender>
 
     <Logger name="org.jooq" level="info">
         <AppenderRef ref="Console"/>
