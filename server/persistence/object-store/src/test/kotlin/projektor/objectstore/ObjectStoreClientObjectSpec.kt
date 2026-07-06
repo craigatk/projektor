@@ -40,5 +40,14 @@ class ObjectStoreClientObjectSpec : StringSpec() {
 
             expectThat(client.getObject(bucketName, objectName)).isNull()
         }
+
+        "should delete multiple objects" {
+            val objectNames = listOf("$objectName-1", "$objectName-2")
+            objectNames.forEach { name -> client.putObject(bucketName, name, File("src/test/resources/test_file.txt").inputStream()) }
+
+            client.removeObjects(bucketName, objectNames)
+
+            objectNames.forEach { name -> expectThat(client.getObject(bucketName, name)).isNull() }
+        }
     }
 }
