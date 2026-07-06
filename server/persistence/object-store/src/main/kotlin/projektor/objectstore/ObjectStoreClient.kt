@@ -8,7 +8,7 @@ import io.minio.PutObjectArgs
 import io.minio.RemoveObjectArgs
 import io.minio.RemoveObjectsArgs
 import io.minio.errors.ErrorResponseException
-import io.minio.messages.DeleteObject
+import io.minio.messages.DeleteRequest
 import projektor.objectstore.bucket.BucketCreationException
 import java.io.InputStream
 
@@ -83,13 +83,17 @@ class ObjectStoreClient(config: ObjectStoreConfig) {
         bucketName: String,
         objectNames: List<String>,
     ) {
-        val objects = objectNames.map { DeleteObject(it) }
-        minioClient.removeObjects(
-            RemoveObjectsArgs
-                .builder()
-                .bucket(bucketName)
-                .objects(objects)
-                .build(),
-        )
+        val objects = objectNames.map { DeleteRequest.Object(it) }
+        val results =
+            minioClient.removeObjects(
+                RemoveObjectsArgs
+                    .builder()
+                    .bucket(bucketName)
+                    .objects(objects)
+                    .build(),
+            )
+        // removeObjects only sends the delete requests as this iterable is consumed;
+        // the iterable yields an entry for each object that failed to delete.
+        results.forEach { it.get() }
     }
 }
