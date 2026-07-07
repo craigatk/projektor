@@ -23,6 +23,7 @@ shadowJar {
     }
     mergeServiceFiles() // Needed for Flyway 10 to find migration files in a shadow JAR. Ref: https://github.com/flyway/flyway/issues/3811#issuecomment-1923303046
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    zip64 = true // The shadow JAR has more than 65535 entries, which requires the zip64 extension
 }
 
 jar.enabled = false // We only use the -all jar produced by Shadow

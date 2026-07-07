@@ -15,8 +15,11 @@ const OverallCoverageGraphs = ({
 }: OverallCoverageGraphsProps) => {
   if (overallStats) {
     return (
-      <Grid container className={classes.graphGrid}>
-        <Grid item sm={4} xs={12} data-testid="overall-coverage-section-line">
+      <Grid container spacing={4} className={classes.graphGrid}>
+        <Grid
+          size={{ xs: 12, sm: 4 }}
+          data-testid="overall-coverage-section-line"
+        >
           <CoverageGraph
             type="Line"
             coverageStat={overallStats.lineStat}
@@ -25,7 +28,10 @@ const OverallCoverageGraphs = ({
             previousTestRunId={previousTestRunId}
           />
         </Grid>
-        <Grid item sm={4} xs={12} data-testid="overall-coverage-section-branch">
+        <Grid
+          size={{ xs: 12, sm: 4 }}
+          data-testid="overall-coverage-section-branch"
+        >
           <CoverageGraph
             type="Branch"
             coverageStat={overallStats.branchStat}
@@ -35,9 +41,7 @@ const OverallCoverageGraphs = ({
           />
         </Grid>
         <Grid
-          item
-          sm={4}
-          xs={12}
+          size={{ xs: 12, sm: 4 }}
           data-testid="overall-coverage-section-statement"
         >
           <CoverageGraph
