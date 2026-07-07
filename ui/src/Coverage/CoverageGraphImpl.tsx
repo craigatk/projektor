@@ -32,10 +32,13 @@ const CoverageGraphImpl = ({
     <span>{coverageStat.covered} Covered</span>
   );
 
+  // Non-inline graphs (e.g. the dashboard summary) have enough width to always
+  // show the "Uncovered" label; inline graphs (e.g. table cells) are narrower,
+  // so only show it there when the uncovered portion is large enough.
   const missedText =
-    coverageStat.coveredPercentage > 50
-      ? `${coverageStat.missed}`
-      : `${coverageStat.missed} Uncovered`;
+    !inline || coverageStat.coveredPercentage <= 75
+      ? `${coverageStat.missed} Uncovered`
+      : `${coverageStat.missed}`;
 
   const data = [
     {
@@ -75,6 +78,7 @@ const CoverageGraphImpl = ({
           flexWrap: "wrap",
           width: "100%",
           gap: "8px",
+          justifyContent: "space-between",
         }}
       >
         {coveredDescription}
