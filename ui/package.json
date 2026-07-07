@@ -73,7 +73,6 @@
     "react": "19.2.7",
     "react-copy-to-clipboard": "5.1.1",
     "react-dom": "19.2.7",
-    "react-horizontal-stacked-bar-chart": "8.15.2",
     "react-scroll": "1.9.3",
     "recharts": "3.9.2",
     "use-query-params": "2.2.2"
@@ -85,8 +84,6 @@
     "usePathForSuiteName": "true"
   },
   "resolutions": {
-    "axios": "1.18.1",
-    "**/react": "19.2.7",
-    "**/react-dom": "19.2.7"
+    "axios": "1.18.1"
   }
 }

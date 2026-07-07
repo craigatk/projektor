@@ -22,8 +22,9 @@ interface CoverageGraphStyleProps {
 }
 
 const CoverageGraphWrapper = styled.div<CoverageGraphStyleProps>`
-  margin-right: ${({ inline }) => (inline ? "10px" : "50px")};
-  display: inline-block;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const CoverageGraphLabel = styled(Typography)`
@@ -58,6 +59,7 @@ const CoverageGraph = React.memo(function CoverageGraph({
           <CleanLink
             to={coveredPercentageLink}
             data-testid={`${testIdPrefix}-covered-percentage-link`}
+            style={{ display: "block", width: "100%" }}
           >
             <CoverageGraphImpl
               coverageStat={coverageStat}

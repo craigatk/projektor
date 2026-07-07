@@ -4687,11 +4687,6 @@ lodash@4.18.1, lodash@^4.17.19, lodash@^4.17.23, lodash@^4.18.1:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.18.1.tgz#ff2b66c1f6326d59513de2407bf881439812771c"
   integrity sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==
 
-lodash@~4.17.15:
-  version "4.17.23"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.23.tgz#f113b0378386103be4f6893388c73d0bde7f2c5a"
-  integrity sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==
-
 log-symbols@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/log-symbols/-/log-symbols-4.0.0.tgz#69b3cc46d20f448eccdb75ea1fa733d9e821c920"
@@ -5433,21 +5428,12 @@ react-copy-to-clipboard@5.1.1:
     copy-to-clipboard "^3.3.3"
     prop-types "^15.8.1"
 
-react-dom@19.2.7, react-dom@~16.12.0:
+react-dom@19.2.7:
   version "19.2.7"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-19.2.7.tgz#0450dc9ae9ddbff76ef196401cd8b8c7fb466ccc"
   integrity sha512-t0BRVXvbiE/o20Hfw669rLbMCDWtYZLvmJigy2f0MxsXF+71pxhR3xOkspmsO8h3ZlNzyibAmtCa3l4lYKk6gQ==
   dependencies:
     scheduler "^0.27.0"
-
-react-horizontal-stacked-bar-chart@8.15.2:
-  version "8.15.2"
-  resolved "https://registry.yarnpkg.com/react-horizontal-stacked-bar-chart/-/react-horizontal-stacked-bar-chart-8.15.2.tgz#934c281381fa6f50b07297183fc342d93195e42e"
-  integrity sha512-O/Xh8ttgjFdJwCgDdZFSMyv8Ia032Sc/14XM8nkcbRyQAopSccxLAB8cxJMY1ZZUt8IoBKVu2JcbcKXTQy7JWg==
-  dependencies:
-    lodash "~4.17.15"
-    react "~16.12.0"
-    react-dom "~16.12.0"
 
 "react-is-18@npm:react-is@^18.3.1", react-is@^18.3.1:
   version "18.3.1"
@@ -5510,7 +5496,7 @@ react-transition-group@^4.4.5:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react@19.2.7, react@~16.12.0:
+react@19.2.7:
   version "19.2.7"
   resolved "https://registry.yarnpkg.com/react/-/react-19.2.7.tgz#1f47a1bfc06f8ec885752c6f4af14369a9f8260b"
   integrity sha512-HNe9WslTbXmFK8o8cmwgAeJFSBvt1bPdHCVKtaaV+WlAN36mpT4hcRpwbf3fY56ar2oIXzsBpOAiIRHAdY0OlQ==
