@@ -147,33 +147,7 @@ describe("CoverageGraph", () => {
     expect(queryByTestId("graph-covered-percentage-link")).toBeInTheDocument();
   });
 
-  it("when coverage percentage less than 50% should include 'Uncovered' in label", () => {
-    const coverageStat = {
-      covered: 4,
-      missed: 6,
-      total: 10,
-      coveredPercentage: 40.0,
-    } as CoverageStat;
-
-    const type = "Line";
-
-    const { queryByTestId } = render(
-      <CoverageGraph
-        coverageStat={coverageStat}
-        type={type}
-        height={25}
-        inline={true}
-        testIdPrefix="graph"
-        coveredPercentageLink="/tests/ABC123/"
-      />,
-    );
-
-    expect(queryByTestId("graph-uncovered-line-count")).toHaveTextContent(
-      "6 Uncovered",
-    );
-  });
-
-  it("when coverage percentage more than 50% should not include 'Uncovered' in label", () => {
+  it("when inline and coverage percentage is 75% or less should include 'Uncovered' in label", () => {
     const coverageStat = {
       covered: 6,
       missed: 4,
@@ -194,7 +168,60 @@ describe("CoverageGraph", () => {
       />,
     );
 
-    expect(queryByTestId("graph-uncovered-line-count")).toHaveTextContent("4");
+    expect(queryByTestId("graph-uncovered-line-count")).toHaveTextContent(
+      "4 Uncovered",
+    );
+  });
+
+  it("when inline and coverage percentage is more than 75% should not include 'Uncovered' in label", () => {
+    const coverageStat = {
+      covered: 8,
+      missed: 2,
+      total: 10,
+      coveredPercentage: 80.0,
+    } as CoverageStat;
+
+    const type = "Line";
+
+    const { queryByTestId } = render(
+      <CoverageGraph
+        coverageStat={coverageStat}
+        type={type}
+        height={25}
+        inline={true}
+        testIdPrefix="graph"
+        coveredPercentageLink="/tests/ABC123/"
+      />,
+    );
+
+    expect(queryByTestId("graph-uncovered-line-count")).toHaveTextContent(
+      /^2$/,
+    );
+  });
+
+  it("when not inline should include 'Uncovered' in label even when coverage percentage is more than 50%", () => {
+    const coverageStat = {
+      covered: 6,
+      missed: 4,
+      total: 10,
+      coveredPercentage: 60.0,
+    } as CoverageStat;
+
+    const type = "Line";
+
+    const { queryByTestId } = render(
+      <CoverageGraph
+        coverageStat={coverageStat}
+        type={type}
+        height={25}
+        inline={false}
+        testIdPrefix="graph"
+      />,
+    );
+
+    expect(queryByTestId("graph-uncovered-line-count")).toHaveTextContent(
+      "4 Uncovered",
+    );
   });
 
   it("graph should not have link when not specified", () => {
