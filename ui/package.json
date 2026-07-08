@@ -84,6 +84,7 @@
     "usePathForSuiteName": "true"
   },
   "resolutions": {
-    "axios": "1.18.1"
+    "axios": "1.18.1",
+    "qs": "6.15.2"
   }
 }
