@@ -22,7 +22,7 @@ import { CoverageExists } from "../../../model/TestRunModel";
 
 window.ResizeObserver = ResizeObserver;
 
-jest.mock("../../../service/EnvService", () => ({
+vi.mock("../../../service/EnvService", () => ({
   baseUrl: (): string => "http://localhost:8080/",
 }));
 

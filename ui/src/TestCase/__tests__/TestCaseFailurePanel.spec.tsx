@@ -12,7 +12,7 @@ import waitForExpect from "wait-for-expect";
 import TestCaseFailurePanel from "../TestCaseFailurePanel";
 import { AIState } from "../../AI/AIContext";
 
-jest.mock("../../service/EnvService", () => ({
+vi.mock("../../service/EnvService", () => ({
   baseUrl: (): string => "http://localhost:8080/",
 }));
 

@@ -12,7 +12,7 @@ import { TestRunSystemAttributes } from "../../model/TestRunModel";
 import { act } from "react-dom/test-utils";
 import { PinState } from "../PinState";
 
-jest.mock("../../service/EnvService", () => ({
+vi.mock("../../service/EnvService", () => ({
   baseUrl: (): string => "http://localhost:8080/",
 }));
 

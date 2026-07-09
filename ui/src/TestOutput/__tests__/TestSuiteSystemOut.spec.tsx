@@ -8,7 +8,7 @@ import TestSuiteSystemOut from "../TestSuiteSystemOut";
 import { QueryParamProvider } from "use-query-params";
 import { ReachAdapter } from "use-query-params/adapters/reach";
 
-jest.mock("../../service/EnvService", () => ({
+vi.mock("../../service/EnvService", () => ({
   baseUrl: (): string => "http://localhost:8080/",
 }));
 

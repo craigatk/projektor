@@ -4,7 +4,7 @@ import { render } from "@testing-library/react";
 import { TestSuite } from "../../model/TestRunModel";
 import TestSuiteDetails from "../TestSuiteDetails";
 
-jest.mock("../../service/EnvService", () => ({
+vi.mock("../../service/EnvService", () => ({
   baseUrl: (): string => "http://localhost:8080/",
 }));
 

@@ -8,7 +8,7 @@ describe("Code text line", () => {
     const line = "Code line";
     const idx = 2;
     const highlighted = false;
-    const handleLineClick = jest.fn();
+    const handleLineClick = vi.fn();
     const { getByTestId } = render(
       <CodeTextLine
         line={line}

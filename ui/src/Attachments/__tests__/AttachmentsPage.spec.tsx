@@ -5,11 +5,11 @@ import MockAdapter from "axios-mock-adapter";
 import { axiosInstanceWithoutCache } from "../../service/AxiosService";
 import { Attachment, Attachments } from "../../model/TestRunModel";
 import AttachmentsPage from "../AttachmentsPage";
-jest.mock("../byteFormat", () => ({
-  formatBytes: jest.fn(),
+vi.mock("../byteFormat", () => ({
+  formatBytes: vi.fn(),
 }));
 
-jest.mock("../../service/EnvService", () => ({
+vi.mock("../../service/EnvService", () => ({
   baseUrl: (): string => "http://localhost:8080/",
 }));
 
