@@ -7,7 +7,7 @@ import { axiosInstance } from "../../service/AxiosService";
 import TestCasePage from "../TestCasePage";
 import { AIState } from "../../AI/AIContext";
 
-jest.mock("../../service/EnvService", () => ({
+vi.mock("../../service/EnvService", () => ({
   baseUrl: (): string => "http://localhost:8080/",
 }));
 

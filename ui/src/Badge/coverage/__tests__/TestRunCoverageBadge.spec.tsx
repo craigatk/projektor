@@ -10,7 +10,7 @@ import {
 } from "@reach/router";
 import TestRunCoverageBadge from "../TestRunCoverageBadge";
 
-jest.mock("../../../service/EnvService", () => ({
+vi.mock("../../../service/EnvService", () => ({
   baseUrl: (): string => "http://localhost:8080/",
 }));
 
@@ -33,7 +33,7 @@ describe("TestRunCoverageBadge", () => {
       .onGet(`http://localhost:8080/run/${publicId}/badge/coverage`)
       .reply(200, "<span>my-badge</span>");
 
-    document.execCommand = jest.fn();
+    document.execCommand = vi.fn();
 
     const { findByTestId } = render(
       <LocationProvider history={createHistory(createMemorySource("/ui"))}>

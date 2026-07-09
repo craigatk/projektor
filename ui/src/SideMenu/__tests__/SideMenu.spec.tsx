@@ -5,7 +5,7 @@ import SideMenu from "../SideMenu";
 import { TestRunSummary } from "../../model/TestRunModel";
 import { PinState } from "../../Pin/PinState";
 
-jest.mock("../../service/EnvService", () => ({
+vi.mock("../../service/EnvService", () => ({
   baseUrl: (): string => "http://localhost:8080/",
 }));
 

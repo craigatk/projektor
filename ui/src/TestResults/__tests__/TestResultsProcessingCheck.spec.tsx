@@ -9,7 +9,7 @@ import {
 } from "../../model/TestRunModel";
 import TestResultsProcessingCheck from "../TestResultsProcessingCheck";
 
-jest.mock("../../service/EnvService", () => ({
+vi.mock("../../service/EnvService", () => ({
   baseUrl: (): string => "http://localhost:8080/",
 }));
 
@@ -39,7 +39,7 @@ describe("TestResultsProcessingCheck", () => {
   };
 
   it("should display message when results still processing", async () => {
-    const succeededFunc = jest.fn();
+    const succeededFunc = vi.fn();
 
     mockProcessingStatus(TestResultsProcessingStatus.PROCESSING);
 
@@ -58,7 +58,7 @@ describe("TestResultsProcessingCheck", () => {
   });
 
   it("should refresh status when still processing up to max timeout", async () => {
-    const succeededFunc = jest.fn();
+    const succeededFunc = vi.fn();
 
     mockProcessingStatus(TestResultsProcessingStatus.PROCESSING);
 
@@ -83,7 +83,7 @@ describe("TestResultsProcessingCheck", () => {
   });
 
   it("should display failure message when results processing failed", async () => {
-    const succeededFunc = jest.fn();
+    const succeededFunc = vi.fn();
 
     mockProcessingStatus(TestResultsProcessingStatus.ERROR);
 
@@ -102,7 +102,7 @@ describe("TestResultsProcessingCheck", () => {
   });
 
   it("should display message when results were deleted", async () => {
-    const succeededFunc = jest.fn();
+    const succeededFunc = vi.fn();
 
     mockProcessingStatus(TestResultsProcessingStatus.DELETED);
 
@@ -121,7 +121,7 @@ describe("TestResultsProcessingCheck", () => {
   });
 
   it("should call success function when results successfully processed", async () => {
-    const succeededFunc = jest.fn();
+    const succeededFunc = vi.fn();
 
     mockProcessingStatus(TestResultsProcessingStatus.SUCCESS);
 

@@ -1,4 +1,4 @@
-jest.mock("@reach/router");
+vi.mock("@reach/router");
 
 import "@testing-library/jest-dom";
 import React from "react";

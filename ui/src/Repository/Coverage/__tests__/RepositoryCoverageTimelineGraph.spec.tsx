@@ -13,7 +13,7 @@ import ResizeObserver from "resize-observer-polyfill";
 window.ResizeObserver = ResizeObserver;
 
 describe("RepositoryCoverageTimelineGraph", () => {
-  jest.setTimeout(30000);
+  vi.setConfig({ testTimeout: 30000 });
 
   it("should display coverage timeline graph", async () => {
     const timeline = {
