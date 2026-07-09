@@ -591,7 +591,7 @@
     prop-types "^15.8.1"
     react-is "^19.0.0"
 
-"@mui/utils@^9.1.1", "@mui/utils@^9.2.0":
+"@mui/utils@^9.2.0":
   version "9.2.0"
   resolved "https://registry.yarnpkg.com/@mui/utils/-/utils-9.2.0.tgz#1da604f8fcfb6964e20e3a93f4ad3b719f73c843"
   integrity sha512-OsUH5zhlSOM4xmLl53+agug1M1UyWb4zxFxWQCqwKTKUeQPvTENtg3JhrroBD2qpCLKsX5W/DYGERJ4mBUbc8g==
@@ -603,27 +603,27 @@
     prop-types "^15.8.1"
     react-is "^19.2.6"
 
-"@mui/x-date-pickers@9.8.0":
-  version "9.8.0"
-  resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-9.8.0.tgz#7786c73ea5fd283564e33cbc1e2d9562c328fb5d"
-  integrity sha512-p684m6H0Dpq9LOARjnmBUXi0QgtfVCRd6xu+n1DNQVgosmQLb3hItANJluN0MQpA3RQ51ih69Ld5gadwb57MFw==
+"@mui/x-date-pickers@9.9.0":
+  version "9.9.0"
+  resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-9.9.0.tgz#cc37e771a166e57ee26182c342e8a272e0501b99"
+  integrity sha512-NrmOeLuhOaTPp8xSpmSa08i0xX4h2H5dnGMKClIfEgXJcjtojPrMoe7LzEN+iUYm7HzzxP+pH/bH3IXAMoqcYw==
   dependencies:
     "@babel/runtime" "^7.29.7"
-    "@mui/utils" "^9.1.1"
-    "@mui/x-internals" "^9.8.0"
+    "@mui/utils" "^9.2.0"
+    "@mui/x-internals" "^9.9.0"
     "@types/react-transition-group" "^4.4.12"
     clsx "^2.1.1"
     prop-types "^15.8.1"
     react-transition-group "^4.4.5"
 
-"@mui/x-internals@^9.8.0":
-  version "9.8.0"
-  resolved "https://registry.yarnpkg.com/@mui/x-internals/-/x-internals-9.8.0.tgz#59f64d52721a958bd57b9f4fe897a6f8c6b68615"
-  integrity sha512-eVwqPAoxxQ0WEa5+lUeCdHLdfQbUNeOQ3wPMc3S3+yGecymH6J0FfGPDPSBnFkFNVhXAaRXElKNP8Uvoz5d4Vw==
+"@mui/x-internals@^9.9.0":
+  version "9.9.0"
+  resolved "https://registry.yarnpkg.com/@mui/x-internals/-/x-internals-9.9.0.tgz#adcd60c490573e1ad81e8d4a26acf6f4e48bc9be"
+  integrity sha512-RMddUd59Qie2o4dralFUcp4Hzu0HOyeYqjh2t3zkpURX1CGX2tUbYZxCwC5UjLJ/PBcSqmSDrGalx7Z8UQFX+g==
   dependencies:
     "@babel/runtime" "^7.29.7"
     "@base-ui/utils" "^0.3.0"
-    "@mui/utils" "^9.1.1"
+    "@mui/utils" "^9.2.0"
     reselect "^5.2.0"
     use-sync-external-store "^1.6.0"
 
