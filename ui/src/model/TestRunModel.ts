@@ -189,6 +189,10 @@ interface TestCaseFailureAnalysis {
   analysis?: string;
 }
 
+interface TestCaseDebugContext {
+  markdown?: string;
+}
+
 export {
   Attachment,
   Attachments,
@@ -210,6 +214,7 @@ export {
   TestSuite,
   TestOutput,
   TestCase,
+  TestCaseDebugContext,
   TestCaseFailureAnalysis,
   TestFailure,
   TestRunGitMetadata,

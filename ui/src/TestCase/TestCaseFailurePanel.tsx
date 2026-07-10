@@ -8,7 +8,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import { AttachmentType, TestCase } from "../model/TestRunModel";
-import { Typography } from "@mui/material";
+import { Chip, Fade, IconButton, Tooltip, Typography } from "@mui/material";
+import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import CleanLink from "../Link/CleanLink";
 import { ExpandCollapseState } from "./ExpandCollapseState";
 import TestCaseFailureScreenshot from "./TestCaseFailureScreenshot";
@@ -18,6 +19,14 @@ import {
 } from "./testCaseHelpers";
 import { AIContext, AIState } from "../AI/AIContext";
 import AIIcon from "../Icons/AIIcon";
+import { fetchTestCaseDebugContext } from "../service/TestRunService";
+
+enum CopyAIContextState {
+  IDLE,
+  COPYING,
+  COPIED,
+  ERROR,
+}
 
 interface TestCaseFailurePanelProps {
   testCase: TestCase;
@@ -40,6 +49,8 @@ const TestCaseFailurePanel = ({
     expandCollapseAll !== ExpandCollapseState.COLLAPSE_ALL;
 
   const [expanded, setExpanded] = React.useState<boolean>(defaultExpanded);
+  const [copyAIContextState, setCopyAIContextState] =
+    React.useState<CopyAIContextState>(CopyAIContextState.IDLE);
 
   React.useEffect(() => {
     setExpanded(defaultExpanded);
@@ -47,6 +58,18 @@ const TestCaseFailurePanel = ({
 
   const expansionPanelOnClick = () => {
     setExpanded(!expanded);
+  };
+
+  const copyAIContext = () => {
+    setCopyAIContextState(CopyAIContextState.COPYING);
+
+    fetchTestCaseDebugContext(publicId, testCase.testSuiteIdx, testCase.idx)
+      .then((response) => navigator.clipboard.writeText(response.data.markdown))
+      .then(() => setCopyAIContextState(CopyAIContextState.COPIED))
+      .catch(() => setCopyAIContextState(CopyAIContextState.ERROR))
+      .finally(() => {
+        setTimeout(() => setCopyAIContextState(CopyAIContextState.IDLE), 3000);
+      });
   };
 
   const screenshotAttachment = findAttachmentOfType(
@@ -178,6 +201,47 @@ const TestCaseFailurePanel = ({
             </CleanLink>
           </Button>
         )}
+        {!testCase.passed && (
+          <Button>
+            <CleanLink
+              to={`/tests/${publicId}/suite/${testCase.testSuiteIdx}/case/${testCase.idx}/debugContext`}
+              data-testid={`test-case-summary-ai-context-link-${testCaseIdentifier}`}
+            >
+              AI Context
+            </CleanLink>
+          </Button>
+        )}
+        {!testCase.passed && (
+          <Tooltip title="Copy AI context Markdown to clipboard">
+            <span>
+              <IconButton
+                size="small"
+                onClick={copyAIContext}
+                disabled={copyAIContextState === CopyAIContextState.COPYING}
+                data-testid={`test-case-summary-ai-context-copy-${testCaseIdentifier}`}
+              >
+                <FileCopyOutlinedIcon fontSize="small" />
+              </IconButton>
+            </span>
+          </Tooltip>
+        )}
+        <Fade in={copyAIContextState === CopyAIContextState.COPIED}>
+          <Chip
+            label="Copied to clipboard"
+            variant="outlined"
+            size="small"
+            data-testid={`test-case-summary-ai-context-copied-${testCaseIdentifier}`}
+          />
+        </Fade>
+        <Fade in={copyAIContextState === CopyAIContextState.ERROR}>
+          <Chip
+            label="Error copying AI context"
+            variant="outlined"
+            size="small"
+            color="error"
+            data-testid={`test-case-summary-ai-context-copy-error-${testCaseIdentifier}`}
+          />
+        </Fade>
       </AccordionActions>
     </Accordion>
   );

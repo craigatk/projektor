@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom";
 import React from "react";
-import { render } from "@testing-library/react";
+import MockAdapter from "axios-mock-adapter";
+import { act, render } from "@testing-library/react";
 import {
   Attachment,
   AttachmentType,
@@ -11,12 +12,27 @@ import moment from "moment";
 import waitForExpect from "wait-for-expect";
 import TestCaseFailurePanel from "../TestCaseFailurePanel";
 import { AIState } from "../../AI/AIContext";
+import { axiosInstance } from "../../service/AxiosService";
 
 vi.mock("../../service/EnvService", () => ({
   baseUrl: (): string => "http://localhost:8080/",
 }));
 
 describe("TestCaseFailurePanel", () => {
+  let mockAxios;
+
+  beforeEach(() => {
+    // @ts-ignore
+    mockAxios = new MockAdapter(axiosInstance);
+    Object.assign(navigator, {
+      clipboard: { writeText: vi.fn().mockResolvedValue(undefined) },
+    });
+  });
+
+  afterEach(() => {
+    mockAxios.restore();
+  });
+
   it("should render failure details link when the test case failed", () => {
     const testCase: TestCase = {
       idx: 1,
@@ -192,6 +208,116 @@ describe("TestCaseFailurePanel", () => {
     expect(
       queryByTestId("test-case-summary-system-err-link-2-1"),
     ).not.toBeNull();
+  });
+
+  it("should render AI context link when the test case failed", () => {
+    const testCase: TestCase = {
+      idx: 1,
+      testSuiteIdx: 2,
+      publicId: "12345",
+      name: "Test Case",
+      testSuiteName: "",
+      packageName: "",
+      className: "",
+      fullName: "Test Case",
+      duration: 1.2,
+      passed: false,
+      skipped: false,
+      hasSystemOut: false,
+      hasSystemErr: false,
+      hasSystemOutTestCase: false,
+      hasSystemErrTestCase: false,
+      hasSystemOutTestSuite: false,
+      hasSystemErrTestSuite: false,
+      failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
+    };
+
+    const { queryByTestId } = render(
+      <AIState>
+        <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      </AIState>,
+    );
+
+    expect(
+      queryByTestId("test-case-summary-ai-context-link-2-1"),
+    ).not.toBeNull();
+  });
+
+  it("should copy AI context markdown to clipboard when copy button clicked", async () => {
+    const testCase: TestCase = {
+      idx: 1,
+      testSuiteIdx: 2,
+      publicId: "12345",
+      name: "Test Case",
+      testSuiteName: "",
+      packageName: "",
+      className: "",
+      fullName: "Test Case",
+      duration: 1.2,
+      passed: false,
+      skipped: false,
+      hasSystemOut: false,
+      hasSystemErr: false,
+      hasSystemOutTestCase: false,
+      hasSystemErrTestCase: false,
+      hasSystemOutTestSuite: false,
+      hasSystemErrTestSuite: false,
+      failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
+    };
+
+    mockAxios
+      .onGet("http://localhost:8080/run/12345/suite/2/case/1/debug-context")
+      .reply(200, { markdown: "# Test Failure: Test Case" });
+
+    const { getByTestId, findByTestId } = render(
+      <AIState>
+        <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      </AIState>,
+    );
+
+    await act(async () => {
+      getByTestId("test-case-summary-ai-context-copy-2-1").click();
+    });
+
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+      "# Test Failure: Test Case",
+    );
+
+    await findByTestId("test-case-summary-ai-context-copied-2-1");
+  });
+
+  it("should not render AI context link when the test case passed", () => {
+    const testCase: TestCase = {
+      idx: 1,
+      testSuiteIdx: 2,
+      publicId: "12345",
+      name: "Test Case",
+      testSuiteName: "",
+      packageName: "",
+      className: "",
+      fullName: "Test Case",
+      duration: 1.2,
+      passed: true,
+      skipped: false,
+      hasSystemOut: false,
+      hasSystemErr: false,
+      hasSystemOutTestCase: false,
+      hasSystemErrTestCase: false,
+      hasSystemOutTestSuite: false,
+      hasSystemErrTestSuite: false,
+      failure: null,
+      createdTimestamp: moment("2020-04-25").toDate(),
+    };
+
+    const { queryByTestId } = render(
+      <AIState>
+        <TestCaseFailurePanel testCase={testCase} publicId="12345" />
+      </AIState>,
+    );
+
+    expect(queryByTestId("test-case-summary-ai-context-link-2-1")).toBeNull();
   });
 
   it("should render failure message when flag to show full failure is false", () => {

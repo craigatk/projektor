@@ -24,6 +24,7 @@ import { findAttachmentOfType } from "./testCaseHelpers";
 import TestCaseFailureScreenshot from "./TestCaseFailureScreenshot";
 import { AIContext, AIState } from "../AI/AIContext";
 import TestCaseFailureAnalysisSection from "./TestCaseFailureAnalysisSection";
+import TestCaseDebugContextSection from "./TestCaseDebugContextSection";
 
 interface TestCaseDetailsProps {
   publicId: string;
@@ -160,6 +161,15 @@ const TestCaseDetails = ({ publicId, testCase }: TestCaseDetailsProps) => {
                     to={`${linkBase}/analysis`}
                   />
                 )}
+                {!testCase.passed && !testCase.skipped ? (
+                  <Tab
+                    label="AI Context"
+                    value="/debugContext"
+                    data-testid="test-case-tab-debug-context"
+                    component={Link}
+                    to={`${linkBase}/debugContext`}
+                  />
+                ) : null}
               </Tabs>
             )}
           </Location>
@@ -220,6 +230,12 @@ const TestCaseDetails = ({ publicId, testCase }: TestCaseDetailsProps) => {
               />
               <TestCaseFailureAnalysisSection
                 path="/analysis"
+                publicId={publicId}
+                testSuiteIdx={testCase.testSuiteIdx}
+                testCaseIdx={testCase.idx}
+              />
+              <TestCaseDebugContextSection
+                path="/debugContext"
                 publicId={publicId}
                 testSuiteIdx={testCase.testSuiteIdx}
                 testCaseIdx={testCase.idx}
