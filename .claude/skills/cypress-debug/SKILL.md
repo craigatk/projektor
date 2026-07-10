@@ -75,6 +75,24 @@ For one-off investigations, write throwaway spec files (e.g.
 `cypress/e2e/_debug_<thing>.cy.js`) rather than editing the real spec — **delete them**
 before finishing (`rm cypress/e2e/_debug_*.cy.js`), they are not test coverage.
 
+## Verifying a copy-to-clipboard feature actually copied
+
+Don't stop at asserting the "Copied to clipboard" feedback chip appeared — that only proves
+the `onCopy` callback fired, not that the right text landed on the clipboard (e.g. a stale
+closure over old state, or copying the wrong field, would still show the chip). Read the
+clipboard back directly:
+
+```js
+cy.window().then((win) => {
+  cy.wrap(win.navigator.clipboard.readText()).should("eq", "expected text");
+});
+```
+
+This works in Electron headless with no extra permission setup (confirmed verifying a
+"copy AI debug context" feature backed by `navigator.clipboard.writeText`/
+`react-copy-to-clipboard`) — no need to stub `document.execCommand` or grant clipboard
+permissions first.
+
 ## A click silently does nothing (no error, handler never fires)
 
 This is almost always a hit-testing mismatch, not a missing/broken handler. Diagnose with

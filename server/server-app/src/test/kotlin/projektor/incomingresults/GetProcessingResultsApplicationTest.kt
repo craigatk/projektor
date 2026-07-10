@@ -13,6 +13,8 @@ import projektor.server.api.results.ResultsProcessingStatus
 import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import strikt.assertions.isGreaterThanOrEqualTo
+import strikt.assertions.isLessThanOrEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 import java.time.LocalDateTime
@@ -22,6 +24,8 @@ class GetProcessingResultsApplicationTest : ApplicationTestCase() {
     @Test
     fun `should get processing results after parsing saving test results`() =
         projektorTestApplication {
+            val beforeSubmission = LocalDateTime.now()
+
             val requestBody = resultsXmlLoader.passing()
 
             val postResponse = client.postResultsPlainText(requestBody)
@@ -40,7 +44,7 @@ class GetProcessingResultsApplicationTest : ApplicationTestCase() {
 
             val processingResponse = objectMapper.readValue(getResponse.bodyAsText(), ResultsProcessing::class.java)
 
-            val now = LocalDateTime.now()
+            val afterProcessing = LocalDateTime.now()
 
             expectThat(processingResponse)
                 .isNotNull()
@@ -48,13 +52,8 @@ class GetProcessingResultsApplicationTest : ApplicationTestCase() {
                     get { status }.isEqualTo(ResultsProcessingStatus.SUCCESS)
                     get { errorMessage }.isNull()
                     get { createdTimestamp }.isNotNull()
-                        .and {
-                            get { year }.isEqualTo(now.year)
-                            get { month }.isEqualTo(now.month)
-                            get { dayOfMonth }.isEqualTo(now.dayOfMonth)
-                            get { hour }.isEqualTo(now.hour)
-                            get { minute }.isEqualTo(now.minute)
-                        }
+                        .isGreaterThanOrEqualTo(beforeSubmission)
+                        .isLessThanOrEqualTo(afterProcessing)
                 }
         }
 

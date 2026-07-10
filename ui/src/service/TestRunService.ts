@@ -17,6 +17,7 @@ import {
   PerformanceResults,
   CodeQualityReports,
   TestCaseFailureAnalysis,
+  TestCaseDebugContext,
 } from "../model/TestRunModel";
 import TestOutputType from "./TestOutputType";
 import { axiosInstance, axiosInstanceWithoutCache } from "./AxiosService";
@@ -86,6 +87,17 @@ const fetchTestCaseFailureAnalysis = (
   // @ts-ignore
   return axiosInstance.get<TestCaseFailureAnalysis>(
     `/run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/analysis`,
+  );
+};
+
+const fetchTestCaseDebugContext = (
+  publicId: string,
+  testSuiteIdx: number,
+  testCaseIdx: number,
+): Promise<AxiosResponse<TestCaseDebugContext>> => {
+  // @ts-ignore
+  return axiosInstance.get<TestCaseDebugContext>(
+    `/run/${publicId}/suite/${testSuiteIdx}/case/${testCaseIdx}/debug-context`,
   );
 };
 
@@ -214,6 +226,7 @@ export {
   fetchOverallCoverageStats,
   fetchSlowTestCases,
   fetchTestCaseDetails,
+  fetchTestCaseDebugContext,
   fetchTestCaseFailureAnalysis,
   fetchTestCaseSystemOutput,
   fetchTestSuitesInPackage,

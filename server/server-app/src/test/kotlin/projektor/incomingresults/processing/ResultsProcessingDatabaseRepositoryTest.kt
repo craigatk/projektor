@@ -11,6 +11,8 @@ import projektor.server.api.error.FailureBodyType
 import projektor.server.api.results.ResultsProcessingStatus
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import strikt.assertions.isGreaterThanOrEqualTo
+import strikt.assertions.isLessThanOrEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 import java.time.LocalDateTime
@@ -22,21 +24,18 @@ class ResultsProcessingDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     fun `should create new results processing record`() {
         val publicId = randomPublicId()
 
+        val beforeCreate = LocalDateTime.now()
+
         val resultsProcessing = runBlocking { resultsProcessingDatabaseRepository.createResultsProcessing(publicId) }
 
-        val now = LocalDateTime.now()
+        val afterCreate = LocalDateTime.now()
 
         expectThat(resultsProcessing) {
             get { id }.isEqualTo(publicId.id)
             get { status }.isEqualTo(ResultsProcessingStatus.RECEIVED)
             get { createdTimestamp }.isNotNull()
-                .and {
-                    get { year }.isEqualTo(now.year)
-                    get { month }.isEqualTo(now.month)
-                    get { dayOfMonth }.isEqualTo(now.dayOfMonth)
-                    get { hour }.isEqualTo(now.hour)
-                    get { minute }.isEqualTo(now.minute)
-                }
+                .isGreaterThanOrEqualTo(beforeCreate)
+                .isLessThanOrEqualTo(afterCreate)
         }
     }
 

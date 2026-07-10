@@ -6,6 +6,7 @@ import projektor.server.api.PublicId
 import projektor.server.api.TestCase
 import projektor.server.api.TestOutput
 import projektor.server.api.ai.TestCaseFailureAnalysis
+import projektor.server.api.debug.TestCaseDebugContext
 
 class TestCaseService(
     private val testCaseRepository: TestCaseRepository,
@@ -95,4 +96,28 @@ class TestCaseService(
         } else {
             null
         }
+
+    suspend fun buildTestCaseDebugContext(
+        publicId: PublicId,
+        testSuiteIdx: Int,
+        testCaseIdx: Int,
+    ): TestCaseDebugContext? {
+        val testCase = testCaseRepository.fetchTestCase(publicId, testSuiteIdx, testCaseIdx) ?: return null
+
+        val systemOut =
+            if (testCase.hasSystemOutTestCase) {
+                testCaseRepository.fetchTestCaseSystemOut(publicId, testSuiteIdx, testCaseIdx).value
+            } else {
+                null
+            }
+
+        val systemErr =
+            if (testCase.hasSystemErrTestCase) {
+                testCaseRepository.fetchTestCaseSystemErr(publicId, testSuiteIdx, testCaseIdx).value
+            } else {
+                null
+            }
+
+        return TestCaseDebugContext(buildTestCaseDebugContextMarkdown(testCase, systemOut, systemErr))
+    }
 }

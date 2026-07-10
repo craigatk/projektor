@@ -65,4 +65,14 @@ fun Route.testCases(testCaseService: TestCaseService) {
             call.respond(HttpStatusCode.NoContent)
         }
     }
+    get("/run/{publicId}/suite/{testSuiteIdx}/case/{testCaseIdx}/debug-context") {
+        val publicId = call.parameters.getOrFail("publicId")
+        val testSuiteIdx = call.parameters.getOrFail("testSuiteIdx").toInt()
+        val testCaseIdx = call.parameters.getOrFail("testCaseIdx").toInt()
+
+        val debugContext = testCaseService.buildTestCaseDebugContext(PublicId(publicId), testSuiteIdx, testCaseIdx)
+
+        debugContext?.let { call.respond(HttpStatusCode.OK, it) }
+            ?: call.respond(HttpStatusCode.NotFound)
+    }
 }

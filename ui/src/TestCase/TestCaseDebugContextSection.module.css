@@ -1,0 +1,23 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.copied {
+  margin-left: 8px;
+}
+
+.debugContextContents {
+  padding: 2px 10px;
+  background-color: #ededed;
+  border-radius: 8px;
+  font-size: 0.9em;
+}
+
+.debugContextText {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
