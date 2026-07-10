@@ -5,9 +5,26 @@ import projektor.parser.model.TestSuite
 import spock.lang.Specification
 import spock.lang.Subject
 
+import java.time.LocalDateTime
+
 class JUnitResultsParserExtraAttributesSpec extends Specification {
     @Subject
     JUnitResultsParser testResultsParser = new JUnitResultsParser()
+
+    def "should parse timestamp attribute with a UTC offset, as emitted by pytest 8.3+"() {
+        given:
+        String resultsXmlWithOffsetTimestamp = """<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="projektor.example.pytest.OffsetTimestampSpec" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-08-28T20:34:02.247682+00:00" hostname="Craigs-MacBook-Pro.local" time="0.002">
+  <testcase name="with-offset-timestamp" classname="projektor.example.pytest.OffsetTimestampSpec" time="0.002"/>
+</testsuite>
+"""
+
+        when:
+        TestSuite testSuite = testResultsParser.parseTestSuite(resultsXmlWithOffsetTimestamp)
+
+        then:
+        testSuite.timestamp == LocalDateTime.of(2025, 8, 28, 20, 34, 2, 247682000)
+    }
 
     def "should be able to parse results with extra XML attributes"() {
         given:

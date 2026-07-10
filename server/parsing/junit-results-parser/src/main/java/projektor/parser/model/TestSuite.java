@@ -2,6 +2,7 @@ package projektor.parser.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 
 import java.math.BigDecimal;
@@ -14,6 +15,8 @@ public class TestSuite {
     public int skipped;
     public int failures;
     public int errors;
+
+    @JsonDeserialize(using = LenientLocalDateTimeDeserializer.class)
     public LocalDateTime timestamp;
     public String hostname;
     public BigDecimal time;
