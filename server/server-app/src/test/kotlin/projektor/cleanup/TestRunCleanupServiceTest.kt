@@ -13,8 +13,12 @@ import projektor.coverage.CoverageService
 import projektor.database.generated.tables.pojos.ResultsProcessing
 import projektor.incomingresults.randomPublicId
 import projektor.parser.coverage.payload.CoverageFilePayload
+import projektor.repository.coverage.RepositoryCoverageRepository
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.server.example.coverage.JacocoXmlLoader
+import projektor.server.example.coverage.JacocoXmlLoader.Companion.serverAppLineCoveragePercentage
+import projektor.server.example.coverage.JacocoXmlLoader.Companion.serverAppReducedLineCoveragePercentage
+import projektor.util.randomOrgAndRepo
 import strikt.api.expectThat
 import strikt.assertions.contains
 import strikt.assertions.doesNotContain
@@ -37,6 +41,8 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
                 get(),
                 get(),
                 null,
+                get(),
+                get(),
             )
 
         val publicId = randomPublicId()
@@ -85,6 +91,8 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
                 get(),
                 get(),
                 null,
+                get(),
+                get(),
             )
 
         val publicId = randomPublicId()
@@ -139,6 +147,8 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
                 get(),
                 get(),
                 null,
+                get(),
+                get(),
             )
 
         val publicId = randomPublicId()
@@ -193,6 +203,8 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
                 get(),
                 get(),
                 attachmentService,
+                get(),
+                get(),
             )
 
         val publicId = randomPublicId()
@@ -255,7 +267,7 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
 
         val cleanupConfig = CleanupConfig(null, null, false)
 
-        val cleanupService = TestRunCleanupService(cleanupConfig, get(), get(), get(), null)
+        val cleanupService = TestRunCleanupService(cleanupConfig, get(), get(), get(), null, get(), get())
 
         val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyCleanupTestRuns() }
 
@@ -279,7 +291,7 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
         testRunDBGenerator.createTestRun(pinnedTestRunId, LocalDate.now().minusDays(31), true)
 
         val cleanupConfig = CleanupConfig(30, null, false)
-        val cleanupService = TestRunCleanupService(cleanupConfig, get(), get(), get(), null)
+        val cleanupService = TestRunCleanupService(cleanupConfig, get(), get(), get(), null, get(), get())
 
         val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyCleanupTestRuns() }
 
@@ -303,7 +315,7 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
         testRunDBGenerator.createTestRun(testRunIdTooOld2, LocalDate.now().minusDays(45), false)
 
         val cleanupConfig = CleanupConfig(30, null, true)
-        val cleanupService = TestRunCleanupService(cleanupConfig, get(), get(), get(), null)
+        val cleanupService = TestRunCleanupService(cleanupConfig, get(), get(), get(), null, get(), get())
 
         val cleanedUpTestRuns = runBlocking { cleanupService.conditionallyCleanupTestRuns() }
 
@@ -318,7 +330,7 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
     fun `should delete coverage along with test run`() {
         val coverageService: CoverageService by inject()
         val cleanupConfig = CleanupConfig(30, null, false)
-        val cleanupService = TestRunCleanupService(cleanupConfig, get(), get(), get(), null)
+        val cleanupService = TestRunCleanupService(cleanupConfig, get(), get(), get(), null, get(), get())
 
         val publicIdToRemove = randomPublicId()
         testRunDBGenerator.createTestRun(publicIdToRemove, LocalDate.now().minusDays(31), false)
@@ -348,5 +360,97 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
         coverageStats.forEach { coverageStat ->
             expectThat(coverageStatsDao.fetchOneById(coverageStat.id)).isNull()
         }
+    }
+
+    @Test
+    fun `should preserve last known coverage for mainline branch after cleanup`() {
+        val repositoryCoverageRepository: RepositoryCoverageRepository by inject()
+        val cleanupService = TestRunCleanupService(CleanupConfig(30, null, false), get(), get(), get(), null, get(), get())
+
+        val publicId = randomPublicId()
+        val repoName = randomOrgAndRepo()
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            publicId = publicId,
+            coverageText = JacocoXmlLoader().serverAppReduced(),
+            repoName = repoName,
+            branchName = "main",
+        )
+
+        runBlocking { cleanupService.cleanupTestRun(publicId) }
+
+        val lastKnownCoverage = runBlocking { repositoryCoverageRepository.fetchLastKnownCoverage(repoName, null) }
+
+        expectThat(lastKnownCoverage)
+            .isNotNull()
+            .and {
+                get { id }.isEqualTo(publicId.id)
+                get { coveredPercentage }.isEqualTo(serverAppReducedLineCoveragePercentage)
+            }
+    }
+
+    @Test
+    fun `should not preserve last known coverage for non-mainline branch`() {
+        val repositoryCoverageRepository: RepositoryCoverageRepository by inject()
+        val cleanupService = TestRunCleanupService(CleanupConfig(30, null, false), get(), get(), get(), null, get(), get())
+
+        val publicId = randomPublicId()
+        val repoName = randomOrgAndRepo()
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            publicId = publicId,
+            coverageText = JacocoXmlLoader().serverAppReduced(),
+            repoName = repoName,
+            branchName = "feature/dev",
+        )
+
+        runBlocking { cleanupService.cleanupTestRun(publicId) }
+
+        val lastKnownCoverage = runBlocking { repositoryCoverageRepository.fetchLastKnownCoverage(repoName, null) }
+
+        expectThat(lastKnownCoverage).isNull()
+    }
+
+    @Test
+    fun `should not overwrite last known coverage with an older run's coverage`() {
+        val repositoryCoverageRepository: RepositoryCoverageRepository by inject()
+        val cleanupService = TestRunCleanupService(CleanupConfig(30, null, false), get(), get(), get(), null, get(), get())
+
+        val repoName = randomOrgAndRepo()
+
+        val newerPublicId = randomPublicId()
+        val olderPublicId = randomPublicId()
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            publicId = newerPublicId,
+            coverageText = JacocoXmlLoader().serverApp(),
+            repoName = repoName,
+            branchName = "main",
+        )
+
+        testRunDBGenerator.createTestRunWithCoverageAndGitMetadata(
+            publicId = olderPublicId,
+            coverageText = JacocoXmlLoader().serverAppReduced(),
+            repoName = repoName,
+            branchName = "main",
+        )
+
+        val olderTestRunDB = testRunDao.fetchOneByPublicId(olderPublicId.id)
+        olderTestRunDB.createdTimestamp = olderTestRunDB.createdTimestamp.minusDays(1)
+        testRunDao.update(olderTestRunDB)
+
+        // Clean up the newer run first so an upsert-without-a-newer-check would incorrectly let
+        // the older run's coverage win by being written last.
+        runBlocking { cleanupService.cleanupTestRun(newerPublicId) }
+        runBlocking { cleanupService.cleanupTestRun(olderPublicId) }
+
+        val lastKnownCoverage = runBlocking { repositoryCoverageRepository.fetchLastKnownCoverage(repoName, null) }
+
+        expectThat(lastKnownCoverage)
+            .isNotNull()
+            .and {
+                get { id }.isEqualTo(newerPublicId.id)
+                get { coveredPercentage }.isEqualTo(serverAppLineCoveragePercentage)
+            }
     }
 }

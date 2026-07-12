@@ -64,6 +64,7 @@ import projektor.organization.coverage.OrganizationCoverageService
 import projektor.performance.PerformanceResultsService
 import projektor.processing.ProcessingConfig
 import projektor.quality.CodeQualityReportRepository
+import projektor.repository.coverage.RepositoryCoverageRepository
 import projektor.repository.coverage.RepositoryCoverageService
 import projektor.repository.performance.RepositoryPerformanceService
 import projektor.repository.testrun.RepositoryTestRunService
@@ -185,16 +186,24 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     val testRunSystemAttributesService: TestRunSystemAttributesService by inject()
     val testRunRepository: TestRunRepository by inject()
     val resultsProcessingRepository: ResultsProcessingRepository by inject()
+    val testRunMetadataService: TestRunMetadataService by inject()
+    val repositoryCoverageRepository: RepositoryCoverageRepository by inject()
 
     val coverageService: CoverageService by inject()
 
     val testRunCleanupService =
-        TestRunCleanupService(cleanupConfig, testRunRepository, resultsProcessingRepository, coverageService, attachmentService)
+        TestRunCleanupService(
+            cleanupConfig,
+            testRunRepository,
+            resultsProcessingRepository,
+            coverageService,
+            attachmentService,
+            testRunMetadataService,
+            repositoryCoverageRepository,
+        )
     val attachmentCleanupService = attachmentService?.let { AttachmentCleanupService(cleanupConfig, testRunRepository, attachmentService) }
     val scheduler: Scheduler by inject()
     CleanupScheduledJob.conditionallyStartCleanupScheduledJob(cleanupConfig, testRunCleanupService, attachmentCleanupService, scheduler)
-
-    val testRunMetadataService: TestRunMetadataService by inject()
 
     val organizationCoverageService: OrganizationCoverageService by inject()
 

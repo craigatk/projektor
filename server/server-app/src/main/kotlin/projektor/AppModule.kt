@@ -145,7 +145,7 @@ fun createAppModule(
 
     single { GitHubPullRequestCommentService(notificationConfig, gitHubCommentService) }
 
-    single { CoverageBadgeService(get(), get(), get()) }
+    single { CoverageBadgeService(get(), get(), get(), get()) }
     single { SvgCoverageBadgeCreator() }
     single { TestRunBadgeService(get(), get(), get()) }
     single { SvgTestRunBadgeCreator() }
