@@ -4,6 +4,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
@@ -14,6 +15,7 @@ import projektor.server.example.coverage.JacocoXmlLoader.Companion.jacocoXmlPars
 import projektor.server.example.coverage.JacocoXmlLoader.Companion.serverAppLineCoveragePercentage
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import java.time.Instant
 import java.time.ZoneOffset
 import kotlin.test.assertNotNull
 
@@ -186,5 +188,38 @@ class RepositoryCoverageCurrentApplicationTest : ApplicationTestCase() {
             val response = client.get("/repo/$repoName/coverage/current")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NoContent)
+        }
+
+    @Test
+    fun `should fall back to last known coverage once all mainline test runs have been cleaned up`() =
+        projektorTestApplication {
+            val orgName = RandomStringUtils.randomAlphabetic(12)
+            val repoName = "$orgName/repo"
+            val cleanedUpPublicId = randomPublicId()
+            val createdTimestamp = Instant.now()
+
+            // Simulates the state left behind by TestRunCleanupService: no live test run or
+            // coverage data remains for this repo, only the durable last-known-coverage snapshot.
+            val repositoryCoverageRepository = RepositoryCoverageDatabaseRepository(dslContext)
+            runBlocking {
+                repositoryCoverageRepository.saveLastKnownCoverageIfNewer(
+                    repoName = repoName,
+                    projectName = null,
+                    branchName = "main",
+                    coveredPercentage = serverAppLineCoveragePercentage,
+                    testRunPublicId = cleanedUpPublicId,
+                    createdTimestamp = createdTimestamp,
+                )
+            }
+
+            val response = client.get("/repo/$repoName/coverage/current")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+            val currentCoverage: RepositoryCurrentCoverage = objectMapper.readValue(response.bodyAsText())
+
+            expectThat(currentCoverage) {
+                get { id }.isEqualTo(cleanedUpPublicId.id)
+                get { coveredPercentage }.isEqualTo(serverAppLineCoveragePercentage)
+            }
         }
 }

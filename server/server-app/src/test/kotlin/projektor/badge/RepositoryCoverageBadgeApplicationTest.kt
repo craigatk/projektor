@@ -3,14 +3,18 @@ package projektor.badge
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import projektor.ApplicationTestCase
 import projektor.incomingresults.randomPublicId
+import projektor.repository.coverage.RepositoryCoverageDatabaseRepository
 import projektor.server.example.coverage.JacocoXmlLoader
+import projektor.server.example.coverage.JacocoXmlLoader.Companion.serverAppReducedLineCoveragePercentage
 import projektor.util.randomOrgAndRepo
 import strikt.api.expectThat
 import strikt.assertions.contains
 import strikt.assertions.isEqualTo
+import java.time.Instant
 
 class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
     @Test
@@ -82,6 +86,34 @@ class RepositoryCoverageBadgeApplicationTest : ApplicationTestCase() {
             val response = client.get("/repo/$repoName/badge/coverage")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.NotFound)
+        }
+
+    @Test
+    fun `should show last known coverage once all test runs for a repository have been cleaned up`() =
+        projektorTestApplication {
+            val repoName = randomOrgAndRepo()
+            val cleanedUpPublicId = randomPublicId()
+
+            // Simulates the state left behind by TestRunCleanupService: no live test run or
+            // coverage data remains for this repo, only the durable last-known-coverage snapshot.
+            val repositoryCoverageRepository = RepositoryCoverageDatabaseRepository(dslContext)
+            runBlocking {
+                repositoryCoverageRepository.saveLastKnownCoverageIfNewer(
+                    repoName = repoName,
+                    projectName = null,
+                    branchName = "main",
+                    coveredPercentage = serverAppReducedLineCoveragePercentage,
+                    testRunPublicId = cleanedUpPublicId,
+                    createdTimestamp = Instant.now(),
+                )
+            }
+
+            val response = client.get("/repo/$repoName/badge/coverage")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+            expectThat(response.contentType().toString()).contains(ContentType.Image.SVG.toString())
+
+            expectThat(response.bodyAsText()).contains("95%")
         }
 
     @Test

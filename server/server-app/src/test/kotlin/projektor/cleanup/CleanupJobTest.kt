@@ -19,6 +19,8 @@ class CleanupJobTest : DatabaseRepositoryTestCase() {
                 get(),
                 get(),
                 null,
+                get(),
+                get(),
             )
         val cleanupScheduledJob = CleanupScheduledJob(cleanupService, null)
 

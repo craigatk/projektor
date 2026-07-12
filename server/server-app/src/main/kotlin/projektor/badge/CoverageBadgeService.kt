@@ -3,6 +3,7 @@ package projektor.badge
 import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageService
 import projektor.notification.badge.SvgCoverageBadgeCreator
+import projektor.repository.coverage.RepositoryCoverageRepository
 import projektor.server.api.PublicId
 import projektor.server.api.repository.BranchSearch
 import projektor.server.api.repository.BranchType
@@ -11,6 +12,7 @@ class CoverageBadgeService(
     private val coverageService: CoverageService,
     private val previousTestRunService: PreviousTestRunService,
     private val svgCoverageBadgeCreator: SvgCoverageBadgeCreator,
+    private val repositoryCoverageRepository: RepositoryCoverageRepository,
 ) {
     suspend fun createCoverageBadge(
         fullRepoName: String,
@@ -30,7 +32,7 @@ class CoverageBadgeService(
         val coveredPercentage =
             mostRecentRunWithCoverage?.publicId?.let { publicId ->
                 coverageService.getCoveredLinePercentage(publicId)
-            }
+            } ?: repositoryCoverageRepository.fetchLastKnownCoverage(fullRepoName, projectName)?.coveredPercentage
 
         return coveredPercentage?.let { svgCoverageBadgeCreator.createBadge(it) }
     }

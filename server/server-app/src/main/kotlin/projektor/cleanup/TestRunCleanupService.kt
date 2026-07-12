@@ -4,6 +4,8 @@ import org.slf4j.LoggerFactory
 import projektor.attachment.AttachmentService
 import projektor.coverage.CoverageService
 import projektor.incomingresults.processing.ResultsProcessingRepository
+import projektor.metadata.TestRunMetadataService
+import projektor.repository.coverage.RepositoryCoverageRepository
 import projektor.server.api.PublicId
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.testrun.TestRunRepository
@@ -15,6 +17,8 @@ class TestRunCleanupService(
     private val resultsProcessingRepository: ResultsProcessingRepository,
     private val coverageService: CoverageService,
     private val attachmentService: AttachmentService?,
+    private val testRunMetadataService: TestRunMetadataService,
+    private val repositoryCoverageRepository: RepositoryCoverageRepository,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
@@ -40,6 +44,8 @@ class TestRunCleanupService(
         }
 
     suspend fun cleanupTestRun(publicId: PublicId) {
+        preserveLastKnownCoverage(publicId)
+
         testRunRepository.deleteTestRun(publicId)
 
         coverageService.deleteCoverage(publicId)
@@ -47,6 +53,38 @@ class TestRunCleanupService(
         attachmentService?.deleteAttachments(publicId)
 
         resultsProcessingRepository.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.DELETED)
+    }
+
+    // Snapshots this run's coverage into a durable, per-repo table before it's deleted, so the
+    // repository coverage badge/current-coverage endpoints keep reflecting the last known value
+    // instead of going empty once every test run for a repo has aged out. Best-effort: a failure
+    // here must never block the actual cleanup of the test run.
+    private suspend fun preserveLastKnownCoverage(publicId: PublicId) {
+        try {
+            val gitMetadata = testRunMetadataService.fetchGitMetadata(publicId)
+            val repoName = gitMetadata?.repoName
+
+            if (gitMetadata != null && gitMetadata.isMainBranch && repoName != null) {
+                val coveredPercentage = coverageService.getCoveredLinePercentage(publicId)
+
+                if (coveredPercentage != null) {
+                    val testRunSummary = testRunRepository.fetchTestRunSummary(publicId)
+
+                    if (testRunSummary != null) {
+                        repositoryCoverageRepository.saveLastKnownCoverageIfNewer(
+                            repoName = repoName,
+                            projectName = gitMetadata.projectName,
+                            branchName = gitMetadata.branchName,
+                            coveredPercentage = coveredPercentage,
+                            testRunPublicId = publicId,
+                            createdTimestamp = testRunSummary.createdTimestamp,
+                        )
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            logger.error("Failed to preserve last known coverage for test run $publicId before cleanup", e)
+        }
     }
 
     private suspend fun conditionallyCleanupTestRun(

@@ -9,14 +9,20 @@ import projektor.coverage.toCoverageStats
 import projektor.database.generated.Tables.CODE_COVERAGE_RUN
 import projektor.database.generated.Tables.CODE_COVERAGE_STATS
 import projektor.database.generated.Tables.GIT_METADATA
+import projektor.database.generated.Tables.REPOSITORY_CURRENT_COVERAGE
 import projektor.database.generated.Tables.TEST_RUN
 import projektor.parser.coverage.model.CoverageReportStats
 import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withBranchType
 import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withProjectName
+import projektor.server.api.PublicId
 import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.coverage.RepositoryCoverageTimeline
 import projektor.server.api.repository.coverage.RepositoryCoverageTimelineEntry
+import projektor.server.api.repository.coverage.RepositoryCurrentCoverage
+import java.math.BigDecimal
 import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import kotlin.streams.toList
 
 class RepositoryCoverageDatabaseRepository(private val dslContext: DSLContext) : RepositoryCoverageRepository {
@@ -82,6 +88,62 @@ class RepositoryCoverageDatabaseRepository(private val dslContext: DSLContext) :
                             .and(CODE_COVERAGE_STATS.SCOPE.eq("GROUP")),
                     ),
             )
+        }
+
+    override suspend fun saveLastKnownCoverageIfNewer(
+        repoName: String,
+        projectName: String?,
+        branchName: String?,
+        coveredPercentage: BigDecimal,
+        testRunPublicId: PublicId,
+        createdTimestamp: Instant,
+    ) = withContext(Dispatchers.IO) {
+        val normalizedProjectName = projectName ?: ""
+        val createdTimestampLocal = LocalDateTime.ofInstant(createdTimestamp, ZoneOffset.UTC)
+
+        dslContext.insertInto(REPOSITORY_CURRENT_COVERAGE)
+            .set(REPOSITORY_CURRENT_COVERAGE.REPO_NAME, repoName)
+            .set(REPOSITORY_CURRENT_COVERAGE.PROJECT_NAME, normalizedProjectName)
+            .set(REPOSITORY_CURRENT_COVERAGE.BRANCH_NAME, branchName)
+            .set(REPOSITORY_CURRENT_COVERAGE.COVERED_PERCENTAGE, coveredPercentage)
+            .set(REPOSITORY_CURRENT_COVERAGE.TEST_RUN_PUBLIC_ID, testRunPublicId.id)
+            .set(REPOSITORY_CURRENT_COVERAGE.CREATED_TIMESTAMP, createdTimestampLocal)
+            .onConflict(REPOSITORY_CURRENT_COVERAGE.REPO_NAME, REPOSITORY_CURRENT_COVERAGE.PROJECT_NAME)
+            .doUpdate()
+            .set(REPOSITORY_CURRENT_COVERAGE.BRANCH_NAME, branchName)
+            .set(REPOSITORY_CURRENT_COVERAGE.COVERED_PERCENTAGE, coveredPercentage)
+            .set(REPOSITORY_CURRENT_COVERAGE.TEST_RUN_PUBLIC_ID, testRunPublicId.id)
+            .set(REPOSITORY_CURRENT_COVERAGE.CREATED_TIMESTAMP, createdTimestampLocal)
+            .set(REPOSITORY_CURRENT_COVERAGE.UPDATED_TIMESTAMP, LocalDateTime.now())
+            .where(REPOSITORY_CURRENT_COVERAGE.CREATED_TIMESTAMP.lessThan(createdTimestampLocal))
+            .execute()
+
+        Unit
+    }
+
+    override suspend fun fetchLastKnownCoverage(
+        repoName: String,
+        projectName: String?,
+    ): RepositoryCurrentCoverage? =
+        withContext(Dispatchers.IO) {
+            val normalizedProjectName = projectName ?: ""
+
+            dslContext.selectFrom(REPOSITORY_CURRENT_COVERAGE)
+                .where(
+                    REPOSITORY_CURRENT_COVERAGE.REPO_NAME.eq(repoName)
+                        .and(REPOSITORY_CURRENT_COVERAGE.PROJECT_NAME.eq(normalizedProjectName)),
+                )
+                .fetchOne()
+                ?.let { record ->
+                    RepositoryCurrentCoverage(
+                        id = record.testRunPublicId,
+                        createdTimestamp = record.createdTimestamp.toInstant(ZoneOffset.UTC),
+                        coveredPercentage = record.coveredPercentage,
+                        repo = record.repoName,
+                        project = projectName,
+                        branch = record.branchName,
+                    )
+                }
         }
 
     data class ReportTimelineEntry(
