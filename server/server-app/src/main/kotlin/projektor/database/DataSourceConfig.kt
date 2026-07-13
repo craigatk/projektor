@@ -11,6 +11,8 @@ import org.jooq.conf.MappedSchema
 import org.jooq.conf.RenderMapping
 import org.jooq.conf.Settings
 import org.jooq.impl.DSL
+import java.net.URI
+import java.net.URLDecoder
 import javax.sql.DataSource
 
 data class DataSourceConfig(
@@ -21,14 +23,46 @@ data class DataSourceConfig(
     val maximumPoolSize: Int,
 ) {
     companion object {
-        fun createDataSourceConfig(applicationConfig: ApplicationConfig) =
-            DataSourceConfig(
-                applicationConfig.property("ktor.datasource.jdbcUrl").getString(),
-                applicationConfig.property("ktor.datasource.username").getString(),
-                applicationConfig.property("ktor.datasource.password").getString(),
+        fun createDataSourceConfig(applicationConfig: ApplicationConfig): DataSourceConfig {
+            val (jdbcUrl, username, password) =
+                normalizeConnectionInfo(
+                    applicationConfig.property("ktor.datasource.jdbcUrl").getString(),
+                    applicationConfig.property("ktor.datasource.username").getString(),
+                    applicationConfig.property("ktor.datasource.password").getString(),
+                )
+
+            return DataSourceConfig(
+                jdbcUrl,
+                username,
+                password,
                 applicationConfig.property("ktor.datasource.schema").getString(),
                 applicationConfig.property("ktor.datasource.maximumPoolSize").getString().toInt(),
             )
+        }
+
+        // Some hosts (e.g. DigitalOcean's managed Postgres connection string, Heroku's DATABASE_URL)
+        // provide the connection info as a `postgres://user:password@host:port/database?sslmode=require`
+        // URI rather than the `jdbc:postgresql://` URL this app otherwise expects for DB_URL. Detect
+        // and convert that format so either can be set directly as DB_URL without manual reformatting.
+        internal fun normalizeConnectionInfo(
+            jdbcUrl: String,
+            username: String,
+            password: String,
+        ): Triple<String, String, String> =
+            if (jdbcUrl.startsWith("postgres://") || jdbcUrl.startsWith("postgresql://")) {
+                val uri = URI(jdbcUrl)
+
+                val userInfoParts = uri.userInfo?.split(":", limit = 2)
+                val parsedUsername = userInfoParts?.getOrNull(0)?.let { URLDecoder.decode(it, "UTF-8") } ?: username
+                val parsedPassword = userInfoParts?.getOrNull(1)?.let { URLDecoder.decode(it, "UTF-8") } ?: password
+
+                val hostAndPort = if (uri.port != -1) "${uri.host}:${uri.port}" else uri.host
+                val query = uri.query?.let { "?$it" } ?: ""
+
+                Triple("jdbc:postgresql://$hostAndPort${uri.path}$query", parsedUsername, parsedPassword)
+            } else {
+                Triple(jdbcUrl, username, password)
+            }
 
         fun createDataSource(
             dataSourceConfig: DataSourceConfig,
