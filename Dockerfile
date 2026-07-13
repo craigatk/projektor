@@ -24,9 +24,13 @@ ENV HONEYCOMB_API_KEY=${HONEYCOMB_API_KEY}
 WORKDIR /app
 COPY . .
 
+# --no-parallel: DO's build container has less memory than CI/dev machines, and compiling
+# multiple modules concurrently multiplies peak memory demand within the same heap ceiling
+# (org.gradle.jvmargs in gradle.properties). Scoped to this build only, not gradle.properties,
+# so CI/local dev keep parallel compilation.
 RUN chmod +x gradlew \
     && cd ui && yarn install --frozen-lockfile && cd .. \
-    && ./gradlew :server:server-app:assembleFull --no-daemon \
+    && ./gradlew :server:server-app:assembleFull --no-daemon --no-parallel \
     && mkdir -p server/server-app/opentelemetry
 
 # ---- Runtime image: just the JRE, the fat jar, and (if built) the OpenTelemetry javaagent ----
