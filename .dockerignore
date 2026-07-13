@@ -1,0 +1,10 @@
+**/.git
+**/.idea
+**/.gradle
+**/.cache
+**/.yarn-cache
+**/build
+**/node_modules
+**/dist
+**/*.log
+minio
