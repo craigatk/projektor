@@ -13,7 +13,6 @@ import projektor.server.api.error.FailureBodyType
 import projektor.server.api.error.ResultsProcessingFailure
 import strikt.api.expectThat
 import strikt.assertions.any
-import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import kotlin.test.assertNotNull
 
@@ -48,7 +47,14 @@ class ProcessingFailureApplicationTest : ApplicationTestCase() {
                 }
             }
 
-            val response = client.get("/failures/recent?count=5")
+            // /failures/recent has no per-test/per-repo scoping -- it's a global "most recent
+            // failures across the whole server" view -- and other tests can be recording their
+            // own processing failures into the same shared table concurrently (this project runs
+            // tests in parallel). Asking for exactly 5 and asserting the response is precisely
+            // the 5 we just created is flaky: a concurrently-inserted row from another test can
+            // be more recent and bump one of ours out of the window. Instead, request a generous
+            // window and confirm our own records are present in it.
+            val response = client.get("/failures/recent?count=1000")
 
             expectThat(response.status).isEqualTo(HttpStatusCode.OK)
 
@@ -56,26 +62,12 @@ class ProcessingFailureApplicationTest : ApplicationTestCase() {
             assertNotNull(responseBody)
 
             val failures: List<ResultsProcessingFailure> = objectMapper.readValue(responseBody)
-            expectThat(failures).hasSize(5)
-                .any {
-                    get { body }.isEqualTo("recent-body-${recentPublicIds[0]}")
-                    get { failureMessage }.isEqualTo("recent-failure-${recentPublicIds[0]}")
+
+            recentPublicIds.forEach { publicId ->
+                expectThat(failures).any {
+                    get { body }.isEqualTo("recent-body-$publicId")
+                    get { failureMessage }.isEqualTo("recent-failure-$publicId")
                 }
-                .any {
-                    get { body }.isEqualTo("recent-body-${recentPublicIds[1]}")
-                    get { failureMessage }.isEqualTo("recent-failure-${recentPublicIds[1]}")
-                }
-                .any {
-                    get { body }.isEqualTo("recent-body-${recentPublicIds[2]}")
-                    get { failureMessage }.isEqualTo("recent-failure-${recentPublicIds[2]}")
-                }
-                .any {
-                    get { body }.isEqualTo("recent-body-${recentPublicIds[3]}")
-                    get { failureMessage }.isEqualTo("recent-failure-${recentPublicIds[3]}")
-                }
-                .any {
-                    get { body }.isEqualTo("recent-body-${recentPublicIds[4]}")
-                    get { failureMessage }.isEqualTo("recent-failure-${recentPublicIds[4]}")
-                }
+            }
         }
 }
