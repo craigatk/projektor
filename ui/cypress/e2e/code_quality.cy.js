@@ -35,7 +35,7 @@ context("code quality", () => {
     cy.findByText("notifications-github-ktlint.txt").click();
     cy.findByTestId("code-text-line-content-1").should(
       "contain",
-      "github-line-1",
+      "github-line-67",
     );
   });
 
