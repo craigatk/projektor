@@ -1,10 +1,10 @@
 # Projektor
 
-| Project                | Tests                                                                                                                                                                                                      | Coverage                                                                                                                                                                                                                      |
-|------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Server & Gradle plugin | [![Test results](https://projektorlive.herokuapp.com/repo/craigatk/projektor/badge/tests)](https://projektorlive.herokuapp.com/repo/craigatk/projektor/run/latest)                                         | [![Code coverage percentage](https://projektorlive.herokuapp.com/repo/craigatk/projektor/badge/coverage)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/coverage)                                         |
-| UI                     | [![Test results](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/ui-jest/badge/tests)](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/ui-jest/run/latest)         | [![Code coverage percentage](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/ui-jest/badge/coverage)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/project/ui-jest/coverage)         |
-| Node publisher         | [![Test results](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/node-script/badge/tests)](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/node-script/run/latest) | [![Code coverage percentage](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/node-script/badge/coverage)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/project/node-script/coverage) |
+| Project                | Tests                                                                                                                                                                                                    | Coverage                                                                                                                                                                                                                     |
+|------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Server & Gradle plugin | [![Test results](https://live.projektor.dev/repo/craigatk/projektor/badge/tests)](https://live.projektor.dev/repo/craigatk/projektor/run/latest)                                         | [![Code coverage percentage](https://live.projektor.dev/repo/craigatk/projektor/badge/coverage)](live.projektor.dev/repository/craigatk/projektor/coverage)                                         |
+| UI                     | [![Test results](https://live.projektor.dev/repo/craigatk/projektor/project/ui-jest/badge/tests)](https://live.projektor.dev/repo/craigatk/projektor/project/ui-jest/run/latest)       | [![Code coverage percentage](https://live.projektor.dev/repo/craigatk/projektor/project/ui-jest/badge/coverage)](https://live.projektor.dev/repository/craigatk/projektor/project/ui-jest/coverage)        |
+| Node publisher         | [![Test results](https://live.projektor.dev/repo/craigatk/projektor/project/node-script/badge/tests)](https://live.projektor.dev/repo/craigatk/projektor/project/node-script/run/latest) | [![Code coverage percentage](https://live.projektor.dev/repo/craigatk/projektor/project/node-script/badge/coverage)](https://live.projektor.dev/repository/craigatk/projektor/project/node-script/coverage) |
 
 For detailed instructions to get started with Projektor, please see the full project documentation at https://projektor.dev
 
@@ -20,7 +20,7 @@ Access and share your full test reports quickly and easily with Projektor.
 
 Projektor shows a summary of all the tests executed as part of your test run:
 
-https://projektorlive.herokuapp.com/tests/RQ99P3LRZJSX
+https://live.projektor.dev/tests/AYAM6TSB8DIS/
 
 The summary includes things like number of tests executed, how many passed or failed, etc.
 And if there are any failures, those failure details are shown first on the dashboard:
@@ -32,7 +32,7 @@ to the system out and system err from each test:
 
 ![Projektor system out](images/test-system-output.png "Projektor system out")
 
-https://projektorlive.herokuapp.com/tests/V1BMYK93MTNR/suite/65/systemOut
+https://live.projektor.dev/tests/AYAM6TSB8DIS/suite/72/case/1/systemOut
 
 ## Code coverage stats
 
@@ -48,7 +48,7 @@ Drilling down further, Projektor can show file-level coverage stats, including w
 
 ![Projektor code coverage files](images/code-coverage-files.png "Projektor code coverage files")
 
-For example https://projektorlive.herokuapp.com/tests/RQ99P3LRZJSX/coverage/server-app/files
+For example https://live.projektor.dev/tests/AYAM6TSB8DIS/coverage/server-app/files
 
 Projektor can also graph your project's code coverage over time, giving you the opportunity to see
 how the code coverage is trending:
