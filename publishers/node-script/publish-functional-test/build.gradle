@@ -12,14 +12,14 @@ node {
 evaluationDependsOn(':server:server-app')
 
 task projektorPublish(type: ProjektorManualPublishTask) {
-    serverUrl = "https://projektorlive.herokuapp.com"
+    serverUrl = "https://live.projektor.dev"
     publishToken = System.getenv("PROJEKTOR_TOKEN") ?: project.findProperty('projektor_publish_token') ?: null
     additionalResultsDirs = ["testResults"]
     projectName = "node-script-functional-test"
 }
 
 task projektorPublishWithToken(type: ProjektorManualPublishTask) {
-    serverUrl = "https://projektorlive.herokuapp.com"
+    serverUrl = "https://live.projektor.dev"
     publishToken = System.getenv("PROJEKTOR_TOKEN") ?: project.findProperty('projektor_publish_token') ?: null
     additionalResultsDirs = ["testResults"]
     projectName = "node-script-functional-test-with-token"

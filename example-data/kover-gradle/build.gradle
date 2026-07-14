@@ -25,7 +25,7 @@ repositories {
 }
 
 projektor {
-    serverUrl = "https://projektorlive.herokuapp.com"
+    serverUrl = "https://live.projektor.dev"
     publishToken = System.getenv("PROJEKTOR_TOKEN") ?: project.findProperty('projektor_publish_token') ?: null
 }
 
