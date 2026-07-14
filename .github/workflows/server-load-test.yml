@@ -60,7 +60,7 @@ jobs:
       uses: craigatk/projektor-action@v15.1.0
       if: failure() || success()
       with:
-        server-url: https://projektorlive.herokuapp.com
+        server-url: https://live.projektor.dev
         performance: server/test/load-test/test-results/*.json
         token: ${{ secrets.PROJEKTOR_TOKEN }}
         project-name: server-load-test

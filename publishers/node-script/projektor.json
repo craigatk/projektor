@@ -1,5 +1,5 @@
 {
-  "serverUrl": "https://projektorlive.herokuapp.com",
+  "serverUrl": "https://live.projektor.dev",
   "results": [
     "testResults/*.xml"
   ],
