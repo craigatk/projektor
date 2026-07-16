@@ -13,6 +13,45 @@ import strikt.assertions.contains
 import strikt.assertions.isEqualTo
 
 class McpPullRequestFailureContextApplicationTest : ApplicationTestCase() {
+    private val initializeRequestBody =
+        """
+        {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "method": "initialize",
+          "params": {
+            "protocolVersion": "2025-06-18",
+            "capabilities": {},
+            "clientInfo": {
+              "name": "test-client",
+              "version": "1.0"
+            }
+          }
+        }
+        """.trimIndent()
+
+    @Test
+    fun `initialize response uses spec-compliant camelCase field names with no explicit nulls`() =
+        projektorTestApplication {
+            val response =
+                client.post("/mcp") {
+                    headers {
+                        append(HttpHeaders.ContentType, "application/json")
+                        append(HttpHeaders.Accept, "application/json, text/event-stream")
+                    }
+                    setBody(initializeRequestBody)
+                }
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val bodyText = response.bodyAsText()
+            expectThat(bodyText).contains("\"protocolVersion\"")
+            expectThat(bodyText).contains("\"serverInfo\"")
+            expectThat(bodyText).not { contains("\"protocol_version\"") }
+            expectThat(bodyText).not { contains("\"server_info\"") }
+            expectThat(bodyText).not { contains(":null") }
+        }
+
     private fun callToolRequestBody(
         orgName: String,
         repoName: String,

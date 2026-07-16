@@ -51,6 +51,7 @@ import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
 import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.mcp.buildProjektorMcpServer
+import projektor.mcp.registerMcpTypeCompatibility
 import projektor.message.MessageConfig
 import projektor.message.MessageService
 import projektor.metadata.TestRunMetadataService
@@ -138,8 +139,12 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
             propertyNamingStrategy = PropertyNamingStrategies.SNAKE_CASE
             disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            // ContentNegotiation always resolves to this converter (see McpJacksonCompat.kt for why
+            // json(McpJson) below doesn't help), so the MCP SDK's own types need Jackson to render
+            // them correctly rather than with the REST API's snake_case convention.
+            registerMcpTypeCompatibility()
         }
-        json(McpJson) // Required for MCP JSON-RPC (de)serialization, see projektor.mcp
+        json(McpJson) // Kept for spec fidelity if ContentNegotiation's converter selection ever changes.
     }
     install(Koin) {
         SLF4JLogger()
