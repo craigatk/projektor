@@ -1399,10 +1399,10 @@ axios-cache-interceptor@1.12.0:
     object-code "^2.0.0"
     try "^1.0.3"
 
-axios-case-converter@1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/axios-case-converter/-/axios-case-converter-1.1.1.tgz#7aad2194c30265513b50ee0433cbd15380d89a8a"
-  integrity sha512-v13pB7cYryh/7f4TKxN/gniD2hwqPQcjip29Hk3J9iwsnA37Rht2Hkn5VyrxynxlKdMNSIfGk6I9D6G28oTRyQ==
+axios-case-converter@1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/axios-case-converter/-/axios-case-converter-1.1.2.tgz#a34b269b49f0e0874fba6d4cf67da0bdd0ead94c"
+  integrity sha512-sVIneiHKMk+Rxr5WPqhxQm/5O8q9KCcYsG01gFF+baCkacsB4kJMGxRdNFT+5ZXZe7IPqHQ2eQ6XF3xSOrGLrg==
   dependencies:
     camel-case "^4.1.1"
     header-case "^2.0.3"
