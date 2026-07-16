@@ -240,6 +240,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
         coverage(authService, coverageService)
         failure(processingFailureService)
         health()
+        mcpOAuthDiscovery()
         messages(messageService)
         metadata(testRunMetadataService, versionControlConfig)
         organization(organizationCoverageService)
