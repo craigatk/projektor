@@ -48,6 +48,7 @@ import projektor.performance.PerformanceResultsDatabaseRepository
 import projektor.performance.PerformanceResultsRepository
 import projektor.performance.PerformanceResultsService
 import projektor.processing.ProcessingConfig
+import projektor.pullrequest.PullRequestFailureContextService
 import projektor.quality.CodeQualityReportDatabaseRepository
 import projektor.quality.CodeQualityReportRepository
 import projektor.repository.coverage.RepositoryCoverageDatabaseRepository
@@ -125,6 +126,7 @@ fun createAppModule(
     single { PreviousTestRunService(get()) }
     single { ProcessingFailureService(get()) }
     single { TestCaseService(get(), attachmentService, aiTestFailureAnalyzer) }
+    single { PullRequestFailureContextService(get(), get()) }
     single { TestSuiteService(get()) }
     single { TestResultsProcessingService(get()) }
     single { TestResultsService(get(), get(), get(), get()) }

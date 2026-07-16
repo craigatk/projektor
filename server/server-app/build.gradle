@@ -50,6 +50,10 @@ dependencies {
     implementation "io.ktor:ktor-server-compression:$ktor_version"
     implementation "io.ktor:ktor-server-content-negotiation:$ktor_version"
     implementation "io.ktor:ktor-serialization-jackson:$ktor_version"
+    implementation "io.ktor:ktor-server-sse:$ktor_version"
+    implementation "io.ktor:ktor-serialization-kotlinx-json:$ktor_version"
+
+    implementation "io.modelcontextprotocol:kotlin-sdk-server:$mcp_sdk_version" // https://github.com/modelcontextprotocol/kotlin-sdk
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
     implementation "io.insert-koin:koin-ktor:$koin_version"
