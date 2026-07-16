@@ -8,6 +8,7 @@ import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
 import io.ktor.http.content.CachingOptions
 import io.ktor.serialization.jackson.jackson
+import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.metrics.micrometer.MicrometerMetrics
@@ -21,6 +22,8 @@ import io.ktor.server.plugins.cors.routing.CORS
 import io.ktor.server.routing.IgnoreTrailingSlash
 import io.ktor.server.routing.routing
 import io.micrometer.core.instrument.MeterRegistry
+import io.modelcontextprotocol.kotlin.sdk.server.mcpStatelessStreamableHttp
+import io.modelcontextprotocol.kotlin.sdk.types.McpJson
 import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.SLF4JLogger
@@ -47,6 +50,7 @@ import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
 import projektor.incomingresults.processing.ResultsProcessingRepository
+import projektor.mcp.buildProjektorMcpServer
 import projektor.message.MessageConfig
 import projektor.message.MessageService
 import projektor.metadata.TestRunMetadataService
@@ -63,6 +67,7 @@ import projektor.notification.github.comment.GitHubCommentService
 import projektor.organization.coverage.OrganizationCoverageService
 import projektor.performance.PerformanceResultsService
 import projektor.processing.ProcessingConfig
+import projektor.pullrequest.PullRequestFailureContextService
 import projektor.quality.CodeQualityReportRepository
 import projektor.repository.coverage.RepositoryCoverageRepository
 import projektor.repository.coverage.RepositoryCoverageService
@@ -134,6 +139,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
             disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         }
+        json(McpJson) // Required for MCP JSON-RPC (de)serialization, see projektor.mcp
     }
     install(Koin) {
         SLF4JLogger()
@@ -222,6 +228,8 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
 
     val codeQualityReportRepository: CodeQualityReportRepository by inject()
 
+    val pullRequestFailureContextService: PullRequestFailureContextService by inject()
+
     routing {
         api(organizationCoverageService, repositoryCoverageService, repositoryTestRunService)
         attachments(attachmentService, authService)
@@ -248,6 +256,11 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
         ui()
         version()
     }
+
+    val projektorMcpServer = buildProjektorMcpServer(pullRequestFailureContextService)
+    // DNS rebinding protection defends locally-bound dev servers reachable from a browser; this app is a
+    // publicly deployed API server (same trust model as the rest of its routes, which use CORS anyHost()).
+    mcpStatelessStreamableHttp(path = "/mcp", enableDnsRebindingProtection = false) { projektorMcpServer }
 }
 
 private fun conditionallyCreateAttachmentService(

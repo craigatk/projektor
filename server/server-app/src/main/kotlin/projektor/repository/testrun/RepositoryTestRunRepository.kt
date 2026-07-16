@@ -31,6 +31,11 @@ interface RepositoryTestRunRepository {
         maxRuns: Int,
     ): List<PublicId>
 
+    suspend fun fetchMostRecentTestRunPublicId(
+        repoName: String,
+        pullRequestNumber: Int,
+    ): PublicId?
+
     suspend fun fetchTestRunCount(
         repoName: String,
         projectName: String?,

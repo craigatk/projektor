@@ -173,6 +173,25 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                 .map { PublicId(it) }
         }
 
+    override suspend fun fetchMostRecentTestRunPublicId(
+        repoName: String,
+        pullRequestNumber: Int,
+    ): PublicId? =
+        withContext(Dispatchers.IO) {
+            dslContext
+                .select(TEST_RUN.PUBLIC_ID)
+                .from(TEST_RUN)
+                .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                .where(
+                    GIT_METADATA.REPO_NAME.eq(repoName)
+                        .and(GIT_METADATA.PULL_REQUEST_NUMBER.eq(pullRequestNumber)),
+                )
+                .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                .limit(1)
+                .fetchOne(TEST_RUN.PUBLIC_ID)
+                ?.let { PublicId(it) }
+        }
+
     override suspend fun fetchTestRunCount(
         repoName: String,
         projectName: String?,
