@@ -118,6 +118,8 @@ class McpPullRequestFailureContextApplicationTest : ApplicationTestCase() {
             val bodyText = response.bodyAsText()
             expectThat(bodyText).contains(publicId.id)
             expectThat(bodyText).contains("failingTestSuite1TestCase1 failure message")
+            expectThat(bodyText).contains("\"type\":\"text\"")
+            expectThat(bodyText).not { contains("\"type\":\"TEXT\"") }
         }
 
     @Test
