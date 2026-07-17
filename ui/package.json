@@ -60,7 +60,7 @@
     "@types/react-dom": "19.2.3",
     "axios": "1.18.1",
     "axios-cache-interceptor": "1.12.0",
-    "axios-case-converter": "1.1.2",
+    "axios-case-converter": "2.0.1",
     "classnames": "2.5.1",
     "lodash": "4.18.1",
     "material-react-table": "3.2.1",
