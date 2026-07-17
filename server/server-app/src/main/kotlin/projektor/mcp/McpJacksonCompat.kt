@@ -9,9 +9,12 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.introspect.ClassIntrospector
+import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 
 private const val MCP_TYPES_PACKAGE = "io.modelcontextprotocol.kotlin.sdk.types"
 
@@ -67,6 +70,28 @@ private object McpSerialNameEnumSerializer : StdSerializer<Enum<*>>(Enum::class.
 @JsonSerialize(using = McpSerialNameEnumSerializer::class)
 private interface McpEnumMixin
 
+// kotlinx.serialization.json.JsonObject/JsonArray delegate to Map/List, so Jackson's built-in
+// Map/Collection serializers render them correctly. JsonPrimitive (the leaf string/number/
+// boolean/null case, e.g. a JSON Schema property's "type": "string") is a plain class in
+// package kotlinx.serialization.json -- outside MCP_TYPES_PACKAGE, so McpTypesMixInResolver
+// below doesn't cover it, and Jackson falls back to reflecting over its internal fields
+// (isString, content, and an internal Kotlin-mangled coerceToInlineType field) instead of
+// writing its actual value. That produced spec-invalid tool schemas, e.g. a property's "type"
+// serialized as {"is_string":true,"content":"string",...} instead of "string".
+private object JsonPrimitiveSerializer : StdSerializer<JsonPrimitive>(JsonPrimitive::class.java) {
+    override fun serialize(
+        value: JsonPrimitive,
+        gen: JsonGenerator,
+        provider: SerializerProvider,
+    ) {
+        when {
+            value is JsonNull -> gen.writeNull()
+            value.isString -> gen.writeString(value.content)
+            else -> gen.writeRawValue(value.content)
+        }
+    }
+}
+
 private object McpTypesMixInResolver : ClassIntrospector.MixInResolver {
     override fun findMixInClassFor(cls: Class<*>): Class<*>? {
         if (cls.packageName != MCP_TYPES_PACKAGE) return null
@@ -81,4 +106,6 @@ private object McpTypesMixInResolver : ClassIntrospector.MixInResolver {
     override fun copy(): ClassIntrospector.MixInResolver = this
 }
 
-fun ObjectMapper.registerMcpTypeCompatibility(): ObjectMapper = setMixInResolver(McpTypesMixInResolver)
+fun ObjectMapper.registerMcpTypeCompatibility(): ObjectMapper =
+    setMixInResolver(McpTypesMixInResolver)
+        .registerModule(SimpleModule().addSerializer(JsonPrimitive::class.java, JsonPrimitiveSerializer))
