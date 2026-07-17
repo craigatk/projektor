@@ -1,6 +1,6 @@
 # Projektor UI
 
-[![Code coverage percentage](https://projektorlive.herokuapp.com/repo/craigatk/projektor/project/ui-jest/badge/coverage)](https://projektorlive.herokuapp.com/repository/craigatk/projektor/project/ui-jest/coverage)
+[![Code coverage percentage](https://live.projektor.dev/repo/craigatk/projektor/project/ui-jest/badge/coverage)](https://live.projektor.dev/repository/craigatk/projektor/project/ui-jest/coverage)
 
 The Projektor UI is a [React](https://reactjs.org/) app written with Typescript/Javascript,
 built by [Parcel](https://parceljs.org/) with [Yarn](https://yarnpkg.com)
