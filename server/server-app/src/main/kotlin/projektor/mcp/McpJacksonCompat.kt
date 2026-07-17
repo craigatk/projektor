@@ -2,10 +2,15 @@ package projektor.mcp
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.introspect.ClassIntrospector
+import com.fasterxml.jackson.databind.ser.std.StdSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.JsonObject
 
 private const val MCP_TYPES_PACKAGE = "io.modelcontextprotocol.kotlin.sdk.types"
@@ -44,9 +49,28 @@ private interface ToolSchemaMixin {
     val defs: JsonObject?
 }
 
+// Most enums in this package (e.g. ContentTypes.TEXT, LoggingLevel.Debug) carry a kotlinx
+// @SerialName giving their real wire value ("text", "debug"); Jackson has no notion of that
+// annotation and falls back to the enum constant's Kotlin name ("TEXT", "Debug") instead. This
+// reads @SerialName reflectively so it works for every enum in the package without listing them.
+private object McpSerialNameEnumSerializer : StdSerializer<Enum<*>>(Enum::class.java) {
+    override fun serialize(
+        value: Enum<*>,
+        gen: JsonGenerator,
+        provider: SerializerProvider,
+    ) {
+        val serialName = value.javaClass.getField(value.name).getAnnotation(SerialName::class.java)?.value
+        gen.writeString(serialName ?: value.name)
+    }
+}
+
+@JsonSerialize(using = McpSerialNameEnumSerializer::class)
+private interface McpEnumMixin
+
 private object McpTypesMixInResolver : ClassIntrospector.MixInResolver {
     override fun findMixInClassFor(cls: Class<*>): Class<*>? {
         if (cls.packageName != MCP_TYPES_PACKAGE) return null
+        if (cls.isEnum) return McpEnumMixin::class.java
         return when (cls.simpleName) {
             "WithMeta" -> WithMetaMixin::class.java
             "ToolSchema" -> ToolSchemaMixin::class.java
