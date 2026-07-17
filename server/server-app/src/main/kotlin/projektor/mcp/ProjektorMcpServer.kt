@@ -27,6 +27,20 @@ private val objectMapper =
         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         .build()
 
+private data class PullRequestLocation(val orgName: String, val repoName: String, val pullRequestNumber: Int)
+
+// Callers frequently have just a GitHub PR link (e.g. pasted from a user message) rather than
+// its three parts pre-split, so pullRequestUrl is accepted as an alternative to orgName/repoName/
+// pullRequestNumber. Trailing path segments/query/fragment are allowed so e.g. a "/files" or
+// "?diff=split" suffixed URL still parses.
+private val githubPullRequestUrlPattern = Regex("""^https?://github\.com/([^/]+)/([^/]+)/pull/(\d+)(?:[/?#].*)?$""")
+
+private fun parseGitHubPullRequestUrl(url: String): PullRequestLocation? =
+    githubPullRequestUrlPattern.matchEntire(url.trim())?.let { match ->
+        val (orgName, repoName, pullRequestNumber) = match.destructured
+        PullRequestLocation(orgName, repoName, pullRequestNumber.toInt())
+    }
+
 fun buildProjektorMcpServer(pullRequestFailureContextService: PullRequestFailureContextService): Server {
     val server =
         Server(
@@ -44,11 +58,21 @@ fun buildProjektorMcpServer(pullRequestFailureContextService: PullRequestFailure
         description =
             "Fetches the diagnostic context (failure message, stack trace, stdout/stderr) for every " +
                 "currently-failing test in the most recent Projektor test run recorded for a GitHub pull " +
-                "request, so it can be used to diagnose why those tests are failing.",
+                "request, so it can be used to diagnose why those tests are failing. Identify the pull " +
+                "request either with pullRequestUrl, or with orgName, repoName, and pullRequestNumber " +
+                "together.",
         inputSchema =
             ToolSchema(
                 properties =
                     buildJsonObject {
+                        putJsonObject("pullRequestUrl") {
+                            put("type", "string")
+                            put(
+                                "description",
+                                "The GitHub pull request's URL, e.g. https://github.com/{org}/{repo}/pull/{number}. " +
+                                    "An alternative to passing orgName, repoName, and pullRequestNumber separately.",
+                            )
+                        }
                         putJsonObject("orgName") {
                             put("type", "string")
                             put("description", "GitHub organization or user name that owns the repository")
@@ -62,35 +86,62 @@ fun buildProjektorMcpServer(pullRequestFailureContextService: PullRequestFailure
                             put("description", "The pull request number")
                         }
                     },
-                required = listOf("orgName", "repoName", "pullRequestNumber"),
             ),
     ) { request ->
         val arguments = request.arguments
-        val orgName = arguments?.get("orgName")?.jsonPrimitive?.content
-        val repoName = arguments?.get("repoName")?.jsonPrimitive?.content
-        val pullRequestNumber = arguments?.get("pullRequestNumber")?.jsonPrimitive?.int
+        val pullRequestUrl = arguments?.get("pullRequestUrl")?.jsonPrimitive?.content
 
-        if (orgName == null || repoName == null || pullRequestNumber == null) {
+        val location =
+            if (pullRequestUrl != null) {
+                parseGitHubPullRequestUrl(pullRequestUrl)
+                    ?: return@addTool CallToolResult(
+                        content =
+                            listOf(
+                                TextContent(
+                                    "pullRequestUrl must look like https://github.com/{org}/{repo}/pull/{number}",
+                                ),
+                            ),
+                        isError = true,
+                    )
+            } else {
+                val orgName = arguments?.get("orgName")?.jsonPrimitive?.content
+                val repoName = arguments?.get("repoName")?.jsonPrimitive?.content
+                val pullRequestNumber = arguments?.get("pullRequestNumber")?.jsonPrimitive?.int
+
+                if (orgName == null || repoName == null || pullRequestNumber == null) {
+                    return@addTool CallToolResult(
+                        content =
+                            listOf(
+                                TextContent(
+                                    "Either pullRequestUrl, or orgName, repoName, and pullRequestNumber together, are required",
+                                ),
+                            ),
+                        isError = true,
+                    )
+                }
+
+                PullRequestLocation(orgName, repoName, pullRequestNumber)
+            }
+
+        val failureContext =
+            pullRequestFailureContextService.fetchFailureContext(
+                location.orgName,
+                location.repoName,
+                location.pullRequestNumber,
+            )
+
+        if (failureContext == null) {
             CallToolResult(
-                content = listOf(TextContent("orgName, repoName, and pullRequestNumber are all required")),
-                isError = true,
+                content =
+                    listOf(
+                        TextContent(
+                            "No test run found for pull request ${location.pullRequestNumber} in " +
+                                "${location.orgName}/${location.repoName}",
+                        ),
+                    ),
             )
         } else {
-            val failureContext =
-                pullRequestFailureContextService.fetchFailureContext(orgName, repoName, pullRequestNumber)
-
-            if (failureContext == null) {
-                CallToolResult(
-                    content =
-                        listOf(
-                            TextContent(
-                                "No test run found for pull request $pullRequestNumber in $orgName/$repoName",
-                            ),
-                        ),
-                )
-            } else {
-                CallToolResult(content = listOf(TextContent(objectMapper.writeValueAsString(failureContext))))
-            }
+            CallToolResult(content = listOf(TextContent(objectMapper.writeValueAsString(failureContext))))
         }
     }
 

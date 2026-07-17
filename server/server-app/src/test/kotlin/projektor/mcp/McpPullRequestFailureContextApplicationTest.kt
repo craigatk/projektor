@@ -72,6 +72,21 @@ class McpPullRequestFailureContextApplicationTest : ApplicationTestCase() {
         }
         """.trimIndent()
 
+    private fun callToolRequestBodyWithUrl(pullRequestUrl: String) =
+        """
+        {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "method": "tools/call",
+          "params": {
+            "name": "get_pull_request_failing_test_context",
+            "arguments": {
+              "pullRequestUrl": "$pullRequestUrl"
+            }
+          }
+        }
+        """.trimIndent()
+
     @Test
     fun `should return failing test context for pull request`() =
         projektorTestApplication {
@@ -140,5 +155,106 @@ class McpPullRequestFailureContextApplicationTest : ApplicationTestCase() {
 
             val bodyText = response.bodyAsText()
             expectThat(bodyText).contains("No test run found")
+        }
+
+    @Test
+    fun `should return failing test context when pull request identified by URL`() =
+        projektorTestApplication {
+            val orgName = RandomStringUtils.randomAlphabetic(12)
+            val repoName = "repo"
+            val pullRequestNumber = 7
+
+            val publicId = randomPublicId()
+
+            val testRunDB =
+                testRunDBGenerator.createTestRun(
+                    publicId,
+                    listOf(
+                        TestSuiteData(
+                            "testSuite1",
+                            listOf(),
+                            listOf("failingTestSuite1TestCase1"),
+                            listOf(),
+                        ),
+                    ),
+                )
+            testRunDBGenerator.addResultsMetadata(testRunDB, true)
+            testRunDBGenerator.addGitMetadata(
+                testRunDB,
+                "$orgName/$repoName",
+                false,
+                "feature",
+                null,
+                pullRequestNumber,
+                null,
+            )
+
+            val pullRequestUrl = "https://github.com/$orgName/$repoName/pull/$pullRequestNumber"
+
+            val response =
+                client.post("/mcp") {
+                    headers {
+                        append(HttpHeaders.ContentType, "application/json")
+                        append(HttpHeaders.Accept, "application/json, text/event-stream")
+                    }
+                    setBody(callToolRequestBodyWithUrl(pullRequestUrl))
+                }
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val bodyText = response.bodyAsText()
+            expectThat(bodyText).contains(publicId.id)
+            expectThat(bodyText).contains("failingTestSuite1TestCase1 failure message")
+        }
+
+    @Test
+    fun `should return error for malformed pull request URL`() =
+        projektorTestApplication {
+            val response =
+                client.post("/mcp") {
+                    headers {
+                        append(HttpHeaders.ContentType, "application/json")
+                        append(HttpHeaders.Accept, "application/json, text/event-stream")
+                    }
+                    setBody(callToolRequestBodyWithUrl("https://example.com/not-a-pull-request"))
+                }
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val bodyText = response.bodyAsText()
+            expectThat(bodyText).contains("pullRequestUrl must look like")
+            expectThat(bodyText).contains("\"isError\":true")
+        }
+
+    @Test
+    fun `should return error when neither pullRequestUrl nor the individual fields are given`() =
+        projektorTestApplication {
+            val requestBody =
+                """
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "tools/call",
+                  "params": {
+                    "name": "get_pull_request_failing_test_context",
+                    "arguments": {}
+                  }
+                }
+                """.trimIndent()
+
+            val response =
+                client.post("/mcp") {
+                    headers {
+                        append(HttpHeaders.ContentType, "application/json")
+                        append(HttpHeaders.Accept, "application/json, text/event-stream")
+                    }
+                    setBody(requestBody)
+                }
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val bodyText = response.bodyAsText()
+            expectThat(bodyText).contains("Either pullRequestUrl, or orgName, repoName, and pullRequestNumber together, are required")
+            expectThat(bodyText).contains("\"isError\":true")
         }
 }
