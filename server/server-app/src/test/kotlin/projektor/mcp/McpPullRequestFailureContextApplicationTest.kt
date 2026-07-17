@@ -52,6 +52,38 @@ class McpPullRequestFailureContextApplicationTest : ApplicationTestCase() {
             expectThat(bodyText).not { contains(":null") }
         }
 
+    @Test
+    fun `tools list response has spec-compliant JSON Schema property types`() =
+        projektorTestApplication {
+            val listToolsRequestBody =
+                """
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "tools/list",
+                  "params": {}
+                }
+                """.trimIndent()
+
+            val response =
+                client.post("/mcp") {
+                    headers {
+                        append(HttpHeaders.ContentType, "application/json")
+                        append(HttpHeaders.Accept, "application/json, text/event-stream")
+                    }
+                    setBody(listToolsRequestBody)
+                }
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val bodyText = response.bodyAsText()
+            expectThat(bodyText).contains("\"type\":\"string\"")
+            expectThat(bodyText).contains("\"type\":\"integer\"")
+            expectThat(bodyText).contains("\"type\":\"object\"")
+            expectThat(bodyText).not { contains("\"is_string\"") }
+            expectThat(bodyText).not { contains("coerceToInlineType") }
+        }
+
     private fun callToolRequestBody(
         orgName: String,
         repoName: String,
