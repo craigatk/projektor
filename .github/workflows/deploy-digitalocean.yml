@@ -1,0 +1,41 @@
+name: Deploy to DigitalOcean
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  deploy-app:
+    name: Deploy app
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3.3.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@v6.5.0
+        env:
+          CACHE_ACCESS_KEY: ${{ secrets.CACHE_ACCESS_KEY }}
+          CACHE_SECRET_KEY: ${{ secrets.CACHE_SECRET_KEY }}
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest
+      - name: Deploy the app
+        uses: digitalocean/app_action/deploy@v2
+        env:
+          SAMPLE_DIGEST: ${{ steps.push.outputs.digest }}
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          app_name: projektor
+          print_build_logs: true
+          print_deploy_logs: true
