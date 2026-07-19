@@ -36,6 +36,6 @@ jobs:
           SAMPLE_DIGEST: ${{ steps.push.outputs.digest }}
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-          app_name: projektor
+          app_name: projektor-app
           print_build_logs: true
           print_deploy_logs: true
