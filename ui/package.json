@@ -69,7 +69,7 @@
     "pretty-bytes": "7.1.1",
     "react": "19.2.7",
     "react-copy-to-clipboard": "5.1.1",
-    "react-dom": "19.2.7",
+    "react-dom": "19.2.8",
     "react-scroll": "1.9.3",
     "recharts": "3.10.0",
     "use-query-params": "2.2.2"
