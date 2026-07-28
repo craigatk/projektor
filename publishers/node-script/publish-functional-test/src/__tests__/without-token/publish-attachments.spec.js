@@ -13,7 +13,7 @@ describe("Publishing attachments", () => {
 
   it("should publish to server with attachments when one exceeds max size", (done) => {
     exec(
-      `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --attachmentMaxSizeMB=0.05 --attachments="attachments-large/*" results/*.xml`,
+      `npx projektor-publish --serverUrl=http://localhost:${serverPort} --attachmentMaxSizeMB=0.05 --attachments="attachments-large/*" results/*.xml`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
         expect(stderr).toContain(

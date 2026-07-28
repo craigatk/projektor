@@ -13,7 +13,7 @@ describe("Publishing with coverage via CLI", () => {
 
   it("should publish results and coverage to server configured in config file", (done) => {
     exec(
-      `yarn projektor-publish --configFile=src/__tests__/without-token/projektor-coverage.json`,
+      `npx projektor-publish --configFile=src/__tests__/without-token/projektor-coverage.json`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
         expect(error).toBeNull();
@@ -50,7 +50,7 @@ describe("Publishing with coverage via CLI", () => {
 
   it("should publish results and coverage to server configured on command line", (done) => {
     exec(
-      `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --coverage=coverage/*.xml results/*.xml`,
+      `npx projektor-publish --serverUrl=http://localhost:${serverPort} --coverage=coverage/*.xml results/*.xml`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
         expect(error).toBeNull();
@@ -84,7 +84,7 @@ describe("Publishing with coverage via CLI", () => {
 
   it("should publish coverage alone without results when configured on command line", (done) => {
     exec(
-      `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --coverage=coverage/*.xml`,
+      `npx projektor-publish --serverUrl=http://localhost:${serverPort} --coverage=coverage/*.xml`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
         expect(error).toBeNull();
@@ -118,7 +118,7 @@ describe("Publishing with coverage via CLI", () => {
 
   it("should publish coverage with base directory path to server configured on command line", (done) => {
     exec(
-      `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --coverage=coverage/*.xml --baseDirectoryPath=ui results/*.xml`,
+      `npx projektor-publish --serverUrl=http://localhost:${serverPort} --coverage=coverage/*.xml --baseDirectoryPath=ui results/*.xml`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
         expect(error).toBeNull();

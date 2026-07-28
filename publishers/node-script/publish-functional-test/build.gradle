@@ -25,15 +25,15 @@ task projektorPublishWithToken(type: ProjektorManualPublishTask) {
     projectName = "node-script-functional-test-with-token"
 }
 
-task functionalTest(type: YarnTask) {
+task functionalTest(type: NpmTask) {
     dependsOn 'startServerDaemon'
-    args = ['test']
+    args = ['run', 'test']
     finalizedBy(projektorPublish)
 }
 
-task functionalTestWithToken(type: YarnTask) {
+task functionalTestWithToken(type: NpmTask) {
     dependsOn 'startServerDaemonWithToken'
-    args = ['test-with-token']
+    args = ['run', 'test-with-token']
     finalizedBy(projektorPublishWithToken)
 }
 
@@ -41,7 +41,7 @@ task allFunctionalTests(dependsOn: [functionalTest, functionalTestWithToken])
 
 // https://github.com/psxpaul/gradle-execfork-plugin
 task startServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {
-    dependsOn ':server:server-app:shadowJar','yarnSetup'
+    dependsOn ':server:server-app:shadowJar','npmSetup'
     classpath = tasks.getByPath(':server:server-app:shadowJar').outputs.files
     main = 'io.ktor.server.netty.EngineMain'
     stopAfter = functionalTest
@@ -60,7 +60,7 @@ task startServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {
 
 // https://github.com/psxpaul/gradle-execfork-plugin
 task startServerDaemonWithToken(type: com.github.psxpaul.task.JavaExecFork) {
-    dependsOn ':server:server-app:shadowJar','yarnSetup'
+    dependsOn ':server:server-app:shadowJar','npmSetup'
     classpath = tasks.getByPath(':server:server-app:shadowJar').outputs.files
     main = 'io.ktor.server.netty.EngineMain'
     stopAfter = functionalTest

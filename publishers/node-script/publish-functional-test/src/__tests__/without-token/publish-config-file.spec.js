@@ -6,7 +6,7 @@ describe("Publishing via config file", () => {
 
   it("should exit with non-zero exit code when configured via config file", (done) => {
     exec(
-      `yarn projektor-publish --configFile=src/__tests__/without-token/projektor-exit-with-failure.json`,
+      `npx projektor-publish --configFile=src/__tests__/without-token/projektor-exit-with-failure.json`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
 

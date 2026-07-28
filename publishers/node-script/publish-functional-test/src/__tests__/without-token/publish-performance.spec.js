@@ -13,7 +13,7 @@ describe("Publishing performance results via CLI", () => {
 
   it("should publish performance results", (done) => {
     exec(
-      `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --performance=performance/getRun.json`,
+      `npx projektor-publish --serverUrl=http://localhost:${serverPort} --performance=performance/getRun.json`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
         expect(error).toBeNull();
@@ -39,7 +39,7 @@ describe("Publishing performance results via CLI", () => {
 
   it("should publish performance results with repository name", (done) => {
     exec(
-      `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --performance=performance/getRun.json --repositoryName=projektor/projektor-app`,
+      `npx projektor-publish --serverUrl=http://localhost:${serverPort} --performance=performance/getRun.json --repositoryName=projektor/projektor-app`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
         expect(error).toBeNull();
@@ -77,7 +77,7 @@ describe("Publishing performance results via CLI", () => {
 
   it("when no performance results should log message", (done) => {
     exec(
-      `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --performance=performance/doesNotExist.json`,
+      `npx projektor-publish --serverUrl=http://localhost:${serverPort} --performance=performance/doesNotExist.json`,
       async (error, stdout, stderr) => {
         expect(stdout).toContain(
           "No performance results files found in locations"

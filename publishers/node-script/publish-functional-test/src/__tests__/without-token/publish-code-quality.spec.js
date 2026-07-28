@@ -12,7 +12,7 @@ describe("publish code quality functional spec", () => {
 
   it("should publish code quality reports", (done) => {
     exec(
-      `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --codeQuality=code-quality-reports/*.txt results/*.xml`,
+      `npx projektor-publish --serverUrl=http://localhost:${serverPort} --codeQuality=code-quality-reports/*.txt results/*.xml`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
         expect(error).toBeNull();

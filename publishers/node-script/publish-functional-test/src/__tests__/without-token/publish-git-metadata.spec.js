@@ -12,7 +12,7 @@ describe("publish Git metadata functional spec", () => {
 
   it("should publish Git metadata along with results", (done) => {
     exec(
-      `env-cmd -f .git-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} --projectName=my-project results/*.xml`,
+      `env-cmd -f .git-env npx projektor-publish --serverUrl=http://localhost:${serverPort} --projectName=my-project results/*.xml`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
         expect(error).toBeNull();
@@ -50,7 +50,7 @@ describe("publish Git metadata functional spec", () => {
 
   it("should allow configuring the mainline branch names", (done) => {
     exec(
-      `env-cmd -f .git-develop-branch-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} --projectName=my-project --gitMainBranchNames=main,develop results/*.xml`,
+      `env-cmd -f .git-develop-branch-env npx projektor-publish --serverUrl=http://localhost:${serverPort} --projectName=my-project --gitMainBranchNames=main,develop results/*.xml`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
         expect(error).toBeNull();
