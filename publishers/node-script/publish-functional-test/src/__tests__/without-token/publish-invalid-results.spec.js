@@ -6,7 +6,7 @@ describe("publishing invalid test results", () => {
 
   it("should log error message from server when publishing invalid test results", (done) => {
     exec(
-      `yarn projektor-publish --serverUrl=${serverUrl} results-invalid/*.xml`,
+      `npx projektor-publish --serverUrl=${serverUrl} results-invalid/*.xml`,
       async (error, stdout, stderr) => {
         expect(stderr).toContain(
           `Error publishing results to Projektor server ${serverUrl}`

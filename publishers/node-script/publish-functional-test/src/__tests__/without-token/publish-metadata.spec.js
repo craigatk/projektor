@@ -12,7 +12,7 @@ describe("publish results metadata functional spec", () => {
 
   it("should publish CI=true when running in CI", (done) => {
     exec(
-      `env-cmd -f .ci-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} results/*.xml`,
+      `env-cmd -f .ci-env npx projektor-publish --serverUrl=http://localhost:${serverPort} results/*.xml`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
         expect(error).toBeNull();
@@ -45,7 +45,7 @@ describe("publish results metadata functional spec", () => {
 
   it("should publish CI=false when running in CI", (done) => {
     exec(
-      `env-cmd -f .no-ci-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} results/*.xml`,
+      `env-cmd -f .no-ci-env npx projektor-publish --serverUrl=http://localhost:${serverPort} results/*.xml`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
         expect(error).toBeNull();
@@ -78,7 +78,7 @@ describe("publish results metadata functional spec", () => {
 
   it("when group results is true and build number set should append results", async () => {
     const stdout = execSync(
-      `env-cmd -f .build-number-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} --groupResults=true "results/*.xml"`
+      `env-cmd -f .build-number-env npx projektor-publish --serverUrl=http://localhost:${serverPort} --groupResults=true "results/*.xml"`
     ).toString();
 
     const testRunId = extractTestRunId(stdout);
@@ -99,7 +99,7 @@ describe("publish results metadata functional spec", () => {
     const initialTotalTestCount = testRunSummaryResponse.data.total_test_count;
 
     const secondStdout = execSync(
-      `env-cmd -f .build-number-env yarn projektor-publish --serverUrl=http://localhost:${serverPort} --groupResults=true results/*.xml`
+      `env-cmd -f .build-number-env npx projektor-publish --serverUrl=http://localhost:${serverPort} --groupResults=true results/*.xml`
     ).toString();
 
     const secondTestRunId = extractTestRunId(secondStdout);

@@ -81,6 +81,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-all-yarn-
 
+      - name: Cache npm dependencies
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-all-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-all-npm-
+
       - name: ui install
         run: |
           cd ui
@@ -88,7 +96,7 @@ jobs:
       - name: functional test install
         run: |
           cd publishers/node-script/publish-functional-test
-          yarn install
+          npm install
       - name: Run functional tests with token
         env:
           DB_URL: "jdbc:postgresql://localhost:5432/projektordb"

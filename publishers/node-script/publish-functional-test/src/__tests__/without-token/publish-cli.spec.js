@@ -8,7 +8,7 @@ describe("Publishing via CLI", () => {
   const serverPort = "8082";
   it("should publish to server when executed via CLI", (done) => {
     exec(
-      `yarn projektor-publish --serverUrl=http://localhost:${serverPort} results/*.xml`,
+      `npx projektor-publish --serverUrl=http://localhost:${serverPort} results/*.xml`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
         expect(error).toBeNull();
@@ -37,7 +37,7 @@ describe("Publishing via CLI", () => {
 
   it("should exit with non-zero exit code when configured via CLI and there are failing tests", (done) => {
     exec(
-      `yarn projektor-publish --serverUrl=http://localhost:${serverPort} --exitWithFailure results-failure/*.xml`,
+      `npx projektor-publish --serverUrl=http://localhost:${serverPort} --exitWithFailure results-failure/*.xml`,
       async (error, stdout, stderr) => {
         verifyOutput(error, stdout, stderr, serverPort);
 
@@ -50,7 +50,7 @@ describe("Publishing via CLI", () => {
 
   it("should log message when no test results found", () => {
     const stdout = execSync(
-      `yarn projektor-publish --serverUrl=http://localhost:${serverPort} does-not-exist/*.xml`
+      `npx projektor-publish --serverUrl=http://localhost:${serverPort} does-not-exist/*.xml`
     ).toString();
 
     console.log(stdout);
@@ -62,7 +62,7 @@ describe("Publishing via CLI", () => {
 
   it("should log error message if results above max size", (done) => {
     exec(
-      `yarn projektor-publish --resultsMaxSizeMB=0.01 --serverUrl=http://localhost:${serverPort} results-large/*.xml`,
+      `npx projektor-publish --resultsMaxSizeMB=0.01 --serverUrl=http://localhost:${serverPort} results-large/*.xml`,
       async (error, stdout, stderr) => {
         expect(stderr).toContain(
           `Error publishing results to Projektor server http://localhost:${serverPort}`
