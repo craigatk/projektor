@@ -16,10 +16,12 @@ const FailedTestCases = ({ publicId }: FailedTestCasesProps) => {
   const [loadingState, setLoadingState] = React.useState(LoadingState.Loading);
 
   React.useEffect(() => {
-    fetchFailedTestCases(publicId).then((response) => {
-      setFailedTestCases(response.data);
-      setLoadingState(LoadingState.Success);
-    });
+    fetchFailedTestCases(publicId)
+      .then((response) => {
+        setFailedTestCases(response.data);
+        setLoadingState(LoadingState.Success);
+      })
+      .catch(() => setLoadingState(LoadingState.Error));
   }, [setFailedTestCases, setLoadingState]);
 
   return (

@@ -76,6 +76,17 @@ describe("TestRunDataWrapper", () => {
 
     await waitFor(() => getByTestId("test-run-menu-wrapper"));
 
+    // The menu wrapper appears before the effects of its children have flushed,
+    // so wait for their requests to be served here rather than letting them
+    // escape to the real adapter once the mock is restored in afterEach.
+    await waitFor(() =>
+      expect(
+        mockAxios.history.get.some((request) =>
+          request.url.includes("cases/failed"),
+        ),
+      ).toBe(true),
+    );
+
     expect(queryByTestId("test-run-menu-wrapper")).not.toBeNull();
     expect(queryByTestId("loading-section-error")).toBeNull();
   });

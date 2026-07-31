@@ -17,10 +17,12 @@ const SlowTestCasesPage = ({ publicId }: SlowTestCasesPageProps) => {
   const [testCases, setTestCases] = React.useState<TestCase[]>([]);
 
   React.useEffect(() => {
-    fetchSlowTestCases(publicId).then((response) => {
-      setTestCases(response.data);
-      setLoadingState(LoadingState.Success);
-    });
+    fetchSlowTestCases(publicId)
+      .then((response) => {
+        setTestCases(response.data);
+        setLoadingState(LoadingState.Success);
+      })
+      .catch(() => setLoadingState(LoadingState.Error));
   }, [setTestCases, setLoadingState]);
 
   return (
