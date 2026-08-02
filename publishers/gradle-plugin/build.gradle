@@ -54,7 +54,7 @@ dependencies {
     }
     testImplementation "org.spockframework:spock-junit4:$spockVersion"
     testImplementation "net.bytebuddy:byte-buddy:1.18.11"
-    testImplementation 'org.objenesis:objenesis:3.5'
+    testImplementation 'org.objenesis:objenesis:3.6'
 
     testImplementation "org.wiremock:wiremock:$wiremockVersion"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
