@@ -597,23 +597,23 @@
     prop-types "^15.8.1"
     react-is "^19.2.8"
 
-"@mui/x-date-pickers@9.11.0":
-  version "9.11.0"
-  resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-9.11.0.tgz#5c141aa1c6ddb4ce631ce13e60b4a50f8f500425"
-  integrity sha512-3vLmkn1wG+hNBaGobnk/9R8APCRhOiAXBTC78m7wZ2OWZ2NoMqi+O09HwTGlIgK6mScZZCeCQTSj5phNLrK1hw==
+"@mui/x-date-pickers@9.12.0":
+  version "9.12.0"
+  resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-9.12.0.tgz#b822865c1112bc18862b4f0917e292d16c04514a"
+  integrity sha512-8buJZhsDQmq2mfG4ID7JPI8RmbBW8FZkF5GfgGkH0Bi/Y9UkpCeEuOFF/Tbg8TxL5gKAOkXRZTK/pFlNZYqdhg==
   dependencies:
     "@babel/runtime" "^7.29.7"
     "@mui/utils" "^9.3.0"
-    "@mui/x-internals" "^9.11.0"
+    "@mui/x-internals" "^9.12.0"
     "@types/react-transition-group" "^4.4.12"
     clsx "^2.1.1"
     prop-types "^15.8.1"
     react-transition-group "^4.4.5"
 
-"@mui/x-internals@^9.11.0":
-  version "9.11.0"
-  resolved "https://registry.yarnpkg.com/@mui/x-internals/-/x-internals-9.11.0.tgz#42a1725c1076efd0cdd202a43a69f347650322d2"
-  integrity sha512-JjKe9k1+gVWNPwMTZLNSc92eVmoZqP5Xq3Ui6mJkstotUrbWIZC0o9+4AfTR1lYqWwnKmqm+VtLLVCa7MEBXWQ==
+"@mui/x-internals@^9.12.0":
+  version "9.12.0"
+  resolved "https://registry.yarnpkg.com/@mui/x-internals/-/x-internals-9.12.0.tgz#1e6ff8d96aba939aacaff55365fa295391fdb827"
+  integrity sha512-rpG9EgJhH3JeOK2Q/tKaUWk5vP8C1NfL8DaXMKR1XCA7RhpZUI/xT67WKY80QtogNWu7U/BRezKyQGtiZ8soYg==
   dependencies:
     "@babel/runtime" "^7.29.7"
     "@base-ui/utils" "^0.3.1"
