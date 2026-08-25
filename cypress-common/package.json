@@ -5,7 +5,7 @@
   "license": "MIT",
   "devDependencies": {
     "chai-colors": "1.0.1",
-    "cypress": "15.21.0"
+    "cypress": "15.21.1"
   },
   "resolutions": {
     "qs": "6.15.3"
