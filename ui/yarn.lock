@@ -3551,10 +3551,10 @@ prettier@3.9.6:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.9.6.tgz#b3ea5146515d40fc53f18aa63f74dfab1e10dbf6"
   integrity sha512-OpN0zzVdiaiAhxpuuj5efpIS4sY9j7bY6uR5mnj5yPzGkdkjNKSJeUThPb60Jw29QuAZgA4o+/iB49kFiaBX6g==
 
-pretty-bytes@7.1.1:
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/pretty-bytes/-/pretty-bytes-7.1.1.tgz#f1dd1a294396b78d6d1698a034bf447eed060b3c"
-  integrity sha512-X+vn9z8nOFZQlxOLmfJ0iKDdMD7jYTsTW12OAlCpdoE3Igik6L37pugIZi+N3usuyp5McfgKPWi12q3zvHLeGQ==
+pretty-bytes@7.1.2:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/pretty-bytes/-/pretty-bytes-7.1.2.tgz#2ff7ecfe78c999a2edf5f20449b047b0583108d2"
+  integrity sha512-spZIOSORH9joSPGN0L/tYfvINH+xbOpnI3kdcEkq0mzGMjFvDZzyRVbqEOV0wACF0gggdKE9RWO2mosGsBh/Rg==
 
 pretty-bytes@^5.6.0:
   version "5.6.0"
