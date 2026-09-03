@@ -1159,10 +1159,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-dom@19.2.6":
-  version "19.2.6"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-19.2.6.tgz#35ed45962de3a3368e3c3f31167b83066b60c8bb"
-  integrity sha512-bzczc+lpPxs7hFBkaOht7j/zVcSZVBGZZajtQoMhTDTrwVCcNa+bd0+LfhDXhnEnT4OHHFBE2jLTenVL+UzF7Q==
+"@types/react-dom@19.2.7":
+  version "19.2.7"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-19.2.7.tgz#eba78fc6201e564986ec40d56c86c8434593cace"
+  integrity sha512-I8bPpDLcHBv1qiIiXDCy71Rt8eQDKJP0sMSWJphDdAcdqiJ1sGpZamavoEIRZmYzjia9LuEb2HlYdDpmoENpvQ==
 
 "@types/react-transition-group@^4.4.12":
   version "4.4.12"
