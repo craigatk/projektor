@@ -22,14 +22,12 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       objectstorage:
-        image: minio/minio:edge-cicd
+        image: rustfs/rustfs:1.0.0-rc.6
         ports:
           - "9000:9000"
-        volumes:
-          - /tmp:/data
         env:
-          MINIO_ROOT_USER: minio_access_key
-          MINIO_ROOT_PASSWORD: minio_secret_key
+          RUSTFS_ACCESS_KEY: minio_access_key
+          RUSTFS_SECRET_KEY: minio_secret_key
 
     steps:
     - uses: actions/checkout@v7
