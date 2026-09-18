@@ -34,7 +34,7 @@
     "del": "8.0.1",
     "env-cmd": "11.0.0",
     "jsdom": "30.1.0",
-    "prettier": "3.9.7",
+    "prettier": "3.9.8",
     "process": "0.11.10",
     "projektor-publish": "3.13.14",
     "resize-observer-polyfill": "1.5.1",
