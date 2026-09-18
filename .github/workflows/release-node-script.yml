@@ -13,7 +13,7 @@ name: Release Node script
 jobs:
   build:
     name: Publish Node script release
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     defaults:
       run:
         working-directory: 'publishers/node-script'
