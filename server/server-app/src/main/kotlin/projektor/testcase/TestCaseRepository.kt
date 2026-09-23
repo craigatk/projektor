@@ -3,6 +3,7 @@ package projektor.testcase
 import projektor.server.api.PublicId
 import projektor.server.api.TestCase
 import projektor.server.api.TestOutput
+import projektor.server.api.history.TestCaseHistoryEntry
 
 interface TestCaseRepository {
     suspend fun fetchFailedTestCases(testRunPublicId: PublicId): List<TestCase>
@@ -29,4 +30,11 @@ interface TestCaseRepository {
         testSuiteIdx: Int,
         testCaseIdx: Int,
     ): TestOutput
+
+    suspend fun fetchTestCaseHistory(
+        testRunPublicId: PublicId,
+        testSuiteIdx: Int,
+        testCaseIdx: Int,
+        maxRuns: Int,
+    ): List<TestCaseHistoryEntry>
 }

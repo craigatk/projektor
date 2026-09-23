@@ -1,0 +1,36 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.callout {
+  padding: 8px 12px;
+  border-left: 4px solid #d32f2f;
+  background-color: #ededed;
+  border-radius: 4px;
+}
+
+.strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding-top: 6px;
+}
+
+.stripCell {
+  width: 14px;
+  height: 24px;
+  border-radius: 3px;
+}
+
+.resultIcon {
+  height: 0.75em;
+  vertical-align: text-bottom;
+}
+
+.tooltip {
+  outline: 1px solid black;
+  background-color: white;
+  padding: 5px 10px;
+}

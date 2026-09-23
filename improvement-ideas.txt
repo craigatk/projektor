@@ -1,0 +1,22 @@
+
+High value, and they build on what exists
+
+1. Flaky test quarantine and alerts. The repo flaky-test API (v4.38.0) only detects flakes. Go further: tag a test as "quarantined" in the UI, have PR comments label known flakes separately ("2 failures, both known-flaky"), and alert when a new flake shows up.
+2. Failure clustering. Group failures in a run by a normalized stack trace or error message, so you see "38 tests failed from 1 root cause: ConnectException in DbSetup." This fits naturally in front of the AI analyzer: analyze one representative per cluster instead of every failure, which also cuts OpenAI cost.
+3. Test history for a single test case. Pass/fail/duration sparkline across recent runs on the TestCasePage, plus a "first failed in commit X" marker. That's the most common question when triaging a failure.
+4. More MCP tools. Right now the MCP server only exposes get_pull_request_failing_test_context. Natural additions: get_flaky_tests(repo), get_test_case_history, get_coverage_delta(pr), get_uncovered_lines(file). These make Projektor useful to coding agents fixing tests or writing coverage.
+5. Multiple AI providers. server:ai:analysis is already provider-agnostic, but only OpenAI is implemented. Adding a Claude implementation (and letting users pick via config) is a small, self-contained module.
+
+Medium value
+
+6. Coverage on changed lines in PR comments. Report coverage of just the lines changed in the diff, not only the overall delta. Optionally set it as a GitHub check status that fails when it drops below a threshold.
+7. Slow-test regression detection. Flag tests whose duration jumped more than N% compared with their rolling baseline. The per-run slow-tests view already exists.
+8. Webhook/Slack notifications. Notify when mainline goes red, coverage drops, or a new flake appears. GitHub is currently the only notifier.
+9. Run comparison view. Pick any two runs and see new failures, fixed tests, and duration and coverage diffs side by side. The compare/ package only handles "previous run" today.
+
+Smaller improvements
+
+10. Test-results parsers for more formats, suc JSON report, and Go test2json. Coverage already supports Go, but test results only.
+11. Saved searches and filters on the repo page stored in query params to match the existing use-query-params pattern.
+12. A test-health score badge that combines average trend, reusing the existing SVG badge
+    templates.

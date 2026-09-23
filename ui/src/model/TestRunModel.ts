@@ -193,6 +193,26 @@ interface TestCaseDebugContext {
   markdown?: string;
 }
 
+interface TestCaseHistoryEntry {
+  publicId: string;
+  testSuiteIdx: number;
+  testCaseIdx: number;
+  createdTimestamp: Date;
+  passed: boolean;
+  skipped: boolean;
+  failed: boolean;
+  duration?: number;
+  branchName?: string;
+  commitSha?: string;
+  pullRequestNumber?: number;
+}
+
+interface TestCaseHistory {
+  entries: TestCaseHistoryEntry[];
+  firstFailure?: TestCaseHistoryEntry;
+  lastPassedBeforeFailure?: TestCaseHistoryEntry;
+}
+
 export {
   Attachment,
   Attachments,
@@ -216,6 +236,8 @@ export {
   TestCase,
   TestCaseDebugContext,
   TestCaseFailureAnalysis,
+  TestCaseHistory,
+  TestCaseHistoryEntry,
   TestFailure,
   TestRunGitMetadata,
   TestResultsProcessingStatus,

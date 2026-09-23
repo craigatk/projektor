@@ -33,6 +33,7 @@ fun main() {
     repositoryCoverageTimeline()
     repositoryCoverageTimelineDifferentBranches()
     repositoryFlakyTests()
+    testCaseHistory()
     loadMultipleTestRunsFromSameRepoForTimeline()
     loadMultipleShortTestRunsFromSameRepoForTimeline()
     slowTimeline()

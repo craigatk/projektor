@@ -673,6 +673,41 @@ fun performanceSingleTestTimeline() {
     println("View performance test timeline with single test at $uiBaseUrl/repository/$repoName")
 }
 
+fun testCaseHistory() {
+    val repoName = "history-org/history-repo"
+
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = "main"
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+    resultsMetadata.ci = true
+
+    // Oldest to newest - one flaky failure in the middle, then failing for the most recent runs
+    val runPassed = listOf(true, true, true, true, true, false, true, true, true, true, true, false, false, false)
+
+    val now = Instant.now()
+
+    val responses =
+        runPassed.mapIndexed { idx, passed ->
+            val duration = if (passed) "%.3f".format(3.5 + (idx % 4) * 0.4) else "%.3f".format(6.0 + (idx % 3) * 0.3)
+            val resultsXml =
+                if (passed) {
+                    resultsXmlLoader.gradleSingleTestCaseSystemOutPass().replace("time=\"4.543\"", "time=\"$duration\"")
+                } else {
+                    resultsXmlLoader.gradleSingleTestCaseSystemOutFail().replace("time=\"3.033\"", "time=\"$duration\"")
+                }
+
+            gitMetadata.commitSha = RandomStringUtils.random(40, "0123456789abcdef")
+            resultsMetadata.createdTimestamp = now.minusSeconds(60L * 60 * 24 * (runPassed.size - 1 - idx))
+
+            sendGroupedResultsToServer(groupedResultsXmlLoader.wrapResultsXmlInGroup(resultsXml = resultsXml, metadata = resultsMetadata))
+        }
+
+    println("View test case history at $uiBaseUrl${responses.last().uri}/suite/1/case/1/history")
+}
+
 fun repositoryCoverageTimeline(
     repoName: String = "cov-org/cov-repo",
     printLink: Boolean = true,

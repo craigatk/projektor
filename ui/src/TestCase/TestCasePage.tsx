@@ -29,7 +29,7 @@ const TestCasePage = ({
         setLoadingState(LoadingState.Success);
       })
       .catch(() => setLoadingState(LoadingState.Error));
-  }, [setTestCase, setLoadingState]);
+  }, [publicId, testSuiteIdx, testCaseIdx]);
 
   return (
     <LoadingSection
