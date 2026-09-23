@@ -7,6 +7,7 @@ import projektor.server.api.TestCase
 import projektor.server.api.TestOutput
 import projektor.server.api.ai.TestCaseFailureAnalysis
 import projektor.server.api.debug.TestCaseDebugContext
+import projektor.server.api.history.TestCaseHistory
 
 class TestCaseService(
     private val testCaseRepository: TestCaseRepository,
@@ -120,4 +121,11 @@ class TestCaseService(
 
         return TestCaseDebugContext(buildTestCaseDebugContextMarkdown(testCase, systemOut, systemErr))
     }
+
+    suspend fun fetchTestCaseHistory(
+        publicId: PublicId,
+        testSuiteIdx: Int,
+        testCaseIdx: Int,
+        maxRuns: Int,
+    ): TestCaseHistory = buildTestCaseHistory(testCaseRepository.fetchTestCaseHistory(publicId, testSuiteIdx, testCaseIdx, maxRuns))
 }

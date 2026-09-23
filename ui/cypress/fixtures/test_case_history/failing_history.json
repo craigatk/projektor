@@ -1,0 +1,95 @@
+{
+  "entries": [
+    {
+      "public_id": "12345",
+      "test_suite_idx": 1,
+      "test_case_idx": 2,
+      "created_timestamp": "2026-09-06T15:00:00",
+      "passed": false,
+      "skipped": false,
+      "failed": true,
+      "duration": 2.9,
+      "branch_name": "main",
+      "commit_sha": "cccccccccccccccccccc",
+      "pull_request_number": null
+    },
+    {
+      "public_id": "FAIL1",
+      "test_suite_idx": 1,
+      "test_case_idx": 2,
+      "created_timestamp": "2026-09-05T15:00:00",
+      "passed": false,
+      "skipped": false,
+      "failed": true,
+      "duration": 2.8,
+      "branch_name": "main",
+      "commit_sha": "bbbbbbbbbbbbbbbbbbbb",
+      "pull_request_number": null
+    },
+    {
+      "public_id": "SKIP1",
+      "test_suite_idx": 1,
+      "test_case_idx": 2,
+      "created_timestamp": "2026-09-04T15:00:00",
+      "passed": true,
+      "skipped": true,
+      "failed": false,
+      "duration": 0,
+      "branch_name": "main",
+      "commit_sha": "9999999999999999999",
+      "pull_request_number": null
+    },
+    {
+      "public_id": "PASS2",
+      "test_suite_idx": 1,
+      "test_case_idx": 2,
+      "created_timestamp": "2026-09-03T15:00:00",
+      "passed": true,
+      "skipped": false,
+      "failed": false,
+      "duration": 1.4,
+      "branch_name": "main",
+      "commit_sha": "aaaaaaaaaaaaaaaaaaaa",
+      "pull_request_number": null
+    },
+    {
+      "public_id": "PASS1",
+      "test_suite_idx": 1,
+      "test_case_idx": 2,
+      "created_timestamp": "2026-09-02T15:00:00",
+      "passed": true,
+      "skipped": false,
+      "failed": false,
+      "duration": 1.3,
+      "branch_name": "main",
+      "commit_sha": "8888888888888888888",
+      "pull_request_number": null
+    }
+  ],
+  "first_failure": {
+    "public_id": "FAIL1",
+    "test_suite_idx": 1,
+    "test_case_idx": 2,
+    "created_timestamp": "2026-09-05T15:00:00",
+    "passed": false,
+    "skipped": false,
+    "failed": true,
+    "duration": 2.8,
+    "branch_name": "main",
+    "commit_sha": "bbbbbbbbbbbbbbbbbbbb",
+    "pull_request_number": null
+  },
+  "last_passed_before_failure": {
+    "public_id": "PASS2",
+    "test_suite_idx": 1,
+    "test_case_idx": 2,
+    "created_timestamp": "2026-09-03T15:00:00",
+    "passed": true,
+    "skipped": false,
+    "failed": false,
+    "duration": 1.4,
+    "branch_name": "main",
+    "commit_sha": "aaaaaaaaaaaaaaaaaaaa",
+    "pull_request_number": null
+  }
+}

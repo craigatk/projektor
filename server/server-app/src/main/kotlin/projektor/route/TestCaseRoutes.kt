@@ -75,4 +75,14 @@ fun Route.testCases(testCaseService: TestCaseService) {
         debugContext?.let { call.respond(HttpStatusCode.OK, it) }
             ?: call.respond(HttpStatusCode.NotFound)
     }
+    get("/run/{publicId}/suite/{testSuiteIdx}/case/{testCaseIdx}/history") {
+        val publicId = call.parameters.getOrFail("publicId")
+        val testSuiteIdx = call.parameters.getOrFail("testSuiteIdx").toInt()
+        val testCaseIdx = call.parameters.getOrFail("testCaseIdx").toInt()
+        val maxRuns = (call.request.queryParameters["max_runs"]?.toInt() ?: 30).coerceIn(1, 100)
+
+        val history = testCaseService.fetchTestCaseHistory(PublicId(publicId), testSuiteIdx, testCaseIdx, maxRuns)
+
+        call.respond(HttpStatusCode.OK, history)
+    }
 }

@@ -25,6 +25,7 @@ import TestCaseFailureScreenshot from "./TestCaseFailureScreenshot";
 import { AIContext, AIState } from "../AI/AIContext";
 import TestCaseFailureAnalysisSection from "./TestCaseFailureAnalysisSection";
 import TestCaseDebugContextSection from "./TestCaseDebugContextSection";
+import TestCaseHistorySection from "./TestCaseHistorySection";
 
 interface TestCaseDetailsProps {
   publicId: string;
@@ -116,6 +117,13 @@ const TestCaseDetails = ({ publicId, testCase }: TestCaseDetailsProps) => {
                     to={`${linkBase}/failure`}
                   />
                 ) : null}
+                <Tab
+                  label="History"
+                  value="/history"
+                  data-testid="test-case-tab-history"
+                  component={Link}
+                  to={`${linkBase}/history`}
+                />
                 {testCase.hasSystemOut && (
                   <Tab
                     label="System out"
@@ -230,6 +238,12 @@ const TestCaseDetails = ({ publicId, testCase }: TestCaseDetailsProps) => {
               />
               <TestCaseFailureAnalysisSection
                 path="/analysis"
+                publicId={publicId}
+                testSuiteIdx={testCase.testSuiteIdx}
+                testCaseIdx={testCase.idx}
+              />
+              <TestCaseHistorySection
+                path="/history"
                 publicId={publicId}
                 testSuiteIdx={testCase.testSuiteIdx}
                 testCaseIdx={testCase.idx}
