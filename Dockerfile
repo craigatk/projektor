@@ -1,5 +1,8 @@
+# syntax=docker/dockerfile:1
 # Builds the Kotlin/Ktor backend and the React UI, then packages the UI into the server's
 # static resources and produces the runnable fat jar (mirrors `.github/workflows/release-server.yml`).
+# Built and pushed to DigitalOcean Container Registry by `.github/workflows/deploy-server.yml`;
+# DO App Platform runs the pushed image rather than building from source.
 FROM eclipse-temurin:21-jdk AS build
 
 # Node.js + a matching Yarn Classic: `ui/build.gradle`'s YarnTask only runs `yarn build`, it does
@@ -13,24 +16,22 @@ RUN apt-get update \
     && npm install -g yarn@1.22.22 \
     && rm -rf /var/lib/apt/lists/*
 
-# Optional: bakes a Honeycomb-configured OpenTelemetry javaagent jar into the build (same
-# `com.atkinsondev.opentelemetry-build` plugin the Heroku Procfile relies on - see root
-# build.gradle's `openTelemetryBuild` block). Pass with `docker build --build-arg
-# HONEYCOMB_API_KEY=...`. If omitted, the plugin disables itself and the app just runs without
-# the agent (handled by docker-entrypoint.sh below).
-ARG HONEYCOMB_API_KEY
-ENV HONEYCOMB_API_KEY=${HONEYCOMB_API_KEY}
-
 WORKDIR /app
 COPY . .
 
-# --no-parallel: DO's build container has less memory than CI/dev machines, and compiling
-# multiple modules concurrently multiplies peak memory demand within the same heap ceiling
-# (org.gradle.jvmargs in gradle.properties). Scoped to this build only, not gradle.properties,
-# so CI/local dev keep parallel compilation.
-RUN chmod +x gradlew \
+# Optional: bakes a Honeycomb-configured OpenTelemetry javaagent jar into the build (the
+# `com.atkinsondev.opentelemetry-build` plugin - see root build.gradle's `openTelemetryBuild`
+# block). Passed as a BuildKit secret so the key never lands in an image layer or the build cache:
+# `docker build --secret id=honeycomb_api_key,env=HONEYCOMB_API_KEY .`. If omitted, the plugin
+# disables itself and the app just runs without the agent (handled by docker-entrypoint.sh).
+# The optional cache_access_key/cache_secret_key secrets enable read access to the Gradle remote
+# build cache (settings.gradle) the same way.
+RUN --mount=type=secret,id=honeycomb_api_key,env=HONEYCOMB_API_KEY \
+    --mount=type=secret,id=cache_access_key,env=CACHE_ACCESS_KEY \
+    --mount=type=secret,id=cache_secret_key,env=CACHE_SECRET_KEY \
+    chmod +x gradlew \
     && cd ui && yarn install --frozen-lockfile && cd .. \
-    && ./gradlew :server:server-app:assembleFull --no-daemon --no-parallel \
+    && ./gradlew :server:server-app:assembleFull --no-daemon \
     && mkdir -p server/server-app/opentelemetry
 
 # ---- Runtime image: just the JRE, the fat jar, and (if built) the OpenTelemetry javaagent ----
