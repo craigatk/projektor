@@ -122,16 +122,20 @@ deployed server):
 
 ## Deployment
 
-Two deploy paths coexist in the repo:
-- **Docker / DigitalOcean App Platform** (current, live.projektor.dev): root `Dockerfile`
-  installs Node+Yarn, runs `./gradlew :server:server-app:assembleFull --no-daemon
-  --no-parallel` (the `--no-parallel` is deliberate — DO's build container has less memory
-  than CI, and `gradle.properties`' `org.gradle.jvmargs=-Xmx2g` exists for the same reason),
-  then `docker-entrypoint.sh` runs the resulting jar. No committed App Platform spec/`doctl`
-  config — presumably configured directly in DO's dashboard against this Dockerfile.
-- **Heroku** (older, still wired up): root `Procfile` + a `heroku {}` block and
-  `deployHeroku` task in `server/server-app/build.gradle` (`appName = "projektorlive"`).
-  `ui/README.md` still references the old `projektorlive.herokuapp.com` URL.
+**Docker image on DigitalOcean App Platform** (live.projektor.dev):
+`.github/workflows/deploy-digitalocean.yml` (on push to `main` or manual dispatch) builds the
+root `Dockerfile` on a GitHub runner, pushes it to DigitalOcean Container Registry as
+`projektor:latest` and `projektor:<sha>`, then runs `doctl apps create-deployment --wait`. The
+App Platform service's source is that DOCR image, not the GitHub repo, so DO never builds from
+source. The app spec (env vars, secrets, instance size, database) lives only in DO, not the repo.
+Repo config: the `DIGITALOCEAN_ACCESS_TOKEN` secret plus the `DIGITALOCEAN_REGISTRY` and
+`DIGITALOCEAN_APP_ID` Actions variables.
+
+The Dockerfile installs Node+Yarn, runs `./gradlew :server:server-app:assembleFull`, and
+`docker-entrypoint.sh` runs the resulting jar (with the OpenTelemetry agent if it was built).
+`HONEYCOMB_API_KEY` and the Gradle build-cache keys go in as BuildKit secrets
+(`--secret id=honeycomb_api_key,...`), not build args, so they stay out of image layers.
+`ui/README.md` still references the old, retired `projektorlive.herokuapp.com` URL.
 
 `release-server.yml` (GitHub Actions, on `v*` tags) builds the jar and attaches it to a
 GitHub Release — it does not itself deploy. The Gradle remote build cache
