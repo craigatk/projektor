@@ -124,12 +124,14 @@ deployed server):
 
 **Docker image on DigitalOcean App Platform** (live.projektor.dev):
 `.github/workflows/deploy-digitalocean.yml` (manual dispatch only, from the Actions tab) builds the
-root `Dockerfile` on a GitHub runner, pushes it to DigitalOcean Container Registry as
-`projektor:latest` and `projektor:<sha>`, then runs `doctl apps create-deployment --wait`. The
-App Platform service's source is that DOCR image, not the GitHub repo, so DO never builds from
-source. The app spec (env vars, secrets, instance size, database) lives only in DO, not the repo.
-Repo config: the `DIGITALOCEAN_ACCESS_TOKEN` secret plus the `DIGITALOCEAN_REGISTRY` and
-`DIGITALOCEAN_APP_ID` Actions variables.
+root `Dockerfile` on a GitHub runner, pushes it to GitHub Container Registry as
+`ghcr.io/craigatk/projektor:latest` and `:<sha>` (a public package, so no storage quota and DO
+pulls it without credentials), then runs `doctl apps create-deployment --wait`. The App Platform
+service's source is that GHCR image, not the GitHub repo, so DO never builds from source. (It
+used DigitalOcean Container Registry first, but the ~150 MB jar layer per build blew through the
+free tier's 500 MB.) The app spec (env vars, secrets, instance size, database) lives only in DO,
+not the repo. Repo config: the `DIGITALOCEAN_ACCESS_TOKEN` secret (needs only app read/update
+scopes) and the `DIGITALOCEAN_APP_ID` Actions variable.
 
 The Dockerfile installs Node+Yarn, runs `./gradlew :server:server-app:assembleFull`, and
 `docker-entrypoint.sh` runs the resulting jar (with the OpenTelemetry agent if it was built).

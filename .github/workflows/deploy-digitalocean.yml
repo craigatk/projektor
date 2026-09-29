@@ -1,20 +1,21 @@
 name: Deploy to DigitalOcean
 
-# Builds the server Docker image, pushes it to DigitalOcean Container Registry, then deploys it.
-# The App Platform app's service pulls `projektor:latest` from DOCR (its source is the image, not
-# the GitHub repo), so App Platform itself never builds from source.
+# Builds the server Docker image, pushes it to GitHub Container Registry, then deploys it.
+# The App Platform app's service pulls the public `ghcr.io/craigatk/projektor:latest` image (its
+# source is the image, not the GitHub repo), so App Platform itself never builds from source.
 on:
   workflow_dispatch:
 
 permissions:
   contents: read
+  packages: write
 
 concurrency:
   group: deploy-digitalocean
   cancel-in-progress: false
 
 env:
-  IMAGE: registry.digitalocean.com/${{ vars.DIGITALOCEAN_REGISTRY }}/projektor
+  IMAGE: ghcr.io/${{ github.repository }}
 
 jobs:
   deploy-app:
@@ -23,12 +24,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v4.6.0
         with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      - name: Log in to DigitalOcean Container Registry
-        run: doctl registry login --expiry-seconds 1800
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Build and push Docker image
@@ -46,5 +47,11 @@ jobs:
             cache_secret_key=${{ secrets.CACHE_SECRET_KEY }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       - name: Deploy the app
         run: doctl apps create-deployment ${{ vars.DIGITALOCEAN_APP_ID }} --wait
