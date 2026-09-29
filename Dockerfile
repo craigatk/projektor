@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # Builds the Kotlin/Ktor backend and the React UI, then packages the UI into the server's
 # static resources and produces the runnable fat jar (mirrors `.github/workflows/release-server.yml`).
-# Built and pushed to DigitalOcean Container Registry by `.github/workflows/deploy-server.yml`;
+# Built and pushed to GitHub Container Registry by `.github/workflows/deploy-digitalocean.yml`;
 # DO App Platform runs the pushed image rather than building from source.
 FROM eclipse-temurin:21-jdk AS build
 
