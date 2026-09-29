@@ -4,9 +4,6 @@ name: Deploy to DigitalOcean
 # The App Platform app's service pulls `projektor:latest` from DOCR (its source is the image, not
 # the GitHub repo), so App Platform itself never builds from source.
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:

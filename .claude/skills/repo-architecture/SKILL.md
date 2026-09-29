@@ -123,7 +123,7 @@ deployed server):
 ## Deployment
 
 **Docker image on DigitalOcean App Platform** (live.projektor.dev):
-`.github/workflows/deploy-digitalocean.yml` (on push to `main` or manual dispatch) builds the
+`.github/workflows/deploy-digitalocean.yml` (manual dispatch only, from the Actions tab) builds the
 root `Dockerfile` on a GitHub runner, pushes it to DigitalOcean Container Registry as
 `projektor:latest` and `projektor:<sha>`, then runs `doctl apps create-deployment --wait`. The
 App Platform service's source is that DOCR image, not the GitHub repo, so DO never builds from
