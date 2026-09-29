@@ -30,7 +30,7 @@ jobs:
       - name: Log in to DigitalOcean Container Registry
         run: doctl registry login --expiry-seconds 1800
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
       - name: Build and push Docker image
         uses: docker/build-push-action@v7.4.0
         with:
