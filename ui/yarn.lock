@@ -2584,9 +2584,9 @@ isstream@~0.1.2:
   integrity sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==
 
 joi@^18.2.3:
-  version "18.2.8"
-  resolved "https://registry.yarnpkg.com/joi/-/joi-18.2.8.tgz#855dae219ef3bb48bb26c35f02fdb521f88b9c03"
-  integrity sha512-G2TX62h58ZHuwqetJgP2F4ualakqAmZtBYe3jWen7gxQRw5xApX6crnFtuB91WC0c3ESBnva+kGSnb3+6pIQDQ==
+  version "18.2.9"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-18.2.9.tgz#8f489aebefab85cfa9979ea4471e3eea022787b1"
+  integrity sha512-2mD929bUVKUhOLQQEVhlf6EZ0Mlo0DeRb5MO7cViR9AXLtBauuccEtB1py9Ocxpo/P7ucnh442iY/iOwrh3IQw==
   dependencies:
     "@hapi/address" "^5.1.1"
     "@hapi/formula" "^3.0.2"
@@ -3242,9 +3242,9 @@ postcss-modules-scope@^3.1.1:
     postcss-selector-parser "^7.0.0"
 
 postcss-selector-parser@^7.0.0:
-  version "7.1.4"
-  resolved "https://registry.yarnpkg.com/postcss-selector-parser/-/postcss-selector-parser-7.1.4.tgz#69dc7a526517572ff6b150e352b36a016017b485"
-  integrity sha512-HeP7D2wyhkR+XaK6v4W8oRF62Dsz4flyuczALJp61GckGm42u1saSSJ/0auvcBqxs3jMRFEcPK34At/0JBKdOg==
+  version "7.1.6"
+  resolved "https://registry.yarnpkg.com/postcss-selector-parser/-/postcss-selector-parser-7.1.6.tgz#45e970f2d93d4547d6754167ed1132f43012c4bf"
+  integrity sha512-7qASPzhKF2l2KLboRZux8CCTRMdGiV08vWmyKzPz22qZ7ZjQBOeY7rNzNoCLSUiftJ7HUq0GERHmxw/t0dCdMw==
   dependencies:
     cssesc "^3.0.0"
     util-deprecate "^1.0.2"
@@ -3734,9 +3734,9 @@ snake-case@^3.0.3:
     tslib "^2.0.3"
 
 "source-map-js@>=0.6.2 <2.0.0", source-map-js@^1.0.2, source-map-js@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-1.2.1.tgz#1ce5650fddd87abc099eda37dcff024c2667ae46"
-  integrity sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-1.2.2.tgz#79fb88d97535a21cb27162cb05d211b67acea4ab"
+  integrity sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==
 
 source-map@^0.5.7:
   version "0.5.7"
