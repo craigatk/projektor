@@ -4,6 +4,12 @@
 
 Full list of releases and the packaged server .jar file for each release at: https://github.com/craigatk/projektor/releases
 
+* v6.3.0
+  * Adding test case history tab
+* v6.2.0
+  * Keeping repo current coverage even when reports cleaned up
+* v6.1.0
+  * Adding initial support for Go native coverage format
 * v6.0.0
   * BREAKING CHANGE: Projektor server is now built with Java 21 and requires Java 21+ to run
 * v5.2.0
