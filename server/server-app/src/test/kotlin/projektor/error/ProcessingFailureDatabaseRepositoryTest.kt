@@ -36,7 +36,7 @@ class ProcessingFailureDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         // tests, so fetch a generous window and find our own record in it rather than assuming
         // it's the single most recent row -- another test's concurrent insert could otherwise
         // make this flaky.
-        val failures = runBlocking { processingFailureRepository.fetchRecentProcessingFailures(1000) }
+        val failures = runBlocking { processingFailureRepository.fetchRecentProcessingFailures(100) }
 
         val failure = failures.find { it.id == publicId.id }
 

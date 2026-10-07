@@ -189,6 +189,28 @@ interface TestCaseFailureAnalysis {
   analysis?: string;
 }
 
+interface FailureClusterTestCase {
+  testSuiteIdx: number;
+  testCaseIdx: number;
+  fullName: string;
+}
+
+interface FailureCluster {
+  key: string;
+  title: string;
+  failureType?: string;
+  normalizedMessage?: string;
+  location?: string;
+  testCaseCount: number;
+  representative: FailureClusterTestCase;
+  testCases: FailureClusterTestCase[];
+}
+
+interface FailureClusters {
+  totalFailedTestCount: number;
+  clusters: FailureCluster[];
+}
+
 interface TestCaseDebugContext {
   markdown?: string;
 }
@@ -226,6 +248,9 @@ export {
   CoverageGroup,
   CoverageStat,
   CoverageStats,
+  FailureCluster,
+  FailureClusters,
+  FailureClusterTestCase,
   Messages,
   PerformanceResult,
   PerformanceResults,

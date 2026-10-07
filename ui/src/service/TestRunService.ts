@@ -19,6 +19,7 @@ import {
   TestCaseFailureAnalysis,
   TestCaseDebugContext,
   TestCaseHistory,
+  FailureClusters,
 } from "../model/TestRunModel";
 import TestOutputType from "./TestOutputType";
 import { axiosInstance, axiosInstanceWithoutCache } from "./AxiosService";
@@ -45,6 +46,25 @@ const fetchFailedTestCases = (
 ): Promise<AxiosResponse<TestCase[]>> => {
   // @ts-ignore
   return axiosInstance.get<TestCase[]>(`run/${publicId}/cases/failed`);
+};
+
+const fetchFailureClusters = (
+  publicId: string,
+): Promise<AxiosResponse<FailureClusters>> => {
+  // @ts-ignore
+  return axiosInstance.get<FailureClusters>(
+    `run/${publicId}/cases/failed/clusters`,
+  );
+};
+
+const fetchFailureClusterAnalysis = (
+  publicId: string,
+  clusterKey: string,
+): Promise<AxiosResponse<TestCaseFailureAnalysis>> => {
+  // @ts-ignore
+  return axiosInstance.get<TestCaseFailureAnalysis>(
+    `run/${publicId}/cases/failed/clusters/${clusterKey}/analysis`,
+  );
 };
 
 const fetchSlowTestCases = (
@@ -229,6 +249,8 @@ export {
   fetchTestRunSummary,
   fetchTestRunGitMetadata,
   fetchFailedTestCases,
+  fetchFailureClusters,
+  fetchFailureClusterAnalysis,
   fetchCoverage,
   fetchCoverageExists,
   fetchCoverageGroupFiles,
