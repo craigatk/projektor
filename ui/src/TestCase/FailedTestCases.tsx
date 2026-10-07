@@ -6,6 +6,7 @@ import { fetchFailedTestCases } from "../service/TestRunService";
 import LoadingState from "../Loading/LoadingState";
 import { RouteComponentProps } from "@reach/router";
 import PageTitle from "../PageTitle";
+import FailureClusterSummary from "./cluster/FailureClusterSummary";
 
 interface FailedTestCasesProps extends RouteComponentProps {
   publicId: string;
@@ -27,6 +28,7 @@ const FailedTestCases = ({ publicId }: FailedTestCasesProps) => {
   return (
     <div className={classes.mainSection}>
       <PageTitle title="Failed tests" testid="failed-tests-title" />
+      <FailureClusterSummary publicId={publicId} />
       <LoadingSection
         loadingState={loadingState}
         successComponent={

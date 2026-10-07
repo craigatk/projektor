@@ -7,12 +7,17 @@ import projektor.server.api.TestCase
 import projektor.server.api.TestOutput
 import projektor.server.api.ai.TestCaseFailureAnalysis
 import projektor.server.api.debug.TestCaseDebugContext
+import projektor.server.api.failure.FailureClusters
 import projektor.server.api.history.TestCaseHistory
+import projektor.testcase.cluster.FailureAnalysisCache
+import projektor.testcase.cluster.FailureClusterer
+import projektor.testcase.cluster.FailureSignature
 
 class TestCaseService(
     private val testCaseRepository: TestCaseRepository,
     private val attachmentService: AttachmentService?,
     private val testFailureAnalyzer: AITestFailureAnalyzer?,
+    private val failureAnalysisCache: FailureAnalysisCache = FailureAnalysisCache(),
 ) {
     private val attachmentMatchers =
         listOf(
@@ -77,26 +82,56 @@ class TestCaseService(
         testCaseIdx: Int,
     ): TestOutput = testCaseRepository.fetchTestCaseSystemOut(publicId, testSuiteIdx, testCaseIdx)
 
+    suspend fun fetchFailureClusters(publicId: PublicId): FailureClusters =
+        FailureClusterer.cluster(fetchClusterableFailedTestCases(publicId))
+
     suspend fun analyzeTestCaseFailure(
         publicId: PublicId,
         testSuiteIdx: Int,
         testCaseIdx: Int,
     ): TestCaseFailureAnalysis? =
         if (testFailureAnalyzer != null) {
-            val testCase = testCaseRepository.fetchTestCase(publicId, testSuiteIdx, testCaseIdx)
-
-            val failureTextToAnalyze = testCase?.failure?.failureText ?: testCase?.failure?.failureMessage
-
-            val failureAnalysis = failureTextToAnalyze?.let { testFailureAnalyzer.analyzeTestFailure(it)?.analysis }
-
-            failureAnalysis?.let {
-                TestCaseFailureAnalysis(
-                    it,
-                )
+            testCaseRepository.fetchTestCase(publicId, testSuiteIdx, testCaseIdx)?.let { testCase ->
+                analyzeWithCache(publicId, testCase)
             }
         } else {
             null
         }
+
+    /**
+     * Analyzes a single representative failure for the whole cluster. Since the analysis is cached
+     * by failure signature, analyzing any other test case in the same cluster reuses this result.
+     */
+    suspend fun analyzeFailureCluster(
+        publicId: PublicId,
+        clusterKey: String,
+    ): TestCaseFailureAnalysis? =
+        if (testFailureAnalyzer != null) {
+            val clusterTestCases =
+                fetchClusterableFailedTestCases(publicId)
+                    .filter { FailureSignature.fromTestCase(it).key == clusterKey }
+
+            clusterTestCases.firstOrNull()?.let { representative -> analyzeWithCache(publicId, representative) }
+        } else {
+            null
+        }
+
+    private suspend fun fetchClusterableFailedTestCases(publicId: PublicId): List<TestCase> =
+        testCaseRepository.fetchFailedTestCases(publicId).filterNot { it.skipped }
+
+    private suspend fun analyzeWithCache(
+        publicId: PublicId,
+        testCase: TestCase,
+    ): TestCaseFailureAnalysis? {
+        val failureTextToAnalyze = testCase.failure?.failureText ?: testCase.failure?.failureMessage ?: return null
+
+        val failureAnalysis =
+            failureAnalysisCache.getOrAnalyze(publicId, FailureSignature.fromTestCase(testCase).key) {
+                testFailureAnalyzer?.analyzeTestFailure(failureTextToAnalyze)
+            }
+
+        return failureAnalysis?.let { TestCaseFailureAnalysis(it.analysis) }
+    }
 
     suspend fun buildTestCaseDebugContext(
         publicId: PublicId,

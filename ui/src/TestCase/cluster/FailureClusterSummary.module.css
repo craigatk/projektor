@@ -1,0 +1,60 @@
+.section {
+  margin-bottom: 20px;
+}
+
+.headline {
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.cluster {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.clusterHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.clusterTitle {
+  overflow-wrap: anywhere;
+}
+
+.clusterMessage {
+  margin: 6px 0 0;
+  font-size: 0.85em;
+  color: #555;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.clusterActions {
+  margin-top: 4px;
+}
+
+.testList {
+  margin: 4px 0;
+  padding-left: 20px;
+  font-size: 0.9em;
+}
+
+.icon {
+  margin-left: 4px;
+}
+
+.analysisText {
+  padding: 8px 10px;
+  background-color: #ededed;
+  border-radius: 8px;
+  font-size: 0.9em;
+  white-space: pre-line;
+}
+
+.mention {
+  font-style: italic;
+  font-size: 0.9em;
+}

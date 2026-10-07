@@ -27,6 +27,25 @@ fun Route.testCases(testCaseService: TestCaseService) {
 
         call.respond(HttpStatusCode.OK, testCases)
     }
+    get("/run/{publicId}/cases/failed/clusters") {
+        val publicId = call.parameters.getOrFail("publicId")
+
+        val failureClusters = testCaseService.fetchFailureClusters(PublicId(publicId))
+
+        call.respond(HttpStatusCode.OK, failureClusters)
+    }
+    get("/run/{publicId}/cases/failed/clusters/{clusterKey}/analysis") {
+        val publicId = call.parameters.getOrFail("publicId")
+        val clusterKey = call.parameters.getOrFail("clusterKey")
+
+        val analysis = testCaseService.analyzeFailureCluster(PublicId(publicId), clusterKey)
+
+        if (analysis != null) {
+            call.respond(HttpStatusCode.OK, analysis)
+        } else {
+            call.respond(HttpStatusCode.NoContent)
+        }
+    }
     get("/run/{publicId}/cases/slow") {
         val publicId = call.parameters.getOrFail("publicId")
 
