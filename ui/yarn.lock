@@ -1351,7 +1351,7 @@ axios-mock-adapter@2.1.0:
     fast-deep-equal "^3.1.3"
     is-buffer "^2.0.5"
 
-axios@1.20.0, axios@^1.18.1:
+axios@1.20.0, axios@^1.20.0:
   version "1.20.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.20.0.tgz#515513445aa60e71d04b6521ca6210829ccb4786"
   integrity sha512-r8aOh8j9cGKpgQAqpzrUHnSIc6a59Y3Xf/cv8sy1DrHCkZHzQGEuoq1tARk6qSyDdtQGSDgpb9kFlruzPvrgwg==
@@ -2583,7 +2583,7 @@ isstream@~0.1.2:
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
   integrity sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==
 
-joi@^18.2.3:
+joi@^18.2.9:
   version "18.2.9"
   resolved "https://registry.yarnpkg.com/joi/-/joi-18.2.9.tgz#8f489aebefab85cfa9979ea4471e3eea022787b1"
   integrity sha512-2mD929bUVKUhOLQQEVhlf6EZ0Mlo0DeRb5MO7cViR9AXLtBauuccEtB1py9Ocxpo/P7ucnh442iY/iOwrh3IQw==
@@ -3768,10 +3768,10 @@ sshpk@^1.18.0:
     safer-buffer "^2.0.2"
     tweetnacl "~0.14.0"
 
-start-server-and-test@3.0.12:
-  version "3.0.12"
-  resolved "https://registry.yarnpkg.com/start-server-and-test/-/start-server-and-test-3.0.12.tgz#0573aeb5fe7282b3980362951cc96110606528d2"
-  integrity sha512-JhW9LiYXqJxyzmgMvBQ6JxVcz16wV+c5IE6rTHofqLBKjSE075Yr9e6sTr8QgrkHMHlHqkDegzKpQfVKxwauJw==
+start-server-and-test@3.0.13:
+  version "3.0.13"
+  resolved "https://registry.yarnpkg.com/start-server-and-test/-/start-server-and-test-3.0.13.tgz#bc52cd5ab613cd4567e739d35f380d9f645cce52"
+  integrity sha512-Zlgm0u/S+J9XOPljvr2M/cOWCG4BasrNLnBBr/rCK/EWmmTF2c5+P4CCALQNwwmJHovvgsS8aGlmze2ybYUn3g==
   dependencies:
     arg "5.0.2"
     check-more-types "2.24.0"
@@ -3779,7 +3779,7 @@ start-server-and-test@3.0.12:
     execa "5.1.1"
     lazy-ass "2.0.3"
     tree-kill "1.2.2"
-    wait-on "9.1.0"
+    wait-on "9.5.1"
 
 std-env@^4.2.0:
   version "4.2.0"
@@ -4190,15 +4190,14 @@ wait-for-expect@4.0.0:
   resolved "https://registry.yarnpkg.com/wait-for-expect/-/wait-for-expect-4.0.0.tgz#c8204e1ee6a678381cd7651abe18309a6efa0a19"
   integrity sha512-mcH2HYUUHhdFGHVJkgwkBxRihZO4VSuPyh6xhYHz7LEnYkcaLbTAEEsTpYiFw4UY45XdTZYYIaquuMucw9wWMw==
 
-wait-on@9.1.0:
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/wait-on/-/wait-on-9.1.0.tgz#3872a460589e33f2c7a1c53cbbb83c437477073e"
-  integrity sha512-PymrLXHLBM1Ju/Xspb2ADUhbPSMvbnuNvy/mN2hWtpbJ3da0h3Ky1LqwKPG5QSVR57liyO0iUpfipYl/s5qNvA==
+wait-on@9.5.1:
+  version "9.5.1"
+  resolved "https://registry.yarnpkg.com/wait-on/-/wait-on-9.5.1.tgz#6867956a9dbb39e28d35e5db6a779bdbf0f013b8"
+  integrity sha512-bOtj1wRY6u+GPnNskZLcgZNHOaL5NC4+5hRCbEpVoVX6MbMrCLCqIBM2bjsAfrgst3ZC0siIo7vLb4LuYFfIow==
   dependencies:
-    axios "^1.18.1"
-    joi "^18.2.3"
+    axios "^1.20.0"
+    joi "^18.2.9"
     lodash "^4.18.1"
-    minimist "^1.2.8"
     rxjs "^7.8.2"
 
 warning@^4.0.3:
