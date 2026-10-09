@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Same tests as DurationRegressionSpec-baseline.xml, with some slower. With the default 50% threshold:
+  - "should save order" 1.2s -> 4.8s (+300%) is flagged
+  - "should load order history" 2.5s -> 4.0s (+60%) is flagged
+  - "should calculate tax" 0.4s -> 0.5s (+25%) is under the threshold
+  - "should validate address" 3ms -> 9ms (+200%) is under the minimum absolute increase
+  - "should send confirmation email" 3.0s -> 3.1s is unchanged
+-->
+<testsuite name="projektor.example.spock.DurationRegressionSpec" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-01T13:15:45" hostname="ci-runner" time="12.409">
+  <properties/>
+  <testcase name="should save order" classname="projektor.example.spock.DurationRegressionSpec" time="4.800"/>
+  <testcase name="should load order history" classname="projektor.example.spock.DurationRegressionSpec" time="4.000"/>
+  <testcase name="should calculate tax" classname="projektor.example.spock.DurationRegressionSpec" time="0.500"/>
+  <testcase name="should validate address" classname="projektor.example.spock.DurationRegressionSpec" time="0.009"/>
+  <testcase name="should send confirmation email" classname="projektor.example.spock.DurationRegressionSpec" time="3.100"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

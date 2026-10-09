@@ -9,9 +9,11 @@ import projektor.server.api.ai.TestCaseFailureAnalysis
 import projektor.server.api.debug.TestCaseDebugContext
 import projektor.server.api.failure.FailureClusters
 import projektor.server.api.history.TestCaseHistory
+import projektor.server.api.slow.SlowTestRegressions
 import projektor.testcase.cluster.FailureAnalysisCache
 import projektor.testcase.cluster.FailureClusterer
 import projektor.testcase.cluster.FailureSignature
+import projektor.testcase.slow.SlowTestRegressionDetector
 
 class TestCaseService(
     private val testCaseRepository: TestCaseRepository,
@@ -69,6 +71,17 @@ class TestCaseService(
         publicId: PublicId,
         limit: Int,
     ): List<TestCase> = testCaseRepository.fetchSlowTestCases(publicId, limit)
+
+    suspend fun fetchSlowTestRegressions(
+        publicId: PublicId,
+        thresholdPercent: Int,
+        baselineRuns: Int,
+    ): SlowTestRegressions =
+        SlowTestRegressionDetector.detect(
+            testCases = testCaseRepository.fetchTestCases(publicId),
+            baselines = testCaseRepository.fetchTestCaseDurationBaselines(publicId, baselineRuns),
+            thresholdPercent = thresholdPercent,
+        )
 
     suspend fun fetchTestCaseSystemErr(
         publicId: PublicId,

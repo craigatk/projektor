@@ -37,6 +37,7 @@ fun main() {
     loadMultipleTestRunsFromSameRepoForTimeline()
     loadMultipleShortTestRunsFromSameRepoForTimeline()
     slowTimeline()
+    slowTestRegressions()
     loadTestRunTimelineAndCoverageTimeline()
     loadPerformanceK6GetRun()
     loadPerformanceK6GetFailedTestCasesLarge()

@@ -1,0 +1,32 @@
+/* Set the regressions apart from the general list of slow tests below them */
+.section {
+  margin-bottom: 24px;
+  padding: 12px 0 4px;
+  /* Inset shadow rather than a border so the columns still line up with the list below */
+  box-shadow: inset 4px 0 0 #e65100;
+  background-color: #fff8f2;
+}
+
+/* Line the text up with the section title and the table cell contents */
+.headline,
+.description {
+  padding: 0 16px;
+}
+
+.headline {
+  margin-top: 4px;
+}
+
+.description {
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.numeric {
+  white-space: nowrap;
+}
+
+/* Nested so it wins over the MUI table cell text color */
+.section .change {
+  color: #b71c1c;
+}

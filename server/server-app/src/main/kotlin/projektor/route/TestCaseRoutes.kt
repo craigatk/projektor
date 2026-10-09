@@ -8,6 +8,7 @@ import io.ktor.server.routing.get
 import io.ktor.server.util.getOrFail
 import projektor.server.api.PublicId
 import projektor.testcase.TestCaseService
+import projektor.testcase.slow.SlowTestRegressionDetector
 
 fun Route.testCases(testCaseService: TestCaseService) {
     get("/run/{publicId}/suite/{testSuiteIdx}/case/{testCaseIdx}") {
@@ -52,6 +53,17 @@ fun Route.testCases(testCaseService: TestCaseService) {
         val testCases = testCaseService.fetchSlowTestCases(PublicId(publicId), 10)
 
         call.respond(HttpStatusCode.OK, testCases)
+    }
+    get("/run/{publicId}/cases/slow/regressions") {
+        val publicId = call.parameters.getOrFail("publicId")
+        val thresholdPercent =
+            (call.request.queryParameters["threshold_percent"]?.toInt() ?: SlowTestRegressionDetector.DEFAULT_THRESHOLD_PERCENT)
+                .coerceAtLeast(1)
+        val baselineRuns = (call.request.queryParameters["baseline_runs"]?.toInt() ?: 10).coerceIn(1, 50)
+
+        val regressions = testCaseService.fetchSlowTestRegressions(PublicId(publicId), thresholdPercent, baselineRuns)
+
+        call.respond(HttpStatusCode.OK, regressions)
     }
     get("/run/{publicId}/suite/{testSuiteIdx}/case/{testCaseIdx}/systemErr") {
         val publicId = call.parameters.getOrFail("publicId")

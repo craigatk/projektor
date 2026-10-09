@@ -1,0 +1,6 @@
+/* Headers for the sections of the slow tests page, lined up with the page title and table cell contents */
+.sectionTitle {
+  padding: 0 16px;
+  font-size: 1.1em;
+  font-weight: 500;
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="projektor.example.spock.DurationRegressionSpec" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-01T13:15:45" hostname="ci-runner" time="7.103">
+  <properties/>
+  <testcase name="should save order" classname="projektor.example.spock.DurationRegressionSpec" time="1.200"/>
+  <testcase name="should load order history" classname="projektor.example.spock.DurationRegressionSpec" time="2.500"/>
+  <testcase name="should calculate tax" classname="projektor.example.spock.DurationRegressionSpec" time="0.400"/>
+  <testcase name="should validate address" classname="projektor.example.spock.DurationRegressionSpec" time="0.003"/>
+  <testcase name="should send confirmation email" classname="projektor.example.spock.DurationRegressionSpec" time="3.000"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

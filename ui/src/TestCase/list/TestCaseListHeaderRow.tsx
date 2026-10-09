@@ -32,6 +32,7 @@ const TestCaseListHeaderRow = ({
   const durationHeaderCell = (
     <TableCell
       key="duration-header"
+      className={showDurationFirst ? classes.durationFirstCol : undefined}
       role="rowheader"
       data-testid="test-list-duration-header"
     >
