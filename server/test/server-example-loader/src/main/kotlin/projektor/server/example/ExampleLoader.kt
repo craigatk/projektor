@@ -447,6 +447,42 @@ fun slowTimeline() {
     println("View repository slow tests run timeline at $uiBaseUrl/repository/$repoName")
 }
 
+fun slowTestRegressions() {
+    val repoName = "slow-org/regression-repo"
+    val gitMetadata = GitMetadata()
+    gitMetadata.repoName = repoName
+    gitMetadata.branchName = "main"
+    gitMetadata.isMainBranch = true
+    val resultsMetadata = ResultsMetadata()
+    resultsMetadata.git = gitMetadata
+    resultsMetadata.ci = true
+
+    val baselineRunCount = 5
+    val now = Instant.now()
+
+    // Enough earlier runs for the tests to have a baseline, then a run where some tests got slower.
+    // Explicit timestamps keep the regressed run the most recent one regardless of save order.
+    repeat(baselineRunCount) { idx ->
+        resultsMetadata.createdTimestamp = now.minusSeconds(60L * 60 * 24 * (baselineRunCount - idx))
+        sendGroupedResultsToServer(
+            groupedResultsXmlLoader.wrapResultsXmlInGroup(
+                resultsXml = resultsXmlLoader.durationRegressionBaseline(),
+                metadata = resultsMetadata,
+            ),
+        )
+    }
+    resultsMetadata.createdTimestamp = now
+    val regressedResponse =
+        sendGroupedResultsToServer(
+            groupedResultsXmlLoader.wrapResultsXmlInGroup(
+                resultsXml = resultsXmlLoader.durationRegressionRegressed(),
+                metadata = resultsMetadata,
+            ),
+        )
+
+    println("View tests slower than their baseline at $uiBaseUrl${regressedResponse.uri}/slow")
+}
+
 fun gitMetadataWithPullRequestNumberAndCommitSha() {
     val repoName = "craigatk/projektor"
     val branchName = "master"

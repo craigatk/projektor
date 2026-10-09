@@ -211,6 +211,20 @@ interface FailureClusters {
   clusters: FailureCluster[];
 }
 
+interface SlowTestRegression {
+  testCase: TestCase;
+  baselineDuration: number;
+  baselineSampleCount: number;
+  durationIncrease: number;
+  increasePercent: number;
+}
+
+interface SlowTestRegressions {
+  thresholdPercent: number;
+  baselineRunCount: number;
+  regressions: SlowTestRegression[];
+}
+
 interface TestCaseDebugContext {
   markdown?: string;
 }
@@ -254,6 +268,8 @@ export {
   Messages,
   PerformanceResult,
   PerformanceResults,
+  SlowTestRegression,
+  SlowTestRegressions,
   TestRunSummary,
   TestRun,
   TestSuite,

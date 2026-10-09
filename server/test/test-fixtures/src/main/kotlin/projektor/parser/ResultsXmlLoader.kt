@@ -31,6 +31,11 @@ class ResultsXmlLoader {
 
     fun slower() = loadTextFromFile("TEST-projektor.example.spock.SlowerSpec.xml")
 
+    fun durationRegressionBaseline() = loadTextFromFile("TEST-projektor.example.spock.DurationRegressionSpec-baseline.xml")
+
+    // Same tests as durationRegressionBaseline() with some of them slower
+    fun durationRegressionRegressed() = loadTextFromFile("TEST-projektor.example.spock.DurationRegressionSpec-regressed.xml")
+
     fun invalid() =
         loadTextFromFile("TEST-projektor.example.spock.PassingSpec.xml")
             .replace("<testsuite", "testsuite")

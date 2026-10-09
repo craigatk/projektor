@@ -20,6 +20,7 @@ import {
   TestCaseDebugContext,
   TestCaseHistory,
   FailureClusters,
+  SlowTestRegressions,
 } from "../model/TestRunModel";
 import TestOutputType from "./TestOutputType";
 import { axiosInstance, axiosInstanceWithoutCache } from "./AxiosService";
@@ -72,6 +73,15 @@ const fetchSlowTestCases = (
 ): Promise<AxiosResponse<TestCase[]>> => {
   // @ts-ignore
   return axiosInstance.get<TestCase[]>(`run/${publicId}/cases/slow`);
+};
+
+const fetchSlowTestRegressions = (
+  publicId: string,
+): Promise<AxiosResponse<SlowTestRegressions>> => {
+  // @ts-ignore
+  return axiosInstance.get<SlowTestRegressions>(
+    `run/${publicId}/cases/slow/regressions`,
+  );
 };
 
 const fetchTestCaseDetails = (
@@ -251,6 +261,7 @@ export {
   fetchFailedTestCases,
   fetchFailureClusters,
   fetchFailureClusterAnalysis,
+  fetchSlowTestRegressions,
   fetchCoverage,
   fetchCoverageExists,
   fetchCoverageGroupFiles,
