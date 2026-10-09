@@ -21,7 +21,10 @@ import projektor.server.api.PublicId
 import projektor.server.api.TestCase
 import projektor.server.api.TestOutput
 import projektor.server.api.history.TestCaseHistoryEntry
+import projektor.testcase.slow.TestCaseDurationBaseline
+import projektor.testcase.slow.TestCaseDurationBaselines
 import projektor.util.addPrefixToFields
+import java.math.BigDecimal
 import kotlin.streams.toList
 
 class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseRepository {
@@ -108,31 +111,9 @@ class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseR
                     )
                     .fetchOne()
 
-            val repoName = target?.get(GIT_METADATA.REPO_NAME) ?: return@withContext listOf()
-            val targetRunId = target.get(TEST_RUN.ID)
-            val targetCreatedTimestamp = target.get(TEST_RUN.CREATED_TIMESTAMP)
+            if (target?.get(GIT_METADATA.REPO_NAME) == null) return@withContext listOf()
 
-            // Runs of the same repo, project, and branch up to and including the requested run.
-            // Only CI runs are included, other than the requested run itself.
-            val recentRunIds =
-                dslContext
-                    .select(TEST_RUN.ID)
-                    .from(TEST_RUN)
-                    .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
-                    .leftOuterJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
-                    .where(
-                        GIT_METADATA.REPO_NAME.eq(repoName)
-                            .and(withProjectName(target.get(GIT_METADATA.PROJECT_NAME)))
-                            .and(withBranchName(target.get(GIT_METADATA.BRANCH_NAME)))
-                            .and(RESULTS_METADATA.CI.isTrue.or(TEST_RUN.ID.eq(targetRunId)))
-                            .and(
-                                TEST_RUN.CREATED_TIMESTAMP.lt(targetCreatedTimestamp)
-                                    .or(TEST_RUN.CREATED_TIMESTAMP.eq(targetCreatedTimestamp).and(TEST_RUN.ID.le(targetRunId))),
-                            ),
-                    )
-                    .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc(), TEST_RUN.ID.desc())
-                    .limit(maxRuns)
-                    .fetch(TEST_RUN.ID)
+            val recentRunIds = fetchRecentRunIds(target, maxRuns, includeTargetRun = true)
 
             val isRequestedTestCase = TEST_SUITE.IDX.eq(testSuiteIdx).and(TEST_CASE.IDX.eq(testCaseIdx))
 
@@ -183,6 +164,134 @@ class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseR
                 }
                 .distinctBy { it.publicId }
         }
+
+    override suspend fun fetchTestCases(testRunPublicId: PublicId): List<TestCase> =
+        withContext(Dispatchers.IO) {
+            val resultSet =
+                selectTestCase(dslContext)
+                    .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
+                    .orderBy(TEST_CASE.ID)
+                    .fetchResultSet()
+
+            resultSet.use { testCaseMapper.stream(it).toList() }
+        }
+
+    override suspend fun fetchTestCaseDurationBaselines(
+        testRunPublicId: PublicId,
+        maxRuns: Int,
+    ): TestCaseDurationBaselines =
+        withContext(Dispatchers.IO) {
+            val target =
+                dslContext
+                    .select(
+                        TEST_RUN.ID,
+                        TEST_RUN.CREATED_TIMESTAMP,
+                        GIT_METADATA.REPO_NAME,
+                        GIT_METADATA.PROJECT_NAME,
+                        GIT_METADATA.BRANCH_NAME,
+                    )
+                    .from(TEST_RUN)
+                    .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                    .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
+                    .fetchOne()
+
+            if (target?.get(GIT_METADATA.REPO_NAME) == null) return@withContext TestCaseDurationBaselines(0, listOf())
+
+            val baselineRunIds = fetchRecentRunIds(target, maxRuns, includeTargetRun = false)
+
+            if (baselineRunIds.isEmpty()) return@withContext TestCaseDurationBaselines(0, listOf())
+
+            val baseline =
+                dslContext
+                    .select(
+                        TEST_CASE.PACKAGE_NAME,
+                        TEST_CASE.CLASS_NAME,
+                        TEST_CASE.NAME,
+                        DSL.percentileCont(BigDecimal("0.5")).withinGroupOrderBy(TEST_CASE.DURATION).`as`("median_duration"),
+                        DSL.countDistinct(TEST_RUN.ID).`as`("sample_count"),
+                    )
+                    .from(TEST_CASE)
+                    .innerJoin(TEST_SUITE).on(TEST_CASE.TEST_SUITE_ID.eq(TEST_SUITE.ID))
+                    .innerJoin(TEST_RUN).on(TEST_SUITE.TEST_RUN_ID.eq(TEST_RUN.ID))
+                    .where(
+                        TEST_RUN.ID.`in`(baselineRunIds)
+                            .and(TEST_CASE.PASSED.isTrue)
+                            .and(TEST_CASE.SKIPPED.isFalse)
+                            .and(TEST_CASE.DURATION.isNotNull),
+                    )
+                    .groupBy(TEST_CASE.PACKAGE_NAME, TEST_CASE.CLASS_NAME, TEST_CASE.NAME)
+                    .asTable("baseline")
+
+            val baselinePackageName = baseline.field(TEST_CASE.PACKAGE_NAME)!!
+            val baselineClassName = baseline.field(TEST_CASE.CLASS_NAME)!!
+            val baselineName = baseline.field(TEST_CASE.NAME)!!
+            val medianDuration = baseline.field("median_duration", BigDecimal::class.java)!!
+            val sampleCount = baseline.field("sample_count", Int::class.java)!!
+
+            // Match the baselines to the test cases in the requested run
+            val baselines =
+                dslContext
+                    .select(TEST_SUITE.IDX, TEST_CASE.IDX, medianDuration, sampleCount)
+                    .from(TEST_CASE)
+                    .innerJoin(TEST_SUITE).on(TEST_CASE.TEST_SUITE_ID.eq(TEST_SUITE.ID))
+                    .innerJoin(baseline).on(
+                        TEST_CASE.PACKAGE_NAME.isNotDistinctFrom(baselinePackageName)
+                            .and(TEST_CASE.CLASS_NAME.isNotDistinctFrom(baselineClassName))
+                            .and(TEST_CASE.NAME.eq(baselineName)),
+                    )
+                    .where(TEST_SUITE.TEST_RUN_ID.eq(target.get(TEST_RUN.ID)))
+                    .fetch { record ->
+                        TestCaseDurationBaseline(
+                            testSuiteIdx = record.get(TEST_SUITE.IDX),
+                            testCaseIdx = record.get(TEST_CASE.IDX),
+                            medianDuration = record.get(medianDuration),
+                            sampleCount = record.get(sampleCount),
+                        )
+                    }
+
+            TestCaseDurationBaselines(baselineRunIds.size, baselines)
+        }
+
+    /**
+     * Most recent CI runs of the same repo, project, and branch as the target run, ordered most recent first.
+     * The target run itself is included (even if it wasn't a CI run) only when [includeTargetRun] is true.
+     */
+    private fun fetchRecentRunIds(
+        target: Record,
+        maxRuns: Int,
+        includeTargetRun: Boolean,
+    ): List<Long> {
+        val targetRunId = target.get(TEST_RUN.ID)
+        val targetCreatedTimestamp = target.get(TEST_RUN.CREATED_TIMESTAMP)
+
+        val ciCondition =
+            if (includeTargetRun) {
+                RESULTS_METADATA.CI.isTrue.or(TEST_RUN.ID.eq(targetRunId))
+            } else {
+                RESULTS_METADATA.CI.isTrue
+            }
+        val sameTimestampCondition =
+            if (includeTargetRun) TEST_RUN.ID.le(targetRunId) else TEST_RUN.ID.lt(targetRunId)
+
+        return dslContext
+            .select(TEST_RUN.ID)
+            .from(TEST_RUN)
+            .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+            .leftOuterJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
+            .where(
+                GIT_METADATA.REPO_NAME.eq(target.get(GIT_METADATA.REPO_NAME))
+                    .and(withProjectName(target.get(GIT_METADATA.PROJECT_NAME)))
+                    .and(withBranchName(target.get(GIT_METADATA.BRANCH_NAME)))
+                    .and(ciCondition)
+                    .and(
+                        TEST_RUN.CREATED_TIMESTAMP.lt(targetCreatedTimestamp)
+                            .or(TEST_RUN.CREATED_TIMESTAMP.eq(targetCreatedTimestamp).and(sameTimestampCondition)),
+                    ),
+            )
+            .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc(), TEST_RUN.ID.desc())
+            .limit(maxRuns)
+            .fetch(TEST_RUN.ID)
+    }
 
     companion object {
         val testCaseMapper =

@@ -13,6 +13,13 @@ class ResultsXmlLoaderSpec : StringSpec({
         expectThat(passingSpec).contains("PassingSpec")
     }
 
+    "should load duration regression specs for the same test suite" {
+        val resultsXmlLoader = ResultsXmlLoader()
+
+        expectThat(resultsXmlLoader.durationRegressionBaseline()).contains("projektor.example.spock.DurationRegressionSpec")
+        expectThat(resultsXmlLoader.durationRegressionRegressed()).contains("projektor.example.spock.DurationRegressionSpec")
+    }
+
     "should get Cypress results" {
         val cypressResults = ResultsXmlLoader().cypressResults()
 
