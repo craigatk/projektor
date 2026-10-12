@@ -1,0 +1,20 @@
+plugins {
+    id "java-test-fixtures"
+    id 'jacoco'
+}
+
+apply from: "../../../gradle/kotlin.gradle"
+
+dependencies {
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+
+    implementation "ch.qos.logback:logback-classic:$logbackVersion"
+
+    testImplementation "org.wiremock:wiremock:$wiremockVersion"
+
+    testImplementation(platform('org.junit:junit-bom:6.1.3'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
+
+    testFixturesImplementation "org.wiremock:wiremock:$wiremockVersion"
+}

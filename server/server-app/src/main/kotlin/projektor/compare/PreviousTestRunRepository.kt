@@ -6,6 +6,8 @@ import projektor.server.api.repository.BranchSearch
 interface PreviousTestRunRepository {
     suspend fun findPreviousMainBranchRunWithCoverage(publicId: PublicId): PublicId?
 
+    suspend fun findPreviousMainBranchRun(publicId: PublicId): RecentTestRun?
+
     suspend fun findMostRecentRunWithCoverage(
         repoName: String,
         projectName: String?,

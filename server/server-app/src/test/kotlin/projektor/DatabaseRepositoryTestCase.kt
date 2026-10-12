@@ -40,6 +40,7 @@ import projektor.metrics.InfluxMetricsConfig
 import projektor.metrics.MetricsService
 import projektor.metrics.createRegistry
 import projektor.notification.NotificationConfig
+import projektor.notification.slack.SlackNotificationConfig
 import projektor.parser.grouped.GroupedResultsParser
 import projektor.processing.ProcessingConfig
 import java.util.TimeZone
@@ -135,6 +136,8 @@ open class DatabaseRepositoryTestCase : KoinTest {
                     null,
                     null,
                     testFailureAnalyzer,
+                    SlackNotificationConfig(null, null),
+                    null,
                 ),
             )
         }

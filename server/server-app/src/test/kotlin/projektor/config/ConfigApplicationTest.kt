@@ -75,4 +75,31 @@ class ConfigApplicationTest : ApplicationTestCase() {
             val serverConfig = objectMapper.readValue(response.bodyAsText(), ServerConfig::class.java)
             expectThat(serverConfig.aiConfig.testCaseFailureAnalysisEnabled).isFalse()
         }
+
+    @Test
+    fun `should return Slack enabled when Slack API URL and bot token are set`() =
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                slackApiUrl = "https://slack.com/api",
+                slackBotToken = "xoxb-token",
+            ),
+        ) {
+            val response = client.get("/config")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val serverConfig = objectMapper.readValue(response.bodyAsText(), ServerConfig::class.java)
+            expectThat(serverConfig.slack.enabled).isTrue()
+        }
+
+    @Test
+    fun `should return Slack disabled when Slack API URL is not set`() =
+        projektorTestApplication {
+            val response = client.get("/config")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val serverConfig = objectMapper.readValue(response.bodyAsText(), ServerConfig::class.java)
+            expectThat(serverConfig.slack.enabled).isFalse()
+        }
 }

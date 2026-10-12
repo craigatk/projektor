@@ -49,6 +49,9 @@ task startServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {
             "ATTACHMENT_AUTO_CREATE_BUCKET": "true",
             "ATTACHMENT_ACCESS_KEY": "minio_access_key",
             "ATTACHMENT_SECRET_KEY": "minio_secret_key",
-            "MAX_REPORT_AGE_DAYS": "30"
+            "MAX_REPORT_AGE_DAYS": "30",
+            // Fake Slack API started by the Cypress plugins, see cypress/plugins/fakeSlackApi.js
+            "SLACK_API_URL": "http://localhost:8091",
+            "SLACK_BOT_TOKEN": "functional-test-token"
     ]
 }

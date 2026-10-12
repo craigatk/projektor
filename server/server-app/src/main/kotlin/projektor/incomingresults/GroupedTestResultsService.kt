@@ -13,6 +13,7 @@ import projektor.metadata.TestRunMetadataRepository
 import projektor.metrics.MetricsService
 import projektor.notification.github.GitHubPullRequestCommentService
 import projektor.notification.github.comment.PullRequest
+import projektor.notification.slack.SlackMainlineNotificationService
 import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.performance.PerformanceResultsRepository
 import projektor.quality.CodeQualityReportRepository
@@ -35,6 +36,7 @@ class GroupedTestResultsService(
     private val coverageService: CoverageService,
     private val appendTestResultsService: AppendTestResultsService,
     private val codeQualityReportRepository: CodeQualityReportRepository,
+    private val slackMainlineNotificationService: SlackMainlineNotificationService,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
@@ -119,6 +121,8 @@ class GroupedTestResultsService(
                     commitSha = groupedResults.metadata.git.commitSha,
                 )
             }
+
+            publishSlackNotification(testRunSummary, groupedResults.metadata?.git, groupedResults.metadata?.ci, coverage)
         } catch (e: Exception) {
             val errorMessage = "Error persisting test results: ${e.message}"
             logger.error(errorMessage, e)
@@ -189,4 +193,24 @@ class GroupedTestResultsService(
             metricsService.incrementPullRequestCommentFailureCounter()
             null
         }
+
+    private suspend fun publishSlackNotification(
+        testRunSummary: TestRunSummary,
+        gitMetadata: GitMetadata?,
+        ci: Boolean?,
+        coverage: Coverage?,
+    ) {
+        try {
+            val channelName = slackMainlineNotificationService.notifyIfNeeded(testRunSummary, gitMetadata, ci, coverage)
+
+            if (channelName != null) {
+                logger.info("Successfully sent Slack notification to channel $channelName for test run ${testRunSummary.id}")
+
+                metricsService.incrementSlackNotificationSuccessCounter()
+            }
+        } catch (e: Exception) {
+            logger.warn("Error sending Slack notification for test run ${testRunSummary.id}", e)
+            metricsService.incrementSlackNotificationFailureCounter()
+        }
+    }
 }

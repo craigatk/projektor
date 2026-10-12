@@ -39,6 +39,12 @@ import projektor.notification.badge.SvgCoverageBadgeCreator
 import projektor.notification.badge.SvgTestRunBadgeCreator
 import projektor.notification.github.GitHubPullRequestCommentService
 import projektor.notification.github.comment.GitHubCommentService
+import projektor.notification.slack.RepositorySlackChannelDatabaseRepository
+import projektor.notification.slack.RepositorySlackChannelRepository
+import projektor.notification.slack.RepositorySlackChannelService
+import projektor.notification.slack.SlackMainlineNotificationService
+import projektor.notification.slack.SlackNotificationConfig
+import projektor.notification.slack.SlackNotificationService
 import projektor.organization.coverage.OrganizationCoverageDatabaseRepository
 import projektor.organization.coverage.OrganizationCoverageRepository
 import projektor.organization.coverage.OrganizationCoverageService
@@ -87,6 +93,8 @@ fun createAppModule(
     gitHubCommentService: GitHubCommentService?,
     attachmentService: AttachmentService?,
     aiTestFailureAnalyzer: AITestFailureAnalyzer?,
+    slackNotificationConfig: SlackNotificationConfig,
+    slackNotificationService: SlackNotificationService?,
 ) = module {
     single { dataSource }
     single { TestResultsProcessor() }
@@ -121,7 +129,7 @@ fun createAppModule(
     single { GroupedResultsParser(processingConfig.maxPayloadSize) }
     single { PerformanceResultsParser() }
     single { GroupedResultsConverter(get(), get(), get()) }
-    single { GroupedTestResultsService(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    single { GroupedTestResultsService(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     single { MessageService(messageConfig) }
     single { PreviousTestRunService(get()) }
     single { ProcessingFailureService(get()) }
@@ -146,6 +154,12 @@ fun createAppModule(
     single<CodeQualityReportRepository> { CodeQualityReportDatabaseRepository(get()) }
 
     single { GitHubPullRequestCommentService(notificationConfig, gitHubCommentService) }
+
+    single<RepositorySlackChannelRepository> { RepositorySlackChannelDatabaseRepository(get()) }
+    single { RepositorySlackChannelService(get(), slackNotificationService) }
+    single {
+        SlackMainlineNotificationService(notificationConfig, slackNotificationConfig, slackNotificationService, get(), get(), get())
+    }
 
     single { CoverageBadgeService(get(), get(), get(), get()) }
     single { SvgCoverageBadgeCreator() }
