@@ -12,6 +12,7 @@ import DashboardSummaryItem from "./DashboardSummaryItem";
 import { createGitHubUrl } from "../VersionControl/VersionControlHelpers";
 import CleanLinkText from "../Link/CleanLinkText";
 import TestRunTestsBadge from "../Badge/tests/TestRunTestsBadge";
+import SlackChannelListItem from "../Slack/SlackChannelListItem";
 import classes from "./DashboardSummary.module.css";
 
 interface DashboardSummaryProps {
@@ -160,6 +161,12 @@ const DashboardSummary = ({
                 label="Project"
                 testId="dashboard-summary-project-name"
                 value={gitMetadata.projectName}
+              />
+            )}
+            {gitMetadata && gitMetadata.repoName && (
+              <SlackChannelListItem
+                repoName={gitMetadata.repoName}
+                projectName={gitMetadata.projectName}
               />
             )}
             <TestRunDate createdTimestamp={createdTimestamp} />

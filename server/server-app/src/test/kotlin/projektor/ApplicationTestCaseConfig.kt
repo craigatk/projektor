@@ -22,5 +22,8 @@ data class ApplicationTestCaseConfig(
     val gitHubApiUrl: String? = null,
     val gitHubAppId: String? = null,
     val gitHubPrivateKeyEncoded: String? = null,
+    val slackApiUrl: String? = null,
+    val slackBotToken: String? = null,
+    val slackFlakyFailureThreshold: Int? = null,
     val openAIApiKey: String? = null,
 )

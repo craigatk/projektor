@@ -13,6 +13,7 @@ import projektor.database.generated.tables.GitMetadata;
 import projektor.database.generated.tables.GitRepository;
 import projektor.database.generated.tables.PerformanceResults;
 import projektor.database.generated.tables.RepositoryCurrentCoverage;
+import projektor.database.generated.tables.RepositorySlackChannel;
 import projektor.database.generated.tables.ResultsMetadata;
 import projektor.database.generated.tables.ResultsProcessing;
 import projektor.database.generated.tables.ResultsProcessingFailure;
@@ -75,6 +76,11 @@ public class Tables {
      * The table <code>public.repository_current_coverage</code>.
      */
     public static final RepositoryCurrentCoverage REPOSITORY_CURRENT_COVERAGE = RepositoryCurrentCoverage.REPOSITORY_CURRENT_COVERAGE;
+
+    /**
+     * The table <code>public.repository_slack_channel</code>.
+     */
+    public static final RepositorySlackChannel REPOSITORY_SLACK_CHANNEL = RepositorySlackChannel.REPOSITORY_SLACK_CHANNEL;
 
     /**
      * The table <code>public.results_metadata</code>.

@@ -65,6 +65,11 @@ import projektor.notification.github.auth.JwtProvider
 import projektor.notification.github.auth.JwtTokenConfig
 import projektor.notification.github.comment.GitHubCommentClient
 import projektor.notification.github.comment.GitHubCommentService
+import projektor.notification.slack.RepositorySlackChannelService
+import projektor.notification.slack.SlackClient
+import projektor.notification.slack.SlackClientConfig
+import projektor.notification.slack.SlackNotificationConfig
+import projektor.notification.slack.SlackNotificationService
 import projektor.organization.coverage.OrganizationCoverageService
 import projektor.performance.PerformanceResultsService
 import projektor.processing.ProcessingConfig
@@ -109,6 +114,8 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
 
     val notificationConfig = NotificationConfig.createNotificationConfig(applicationConfig)
     val gitHubCommentService = conditionallyCreateGitHubCommentService(applicationConfig)
+    val slackNotificationConfig = SlackNotificationConfig.createSlackNotificationConfig(applicationConfig)
+    val slackNotificationService = conditionallyCreateSlackNotificationService(slackNotificationConfig)
 
     val attachmentRepository: AttachmentRepository = AttachmentDatabaseRepository(dslContext)
     val attachmentService = conditionallyCreateAttachmentService(applicationConfig, attachmentRepository)
@@ -128,6 +135,8 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
             gitHubCommentService = gitHubCommentService,
             attachmentService = attachmentService,
             aiTestFailureAnalyzer = aiTestFailureAnalyzer,
+            slackNotificationConfig = slackNotificationConfig,
+            slackNotificationService = slackNotificationService,
         )
 
     install(CORS) {
@@ -235,13 +244,15 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
 
     val pullRequestFailureContextService: PullRequestFailureContextService by inject()
 
+    val repositorySlackChannelService: RepositorySlackChannelService by inject()
+
     routing {
         api(organizationCoverageService, repositoryCoverageService, repositoryTestRunService)
         attachments(attachmentService, authService)
         badgeCoverage(coverageBadgeService)
         badgeTests(testRunBadgeService)
         codeQuality(codeQualityReportRepository)
-        config(cleanupConfig, aiConfig)
+        config(cleanupConfig, aiConfig, slackNotificationConfig)
         coverage(authService, coverageService)
         failure(processingFailureService)
         health()
@@ -254,6 +265,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
         repository(previousTestRunService, repositoryTestRunService)
         repositoryCoverage(repositoryCoverageService)
         repositoryPerformance(repositoryPerformanceService)
+        repositorySlack(slackNotificationConfig, repositorySlackChannelService)
         results(testResultsService, groupedTestResultsService, testResultsProcessingService, authService, metricRegistry, metricsService)
         testCases(testCaseService)
         testSuites(testSuiteService)
@@ -301,6 +313,16 @@ private fun conditionallyCreateGitHubCommentService(applicationConfig: Applicati
             )
 
         GitHubCommentService(gitHubCommentClient)
+    } else {
+        null
+    }
+}
+
+private fun conditionallyCreateSlackNotificationService(slackNotificationConfig: SlackNotificationConfig): SlackNotificationService? {
+    val (apiUrl, botToken) = slackNotificationConfig
+
+    return if (slackNotificationConfig.enabled && apiUrl != null && botToken != null) {
+        SlackNotificationService(SlackClient(SlackClientConfig(apiUrl = apiUrl, botToken = botToken)))
     } else {
         null
     }

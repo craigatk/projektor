@@ -6,12 +6,14 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import projektor.ai.AIConfig
 import projektor.cleanup.CleanupConfig
+import projektor.notification.slack.SlackNotificationConfig
 import projektor.server.api.config.ServerCleanupConfig
 import projektor.server.api.config.ServerConfig
 
 fun Route.config(
     cleanupConfig: CleanupConfig,
     aiConfig: AIConfig,
+    slackNotificationConfig: SlackNotificationConfig,
 ) {
     get("/config") {
         call.respond(
@@ -22,6 +24,7 @@ fun Route.config(
                     cleanupConfig.maxReportAgeDays,
                 ),
                 aiConfig.toServerConfig(),
+                slackNotificationConfig.toServerConfig(),
             ),
         )
     }

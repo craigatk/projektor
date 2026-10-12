@@ -12,6 +12,9 @@ class MetricsService(private val metricRegistry: MeterRegistry) {
     private val pullRequestCommentSuccessCounter = metricRegistry.counter("pull_request_comment_success")
     private val pullRequestCommentFailureCounter = metricRegistry.counter("pull_request_comment_failure")
 
+    private val slackNotificationSuccessCounter = metricRegistry.counter("slack_notification_success")
+    private val slackNotificationFailureCounter = metricRegistry.counter("slack_notification_failure")
+
     private val resultsProcessStartCounter = metricRegistry.counter("results_process_start")
     private val resultsProcessSuccessCounter = metricRegistry.counter("results_process_success")
     private val resultsProcessFailureCounter = metricRegistry.counter("results_process_failure")
@@ -28,6 +31,10 @@ class MetricsService(private val metricRegistry: MeterRegistry) {
     fun incrementPullRequestCommentSuccessCounter() = pullRequestCommentSuccessCounter.increment()
 
     fun incrementPullRequestCommentFailureCounter() = pullRequestCommentFailureCounter.increment()
+
+    fun incrementSlackNotificationSuccessCounter() = slackNotificationSuccessCounter.increment()
+
+    fun incrementSlackNotificationFailureCounter() = slackNotificationFailureCounter.increment()
 
     fun incrementResultsProcessStartCounter() = resultsProcessStartCounter.increment()
 

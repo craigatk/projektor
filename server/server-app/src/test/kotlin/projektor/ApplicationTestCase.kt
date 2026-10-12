@@ -170,6 +170,10 @@ open class ApplicationTestCase {
                 testCaseConfig.gitHubAppId?.let { put("ktor.notification.gitHub.gitHubAppId", it) }
                 testCaseConfig.gitHubPrivateKeyEncoded?.let { put("ktor.notification.gitHub.privateKey", it) }
 
+                testCaseConfig.slackApiUrl?.let { put("ktor.notification.slack.apiUrl", it) }
+                testCaseConfig.slackBotToken?.let { put("ktor.notification.slack.botToken", it) }
+                testCaseConfig.slackFlakyFailureThreshold?.let { put("ktor.notification.slack.flakyFailureThreshold", it.toString()) }
+
                 testCaseConfig.openAIApiKey?.let { put("ktor.ai.openAIApiKey", it) }
             }
 

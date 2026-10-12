@@ -1,0 +1,5 @@
+{
+  "cleanup": { "enabled": false },
+  "ai_config": { "test_case_failure_analysis_enabled": false },
+  "slack": { "enabled": true }
+}

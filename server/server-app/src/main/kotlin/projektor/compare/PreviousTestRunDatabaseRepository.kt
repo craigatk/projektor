@@ -5,7 +5,9 @@ import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
 import projektor.database.generated.Tables.CODE_COVERAGE_RUN
 import projektor.database.generated.Tables.GIT_METADATA
+import projektor.database.generated.Tables.RESULTS_METADATA
 import projektor.database.generated.Tables.TEST_RUN
+import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.runInCIFromRepo
 import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withBranchName
 import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withBranchType
 import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withProjectName
@@ -47,6 +49,49 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
                         .fetchOne(TEST_RUN.PUBLIC_ID)
 
                 previousPublicId?.let { PublicId(it) }
+            } else {
+                null
+            }
+        }
+
+    override suspend fun findPreviousMainBranchRun(publicId: PublicId): RecentTestRun? =
+        withContext(Dispatchers.IO) {
+            val currentRunInfo =
+                dslContext.select(
+                    GIT_METADATA.REPO_NAME,
+                    TEST_RUN.CREATED_TIMESTAMP,
+                    GIT_METADATA.PROJECT_NAME,
+                )
+                    .from(GIT_METADATA)
+                    .innerJoin(TEST_RUN).on(GIT_METADATA.TEST_RUN_ID.eq(TEST_RUN.ID))
+                    .where(TEST_RUN.PUBLIC_ID.eq(publicId.id))
+                    .limit(1)
+                    .fetchOneInto(CurrentRunInfo::class.java)
+
+            if (currentRunInfo != null) {
+                val previousTestRun =
+                    dslContext.select(TEST_RUN.PUBLIC_ID, TEST_RUN.CREATED_TIMESTAMP, TEST_RUN.PASSED, GIT_METADATA.BRANCH_NAME)
+                        .from(TEST_RUN)
+                        .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                        .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
+                        .where(
+                            runInCIFromRepo(currentRunInfo.repoName, currentRunInfo.projectName)
+                                .and(GIT_METADATA.IS_MAIN_BRANCH.eq(true))
+                                .and(TEST_RUN.PUBLIC_ID.ne(publicId.id))
+                                .and(TEST_RUN.CREATED_TIMESTAMP.lessThan(currentRunInfo.createdTimestamp)),
+                        )
+                        .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                        .limit(1)
+                        .fetchOne()
+
+                previousTestRun?.let {
+                    RecentTestRun(
+                        publicId = PublicId(it.component1()),
+                        createdTimestamp = it.component2().toInstant(ZoneOffset.UTC),
+                        passed = it.component3(),
+                        branch = it.component4(),
+                    )
+                }
             } else {
                 null
             }

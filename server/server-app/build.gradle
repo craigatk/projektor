@@ -35,6 +35,7 @@ dependencies {
     implementation project(':server:ai:openai')
     implementation project(':server:notification:badge')
     implementation project(':server:notification:github')
+    implementation project(':server:notification:slack')
     implementation project(':server:persistence:database-schema')
     implementation project(':server:server-api')
     implementation project(':server:parsing:coverage-parser')
@@ -81,6 +82,7 @@ dependencies {
 
     testImplementation(testFixtures(project(":server:ai:analysis")))
     testImplementation(testFixtures(project(":server:notification:github")))
+    testImplementation(testFixtures(project(":server:notification:slack")))
     testImplementation(project(':server:test:coverage-fixtures'))
     testImplementation(project(':server:test:performance-fixtures'))
     testImplementation(project(':server:test:test-fixtures'))
