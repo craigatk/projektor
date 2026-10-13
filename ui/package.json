@@ -20,9 +20,12 @@
     "projektor:jest": "env-cmd -f ~/.env projektor-publish --configFile=projektor.jest.json",
     "clean-results": "rimraf test-results/*.xml",
     "clean-dist": "rimraf dist",
-    "clean-dev-dist": "rimraf dev-dist"
+    "clean-dev-dist": "rimraf dev-dist",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "devDependencies": {
+    "@storybook/react-vite": "10.6.2",
     "@testing-library/cypress": "10.1.3",
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.3",
@@ -40,6 +43,7 @@
     "resize-observer-polyfill": "1.5.1",
     "rimraf": "6.1.3",
     "start-server-and-test": "3.0.13",
+    "storybook": "10.6.2",
     "typescript": "7.0.2",
     "typescript-plugin-css-modules": "5.2.0",
     "vite": "8.3.4",

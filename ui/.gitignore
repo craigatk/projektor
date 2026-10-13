@@ -12,4 +12,6 @@ test-results/
 
 /coverage/
 
+storybook-static/
+
 .env.local
