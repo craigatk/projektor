@@ -50,6 +50,11 @@
     "classNameTemplate": "{classname}",
     "usePathForSuiteName": "true"
   },
+  "overrides": {
+    "@istanbuljs/load-nyc-config": {
+      "js-yaml": "4.3.2"
+    }
+  },
   "resolutions": {
     "wrap-ansi": "10.0.2",
     "string-width": "8.3.0"
