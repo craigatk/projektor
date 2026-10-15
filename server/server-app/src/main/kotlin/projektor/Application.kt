@@ -73,6 +73,7 @@ import projektor.notification.slack.SlackNotificationService
 import projektor.organization.coverage.OrganizationCoverageService
 import projektor.performance.PerformanceResultsService
 import projektor.processing.ProcessingConfig
+import projektor.pullrequest.PullRequestCoverageService
 import projektor.pullrequest.PullRequestFailureContextService
 import projektor.quality.CodeQualityReportRepository
 import projektor.repository.coverage.RepositoryCoverageRepository
@@ -243,6 +244,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     val codeQualityReportRepository: CodeQualityReportRepository by inject()
 
     val pullRequestFailureContextService: PullRequestFailureContextService by inject()
+    val pullRequestCoverageService: PullRequestCoverageService by inject()
 
     val repositorySlackChannelService: RepositorySlackChannelService by inject()
 
@@ -275,7 +277,15 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
         version()
     }
 
-    val projektorMcpServer = buildProjektorMcpServer(pullRequestFailureContextService)
+    val projektorMcpServer =
+        buildProjektorMcpServer(
+            pullRequestFailureContextService,
+            pullRequestCoverageService,
+            repositoryTestRunService,
+            testCaseService,
+            coverageService,
+            previousTestRunService,
+        )
     // DNS rebinding protection defends locally-bound dev servers reachable from a browser; this app is a
     // publicly deployed API server (same trust model as the rest of its routes, which use CORS anyHost()).
     mcpStatelessStreamableHttp(path = "/mcp", enableDnsRebindingProtection = false) { projektorMcpServer }

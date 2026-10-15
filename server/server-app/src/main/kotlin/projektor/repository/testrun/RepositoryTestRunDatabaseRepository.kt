@@ -9,6 +9,7 @@ import org.jooq.impl.DSL.count
 import org.jooq.impl.DSL.min
 import org.jooq.impl.DSL.noCondition
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
+import projektor.database.generated.Tables.CODE_COVERAGE_RUN
 import projektor.database.generated.Tables.GIT_METADATA
 import projektor.database.generated.Tables.RESULTS_METADATA
 import projektor.database.generated.Tables.TEST_CASE
@@ -182,6 +183,26 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                 .select(TEST_RUN.PUBLIC_ID)
                 .from(TEST_RUN)
                 .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                .where(
+                    GIT_METADATA.REPO_NAME.eq(repoName)
+                        .and(GIT_METADATA.PULL_REQUEST_NUMBER.eq(pullRequestNumber)),
+                )
+                .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                .limit(1)
+                .fetchOne(TEST_RUN.PUBLIC_ID)
+                ?.let { PublicId(it) }
+        }
+
+    override suspend fun fetchMostRecentTestRunPublicIdWithCoverage(
+        repoName: String,
+        pullRequestNumber: Int,
+    ): PublicId? =
+        withContext(Dispatchers.IO) {
+            dslContext
+                .select(TEST_RUN.PUBLIC_ID)
+                .from(TEST_RUN)
+                .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                .innerJoin(CODE_COVERAGE_RUN).on(TEST_RUN.PUBLIC_ID.eq(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID))
                 .where(
                     GIT_METADATA.REPO_NAME.eq(repoName)
                         .and(GIT_METADATA.PULL_REQUEST_NUMBER.eq(pullRequestNumber)),

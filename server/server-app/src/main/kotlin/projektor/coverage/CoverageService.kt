@@ -17,6 +17,8 @@ import projektor.server.api.coverage.Coverage
 import projektor.server.api.coverage.CoverageFile
 import projektor.server.api.coverage.CoverageStat
 import projektor.server.api.coverage.CoverageStats
+import projektor.server.api.coverage.UncoveredLines
+import projektor.server.api.coverage.UncoveredLinesFile
 import projektor.server.api.error.FailureBodyType
 import java.math.BigDecimal
 
@@ -165,6 +167,41 @@ class CoverageService(
         publicId: PublicId,
         groupName: String,
     ): List<CoverageFile> = coverageRepository.fetchCoverageFiles(publicId, groupName)
+
+    suspend fun getAllCoverageFiles(publicId: PublicId): List<GroupedCoverageFile> =
+        coverageRepository.fetchCoverageList(publicId).flatMap { coverageReport ->
+            coverageRepository.fetchCoverageFiles(publicId, coverageReport.name)
+                .map { coverageFile -> GroupedCoverageFile(coverageReport.name, coverageFile) }
+        }
+
+    /**
+     * Finds the files in a test run's coverage matching the given path. Coverage reports don't consistently
+     * record full repo-relative paths (e.g. Jacoco only knows the package directory), so the match is by
+     * path suffix in either direction - "CoverageService.kt", "projektor/coverage/CoverageService.kt", and
+     * "server/server-app/src/main/kotlin/projektor/coverage/CoverageService.kt" all match the same file.
+     */
+    suspend fun findUncoveredLines(
+        publicId: PublicId,
+        filePath: String,
+    ): UncoveredLines {
+        val requestedPath = normalizeCoverageFilePath(filePath)
+
+        val matchingFiles =
+            getAllCoverageFiles(publicId)
+                .filter { coverageFilePathsMatch(it.path, requestedPath) }
+                .map { (groupName, coverageFile) ->
+                    UncoveredLinesFile(
+                        groupName = groupName,
+                        filePath = coverageFile.fullPath(),
+                        lineStat = coverageFile.stats.lineStat,
+                        branchStat = coverageFile.stats.branchStat,
+                        missedLines = coverageFile.missedLines.toList(),
+                        partialLines = coverageFile.partialLines.toList(),
+                    )
+                }
+
+        return UncoveredLines(publicId.id, matchingFiles)
+    }
 
     suspend fun parseReport(coverageFilePayload: CoverageFilePayload): Pair<CoverageReport, List<CoverageFile>>? =
         withContext(Dispatchers.IO) {

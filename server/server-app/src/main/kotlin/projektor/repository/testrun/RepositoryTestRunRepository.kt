@@ -36,6 +36,11 @@ interface RepositoryTestRunRepository {
         pullRequestNumber: Int,
     ): PublicId?
 
+    suspend fun fetchMostRecentTestRunPublicIdWithCoverage(
+        repoName: String,
+        pullRequestNumber: Int,
+    ): PublicId?
+
     suspend fun fetchTestRunCount(
         repoName: String,
         projectName: String?,
