@@ -82,6 +82,20 @@ class McpPullRequestFailureContextApplicationTest : ApplicationTestCase() {
             expectThat(bodyText).contains("\"type\":\"object\"")
             expectThat(bodyText).not { contains("\"is_string\"") }
             expectThat(bodyText).not { contains("coerceToInlineType") }
+
+            listOf(
+                GET_PULL_REQUEST_FAILING_TEST_CONTEXT,
+                GET_FLAKY_TESTS,
+                GET_TEST_CASE_HISTORY,
+                GET_COVERAGE_DELTA,
+                GET_UNCOVERED_LINES,
+            ).forEach { toolName -> expectThat(bodyText).contains("\"name\":\"$toolName\"") }
+
+            expectThat(bodyText).contains("\"readOnlyHint\":true")
+            expectThat(bodyText).contains("\"required\":[\"filePath\"]")
+            expectThat(bodyText).contains("\"enum\":[\"MAINLINE\",\"ALL\"]")
+            expectThat(bodyText).not { contains("read_only_hint") }
+            expectThat(bodyText).not { contains(":null") }
         }
 
     private fun callToolRequestBody(
@@ -165,6 +179,7 @@ class McpPullRequestFailureContextApplicationTest : ApplicationTestCase() {
             val bodyText = response.bodyAsText()
             expectThat(bodyText).contains(publicId.id)
             expectThat(bodyText).contains("failingTestSuite1TestCase1 failure message")
+            expectThat(bodyText).contains("\\\"test_suite_idx\\\":1")
             expectThat(bodyText).contains("\"type\":\"text\"")
             expectThat(bodyText).not { contains("\"type\":\"TEXT\"") }
         }

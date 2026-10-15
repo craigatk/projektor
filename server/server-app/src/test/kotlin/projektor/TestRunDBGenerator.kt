@@ -229,6 +229,7 @@ class TestRunDBGenerator(
         repoName: String,
         branchName: String = "main",
         projectName: String? = null,
+        pullRequestNumber: Int? = null,
     ): TestRunDB =
         createTestRunWithCoverageAndGitMetadata(
             publicId,
@@ -236,6 +237,7 @@ class TestRunDBGenerator(
             repoName,
             branchName,
             projectName,
+            pullRequestNumber,
         )
 
     fun createTestRunWithCoverageAndGitMetadata(
@@ -244,9 +246,10 @@ class TestRunDBGenerator(
         repoName: String,
         branchName: String = "main",
         projectName: String? = null,
+        pullRequestNumber: Int? = null,
     ): TestRunDB {
         val testRunDB = createSimpleTestRun(publicId)
-        addGitMetadata(testRunDB, repoName, branchName == "main", branchName, projectName, null, null)
+        addGitMetadata(testRunDB, repoName, branchName == "main", branchName, projectName, pullRequestNumber, null)
         runBlocking { coverageService.saveReport(coverageFilePayload, publicId) }
 
         return testRunDB

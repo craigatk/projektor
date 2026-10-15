@@ -27,7 +27,9 @@ class PullRequestFailureContextService(
         val testCaseContexts =
             failedTestCases.mapNotNull { testCase ->
                 testCaseService.buildTestCaseDebugContext(publicId, testCase.testSuiteIdx, testCase.idx)
-                    ?.let { debugContext -> TestCaseFailureContext(testCase.fullName, debugContext.markdown) }
+                    ?.let { debugContext ->
+                        TestCaseFailureContext(testCase.fullName, testCase.testSuiteIdx, testCase.idx, debugContext.markdown)
+                    }
             }
 
         return PullRequestFailureContext(publicId.id, testCaseContexts)
