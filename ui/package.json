@@ -36,7 +36,7 @@
     "cypress": "16.2.0",
     "del": "9.0.1",
     "env-cmd": "11.0.0",
-    "jsdom": "30.1.2",
+    "jsdom": "30.1.3",
     "prettier": "3.9.10",
     "process": "0.11.10",
     "projektor-publish": "3.13.15",
