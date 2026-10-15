@@ -69,9 +69,9 @@ Cypress.Commands.add("releaseShift", () =>
   cy.get("body").type("{shift}", { release: true })
 );
 
-Cypress.Commands.add("getByRole", role =>
+Cypress.Commands.add("getByRoleAttribute", role =>
     cy.get(`[role="${role}"]`)
 );
 Cypress.Commands.add("roleShouldExist", role =>
-    cy.getByRole(role).should("exist")
+    cy.getByRoleAttribute(role).should("exist")
 );
