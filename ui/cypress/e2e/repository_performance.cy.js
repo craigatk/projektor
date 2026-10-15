@@ -26,7 +26,7 @@ describe("repository performance", () => {
     publicIds.forEach((publicId) => cy.roleShouldExist(`dot-p95-${publicId}`));
 
     const publicIdToClick = publicIds[1];
-    cy.getByRole(`dot-p95-${publicIdToClick}`).click();
+    cy.getByRoleAttribute(`dot-p95-${publicIdToClick}`).click();
     cy.url().should("contain", `/tests/${publicIdToClick}`);
   });
 
@@ -70,7 +70,7 @@ describe("repository performance", () => {
 
     cy.testIdShouldExist("repository-performance-timeline-graph");
 
-    cy.getByRole(`dot-p95-${publicId}`).trigger("mouseover");
+    cy.getByRoleAttribute(`dot-p95-${publicId}`).trigger("mouseover");
 
     cy.testIdShouldExist("performance-timeline-graph-tooltip");
 
