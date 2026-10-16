@@ -32,6 +32,7 @@ version '1.0'
 
 dependencies {
     implementation project(':server:ai:analysis')
+    implementation project(':server:ai:anthropic')
     implementation project(':server:ai:openai')
     implementation project(':server:notification:badge')
     implementation project(':server:notification:github')

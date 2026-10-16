@@ -77,6 +77,38 @@ class ConfigApplicationTest : ApplicationTestCase() {
         }
 
     @Test
+    fun `should return test case failure analysis enabled when Anthropic is the configured provider`() =
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                aiProvider = "anthropic",
+                anthropicApiKey = "bXktYXBpLWtleQo=",
+            ),
+        ) {
+            val response = client.get("/config")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val serverConfig = objectMapper.readValue(response.bodyAsText(), ServerConfig::class.java)
+            expectThat(serverConfig.aiConfig.testCaseFailureAnalysisEnabled).isTrue()
+        }
+
+    @Test
+    fun `should return test case failure analysis disabled when Anthropic is the configured provider but its API key is not set`() =
+        projektorTestApplication(
+            ApplicationTestCaseConfig(
+                aiProvider = "anthropic",
+                openAIApiKey = "bXktYXBpLWtleQo=",
+            ),
+        ) {
+            val response = client.get("/config")
+
+            expectThat(response.status).isEqualTo(HttpStatusCode.OK)
+
+            val serverConfig = objectMapper.readValue(response.bodyAsText(), ServerConfig::class.java)
+            expectThat(serverConfig.aiConfig.testCaseFailureAnalysisEnabled).isFalse()
+        }
+
+    @Test
     fun `should return Slack enabled when Slack API URL and bot token are set`() =
         projektorTestApplication(
             ApplicationTestCaseConfig(
