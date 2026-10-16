@@ -175,6 +175,8 @@ open class ApplicationTestCase {
                 testCaseConfig.slackFlakyFailureThreshold?.let { put("ktor.notification.slack.flakyFailureThreshold", it.toString()) }
 
                 testCaseConfig.openAIApiKey?.let { put("ktor.ai.openAIApiKey", it) }
+                testCaseConfig.anthropicApiKey?.let { put("ktor.ai.anthropicApiKey", it) }
+                testCaseConfig.aiProvider?.let { put("ktor.ai.provider", it) }
             }
 
         return config

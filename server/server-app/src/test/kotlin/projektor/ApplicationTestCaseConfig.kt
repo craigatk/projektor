@@ -26,4 +26,6 @@ data class ApplicationTestCaseConfig(
     val slackBotToken: String? = null,
     val slackFlakyFailureThreshold: Int? = null,
     val openAIApiKey: String? = null,
+    val anthropicApiKey: String? = null,
+    val aiProvider: String? = null,
 )

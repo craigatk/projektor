@@ -28,7 +28,9 @@ import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.SLF4JLogger
 import projektor.ai.AIConfig
+import projektor.ai.AIProvider
 import projektor.ai.analysis.AITestFailureAnalyzer
+import projektor.ai.anthropic.AnthropicAnalysisClient
 import projektor.ai.openai.OpenAIAnalysisClient
 import projektor.attachment.AttachmentConfig
 import projektor.attachment.AttachmentDatabaseRepository
@@ -338,4 +340,12 @@ private fun conditionallyCreateSlackNotificationService(slackNotificationConfig:
     }
 }
 
-private fun conditionallyCreateAITestFailureAnalyzer(aiConfig: AIConfig) = aiConfig.openAIApiKey?.let { OpenAIAnalysisClient(it) }
+private fun conditionallyCreateAITestFailureAnalyzer(aiConfig: AIConfig): AITestFailureAnalyzer? =
+    when (aiConfig.provider) {
+        AIProvider.OPENAI -> aiConfig.openAIApiKey?.let { OpenAIAnalysisClient(it) }
+        AIProvider.ANTHROPIC ->
+            aiConfig.anthropicApiKey?.let {
+                AnthropicAnalysisClient(apiKey = it, model = aiConfig.anthropicModel ?: AnthropicAnalysisClient.DEFAULT_MODEL)
+            }
+        null -> null
+    }
