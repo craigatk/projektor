@@ -4,6 +4,11 @@
 
 Full list of releases and the packaged server .jar file for each release at: https://github.com/craigatk/projektor/releases
 
+* v6.4.0
+  * Adding failure clustering by normalized root cause
+  * Adding slow test regression detection
+  * Adding Slack notifications for mainline failures, coverage drops, and new flaky tests
+  * Adding MCP tools for flaky tests, test history, and coverage
 * v6.3.0
   * Adding test case history tab
 * v6.2.0
