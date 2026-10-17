@@ -165,11 +165,20 @@ lease once expired. `SchedulerLock` accepts a `LockProvider` instead of building
     text/binary transfer mode; the object store returns the binary-mode form (`3.0`), and the parity test compares
     medians by value.
 
-### Phase 4: wiring and operations
+### Phase 4: wiring and operations — DONE (except telemetry)
 
-- Koin module per backend, `ObjectStoreLockProvider`, config parsing in `PersistenceConfig.createPersistenceConfig`.
-- Health check, OpenTelemetry spans matching the DB repositories, Micrometer timers on object-store calls.
-- MinIO-backed `server-app` run profile in the local docker-compose.
+- `PERSISTENCE_TYPE=object-store` selects `ObjectStorePersistence`, configured by `PERSISTENCE_OBJECT_STORE_URL`,
+  `_BUCKET_NAME`, `_ACCESS_KEY`, `_SECRET_KEY`, optional `_KEY_PREFIX`, and `_AUTO_CREATE_BUCKET` (otherwise startup
+  fails if the bucket doesn't exist). Parsed by `ObjectStorePersistenceConfig`.
+- `ObjectStoreLockProvider`: ShedLock leases at `locks/{name}.json`, taken with create-if-missing or replace-if-expired
+  conditional writes and released by shortening the lease with an `If-Match` write (so releasing an expired lock
+  can't release the instance that took it over).
+- `ApplicationTestCaseConfig(objectStorePersistence = true)` runs application tests on the object-store backend;
+  `ObjectStorePersistenceApplicationTest` publishes results over HTTP and checks the run, suite, case, history, git
+  metadata, coverage, previous run, repository timelines, org coverage and pinning endpoints.
+- Health check needed no change (it doesn't touch the database). Local run instructions in `server-app/README.md`.
+- Not done: OpenTelemetry spans and Micrometer timers on the object-store repositories. The database backend only
+  has spans on a few methods, so this isn't a parity gap, but object-store latency won't be visible in metrics yet.
 
 ### Phase 5: tests
 

@@ -29,4 +29,43 @@ class PersistenceConfigTest {
 
         expectThrows<IllegalArgumentException> { PersistenceConfig.createPersistenceConfig(applicationConfig) }
     }
+
+    @Test
+    fun `should parse object-store persistence config`() {
+        val applicationConfig =
+            MapApplicationConfig(
+                "ktor.persistence.type" to "object-store",
+                "ktor.persistence.objectStore.url" to "http://localhost:9000",
+                "ktor.persistence.objectStore.bucketName" to "projektor",
+                "ktor.persistence.objectStore.accessKey" to "access",
+                "ktor.persistence.objectStore.secretKey" to "secret",
+                "ktor.persistence.objectStore.keyPrefix" to "prod",
+                "ktor.persistence.objectStore.autoCreateBucket" to "true",
+            )
+
+        expectThat(PersistenceConfig.createPersistenceConfig(applicationConfig).type).isEqualTo(PersistenceType.OBJECT_STORE)
+        expectThat(ObjectStorePersistenceConfig.createObjectStorePersistenceConfig(applicationConfig))
+            .isEqualTo(ObjectStorePersistenceConfig("http://localhost:9000", "projektor", "access", "secret", "prod", true))
+    }
+
+    @Test
+    fun `should default object-store key prefix and bucket creation`() {
+        val applicationConfig =
+            MapApplicationConfig(
+                "ktor.persistence.objectStore.url" to "http://localhost:9000",
+                "ktor.persistence.objectStore.bucketName" to "projektor",
+                "ktor.persistence.objectStore.accessKey" to "access",
+                "ktor.persistence.objectStore.secretKey" to "secret",
+            )
+
+        expectThat(ObjectStorePersistenceConfig.createObjectStorePersistenceConfig(applicationConfig))
+            .isEqualTo(ObjectStorePersistenceConfig("http://localhost:9000", "projektor", "access", "secret", "", false))
+    }
+
+    @Test
+    fun `should fail when required object-store config is missing`() {
+        val applicationConfig = MapApplicationConfig("ktor.persistence.objectStore.url" to "http://localhost:9000")
+
+        expectThrows<IllegalArgumentException> { ObjectStorePersistenceConfig.createObjectStorePersistenceConfig(applicationConfig) }
+    }
 }

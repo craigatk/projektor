@@ -28,6 +28,7 @@ import projektor.repository.performance.RepositoryPerformanceObjectStoreReposito
 import projektor.repository.performance.RepositoryPerformanceRepository
 import projektor.repository.testrun.RepositoryTestRunObjectStoreRepository
 import projektor.repository.testrun.RepositoryTestRunRepository
+import projektor.schedule.SchedulerLock
 import projektor.testcase.TestCaseObjectStoreRepository
 import projektor.testcase.TestCaseRepository
 import projektor.testrun.TestRunObjectStoreRepository
@@ -38,10 +39,7 @@ import projektor.testsuite.TestSuiteObjectStoreRepository
 import projektor.testsuite.TestSuiteRepository
 
 /**
- * Repositories for the object-store persistence backend.
- *
- * Not yet complete: the scheduler lock comes in phase 4 of the object-store persistence plan,
- * so this backend can't be selected with PERSISTENCE_TYPE yet.
+ * Repositories and scheduler lock for the object-store persistence backend.
  */
 fun createObjectStorePersistenceModule(store: JsonObjectStore) =
     module {
@@ -67,4 +65,6 @@ fun createObjectStorePersistenceModule(store: JsonObjectStore) =
         single<PreviousTestRunRepository> { PreviousTestRunObjectStoreRepository(get(), get()) }
         single<OrganizationCoverageRepository> { OrganizationCoverageObjectStoreRepository(get()) }
         single<RepositorySlackChannelRepository> { RepositorySlackChannelObjectStoreRepository(get()) }
+
+        single { SchedulerLock(ObjectStoreLockProvider(get())) }
     }

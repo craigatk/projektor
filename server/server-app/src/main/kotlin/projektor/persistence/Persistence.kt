@@ -5,6 +5,7 @@ import io.micrometer.core.instrument.MeterRegistry
 import org.koin.core.module.Module
 import projektor.attachment.AttachmentRepository
 import projektor.database.DataSourceConfig
+import projektor.persistence.objectstore.ObjectStorePersistence
 import java.io.Closeable
 
 /**
@@ -25,6 +26,8 @@ interface Persistence : Closeable {
             when (PersistenceConfig.createPersistenceConfig(applicationConfig).type) {
                 PersistenceType.DATABASE ->
                     DatabasePersistence.create(DataSourceConfig.createDataSourceConfig(applicationConfig), metricRegistry)
+                PersistenceType.OBJECT_STORE ->
+                    ObjectStorePersistence.create(ObjectStorePersistenceConfig.createObjectStorePersistenceConfig(applicationConfig))
             }
     }
 }
