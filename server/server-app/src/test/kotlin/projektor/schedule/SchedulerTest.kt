@@ -1,5 +1,6 @@
 package projektor.schedule
 
+import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.Test
@@ -23,7 +24,7 @@ class SchedulerTest : DatabaseRepositoryTestCase() {
                 schedulerCalled = true
             }
 
-        val schedulerLock = SchedulerLock(dataSource)
+        val schedulerLock = SchedulerLock(JdbcTemplateLockProvider(dataSource))
         val scheduler = Scheduler(schedulerLock)
         val jobName = "my_scheduled_job"
 

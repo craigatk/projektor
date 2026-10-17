@@ -33,7 +33,6 @@ import projektor.ai.analysis.AITestFailureAnalyzer
 import projektor.ai.anthropic.AnthropicAnalysisClient
 import projektor.ai.openai.OpenAIAnalysisClient
 import projektor.attachment.AttachmentConfig
-import projektor.attachment.AttachmentDatabaseRepository
 import projektor.attachment.AttachmentRepository
 import projektor.attachment.AttachmentService
 import projektor.auth.AuthConfig
@@ -46,7 +45,6 @@ import projektor.cleanup.CleanupScheduledJob
 import projektor.cleanup.TestRunCleanupService
 import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageService
-import projektor.database.DataSourceConfig
 import projektor.error.ProcessingFailureService
 import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
@@ -74,6 +72,7 @@ import projektor.notification.slack.SlackNotificationConfig
 import projektor.notification.slack.SlackNotificationService
 import projektor.organization.coverage.OrganizationCoverageService
 import projektor.performance.PerformanceResultsService
+import projektor.persistence.Persistence
 import projektor.processing.ProcessingConfig
 import projektor.pullrequest.PullRequestCoverageService
 import projektor.pullrequest.PullRequestFailureContextService
@@ -100,10 +99,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     val influxMetricsConfig = InfluxMetricsConfig.createInfluxMetricsConfig(applicationConfig)
     val metricRegistry = meterRegistry ?: createRegistry(influxMetricsConfig)
 
-    val dataSourceConfig = DataSourceConfig.createDataSourceConfig(applicationConfig)
-    val dataSource = DataSourceConfig.createDataSource(dataSourceConfig, metricRegistry)
-    DataSourceConfig.flywayMigrate(dataSource, dataSourceConfig)
-    val dslContext = DataSourceConfig.createDSLContext(dataSource, dataSourceConfig)
+    val persistence = Persistence.createPersistence(applicationConfig, metricRegistry)
 
     val aiConfig = AIConfig.createAIConfig(applicationConfig)
 
@@ -120,17 +116,14 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     val slackNotificationConfig = SlackNotificationConfig.createSlackNotificationConfig(applicationConfig)
     val slackNotificationService = conditionallyCreateSlackNotificationService(slackNotificationConfig)
 
-    val attachmentRepository: AttachmentRepository = AttachmentDatabaseRepository(dslContext)
-    val attachmentService = conditionallyCreateAttachmentService(applicationConfig, attachmentRepository)
+    val attachmentService = conditionallyCreateAttachmentService(applicationConfig, persistence.attachmentRepository)
     attachmentService?.conditionallyCreateBucketIfNotExists()
 
     val aiTestFailureAnalyzer: AITestFailureAnalyzer? = conditionallyCreateAITestFailureAnalyzer(aiConfig)
 
     val appModule =
         createAppModule(
-            dataSource = dataSource,
             authConfig = authConfig,
-            dslContext = dslContext,
             metricRegistry = metricRegistry,
             messageConfig = messageConfig,
             notificationConfig = notificationConfig,
@@ -160,7 +153,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     }
     install(Koin) {
         SLF4JLogger()
-        modules(appModule)
+        modules(persistence.koinModule, appModule)
     }
     install(CachingHeaders) {
         options { _, outgoingContent ->
@@ -193,8 +186,8 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
 
     environment.monitor.subscribe(ApplicationStopped) {
         log.info("Application stopping")
-        dataSource.close()
-        log.info("Datasource closed")
+        persistence.close()
+        log.info("Persistence closed")
     }
 
     val authService: AuthService by inject()

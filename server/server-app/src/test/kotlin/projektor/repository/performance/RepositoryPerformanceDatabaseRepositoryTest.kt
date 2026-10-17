@@ -36,7 +36,7 @@ class RepositoryPerformanceDatabaseRepositoryTest : DatabaseRepositoryTestCase()
                 p95 = BigDecimal("30.48"),
             )
         val performanceResultsRepository: PerformanceResultsRepository by inject()
-        runBlocking { performanceResultsRepository.savePerformanceResults(testRunDB.id, publicId, savedPerfResult1) }
+        runBlocking { performanceResultsRepository.savePerformanceResults(publicId, savedPerfResult1) }
 
         val entries = runBlocking { repositoryPerformanceRepository.fetchTestTimelineEntries(repoName, null) }
 

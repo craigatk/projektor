@@ -19,16 +19,16 @@ interface TestRunRepository {
     suspend fun saveGroupedTestRun(
         publicId: PublicId,
         groupedResults: GroupedResults,
-    ): Pair<Long, TestRunSummary>
+    ): TestRunSummary
 
     suspend fun appendTestSuites(
         publicId: PublicId,
         startingIdx: Int,
         groupedTestSuites: List<GroupedTestSuites>,
-    ): Long
+    )
 
     suspend fun updateTestRunSummary(
-        testRunId: Long,
+        publicId: PublicId,
         testSuites: List<TestSuiteApi>,
         wallClockDuration: BigDecimal?,
     ): TestRunSummary
@@ -37,6 +37,12 @@ interface TestRunRepository {
 
     suspend fun fetchTestRunSummary(publicId: PublicId): TestRunSummary?
 
+    /**
+     * Deletes the test run and the data owned by it: test suites, test cases, failures, suite groups,
+     * results and git metadata, system attributes, performance results, and code quality reports.
+     * Coverage, attachments and results processing status are NOT deleted here; callers remove those
+     * through their own repositories (see TestRunCleanupService).
+     */
     suspend fun deleteTestRun(publicId: PublicId)
 
     suspend fun findTestRunsCreatedBeforeAndNotPinned(createdBefore: LocalDate): List<PublicId>

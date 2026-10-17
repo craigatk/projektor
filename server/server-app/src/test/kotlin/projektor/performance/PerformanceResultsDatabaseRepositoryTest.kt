@@ -19,7 +19,7 @@ class PerformanceResultsDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
         val publicId = randomPublicId()
 
-        val testRun = testRunDBGenerator.createEmptyTestRun(publicId)
+        testRunDBGenerator.createEmptyTestRun(publicId)
 
         val result =
             PerformanceResult(
@@ -33,7 +33,6 @@ class PerformanceResultsDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
         runBlocking {
             performanceResultsDatabaseRepository.savePerformanceResults(
-                testRun.id,
                 publicId,
                 result,
             )

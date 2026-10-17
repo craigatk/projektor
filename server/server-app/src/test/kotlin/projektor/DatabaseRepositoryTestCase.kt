@@ -42,6 +42,7 @@ import projektor.metrics.createRegistry
 import projektor.notification.NotificationConfig
 import projektor.notification.slack.SlackNotificationConfig
 import projektor.parser.grouped.GroupedResultsParser
+import projektor.persistence.createDatabasePersistenceModule
 import projektor.processing.ProcessingConfig
 import java.util.TimeZone
 
@@ -125,10 +126,9 @@ open class DatabaseRepositoryTestCase : KoinTest {
         stopKoin()
         startKoin {
             modules(
+                createDatabasePersistenceModule(dataSource, dslContext),
                 createAppModule(
-                    dataSource,
                     AuthConfig(null),
-                    dslContext,
                     createRegistry(metricsConfig),
                     MessageConfig(listOf()),
                     NotificationConfig(null),

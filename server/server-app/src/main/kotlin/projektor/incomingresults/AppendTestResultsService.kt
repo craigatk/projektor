@@ -25,25 +25,22 @@ class AppendTestResultsService(
     suspend fun appendGroupedTestRun(
         existingPublicId: PublicId,
         groupedResults: GroupedResults,
-    ): Pair<Long, TestRunSummary> =
+    ): TestRunSummary =
         withContext(Dispatchers.IO) {
             // Find the highest test suite index for the existing public ID
             val highestExistingTestSuiteIdx = testSuiteRepository.fetchHighestTestSuiteIndex(existingPublicId) ?: 0
 
             // Save the test suites, starting with that highest index
-            val testRunId =
-                testRunRepository.appendTestSuites(
-                    existingPublicId,
-                    highestExistingTestSuiteIdx + 1,
-                    groupedResults.groupedTestSuites,
-                )
+            testRunRepository.appendTestSuites(
+                existingPublicId,
+                highestExistingTestSuiteIdx + 1,
+                groupedResults.groupedTestSuites,
+            )
 
             // Fetch back all the test suites
             val allTestSuites = testSuiteRepository.fetchTestSuitesWithCases(existingPublicId)
 
             // Calculate the new top-level test run data using all the test suites and update the values
-            val testRunSummary = testRunRepository.updateTestRunSummary(testRunId, allTestSuites, groupedResults.wallClockDuration)
-
-            Pair(testRunId, testRunSummary)
+            testRunRepository.updateTestRunSummary(existingPublicId, allTestSuites, groupedResults.wallClockDuration)
         }
 }

@@ -64,28 +64,25 @@ class RepositoryPerformanceTimelineApplicationTest : ApplicationTestCase() {
 
             val performanceResultsRepository: PerformanceResultsRepository = getApplication().get()
 
-            val firstTestRun = testRunDBGenerator.createEmptyTestRunInRepo(firstRunPublicId, repoName, true, null)
+            testRunDBGenerator.createEmptyTestRunInRepo(firstRunPublicId, repoName, true, null)
             runBlocking {
                 performanceResultsRepository.savePerformanceResults(
-                    firstTestRun.id,
                     firstRunPublicId,
                     firstPerfResultToSave,
                 )
             }
 
-            val secondTestRun = testRunDBGenerator.createEmptyTestRunInRepo(secondRunPublicId, repoName, true, null)
+            testRunDBGenerator.createEmptyTestRunInRepo(secondRunPublicId, repoName, true, null)
             runBlocking {
                 performanceResultsRepository.savePerformanceResults(
-                    secondTestRun.id,
                     secondRunPublicId,
                     secondPerfResultToSave,
                 )
             }
 
-            val thirdTestRun = testRunDBGenerator.createEmptyTestRunInRepo(thirdRunPublicId, repoName, true, null)
+            testRunDBGenerator.createEmptyTestRunInRepo(thirdRunPublicId, repoName, true, null)
             runBlocking {
                 performanceResultsRepository.savePerformanceResults(
-                    thirdTestRun.id,
                     thirdRunPublicId,
                     thirdPerfResultToSave,
                 )
@@ -179,28 +176,25 @@ class RepositoryPerformanceTimelineApplicationTest : ApplicationTestCase() {
 
             val performanceResultsRepository: PerformanceResultsRepository = getApplication().get()
 
-            val firstTestRun = testRunDBGenerator.createEmptyTestRunInRepo(firstRunPublicId, repoName, true, projectName)
+            testRunDBGenerator.createEmptyTestRunInRepo(firstRunPublicId, repoName, true, projectName)
             runBlocking {
                 performanceResultsRepository.savePerformanceResults(
-                    firstTestRun.id,
                     firstRunPublicId,
                     firstPerfResultToSave,
                 )
             }
 
-            val secondTestRun = testRunDBGenerator.createEmptyTestRunInRepo(secondRunPublicId, repoName, true, projectName)
+            testRunDBGenerator.createEmptyTestRunInRepo(secondRunPublicId, repoName, true, projectName)
             runBlocking {
                 performanceResultsRepository.savePerformanceResults(
-                    secondTestRun.id,
                     secondRunPublicId,
                     secondPerfResultToSave,
                 )
             }
 
-            val thirdTestRun = testRunDBGenerator.createEmptyTestRunInRepo(thirdRunPublicId, repoName, true, projectName)
+            testRunDBGenerator.createEmptyTestRunInRepo(thirdRunPublicId, repoName, true, projectName)
             runBlocking {
                 performanceResultsRepository.savePerformanceResults(
-                    thirdTestRun.id,
                     thirdRunPublicId,
                     thirdPerfResultToSave,
                 )

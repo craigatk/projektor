@@ -9,6 +9,7 @@ import projektor.database.generated.tables.daos.PerformanceResultsDao
 import projektor.database.generated.tables.pojos.PerformanceResults
 import projektor.server.api.PublicId
 import projektor.server.api.performance.PerformanceResult
+import projektor.util.fetchTestRunId
 import projektor.incomingresults.model.PerformanceResult as IncomingPerformanceResult
 
 class PerformanceResultsDatabaseRepository(private val dslContext: DSLContext) : PerformanceResultsRepository {
@@ -17,13 +18,12 @@ class PerformanceResultsDatabaseRepository(private val dslContext: DSLContext) :
     private val performanceResultsDao = PerformanceResultsDao(dslContext.configuration())
 
     override suspend fun savePerformanceResults(
-        testRunId: Long,
         publicId: PublicId,
         results: IncomingPerformanceResult,
     ): PerformanceResult =
         withContext(Dispatchers.IO) {
             val performanceResults = PerformanceResults()
-            performanceResults.testRunId = testRunId
+            performanceResults.testRunId = fetchTestRunId(dslContext, publicId)
             performanceResults.testRunPublicId = publicId.id
             performanceResults.name = results.name
             performanceResults.requestsPerSecond = results.requestsPerSecond

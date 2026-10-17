@@ -5,7 +5,7 @@ import projektor.server.api.quality.CodeQualityReport
 
 interface CodeQualityReportRepository {
     suspend fun insertCodeQualityReports(
-        testRunId: Long,
+        publicId: PublicId,
         codeQualityReports: List<CodeQualityReport>,
     )
 

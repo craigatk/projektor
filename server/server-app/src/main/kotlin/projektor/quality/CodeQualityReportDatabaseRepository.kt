@@ -9,6 +9,7 @@ import projektor.database.generated.Tables.TEST_RUN
 import projektor.database.generated.tables.daos.CodeQualityReportDao
 import projektor.server.api.PublicId
 import projektor.server.api.quality.CodeQualityReport
+import projektor.util.fetchTestRunId
 import kotlin.streams.toList
 import projektor.database.generated.tables.pojos.CodeQualityReport as CodeQualityReportDB
 
@@ -22,9 +23,11 @@ class CodeQualityReportDatabaseRepository(private val dslContext: DSLContext) : 
             .newMapper(CodeQualityReport::class.java)
 
     override suspend fun insertCodeQualityReports(
-        testRunId: Long,
+        publicId: PublicId,
         codeQualityReports: List<CodeQualityReport>,
-    ) {
+    ) = withContext(Dispatchers.IO) {
+        val testRunId = fetchTestRunId(dslContext, publicId)
+
         codeQualityReports.forEach { codeQualityReport ->
             val codeQualityReportDB = CodeQualityReportDB()
             codeQualityReportDB.testRunId = testRunId
