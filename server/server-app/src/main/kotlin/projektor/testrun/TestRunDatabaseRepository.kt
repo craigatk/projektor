@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.Configuration
 import org.jooq.DSLContext
+import org.jooq.impl.DSL
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import org.slf4j.LoggerFactory
 import projektor.database.generated.Tables.GIT_METADATA
@@ -12,6 +13,7 @@ import projektor.database.generated.Tables.GIT_REPOSITORY
 import projektor.database.generated.Tables.RESULTS_METADATA
 import projektor.database.generated.Tables.TEST_RUN
 import projektor.database.generated.Tables.TEST_RUN_ATTACHMENT
+import projektor.database.generated.Tables.TEST_RUN_GROUP_CLAIM
 import projektor.database.generated.Tables.TEST_RUN_SYSTEM_ATTRIBUTES
 import projektor.database.generated.Tables.TEST_SUITE
 import projektor.database.generated.Tables.TEST_SUITE_GROUP
@@ -32,9 +34,10 @@ import projektor.incomingresults.model.ResultsMetadata
 import projektor.server.api.PublicId
 import projektor.server.api.TestRun
 import projektor.server.api.TestRunSummary
-import projektor.server.api.TestSuite
 import projektor.telemetry.startSpanWithParent
+import projektor.testsuite.TestSuiteDatabaseRepository
 import projektor.util.addPrefixToFields
+import projektor.util.lockUntilTransactionEnds
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
@@ -121,16 +124,26 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
         withContext(Dispatchers.IO) {
             logger.info("Starting appending test suites to $publicId")
 
-            var testSuiteStartingIndex = startingIdx
-
             dslContext.transaction { configuration ->
+                val transactionContext = DSL.using(configuration)
+                transactionContext.lockUntilTransactionEnds(testRunLockKey(publicId))
+
                 val testRunDao = TestRunDao(configuration)
                 val testSuiteGroupDao = TestSuiteGroupDao(configuration)
 
                 val testRunDB = testRunDao.fetchOneByPublicId(publicId.id)
 
+                // The suites are numbered from startingIdx + 1, unless a concurrent append already used those indexes
+                val highestExistingIdx =
+                    transactionContext
+                        .select(DSL.max(TEST_SUITE.IDX))
+                        .from(TEST_SUITE)
+                        .where(TEST_SUITE.TEST_RUN_ID.eq(testRunDB.id))
+                        .fetchOne(0, Int::class.java) ?: 0
+                var testSuiteStartingIndex = maxOf(startingIdx, highestExistingIdx)
+
                 groupedTestSuites.forEach { groupedTestSuites ->
-                    val existingTestSuiteDB = fetchTestSuiteGroup(testRunDB.id, groupedTestSuites.groupName)
+                    val existingTestSuiteDB = fetchTestSuiteGroup(transactionContext, testRunDB.id, groupedTestSuites.groupName)
 
                     val testSuiteGroupDB =
                         if (existingTestSuiteDB != null) {
@@ -151,31 +164,45 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
 
     override suspend fun updateTestRunSummary(
         publicId: PublicId,
-        testSuites: List<TestSuite>,
         wallClockDuration: BigDecimal?,
     ): TestRunSummary =
         withContext(Dispatchers.IO) {
-            val testRunDao = TestRunDao(dslContext.configuration())
-            val existingTestRun = testRunDao.fetchOneByPublicId(publicId.id)
+            dslContext.transactionResult { configuration ->
+                val transactionContext = DSL.using(configuration)
+                transactionContext.lockUntilTransactionEnds(testRunLockKey(publicId))
 
-            val updatedWallClockDuration: BigDecimal = (existingTestRun.wallClockDuration ?: BigDecimal.ZERO) + (wallClockDuration ?: BigDecimal.ZERO)
-
-            val testRunSummary =
-                toTestRunSummaryFromApi(publicId, testSuites, updatedWallClockDuration, Instant.now())
-            existingTestRun.averageDuration = testRunSummary.averageDuration
-            existingTestRun.cumulativeDuration = testRunSummary.cumulativeDuration
-            existingTestRun.passed = testRunSummary.passed
-            existingTestRun.slowestTestCaseDuration = testRunSummary.slowestTestCaseDuration
-            existingTestRun.totalFailureCount = testRunSummary.totalFailureCount
-            existingTestRun.totalPassingCount = testRunSummary.totalPassingCount
-            existingTestRun.totalSkippedCount = testRunSummary.totalSkippedCount
-            existingTestRun.totalTestCount = testRunSummary.totalTestCount
-            existingTestRun.wallClockDuration = testRunSummary.wallClockDuration
-
-            testRunDao.update(existingTestRun)
-
-            testRunSummary
+                updateTestRunSummary(transactionContext, publicId, wallClockDuration)
+            }
         }
+
+    private fun updateTestRunSummary(
+        transactionContext: DSLContext,
+        publicId: PublicId,
+        wallClockDuration: BigDecimal?,
+    ): TestRunSummary {
+        val testRunDao = TestRunDao(transactionContext.configuration())
+        val existingTestRun = testRunDao.fetchOneByPublicId(publicId.id)
+
+        val updatedWallClockDuration: BigDecimal = (existingTestRun.wallClockDuration ?: BigDecimal.ZERO) + (wallClockDuration ?: BigDecimal.ZERO)
+
+        val testSuites = TestSuiteDatabaseRepository.fetchTestSuitesWithCases(transactionContext, publicId)
+
+        val testRunSummary =
+            toTestRunSummaryFromApi(publicId, testSuites, updatedWallClockDuration, Instant.now())
+        existingTestRun.averageDuration = testRunSummary.averageDuration
+        existingTestRun.cumulativeDuration = testRunSummary.cumulativeDuration
+        existingTestRun.passed = testRunSummary.passed
+        existingTestRun.slowestTestCaseDuration = testRunSummary.slowestTestCaseDuration
+        existingTestRun.totalFailureCount = testRunSummary.totalFailureCount
+        existingTestRun.totalPassingCount = testRunSummary.totalPassingCount
+        existingTestRun.totalSkippedCount = testRunSummary.totalSkippedCount
+        existingTestRun.totalTestCount = testRunSummary.totalTestCount
+        existingTestRun.wallClockDuration = testRunSummary.wallClockDuration
+
+        testRunDao.update(existingTestRun)
+
+        return testRunSummary
+    }
 
     private fun saveTestSuites(
         testSuites: List<ParsedTestSuite>,
@@ -251,6 +278,7 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
     }
 
     private fun fetchTestSuiteGroup(
+        dslContext: DSLContext,
         testRunId: Long,
         groupName: String?,
     ): TestSuiteGroupDB? =
@@ -330,6 +358,11 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
                 testRun?.let {
                     testRunDao.deleteById(testRun.id)
                 }
+
+                DSL.using(configuration)
+                    .deleteFrom(TEST_RUN_GROUP_CLAIM)
+                    .where(TEST_RUN_GROUP_CLAIM.TEST_RUN_PUBLIC_ID.eq(publicId.id))
+                    .execute()
             }
         }
     }
@@ -340,21 +373,83 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
     override suspend fun findTestRunsCreatedBeforeAndNotPinnedWithAttachments(createdBefore: LocalDate): List<PublicId> =
         findTestRunsCreatedBeforeAndNotPinned(createdBefore, true)
 
+    override suspend fun claimTestRunGroup(
+        group: String,
+        repoName: String,
+        publicId: PublicId,
+    ): PublicId =
+        withContext(Dispatchers.IO) {
+            dslContext.transactionResult { configuration ->
+                val transactionContext = DSL.using(configuration)
+                transactionContext.lockUntilTransactionEnds("test-run-group:$repoName:$group")
+
+                val existingClaim =
+                    transactionContext
+                        .select(TEST_RUN_GROUP_CLAIM.TEST_RUN_PUBLIC_ID)
+                        .from(TEST_RUN_GROUP_CLAIM)
+                        .where(TEST_RUN_GROUP_CLAIM.REPO_NAME.eq(repoName).and(TEST_RUN_GROUP_CLAIM.GROUP_NAME.eq(group)))
+                        .fetchOne(TEST_RUN_GROUP_CLAIM.TEST_RUN_PUBLIC_ID)
+
+                if (existingClaim != null) {
+                    PublicId(existingClaim)
+                } else {
+                    // Test runs saved before group claims were added don't have a claim
+                    val owner = findTestRunWithGroup(transactionContext, group, repoName) ?: publicId
+
+                    transactionContext
+                        .insertInto(
+                            TEST_RUN_GROUP_CLAIM,
+                            TEST_RUN_GROUP_CLAIM.REPO_NAME,
+                            TEST_RUN_GROUP_CLAIM.GROUP_NAME,
+                            TEST_RUN_GROUP_CLAIM.TEST_RUN_PUBLIC_ID,
+                        )
+                        .values(repoName, group, owner.id)
+                        .execute()
+
+                    owner
+                }
+            }
+        }
+
+    override suspend fun releaseTestRunGroupClaim(
+        group: String,
+        repoName: String,
+        publicId: PublicId,
+    ) {
+        withContext(Dispatchers.IO) {
+            dslContext
+                .deleteFrom(TEST_RUN_GROUP_CLAIM)
+                .where(
+                    TEST_RUN_GROUP_CLAIM.REPO_NAME.eq(repoName)
+                        .and(TEST_RUN_GROUP_CLAIM.GROUP_NAME.eq(group))
+                        .and(TEST_RUN_GROUP_CLAIM.TEST_RUN_PUBLIC_ID.eq(publicId.id)),
+                )
+                .execute()
+        }
+    }
+
     override suspend fun findTestRunWithGroup(
         group: String,
         repoName: String,
     ): PublicId? =
         withContext(Dispatchers.IO) {
-            dslContext
-                .select(TEST_RUN.PUBLIC_ID)
-                .from(TEST_RUN)
-                .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
-                .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
-                .where(GIT_METADATA.REPO_NAME.eq(repoName).and(RESULTS_METADATA.GROUP.eq(group)))
-                .limit(1)
-                .fetchOneInto(String::class.java)
-                ?.let { PublicId(it) }
+            findTestRunWithGroup(dslContext, group, repoName)
         }
+
+    private fun findTestRunWithGroup(
+        dslContext: DSLContext,
+        group: String,
+        repoName: String,
+    ): PublicId? =
+        dslContext
+            .select(TEST_RUN.PUBLIC_ID)
+            .from(TEST_RUN)
+            .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+            .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
+            .where(GIT_METADATA.REPO_NAME.eq(repoName).and(RESULTS_METADATA.GROUP.eq(group)))
+            .limit(1)
+            .fetchOneInto(String::class.java)
+            ?.let { PublicId(it) }
 
     private suspend fun findTestRunsCreatedBeforeAndNotPinned(
         createdBefore: LocalDate,
@@ -385,4 +480,8 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
                 .fetchInto(String::class.java)
                 .map { PublicId(it) }
         }
+
+    companion object {
+        private fun testRunLockKey(publicId: PublicId) = "test-run:${publicId.id}"
+    }
 }

@@ -10,6 +10,14 @@ fun TableImpl<*>.addPrefixToFields(prefix: String): List<Field<*>> {
     return fields().map { it.`as`("${prefix}${it.name}") }
 }
 
+/**
+ * Takes a Postgres advisory lock on the key until the current transaction ends, serializing transactions that
+ * change the same data (e.g. appends to the same test run) without needing a row to lock.
+ */
+fun DSLContext.lockUntilTransactionEnds(key: String) {
+    fetch("select pg_advisory_xact_lock(hashtext(?))", key)
+}
+
 // Resolves the internal test run row ID so it doesn't need to leak out through the repository interfaces.
 // Throws NoDataFoundException if no test run exists with this public ID.
 fun fetchTestRunId(

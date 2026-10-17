@@ -4,6 +4,7 @@ import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import projektor.DatabaseCleanupLock
 import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedResults
 import projektor.incomingresults.model.GroupedTestSuites
@@ -25,6 +26,7 @@ import projektor.incomingresults.model.PerformanceResult as IncomingPerformanceR
  * Checks that the object-store backend's queries across test runs, backed by its indexes, return the same
  * results as the database backend for the same set of test runs.
  */
+@DatabaseCleanupLock(DatabaseCleanupLock.Mode.CREATES_CLEANUP_ELIGIBLE_TEST_RUNS)
 class ObjectStoreIndexParityTest : ObjectStoreParityTestCase() {
     private val orgName = RandomStringUtils.randomAlphabetic(12).lowercase()
     private val repoA = "$orgName/repo-a"

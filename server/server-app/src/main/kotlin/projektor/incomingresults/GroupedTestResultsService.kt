@@ -72,13 +72,20 @@ class GroupedTestResultsService(
 
         val group = groupedResults.metadata?.group
         val repoAndOrgName = groupedResults.metadata?.git?.repoName
-        val existingPublicIdWithGroup = appendTestResultsService.findExistingTestRunWithGroup(group, repoAndOrgName)
+        val groupOwnerPublicId = appendTestResultsService.claimTestRunGroup(group, repoAndOrgName, publicId)
+        val existingPublicIdWithGroup = groupOwnerPublicId?.takeIf { it != publicId }
 
         coroutineScope.launch {
-            if (existingPublicIdWithGroup != null) {
-                doAppendTestResults(existingPublicIdWithGroup, groupedResults, groupedResultsBlob)
-            } else {
-                doPersistTestResults(publicId, groupedResults, groupedResultsBlob)
+            // Processing errors are recorded by doAppendTestResults and doPersistTestResults, but recording them can
+            // fail too (e.g. when the server is shutting down), and nothing above this coroutine would handle that
+            try {
+                if (existingPublicIdWithGroup != null) {
+                    doAppendTestResults(existingPublicIdWithGroup, groupedResults, groupedResultsBlob)
+                } else {
+                    doPersistTestResults(publicId, groupedResults, groupedResultsBlob)
+                }
+            } catch (e: Exception) {
+                logger.error("Error processing test results $publicId", e)
             }
         }
 
@@ -126,8 +133,33 @@ class GroupedTestResultsService(
         } catch (e: Exception) {
             val errorMessage = "Error persisting test results: ${e.message}"
             logger.error(errorMessage, e)
+            // Released before the error is recorded, so uploads waiting to append stop waiting on a group that's free again
+            releaseGroupClaimIfNotSaved(publicId, groupedResults)
             testResultsProcessingService.recordResultsProcessingError(publicId, groupedResultsBlob, errorMessage)
             metricsService.incrementResultsProcessFailureCounter()
+        }
+    }
+
+    /**
+     * When the test run that claimed its results group fails to save, releases the claim so the next upload with the
+     * group starts a new test run instead of appending to one that doesn't exist. Keeps the claim when the test run
+     * was saved and a later step failed, since uploads can still append to it.
+     */
+    private suspend fun releaseGroupClaimIfNotSaved(
+        publicId: PublicId,
+        groupedResults: GroupedResults,
+    ) {
+        val group = groupedResults.metadata?.group
+        val repoName = groupedResults.metadata?.git?.repoName
+
+        if (group != null && repoName != null) {
+            try {
+                if (testRunRepository.fetchTestRunSummary(publicId) == null) {
+                    testRunRepository.releaseTestRunGroupClaim(group, repoName, publicId)
+                }
+            } catch (e: Exception) {
+                logger.error("Error releasing results group $group claim for test run $publicId", e)
+            }
         }
     }
 

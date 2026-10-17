@@ -3,6 +3,7 @@ package projektor.cleanup
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.test.get
+import projektor.DatabaseCleanupLock
 import projektor.DatabaseRepositoryTestCase
 import projektor.incomingresults.randomPublicId
 import strikt.api.expectThat
@@ -12,6 +13,7 @@ import strikt.assertions.hasSize
 import strikt.assertions.isNotNull
 import java.time.LocalDate
 
+@DatabaseCleanupLock(DatabaseCleanupLock.Mode.RUNS_CLEANUP)
 class AttachmentCleanupServiceTest : DatabaseRepositoryTestCase() {
     init {
         attachmentsEnabled = true

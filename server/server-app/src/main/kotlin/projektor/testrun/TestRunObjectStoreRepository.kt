@@ -23,11 +23,11 @@ import projektor.persistence.objectstore.TestSuiteDocument
 import projektor.persistence.objectstore.TestSuiteGroupDocument
 import projektor.persistence.objectstore.toApi
 import projektor.persistence.objectstore.toDocument
+import projektor.persistence.objectstore.toNestedApi
 import projektor.persistence.objectstore.toStoredScale
 import projektor.server.api.PublicId
 import projektor.server.api.TestRun
 import projektor.server.api.TestRunSummary
-import projektor.server.api.TestSuite
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
@@ -153,7 +153,6 @@ class TestRunObjectStoreRepository(
 
     override suspend fun updateTestRunSummary(
         publicId: PublicId,
-        testSuites: List<TestSuite>,
         wallClockDuration: BigDecimal?,
     ): TestRunSummary {
         lateinit var testRunSummary: TestRunSummary
@@ -161,6 +160,14 @@ class TestRunObjectStoreRepository(
         updateTestRunDocument(publicId) { current ->
             val updatedWallClockDuration: BigDecimal =
                 (current.summary.wallClockDuration ?: BigDecimal.ZERO) + (wallClockDuration ?: BigDecimal.ZERO)
+
+            // Calculated from the test suites in the version of the document being replaced, so an append that
+            // commits in between makes this update retry with that append's test suites included
+            val testCasesBySuite = documentStore.readAllTestCasesBlocking(publicId, current)
+            val testSuites =
+                current.testSuites.map { testSuite ->
+                    testSuite.toApi(testCasesBySuite[testSuite.idx].orEmpty().map { it.toNestedApi(publicId, current, testSuite) })
+                }
 
             // Matches the database repository, which returns the time of the update as the created timestamp
             // but leaves the stored created timestamp unchanged
@@ -199,7 +206,17 @@ class TestRunObjectStoreRepository(
             store.deletePrefix(ObjectStoreKeys.testRunPrefix(publicId))
         }
 
-        deletedTestRun?.let { testRunIndex.removeTestRun(publicId, it) }
+        deletedTestRun?.let { testRun ->
+            testRunIndex.removeTestRun(publicId, testRun)
+
+            val group = testRun.resultsMetadata?.group
+            val repoName = testRun.gitMetadata?.repoName
+            if (group != null && repoName != null) {
+                withContext(Dispatchers.IO) {
+                    releaseGroupClaim(repoName, group, publicId)
+                }
+            }
+        }
     }
 
     override suspend fun findTestRunsCreatedBeforeAndNotPinned(createdBefore: LocalDate): List<PublicId> =
@@ -207,6 +224,29 @@ class TestRunObjectStoreRepository(
 
     override suspend fun findTestRunsCreatedBeforeAndNotPinnedWithAttachments(createdBefore: LocalDate): List<PublicId> =
         findTestRunsCreatedBeforeAndNotPinned(createdBefore, withAttachmentsOnly = true)
+
+    override suspend fun claimTestRunGroup(
+        group: String,
+        repoName: String,
+        publicId: PublicId,
+    ): PublicId =
+        withContext(Dispatchers.IO) {
+            val claimKey = groupClaimKey(repoName, group)
+
+            // Only the first claim is written, every claim then reads back the winner
+            store.create(claimKey, GroupClaimDocument(publicId.id))
+            PublicId(store.read<GroupClaimDocument>(claimKey)!!.testRunPublicId)
+        }
+
+    override suspend fun releaseTestRunGroupClaim(
+        group: String,
+        repoName: String,
+        publicId: PublicId,
+    ) {
+        withContext(Dispatchers.IO) {
+            releaseGroupClaim(repoName, group, publicId)
+        }
+    }
 
     override suspend fun findTestRunWithGroup(
         group: String,
@@ -262,7 +302,27 @@ class TestRunObjectStoreRepository(
             }!!
         }
 
+    // A claim is only ever written when the group has no claim, so a claim owned by this test run can't change
+    // between reading and deleting it
+    private fun releaseGroupClaim(
+        repoName: String,
+        group: String,
+        publicId: PublicId,
+    ) {
+        val claimKey = groupClaimKey(repoName, group)
+        if (store.read<GroupClaimDocument>(claimKey)?.testRunPublicId == publicId.id) {
+            store.delete(claimKey)
+        }
+    }
+
+    data class GroupClaimDocument(val testRunPublicId: String)
+
     companion object {
+        private fun groupClaimKey(
+            repoName: String,
+            group: String,
+        ) = "${TestRunIndex.repositoryPrefix(repoName)}group-claims/${TestRunIndex.encodeKeySegment(group)}.json"
+
         // Like the database's group_name = ? lookup, a group without a name never matches an existing group
         private fun findTestSuiteGroup(
             testSuiteGroups: List<TestSuiteGroupDocument>,

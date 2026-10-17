@@ -20,12 +20,6 @@ import kotlin.streams.toList
 import kotlin.use
 
 class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuiteRepository {
-    private val testSuiteMapper =
-        JdbcMapperFactory.newInstance()
-            .addKeys("id", "test_cases_id", "test_cases_failure_id")
-            .ignorePropertyNotFound()
-            .newMapper(TestSuite::class.java)
-
     override suspend fun fetchTestSuite(
         testRunPublicId: PublicId,
         testSuiteIdx: Int,
@@ -75,18 +69,7 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
 
     override suspend fun fetchTestSuitesWithCases(testRunPublicId: PublicId): List<TestSuite> =
         withContext(Dispatchers.IO) {
-            val resultSet =
-                selectTestSuite(dslContext)
-                    .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
-                    .orderBy(TEST_SUITE.ID)
-                    .fetchResultSet()
-
-            val testSuites =
-                resultSet.use {
-                    testSuiteMapper.stream(resultSet).toList()
-                }
-
-            testSuites
+            fetchTestSuitesWithCases(dslContext, testRunPublicId)
         }
 
     override suspend fun fetchTestSuiteSystemErr(
@@ -126,6 +109,26 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
         }
 
     companion object {
+        private val testSuiteMapper =
+            JdbcMapperFactory.newInstance()
+                .addKeys("id", "test_cases_id", "test_cases_failure_id")
+                .ignorePropertyNotFound()
+                .newMapper(TestSuite::class.java)
+
+        // Takes the DSLContext so it can be used inside a transaction
+        fun fetchTestSuitesWithCases(
+            dslContext: DSLContext,
+            testRunPublicId: PublicId,
+        ): List<TestSuite> {
+            val resultSet =
+                selectTestSuite(dslContext)
+                    .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
+                    .orderBy(TEST_SUITE.ID)
+                    .fetchResultSet()
+
+            return resultSet.use { testSuiteMapper.stream(resultSet).toList() }
+        }
+
         val testSuiteFieldsToSelect = TEST_SUITE.fields().toList().minus(listOf(TEST_SUITE.SYSTEM_ERR, TEST_SUITE.SYSTEM_OUT))
 
         fun selectTestSuite(dslContext: DSLContext): SelectOnConditionStep<Record> =

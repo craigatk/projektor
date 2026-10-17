@@ -109,7 +109,7 @@ abstract class CoverageRepositoryTest : RepositoryTestCase() {
                 ),
             )
 
-        runBlocking { coverageRepository.insertCoverageFiles(publicId, "my-report", coverageReportFiles) }
+        runBlocking { coverageRepository.appendCoverageReport(publicId, coverageReport, coverageReportFiles) }
 
         val codeCoverageFiles = runBlocking { coverageRepository.fetchCoverageFiles(publicId, "my-report") }
 
@@ -177,7 +177,7 @@ abstract class CoverageRepositoryTest : RepositoryTestCase() {
                 ),
             )
 
-        runBlocking { coverageRepository.insertCoverageFiles(publicId, "my-report", coverageReportFiles) }
+        runBlocking { coverageRepository.appendCoverageReport(publicId, coverageReport, coverageReportFiles) }
 
         val coverageFiles = runBlocking { coverageRepository.fetchCoverageFiles(publicId, "my-report") }
         expectThat(coverageFiles).hasSize(2)
@@ -265,19 +265,83 @@ abstract class CoverageRepositoryTest : RepositoryTestCase() {
                 null,
             )
 
-        val newLineStat = CoverageStat(covered = 8, missed = 1)
+        val reportFiles = listOf(coverageFile("File1.kt", "path/File1.kt", listOf(3), 9))
 
-        val coverageGroupStatus =
-            runBlocking {
-                coverageRepository.upsertCoverageGroup(publicId, coverageReport, newLineStat)
-            }
-        expectThat(coverageGroupStatus).isEqualTo(CoverageGroupStatus.NEW)
+        runBlocking { coverageRepository.appendCoverageReport(publicId, coverageReport, reportFiles) }
 
-        val newCoverageGroupsFromDB = runBlocking { coverageRepository.fetchCoverageList(publicId) }
-        expectThat(newCoverageGroupsFromDB).hasSize(1).any {
+        // A new group keeps the report's stats
+        val newCoverageGroups = runBlocking { coverageRepository.fetchCoverageList(publicId) }
+        expectThat(newCoverageGroups).hasSize(1).any {
             get { name }.isEqualTo("my-report")
+            get { totalStats.statementStat }.isEqualTo(CoverageReportStat(75, 25))
+            get { totalStats.lineStat }.isEqualTo(CoverageReportStat(60, 0))
         }
+        expectThat(runBlocking { coverageRepository.fetchCoverageFiles(publicId, "my-report") }).hasSize(1)
     }
+
+    @Test
+    fun `when appending to existing coverage group should combine files and update line stats`() {
+        val publicId = randomPublicId()
+        testRunGenerator.createTestRun(publicId, listOf())
+
+        val coverageReport =
+            CoverageReport(
+                "my-report",
+                CoverageReportStats(
+                    statementStat = CoverageReportStat(75, 25),
+                    lineStat = CoverageReportStat(60, 0),
+                    branchStat = CoverageReportStat(33, 66),
+                ),
+                null,
+            )
+
+        runBlocking {
+            coverageRepository.appendCoverageReport(
+                publicId,
+                coverageReport,
+                listOf(coverageFile("File1.kt", "path/File1.kt", listOf(3, 4), 10)),
+            )
+            coverageRepository.appendCoverageReport(
+                publicId,
+                coverageReport,
+                listOf(
+                    coverageFile("File1.kt", "path/File1.kt", listOf(4, 5), 10),
+                    coverageFile("File2.kt", "path/File2.kt", listOf(1), 5),
+                ),
+            )
+        }
+
+        val files = runBlocking { coverageRepository.fetchCoverageFiles(publicId, "my-report") }.associateBy { it.fileName }
+        // Only lines missed by both reports are still missed
+        expectThat(files["File1.kt"]?.missedLines?.toList()).isEqualTo(listOf(4))
+        expectThat(files["File1.kt"]?.stats?.lineStat).isEqualTo(CoverageStat(9, 1))
+        expectThat(files["File2.kt"]?.stats?.lineStat).isEqualTo(CoverageStat(4, 1))
+
+        // The group's line stats are the sum of its files, and its statement and branch stats are zeroed
+        val groups = runBlocking { coverageRepository.fetchCoverageList(publicId) }
+        expectThat(groups).hasSize(1)
+        expectThat(groups[0].totalStats.lineStat).isEqualTo(CoverageReportStat(13, 2))
+        expectThat(groups[0].totalStats.statementStat).isEqualTo(CoverageReportStat(0, 0))
+    }
+
+    private fun coverageFile(
+        fileName: String,
+        filePath: String,
+        missedLines: List<Int>,
+        totalLines: Int,
+    ) = CoverageFile(
+        directoryName = "dir",
+        fileName = fileName,
+        stats =
+            CoverageStats(
+                statementStat = CoverageStat(totalLines - missedLines.size, missedLines.size),
+                lineStat = CoverageStat(totalLines - missedLines.size, missedLines.size),
+                branchStat = CoverageStat(0, 0),
+            ),
+        missedLines = missedLines.toTypedArray(),
+        partialLines = arrayOf(),
+        filePath = filePath,
+    )
 }
 
 class CoverageRepositoryDatabaseTest : CoverageRepositoryTest() {

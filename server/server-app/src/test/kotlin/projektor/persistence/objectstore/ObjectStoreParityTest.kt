@@ -2,7 +2,6 @@ package projektor.persistence.objectstore
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import projektor.coverage.CoverageGroupStatus
 import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedResults
 import projektor.incomingresults.model.GroupedTestSuites
@@ -10,11 +9,11 @@ import projektor.incomingresults.model.ResultsMetadata
 import projektor.incomingresults.randomPublicId
 import projektor.server.api.PublicId
 import projektor.server.api.attachments.Attachment
-import projektor.server.api.coverage.CoverageStat
 import projektor.server.api.quality.CodeQualityReport
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.testsuite.TestSuiteSearchCriteria
 import strikt.api.expectThat
+import strikt.assertions.contains
 import strikt.assertions.isEqualTo
 import strikt.assertions.isGreaterThan
 import java.math.BigDecimal
@@ -44,6 +43,8 @@ class ObjectStoreParityTest : ObjectStoreParityTestCase() {
                                 resultsXmlLoader.someIgnoredSomeFailing(),
                                 resultsXmlLoader.slow(),
                                 resultsXmlLoader.cypressAttachmentsSpecWithFilePath(),
+                                // Output on the test case rather than the test suite, with empty test suite output
+                                resultsXmlLoader.gradleSingleTestCaseSystemOutFail(),
                             ),
                             "Group2",
                             null,
@@ -85,6 +86,17 @@ class ObjectStoreParityTest : ObjectStoreParityTestCase() {
                 }
             }
         expectThat(output.value.orEmpty().length).isGreaterThan(0)
+
+        val testCaseWithOwnOutput = testCases.first { it.hasSystemOutTestCase && it.hasSystemErrTestCase }
+        val testCaseSystemOut =
+            runBlocking {
+                objectStore.testCaseRepository.fetchTestCaseSystemOut(
+                    publicId,
+                    testCaseWithOwnOutput.testSuiteIdx,
+                    testCaseWithOwnOutput.idx,
+                )
+            }
+        expectThat(testCaseSystemOut.value.orEmpty()).contains("LoggerContext")
 
         expectSameResult { it.testRunMetadataRepository.updateGitMetadata(publicId, 43, "def456") }
         expectSameResult { it.testRunMetadataRepository.fetchGitMetadata(publicId) }
@@ -129,8 +141,7 @@ class ObjectStoreParityTest : ObjectStoreParityTestCase() {
         expectSameResult { backend ->
             val startingIdx = backend.testSuiteRepository.fetchHighestTestSuiteIndex(publicId)!! + 1
             backend.testRunRepository.appendTestSuites(publicId, startingIdx, appendedSuites)
-            val allTestSuites = backend.testSuiteRepository.fetchTestSuitesWithCases(publicId)
-            backend.testRunRepository.updateTestRunSummary(publicId, allTestSuites, BigDecimal("5.5"))
+            backend.testRunRepository.updateTestRunSummary(publicId, BigDecimal("5.5"))
                 .copy(createdTimestamp = Instant.EPOCH)
         }
 
@@ -234,27 +245,36 @@ class ObjectStoreParityTest : ObjectStoreParityTestCase() {
         expectSameCoverage(publicId, listOf("server", "ui"))
 
         // Appending to the existing group, which updates the matching files and adds the new ones
-        expectSameResult { it.coverageRepository.upsertCoverageGroup(publicId, serverReport, CoverageStat(50, 5)) }
         expectSameResult {
-            it.coverageRepository.upsertCoverageFiles(
+            it.coverageRepository.appendCoverageReport(
                 publicId,
-                "server",
+                serverReport,
+                // Not including a file without a path, which the database counts in the group's line stats on every
+                // append without saving it, where the object store calculates the group's stats from its saved files
                 listOf(
                     coverageFile("File1.kt", "path/File1.kt", listOf(13), listOf(15)),
                     coverageFile("File3.kt", "path/File3.kt", listOf(30), listOf(31)),
-                    coverageFile("NoPath.kt", null, listOf(99), listOf()),
                 ),
             )
         }
         expectSameCoverage(publicId, listOf("server", "ui"))
 
-        // Appending a new group
+        // Appending a new group, then appending to it again
         val uiReport = coverageReport("ui", 10, 0, 20, 5, 1, 1)
-        val uiGroupStatus = runBlocking { objectStore.coverageRepository.upsertCoverageGroup(publicId, uiReport, CoverageStat(1, 1)) }
-        val databaseUiGroupStatus = runBlocking { database.coverageRepository.upsertCoverageGroup(publicId, uiReport, CoverageStat(1, 1)) }
-        expectThat(uiGroupStatus).isEqualTo(databaseUiGroupStatus).isEqualTo(CoverageGroupStatus.NEW)
         expectSameResult {
-            it.coverageRepository.insertCoverageFiles(publicId, "ui", listOf(coverageFile("App.tsx", "src/App.tsx", listOf(), listOf(3))))
+            it.coverageRepository.appendCoverageReport(
+                publicId,
+                uiReport,
+                listOf(coverageFile("App.tsx", "src/App.tsx", listOf(1, 2), listOf(3))),
+            )
+        }
+        expectSameCoverage(publicId, listOf("server", "ui"))
+        expectSameResult {
+            it.coverageRepository.appendCoverageReport(
+                publicId,
+                uiReport,
+                listOf(coverageFile("App.tsx", "src/App.tsx", listOf(2), listOf())),
+            )
         }
         expectSameCoverage(publicId, listOf("server", "ui"))
 
@@ -265,11 +285,11 @@ class ObjectStoreParityTest : ObjectStoreParityTestCase() {
 
     private fun expectSameTestRunData(publicId: PublicId) {
         // The database repository returns the test run's internal row ID as the summary ID, where the object store
-        // returns the public ID, so compare the summary separately via fetchTestRunSummary
-        expectSameResult {
-            it.testRunRepository.fetchTestRun(publicId)?.let {
-                    testRun ->
-                testRun.copy(summary = testRun.summary.copy(id = ""))
+        // returns the public ID, so compare the summary separately via fetchTestRunSummary. The database's query also
+        // doesn't order the test suites, so compare them in index order.
+        expectSameResult { backend ->
+            backend.testRunRepository.fetchTestRun(publicId)?.let { testRun ->
+                testRun.copy(summary = testRun.summary.copy(id = ""), testSuites = testRun.testSuites?.sortedBy { it.idx })
             }
         }
         expectSameResult { it.testRunRepository.fetchTestRunSummary(publicId) }

@@ -135,6 +135,14 @@ val orgName = RandomStringUtils.randomAlphabetic(12)
 When writing a new DB test, follow this — don't assume a clean table, and don't add manual
 cleanup logic; generate unique keys instead, matching the rest of the suite.
 
+**The one exception to random-key isolation is cleanup.** `TestRunCleanupService` /
+`AttachmentCleanupService` delete *every* old enough test run or attachment in the database, not just
+the test's own, and test classes run in parallel JVMs (`maxParallelForks`). Annotate the test class with
+`@DatabaseCleanupLock` (`projektor.DatabaseCleanupLock`, a cross-JVM Postgres advisory lock):
+`Mode.RUNS_CLEANUP` if it runs a cleanup, `Mode.CREATES_CLEANUP_ELIGIBLE_TEST_RUNS` if it saves test runs
+created more than 14 days ago. Otherwise a cleanup in another test class can delete the test's data
+mid-test (e.g. a foreign key error inserting coverage for a test run that was just deleted).
+
 **Fixture data**: use `TestRunDBGenerator` (a test field, `testRunDBGenerator`, already
 wired up in `DatabaseRepositoryTestCase`) rather than hand-rolling inserts for anything
 resembling a full test run — `createTestRun(...)`, `createTestRunInRepo(...)`,

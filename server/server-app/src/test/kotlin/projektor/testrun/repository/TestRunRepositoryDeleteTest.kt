@@ -2,6 +2,7 @@ package projektor.testrun.repository
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
+import projektor.DatabaseCleanupLock
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
 import projektor.persistence.DatabaseTestBackend
@@ -15,6 +16,7 @@ import strikt.assertions.isEmpty
 import strikt.assertions.isNull
 import java.time.LocalDate
 
+@DatabaseCleanupLock(DatabaseCleanupLock.Mode.CREATES_CLEANUP_ELIGIBLE_TEST_RUNS)
 abstract class TestRunRepositoryDeleteTest : RepositoryTestCase() {
     @Test
     fun `should delete test run`() {

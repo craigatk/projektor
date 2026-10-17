@@ -51,6 +51,19 @@ class TestRunDocumentStore(val store: JsonObjectStore) {
                 .associate { it.testSuiteIdx to it.testCases }
         }
 
+    /**
+     * Blocking version of [readAllTestCases], for use inside a compare-and-swap update.
+     */
+    fun readAllTestCasesBlocking(
+        publicId: PublicId,
+        testRun: TestRunDocument,
+    ): Map<Int, List<TestCaseDocument>> =
+        testRun.testSuites
+            .map { it.testCaseChunk }
+            .distinct()
+            .flatMap { chunk -> readTestCaseChunk(publicId, chunk)?.testSuites.orEmpty() }
+            .associate { it.testSuiteIdx to it.testCases }
+
     suspend fun readTestCases(
         publicId: PublicId,
         testSuite: TestSuiteDocument,
@@ -292,7 +305,8 @@ fun TestCaseDocument.toApi(
 )
 
 /**
- * A test case nested in a test suite, which only includes the test case's own data.
+ * A test case nested in a test suite, which only includes the test case's own data
+ * (its own output flags, but not its test suite's).
  */
 fun TestCaseDocument.toNestedApi(
     publicId: PublicId,
@@ -309,8 +323,8 @@ fun TestCaseDocument.toNestedApi(
     duration = duration,
     passed = passed,
     skipped = skipped,
-    hasSystemOutTestCase = false,
-    hasSystemErrTestCase = false,
+    hasSystemOutTestCase = hasSystemOut,
+    hasSystemErrTestCase = hasSystemErr,
     hasSystemOutTestSuite = false,
     hasSystemErrTestSuite = false,
     publicId = publicId.id,

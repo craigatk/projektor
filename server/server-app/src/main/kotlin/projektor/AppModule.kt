@@ -65,7 +65,7 @@ fun createAppModule(
 
     single { PerformanceResultsService(get()) }
 
-    single { AppendTestResultsService(get(), get()) }
+    single { AppendTestResultsService(get(), get(), get()) }
     single { CoverageService(get(), get(), get(), get()) }
     single { GroupedResultsParser(processingConfig.maxPayloadSize) }
     single { PerformanceResultsParser() }

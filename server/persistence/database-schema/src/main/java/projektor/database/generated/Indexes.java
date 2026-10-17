@@ -24,6 +24,7 @@ import projektor.database.generated.tables.TestCase;
 import projektor.database.generated.tables.TestFailure;
 import projektor.database.generated.tables.TestRun;
 import projektor.database.generated.tables.TestRunAttachment;
+import projektor.database.generated.tables.TestRunGroupClaim;
 import projektor.database.generated.tables.TestSuite;
 
 
@@ -54,6 +55,7 @@ public class Indexes {
     public static final Index IDX_TEST_CASE_PASSED = Internal.createIndex(DSL.name("idx_test_case_passed"), TestCase.TEST_CASE, new OrderField[] { TestCase.TEST_CASE.PASSED }, false);
     public static final Index IDX_TEST_CASE_TEST_SUITE_ID = Internal.createIndex(DSL.name("idx_test_case_test_suite_id"), TestCase.TEST_CASE, new OrderField[] { TestCase.TEST_CASE.TEST_SUITE_ID }, false);
     public static final Index IDX_TEST_FAILURE_TEST_CASE_ID = Internal.createIndex(DSL.name("idx_test_failure_test_case_id"), TestFailure.TEST_FAILURE, new OrderField[] { TestFailure.TEST_FAILURE.TEST_CASE_ID }, false);
+    public static final Index IDX_TEST_RUN_GROUP_CLAIM_PUBLIC_ID = Internal.createIndex(DSL.name("idx_test_run_group_claim_public_id"), TestRunGroupClaim.TEST_RUN_GROUP_CLAIM, new OrderField[] { TestRunGroupClaim.TEST_RUN_GROUP_CLAIM.TEST_RUN_PUBLIC_ID }, false);
     public static final Index IDX_TEST_RUN_PUBLIC_ID = Internal.createIndex(DSL.name("idx_test_run_public_id"), TestRun.TEST_RUN, new OrderField[] { TestRun.TEST_RUN.PUBLIC_ID }, false);
     public static final Index IDX_TEST_SUITE_IDX = Internal.createIndex(DSL.name("idx_test_suite_idx"), TestSuite.TEST_SUITE, new OrderField[] { TestSuite.TEST_SUITE.IDX }, false);
     public static final Index IDX_TEST_SUITE_TEST_RUN_ID = Internal.createIndex(DSL.name("idx_test_suite_test_run_id"), TestSuite.TEST_SUITE, new OrderField[] { TestSuite.TEST_SUITE.TEST_RUN_ID }, false);
