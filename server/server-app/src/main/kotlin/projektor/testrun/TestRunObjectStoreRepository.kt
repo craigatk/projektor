@@ -213,10 +213,7 @@ class TestRunObjectStoreRepository(
             val repoName = testRun.gitMetadata?.repoName
             if (group != null && repoName != null) {
                 withContext(Dispatchers.IO) {
-                    val claimKey = groupClaimKey(repoName, group)
-                    if (store.read<GroupClaimDocument>(claimKey)?.testRunPublicId == publicId.id) {
-                        store.delete(claimKey)
-                    }
+                    releaseGroupClaim(repoName, group, publicId)
                 }
             }
         }
@@ -240,6 +237,16 @@ class TestRunObjectStoreRepository(
             store.create(claimKey, GroupClaimDocument(publicId.id))
             PublicId(store.read<GroupClaimDocument>(claimKey)!!.testRunPublicId)
         }
+
+    override suspend fun releaseTestRunGroupClaim(
+        group: String,
+        repoName: String,
+        publicId: PublicId,
+    ) {
+        withContext(Dispatchers.IO) {
+            releaseGroupClaim(repoName, group, publicId)
+        }
+    }
 
     override suspend fun findTestRunWithGroup(
         group: String,
@@ -294,6 +301,19 @@ class TestRunObjectStoreRepository(
                 transform(current ?: throw IllegalStateException("Test run $publicId does not exist"))
             }!!
         }
+
+    // A claim is only ever written when the group has no claim, so a claim owned by this test run can't change
+    // between reading and deleting it
+    private fun releaseGroupClaim(
+        repoName: String,
+        group: String,
+        publicId: PublicId,
+    ) {
+        val claimKey = groupClaimKey(repoName, group)
+        if (store.read<GroupClaimDocument>(claimKey)?.testRunPublicId == publicId.id) {
+            store.delete(claimKey)
+        }
+    }
 
     data class GroupClaimDocument(val testRunPublicId: String)
 

@@ -231,7 +231,8 @@ Found by a coverage and behavior audit after Phase 5:
     `TestRunRepository.claimTestRunGroup` claims the group at request time (`test_run_group_claim` table, migration
     V42, with a fallback to the existing group lookup for older runs; a create-if-missing document on the object
     store). Appending uploads wait for the owning run to be saved, failing fast if its processing errored.
-    Deleting a test run deletes its claim.
+    Deleting a test run deletes its claim, and when the claiming upload fails to save its test run the claim is
+    released (`releaseTestRunGroupClaim`) so the next upload with the group starts a new test run.
 - Background results processing no longer lets exceptions escape its coroutine. Recording a processing error could
   itself fail (e.g. after the server's connection pool closed), and the escaped exception failed unrelated tests.
 - The GitHub pull request comment application tests (7, all previously `@Disabled` as flaky) are re-enabled, plus an

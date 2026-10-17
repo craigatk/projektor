@@ -62,6 +62,16 @@ interface TestRunRepository {
         publicId: PublicId,
     ): PublicId
 
+    /**
+     * Releases the test run's claim on the results group, if it still has it, so the next upload with the
+     * group starts a new test run.
+     */
+    suspend fun releaseTestRunGroupClaim(
+        group: String,
+        repoName: String,
+        publicId: PublicId,
+    )
+
     suspend fun findTestRunWithGroup(
         group: String,
         repoName: String,

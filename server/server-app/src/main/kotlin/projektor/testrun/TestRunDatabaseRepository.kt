@@ -411,6 +411,23 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
             }
         }
 
+    override suspend fun releaseTestRunGroupClaim(
+        group: String,
+        repoName: String,
+        publicId: PublicId,
+    ) {
+        withContext(Dispatchers.IO) {
+            dslContext
+                .deleteFrom(TEST_RUN_GROUP_CLAIM)
+                .where(
+                    TEST_RUN_GROUP_CLAIM.REPO_NAME.eq(repoName)
+                        .and(TEST_RUN_GROUP_CLAIM.GROUP_NAME.eq(group))
+                        .and(TEST_RUN_GROUP_CLAIM.TEST_RUN_PUBLIC_ID.eq(publicId.id)),
+                )
+                .execute()
+        }
+    }
+
     override suspend fun findTestRunWithGroup(
         group: String,
         repoName: String,
