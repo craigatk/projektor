@@ -1,37 +1,51 @@
 package projektor.coverage
 
-import projektor.database.generated.tables.pojos.CodeCoverageGroup
-import projektor.database.generated.tables.pojos.CodeCoverageRun
 import projektor.parser.coverage.model.CoverageReport
 import projektor.parser.coverage.model.CoverageReportStats
 import projektor.server.api.PublicId
 import projektor.server.api.coverage.CoverageFile
 import projektor.server.api.coverage.CoverageStat
 
+/**
+ * Coverage for a test run is made up of groups (one per coverage report), each with its own stats and files.
+ * Groups are identified by the test run's public ID and the group (report) name.
+ */
 interface CoverageRepository {
-    suspend fun createOrGetCoverageRun(publicId: PublicId): CodeCoverageRun
+    suspend fun createOrGetCoverageRun(publicId: PublicId)
 
+    /**
+     * Always adds a new coverage group with the report's stats and the given files.
+     */
     suspend fun addCoverageReport(
-        coverageRun: CodeCoverageRun,
+        publicId: PublicId,
         coverageReport: CoverageReport,
-    ): CodeCoverageGroup
-
-    suspend fun upsertCoverageGroup(
-        coverageRun: CodeCoverageRun,
-        coverageReport: CoverageReport,
-        newLineStat: CoverageStat,
-    ): Pair<CodeCoverageGroup, CoverageGroupStatus>
-
-    suspend fun insertCoverageFiles(
         coverageReportFiles: List<CoverageFile>,
-        coverageRun: CodeCoverageRun,
-        coverageGroup: CodeCoverageGroup,
     )
 
-    suspend fun upsertCoverageFiles(
+    /**
+     * Adds a new coverage group with the report's stats if one with the report's name doesn't exist yet.
+     * Otherwise updates the existing group's line stats to newLineStat (and zeroes its statement and branch stats).
+     */
+    suspend fun upsertCoverageGroup(
+        publicId: PublicId,
+        coverageReport: CoverageReport,
+        newLineStat: CoverageStat,
+    ): CoverageGroupStatus
+
+    suspend fun insertCoverageFiles(
+        publicId: PublicId,
+        groupName: String,
         coverageReportFiles: List<CoverageFile>,
-        coverageRun: CodeCoverageRun,
-        coverageGroup: CodeCoverageGroup,
+    )
+
+    /**
+     * Inserts files whose path isn't in the group yet. For files already in the group, updates their missed lines
+     * and line stats (and clears their partial lines and zeroes their statement and branch stats).
+     */
+    suspend fun upsertCoverageFiles(
+        publicId: PublicId,
+        groupName: String,
+        coverageReportFiles: List<CoverageFile>,
     )
 
     suspend fun fetchOverallStats(publicId: PublicId): CoverageReportStats

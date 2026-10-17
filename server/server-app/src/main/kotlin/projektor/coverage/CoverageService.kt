@@ -82,21 +82,13 @@ class CoverageService(
         publicId: PublicId,
     ): CoverageReport? {
         metricsService.incrementCoverageProcessStartCounter()
-        val coverageRun = coverageRepository.createOrGetCoverageRun(publicId)
+        coverageRepository.createOrGetCoverageRun(publicId)
         val coverageReport = CoverageParser.parseReport(coverageFilePayload.reportContents, coverageFilePayload.baseDirectoryPath)
 
         coverageReport?.let {
-            val coverageGroup = coverageRepository.addCoverageReport(coverageRun, it)
+            val coverageFiles = coverageReport.files?.map { file -> file.toCoverageFile() } ?: listOf()
 
-            val coverageFiles = coverageReport.files
-
-            if (coverageFiles != null && coverageFiles.isNotEmpty()) {
-                coverageRepository.insertCoverageFiles(
-                    coverageFiles.map { file -> file.toCoverageFile() },
-                    coverageRun,
-                    coverageGroup,
-                )
-            }
+            coverageRepository.addCoverageReport(publicId, it, coverageFiles)
 
             metricsService.incrementCoverageProcessSuccessCounter()
         }
@@ -221,7 +213,7 @@ class CoverageService(
         publicId: PublicId,
         coverageFiles: List<CoverageFilePayload>,
     ) {
-        val coverageRun = coverageRepository.createOrGetCoverageRun(publicId)
+        coverageRepository.createOrGetCoverageRun(publicId)
 
         coverageFiles.forEach { coverageFilePayload ->
             val parsedReport =
@@ -254,21 +246,17 @@ class CoverageService(
                     val newLineStat =
                         CoverageStat(covered = coveredLines, missed = missedLines, coveredPercentageDelta = null)
 
-                    val (coverageGroup, coverageGroupStatus) =
+                    val coverageGroupStatus =
                         coverageRepository.upsertCoverageGroup(
-                            coverageRun,
+                            publicId,
                             incomingCoverageReport,
                             newLineStat,
                         )
 
                     if (coverageGroupStatus == CoverageGroupStatus.NEW) {
-                        coverageRepository.insertCoverageFiles(
-                            incomingCoverageFiles,
-                            coverageRun,
-                            coverageGroup,
-                        )
+                        coverageRepository.insertCoverageFiles(publicId, incomingCoverageReport.name, incomingCoverageFiles)
                     } else {
-                        coverageRepository.upsertCoverageFiles(combinedCoverageFiles, coverageRun, coverageGroup)
+                        coverageRepository.upsertCoverageFiles(publicId, incomingCoverageReport.name, combinedCoverageFiles)
                     }
                 } catch (e: Exception) {
                     logger.error("Error saving coverage report", e)

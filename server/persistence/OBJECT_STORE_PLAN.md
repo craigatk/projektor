@@ -105,17 +105,34 @@ lease once expired. `SchedulerLock` accepts a `LockProvider` instead of building
 - Not done yet: generic collection types (`TypeReference`) for documents. Repositories wrap lists in data classes
   for now.
 
-### Phase 2: single-run repositories
+### Phase 2: single-run repositories — DONE
 
-Each `*ObjectStoreRepository.kt` lives next to its DB counterpart:
-
-- `TestRunRepository` (save, grouped save, append, summary update, fetch, delete)
-- `TestSuiteRepository` (`fetchTestSuites(searchCriteria)` filters in memory)
-- `TestCaseRepository` single-run methods
-- `TestRunMetadataRepository`, `TestRunSystemAttributesRepository`, `AttachmentRepository`,
-  `ResultsProcessingRepository`, `ProcessingFailureRepository`, `PerformanceResultsRepository`,
-  `CodeQualityReportRepository`
-- `CoverageRepository` (upsert logic matches the DB version's group status calculation)
+- `CoverageRepository` no longer exposes jOOQ POJOs: groups are identified by test run public ID + group name, and
+  `addCoverageReport` takes the group's files so a new group and its files are written together.
+- Object-store repositories next to their DB counterparts: `TestRun`, `TestSuite`, `TestCase` (single-run methods),
+  `TestRunMetadata`, `TestRunSystemAttributes`, `Attachment`, `ResultsProcessing`, `ProcessingFailure`,
+  `PerformanceResults`, `CodeQualityReport`, `Coverage`. Cross-run methods (`findTestRunsCreatedBefore…`,
+  `findTestRunWithGroup`, test case history and duration baselines) are `TODO()` until Phase 3.
+- `projektor.persistence.objectstore`: key layout (`ObjectStoreKeys`), stored document types, `TestRunDocumentStore`
+  (shared run reads/writes, parallel writes bounded at 16), `createObjectStorePersistenceModule`.
+- Layout as implemented (differs from the original sketch above):
+  - `runs/{id}/run.json` holds the summary, metadata, groups and test suites *without* test cases, so
+    `fetchTestRun` is one GET.
+  - Test cases live in chunk documents `runs/{id}/cases/{firstSuiteIdx}.json` of up to 100 suites each.
+  - Output: `runs/{id}/output/suite-{idx}-{out|err}.json` and `case-{suiteIdx}-{caseIdx}-{out|err}.json`.
+  - Coverage under `coverage/{id}/` and attachments at `attachments/{id}.json`, outside `runs/{id}/`, so
+    `deleteTestRun` is a prefix delete that keeps them for the cleanup service to delete separately.
+- Values are normalized like Postgres stores them (numeric(12,3) durations, microsecond timestamps).
+- `ObjectStoreParityTest` saves identical input to both backends and asserts every fetch returns equal results;
+  `ObjectStoreRepositoriesTest` covers object-store-only behavior (multi-chunk runs, concurrent appends,
+  delete scope, failure ordering).
+- Parity findings, intentionally not copied by the object store:
+  - The DB `fetchTestRun` returns the internal row ID as `summary.id`, the object store returns the public ID.
+  - The DB gives concurrent appends to the same run duplicate test suite indexes; the object store reserves
+    distinct indexes.
+- Parity quirks the object store does copy: appended suites are numbered from `startingIdx + 1` (so the append
+  path leaves a gap of one), `fetchHighestTestSuiteIndex` returns 0 when there are no suites, and test cases nested
+  in suites don't carry their suite's file name or output flags.
 
 ### Phase 3: index maintenance and cross-run repositories
 

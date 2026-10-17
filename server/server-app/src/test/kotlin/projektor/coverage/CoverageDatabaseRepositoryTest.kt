@@ -30,8 +30,6 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val publicId = randomPublicId()
         testRunDBGenerator.createTestRun(publicId, listOf())
 
-        val coverageRun = runBlocking { coverageDatabaseRepository.createOrGetCoverageRun(publicId) }
-
         val coverageReport =
             CoverageReport(
                 "my-report",
@@ -42,7 +40,7 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 ),
                 null,
             )
-        runBlocking { coverageDatabaseRepository.addCoverageReport(coverageRun, coverageReport) }
+        runBlocking { coverageDatabaseRepository.addCoverageReport(publicId, coverageReport, listOf()) }
 
         val overallStats = runBlocking { coverageDatabaseRepository.fetchOverallStats(publicId) }
         assertNotNull(overallStats)
@@ -72,8 +70,6 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val publicId = randomPublicId()
         testRunDBGenerator.createTestRun(publicId, listOf())
 
-        val coverageRun = runBlocking { coverageDatabaseRepository.createOrGetCoverageRun(publicId) }
-
         val coverageReport =
             CoverageReport(
                 "my-report",
@@ -84,7 +80,7 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 ),
                 null,
             )
-        val coverageGroup = runBlocking { coverageDatabaseRepository.addCoverageReport(coverageRun, coverageReport) }
+        runBlocking { coverageDatabaseRepository.addCoverageReport(publicId, coverageReport, listOf()) }
 
         val coverageReportFiles =
             listOf(
@@ -116,8 +112,9 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 ),
             )
 
-        runBlocking { coverageDatabaseRepository.insertCoverageFiles(coverageReportFiles, coverageRun, coverageGroup) }
+        runBlocking { coverageDatabaseRepository.insertCoverageFiles(publicId, "my-report", coverageReportFiles) }
 
+        val coverageRun = coverageRunDao.fetchByTestRunPublicId(publicId.id).single()
         val codeCoverageFileDao = CodeCoverageFileDao(dslContext.configuration())
         val codeCoverageFiles = codeCoverageFileDao.fetchByCodeCoverageRunId(coverageRun.id)
 
@@ -145,8 +142,6 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val publicId = randomPublicId()
         testRunDBGenerator.createTestRun(publicId, listOf())
 
-        val coverageRun = runBlocking { coverageDatabaseRepository.createOrGetCoverageRun(publicId) }
-
         val coverageReport =
             CoverageReport(
                 "my-report",
@@ -157,7 +152,7 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 ),
                 null,
             )
-        val coverageGroup = runBlocking { coverageDatabaseRepository.addCoverageReport(coverageRun, coverageReport) }
+        runBlocking { coverageDatabaseRepository.addCoverageReport(publicId, coverageReport, listOf()) }
 
         val coverageReportFiles =
             listOf(
@@ -189,7 +184,7 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 ),
             )
 
-        runBlocking { coverageDatabaseRepository.insertCoverageFiles(coverageReportFiles, coverageRun, coverageGroup) }
+        runBlocking { coverageDatabaseRepository.insertCoverageFiles(publicId, "my-report", coverageReportFiles) }
 
         val coverageFiles = runBlocking { coverageDatabaseRepository.fetchCoverageFiles(publicId, "my-report") }
         expectThat(coverageFiles).hasSize(2)
@@ -224,8 +219,6 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val publicId = randomPublicId()
         testRunDBGenerator.createTestRun(publicId, listOf())
 
-        val coverageRun = runBlocking { coverageDatabaseRepository.createOrGetCoverageRun(publicId) }
-
         val coverageReport =
             CoverageReport(
                 "my-report",
@@ -236,7 +229,7 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 ),
                 null,
             )
-        runBlocking { coverageDatabaseRepository.addCoverageReport(coverageRun, coverageReport) }
+        runBlocking { coverageDatabaseRepository.addCoverageReport(publicId, coverageReport, listOf()) }
 
         val hasCoverageData = runBlocking { coverageDatabaseRepository.coverageGroupExists(publicId) }
 
@@ -276,8 +269,6 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
         val publicId = randomPublicId()
         testRunDBGenerator.createTestRun(publicId, listOf())
 
-        val coverageRun = runBlocking { coverageDatabaseRepository.createOrGetCoverageRun(publicId) }
-
         val coverageReport =
             CoverageReport(
                 "my-report",
@@ -291,15 +282,13 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
         val newLineStat = CoverageStat(covered = 8, missed = 1)
 
-        val (newCoverageGroup, coverageGroupStatus) =
+        val coverageGroupStatus =
             runBlocking {
-                coverageDatabaseRepository.upsertCoverageGroup(coverageRun, coverageReport, newLineStat)
+                coverageDatabaseRepository.upsertCoverageGroup(publicId, coverageReport, newLineStat)
             }
-        expectThat(newCoverageGroup) {
-            get { name }.isEqualTo("my-report")
-        }
         expectThat(coverageGroupStatus).isEqualTo(CoverageGroupStatus.NEW)
 
+        val coverageRun = coverageRunDao.fetchByTestRunPublicId(publicId.id).single()
         val newCoverageGroupsFromDB = runBlocking { coverageGroupDao.fetchByCodeCoverageRunId(coverageRun.id) }
         expectThat(newCoverageGroupsFromDB).hasSize(1).any {
             get { name }.isEqualTo("my-report")
