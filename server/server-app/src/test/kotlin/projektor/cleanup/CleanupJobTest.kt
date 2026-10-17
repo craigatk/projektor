@@ -2,6 +2,7 @@ package projektor.cleanup
 
 import org.junit.jupiter.api.Test
 import org.koin.test.get
+import projektor.DatabaseCleanupLock
 import projektor.DatabaseRepositoryTestCase
 import projektor.incomingresults.randomPublicId
 import strikt.api.expectThat
@@ -9,6 +10,7 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 import java.time.LocalDate
 
+@DatabaseCleanupLock(DatabaseCleanupLock.Mode.RUNS_CLEANUP)
 class CleanupJobTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should execute test report cleanup`() {

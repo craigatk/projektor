@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test
 import org.koin.ktor.ext.get
 import projektor.ApplicationTestCase
 import projektor.ApplicationTestCaseConfig
+import projektor.DatabaseCleanupLock
 import projektor.incomingresults.randomPublicId
 import projektor.schedule.ScheduleDelay
 import projektor.schedule.Scheduler
@@ -16,6 +17,7 @@ import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertNotNull
 
+@DatabaseCleanupLock(DatabaseCleanupLock.Mode.RUNS_CLEANUP)
 class CleanupSchedulerApplicationTest : ApplicationTestCase() {
     @Test
     fun `when report cleanup enabled should schedule cleanup job`() =

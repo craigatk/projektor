@@ -4,6 +4,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.koin.test.get
 import org.koin.test.inject
+import projektor.DatabaseCleanupLock
 import projektor.DatabaseRepositoryTestCase
 import projektor.TestSuiteData
 import projektor.attachment.AttachmentConfig
@@ -31,6 +32,7 @@ import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+@DatabaseCleanupLock(DatabaseCleanupLock.Mode.RUNS_CLEANUP)
 class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should delete non-grouped test run without attachments`() {
