@@ -134,6 +134,16 @@ open class ApplicationTestCase {
 
                 testCaseConfig.publishToken?.let { put("ktor.auth.publishToken", it) }
 
+                if (testCaseConfig.objectStorePersistence) {
+                    put("ktor.persistence.type", "object-store")
+                    put("ktor.persistence.objectStore.url", "http://localhost:9000")
+                    put("ktor.persistence.objectStore.bucketName", "persistencetesting")
+                    put("ktor.persistence.objectStore.accessKey", "minio_access_key")
+                    put("ktor.persistence.objectStore.secretKey", "minio_secret_key")
+                    put("ktor.persistence.objectStore.keyPrefix", testCaseConfig.objectStoreKeyPrefix)
+                    put("ktor.persistence.objectStore.autoCreateBucket", "true")
+                }
+
                 if (testCaseConfig.attachmentsEnabled) {
                     put("ktor.attachment.url", "http://localhost:9000")
                     put("ktor.attachment.bucketName", testCaseConfig.attachmentsBucketName)
@@ -192,7 +202,9 @@ open class ApplicationTestCase {
             }
             application {
                 main(meterRegistry = if (testCaseConfig.metricsEnabled) null else meterRegistry)
-                setUpTestDependencies()
+                if (!testCaseConfig.objectStorePersistence) {
+                    setUpTestDependencies()
+                }
 
                 theApplication = this
             }

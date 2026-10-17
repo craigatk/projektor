@@ -28,4 +28,8 @@ data class ApplicationTestCaseConfig(
     val openAIApiKey: String? = null,
     val anthropicApiKey: String? = null,
     val aiProvider: String? = null,
+    // Runs the application on the object-store persistence backend instead of the database. The test case's
+    // database DAOs and fixtures aren't available in this mode.
+    val objectStorePersistence: Boolean = false,
+    val objectStoreKeyPrefix: String = "application-test-${java.util.UUID.randomUUID()}",
 )
