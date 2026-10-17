@@ -5,11 +5,15 @@ import kotlinx.coroutines.withContext
 import projektor.persistence.objectstore.ObjectStoreKeys
 import projektor.persistence.objectstore.TestRunDocument
 import projektor.persistence.objectstore.TestRunDocumentStore
+import projektor.persistence.objectstore.TestRunIndex
 import projektor.server.api.PublicId
 import projektor.server.api.metadata.TestRunGitMetadata
 import projektor.server.api.metadata.TestRunMetadata
 
-class TestRunMetadataObjectStoreRepository(private val documentStore: TestRunDocumentStore) : TestRunMetadataRepository {
+class TestRunMetadataObjectStoreRepository(
+    private val documentStore: TestRunDocumentStore,
+    private val testRunIndex: TestRunIndex,
+) : TestRunMetadataRepository {
     override suspend fun fetchGitMetadata(publicId: PublicId): TestRunGitMetadata? =
         documentStore.readTestRun(publicId)?.gitMetadata?.let { git ->
             TestRunGitMetadata(
@@ -39,5 +43,7 @@ class TestRunMetadataObjectStoreRepository(private val documentStore: TestRunDoc
                 }
             }
         }
+
+        testRunIndex.refreshEntry(publicId)
     }
 }

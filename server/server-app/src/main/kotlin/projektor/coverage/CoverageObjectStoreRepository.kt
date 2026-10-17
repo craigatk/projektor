@@ -15,6 +15,7 @@ import projektor.persistence.objectstore.CoverageGroupDocument
 import projektor.persistence.objectstore.CoverageRunDocument
 import projektor.persistence.objectstore.CoverageStatsDocument
 import projektor.persistence.objectstore.ObjectStoreKeys
+import projektor.persistence.objectstore.TestRunIndex
 import projektor.server.api.PublicId
 import projektor.server.api.coverage.CoverageFile
 import projektor.server.api.coverage.CoverageStat
@@ -25,10 +26,18 @@ import java.util.UUID
  * Stores each test run's coverage as a run document listing the coverage groups and their stats,
  * plus one document per group holding the group's files.
  */
-class CoverageObjectStoreRepository(private val store: JsonObjectStore) : CoverageRepository {
+class CoverageObjectStoreRepository(
+    private val store: JsonObjectStore,
+    private val testRunIndex: TestRunIndex,
+) : CoverageRepository {
     override suspend fun createOrGetCoverageRun(publicId: PublicId) {
-        withContext(Dispatchers.IO) {
-            store.create(ObjectStoreKeys.coverageRun(publicId), CoverageRunDocument(listOf()))
+        val created =
+            withContext(Dispatchers.IO) {
+                store.create(ObjectStoreKeys.coverageRun(publicId), CoverageRunDocument(listOf()))
+            }
+
+        if (created != null) {
+            testRunIndex.refreshEntry(publicId)
         }
     }
 
@@ -48,9 +57,23 @@ class CoverageObjectStoreRepository(private val store: JsonObjectStore) : Covera
 
             updateCoverageRun(publicId) { current -> current.copy(groups = current.groups + group) }
         }
+
+        testRunIndex.refreshEntry(publicId)
     }
 
     override suspend fun upsertCoverageGroup(
+        publicId: PublicId,
+        coverageReport: CoverageReport,
+        newLineStat: CoverageStat,
+    ): CoverageGroupStatus {
+        val coverageGroupStatus = upsertCoverageGroupDocument(publicId, coverageReport, newLineStat)
+
+        testRunIndex.refreshEntry(publicId)
+
+        return coverageGroupStatus
+    }
+
+    private suspend fun upsertCoverageGroupDocument(
         publicId: PublicId,
         coverageReport: CoverageReport,
         newLineStat: CoverageStat,
@@ -172,14 +195,20 @@ class CoverageObjectStoreRepository(private val store: JsonObjectStore) : Covera
                 .map { it.toApi() }
         }
 
-    override suspend fun deleteCoverage(publicId: PublicId): Boolean =
-        withContext(Dispatchers.IO) {
-            val coverageExisted = store.read<CoverageRunDocument>(ObjectStoreKeys.coverageRun(publicId)) != null
+    override suspend fun deleteCoverage(publicId: PublicId): Boolean {
+        val coverageExisted =
+            withContext(Dispatchers.IO) {
+                val coverageExisted = store.read<CoverageRunDocument>(ObjectStoreKeys.coverageRun(publicId)) != null
 
-            store.deletePrefix(ObjectStoreKeys.coveragePrefix(publicId))
+                store.deletePrefix(ObjectStoreKeys.coveragePrefix(publicId))
 
-            coverageExisted
-        }
+                coverageExisted
+            }
+
+        testRunIndex.refreshEntry(publicId)
+
+        return coverageExisted
+    }
 
     private suspend fun fetchCoverageRun(publicId: PublicId): CoverageRunDocument? =
         withContext(Dispatchers.IO) {
