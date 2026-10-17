@@ -2,21 +2,21 @@ package projektor.testsuite.repository
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import projektor.DatabaseRepositoryTestCase
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
-import projektor.testsuite.TestSuiteDatabaseRepository
+import projektor.persistence.DatabaseTestBackend
+import projektor.persistence.ObjectStoreTestBackend
+import projektor.persistence.RepositoryTestCase
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
-class TestSuiteDatabaseRepositoryAppendTest : DatabaseRepositoryTestCase() {
+abstract class TestSuiteRepositoryHighestIndexTest : RepositoryTestCase() {
     @Test
     fun `should fetch highest test suite index`() {
-        val testSuiteDatabaseRepository = TestSuiteDatabaseRepository(dslContext)
         val publicId = randomPublicId()
 
-        testRunDBGenerator.createTestRun(
+        testRunGenerator.createTestRun(
             publicId,
             listOf(
                 TestSuiteData(
@@ -34,8 +34,16 @@ class TestSuiteDatabaseRepositoryAppendTest : DatabaseRepositoryTestCase() {
             ),
         )
 
-        val highestTestSuiteIdx = runBlocking { testSuiteDatabaseRepository.fetchHighestTestSuiteIndex(publicId) }
+        val highestTestSuiteIdx = runBlocking { testSuiteRepository.fetchHighestTestSuiteIndex(publicId) }
 
         expectThat(highestTestSuiteIdx).isNotNull().isEqualTo(2)
     }
+}
+
+class TestSuiteRepositoryHighestIndexDatabaseTest : TestSuiteRepositoryHighestIndexTest() {
+    override fun createBackend() = DatabaseTestBackend()
+}
+
+class TestSuiteRepositoryHighestIndexObjectStoreTest : TestSuiteRepositoryHighestIndexTest() {
+    override fun createBackend() = ObjectStoreTestBackend()
 }

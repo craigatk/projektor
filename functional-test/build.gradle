@@ -33,6 +33,20 @@ task functionalTest(type: YarnTask) {
     finalizedBy(projektorPublish)
 }
 
+// Environment shared by the servers the functional tests run against
+def serverEnvironment = [
+        'PORT': '8080',
+        "ATTACHMENT_URL": "http://localhost:9000",
+        "ATTACHMENT_BUCKET_NAME": "functionaltest",
+        "ATTACHMENT_AUTO_CREATE_BUCKET": "true",
+        "ATTACHMENT_ACCESS_KEY": "minio_access_key",
+        "ATTACHMENT_SECRET_KEY": "minio_secret_key",
+        "MAX_REPORT_AGE_DAYS": "30",
+        // Fake Slack API started by the Cypress plugins, see cypress/plugins/fakeSlackApi.js
+        "SLACK_API_URL": "http://localhost:8091",
+        "SLACK_BOT_TOKEN": "functional-test-token"
+]
+
 // https://github.com/psxpaul/gradle-execfork-plugin
 task startServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {
     dependsOn ':server:server-app:assembleFull','yarnSetup'
@@ -42,16 +56,49 @@ task startServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {
     waitForPort = 8080
     waitForOutput = 'Application started'
     timeout = 120
-    environment = [
-            'PORT': '8080',
-            "ATTACHMENT_URL": "http://localhost:9000",
-            "ATTACHMENT_BUCKET_NAME": "functionaltest",
-            "ATTACHMENT_AUTO_CREATE_BUCKET": "true",
-            "ATTACHMENT_ACCESS_KEY": "minio_access_key",
-            "ATTACHMENT_SECRET_KEY": "minio_secret_key",
-            "MAX_REPORT_AGE_DAYS": "30",
-            // Fake Slack API started by the Cypress plugins, see cypress/plugins/fakeSlackApi.js
-            "SLACK_API_URL": "http://localhost:8091",
-            "SLACK_BOT_TOKEN": "functional-test-token"
+    environment = serverEnvironment
+}
+
+// Specs covering the main flows, run against a server using object-store persistence instead of the database.
+// See server/persistence/OBJECT_STORE_PLAN.md
+def objectStoreSmokeSpecs = [
+        'test_run_summary',
+        'test_failure',
+        'test_case',
+        'test_case_history',
+        'grouped_test_suites',
+        'attachments',
+        'coverage',
+        'pin',
+        'repository_timeline',
+        'repository_coverage',
+        'organization_coverage',
+        'admin_failures',
+].collect { "cypress/e2e/${it}.cy.js" }.join(',')
+
+task functionalTestObjectStore(type: YarnTask) {
+    group = 'verification'
+    description = 'Runs smoke Cypress specs against a server using object-store persistence'
+    dependsOn 'startObjectStoreServerDaemon', 'cleanResults'
+    args = ['cy:run', '--spec', objectStoreSmokeSpecs]
+}
+
+task startObjectStoreServerDaemon(type: com.github.psxpaul.task.JavaExecFork) {
+    dependsOn ':server:server-app:assembleFull','yarnSetup'
+    classpath = tasks.getByPath(':server:server-app:shadowJar').outputs.files
+    main = 'io.ktor.server.netty.EngineMain'
+    stopAfter = functionalTestObjectStore
+    waitForPort = 8080
+    waitForOutput = 'Application started'
+    timeout = 120
+    environment = serverEnvironment + [
+            'PERSISTENCE_TYPE': 'object-store',
+            'PERSISTENCE_OBJECT_STORE_URL': 'http://localhost:9000',
+            'PERSISTENCE_OBJECT_STORE_BUCKET_NAME': 'functionaltestpersistence',
+            'PERSISTENCE_OBJECT_STORE_ACCESS_KEY': 'minio_access_key',
+            'PERSISTENCE_OBJECT_STORE_SECRET_KEY': 'minio_secret_key',
+            'PERSISTENCE_OBJECT_STORE_AUTO_CREATE_BUCKET': 'true',
+            // Keeps each run's data separate, since the bucket isn't cleaned up between runs
+            'PERSISTENCE_OBJECT_STORE_KEY_PREFIX': "functional-test-${UUID.randomUUID()}".toString()
     ]
 }

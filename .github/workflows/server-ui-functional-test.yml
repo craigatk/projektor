@@ -94,3 +94,7 @@ jobs:
           CACHE_SECRET_KEY: ${{ secrets.CACHE_SECRET_KEY }}
           HONEYCOMB_API_KEY: ${{ secrets.HONEYCOMB_API_KEY }}
         run: ./gradlew :functional-test:functionalTest
+      - name: Run object-store persistence functional smoke tests
+        env:
+          HONEYCOMB_API_KEY: ${{ secrets.HONEYCOMB_API_KEY }}
+        run: ./gradlew :functional-test:functionalTestObjectStore

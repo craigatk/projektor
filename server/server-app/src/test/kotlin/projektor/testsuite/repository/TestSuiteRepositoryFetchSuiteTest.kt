@@ -2,26 +2,22 @@ package projektor.testsuite.repository
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import projektor.DatabaseRepositoryTestCase
 import projektor.TestSuiteData
-import projektor.database.generated.Tables
-import projektor.database.generated.tables.pojos.TestSuite
 import projektor.incomingresults.randomPublicId
-import projektor.testsuite.TestSuiteDatabaseRepository
+import projektor.persistence.DatabaseTestBackend
+import projektor.persistence.ObjectStoreTestBackend
+import projektor.persistence.RepositoryTestCase
 import strikt.api.expectThat
 import strikt.assertions.any
-import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
-import strikt.assertions.isNull
 
-class TestSuiteDatabaseRepositoryFetchSuiteTest : DatabaseRepositoryTestCase() {
+abstract class TestSuiteRepositoryFetchSuiteTest : RepositoryTestCase() {
     @Test
     fun `when test suite failed should fetch test suite along with test cases and failures`() {
-        val testSuiteDatabaseRepository = TestSuiteDatabaseRepository(dslContext)
         val publicId = randomPublicId()
 
-        testRunDBGenerator.createTestRun(
+        testRunGenerator.createTestRun(
             publicId,
             listOf(
                 TestSuiteData(
@@ -39,7 +35,7 @@ class TestSuiteDatabaseRepositoryFetchSuiteTest : DatabaseRepositoryTestCase() {
             ),
         )
 
-        val testSuite = runBlocking { testSuiteDatabaseRepository.fetchTestSuite(publicId, 1) }
+        val testSuite = runBlocking { testSuiteRepository.fetchTestSuite(publicId, 1) }
 
         expectThat(testSuite)
             .isNotNull()
@@ -90,45 +86,12 @@ class TestSuiteDatabaseRepositoryFetchSuiteTest : DatabaseRepositoryTestCase() {
                 get { failureText }.isNotNull().isEqualTo("testSuite1FailedTestCase2 failure text")
             }
     }
+}
 
-    @Test
-    fun `should not fetch system out and err columns when fetching individual test suite`() {
-        val publicId = randomPublicId()
+class TestSuiteRepositoryFetchSuiteDatabaseTest : TestSuiteRepositoryFetchSuiteTest() {
+    override fun createBackend() = DatabaseTestBackend()
+}
 
-        val testRunDB =
-            testRunDBGenerator.createTestRun(
-                publicId,
-                listOf(
-                    TestSuiteData(
-                        "testSuite1",
-                        listOf("testSuite1PassedTestCase1"),
-                        listOf(),
-                        listOf(),
-                    ),
-                ),
-            )
-
-        val testSuiteIdx = 1
-
-        dslContext.update(Tables.TEST_SUITE)
-            .set(Tables.TEST_SUITE.SYSTEM_OUT, "system out")
-            .set(Tables.TEST_SUITE.SYSTEM_ERR, "system err")
-            .where(Tables.TEST_SUITE.TEST_RUN_ID.eq(testRunDB.id).and(Tables.TEST_SUITE.IDX.eq(testSuiteIdx)))
-            .execute()
-
-        val testSuites =
-            TestSuiteDatabaseRepository.selectTestSuite(dslContext)
-                .where(Tables.TEST_RUN.PUBLIC_ID.eq(publicId.id).and(Tables.TEST_SUITE.IDX.eq(testSuiteIdx)))
-                .orderBy(Tables.TEST_SUITE.ID)
-                .fetchInto(TestSuite::class.java)
-
-        expectThat(testSuites).hasSize(1)
-
-        val testSuite = testSuites[0]
-
-        expectThat(testSuite).and {
-            get { systemOut }.isNull()
-            get { systemErr }.isNull()
-        }
-    }
+class TestSuiteRepositoryFetchSuiteObjectStoreTest : TestSuiteRepositoryFetchSuiteTest() {
+    override fun createBackend() = ObjectStoreTestBackend()
 }

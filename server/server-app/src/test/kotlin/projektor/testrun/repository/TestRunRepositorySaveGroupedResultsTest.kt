@@ -2,24 +2,25 @@ package projektor.testrun.repository
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import projektor.DatabaseRepositoryTestCase
 import projektor.incomingresults.model.GroupedResults
 import projektor.incomingresults.model.GroupedTestSuites
 import projektor.incomingresults.randomPublicId
-import projektor.testrun.TestRunDatabaseRepository
+import projektor.persistence.DatabaseTestBackend
+import projektor.persistence.ObjectStoreTestBackend
+import projektor.persistence.RepositoryTestCase
 import strikt.api.expectThat
+import strikt.assertions.all
+import strikt.assertions.containsExactly
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
-import kotlin.test.assertNotNull
+import java.math.BigDecimal
 import projektor.parser.model.TestCase as ParsedTestCase
 import projektor.parser.model.TestSuite as ParsedTestSuite
 
-class TestRunDatabaseRepositorySaveGroupedResultsTest : DatabaseRepositoryTestCase() {
+abstract class TestRunRepositorySaveGroupedResultsTest : RepositoryTestCase() {
     @Test
     fun `should save grouped results with two groups with two test suites each`() {
-        val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
-
         val publicId = randomPublicId()
 
         val testGroup1TestSuite1 = createTestSuite("testGroup1TestSuite1")
@@ -46,45 +47,28 @@ class TestRunDatabaseRepositorySaveGroupedResultsTest : DatabaseRepositoryTestCa
 
         val groupedResults = GroupedResults(listOf(testGroup1, testGroup2), listOf(), null, null, null, null)
 
-        runBlocking { testRunDatabaseRepository.saveGroupedTestRun(publicId, groupedResults) }
+        runBlocking { testRunRepository.saveGroupedTestRun(publicId, groupedResults) }
 
-        val testRunDB = testRunDao.fetchOneByPublicId(publicId.id)
-        assertNotNull(testRunDB)
+        expectThat(runBlocking { testRunRepository.fetchTestRun(publicId) }).isNotNull()
 
-        val testGroupsDB = testSuiteGroupDao.fetchByTestRunId(testRunDB.id)
-        expectThat(testGroupsDB)
+        val testSuites = runBlocking { testSuiteRepository.fetchTestSuitesWithCases(publicId) }
+        expectThat(testSuites).hasSize(4)
+
+        val group1TestSuites = testSuites.filter { it.groupName == "Group1" }
+        expectThat(group1TestSuites)
             .hasSize(2)
+            .all { get { groupLabel }.isEqualTo("Label1") }
+        expectThat(group1TestSuites.map { it.className }).containsExactly("testGroup1TestSuite1", "testGroup1TestSuite2")
 
-        val testGroup1DB = testGroupsDB.find { it.groupName == "Group1" }
-        expectThat(testGroup1DB)
-            .isNotNull()
-            .and {
-                get { groupName }.isEqualTo("Group1")
-                get { groupLabel }.isEqualTo("Label1")
-                get { directory }.isEqualTo("directory-1")
-            }
-
-        val testGroup1SuitesDB = testSuiteDao.fetchByTestSuiteGroupId(testGroup1DB!!.id)
-        expectThat(testGroup1SuitesDB)
+        val group2TestSuites = testSuites.filter { it.groupName == "Group2" }
+        expectThat(group2TestSuites)
             .hasSize(2)
-
-        val testGroup2DB = testGroupsDB.find { it.groupName == "Group2" }
-        expectThat(testGroup2DB)
-            .isNotNull()
-            .and {
-                get { groupName }.isEqualTo("Group2")
-                get { groupLabel }.isEqualTo("Label2")
-                get { directory }.isEqualTo("directory-2")
-            }
-
-        val testGroup2SuitesDB = testSuiteDao.fetchByTestSuiteGroupId(testGroup2DB!!.id)
-        expectThat(testGroup2SuitesDB)
-            .hasSize(2)
+            .all { get { groupLabel }.isEqualTo("Label2") }
+        expectThat(group2TestSuites.map { it.className }).containsExactly("testGroup2TestSuite1", "testGroup2TestSuite2")
     }
 
     @Test
     fun `can save grouped test run with no test suites`() {
-        val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
         val publicId = randomPublicId()
 
         val testGroup =
@@ -97,14 +81,10 @@ class TestRunDatabaseRepositorySaveGroupedResultsTest : DatabaseRepositoryTestCa
 
         val groupedResults = GroupedResults(listOf(testGroup), listOf(), null, null, null, null)
 
-        runBlocking { testRunDatabaseRepository.saveGroupedTestRun(publicId, groupedResults) }
+        runBlocking { testRunRepository.saveGroupedTestRun(publicId, groupedResults) }
 
-        val testRunDB = testRunDao.fetchOneByPublicId(publicId.id)
-        assertNotNull(testRunDB)
-
-        val testSuitesDB = testSuiteDao.fetchByTestRunId(testRunDB.id)
-        expectThat(testSuitesDB)
-            .hasSize(0)
+        expectThat(runBlocking { testRunRepository.fetchTestRun(publicId) }).isNotNull()
+        expectThat(runBlocking { testSuiteRepository.fetchTestSuitesWithCases(publicId) }).hasSize(0)
     }
 
     private fun createTestSuite(name: String): ParsedTestSuite {
@@ -114,6 +94,8 @@ class TestRunDatabaseRepositorySaveGroupedResultsTest : DatabaseRepositoryTestCa
         testSuite.skipped = 0
         testSuite.failures = 0
         testSuite.errors = 0
+        // The database repository can't read back a test suite without a duration, see OBJECT_STORE_PLAN.md
+        testSuite.time = BigDecimal("1.5")
 
         val testCase1 = ParsedTestCase()
         testCase1.name = "${name}TestCase1"
@@ -127,4 +109,12 @@ class TestRunDatabaseRepositorySaveGroupedResultsTest : DatabaseRepositoryTestCa
 
         return testSuite
     }
+}
+
+class TestRunRepositorySaveGroupedResultsDatabaseTest : TestRunRepositorySaveGroupedResultsTest() {
+    override fun createBackend() = DatabaseTestBackend()
+}
+
+class TestRunRepositorySaveGroupedResultsObjectStoreTest : TestRunRepositorySaveGroupedResultsTest() {
+    override fun createBackend() = ObjectStoreTestBackend()
 }
