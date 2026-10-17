@@ -2,6 +2,7 @@ package projektor.coverage
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.jooq.Configuration
 import org.jooq.DSLContext
 import org.jooq.impl.DSL.sum
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
@@ -45,69 +46,43 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
             .ignorePropertyNotFound()
             .newMapper(CoverageFile::class.java)
 
-    override suspend fun createOrGetCoverageRun(publicId: PublicId): CodeCoverageRun =
+    override suspend fun createOrGetCoverageRun(publicId: PublicId) {
         withContext(Dispatchers.IO) {
-            val codeCoverageRuns = codeCoverageRunDao.fetchByTestRunPublicId(publicId.id)
-
-            if (codeCoverageRuns.isNotEmpty()) {
-                codeCoverageRuns[0]
-            } else {
-                val codeCoverageRun = CodeCoverageRun()
-                codeCoverageRun.testRunPublicId = publicId.id
-                codeCoverageRunDao.insert(codeCoverageRun)
-
-                codeCoverageRun
-            }
+            fetchOrCreateCoverageRun(publicId)
         }
+    }
 
     override suspend fun addCoverageReport(
-        coverageRun: CodeCoverageRun,
+        publicId: PublicId,
         coverageReport: CoverageReport,
-    ): CodeCoverageGroup =
+        coverageReportFiles: List<CoverageFile>,
+    ) {
         withContext(Dispatchers.IO) {
-            val codeCoverageGroup = CodeCoverageGroup()
+            val coverageRun = fetchOrCreateCoverageRun(publicId)
 
             dslContext.transaction { configuration ->
-                val codeCoverageGroupDao = CodeCoverageGroupDao(configuration)
-                val codeCoverageStatsDao = CodeCoverageStatsDao(configuration)
+                val coverageGroup = insertCoverageGroup(coverageRun, coverageReport, configuration)
 
-                val groupStats = CodeCoverageStats()
-                groupStats.codeCoverageRunId = coverageRun.id
-                groupStats.statementCovered = coverageReport.totalStats.statementStat.covered
-                groupStats.statementMissed = coverageReport.totalStats.statementStat.missed
-                groupStats.lineCovered = coverageReport.totalStats.lineStat.covered
-                groupStats.lineMissed = coverageReport.totalStats.lineStat.missed
-                groupStats.branchCovered = coverageReport.totalStats.branchStat.covered
-                groupStats.branchMissed = coverageReport.totalStats.branchStat.missed
-                groupStats.scope = "GROUP"
-                codeCoverageStatsDao.insert(groupStats)
-
-                codeCoverageGroup.codeCoverageRunId = coverageRun.id
-                codeCoverageGroup.name = coverageReport.name
-                codeCoverageGroup.statsId = groupStats.id
-                codeCoverageGroupDao.insert(codeCoverageGroup)
+                insertCoverageFiles(coverageReportFiles, coverageRun, coverageGroup, configuration)
             }
-
-            codeCoverageGroup
         }
+    }
 
     override suspend fun upsertCoverageGroup(
-        coverageRun: CodeCoverageRun,
+        publicId: PublicId,
         coverageReport: CoverageReport,
         newLineStat: CoverageStat,
-    ): Pair<CodeCoverageGroup, CoverageGroupStatus> =
+    ): CoverageGroupStatus =
         withContext(Dispatchers.IO) {
-            val existingCoverageGroup =
-                dslContext
-                    .selectFrom(CODE_COVERAGE_GROUP)
-                    .where(
-                        CODE_COVERAGE_GROUP.CODE_COVERAGE_RUN_ID.eq(coverageRun.id)
-                            .and(CODE_COVERAGE_GROUP.NAME.eq(coverageReport.name)),
-                    )
-                    .fetchOneInto(CodeCoverageGroup::class.java)
+            val coverageRun = fetchOrCreateCoverageRun(publicId)
+            val existingCoverageGroup = fetchCoverageGroup(coverageRun, coverageReport.name)
 
             if (existingCoverageGroup == null) {
-                Pair(addCoverageReport(coverageRun, coverageReport), CoverageGroupStatus.NEW)
+                dslContext.transaction { configuration ->
+                    insertCoverageGroup(coverageRun, coverageReport, configuration)
+                }
+
+                CoverageGroupStatus.NEW
             } else {
                 val codeCoverageStatsDao = CodeCoverageStatsDao(dslContext.configuration())
                 val existingGroupStats = codeCoverageStatsDao.fetchOneById(existingCoverageGroup.statsId)
@@ -120,73 +95,158 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
                 existingGroupStats.statementMissed = 0
                 codeCoverageStatsDao.update(existingGroupStats)
 
-                Pair(existingCoverageGroup, CoverageGroupStatus.EXISTING)
+                CoverageGroupStatus.EXISTING
             }
         }
 
     override suspend fun insertCoverageFiles(
+        publicId: PublicId,
+        groupName: String,
         coverageReportFiles: List<CoverageFile>,
-        coverageRun: CodeCoverageRun,
-        coverageGroup: CodeCoverageGroup,
-    ) = withContext(Dispatchers.IO) {
-        dslContext.transaction { configuration ->
-            val codeCoverageFileDao = CodeCoverageFileDao(configuration)
-            val codeCoverageStatsDao = CodeCoverageStatsDao(configuration)
+    ) {
+        withContext(Dispatchers.IO) {
+            val (coverageRun, coverageGroup) = fetchExistingCoverageGroup(publicId, groupName)
 
-            coverageReportFiles.forEach { reportFile ->
-                val reportFileStats = reportFile.stats
-
-                val fileStats = CodeCoverageStats()
-                fileStats.codeCoverageRunId = coverageRun.id
-                fileStats.statementCovered = reportFileStats.statementStat.covered
-                fileStats.statementMissed = reportFileStats.statementStat.missed
-                fileStats.lineCovered = reportFileStats.lineStat.covered
-                fileStats.lineMissed = reportFileStats.lineStat.missed
-                fileStats.branchCovered = reportFileStats.branchStat.covered
-                fileStats.branchMissed = reportFileStats.branchStat.missed
-                fileStats.scope = "FILE"
-                codeCoverageStatsDao.insert(fileStats)
-
-                val codeCoverageFile = CodeCoverageFile()
-                codeCoverageFile.codeCoverageRunId = coverageRun.id
-                codeCoverageFile.codeCoverageGroupId = coverageGroup.id
-                codeCoverageFile.statsId = fileStats.id
-                codeCoverageFile.fileName = reportFile.fileName
-                codeCoverageFile.directoryName = reportFile.directoryName
-                codeCoverageFile.filePath = reportFile.filePath
-                codeCoverageFile.missedLines = reportFile.missedLines
-                codeCoverageFile.partialLines = reportFile.partialLines
-
-                codeCoverageFileDao.insert(codeCoverageFile)
+            dslContext.transaction { configuration ->
+                insertCoverageFiles(coverageReportFiles, coverageRun, coverageGroup, configuration)
             }
         }
     }
 
     override suspend fun upsertCoverageFiles(
+        publicId: PublicId,
+        groupName: String,
         coverageReportFiles: List<CoverageFile>,
-        coverageRun: CodeCoverageRun,
-        coverageGroup: CodeCoverageGroup,
-    ) = withContext(Dispatchers.IO) {
-        val currentCoverageFilePaths: List<String> =
-            dslContext
-                .select(CODE_COVERAGE_FILE.FILE_PATH)
-                .from(CODE_COVERAGE_FILE)
-                .where(CODE_COVERAGE_FILE.CODE_COVERAGE_GROUP_ID.eq(coverageGroup.id))
-                .fetchInto(String::class.java)
+    ) {
+        withContext(Dispatchers.IO) {
+            val (coverageRun, coverageGroup) = fetchExistingCoverageGroup(publicId, groupName)
 
-        val existingCoverageFiles = coverageReportFiles.filter { currentCoverageFilePaths.contains(it.filePath) }
-        val newCoverageFiles = coverageReportFiles.filter { !currentCoverageFilePaths.contains(it.filePath) }
+            val currentCoverageFilePaths: List<String> =
+                dslContext
+                    .select(CODE_COVERAGE_FILE.FILE_PATH)
+                    .from(CODE_COVERAGE_FILE)
+                    .where(CODE_COVERAGE_FILE.CODE_COVERAGE_GROUP_ID.eq(coverageGroup.id))
+                    .fetchInto(String::class.java)
 
-        insertCoverageFiles(newCoverageFiles, coverageRun, coverageGroup)
+            val existingCoverageFiles = coverageReportFiles.filter { currentCoverageFilePaths.contains(it.filePath) }
+            val newCoverageFiles = coverageReportFiles.filter { !currentCoverageFilePaths.contains(it.filePath) }
 
-        updateCoverageFiles(existingCoverageFiles, coverageRun, coverageGroup)
+            dslContext.transaction { configuration ->
+                insertCoverageFiles(newCoverageFiles, coverageRun, coverageGroup, configuration)
+            }
+
+            updateCoverageFiles(existingCoverageFiles, coverageRun, coverageGroup)
+        }
     }
 
-    private suspend fun updateCoverageFiles(
+    private fun fetchOrCreateCoverageRun(publicId: PublicId): CodeCoverageRun {
+        val codeCoverageRuns = codeCoverageRunDao.fetchByTestRunPublicId(publicId.id)
+
+        return if (codeCoverageRuns.isNotEmpty()) {
+            codeCoverageRuns[0]
+        } else {
+            val codeCoverageRun = CodeCoverageRun()
+            codeCoverageRun.testRunPublicId = publicId.id
+            codeCoverageRunDao.insert(codeCoverageRun)
+
+            codeCoverageRun
+        }
+    }
+
+    private fun fetchCoverageGroup(
+        coverageRun: CodeCoverageRun,
+        groupName: String,
+    ): CodeCoverageGroup? =
+        dslContext
+            .selectFrom(CODE_COVERAGE_GROUP)
+            .where(
+                CODE_COVERAGE_GROUP.CODE_COVERAGE_RUN_ID.eq(coverageRun.id)
+                    .and(CODE_COVERAGE_GROUP.NAME.eq(groupName)),
+            )
+            .fetchOneInto(CodeCoverageGroup::class.java)
+
+    private fun fetchExistingCoverageGroup(
+        publicId: PublicId,
+        groupName: String,
+    ): Pair<CodeCoverageRun, CodeCoverageGroup> {
+        val coverageRun = fetchOrCreateCoverageRun(publicId)
+        val coverageGroup =
+            fetchCoverageGroup(coverageRun, groupName)
+                ?: throw IllegalStateException("No coverage group $groupName for test run $publicId")
+
+        return Pair(coverageRun, coverageGroup)
+    }
+
+    private fun insertCoverageGroup(
+        coverageRun: CodeCoverageRun,
+        coverageReport: CoverageReport,
+        configuration: Configuration,
+    ): CodeCoverageGroup {
+        val codeCoverageGroupDao = CodeCoverageGroupDao(configuration)
+        val codeCoverageStatsDao = CodeCoverageStatsDao(configuration)
+
+        val groupStats = CodeCoverageStats()
+        groupStats.codeCoverageRunId = coverageRun.id
+        groupStats.statementCovered = coverageReport.totalStats.statementStat.covered
+        groupStats.statementMissed = coverageReport.totalStats.statementStat.missed
+        groupStats.lineCovered = coverageReport.totalStats.lineStat.covered
+        groupStats.lineMissed = coverageReport.totalStats.lineStat.missed
+        groupStats.branchCovered = coverageReport.totalStats.branchStat.covered
+        groupStats.branchMissed = coverageReport.totalStats.branchStat.missed
+        groupStats.scope = "GROUP"
+        codeCoverageStatsDao.insert(groupStats)
+
+        val codeCoverageGroup = CodeCoverageGroup()
+        codeCoverageGroup.codeCoverageRunId = coverageRun.id
+        codeCoverageGroup.name = coverageReport.name
+        codeCoverageGroup.statsId = groupStats.id
+        codeCoverageGroupDao.insert(codeCoverageGroup)
+
+        return codeCoverageGroup
+    }
+
+    private fun insertCoverageFiles(
         coverageReportFiles: List<CoverageFile>,
         coverageRun: CodeCoverageRun,
         coverageGroup: CodeCoverageGroup,
-    ) = withContext(Dispatchers.IO) {
+        configuration: Configuration,
+    ) {
+        val codeCoverageFileDao = CodeCoverageFileDao(configuration)
+        val codeCoverageStatsDao = CodeCoverageStatsDao(configuration)
+
+        coverageReportFiles.forEach { reportFile ->
+            val reportFileStats = reportFile.stats
+
+            val fileStats = CodeCoverageStats()
+            fileStats.codeCoverageRunId = coverageRun.id
+            fileStats.statementCovered = reportFileStats.statementStat.covered
+            fileStats.statementMissed = reportFileStats.statementStat.missed
+            fileStats.lineCovered = reportFileStats.lineStat.covered
+            fileStats.lineMissed = reportFileStats.lineStat.missed
+            fileStats.branchCovered = reportFileStats.branchStat.covered
+            fileStats.branchMissed = reportFileStats.branchStat.missed
+            fileStats.scope = "FILE"
+            codeCoverageStatsDao.insert(fileStats)
+
+            val codeCoverageFile = CodeCoverageFile()
+            codeCoverageFile.codeCoverageRunId = coverageRun.id
+            codeCoverageFile.codeCoverageGroupId = coverageGroup.id
+            codeCoverageFile.statsId = fileStats.id
+            codeCoverageFile.fileName = reportFile.fileName
+            codeCoverageFile.directoryName = reportFile.directoryName
+            codeCoverageFile.filePath = reportFile.filePath
+            codeCoverageFile.missedLines = reportFile.missedLines
+            codeCoverageFile.partialLines = reportFile.partialLines
+
+            codeCoverageFileDao.insert(codeCoverageFile)
+        }
+    }
+
+    private fun updateCoverageFiles(
+        coverageReportFiles: List<CoverageFile>,
+        coverageRun: CodeCoverageRun,
+        coverageGroup: CodeCoverageGroup,
+    ) {
         val codeCoverageFileDao = CodeCoverageFileDao(dslContext.configuration())
 
         coverageReportFiles.forEach { reportFile ->
