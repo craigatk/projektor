@@ -2,24 +2,22 @@ package projektor.performance
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import projektor.DatabaseRepositoryTestCase
-import projektor.database.generated.tables.daos.PerformanceResultsDao
 import projektor.incomingresults.model.PerformanceResult
 import projektor.incomingresults.randomPublicId
+import projektor.persistence.DatabaseTestBackend
+import projektor.persistence.ObjectStoreTestBackend
+import projektor.persistence.RepositoryTestCase
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import java.math.BigDecimal
 
-class PerformanceResultsDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
+abstract class PerformanceResultsRepositoryTest : RepositoryTestCase() {
     @Test
     fun `should insert performance test results`() {
-        val performanceResultsDatabaseRepository = PerformanceResultsDatabaseRepository(dslContext)
-        val performanceResultsDao = PerformanceResultsDao(dslContext.configuration())
-
         val publicId = randomPublicId()
 
-        testRunDBGenerator.createEmptyTestRun(publicId)
+        testRunGenerator.createEmptyTestRun(publicId)
 
         val result =
             PerformanceResult(
@@ -32,13 +30,13 @@ class PerformanceResultsDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
             )
 
         runBlocking {
-            performanceResultsDatabaseRepository.savePerformanceResults(
+            performanceResultsRepository.savePerformanceResults(
                 publicId,
                 result,
             )
         }
 
-        val fetchedResultsList = performanceResultsDao.fetchByTestRunPublicId(publicId.id)
+        val fetchedResultsList = runBlocking { performanceResultsRepository.fetchResults(publicId) }
         expectThat(fetchedResultsList).hasSize(1)
 
         val fetchResults = fetchedResultsList[0]
@@ -52,4 +50,12 @@ class PerformanceResultsDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
             get { p95 }.isEqualTo(BigDecimal("45.021"))
         }
     }
+}
+
+class PerformanceResultsRepositoryDatabaseTest : PerformanceResultsRepositoryTest() {
+    override fun createBackend() = DatabaseTestBackend()
+}
+
+class PerformanceResultsRepositoryObjectStoreTest : PerformanceResultsRepositoryTest() {
+    override fun createBackend() = ObjectStoreTestBackend()
 }

@@ -2,15 +2,13 @@ package projektor.testcase.repository
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import projektor.DatabaseRepositoryTestCase
 import projektor.TestSuiteData
-import projektor.createTestCase
-import projektor.createTestFailure
-import projektor.createTestRun
-import projektor.createTestSuite
 import projektor.incomingresults.randomPublicId
+import projektor.persistence.DatabaseTestBackend
+import projektor.persistence.ObjectStoreTestBackend
+import projektor.persistence.RepositoryTestCase
+import projektor.persistence.TestRunGenerator
 import projektor.server.api.TestCase
-import projektor.testcase.TestCaseDatabaseRepository
 import strikt.api.expectThat
 import strikt.assertions.contains
 import strikt.assertions.containsExactly
@@ -22,11 +20,11 @@ import strikt.assertions.isTrue
 import strikt.assertions.map
 import java.math.BigDecimal
 
-class TestCaseDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
+abstract class TestCaseRepositoryTest : RepositoryTestCase() {
     @Test
     fun `should fetch failed test cases from multiple test suites`() {
         val publicId = randomPublicId()
-        testRunDBGenerator.createTestRun(
+        testRunGenerator.createTestRun(
             publicId,
             listOf(
                 TestSuiteData(
@@ -44,9 +42,7 @@ class TestCaseDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
             ),
         )
 
-        val testCaseDatabaseRepository = TestCaseDatabaseRepository(dslContext)
-
-        val failedTestCases = runBlocking { testCaseDatabaseRepository.fetchFailedTestCases(publicId) }
+        val failedTestCases = runBlocking { testCaseRepository.fetchFailedTestCases(publicId) }
 
         expectThat(failedTestCases)
             .hasSize(3)
@@ -59,24 +55,17 @@ class TestCaseDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should fetch slowest test cases`() {
         val publicId = randomPublicId()
-        val testRun = createTestRun(publicId, 1)
-        testRunDao.insert(testRun)
+        val testSuite =
+            TestRunGenerator.toParsedTestSuite(
+                TestSuiteData("com.example.ShouldGet1", (1..15).map { "testSuite1Case$it" }, listOf(), listOf()),
+            )
+        testSuite.testCases.forEachIndexed { idx, testCase -> testCase.time = BigDecimal.valueOf(11L + idx) }
 
-        val testSuite1 = createTestSuite(testRun.id, "ShouldGet1", 1)
-        testSuite1.packageName = "com.example"
-        testSuiteDao.insert(testSuite1)
-
-        (1..15).forEach { idx ->
-            val testSuite1Case = createTestCase(testSuite1.id, "testSuite1Case$idx", idx, true)
-            testSuite1Case.duration = BigDecimal.valueOf(10L + idx)
-            testCaseDao.insert(testSuite1Case)
-        }
+        runBlocking { testRunRepository.saveTestRun(publicId, listOf(testSuite)) }
 
         val limit = 5
 
-        val testCaseDatabaseRepository = TestCaseDatabaseRepository(dslContext)
-
-        val slowTestCases = runBlocking { testCaseDatabaseRepository.fetchSlowTestCases(publicId, limit) }
+        val slowTestCases = runBlocking { testCaseRepository.fetchSlowTestCases(publicId, limit) }
 
         expectThat(slowTestCases)
             .hasSize(5)
@@ -93,27 +82,22 @@ class TestCaseDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
     @Test
     fun `should fetch test case when it has a failure`() {
         val publicId = randomPublicId()
-        val testRun = createTestRun(publicId, 1)
-        testRunDao.insert(testRun)
+        val testSuite =
+            TestRunGenerator.toParsedTestSuite(
+                TestSuiteData("com.example.TestSuite", listOf("anotherTestCase"), listOf("testCaseToFind"), listOf()),
+            )
+        // Put the test case to find first in its test suite
+        testSuite.testCases = testSuite.testCases.reversed()
+        testSuite.systemOut = "test suite system out"
 
-        val testSuite = createTestSuite(testRun.id, "TestSuite", 2)
-        testSuite.packageName = "com.example"
-        testSuite.hasSystemOut = true
-        testSuite.hasSystemErr = false
-        testSuiteDao.insert(testSuite)
+        val otherTestSuite =
+            TestRunGenerator.toParsedTestSuite(
+                TestSuiteData("com.example.OtherTestSuite", listOf("otherTestCase"), listOf(), listOf()),
+            )
 
-        val testCaseToFind = createTestCase(testSuite.id, "testCaseToFind", 1, false)
-        testCaseDao.insert(testCaseToFind)
+        runBlocking { testRunRepository.saveTestRun(publicId, listOf(otherTestSuite, testSuite)) }
 
-        val testCaseFailure = createTestFailure(testCaseToFind.id, "testCaseToFind")
-        testFailureDao.insert(testCaseFailure)
-
-        val anotherTestCase = createTestCase(testSuite.id, "anotherTestCase", 2, true)
-        testCaseDao.insert(anotherTestCase)
-
-        val testCaseDatabaseRepository = TestCaseDatabaseRepository(dslContext)
-
-        val foundTestCase = runBlocking { testCaseDatabaseRepository.fetchTestCase(publicId, testSuite.idx, 1) }
+        val foundTestCase = runBlocking { testCaseRepository.fetchTestCase(publicId, 2, 1) }
 
         expectThat(foundTestCase)
             .isNotNull()
@@ -132,4 +116,12 @@ class TestCaseDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                     }
             }
     }
+}
+
+class TestCaseRepositoryDatabaseTest : TestCaseRepositoryTest() {
+    override fun createBackend() = DatabaseTestBackend()
+}
+
+class TestCaseRepositoryObjectStoreTest : TestCaseRepositoryTest() {
+    override fun createBackend() = ObjectStoreTestBackend()
 }

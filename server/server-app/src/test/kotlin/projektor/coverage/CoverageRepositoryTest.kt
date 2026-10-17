@@ -2,12 +2,13 @@ package projektor.coverage
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import projektor.DatabaseRepositoryTestCase
-import projektor.database.generated.tables.daos.CodeCoverageFileDao
 import projektor.incomingresults.randomPublicId
 import projektor.parser.coverage.model.CoverageReport
 import projektor.parser.coverage.model.CoverageReportStat
 import projektor.parser.coverage.model.CoverageReportStats
+import projektor.persistence.DatabaseTestBackend
+import projektor.persistence.ObjectStoreTestBackend
+import projektor.persistence.RepositoryTestCase
 import projektor.server.api.coverage.CoverageFile
 import projektor.server.api.coverage.CoverageStat
 import projektor.server.api.coverage.CoverageStats
@@ -22,13 +23,11 @@ import strikt.assertions.isTrue
 import java.math.BigDecimal
 import kotlin.test.assertNotNull
 
-class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
+abstract class CoverageRepositoryTest : RepositoryTestCase() {
     @Test
     fun `when one coverage report should fetch its overall stats`() {
-        val coverageDatabaseRepository = CoverageDatabaseRepository(dslContext)
-
         val publicId = randomPublicId()
-        testRunDBGenerator.createTestRun(publicId, listOf())
+        testRunGenerator.createTestRun(publicId, listOf())
 
         val coverageReport =
             CoverageReport(
@@ -40,9 +39,9 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 ),
                 null,
             )
-        runBlocking { coverageDatabaseRepository.addCoverageReport(publicId, coverageReport, listOf()) }
+        runBlocking { coverageRepository.addCoverageReport(publicId, coverageReport, listOf()) }
 
-        val overallStats = runBlocking { coverageDatabaseRepository.fetchOverallStats(publicId) }
+        val overallStats = runBlocking { coverageRepository.fetchOverallStats(publicId) }
         assertNotNull(overallStats)
 
         expectThat(overallStats) {
@@ -65,10 +64,8 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
     @Test
     fun `should save coverage file stats`() {
-        val coverageDatabaseRepository = CoverageDatabaseRepository(dslContext)
-
         val publicId = randomPublicId()
-        testRunDBGenerator.createTestRun(publicId, listOf())
+        testRunGenerator.createTestRun(publicId, listOf())
 
         val coverageReport =
             CoverageReport(
@@ -80,7 +77,7 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 ),
                 null,
             )
-        runBlocking { coverageDatabaseRepository.addCoverageReport(publicId, coverageReport, listOf()) }
+        runBlocking { coverageRepository.addCoverageReport(publicId, coverageReport, listOf()) }
 
         val coverageReportFiles =
             listOf(
@@ -112,11 +109,9 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 ),
             )
 
-        runBlocking { coverageDatabaseRepository.insertCoverageFiles(publicId, "my-report", coverageReportFiles) }
+        runBlocking { coverageRepository.insertCoverageFiles(publicId, "my-report", coverageReportFiles) }
 
-        val coverageRun = coverageRunDao.fetchByTestRunPublicId(publicId.id).single()
-        val codeCoverageFileDao = CodeCoverageFileDao(dslContext.configuration())
-        val codeCoverageFiles = codeCoverageFileDao.fetchByCodeCoverageRunId(coverageRun.id)
+        val codeCoverageFiles = runBlocking { coverageRepository.fetchCoverageFiles(publicId, "my-report") }
 
         expectThat(codeCoverageFiles).hasSize(2)
 
@@ -137,10 +132,8 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
     @Test
     fun `should fetch code coverage files`() {
-        val coverageDatabaseRepository = CoverageDatabaseRepository(dslContext)
-
         val publicId = randomPublicId()
-        testRunDBGenerator.createTestRun(publicId, listOf())
+        testRunGenerator.createTestRun(publicId, listOf())
 
         val coverageReport =
             CoverageReport(
@@ -152,7 +145,7 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 ),
                 null,
             )
-        runBlocking { coverageDatabaseRepository.addCoverageReport(publicId, coverageReport, listOf()) }
+        runBlocking { coverageRepository.addCoverageReport(publicId, coverageReport, listOf()) }
 
         val coverageReportFiles =
             listOf(
@@ -184,9 +177,9 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 ),
             )
 
-        runBlocking { coverageDatabaseRepository.insertCoverageFiles(publicId, "my-report", coverageReportFiles) }
+        runBlocking { coverageRepository.insertCoverageFiles(publicId, "my-report", coverageReportFiles) }
 
-        val coverageFiles = runBlocking { coverageDatabaseRepository.fetchCoverageFiles(publicId, "my-report") }
+        val coverageFiles = runBlocking { coverageRepository.fetchCoverageFiles(publicId, "my-report") }
         expectThat(coverageFiles).hasSize(2)
 
         val coverageFile1 = coverageFiles.find { it.fileName == "File1.kt" }
@@ -214,10 +207,8 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
     @Test
     fun `when coverage data should return true when checking if coverage exists`() {
-        val coverageDatabaseRepository = CoverageDatabaseRepository(dslContext)
-
         val publicId = randomPublicId()
-        testRunDBGenerator.createTestRun(publicId, listOf())
+        testRunGenerator.createTestRun(publicId, listOf())
 
         val coverageReport =
             CoverageReport(
@@ -229,45 +220,39 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 ),
                 null,
             )
-        runBlocking { coverageDatabaseRepository.addCoverageReport(publicId, coverageReport, listOf()) }
+        runBlocking { coverageRepository.addCoverageReport(publicId, coverageReport, listOf()) }
 
-        val hasCoverageData = runBlocking { coverageDatabaseRepository.coverageGroupExists(publicId) }
+        val hasCoverageData = runBlocking { coverageRepository.coverageGroupExists(publicId) }
 
         expectThat(hasCoverageData).isTrue()
     }
 
     @Test
     fun `when no coverage run should return false when checking if coverage exists`() {
-        val coverageDatabaseRepository = CoverageDatabaseRepository(dslContext)
-
         val publicId = randomPublicId()
-        testRunDBGenerator.createTestRun(publicId, listOf())
+        testRunGenerator.createTestRun(publicId, listOf())
 
-        val hasCoverageData = runBlocking { coverageDatabaseRepository.coverageGroupExists(publicId) }
+        val hasCoverageData = runBlocking { coverageRepository.coverageGroupExists(publicId) }
 
         expectThat(hasCoverageData).isFalse()
     }
 
     @Test
     fun `when has coverage run but no coverage groups should return false when checking if coverage exists`() {
-        val coverageDatabaseRepository = CoverageDatabaseRepository(dslContext)
-
         val publicId = randomPublicId()
-        testRunDBGenerator.createTestRun(publicId, listOf())
+        testRunGenerator.createTestRun(publicId, listOf())
 
-        runBlocking { coverageDatabaseRepository.createOrGetCoverageRun(publicId) }
+        runBlocking { coverageRepository.createOrGetCoverageRun(publicId) }
 
-        val hasCoverageData = runBlocking { coverageDatabaseRepository.coverageGroupExists(publicId) }
+        val hasCoverageData = runBlocking { coverageRepository.coverageGroupExists(publicId) }
 
         expectThat(hasCoverageData).isFalse()
     }
 
     @Test
     fun `when upserting new coverage group should create it`() {
-        val coverageDatabaseRepository = CoverageDatabaseRepository(dslContext)
-
         val publicId = randomPublicId()
-        testRunDBGenerator.createTestRun(publicId, listOf())
+        testRunGenerator.createTestRun(publicId, listOf())
 
         val coverageReport =
             CoverageReport(
@@ -284,14 +269,21 @@ class CoverageDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
 
         val coverageGroupStatus =
             runBlocking {
-                coverageDatabaseRepository.upsertCoverageGroup(publicId, coverageReport, newLineStat)
+                coverageRepository.upsertCoverageGroup(publicId, coverageReport, newLineStat)
             }
         expectThat(coverageGroupStatus).isEqualTo(CoverageGroupStatus.NEW)
 
-        val coverageRun = coverageRunDao.fetchByTestRunPublicId(publicId.id).single()
-        val newCoverageGroupsFromDB = runBlocking { coverageGroupDao.fetchByCodeCoverageRunId(coverageRun.id) }
+        val newCoverageGroupsFromDB = runBlocking { coverageRepository.fetchCoverageList(publicId) }
         expectThat(newCoverageGroupsFromDB).hasSize(1).any {
             get { name }.isEqualTo("my-report")
         }
     }
+}
+
+class CoverageRepositoryDatabaseTest : CoverageRepositoryTest() {
+    override fun createBackend() = DatabaseTestBackend()
+}
+
+class CoverageRepositoryObjectStoreTest : CoverageRepositoryTest() {
+    override fun createBackend() = ObjectStoreTestBackend()
 }

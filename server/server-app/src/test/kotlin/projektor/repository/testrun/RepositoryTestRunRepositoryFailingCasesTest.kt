@@ -3,9 +3,11 @@ package projektor.repository.testrun
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.junit.jupiter.api.Test
-import projektor.DatabaseRepositoryTestCase
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
+import projektor.persistence.DatabaseTestBackend
+import projektor.persistence.ObjectStoreTestBackend
+import projektor.persistence.RepositoryTestCase
 import projektor.server.api.TestCase
 import projektor.server.api.repository.BranchType
 import strikt.api.expectThat
@@ -14,11 +16,9 @@ import strikt.assertions.contains
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
-class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTestCase() {
+abstract class RepositoryTestRunRepositoryFailingCasesTest : RepositoryTestCase() {
     @Test
     fun `should find failing test cases in repo and CI without project name`() {
-        val repositoryTestRunDatabaseRepository = RepositoryTestRunDatabaseRepository(dslContext)
-
         val orgName = RandomStringUtils.randomAlphabetic(12)
         val repoName = "$orgName/repo"
         val projectName = null
@@ -54,14 +54,14 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
 
         val maxRuns = 4
 
-        testRunDBGenerator.createTestRunInRepo(firstRunCITruePublicId, testSuiteDataList, repoName, true, projectName)
-        testRunDBGenerator.createTestRunInRepo(secondRunCITruePublicId, testSuiteDataList, repoName, true, projectName)
-        testRunDBGenerator.createTestRunInRepo(nonCIPublicId, testSuiteDataList, repoName, false, projectName)
-        testRunDBGenerator.createTestRunInRepo(ciInOtherRepoPublicId, testSuiteDataList, "$orgName/another-project", true, projectName)
+        testRunGenerator.createTestRunInRepo(firstRunCITruePublicId, testSuiteDataList, repoName, true, projectName)
+        testRunGenerator.createTestRunInRepo(secondRunCITruePublicId, testSuiteDataList, repoName, true, projectName)
+        testRunGenerator.createTestRunInRepo(nonCIPublicId, testSuiteDataList, repoName, false, projectName)
+        testRunGenerator.createTestRunInRepo(ciInOtherRepoPublicId, testSuiteDataList, "$orgName/another-project", true, projectName)
 
         val failingTestCases =
             runBlocking {
-                repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
+                repositoryTestRunRepository.fetchRepositoryFailingTestCases(
                     repoName,
                     projectName,
                     maxRuns,
@@ -116,8 +116,6 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
 
     @Test
     fun `should filter out older test runs`() {
-        val repositoryTestRunDatabaseRepository = RepositoryTestRunDatabaseRepository(dslContext)
-
         val orgName = RandomStringUtils.randomAlphabetic(12)
         val repoName = "$orgName/repo"
         val projectName = null
@@ -143,12 +141,12 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
             )
 
         listOf(firstRunCITruePublicId, secondRunCITruePublicId, thirdRunCITruePublicId).forEach { publicId ->
-            testRunDBGenerator.createTestRunInRepo(publicId, testSuiteDataList, repoName, true, projectName)
+            testRunGenerator.createTestRunInRepo(publicId, testSuiteDataList, repoName, true, projectName)
         }
 
         val failingTestCasesMax1 =
             runBlocking {
-                repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
+                repositoryTestRunRepository.fetchRepositoryFailingTestCases(
                     repoName,
                     projectName,
                     1,
@@ -163,7 +161,7 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
 
         val failingTestCasesMax2 =
             runBlocking {
-                repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
+                repositoryTestRunRepository.fetchRepositoryFailingTestCases(
                     repoName,
                     projectName,
                     2,
@@ -180,8 +178,6 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
 
     @Test
     fun `should find failing tests in mainline only`() {
-        val repositoryTestRunDatabaseRepository = RepositoryTestRunDatabaseRepository(dslContext)
-
         val orgName = RandomStringUtils.randomAlphabetic(12)
         val repoName = "$orgName/repo"
         val projectName = null
@@ -232,18 +228,18 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
             )
 
         failingMainlinePublicIds.forEach { publicId ->
-            testRunDBGenerator.createTestRunInRepo(publicId, failingMainlineTestSuiteDataList, repoName, true, projectName, "main")
+            testRunGenerator.createTestRunInRepo(publicId, failingMainlineTestSuiteDataList, repoName, true, projectName, "main")
         }
         failingBranchPublicIds.forEach { publicId ->
-            testRunDBGenerator.createTestRunInRepo(publicId, failingBranchTestSuiteDataList, repoName, true, projectName, "my-branch")
+            testRunGenerator.createTestRunInRepo(publicId, failingBranchTestSuiteDataList, repoName, true, projectName, "my-branch")
         }
         passingPublicIds.forEach { publicId ->
-            testRunDBGenerator.createTestRunInRepo(publicId, passingTestSuiteDataList, repoName, true, projectName)
+            testRunGenerator.createTestRunInRepo(publicId, passingTestSuiteDataList, repoName, true, projectName)
         }
 
         val failingTestCases =
             runBlocking {
-                repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
+                repositoryTestRunRepository.fetchRepositoryFailingTestCases(
                     repoName,
                     projectName,
                     100,
@@ -266,8 +262,6 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
 
     @Test
     fun `should find failing tests in all branches`() {
-        val repositoryTestRunDatabaseRepository = RepositoryTestRunDatabaseRepository(dslContext)
-
         val orgName = RandomStringUtils.randomAlphabetic(12)
         val repoName = "$orgName/repo"
         val projectName = null
@@ -318,18 +312,18 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
             )
 
         failingMainlinePublicIds.forEach { publicId ->
-            testRunDBGenerator.createTestRunInRepo(publicId, failingMainlineTestSuiteDataList, repoName, true, projectName, "main")
+            testRunGenerator.createTestRunInRepo(publicId, failingMainlineTestSuiteDataList, repoName, true, projectName, "main")
         }
         failingBranchPublicIds.forEach { publicId ->
-            testRunDBGenerator.createTestRunInRepo(publicId, failingBranchTestSuiteDataList, repoName, true, projectName, "my-branch")
+            testRunGenerator.createTestRunInRepo(publicId, failingBranchTestSuiteDataList, repoName, true, projectName, "my-branch")
         }
         passingPublicIds.forEach { publicId ->
-            testRunDBGenerator.createTestRunInRepo(publicId, passingTestSuiteDataList, repoName, true, projectName)
+            testRunGenerator.createTestRunInRepo(publicId, passingTestSuiteDataList, repoName, true, projectName)
         }
 
         val failingTestCases =
             runBlocking {
-                repositoryTestRunDatabaseRepository.fetchRepositoryFailingTestCases(
+                repositoryTestRunRepository.fetchRepositoryFailingTestCases(
                     repoName,
                     projectName,
                     100,
@@ -349,4 +343,12 @@ class RepositoryTestRunDatabaseRepositoryFailingCasesTest : DatabaseRepositoryTe
                 "projektor.failingBranch2ClassName.failingBranch2",
             )
     }
+}
+
+class RepositoryTestRunRepositoryFailingCasesDatabaseTest : RepositoryTestRunRepositoryFailingCasesTest() {
+    override fun createBackend() = DatabaseTestBackend()
+}
+
+class RepositoryTestRunRepositoryFailingCasesObjectStoreTest : RepositoryTestRunRepositoryFailingCasesTest() {
+    override fun createBackend() = ObjectStoreTestBackend()
 }

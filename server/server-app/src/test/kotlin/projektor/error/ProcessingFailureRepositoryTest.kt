@@ -2,20 +2,19 @@ package projektor.error
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import org.koin.test.inject
-import projektor.DatabaseRepositoryTestCase
 import projektor.incomingresults.randomPublicId
+import projektor.persistence.DatabaseTestBackend
+import projektor.persistence.ObjectStoreTestBackend
+import projektor.persistence.RepositoryTestCase
 import projektor.server.api.error.FailureBodyType
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import java.time.temporal.ChronoUnit
 
-class ProcessingFailureDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
+abstract class ProcessingFailureRepositoryTest : RepositoryTestCase() {
     @Test
     fun `should fetch most recent failure`() {
-        val processingFailureRepository: ProcessingFailureRepository by inject()
-
         val publicId = randomPublicId()
         val body = "the body"
         val bodyType = FailureBodyType.TEST_RESULTS
@@ -49,4 +48,12 @@ class ProcessingFailureDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
                 get { createdTimestamp.truncatedTo(ChronoUnit.MILLIS) }.isEqualTo(failureDB.createdTimestamp.truncatedTo(ChronoUnit.MILLIS))
             }
     }
+}
+
+class ProcessingFailureRepositoryDatabaseTest : ProcessingFailureRepositoryTest() {
+    override fun createBackend() = DatabaseTestBackend()
+}
+
+class ProcessingFailureRepositoryObjectStoreTest : ProcessingFailureRepositoryTest() {
+    override fun createBackend() = ObjectStoreTestBackend()
 }

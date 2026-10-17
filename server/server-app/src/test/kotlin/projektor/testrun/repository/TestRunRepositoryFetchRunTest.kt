@@ -2,13 +2,13 @@ package projektor.testrun.repository
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import projektor.DatabaseRepositoryTestCase
 import projektor.TestSuiteData
-import projektor.database.generated.tables.pojos.TestCase
-import projektor.database.generated.tables.pojos.TestRun
-import projektor.database.generated.tables.pojos.TestSuite
 import projektor.incomingresults.randomPublicId
-import projektor.testrun.TestRunDatabaseRepository
+import projektor.parser.model.Failure
+import projektor.parser.model.Skipped
+import projektor.persistence.DatabaseTestBackend
+import projektor.persistence.ObjectStoreTestBackend
+import projektor.persistence.RepositoryTestCase
 import strikt.api.expectThat
 import strikt.assertions.any
 import strikt.assertions.hasSize
@@ -17,78 +17,51 @@ import strikt.assertions.isNotNull
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import kotlin.test.assertNotNull
+import projektor.parser.model.TestCase as ParsedTestCase
+import projektor.parser.model.TestSuite as ParsedTestSuite
 
-class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
+abstract class TestRunRepositoryFetchRunTest : RepositoryTestCase() {
     @Test
     fun `should fetch all fields in test run and test suite`() {
-        val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
         val publicId = randomPublicId()
 
-        val testRunDB = TestRun()
-        testRunDB.publicId = publicId.id
-        testRunDB.totalTestCount = 3
-        testRunDB.totalPassingCount = 1
-        testRunDB.totalFailureCount = 1
-        testRunDB.totalSkippedCount = 1
-        testRunDB.passed = false
-        testRunDB.cumulativeDuration = BigDecimal("9.00")
-        testRunDB.averageDuration = BigDecimal("3.00")
-        testRunDB.slowestTestCaseDuration = BigDecimal("5.00")
-        testRunDB.createdTimestamp = LocalDateTime.now()
-        testRunDao.insert(testRunDB)
+        val testCases =
+            listOf(
+                ParsedTestCase().apply {
+                    name = "should pass"
+                    className = "projektor.TestSuiteSpec"
+                    time = BigDecimal("5.00")
+                },
+                ParsedTestCase().apply {
+                    name = "should fail"
+                    className = "projektor.TestSuiteSpec"
+                    time = BigDecimal("4.00")
+                    failure = Failure().apply { message = "Failed" }
+                },
+                ParsedTestCase().apply {
+                    name = "should skip"
+                    className = "projektor.TestSuiteSpec"
+                    time = BigDecimal("0.00")
+                    skipped = Skipped()
+                },
+            )
 
-        val testSuiteDB = TestSuite()
-        testSuiteDB.testRunId = testRunDB.id
-        testSuiteDB.idx = 1
-        testSuiteDB.testCount = 3
-        testSuiteDB.passingCount = 1
-        testSuiteDB.skippedCount = 1
-        testSuiteDB.failureCount = 1
-        testSuiteDB.className = "TestSuiteSpec"
-        testSuiteDB.packageName = "projektor"
-        testSuiteDB.startTs = LocalDateTime.of(2019, 11, 1, 0, 0, 0)
-        testSuiteDB.hostname = "myhostname"
-        testSuiteDB.duration = BigDecimal("9.00")
-        testSuiteDB.systemOut = "Some system out"
-        testSuiteDB.systemErr = null
-        testSuiteDB.hasSystemOut = true
-        testSuiteDB.hasSystemErr = false
-        testSuiteDao.insert(testSuiteDB)
+        val testSuite =
+            ParsedTestSuite().apply {
+                name = "projektor.TestSuiteSpec"
+                tests = 3
+                failures = 1
+                skipped = 1
+                timestamp = LocalDateTime.of(2019, 11, 1, 0, 0, 0)
+                hostname = "myhostname"
+                time = BigDecimal("9.00")
+                systemOut = "Some system out"
+                this.testCases = testCases
+            }
 
-        val passingTestCaseDB = TestCase()
-        passingTestCaseDB.testSuiteId = testSuiteDB.id
-        passingTestCaseDB.idx = 1
-        passingTestCaseDB.name = "should pass"
-        passingTestCaseDB.className = "TestSuiteSpec"
-        passingTestCaseDB.packageName = "projektor"
-        passingTestCaseDB.duration = BigDecimal("5.00")
-        passingTestCaseDB.passed = true
-        passingTestCaseDB.skipped = false
-        testCaseDao.insert(passingTestCaseDB)
+        runBlocking { testRunRepository.saveTestRun(publicId, listOf(testSuite)) }
 
-        val failingTestCaseDB = TestCase()
-        failingTestCaseDB.testSuiteId = testSuiteDB.id
-        failingTestCaseDB.idx = 2
-        failingTestCaseDB.name = "should fail"
-        failingTestCaseDB.className = "TestSuiteSpec"
-        failingTestCaseDB.packageName = "projektor"
-        failingTestCaseDB.duration = BigDecimal("4.00")
-        failingTestCaseDB.passed = false
-        failingTestCaseDB.skipped = false
-        testCaseDao.insert(failingTestCaseDB)
-
-        val skippedTestCaseDB = TestCase()
-        skippedTestCaseDB.testSuiteId = testSuiteDB.id
-        skippedTestCaseDB.idx = 3
-        skippedTestCaseDB.name = "should skip"
-        skippedTestCaseDB.className = "TestSuiteSpec"
-        skippedTestCaseDB.packageName = "projektor"
-        skippedTestCaseDB.duration = BigDecimal("0.00")
-        skippedTestCaseDB.passed = false
-        skippedTestCaseDB.skipped = true
-        testCaseDao.insert(skippedTestCaseDB)
-
-        val testRun = runBlocking { testRunDatabaseRepository.fetchTestRun(publicId) }
+        val testRun = runBlocking { testRunRepository.fetchTestRun(publicId) }
         assertNotNull(testRun)
 
         expectThat(testRun)
@@ -123,10 +96,9 @@ class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
 
     @Test
     fun `should fetch test run with multiple test suites`() {
-        val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
         val publicId = randomPublicId()
 
-        testRunDBGenerator.createTestRun(
+        testRunGenerator.createTestRun(
             publicId,
             listOf(
                 TestSuiteData(
@@ -144,7 +116,7 @@ class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
             ),
         )
 
-        val testRun = runBlocking { testRunDatabaseRepository.fetchTestRun(publicId) }
+        val testRun = runBlocking { testRunRepository.fetchTestRun(publicId) }
         assertNotNull(testRun)
 
         expectThat(testRun) {
@@ -170,4 +142,12 @@ class TestRunDatabaseRepositoryFetchRunTest : DatabaseRepositoryTestCase() {
             get { skippedCount }.isEqualTo(2)
         }
     }
+}
+
+class TestRunRepositoryFetchRunDatabaseTest : TestRunRepositoryFetchRunTest() {
+    override fun createBackend() = DatabaseTestBackend()
+}
+
+class TestRunRepositoryFetchRunObjectStoreTest : TestRunRepositoryFetchRunTest() {
+    override fun createBackend() = ObjectStoreTestBackend()
 }

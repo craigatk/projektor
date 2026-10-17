@@ -2,10 +2,11 @@ package projektor.testsuite.repository
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import projektor.DatabaseRepositoryTestCase
 import projektor.TestSuiteData
 import projektor.incomingresults.randomPublicId
-import projektor.testsuite.TestSuiteDatabaseRepository
+import projektor.persistence.DatabaseTestBackend
+import projektor.persistence.ObjectStoreTestBackend
+import projektor.persistence.RepositoryTestCase
 import projektor.testsuite.TestSuiteSearchCriteria
 import strikt.api.expectThat
 import strikt.assertions.any
@@ -14,13 +15,12 @@ import strikt.assertions.isEmpty
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
-class TestSuiteDatabaseRepositoryFetchSuitesTest : DatabaseRepositoryTestCase() {
+abstract class TestSuiteRepositoryFetchSuitesTest : RepositoryTestCase() {
     @Test
     fun `should fetch test suites with specific package name`() {
-        val testSuiteDatabaseRepository = TestSuiteDatabaseRepository(dslContext)
         val publicId = randomPublicId()
 
-        testRunDBGenerator.createTestRun(
+        testRunGenerator.createTestRun(
             publicId,
             listOf(
                 TestSuiteData(
@@ -46,7 +46,7 @@ class TestSuiteDatabaseRepositoryFetchSuitesTest : DatabaseRepositoryTestCase() 
 
         val testSuites =
             runBlocking {
-                testSuiteDatabaseRepository.fetchTestSuites(publicId, TestSuiteSearchCriteria("projektor", false))
+                testSuiteRepository.fetchTestSuites(publicId, TestSuiteSearchCriteria("projektor", false))
             }
 
         expectThat(testSuites)
@@ -63,10 +63,9 @@ class TestSuiteDatabaseRepositoryFetchSuitesTest : DatabaseRepositoryTestCase() 
 
     @Test
     fun `when no test suites match package name should return empty list`() {
-        val testSuiteDatabaseRepository = TestSuiteDatabaseRepository(dslContext)
         val publicId = randomPublicId()
 
-        testRunDBGenerator.createTestRun(
+        testRunGenerator.createTestRun(
             publicId,
             listOf(
                 TestSuiteData(
@@ -92,9 +91,17 @@ class TestSuiteDatabaseRepositoryFetchSuitesTest : DatabaseRepositoryTestCase() 
 
         val testSuites =
             runBlocking {
-                testSuiteDatabaseRepository.fetchTestSuites(publicId, TestSuiteSearchCriteria("should.find.nothing", false))
+                testSuiteRepository.fetchTestSuites(publicId, TestSuiteSearchCriteria("should.find.nothing", false))
             }
 
         expectThat(testSuites).isEmpty()
     }
+}
+
+class TestSuiteRepositoryFetchSuitesDatabaseTest : TestSuiteRepositoryFetchSuitesTest() {
+    override fun createBackend() = DatabaseTestBackend()
+}
+
+class TestSuiteRepositoryFetchSuitesObjectStoreTest : TestSuiteRepositoryFetchSuitesTest() {
+    override fun createBackend() = ObjectStoreTestBackend()
 }

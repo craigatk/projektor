@@ -2,22 +2,29 @@ package projektor.persistence.objectstore
 
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
+import io.ktor.client.request.headers
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import org.apache.commons.lang3.RandomStringUtils
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.junit.jupiter.api.Test
+import org.koin.ktor.ext.get
 import projektor.ApplicationTestCase
 import projektor.ApplicationTestCaseConfig
+import projektor.cleanup.CleanupScheduledJob
+import projektor.mcp.callMcpTool
 import projektor.parser.GroupedResultsXmlLoader
 import projektor.parser.grouped.model.GitMetadata
 import projektor.parser.grouped.model.ResultsMetadata
+import projektor.schedule.Scheduler
 import projektor.server.api.TestCase
 import projektor.server.api.TestRun
 import projektor.server.api.TestRunSummary
 import projektor.server.api.TestSuite
+import projektor.server.api.attachments.Attachments
 import projektor.server.api.attributes.TestRunSystemAttributes
 import projektor.server.api.coverage.Coverage
 import projektor.server.api.history.TestCaseHistory
@@ -30,10 +37,15 @@ import projektor.server.api.results.SaveResultsResponse
 import strikt.api.expectThat
 import strikt.assertions.contains
 import strikt.assertions.hasSize
+import strikt.assertions.isEmpty
 import strikt.assertions.isEqualTo
+import strikt.assertions.isFalse
 import strikt.assertions.isGreaterThan
 import strikt.assertions.isNotEmpty
 import strikt.assertions.isTrue
+import java.io.File
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
 
 /**
@@ -94,17 +106,99 @@ class ObjectStorePersistenceApplicationTest : ApplicationTestCase() {
         }
     }
 
+    @Test
+    fun `should save and fetch attachments with object-store persistence`() {
+        val repoName = "org-${RandomStringUtils.randomAlphabetic(10).lowercase()}/repo"
+
+        projektorTestApplication(ApplicationTestCaseConfig(objectStorePersistence = true, attachmentsEnabled = true)) {
+            val publicId = publishResults(client, repoName)
+            val attachmentBytes = File("src/test/resources/test-attachment.txt").readBytes()
+
+            val postResponse =
+                client.post("/run/$publicId/attachments/test-attachment.txt") {
+                    headers { append("content-length", attachmentBytes.size.toString()) }
+                    setBody(attachmentBytes)
+                }
+            expectThat(postResponse.status).isEqualTo(HttpStatusCode.OK)
+
+            val attachments = client.fetch<Attachments>("/run/$publicId/attachments")
+            expectThat(attachments.attachments.map { it.fileName }).isEqualTo(listOf("test-attachment.txt"))
+
+            expectThat(
+                client.get("/run/$publicId/attachments/test-attachment.txt").bodyAsText(),
+            ).isEqualTo("Here is a test attachment file")
+        }
+    }
+
+    @Test
+    fun `should return pull request failing test context over MCP with object-store persistence`() {
+        val orgName = "org-${RandomStringUtils.randomAlphabetic(10).lowercase()}"
+        val repoPart = "repo"
+
+        projektorTestApplication(ApplicationTestCaseConfig(objectStorePersistence = true)) {
+            val publicId = publishResults(client, "$orgName/$repoPart", branchName = "feature", pullRequestNumber = 7)
+
+            val response =
+                client.callMcpTool(
+                    "get_pull_request_failing_test_context",
+                    mapOf("orgName" to orgName, "repoName" to repoPart, "pullRequestNumber" to 7),
+                )
+
+            expectThat(response.isError).isFalse()
+            expectThat(response.text).contains(publicId)
+            expectThat(response.text).contains("projektor.example.spock.FailingSpec.should fail")
+        }
+    }
+
+    @Test
+    fun `cleanup job should delete old test runs and attachments with object-store persistence`() {
+        val repoName = "org-${RandomStringUtils.randomAlphabetic(10).lowercase()}/repo"
+
+        projektorTestApplication(
+            ApplicationTestCaseConfig(objectStorePersistence = true, attachmentsEnabled = true, reportCleanupMaxAgeDays = 30),
+        ) {
+            val oldPublicId = publishResults(client, repoName, createdTimestamp = Instant.now().minus(40, ChronoUnit.DAYS))
+            val newPublicId = publishResults(client, repoName)
+
+            val attachmentBytes = File("src/test/resources/test-attachment.txt").readBytes()
+            listOf(oldPublicId, newPublicId).forEach { publicId ->
+                client.post("/run/$publicId/attachments/test-attachment.txt") {
+                    headers { append("content-length", attachmentBytes.size.toString()) }
+                    setBody(attachmentBytes)
+                }
+            }
+
+            val scheduler: Scheduler = getApplication().get()
+            scheduler.findScheduledJob(CleanupScheduledJob.CLEANUP_JOB_NAME)!!.runnable.run()
+
+            expectThat(client.get("/run/$oldPublicId").status).isEqualTo(HttpStatusCode.NotFound)
+            expectThat(client.fetch<Attachments>("/run/$oldPublicId/attachments").attachments).isEmpty()
+            expectThat(client.fetch<ResultsProcessing>("/results/$oldPublicId/status").status).isEqualTo(ResultsProcessingStatus.DELETED)
+
+            expectThat(client.get("/run/$newPublicId").status).isEqualTo(HttpStatusCode.OK)
+            expectThat(client.fetch<Attachments>("/run/$newPublicId/attachments").attachments).hasSize(1)
+
+            val timeline = client.fetch<RepositoryTestRunTimeline>("/repo/$repoName/timeline")
+            expectThat(timeline.timelineEntries.map { it.publicId }).isEqualTo(listOf(newPublicId))
+        }
+    }
+
     private suspend fun publishResults(
         client: HttpClient,
         repoName: String,
+        branchName: String = "main",
+        pullRequestNumber: Int? = null,
+        createdTimestamp: Instant? = null,
     ): String {
         val gitMetadata = GitMetadata()
         gitMetadata.repoName = repoName
-        gitMetadata.branchName = "main"
-        gitMetadata.isMainBranch = true
+        gitMetadata.branchName = branchName
+        gitMetadata.isMainBranch = branchName == "main"
+        gitMetadata.pullRequestNumber = pullRequestNumber
         val metadata = ResultsMetadata()
         metadata.git = gitMetadata
         metadata.ci = true
+        metadata.createdTimestamp = createdTimestamp
 
         val requestBody =
             GroupedResultsXmlLoader().resultsWithCoverage(
@@ -122,6 +216,15 @@ class ObjectStorePersistenceApplicationTest : ApplicationTestCase() {
                     "/results/$publicId/status",
                 ).status
             } == ResultsProcessingStatus.SUCCESS
+        }
+
+        // The pull request number is saved after the processing status is set to success
+        if (pullRequestNumber != null) {
+            await.atMost(30, TimeUnit.SECONDS) until {
+                kotlinx.coroutines.runBlocking {
+                    client.fetch<TestRunGitMetadata>("/run/$publicId/metadata/git").pullRequestNumber
+                } == pullRequestNumber
+            }
         }
 
         return publicId

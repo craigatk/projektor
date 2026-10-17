@@ -2,23 +2,23 @@ package projektor.testrun.repository
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import projektor.DatabaseRepositoryTestCase
 import projektor.incomingresults.randomPublicId
 import projektor.parser.model.Failure
-import projektor.testrun.TestRunDatabaseRepository
+import projektor.persistence.DatabaseTestBackend
+import projektor.persistence.ObjectStoreTestBackend
+import projektor.persistence.RepositoryTestCase
 import strikt.api.expectThat
 import strikt.assertions.any
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
-import kotlin.test.assertNotNull
+import strikt.assertions.isNotNull
+import java.math.BigDecimal
 import projektor.parser.model.TestCase as ParsedTestCase
 import projektor.parser.model.TestSuite as ParsedTestSuite
 
-class TestRunDatabaseRepositorySaveResultsTest : DatabaseRepositoryTestCase() {
+abstract class TestRunRepositorySaveResultsTest : RepositoryTestCase() {
     @Test
     fun `should save test run with two passing test cases`() {
-        val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
-
         val publicId = randomPublicId()
 
         val passingTestSuite = ParsedTestSuite()
@@ -27,6 +27,8 @@ class TestRunDatabaseRepositorySaveResultsTest : DatabaseRepositoryTestCase() {
         passingTestSuite.skipped = 0
         passingTestSuite.failures = 0
         passingTestSuite.errors = 0
+        // The database repository can't read back a test suite without a duration, see OBJECT_STORE_PLAN.md
+        passingTestSuite.time = BigDecimal("1.5")
 
         val passingTestCase1 = ParsedTestCase()
         passingTestCase1.name = "PassingTestCase1"
@@ -38,21 +40,20 @@ class TestRunDatabaseRepositorySaveResultsTest : DatabaseRepositoryTestCase() {
 
         passingTestSuite.testCases = listOf(passingTestCase1, passingTestCase2)
 
-        runBlocking { testRunDatabaseRepository.saveTestRun(publicId, listOf(passingTestSuite)) }
+        runBlocking { testRunRepository.saveTestRun(publicId, listOf(passingTestSuite)) }
 
-        val testRunDB = testRunDao.fetchOneByPublicId(publicId.id)
-        assertNotNull(testRunDB)
+        expectThat(runBlocking { testRunRepository.fetchTestRun(publicId) }).isNotNull()
 
-        val testSuiteDBs = testSuiteDao.fetchByTestRunId(testRunDB.id)
-        expectThat(testSuiteDBs).hasSize(1)
-        val testSuite = testSuiteDBs[0]
+        val testSuites = runBlocking { testSuiteRepository.fetchTestSuitesWithCases(publicId) }
+        expectThat(testSuites).hasSize(1)
+        val testSuite = testSuites[0]
         expectThat(testSuite.className).isEqualTo("PassingSuite")
         expectThat(testSuite.testCount).isEqualTo(2)
         expectThat(testSuite.passingCount).isEqualTo(2)
         expectThat(testSuite.skippedCount).isEqualTo(0)
         expectThat(testSuite.failureCount).isEqualTo(0)
 
-        val testCases = testCaseDao.fetchByTestSuiteId(testSuite.id)
+        val testCases = testSuite.testCases.orEmpty()
         expectThat(testCases).hasSize(2)
 
         expectThat(testCases).any {
@@ -68,8 +69,6 @@ class TestRunDatabaseRepositorySaveResultsTest : DatabaseRepositoryTestCase() {
 
     @Test
     fun `should save test run with a failed test case and an errored test case`() {
-        val testRunDatabaseRepository = TestRunDatabaseRepository(dslContext)
-
         val publicId = randomPublicId()
 
         val failingTestSuite = ParsedTestSuite()
@@ -78,6 +77,8 @@ class TestRunDatabaseRepositorySaveResultsTest : DatabaseRepositoryTestCase() {
         failingTestSuite.skipped = 0
         failingTestSuite.failures = 1
         failingTestSuite.errors = 1
+        // The database repository can't read back a test suite without a duration, see OBJECT_STORE_PLAN.md
+        failingTestSuite.time = BigDecimal("1.5")
 
         val failedTestCase = ParsedTestCase()
         failedTestCase.name = "FailedTestCase"
@@ -95,21 +96,20 @@ class TestRunDatabaseRepositorySaveResultsTest : DatabaseRepositoryTestCase() {
 
         failingTestSuite.testCases = listOf(failedTestCase, erroredTestCase)
 
-        runBlocking { testRunDatabaseRepository.saveTestRun(publicId, listOf(failingTestSuite)) }
+        runBlocking { testRunRepository.saveTestRun(publicId, listOf(failingTestSuite)) }
 
-        val testRunDB = testRunDao.fetchOneByPublicId(publicId.id)
-        assertNotNull(testRunDB)
+        expectThat(runBlocking { testRunRepository.fetchTestRun(publicId) }).isNotNull()
 
-        val testSuiteDBs = testSuiteDao.fetchByTestRunId(testRunDB.id)
-        expectThat(testSuiteDBs).hasSize(1)
-        val testSuite = testSuiteDBs[0]
+        val testSuites = runBlocking { testSuiteRepository.fetchTestSuitesWithCases(publicId) }
+        expectThat(testSuites).hasSize(1)
+        val testSuite = testSuites[0]
         expectThat(testSuite.className).isEqualTo("FailingSuite")
         expectThat(testSuite.testCount).isEqualTo(2)
         expectThat(testSuite.passingCount).isEqualTo(0)
         expectThat(testSuite.skippedCount).isEqualTo(0)
         expectThat(testSuite.failureCount).isEqualTo(2)
 
-        val testCases = testCaseDao.fetchByTestSuiteId(testSuite.id)
+        val testCases = testSuite.testCases.orEmpty()
         expectThat(testCases).hasSize(2)
 
         expectThat(testCases).any {
@@ -117,27 +117,23 @@ class TestRunDatabaseRepositorySaveResultsTest : DatabaseRepositoryTestCase() {
             get { className }.isEqualTo("FailedTestCaseClass")
         }
 
-        val failedTestCaseDB = testCases.find { it.name == "FailedTestCase" }
-        assertNotNull(failedTestCaseDB)
-        val failedTestCaseFailuresDB = testFailureDao.fetchByTestCaseId(failedTestCaseDB.id)
-        expectThat(failedTestCaseFailuresDB)
-            .hasSize(1)
-            .any {
-                get { failureMessage }.isEqualTo("Failed test case")
-            }
+        val savedFailedTestCase = testCases.find { it.name == "FailedTestCase" }
+        expectThat(savedFailedTestCase?.failure?.failureMessage).isEqualTo("Failed test case")
 
         expectThat(testCases).any {
             get { name }.isEqualTo("ErroredTestCase")
             get { className }.isEqualTo("ErroredTestCaseClass")
         }
 
-        val erroredTestCaseDB = testCases.find { it.name == "ErroredTestCase" }
-        assertNotNull(erroredTestCaseDB)
-        val erroredTestCaseFailuresDB = testFailureDao.fetchByTestCaseId(erroredTestCaseDB.id)
-        expectThat(erroredTestCaseFailuresDB)
-            .hasSize(1)
-            .any {
-                get { failureMessage }.isEqualTo("Errored test case")
-            }
+        val savedErroredTestCase = testCases.find { it.name == "ErroredTestCase" }
+        expectThat(savedErroredTestCase?.failure?.failureMessage).isEqualTo("Errored test case")
     }
+}
+
+class TestRunRepositorySaveResultsDatabaseTest : TestRunRepositorySaveResultsTest() {
+    override fun createBackend() = DatabaseTestBackend()
+}
+
+class TestRunRepositorySaveResultsObjectStoreTest : TestRunRepositorySaveResultsTest() {
+    override fun createBackend() = ObjectStoreTestBackend()
 }

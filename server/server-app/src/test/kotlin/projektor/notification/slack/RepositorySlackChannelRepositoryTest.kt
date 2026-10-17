@@ -2,18 +2,17 @@ package projektor.notification.slack
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import org.koin.test.inject
-import projektor.DatabaseRepositoryTestCase
+import projektor.persistence.DatabaseTestBackend
+import projektor.persistence.ObjectStoreTestBackend
+import projektor.persistence.RepositoryTestCase
 import projektor.util.randomOrgAndRepo
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNull
 
-class RepositorySlackChannelDatabaseRepositoryTest : DatabaseRepositoryTestCase() {
+abstract class RepositorySlackChannelRepositoryTest : RepositoryTestCase() {
     @Test
     fun `should save, update, and delete channel for repo`() {
-        val repositorySlackChannelRepository by inject<RepositorySlackChannelRepository>()
-
         val repoName = randomOrgAndRepo()
 
         runBlocking {
@@ -32,8 +31,6 @@ class RepositorySlackChannelDatabaseRepositoryTest : DatabaseRepositoryTestCase(
 
     @Test
     fun `should keep channels for projects in the same repo separate`() {
-        val repositorySlackChannelRepository by inject<RepositorySlackChannelRepository>()
-
         val repoName = randomOrgAndRepo()
 
         runBlocking {
@@ -53,4 +50,12 @@ class RepositorySlackChannelDatabaseRepositoryTest : DatabaseRepositoryTestCase(
             expectThat(repositorySlackChannelRepository.fetchChannelName(repoName, "server")).isEqualTo("server-channel")
         }
     }
+}
+
+class RepositorySlackChannelRepositoryDatabaseTest : RepositorySlackChannelRepositoryTest() {
+    override fun createBackend() = DatabaseTestBackend()
+}
+
+class RepositorySlackChannelRepositoryObjectStoreTest : RepositorySlackChannelRepositoryTest() {
+    override fun createBackend() = ObjectStoreTestBackend()
 }

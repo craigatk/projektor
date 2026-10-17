@@ -180,14 +180,26 @@ lease once expired. `SchedulerLock` accepts a `LockProvider` instead of building
 - Not done: OpenTelemetry spans and Micrometer timers on the object-store repositories. The database backend only
   has spans on a few methods, so this isn't a parity gap, but object-store latency won't be visible in metrics yet.
 
-### Phase 5: tests
+### Phase 5: tests — DONE (except Cypress)
 
-- Turn the repository specs into abstract contract specs with a subclass per backend. Seed through the repository
-  interfaces where possible; add per-backend fixture helpers where specs currently seed with DAOs.
-- Keep the `ApplicationTestCase` tests on the DB backend. Add a smaller application suite with
-  `PERSISTENCE_TYPE=object-store` covering publish -> fetch run, suites, cases, coverage, attachments, repo timeline,
-  test case history, cleanup, and the MCP failing-test context tool.
-- Optional Cypress smoke run against the object-store server.
+- Test infrastructure in `projektor.persistence` (test sources): `PersistenceTestBackend` (`DatabaseTestBackend`,
+  `ObjectStoreTestBackend` with a fresh key prefix per test), `RepositoryTestCase` base class, and `TestRunGenerator`,
+  which seeds data through the repository interfaces with the same conventions as `TestRunDBGenerator`.
+- All 22 repository-level `*DatabaseRepository*Test` classes converted to abstract `*RepositoryTest` classes with
+  `…DatabaseTest` and `…ObjectStoreTest` subclasses, seeding and asserting only through repository interfaces.
+  Only `TestSuiteDatabaseRepositoryQueryTest` (checks the SQL column selection) stays database-only.
+  Some assertions changed from DB-generator artifacts to what a real save produces (e.g. summary counts computed
+  from the suites instead of hard-coded rows).
+- Service-level tests (`TestRunCleanupServiceTest`, `PreviousTestRunServiceTest`, ...) stay on the database backend;
+  persistence behavior is covered by the repository tests plus the parity tests.
+- `ObjectStorePersistenceApplicationTest` also covers attachments, the cleanup job (old run, its attachments and
+  timeline entry removed, processing status DELETED) and the MCP `get_pull_request_failing_test_context` tool.
+- More findings from running the repository tests on the database backend:
+  - Database bug: a test suite saved without a duration can't be read back (`TestSuite.duration` is non-null but the
+    column is nullable, so the row mapper throws). The object store returns 0.000.
+  - The database backend's timestamp conversions assume the JVM runs in UTC (every database test base pins the
+    default time zone), so production needs to keep running in UTC.
+- Not done: Cypress smoke run against an object-store server.
 
 ### Phase 6: docs
 
