@@ -93,11 +93,11 @@ class GroupedTestResultsService(
         groupedResultsBlob: String,
     ) {
         try {
-            val (testRunId, testRunSummary) = testRunRepository.saveGroupedTestRun(publicId, groupedResults)
+            val testRunSummary = testRunRepository.saveGroupedTestRun(publicId, groupedResults)
 
             val performanceResults =
                 groupedResults.performanceResults.map { performanceResult ->
-                    performanceResultsRepository.savePerformanceResults(testRunId, publicId, performanceResult)
+                    performanceResultsRepository.savePerformanceResults(publicId, performanceResult)
                 }
 
             testResultsProcessingService.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.SUCCESS)
@@ -105,7 +105,7 @@ class GroupedTestResultsService(
             val coverage = groupedResults.coverageFiles?.let { saveCoverage(publicId, it) }
 
             groupedResults.codeQualityReports?.let {
-                codeQualityReportRepository.insertCodeQualityReports(testRunId, it)
+                codeQualityReportRepository.insertCodeQualityReports(publicId, it)
             }
 
             metricsService.incrementResultsProcessSuccessCounter()
@@ -116,7 +116,7 @@ class GroupedTestResultsService(
                 val pullRequestNumber = groupedResults.metadata.git.pullRequestNumber ?: pullRequest?.number
 
                 testRunMetadataRepository.updateGitMetadata(
-                    testRunId = testRunId,
+                    publicId = publicId,
                     pullRequestNumber = pullRequestNumber,
                     commitSha = groupedResults.metadata.git.commitSha,
                 )
@@ -137,7 +137,7 @@ class GroupedTestResultsService(
         groupedResultsBlob: String,
     ) {
         try {
-            val (testRunId, testRunSummary) = appendTestResultsService.appendGroupedTestRun(publicId, groupedResults)
+            val testRunSummary = appendTestResultsService.appendGroupedTestRun(publicId, groupedResults)
 
             metricsService.incrementResultsProcessSuccessCounter()
 
@@ -149,7 +149,7 @@ class GroupedTestResultsService(
                 }
 
             groupedResults.codeQualityReports?.let {
-                codeQualityReportRepository.insertCodeQualityReports(testRunId, it)
+                codeQualityReportRepository.insertCodeQualityReports(publicId, it)
             }
 
             publishCommentToPullRequest(testRunSummary, groupedResults.metadata?.git, coverage, null)

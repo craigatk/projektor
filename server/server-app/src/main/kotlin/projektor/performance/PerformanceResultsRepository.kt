@@ -6,7 +6,6 @@ import projektor.incomingresults.model.PerformanceResult as IncomingPerformanceR
 
 interface PerformanceResultsRepository {
     suspend fun savePerformanceResults(
-        testRunId: Long,
         publicId: PublicId,
         results: IncomingPerformanceResult,
     ): PerformanceResult

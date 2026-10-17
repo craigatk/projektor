@@ -38,7 +38,7 @@ class TestRunMetadataDatabaseRepository(private val dslContext: DSLContext) : Te
         }
 
     override suspend fun updateGitMetadata(
-        testRunId: Long,
+        publicId: PublicId,
         pullRequestNumber: Int?,
         commitSha: String?,
     ) {
@@ -46,7 +46,11 @@ class TestRunMetadataDatabaseRepository(private val dslContext: DSLContext) : Te
             dslContext.update(GIT_METADATA)
                 .set(GIT_METADATA.PULL_REQUEST_NUMBER, pullRequestNumber)
                 .set(GIT_METADATA.COMMIT_SHA, commitSha)
-                .where(GIT_METADATA.TEST_RUN_ID.eq(testRunId))
+                .where(
+                    GIT_METADATA.TEST_RUN_ID.eq(
+                        dslContext.select(TEST_RUN.ID).from(TEST_RUN).where(TEST_RUN.PUBLIC_ID.eq(publicId.id)),
+                    ),
+                )
                 .execute()
         }
     }

@@ -110,16 +110,15 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
 
         logger.info("Finished inserting test run $publicId")
 
-        Pair(testRunDB.id, testRunSummary)
+        testRunSummary
     }
 
     override suspend fun appendTestSuites(
         publicId: PublicId,
         startingIdx: Int,
         groupedTestSuites: List<GroupedTestSuites>,
-    ): Long =
+    ) {
         withContext(Dispatchers.IO) {
-            var testRunId: Long = 0
             logger.info("Starting appending test suites to $publicId")
 
             var testSuiteStartingIndex = startingIdx
@@ -146,26 +145,23 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
 
                     testSuiteStartingIndex += groupedTestSuites.testSuites.size
                 }
-
-                testRunId = testRunDB.id
             }
-
-            testRunId
         }
+    }
 
     override suspend fun updateTestRunSummary(
-        testRunId: Long,
+        publicId: PublicId,
         testSuites: List<TestSuite>,
         wallClockDuration: BigDecimal?,
     ): TestRunSummary =
         withContext(Dispatchers.IO) {
             val testRunDao = TestRunDao(dslContext.configuration())
-            val existingTestRun = testRunDao.fetchOneById(testRunId)
+            val existingTestRun = testRunDao.fetchOneByPublicId(publicId.id)
 
             val updatedWallClockDuration: BigDecimal = (existingTestRun.wallClockDuration ?: BigDecimal.ZERO) + (wallClockDuration ?: BigDecimal.ZERO)
 
             val testRunSummary =
-                toTestRunSummaryFromApi(PublicId(existingTestRun.publicId), testSuites, updatedWallClockDuration, Instant.now())
+                toTestRunSummaryFromApi(publicId, testSuites, updatedWallClockDuration, Instant.now())
             existingTestRun.averageDuration = testRunSummary.averageDuration
             existingTestRun.cumulativeDuration = testRunSummary.cumulativeDuration
             existingTestRun.passed = testRunSummary.passed

@@ -43,11 +43,11 @@ class GetPerformanceResultsApplicationTest : ApplicationTestCase() {
                     p95 = BigDecimal("30.48"),
                 )
 
-            val testRun = testRunDBGenerator.createEmptyTestRun(publicId)
+            testRunDBGenerator.createEmptyTestRun(publicId)
             val performanceResultsRepository: PerformanceResultsRepository = getApplication().get()
 
-            runBlocking { performanceResultsRepository.savePerformanceResults(testRun.id, publicId, savedPerfResult1) }
-            runBlocking { performanceResultsRepository.savePerformanceResults(testRun.id, publicId, savedPerfResult2) }
+            runBlocking { performanceResultsRepository.savePerformanceResults(publicId, savedPerfResult1) }
+            runBlocking { performanceResultsRepository.savePerformanceResults(publicId, savedPerfResult2) }
 
             val response = client.get("/run/$publicId/performance")
 
