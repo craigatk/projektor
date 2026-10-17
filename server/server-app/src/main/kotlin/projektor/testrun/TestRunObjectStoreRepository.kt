@@ -1,6 +1,9 @@
 package projektor.testrun
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import org.slf4j.LoggerFactory
 import projektor.incomingresults.mapper.toTestRunSummary
@@ -8,11 +11,14 @@ import projektor.incomingresults.mapper.toTestRunSummaryFromApi
 import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedResults
 import projektor.incomingresults.model.GroupedTestSuites
+import projektor.persistence.objectstore.AttachmentsDocument
 import projektor.persistence.objectstore.GitMetadataDocument
 import projektor.persistence.objectstore.ObjectStoreKeys
 import projektor.persistence.objectstore.ResultsMetadataDocument
+import projektor.persistence.objectstore.SystemAttributesDocument
 import projektor.persistence.objectstore.TestRunDocument
 import projektor.persistence.objectstore.TestRunDocumentStore
+import projektor.persistence.objectstore.TestRunIndex
 import projektor.persistence.objectstore.TestSuiteDocument
 import projektor.persistence.objectstore.TestSuiteGroupDocument
 import projektor.persistence.objectstore.toApi
@@ -25,9 +31,13 @@ import projektor.server.api.TestSuite
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneOffset
 import projektor.parser.model.TestSuite as ParsedTestSuite
 
-class TestRunObjectStoreRepository(private val documentStore: TestRunDocumentStore) : TestRunRepository {
+class TestRunObjectStoreRepository(
+    private val documentStore: TestRunDocumentStore,
+    private val testRunIndex: TestRunIndex,
+) : TestRunRepository {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
     private val store = documentStore.store
@@ -165,6 +175,8 @@ class TestRunObjectStoreRepository(private val documentStore: TestRunDocumentSto
             )
         }
 
+        testRunIndex.refreshEntry(publicId)
+
         return testRunSummary
     }
 
@@ -181,21 +193,52 @@ class TestRunObjectStoreRepository(private val documentStore: TestRunDocumentSto
         documentStore.readTestRun(publicId)?.summary?.toApi(publicId)
 
     override suspend fun deleteTestRun(publicId: PublicId) {
+        val deletedTestRun = documentStore.readTestRun(publicId)
+
         withContext(Dispatchers.IO) {
             store.deletePrefix(ObjectStoreKeys.testRunPrefix(publicId))
         }
+
+        deletedTestRun?.let { testRunIndex.removeTestRun(publicId, it) }
     }
 
     override suspend fun findTestRunsCreatedBeforeAndNotPinned(createdBefore: LocalDate): List<PublicId> =
-        TODO("Requires the created-date index from phase 3 of the object-store persistence plan")
+        findTestRunsCreatedBeforeAndNotPinned(createdBefore, withAttachmentsOnly = false)
 
     override suspend fun findTestRunsCreatedBeforeAndNotPinnedWithAttachments(createdBefore: LocalDate): List<PublicId> =
-        TODO("Requires the created-date index from phase 3 of the object-store persistence plan")
+        findTestRunsCreatedBeforeAndNotPinned(createdBefore, withAttachmentsOnly = true)
 
     override suspend fun findTestRunWithGroup(
         group: String,
         repoName: String,
-    ): PublicId? = TODO("Requires the group index from phase 3 of the object-store persistence plan")
+    ): PublicId? =
+        // The database query has no order, in practice returning the first saved run with the group
+        testRunIndex.readRepositoryEntries(repoName)
+            .firstOrNull { it.group == group }
+            ?.let { PublicId(it.publicId) }
+
+    private suspend fun findTestRunsCreatedBeforeAndNotPinned(
+        createdBefore: LocalDate,
+        withAttachmentsOnly: Boolean,
+    ): List<PublicId> =
+        coroutineScope {
+            val createdBeforeTimestamp = createdBefore.atStartOfDay().toInstant(ZoneOffset.UTC)
+
+            testRunIndex.readTestRunsCreatedAtOrBefore(createdBeforeTimestamp)
+                .map { PublicId(it.publicId) }
+                .map { publicId ->
+                    async(Dispatchers.IO) {
+                        val pinned = store.read<SystemAttributesDocument>(ObjectStoreKeys.systemAttributes(publicId))?.pinned ?: false
+                        val hasAttachments =
+                            !withAttachmentsOnly ||
+                                store.read<AttachmentsDocument>(ObjectStoreKeys.attachments(publicId))?.attachments.orEmpty().isNotEmpty()
+
+                        publicId.takeIf { !pinned && hasAttachments }
+                    }
+                }
+                .awaitAll()
+                .filterNotNull()
+        }
 
     private suspend fun createTestRunDocument(
         publicId: PublicId,
@@ -205,6 +248,8 @@ class TestRunObjectStoreRepository(private val documentStore: TestRunDocumentSto
             store.create(ObjectStoreKeys.testRun(publicId), testRunDocument)
                 ?: throw IllegalStateException("Test run $publicId already exists")
         }
+
+        testRunIndex.addTestRun(publicId, testRunDocument)
     }
 
     private suspend fun updateTestRunDocument(

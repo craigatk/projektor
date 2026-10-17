@@ -11,8 +11,10 @@ import org.koin.dsl.koinApplication
 import projektor.attachment.AttachmentRepository
 import projektor.coverage.CoverageRepository
 import projektor.error.ProcessingFailureRepository
+import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedResults
 import projektor.incomingresults.model.GroupedTestSuites
+import projektor.incomingresults.model.ResultsMetadata
 import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.incomingresults.randomPublicId
 import projektor.objectstore.ObjectStoreClient
@@ -22,8 +24,12 @@ import projektor.parser.coverage.model.CoverageReport
 import projektor.parser.coverage.model.CoverageReportStat
 import projektor.parser.coverage.model.CoverageReportStats
 import projektor.parser.model.Failure
+import projektor.performance.PerformanceResultsRepository
+import projektor.repository.coverage.RepositoryCoverageRepository
+import projektor.repository.performance.RepositoryPerformanceRepository
 import projektor.server.api.attachments.Attachment
 import projektor.server.api.error.FailureBodyType
+import projektor.server.api.repository.BranchType
 import projektor.testcase.TestCaseRepository
 import projektor.testrun.TestRunRepository
 import projektor.testrun.attributes.TestRunSystemAttributesRepository
@@ -37,7 +43,10 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 import strikt.assertions.isTrue
 import java.math.BigDecimal
+import java.time.Instant
+import java.time.LocalDate
 import java.util.UUID
+import projektor.incomingresults.model.PerformanceResult as IncomingPerformanceResult
 import projektor.parser.model.TestCase as ParsedTestCase
 import projektor.parser.model.TestSuite as ParsedTestSuite
 
@@ -198,6 +207,109 @@ class ObjectStoreRepositoriesTest {
         val secondSave = runCatching { runBlocking { testRunRepository.saveGroupedTestRun(publicId, results) } }
         expectThat(secondSave.exceptionOrNull()).isNotNull()
     }
+
+    @Test
+    fun `repository performance timeline should include every performance result of a run`() {
+        val publicId = randomPublicId()
+        val repoName = "org-${UUID.randomUUID()}/repo"
+        val performanceResultsRepository: PerformanceResultsRepository = koin.get()
+        val repositoryPerformanceRepository: RepositoryPerformanceRepository = koin.get()
+
+        runBlocking {
+            testRunRepository.saveGroupedTestRun(
+                publicId,
+                groupedResults(repoName, GroupedTestSuites(listOf(createTestSuite("Suite")), null, null, null)),
+            )
+            listOf("first", "second").forEach { name ->
+                performanceResultsRepository.savePerformanceResults(
+                    publicId,
+                    IncomingPerformanceResult(name, BigDecimal("1"), 1, BigDecimal("1"), BigDecimal("1"), BigDecimal("1")),
+                )
+            }
+        }
+
+        val timelineEntries = runBlocking { repositoryPerformanceRepository.fetchTestTimelineEntries(repoName, null) }
+        expectThat(timelineEntries.map { it.performanceResult.name }).containsExactly("first", "second")
+    }
+
+    @Test
+    fun `repository timeline should reflect every concurrent change to the same month`() {
+        val repoName = "org-${UUID.randomUUID()}/repo"
+        val coverageRepository: CoverageRepository = koin.get()
+        val repositoryCoverageRepository: RepositoryCoverageRepository = koin.get()
+        val publicIds = (1..6).map { randomPublicId() }
+
+        runBlocking {
+            // Every run lands in the same timeline shard, so the index updates contend with each other
+            publicIds.map { publicId ->
+                async(Dispatchers.IO) {
+                    testRunRepository.saveGroupedTestRun(
+                        publicId,
+                        groupedResults(repoName, GroupedTestSuites(listOf(createTestSuite("Suite")), null, null, null)),
+                    )
+                    coverageRepository.addCoverageReport(
+                        publicId,
+                        CoverageReport(
+                            "report",
+                            CoverageReportStats(CoverageReportStat(1, 1), CoverageReportStat(3, 1), CoverageReportStat(1, 1)),
+                            null,
+                        ),
+                        listOf(),
+                    )
+                }
+            }.awaitAll()
+        }
+
+        val coverageTimeline = runBlocking { repositoryCoverageRepository.fetchRepositoryCoverageTimeline(BranchType.ALL, repoName, null) }
+        expectThat(coverageTimeline?.timelineEntries?.map { it.publicId }?.toSet()).isEqualTo(publicIds.map { it.id }.toSet())
+        expectThat(coverageTimeline?.timelineEntries?.all { it.coverageStats.lineStat.covered == 3 }).isEqualTo(true)
+    }
+
+    @Test
+    fun `test run cleanup should find test runs without Git metadata and skip pinned runs`() {
+        val withoutGit = randomPublicId()
+        val withGit = randomPublicId()
+        val pinned = randomPublicId()
+        val systemAttributesRepository: TestRunSystemAttributesRepository = koin.get()
+        val createdTimestamp = Instant.parse("2020-05-01T10:00:00Z")
+
+        runBlocking {
+            listOf(withoutGit, withGit, pinned).forEach { publicId ->
+                val repoName = if (publicId == withoutGit) null else "org-${UUID.randomUUID()}/repo"
+                testRunRepository.saveGroupedTestRun(
+                    publicId,
+                    groupedResults(
+                        repoName,
+                        GroupedTestSuites(listOf(createTestSuite("Suite")), null, null, null),
+                        createdTimestamp = createdTimestamp,
+                    ),
+                )
+            }
+            systemAttributesRepository.pin(pinned)
+        }
+
+        expectThat(runBlocking { testRunRepository.findTestRunsCreatedBeforeAndNotPinned(LocalDate.parse("2020-05-01")) }).hasSize(0)
+        expectThat(runBlocking { testRunRepository.findTestRunsCreatedBeforeAndNotPinned(LocalDate.parse("2020-05-02")).toSet() })
+            .isEqualTo(setOf(withoutGit, withGit))
+
+        runBlocking { testRunRepository.deleteTestRun(withoutGit) }
+        expectThat(
+            runBlocking { testRunRepository.findTestRunsCreatedBeforeAndNotPinned(LocalDate.parse("2020-05-02")) },
+        ).containsExactly(withGit)
+    }
+
+    private fun groupedResults(
+        repoName: String?,
+        vararg groupedTestSuites: GroupedTestSuites,
+        createdTimestamp: Instant? = null,
+    ) = GroupedResults(
+        groupedTestSuites.toList(),
+        listOf(),
+        ResultsMetadata(repoName?.let { GitMetadata(it, null, "main", true) }, true, null, createdTimestamp),
+        null,
+        null,
+        null,
+    )
 
     private fun groupedResults(vararg groupedTestSuites: GroupedTestSuites) =
         GroupedResults(groupedTestSuites.toList(), listOf(), null, null, null, null)

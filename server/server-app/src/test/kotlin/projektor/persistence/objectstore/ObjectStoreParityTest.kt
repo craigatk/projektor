@@ -1,73 +1,30 @@
 package projektor.persistence.objectstore
 
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.Koin
-import org.koin.dsl.koinApplication
-import projektor.DatabaseRepositoryTestCase
-import projektor.attachment.AttachmentRepository
 import projektor.coverage.CoverageGroupStatus
-import projektor.coverage.CoverageRepository
 import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedResults
 import projektor.incomingresults.model.GroupedTestSuites
 import projektor.incomingresults.model.ResultsMetadata
-import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.incomingresults.randomPublicId
-import projektor.metadata.TestRunMetadataRepository
-import projektor.objectstore.ObjectStoreClient
-import projektor.objectstore.ObjectStoreConfig
-import projektor.objectstore.json.JsonObjectStore
-import projektor.parser.ResultsXmlLoader
-import projektor.parser.coverage.model.CoverageReport
-import projektor.parser.coverage.model.CoverageReportStat
-import projektor.parser.coverage.model.CoverageReportStats
-import projektor.performance.PerformanceResultsRepository
-import projektor.persistence.createDatabasePersistenceModule
-import projektor.quality.CodeQualityReportRepository
-import projektor.results.processor.TestResultsProcessor
 import projektor.server.api.PublicId
 import projektor.server.api.attachments.Attachment
-import projektor.server.api.coverage.CoverageFile
 import projektor.server.api.coverage.CoverageStat
-import projektor.server.api.coverage.CoverageStats
 import projektor.server.api.quality.CodeQualityReport
 import projektor.server.api.results.ResultsProcessingStatus
-import projektor.testcase.TestCaseRepository
-import projektor.testrun.TestRunRepository
-import projektor.testrun.attributes.TestRunSystemAttributesRepository
-import projektor.testsuite.TestSuiteRepository
 import projektor.testsuite.TestSuiteSearchCriteria
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isGreaterThan
 import java.math.BigDecimal
 import java.time.Instant
-import java.util.UUID
 import projektor.incomingresults.model.PerformanceResult as IncomingPerformanceResult
 
 /**
- * Saves the same data to both the database and object-store backends (under the same public ID,
- * since the backends are independent) and checks that every fetch returns equal results.
+ * Checks that the object-store backend returns the same data for a single test run as the database backend.
  */
-class ObjectStoreParityTest : DatabaseRepositoryTestCase() {
-    private val resultsXmlLoader = ResultsXmlLoader()
-    private val testResultsProcessor = TestResultsProcessor()
-
-    private lateinit var database: Repositories
-    private lateinit var objectStore: Repositories
-
-    @BeforeEach
-    fun createBackends() {
-        database = Repositories(koinApplication { modules(createDatabasePersistenceModule(dataSource, dslContext)) }.koin)
-
-        val objectStoreClient = ObjectStoreClient(ObjectStoreConfig("http://localhost:9000", "minio_access_key", "minio_secret_key"))
-        objectStoreClient.createBucketIfNotExists(BUCKET_NAME)
-        val jsonObjectStore = JsonObjectStore(objectStoreClient, BUCKET_NAME, "parity-${UUID.randomUUID()}")
-        objectStore = Repositories(koinApplication { modules(createObjectStorePersistenceModule(jsonObjectStore)) }.koin)
-    }
-
+class ObjectStoreParityTest : ObjectStoreParityTestCase() {
     @Test
     fun `grouped test run should match`() {
         val publicId = randomPublicId()
@@ -367,82 +324,5 @@ class ObjectStoreParityTest : DatabaseRepositoryTestCase() {
                     .sortedBy { it.toString() }
             }
         }
-    }
-
-    private fun <T> expectSameResult(
-        ignoringCreatedTimestamp: Boolean = false,
-        fetch: suspend (Repositories) -> T,
-    ) {
-        val databaseResult = runBlocking { fetch(database) }
-        val objectStoreResult = runBlocking { fetch(objectStore) }
-
-        if (ignoringCreatedTimestamp && databaseResult is projektor.server.api.TestRunSummary && objectStoreResult is projektor.server.api.TestRunSummary) {
-            expectThat(
-                objectStoreResult.copy(createdTimestamp = Instant.EPOCH),
-            ).isEqualTo(databaseResult.copy(createdTimestamp = Instant.EPOCH))
-        } else {
-            expectThat(objectStoreResult).isEqualTo(databaseResult)
-        }
-    }
-
-    // Drops test suites without test cases, like GroupedResultsConverter does before results are saved
-    private fun parse(vararg resultsXml: String) =
-        resultsXml
-            .flatMap { testResultsProcessor.parseResultsBlob(it) }
-            .filter { !it.testCases.isNullOrEmpty() }
-            .also { expectThat(it.size).isGreaterThan(0) }
-
-    private fun coverageReport(
-        name: String,
-        statementCovered: Int,
-        statementMissed: Int,
-        lineCovered: Int,
-        lineMissed: Int,
-        branchCovered: Int,
-        branchMissed: Int,
-    ) = CoverageReport(
-        name,
-        CoverageReportStats(
-            statementStat = CoverageReportStat(statementCovered, statementMissed),
-            lineStat = CoverageReportStat(lineCovered, lineMissed),
-            branchStat = CoverageReportStat(branchCovered, branchMissed),
-        ),
-        null,
-    )
-
-    private fun coverageFile(
-        fileName: String,
-        filePath: String?,
-        missedLines: List<Int>,
-        partialLines: List<Int>,
-    ) = CoverageFile(
-        fileName = fileName,
-        directoryName = "dir",
-        missedLines = missedLines.toTypedArray(),
-        partialLines = partialLines.toTypedArray(),
-        stats =
-            CoverageStats(
-                statementStat = CoverageStat(10, missedLines.size),
-                lineStat = CoverageStat(20, missedLines.size),
-                branchStat = CoverageStat(3, partialLines.size),
-            ),
-        filePath = filePath,
-    )
-
-    private class Repositories(koin: Koin) {
-        val testRunRepository: TestRunRepository = koin.get()
-        val testSuiteRepository: TestSuiteRepository = koin.get()
-        val testCaseRepository: TestCaseRepository = koin.get()
-        val testRunMetadataRepository: TestRunMetadataRepository = koin.get()
-        val testRunSystemAttributesRepository: TestRunSystemAttributesRepository = koin.get()
-        val attachmentRepository: AttachmentRepository = koin.get()
-        val resultsProcessingRepository: ResultsProcessingRepository = koin.get()
-        val performanceResultsRepository: PerformanceResultsRepository = koin.get()
-        val codeQualityReportRepository: CodeQualityReportRepository = koin.get()
-        val coverageRepository: CoverageRepository = koin.get()
-    }
-
-    companion object {
-        private const val BUCKET_NAME = "persistenceparity"
     }
 }

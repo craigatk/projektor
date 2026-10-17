@@ -134,15 +134,36 @@ lease once expired. `SchedulerLock` accepts a `LockProvider` instead of building
   path leaves a gap of one), `fetchHighestTestSuiteIndex` returns 0 when there are no suites, and test cases nested
   in suites don't carry their suite's file name or output flags.
 
-### Phase 3: index maintenance and cross-run repositories
+### Phase 3: index maintenance and cross-run repositories — DONE
 
-- An `IndexWriter` called by `saveTestRun`, `saveGroupedTestRun`, `updateGitMetadata`, `pin`/`unpin`, coverage add and
-  delete. It maintains timeline shard entries, PR markers, group pointers and the created-date index.
-- `RepositoryTestRunRepository`, `RepositoryCoverageRepository`, `RepositoryPerformanceRepository`,
-  `PreviousTestRunRepository`, `OrganizationCoverageRepository` (list `repos/{org}/` with a delimiter, then check each
-  repo's current-coverage object), `RepositorySlackChannelRepository`, and the history/baseline methods on
-  `TestCaseRepository`.
-- `findTestRunsCreatedBefore…`: list `created/` day prefixes older than the cutoff and filter on the flags.
+- `projektor.persistence.objectstore.TestRunIndex`:
+  - Repository timeline shards `repos/{urlencoded repo}/timeline/{yyyy-MM}.json`, one entry per run with Git
+    metadata (summary, project/branch/main/PR/commit, CI flag, results group, whether coverage was started, summed
+    coverage group stats, performance results). Covers what the PR markers and group pointers in the original sketch
+    were for, so those weren't needed.
+  - Created-date markers `created/{yyyy-MM-dd}/{publicId}.json` for cleanup (includes runs without Git metadata).
+    Pinned/attachment status is read per candidate at query time.
+  - Organization markers `orgs/{org}/{urlencoded repo}.json`.
+  - Entries are rebuilt, never patched: every mutation calls `refreshEntry(publicId)`, which re-reads the run,
+    coverage and performance documents *inside* the shard's compare-and-swap so concurrent changes converge.
+    A reindex job would be the same call in a loop.
+  - Queries read all of a repository's shards and filter in memory. That stays cheap because cleanup bounds the
+    months of shards; with cleanup disabled, repository pages get slower as history grows.
+- Object-store `RepositoryTestRun`, `RepositoryCoverage` (last-known coverage at
+  `repos/{repo}/current-coverage/{project}.json`), `RepositoryPerformance`, `PreviousTestRun`, `OrganizationCoverage`,
+  `RepositorySlackChannel` (`repos/{repo}/slack-channel/{project}.json`), test case history and duration baselines,
+  `findTestRunWithGroup`, and the cleanup queries. The object-store module now binds every repository.
+- `ObjectStoreIndexParityTest` saves a multi-repo, multi-month scenario to both backends and compares every
+  cross-run query (cleanup queries compared on the scenario's own runs, since the test database is shared).
+  `ParityTest` setup moved into `ObjectStoreParityTestCase`.
+- More parity findings:
+  - Database bug: the repository performance timeline returns only one performance result per run (its row mapper
+    is keyed on public ID). The object store returns all of them.
+  - Queries ordered by created timestamp descending have no tiebreaker in SQL; the object store matches the
+    database's practical behavior (ties in save order) with a stable sort.
+  - Duration baseline medians come back from the database at a scale that depends on the Postgres driver's
+    text/binary transfer mode; the object store returns the binary-mode form (`3.0`), and the parity test compares
+    medians by value.
 
 ### Phase 4: wiring and operations
 
