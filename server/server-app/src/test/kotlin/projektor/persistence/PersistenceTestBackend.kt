@@ -27,7 +27,7 @@ interface PersistenceTestBackend : Closeable {
  * The real Postgres test database, shared across tests (see the database-persistence skill),
  * with a connection pool per test.
  */
-class DatabaseTestBackend : PersistenceTestBackend {
+class DatabaseTestBackend(maximumPoolSize: Int = 2) : PersistenceTestBackend {
     override val name = "database"
 
     private val dataSource: HikariDataSource
@@ -41,7 +41,7 @@ class DatabaseTestBackend : PersistenceTestBackend {
                 System.getenv("DB_USERNAME") ?: "testuser",
                 System.getenv("DB_PASSWORD") ?: "testpass",
                 "public",
-                2,
+                maximumPoolSize,
             )
 
         val hikariConfig = HikariConfig()

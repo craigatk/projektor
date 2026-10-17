@@ -21,6 +21,7 @@ import projektor.database.generated.tables.TestCase;
 import projektor.database.generated.tables.TestFailure;
 import projektor.database.generated.tables.TestRun;
 import projektor.database.generated.tables.TestRunAttachment;
+import projektor.database.generated.tables.TestRunGroupClaim;
 import projektor.database.generated.tables.TestRunSystemAttributes;
 import projektor.database.generated.tables.TestSuite;
 import projektor.database.generated.tables.TestSuiteGroup;
@@ -116,6 +117,11 @@ public class Tables {
      * The table <code>public.test_run_attachment</code>.
      */
     public static final TestRunAttachment TEST_RUN_ATTACHMENT = TestRunAttachment.TEST_RUN_ATTACHMENT;
+
+    /**
+     * The table <code>public.test_run_group_claim</code>.
+     */
+    public static final TestRunGroupClaim TEST_RUN_GROUP_CLAIM = TestRunGroupClaim.TEST_RUN_GROUP_CLAIM;
 
     /**
      * The table <code>public.test_run_system_attributes</code>.

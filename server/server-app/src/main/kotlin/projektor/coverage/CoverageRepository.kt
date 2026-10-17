@@ -4,7 +4,6 @@ import projektor.parser.coverage.model.CoverageReport
 import projektor.parser.coverage.model.CoverageReportStats
 import projektor.server.api.PublicId
 import projektor.server.api.coverage.CoverageFile
-import projektor.server.api.coverage.CoverageStat
 
 /**
  * Coverage for a test run is made up of groups (one per coverage report), each with its own stats and files.
@@ -23,29 +22,16 @@ interface CoverageRepository {
     )
 
     /**
-     * Adds a new coverage group with the report's stats if one with the report's name doesn't exist yet.
-     * Otherwise updates the existing group's line stats to newLineStat (and zeroes its statement and branch stats).
+     * Appends the report to the coverage group with the report's name. If the group doesn't exist yet, adds it
+     * with the report's stats and files. Otherwise combines the report's files with the group's files (see
+     * [combineCoverageFiles]) and updates the group's line stats to match (zeroing its statement and branch stats).
+     *
+     * Atomic with respect to concurrent appends to the same test run.
      */
-    suspend fun upsertCoverageGroup(
+    suspend fun appendCoverageReport(
         publicId: PublicId,
         coverageReport: CoverageReport,
-        newLineStat: CoverageStat,
-    ): CoverageGroupStatus
-
-    suspend fun insertCoverageFiles(
-        publicId: PublicId,
-        groupName: String,
-        coverageReportFiles: List<CoverageFile>,
-    )
-
-    /**
-     * Inserts files whose path isn't in the group yet. For files already in the group, updates their missed lines
-     * and line stats (and clears their partial lines and zeroes their statement and branch stats).
-     */
-    suspend fun upsertCoverageFiles(
-        publicId: PublicId,
-        groupName: String,
-        coverageReportFiles: List<CoverageFile>,
+        incomingCoverageFiles: List<CoverageFile>,
     )
 
     suspend fun fetchOverallStats(publicId: PublicId): CoverageReportStats

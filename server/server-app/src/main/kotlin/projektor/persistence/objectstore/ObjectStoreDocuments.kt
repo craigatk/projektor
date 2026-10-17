@@ -138,6 +138,10 @@ data class CoverageGroupDocument(
     val id: String,
     val name: String,
     val stats: CoverageStatsDocument,
+    // Whether the group was created by appending coverage, and how many appends it's had. A group created by
+    // a single append keeps the report's stats, otherwise its line stats are calculated from its files.
+    val createdByAppend: Boolean = false,
+    val appendCount: Int = 0,
 )
 
 data class CoverageStatsDocument(

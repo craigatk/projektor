@@ -72,13 +72,20 @@ class GroupedTestResultsService(
 
         val group = groupedResults.metadata?.group
         val repoAndOrgName = groupedResults.metadata?.git?.repoName
-        val existingPublicIdWithGroup = appendTestResultsService.findExistingTestRunWithGroup(group, repoAndOrgName)
+        val groupOwnerPublicId = appendTestResultsService.claimTestRunGroup(group, repoAndOrgName, publicId)
+        val existingPublicIdWithGroup = groupOwnerPublicId?.takeIf { it != publicId }
 
         coroutineScope.launch {
-            if (existingPublicIdWithGroup != null) {
-                doAppendTestResults(existingPublicIdWithGroup, groupedResults, groupedResultsBlob)
-            } else {
-                doPersistTestResults(publicId, groupedResults, groupedResultsBlob)
+            // Processing errors are recorded by doAppendTestResults and doPersistTestResults, but recording them can
+            // fail too (e.g. when the server is shutting down), and nothing above this coroutine would handle that
+            try {
+                if (existingPublicIdWithGroup != null) {
+                    doAppendTestResults(existingPublicIdWithGroup, groupedResults, groupedResultsBlob)
+                } else {
+                    doPersistTestResults(publicId, groupedResults, groupedResultsBlob)
+                }
+            } catch (e: Exception) {
+                logger.error("Error processing test results $publicId", e)
             }
         }
 

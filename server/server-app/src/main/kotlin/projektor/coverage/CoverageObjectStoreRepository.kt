@@ -61,95 +61,72 @@ class CoverageObjectStoreRepository(
         testRunIndex.refreshEntry(publicId)
     }
 
-    override suspend fun upsertCoverageGroup(
+    /**
+     * Each step is a compare-and-swap update of one document, so concurrent appends don't lose each other's changes:
+     * 1. Find or create the group and count the append.
+     * 2. Combine the report's files with the group's files.
+     * 3. Recalculate the group's stats from the latest files.
+     */
+    override suspend fun appendCoverageReport(
         publicId: PublicId,
         coverageReport: CoverageReport,
-        newLineStat: CoverageStat,
-    ): CoverageGroupStatus {
-        val coverageGroupStatus = upsertCoverageGroupDocument(publicId, coverageReport, newLineStat)
-
-        testRunIndex.refreshEntry(publicId)
-
-        return coverageGroupStatus
-    }
-
-    private suspend fun upsertCoverageGroupDocument(
-        publicId: PublicId,
-        coverageReport: CoverageReport,
-        newLineStat: CoverageStat,
-    ): CoverageGroupStatus =
+        incomingCoverageFiles: List<CoverageFile>,
+    ) {
         withContext(Dispatchers.IO) {
-            lateinit var coverageGroupStatus: CoverageGroupStatus
+            lateinit var groupId: String
 
             updateCoverageRun(publicId) { current ->
                 val existingGroup = current.groups.find { it.name == coverageReport.name }
 
                 if (existingGroup == null) {
-                    coverageGroupStatus = CoverageGroupStatus.NEW
-
                     val newGroup =
-                        CoverageGroupDocument(UUID.randomUUID().toString(), coverageReport.name, coverageReport.totalStats.toDocument())
+                        CoverageGroupDocument(
+                            id = UUID.randomUUID().toString(),
+                            name = coverageReport.name,
+                            stats = coverageReport.totalStats.toDocument(),
+                            createdByAppend = true,
+                            appendCount = 1,
+                        )
+                    groupId = newGroup.id
                     current.copy(groups = current.groups + newGroup)
                 } else {
-                    coverageGroupStatus = CoverageGroupStatus.EXISTING
-
-                    val updatedGroup = existingGroup.copy(stats = lineOnlyStats(newLineStat))
-                    current.copy(groups = current.groups.map { if (it.id == existingGroup.id) updatedGroup else it })
+                    groupId = existingGroup.id
+                    current.copy(
+                        groups = current.groups.map { if (it.id == existingGroup.id) it.copy(appendCount = it.appendCount + 1) else it },
+                    )
                 }
             }
 
-            coverageGroupStatus
-        }
+            store.update<CoverageFilesDocument>(ObjectStoreKeys.coverageGroupFiles(publicId, groupId)) { current ->
+                val currentFiles = current?.files.orEmpty()
+                val combinedFiles = combineCoverageFiles(currentFiles.map { it.toApi() }, incomingCoverageFiles)
 
-    override suspend fun insertCoverageFiles(
-        publicId: PublicId,
-        groupName: String,
-        coverageReportFiles: List<CoverageFile>,
-    ) {
-        withContext(Dispatchers.IO) {
-            val group = fetchExistingGroup(publicId, groupName)
+                CoverageFilesDocument(upsertFiles(currentFiles, combinedFiles))
+            }
 
-            updateGroupFiles(publicId, group) { files -> files + coverageReportFiles.map { it.toDocument() } }
-        }
-    }
+            updateCoverageRun(publicId) { current ->
+                val group = current.groups.find { it.id == groupId }
 
-    override suspend fun upsertCoverageFiles(
-        publicId: PublicId,
-        groupName: String,
-        coverageReportFiles: List<CoverageFile>,
-    ) {
-        withContext(Dispatchers.IO) {
-            val group = fetchExistingGroup(publicId, groupName)
+                if (group == null || (group.createdByAppend && group.appendCount == 1)) {
+                    null
+                } else {
+                    // Read inside the update so a concurrent append's files are included if it commits first
+                    val files = store.read<CoverageFilesDocument>(ObjectStoreKeys.coverageGroupFiles(publicId, groupId))?.files.orEmpty()
+                    val lineStat = CoverageStat(files.sumOf { it.stats.lineCovered }, files.sumOf { it.stats.lineMissed })
+                    val updatedGroup = group.copy(stats = lineOnlyStats(lineStat))
 
-            updateGroupFiles(publicId, group) { files ->
-                val currentFilePaths = files.map { it.filePath }
-
-                val newFiles = coverageReportFiles.filter { !currentFilePaths.contains(it.filePath) }
-                val existingFilesByPath =
-                    coverageReportFiles
-                        .filter { currentFilePaths.contains(it.filePath) }
-                        // Like the database's file_path = ? lookup, a file without a path is never updated
-                        .filter { it.filePath != null }
-                        .associateBy { it.filePath }
-
-                val updatedFiles =
-                    files.map { file ->
-                        val reportFile = existingFilesByPath[file.filePath]
-
-                        if (reportFile != null) {
-                            file.copy(
-                                missedLines = reportFile.missedLines.toList(),
-                                partialLines = listOf(),
-                                stats = lineOnlyStats(reportFile.stats.lineStat),
-                            )
-                        } else {
-                            file
-                        }
+                    if (updatedGroup == group) {
+                        null
+                    } else {
+                        current.copy(
+                            groups = current.groups.map { if (it.id == groupId) updatedGroup else it },
+                        )
                     }
-
-                updatedFiles + newFiles.map { it.toDocument() }
+                }
             }
         }
+
+        testRunIndex.refreshEntry(publicId)
     }
 
     override suspend fun fetchOverallStats(publicId: PublicId): CoverageReportStats {
@@ -215,33 +192,53 @@ class CoverageObjectStoreRepository(
             store.read<CoverageRunDocument>(ObjectStoreKeys.coverageRun(publicId))
         }
 
-    private suspend fun fetchExistingGroup(
-        publicId: PublicId,
-        groupName: String,
-    ): CoverageGroupDocument =
-        fetchCoverageRun(publicId)?.groups?.find { it.name == groupName }
-            ?: throw IllegalStateException("No coverage group $groupName for test run $publicId")
-
+    // The transform returns null to leave the document unchanged
     private fun updateCoverageRun(
         publicId: PublicId,
-        transform: (CoverageRunDocument) -> CoverageRunDocument,
+        transform: (CoverageRunDocument) -> CoverageRunDocument?,
     ) {
         store.update<CoverageRunDocument>(ObjectStoreKeys.coverageRun(publicId)) { current ->
             transform(current ?: CoverageRunDocument(listOf()))
         }
     }
 
-    private fun updateGroupFiles(
-        publicId: PublicId,
-        group: CoverageGroupDocument,
-        transform: (List<CoverageFileDocument>) -> List<CoverageFileDocument>,
-    ) {
-        store.update<CoverageFilesDocument>(ObjectStoreKeys.coverageGroupFiles(publicId, group.id)) { current ->
-            CoverageFilesDocument(transform(current?.files.orEmpty()))
-        }
-    }
-
     companion object {
+        /**
+         * Adds files whose path isn't in the group yet. For files already in the group, updates their missed lines
+         * and line stats (and clears their partial lines and zeroes their statement and branch stats).
+         */
+        private fun upsertFiles(
+            files: List<CoverageFileDocument>,
+            coverageReportFiles: List<CoverageFile>,
+        ): List<CoverageFileDocument> {
+            val currentFilePaths = files.map { it.filePath }
+
+            val newFiles = coverageReportFiles.filter { !currentFilePaths.contains(it.filePath) }
+            val existingFilesByPath =
+                coverageReportFiles
+                    .filter { currentFilePaths.contains(it.filePath) }
+                    // Like the database's file_path = ? lookup, a file without a path is never updated
+                    .filter { it.filePath != null }
+                    .associateBy { it.filePath }
+
+            val updatedFiles =
+                files.map { file ->
+                    val reportFile = existingFilesByPath[file.filePath]
+
+                    if (reportFile != null) {
+                        file.copy(
+                            missedLines = reportFile.missedLines.toList(),
+                            partialLines = listOf(),
+                            stats = lineOnlyStats(reportFile.stats.lineStat),
+                        )
+                    } else {
+                        file
+                    }
+                }
+
+            return updatedFiles + newFiles.map { it.toDocument() }
+        }
+
         // Appended coverage only tracks line stats, so the statement and branch stats are zeroed
         private fun lineOnlyStats(lineStat: CoverageStat) =
             CoverageStatsDocument(

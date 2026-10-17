@@ -15,7 +15,6 @@ import projektor.parser.coverage.payload.CoveragePayloadParser
 import projektor.server.api.PublicId
 import projektor.server.api.coverage.Coverage
 import projektor.server.api.coverage.CoverageFile
-import projektor.server.api.coverage.CoverageStat
 import projektor.server.api.coverage.CoverageStats
 import projektor.server.api.coverage.UncoveredLines
 import projektor.server.api.coverage.UncoveredLinesFile
@@ -236,28 +235,7 @@ class CoverageService(
                 val (incomingCoverageReport, incomingCoverageFiles) = parsedReport
 
                 try {
-                    val existingCoverageFiles =
-                        coverageRepository.fetchCoverageFiles(publicId, incomingCoverageReport.name)
-
-                    val combinedCoverageFiles = combineCoverageFiles(existingCoverageFiles, incomingCoverageFiles)
-
-                    val coveredLines = combinedCoverageFiles.sumOf { it.stats.lineStat.covered }
-                    val missedLines = combinedCoverageFiles.sumOf { it.stats.lineStat.missed }
-                    val newLineStat =
-                        CoverageStat(covered = coveredLines, missed = missedLines, coveredPercentageDelta = null)
-
-                    val coverageGroupStatus =
-                        coverageRepository.upsertCoverageGroup(
-                            publicId,
-                            incomingCoverageReport,
-                            newLineStat,
-                        )
-
-                    if (coverageGroupStatus == CoverageGroupStatus.NEW) {
-                        coverageRepository.insertCoverageFiles(publicId, incomingCoverageReport.name, incomingCoverageFiles)
-                    } else {
-                        coverageRepository.upsertCoverageFiles(publicId, incomingCoverageReport.name, combinedCoverageFiles)
-                    }
+                    coverageRepository.appendCoverageReport(publicId, incomingCoverageReport, incomingCoverageFiles)
                 } catch (e: Exception) {
                     logger.error("Error saving coverage report", e)
                     metricsService.incrementCoverageProcessFailureCounter()

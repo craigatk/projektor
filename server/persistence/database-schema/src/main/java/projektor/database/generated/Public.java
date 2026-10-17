@@ -29,6 +29,7 @@ import projektor.database.generated.tables.TestCase;
 import projektor.database.generated.tables.TestFailure;
 import projektor.database.generated.tables.TestRun;
 import projektor.database.generated.tables.TestRunAttachment;
+import projektor.database.generated.tables.TestRunGroupClaim;
 import projektor.database.generated.tables.TestRunSystemAttributes;
 import projektor.database.generated.tables.TestSuite;
 import projektor.database.generated.tables.TestSuiteGroup;
@@ -133,6 +134,11 @@ public class Public extends SchemaImpl {
     public final TestRunAttachment TEST_RUN_ATTACHMENT = TestRunAttachment.TEST_RUN_ATTACHMENT;
 
     /**
+     * The table <code>public.test_run_group_claim</code>.
+     */
+    public final TestRunGroupClaim TEST_RUN_GROUP_CLAIM = TestRunGroupClaim.TEST_RUN_GROUP_CLAIM;
+
+    /**
      * The table <code>public.test_run_system_attributes</code>.
      */
     public final TestRunSystemAttributes TEST_RUN_SYSTEM_ATTRIBUTES = TestRunSystemAttributes.TEST_RUN_SYSTEM_ATTRIBUTES;
@@ -180,6 +186,7 @@ public class Public extends SchemaImpl {
             TestFailure.TEST_FAILURE,
             TestRun.TEST_RUN,
             TestRunAttachment.TEST_RUN_ATTACHMENT,
+            TestRunGroupClaim.TEST_RUN_GROUP_CLAIM,
             TestRunSystemAttributes.TEST_RUN_SYSTEM_ATTRIBUTES,
             TestSuite.TEST_SUITE,
             TestSuiteGroup.TEST_SUITE_GROUP

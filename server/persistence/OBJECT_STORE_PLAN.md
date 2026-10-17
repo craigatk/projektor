@@ -210,6 +210,40 @@ lease once expired. `SchedulerLock` accepts a `LockProvider` instead of building
 
 New environment variables and limitations in `../projektor-doc`, plus a release note.
 
+### Testing gap fixes
+
+Found by a coverage and behavior audit after Phase 5:
+
+- Test-case-level output: the parity test now includes test cases with their own system out/err. This found a parity
+  bug: test cases nested in a suite carry their own output flags on the database, but the object store set them false.
+- More than 1000 keys: `ObjectStoreClientManyObjectsTest` lists and deletes 2050 objects (paging, `startAfter`,
+  limits past a page, common prefixes, batched deletes).
+- Concurrent appends (`ConcurrentAppendTest`, both backends, and `ConcurrentGroupedResultsApplicationTest`) found
+  races on both backends, which are fixed:
+  - Coverage appends to the same group lost updates (object store) or created duplicate groups (database).
+    `CoverageRepository.appendCoverageReport` replaces the service-driven upsert/insert sequence and is atomic: a
+    per-test-run Postgres advisory lock on the database, compare-and-swap steps on the object store with the group's
+    line stats recalculated from its saved files.
+  - Test suite appends got duplicate indexes on the database and the summary was calculated from each append's own
+    snapshot. `TestRunRepository.updateTestRunSummary(publicId, wallClockDuration)` now recalculates from the saved
+    suites atomically, and database appends reserve indexes under the same advisory lock.
+  - Concurrent first uploads with the same group created separate test runs on both backends.
+    `TestRunRepository.claimTestRunGroup` claims the group at request time (`test_run_group_claim` table, migration
+    V42, with a fallback to the existing group lookup for older runs; a create-if-missing document on the object
+    store). Appending uploads wait for the owning run to be saved, failing fast if its processing errored.
+    Deleting a test run deletes its claim.
+- Background results processing no longer lets exceptions escape its coroutine. Recording a processing error could
+  itself fail (e.g. after the server's connection pool closed), and the escaped exception failed unrelated tests.
+- The GitHub pull request comment application tests (7, all previously `@Disabled` as flaky) are re-enabled, plus an
+  object-store variant of the end-to-end comment test.
+- More database findings:
+  - `results_processing_failure` uses the test run's public ID as its primary key, so a second processing failure
+    for the same test run can't be recorded (the insert fails). The object store records every failure.
+  - When appending coverage, a file without a path is counted in the group's line stats on every append but never
+    saved. The object store calculates the group's line stats from its saved files.
+  - `fetchTestRun` doesn't order the test suites, so under load Postgres can return them in any order. The object
+    store returns them in index order.
+
 ## Risks and open questions
 
 - Motivation (dropping Postgres for cost/ops, or something else) decides how hard to push on cross-run performance.
