@@ -91,12 +91,19 @@ lease once expired. `SchedulerLock` accepts a `LockProvider` instead of building
    processing status are deleted by `TestRunCleanupService` through their own repositories (already the case), so
    no Postgres cascade behavior leaks into the contract.
 
-### Phase 1: object-store primitives (`server/persistence/object-store`)
+### Phase 1: object-store primitives (`server/persistence/object-store`) — DONE
 
-- `listObjects(prefix, delimiter, startAfter, max)`, `getObjectWithEtag`, `putObjectIfMatch` / `putObjectIfNoneMatch`
-  (via `PutObjectArgs.headers`), byte and JSON helpers with content type and gzip.
-- `JsonObjectStore` wrapping the client with Jackson and a `casUpdate(key) { old -> new }` retry loop.
-- Tests against the existing MinIO container, including concurrent CAS updates losing nothing.
+- `ObjectStoreClient`: `putObject(bytes, contentType, WriteCondition)` (None / IfNotExists / IfMatch, throws
+  `PreconditionFailedException` on 412/409), `getObjectWithETag`, `listObjects(prefix, delimiter, startAfter,
+  limit)` returning objects + common prefixes, `removeObjectsWithPrefix`, and `removeObjects` batched to 1000 keys.
+- `projektor.objectstore.json.JsonObjectStore`: Jackson documents under a key prefix; `read`, `readVersioned`,
+  `write`, `create`, `replace`, `update(key) { old -> new }` (CAS loop with jittered exponential backoff, throws
+  `ConcurrentUpdateException` after max attempts), `delete`, `deletePrefix`, `list`. Documents over 8KB are
+  gzipped; reads detect gzip by magic bytes.
+- JUnit tests against the local docker-compose object store (RustFS, which honors `If-Match` / `If-None-Match`),
+  including 8 threads x 10 concurrent updates losing nothing.
+- Not done yet: generic collection types (`TypeReference`) for documents. Repositories wrap lists in data classes
+  for now.
 
 ### Phase 2: single-run repositories
 
