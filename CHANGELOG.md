@@ -4,6 +4,8 @@
 
 Full list of releases and the packaged server .jar file for each release at: https://github.com/craigatk/projektor/releases
 
+* v6.5.0
+  * Adding support for test case failure analysis with Anthropic Claude, with an `AI_PROVIDER` setting to choose between OpenAI and Anthropic
 * v6.4.0
   * Adding failure clustering by normalized root cause
   * Adding slow test regression detection
