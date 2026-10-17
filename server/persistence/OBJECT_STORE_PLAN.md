@@ -180,7 +180,7 @@ lease once expired. `SchedulerLock` accepts a `LockProvider` instead of building
 - Not done: OpenTelemetry spans and Micrometer timers on the object-store repositories. The database backend only
   has spans on a few methods, so this isn't a parity gap, but object-store latency won't be visible in metrics yet.
 
-### Phase 5: tests — DONE (except Cypress)
+### Phase 5: tests — DONE
 
 - Test infrastructure in `projektor.persistence` (test sources): `PersistenceTestBackend` (`DatabaseTestBackend`,
   `ObjectStoreTestBackend` with a fresh key prefix per test), `RepositoryTestCase` base class, and `TestRunGenerator`,
@@ -199,7 +199,12 @@ lease once expired. `SchedulerLock` accepts a `LockProvider` instead of building
     column is nullable, so the row mapper throws). The object store returns 0.000.
   - The database backend's timestamp conversions assume the JVM runs in UTC (every database test base pins the
     default time zone), so production needs to keep running in UTC.
-- Not done: Cypress smoke run against an object-store server.
+- Cypress smoke test: `./gradlew :functional-test:functionalTestObjectStore` starts the server with
+  `PERSISTENCE_TYPE=object-store` (own bucket, fresh key prefix per run) and runs 12 specs covering the main flows
+  (run summary, failures, test case and history, grouped suites, attachments, coverage, pinning, repository timeline
+  and coverage, organization coverage, admin failures). Runs in the server-UI functional test workflow after the
+  database functional tests. The full Cypress suite (20 specs, 23 tests) also passed against an object-store server
+  when run locally.
 
 ### Phase 6: docs
 
