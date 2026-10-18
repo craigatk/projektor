@@ -44,7 +44,9 @@ def serverEnvironment = [
         "MAX_REPORT_AGE_DAYS": "30",
         // Fake Slack API started by the Cypress plugins, see cypress/plugins/fakeSlackApi.js
         "SLACK_API_URL": "http://localhost:8091",
-        "SLACK_BOT_TOKEN": "functional-test-token"
+        "SLACK_BOT_TOKEN": "functional-test-token",
+        // Enables the links to pull requests, commits and files in GitHub
+        "GITHUB_BASE_URL": "https://github.com/"
 ]
 
 // https://github.com/psxpaul/gradle-execfork-plugin
@@ -74,6 +76,11 @@ def objectStoreSmokeSpecs = [
         'repository_coverage',
         'organization_coverage',
         'admin_failures',
+        // Where the backends have differed: test output, appending grouped uploads, and Git metadata
+        'test_output',
+        'grouped_upload',
+        'dashboard_git',
+        'results_processing',
 ].collect { "cypress/e2e/${it}.cy.js" }.join(',')
 
 task functionalTestObjectStore(type: YarnTask) {

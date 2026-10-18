@@ -8,10 +8,7 @@
       "passing_count": 2,
       "skipped_count": 0,
       "failure_count": 0,
-      "start_ts": {
-        "date": { "year": 2019, "month": 10, "day": 3 },
-        "time": { "hour": 6, "minute": 48, "second": 11, "nano": 0 }
-      },
+      "start_ts": "2019-10-03T06:48:11",
       "duration": 4.245,
       "test_cases": [
         {
@@ -21,7 +18,21 @@
           "class_name": "should show failed test case summaries on dashboard page",
           "duration": 2.412,
           "passed": true,
-          "skipped": false
+          "skipped": false,
+          "has_system_out_test_case": false,
+          "has_system_out_test_suite": false,
+          "has_system_err_test_case": false,
+          "has_system_err_test_suite": false,
+          "public_id": "12345",
+          "created_timestamp": "2020-04-26T13:50:10.123",
+          "package_name": null,
+          "test_suite_name": null,
+          "file_name": null,
+          "failure": null,
+          "attachments": null,
+          "has_system_out": false,
+          "has_system_err": false,
+          "full_name": "should show failed test case summaries on dashboard page.dashboard should show failed test case summaries on dashboard page"
         },
         {
           "idx": 2,
@@ -30,9 +41,30 @@
           "class_name": "when tests all passed should show test suite list on dashboard",
           "duration": 1.833,
           "passed": true,
-          "skipped": false
+          "skipped": false,
+          "has_system_out_test_case": false,
+          "has_system_out_test_suite": false,
+          "has_system_err_test_case": false,
+          "has_system_err_test_suite": false,
+          "public_id": "12345",
+          "created_timestamp": "2020-04-26T13:50:10.123",
+          "package_name": null,
+          "test_suite_name": null,
+          "file_name": null,
+          "failure": null,
+          "attachments": null,
+          "has_system_out": false,
+          "has_system_err": false,
+          "full_name": "when tests all passed should show test suite list on dashboard.dashboard when tests all passed should show test suite list on dashboard"
         }
-      ]
+      ],
+      "has_system_out": false,
+      "has_system_err": false,
+      "file_name": null,
+      "package_name": null,
+      "hostname": null,
+      "group_name": null,
+      "group_label": null
     },
     {
       "idx": 2,
@@ -41,10 +73,7 @@
       "passing_count": 3,
       "skipped_count": 0,
       "failure_count": 0,
-      "start_ts": {
-        "date": { "year": 2019, "month": 10, "day": 3 },
-        "time": { "hour": 6, "minute": 48, "second": 51, "nano": 0 }
-      },
+      "start_ts": "2019-10-03T06:48:51",
       "duration": 10.825,
       "test_cases": [
         {
@@ -54,7 +83,21 @@
           "class_name": "should show test suite system out and err",
           "duration": 5.241,
           "passed": true,
-          "skipped": false
+          "skipped": false,
+          "has_system_out_test_case": false,
+          "has_system_out_test_suite": false,
+          "has_system_err_test_case": false,
+          "has_system_err_test_suite": false,
+          "public_id": "12345",
+          "created_timestamp": "2020-04-26T13:50:10.123",
+          "package_name": null,
+          "test_suite_name": null,
+          "file_name": null,
+          "failure": null,
+          "attachments": null,
+          "has_system_out": false,
+          "has_system_err": false,
+          "full_name": "should show test suite system out and err.test case should show test suite system out and err"
         },
         {
           "idx": 2,
@@ -63,7 +106,21 @@
           "class_name": "when test case passed should redirect to summary tab",
           "duration": 3.036,
           "passed": true,
-          "skipped": false
+          "skipped": false,
+          "has_system_out_test_case": false,
+          "has_system_out_test_suite": false,
+          "has_system_err_test_case": false,
+          "has_system_err_test_suite": false,
+          "public_id": "12345",
+          "created_timestamp": "2020-04-26T13:50:10.123",
+          "package_name": null,
+          "test_suite_name": null,
+          "file_name": null,
+          "failure": null,
+          "attachments": null,
+          "has_system_out": false,
+          "has_system_err": false,
+          "full_name": "when test case passed should redirect to summary tab.test case when test case passed should redirect to summary tab"
         },
         {
           "idx": 3,
@@ -72,9 +129,30 @@
           "class_name": "should highlight multiple system out lines when shift-clicking",
           "duration": 2.548,
           "passed": true,
-          "skipped": false
+          "skipped": false,
+          "has_system_out_test_case": false,
+          "has_system_out_test_suite": false,
+          "has_system_err_test_case": false,
+          "has_system_err_test_suite": false,
+          "public_id": "12345",
+          "created_timestamp": "2020-04-26T13:50:10.123",
+          "package_name": null,
+          "test_suite_name": null,
+          "file_name": null,
+          "failure": null,
+          "attachments": null,
+          "has_system_out": false,
+          "has_system_err": false,
+          "full_name": "should highlight multiple system out lines when shift-clicking.test case should highlight multiple system out lines when shift-clicking"
         }
-      ]
+      ],
+      "has_system_out": false,
+      "has_system_err": false,
+      "file_name": null,
+      "package_name": null,
+      "hostname": null,
+      "group_name": null,
+      "group_label": null
     },
     {
       "idx": 3,
@@ -83,10 +161,7 @@
       "passing_count": 1,
       "skipped_count": 0,
       "failure_count": 0,
-      "start_ts": {
-        "date": { "year": 2019, "month": 10, "day": 3 },
-        "time": { "hour": 6, "minute": 49, "second": 26, "nano": 0 }
-      },
+      "start_ts": "2019-10-03T06:49:26",
       "duration": 3.172,
       "test_cases": [
         {
@@ -96,9 +171,30 @@
           "class_name": "should link from test case details to test suites in package",
           "duration": 3.172,
           "passed": true,
-          "skipped": false
+          "skipped": false,
+          "has_system_out_test_case": false,
+          "has_system_out_test_suite": false,
+          "has_system_err_test_case": false,
+          "has_system_err_test_suite": false,
+          "public_id": "12345",
+          "created_timestamp": "2020-04-26T13:50:10.123",
+          "package_name": null,
+          "test_suite_name": null,
+          "file_name": null,
+          "failure": null,
+          "attachments": null,
+          "has_system_out": false,
+          "has_system_err": false,
+          "full_name": "should link from test case details to test suites in package.test run with failed test cases should link from test case details to test suites in package"
         }
-      ]
+      ],
+      "has_system_out": false,
+      "has_system_err": false,
+      "file_name": null,
+      "package_name": null,
+      "hostname": null,
+      "group_name": null,
+      "group_label": null
     },
     {
       "idx": 4,
@@ -107,10 +203,7 @@
       "passing_count": 2,
       "skipped_count": 0,
       "failure_count": 0,
-      "start_ts": {
-        "date": { "year": 2019, "month": 10, "day": 3 },
-        "time": { "hour": 6, "minute": 49, "second": 11, "nano": 0 }
-      },
+      "start_ts": "2019-10-03T06:49:11",
       "duration": 6.475,
       "test_cases": [
         {
@@ -120,7 +213,21 @@
           "class_name": "should link from test case details to test suite",
           "duration": 3.197,
           "passed": true,
-          "skipped": false
+          "skipped": false,
+          "has_system_out_test_case": false,
+          "has_system_out_test_suite": false,
+          "has_system_err_test_case": false,
+          "has_system_err_test_suite": false,
+          "public_id": "12345",
+          "created_timestamp": "2020-04-26T13:50:10.123",
+          "package_name": null,
+          "test_suite_name": null,
+          "file_name": null,
+          "failure": null,
+          "attachments": null,
+          "has_system_out": false,
+          "has_system_err": false,
+          "full_name": "should link from test case details to test suite.test suite should link from test case details to test suite"
         },
         {
           "idx": 2,
@@ -129,9 +236,30 @@
           "class_name": "should show test suite system out and err",
           "duration": 3.278,
           "passed": true,
-          "skipped": false
+          "skipped": false,
+          "has_system_out_test_case": false,
+          "has_system_out_test_suite": false,
+          "has_system_err_test_case": false,
+          "has_system_err_test_suite": false,
+          "public_id": "12345",
+          "created_timestamp": "2020-04-26T13:50:10.123",
+          "package_name": null,
+          "test_suite_name": null,
+          "file_name": null,
+          "failure": null,
+          "attachments": null,
+          "has_system_out": false,
+          "has_system_err": false,
+          "full_name": "should show test suite system out and err.test suite should show test suite system out and err"
         }
-      ]
+      ],
+      "has_system_out": false,
+      "has_system_err": false,
+      "file_name": null,
+      "package_name": null,
+      "hostname": null,
+      "group_name": null,
+      "group_label": null
     },
     {
       "idx": 5,
@@ -140,10 +268,7 @@
       "passing_count": 1,
       "skipped_count": 0,
       "failure_count": 0,
-      "start_ts": {
-        "date": { "year": 2019, "month": 10, "day": 3 },
-        "time": { "hour": 6, "minute": 48, "second": 38, "nano": 0 }
-      },
+      "start_ts": "2019-10-03T06:48:38",
       "duration": 2.63,
       "test_cases": [
         {
@@ -153,9 +278,30 @@
           "class_name": "should link to failed test cases",
           "duration": 2.63,
           "passed": true,
-          "skipped": false
+          "skipped": false,
+          "has_system_out_test_case": false,
+          "has_system_out_test_suite": false,
+          "has_system_err_test_case": false,
+          "has_system_err_test_suite": false,
+          "public_id": "12345",
+          "created_timestamp": "2020-04-26T13:50:10.123",
+          "package_name": null,
+          "test_suite_name": null,
+          "file_name": null,
+          "failure": null,
+          "attachments": null,
+          "has_system_out": false,
+          "has_system_err": false,
+          "full_name": "should link to failed test cases.side nav should link to failed test cases"
         }
-      ]
+      ],
+      "has_system_out": false,
+      "has_system_err": false,
+      "file_name": null,
+      "package_name": null,
+      "hostname": null,
+      "group_name": null,
+      "group_label": null
     },
     {
       "idx": 6,
@@ -164,10 +310,7 @@
       "passing_count": 2,
       "skipped_count": 0,
       "failure_count": 0,
-      "start_ts": {
-        "date": { "year": 2019, "month": 10, "day": 3 },
-        "time": { "hour": 6, "minute": 48, "second": 24, "nano": 0 }
-      },
+      "start_ts": "2019-10-03T06:48:24",
       "duration": 6.536,
       "test_cases": [
         {
@@ -177,7 +320,21 @@
           "class_name": "should show failed test case summaries on failed tests page",
           "duration": 3.561,
           "passed": true,
-          "skipped": false
+          "skipped": false,
+          "has_system_out_test_case": false,
+          "has_system_out_test_suite": false,
+          "has_system_err_test_case": false,
+          "has_system_err_test_suite": false,
+          "public_id": "12345",
+          "created_timestamp": "2020-04-26T13:50:10.123",
+          "package_name": null,
+          "test_suite_name": null,
+          "file_name": null,
+          "failure": null,
+          "attachments": null,
+          "has_system_out": false,
+          "has_system_err": false,
+          "full_name": "should show failed test case summaries on failed tests page.test run with failed test cases should show failed test case summaries on failed tests page"
         },
         {
           "idx": 2,
@@ -186,9 +343,43 @@
           "class_name": "should link from failed tests page to failed test case system out and system err",
           "duration": 2.975,
           "passed": true,
-          "skipped": false
+          "skipped": false,
+          "has_system_out_test_case": false,
+          "has_system_out_test_suite": false,
+          "has_system_err_test_case": false,
+          "has_system_err_test_suite": false,
+          "public_id": "12345",
+          "created_timestamp": "2020-04-26T13:50:10.123",
+          "package_name": null,
+          "test_suite_name": null,
+          "file_name": null,
+          "failure": null,
+          "attachments": null,
+          "has_system_out": false,
+          "has_system_err": false,
+          "full_name": "should link from failed tests page to failed test case system out and system err.test run with failed test cases should link from failed tests page to failed test case system out and system err"
         }
-      ]
+      ],
+      "has_system_out": false,
+      "has_system_err": false,
+      "file_name": null,
+      "package_name": null,
+      "hostname": null,
+      "group_name": null,
+      "group_label": null
     }
-  ]
+  ],
+  "summary": {
+    "id": "CVYSUNPI011X",
+    "total_test_count": 11,
+    "total_passing_count": 11,
+    "total_skipped_count": 0,
+    "total_failure_count": 0,
+    "passed": true,
+    "created_timestamp": "2020-03-25T11:32:19.041Z",
+    "cumulative_duration": 33.883,
+    "average_duration": 3.08,
+    "slowest_test_case_duration": 33.883,
+    "wall_clock_duration": null
+  }
 }

@@ -120,6 +120,50 @@ describe("TestResultsProcessingCheck", () => {
     expect(succeededFunc).not.toHaveBeenCalled();
   });
 
+  it("should display not found message when results don't exist", async () => {
+    const succeededFunc = vi.fn();
+
+    mockAxios
+      .onGet(`http://localhost:8080/results/${publicId}/status`)
+      .reply(404);
+
+    const { findByTestId, queryByTestId } = render(
+      <TestResultsProcessingCheck
+        publicId={publicId}
+        processingSucceeded={succeededFunc}
+        refreshInterval={5000}
+        autoRefreshTimeout={60000}
+      />,
+    );
+
+    expect(await findByTestId("results-not-found")).toHaveTextContent(
+      "No test results found with this ID",
+    );
+    expect(queryByTestId("results-still-processing")).toBeNull();
+    expect(succeededFunc).not.toHaveBeenCalled();
+  });
+
+  it("should display error message when loading status fails", async () => {
+    const succeededFunc = vi.fn();
+
+    mockAxios
+      .onGet(`http://localhost:8080/results/${publicId}/status`)
+      .reply(500);
+
+    const { findByTestId } = render(
+      <TestResultsProcessingCheck
+        publicId={publicId}
+        processingSucceeded={succeededFunc}
+        refreshInterval={5000}
+        autoRefreshTimeout={60000}
+      />,
+    );
+
+    await findByTestId("results-status-error");
+
+    expect(succeededFunc).not.toHaveBeenCalled();
+  });
+
   it("should call success function when results successfully processed", async () => {
     const succeededFunc = vi.fn();
 

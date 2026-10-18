@@ -15,9 +15,9 @@
     "has_system_out_test_case": false,
     "has_system_err_test_case": false,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\nactual \u003d\u003d 3\n|      |\n1      false\n",
+      "failure_message": "Condition not satisfied:\n\nactual == 3\n|      |\n1      false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\nactual \u003d\u003d 3\n|      |\n1      false\n\n\tat projektor.example.spock.FailingSpec.should fail with output(FailingSpec.groovy:22)\n"
+      "failure_text": "Condition not satisfied:\n\nactual == 3\n|      |\n1      false\n\n\tat projektor.example.spock.FailingSpec.should fail with output(FailingSpec.groovy:22)\n"
     },
     "attachments": [
       {
@@ -32,6 +32,11 @@
         "file_size": 32215,
         "attachment_type": "VIDEO"
       }
-    ]
+    ],
+    "skipped": false,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "full_name": "failing test.should fail with screenshot and video"
   }
 ]

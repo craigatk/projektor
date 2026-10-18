@@ -1,0 +1,30 @@
+{
+  "total_failed_test_count": 2,
+  "clusters": [
+    {
+      "key": "spock-comparison-failure",
+      "title": "SpockComparisonFailure: Condition not satisfied:",
+      "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
+      "normalized_message": "Condition not satisfied:",
+      "location": "FailingSpec.groovy",
+      "test_case_count": 2,
+      "representative": {
+        "test_suite_idx": 1,
+        "test_case_idx": 1,
+        "full_name": "projektor.example.spock.FailingSpec.should fail"
+      },
+      "test_cases": [
+        {
+          "test_suite_idx": 1,
+          "test_case_idx": 1,
+          "full_name": "projektor.example.spock.FailingSpec.should fail"
+        },
+        {
+          "test_suite_idx": 1,
+          "test_case_idx": 2,
+          "full_name": "projektor.example.spock.FailingSpec.should fail with output"
+        }
+      ]
+    }
+  ]
+}

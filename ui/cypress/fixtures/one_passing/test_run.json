@@ -9,10 +9,7 @@
       "passing_count": 1,
       "skipped_count": 0,
       "failure_count": 0,
-      "start_ts": {
-        "date": { "year": 2019, "month": 10, "day": 1 },
-        "time": { "hour": 8, "minute": 15, "second": 45, "nano": 0 }
-      },
+      "start_ts": "2019-10-01T08:15:45",
       "duration": 0.002,
       "test_cases": [
         {
@@ -23,9 +20,41 @@
           "class_name": "PassingSpec",
           "duration": 0.002,
           "passed": true,
-          "skipped": false
+          "skipped": false,
+          "has_system_out_test_case": false,
+          "has_system_out_test_suite": false,
+          "has_system_err_test_case": false,
+          "has_system_err_test_suite": false,
+          "public_id": "12345",
+          "created_timestamp": "2020-04-26T13:50:10.123",
+          "test_suite_name": null,
+          "file_name": null,
+          "failure": null,
+          "attachments": null,
+          "has_system_out": false,
+          "has_system_err": false,
+          "full_name": "projektor.example.spock.PassingSpec.should pass"
         }
-      ]
+      ],
+      "has_system_out": false,
+      "has_system_err": false,
+      "file_name": null,
+      "hostname": null,
+      "group_name": null,
+      "group_label": null
     }
-  ]
+  ],
+  "summary": {
+    "id": "YY0TCTNOAO5W",
+    "total_test_count": 1,
+    "total_passing_count": 1,
+    "total_skipped_count": 0,
+    "total_failure_count": 0,
+    "passed": true,
+    "created_timestamp": "2020-03-25T11:32:19.041Z",
+    "cumulative_duration": 0.002,
+    "average_duration": 0.002,
+    "slowest_test_case_duration": 0.002,
+    "wall_clock_duration": null
+  }
 }

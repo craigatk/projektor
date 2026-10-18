@@ -1,0 +1,3 @@
+{
+  "markdown": "# Test Failure: should fail with output\n\n- **Full name:** projektor.example.spock.FailingSpec.should fail with output\n\n## Failure\n\nCondition not satisfied"
+}

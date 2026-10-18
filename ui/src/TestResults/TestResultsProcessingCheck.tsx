@@ -40,6 +40,7 @@ const TestResultsProcessingCheck = ({
   const [loadingState, setLoadingState] = React.useState<LoadingState>(
     LoadingState.Loading,
   );
+  const [resultsNotFound, setResultsNotFound] = React.useState<boolean>(false);
 
   const loadTestResultsProcessing = () => {
     fetchTestResultsProcessing(publicId)
@@ -55,7 +56,10 @@ const TestResultsProcessingCheck = ({
           totalWaitTime += refreshInterval;
         }
       })
-      .catch(() => setLoadingState(LoadingState.Error));
+      .catch((error) => {
+        setResultsNotFound(error.response?.status === 404);
+        setLoadingState(LoadingState.Error);
+      });
   };
 
   React.useEffect(loadTestResultsProcessing, [
@@ -75,7 +79,23 @@ const TestResultsProcessingCheck = ({
     resultsProcessing &&
     resultsProcessing.status === TestResultsProcessingStatus.DELETED;
 
-  if (resultsProcessingSuccessful) {
+  if (loadingState === LoadingState.Error) {
+    return (
+      <Paper
+        elevation={2}
+        className={classes.paper}
+        data-testid={
+          resultsNotFound ? "results-not-found" : "results-status-error"
+        }
+      >
+        <Typography>
+          {resultsNotFound
+            ? "No test results found with this ID"
+            : "Error loading test results status from server"}
+        </Typography>
+      </Paper>
+    );
+  } else if (resultsProcessingSuccessful) {
     processingSucceeded();
     return null;
   } else if (resultsStillProcessing) {

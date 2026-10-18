@@ -7,19 +7,22 @@
           "covered": 8816,
           "missed": 335,
           "total": 9151,
-          "covered_percentage": 96.34
+          "covered_percentage": 96.34,
+          "covered_percentage_delta": null
         },
         "line_stat": {
           "covered": 953,
           "missed": 25,
           "total": 978,
-          "covered_percentage": 97.44
+          "covered_percentage": 97.44,
+          "covered_percentage_delta": null
         },
         "branch_stat": {
           "covered": 191,
           "missed": 57,
           "total": 248,
-          "covered_percentage": 77.02
+          "covered_percentage": 77.02,
+          "covered_percentage_delta": null
         }
       }
     },
@@ -30,19 +33,22 @@
           "covered": 46,
           "missed": 12,
           "total": 58,
-          "covered_percentage": 79.31
+          "covered_percentage": 79.31,
+          "covered_percentage_delta": null
         },
         "line_stat": {
           "covered": 12,
           "missed": 1,
           "total": 13,
-          "covered_percentage": 92.31
+          "covered_percentage": 92.31,
+          "covered_percentage_delta": null
         },
         "branch_stat": {
           "covered": 0,
           "missed": 0,
           "total": 0,
-          "covered_percentage": 0
+          "covered_percentage": 0,
+          "covered_percentage_delta": null
         }
       }
     },
@@ -53,19 +59,22 @@
           "covered": 87,
           "missed": 4,
           "total": 91,
-          "covered_percentage": 95.6
+          "covered_percentage": 95.6,
+          "covered_percentage_delta": null
         },
         "line_stat": {
           "covered": 13,
           "missed": 1,
           "total": 14,
-          "covered_percentage": 92.86
+          "covered_percentage": 92.86,
+          "covered_percentage_delta": null
         },
         "branch_stat": {
           "covered": 0,
           "missed": 0,
           "total": 0,
-          "covered_percentage": 0
+          "covered_percentage": 0,
+          "covered_percentage_delta": null
         }
       }
     }
@@ -75,19 +84,23 @@
       "covered": 8949,
       "missed": 351,
       "total": 9300,
-      "covered_percentage": 96.23
+      "covered_percentage": 96.23,
+      "covered_percentage_delta": null
     },
     "line_stat": {
       "covered": 978,
       "missed": 27,
       "total": 1005,
-      "covered_percentage": 97.31
+      "covered_percentage": 97.31,
+      "covered_percentage_delta": null
     },
     "branch_stat": {
       "covered": 191,
       "missed": 57,
       "total": 248,
-      "covered_percentage": 77.02
+      "covered_percentage": 77.02,
+      "covered_percentage_delta": null
     }
-  }
+  },
+  "previous_test_run_id": null
 }

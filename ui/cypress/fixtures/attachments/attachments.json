@@ -3,12 +3,14 @@
     {
       "file_name": "test-attachment.txt",
       "object_name": "VYTYOM74ZQRP-test-attachment.txt",
-      "file_size": 30
+      "file_size": 30,
+      "attachment_type": "OTHER"
     },
     {
       "file_name": "test-run-summary.png",
       "object_name": "VYTYOM74ZQRP-test-run-summary.png",
-      "file_size": 32215
+      "file_size": 32215,
+      "attachment_type": "IMAGE"
     }
   ]
 }

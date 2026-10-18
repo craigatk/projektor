@@ -5,6 +5,9 @@
   "total_skipped_count": 0,
   "total_failure_count": 2,
   "passed": false,
-  "total_duration": 0.55,
-  "created_timestamp": "2020-03-25T11:32:19.041Z"
+  "created_timestamp": "2020-03-25T11:32:19.041Z",
+  "cumulative_duration": 0.55,
+  "average_duration": 0.138,
+  "slowest_test_case_duration": 0.3,
+  "wall_clock_duration": 0.4
 }

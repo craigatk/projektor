@@ -339,9 +339,10 @@ class TestRunObjectStoreRepository(
                     projectName = projectName,
                     branchName = branchName,
                     isMainBranch = isMainBranch,
-                    // Like the database repository, these are only set by updateGitMetadata after the test run is saved
-                    pullRequestNumber = null,
-                    commitSha = null,
+                    // Saved with the test run so they're available as soon as it is. A pull request number found when
+                    // commenting on the pull request is added afterwards (see GroupedTestResultsService).
+                    pullRequestNumber = pullRequestNumber,
+                    commitSha = commitSha,
                 )
             }
     }

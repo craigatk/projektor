@@ -25,6 +25,14 @@ context("dashboard", () => {
       "contain",
       "March 25th 2020",
     );
+
+    cy.getByTestId("test-run-average-duration").should("contain", "0.138s");
+    cy.getByTestId("test-run-cumulative-duration").should("contain", "0.550s");
+    cy.getByTestId("test-run-slowest-test-case-duration").should(
+      "contain",
+      "0.300s",
+    );
+    cy.getByTestId("test-run-wall-clock-duration").should("contain", "0.400s");
   });
 
   it("should show failed test case summaries on dashboard page", () => {
@@ -77,6 +85,10 @@ context("dashboard", () => {
       "contain",
       "projektor.example.spock.PassingSpec",
     );
+
+    // Wall clock duration is only shown when the results include it
+    cy.getByTestId("test-run-cumulative-duration").should("be.visible");
+    cy.getByTestId("test-run-wall-clock-duration").should("not.exist");
   });
 
   it("when fetching test run fails should render error message", () => {

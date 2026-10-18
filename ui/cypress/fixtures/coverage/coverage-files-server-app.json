@@ -27,7 +27,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "AttachmentMapper.kt",
@@ -56,7 +57,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "AttachmentRepository.kt",
@@ -85,7 +87,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "AttachmentService.kt",
@@ -114,7 +117,8 @@
           "total": 10,
           "covered_percentage": 80.0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "AddAttachmentResult.kt",
@@ -143,7 +147,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "AttachmentDatabaseRepository.kt",
@@ -172,7 +177,8 @@
           "total": 4,
           "covered_percentage": 75.0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "AttachmentConfig.kt",
@@ -201,7 +207,8 @@
           "total": 14,
           "covered_percentage": 64.29
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "Scheduler.kt",
@@ -230,7 +237,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "SchedulerLock.kt",
@@ -259,7 +267,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "InfluxMetricsConfig.kt",
@@ -288,7 +297,8 @@
           "total": 26,
           "covered_percentage": 69.23
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "MetricsService.kt",
@@ -317,7 +327,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "InfluxMetrics.kt",
@@ -346,7 +357,8 @@
           "total": 16,
           "covered_percentage": 68.75
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "KtorApplicationExt.kt",
@@ -375,7 +387,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "Application.kt",
@@ -404,7 +417,8 @@
           "total": 14,
           "covered_percentage": 85.71
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "AppModule.kt",
@@ -433,7 +447,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "AuthConfig.kt",
@@ -462,7 +477,8 @@
           "total": 2,
           "covered_percentage": 100.0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "AuthService.kt",
@@ -491,7 +507,8 @@
           "total": 8,
           "covered_percentage": 87.5
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "ApiToDBMapper.kt",
@@ -520,7 +537,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "ParsedResultsToApiMapper.kt",
@@ -549,7 +567,8 @@
           "total": 12,
           "covered_percentage": 91.67
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "ParsedResultsToDBMapper.kt",
@@ -578,7 +597,8 @@
           "total": 20,
           "covered_percentage": 100.0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestRunSystemAttributesService.kt",
@@ -607,7 +627,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestRunSystemAttributesDatabaseRepository.kt",
@@ -636,7 +657,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestRunSystemAttributesRepository.kt",
@@ -665,7 +687,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestCaseDatabaseRepository.kt",
@@ -694,7 +717,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestCaseService.kt",
@@ -723,7 +747,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestCaseRepository.kt",
@@ -752,7 +777,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "GroupedResults.kt",
@@ -781,7 +807,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "GroupedTestSuites.kt",
@@ -810,7 +837,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestRunDatabaseRepository.kt",
@@ -839,7 +867,8 @@
           "total": 8,
           "covered_percentage": 75.0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestRunService.kt",
@@ -868,7 +897,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestRunRepository.kt",
@@ -897,7 +927,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestResultsService.kt",
@@ -926,7 +957,8 @@
           "total": 8,
           "covered_percentage": 87.5
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestResultsProcessingService.kt",
@@ -955,7 +987,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "GroupedTestResultsService.kt",
@@ -984,7 +1017,8 @@
           "total": 2,
           "covered_percentage": 50.0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "GroupedResultsConverter.kt",
@@ -1013,7 +1047,8 @@
           "total": 8,
           "covered_percentage": 87.5
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "PersistTestResultsException.kt",
@@ -1042,7 +1077,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "RandomPublicId.kt",
@@ -1071,7 +1107,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "MessageConfig.kt",
@@ -1100,7 +1137,8 @@
           "total": 6,
           "covered_percentage": 83.33
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "MessageService.kt",
@@ -1129,7 +1167,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "AttachmentRoutes.kt",
@@ -1158,7 +1197,8 @@
           "total": 18,
           "covered_percentage": 77.78
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "ResultsRoutes.kt",
@@ -1187,7 +1227,8 @@
           "total": 16,
           "covered_percentage": 87.5
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestSuiteRoutes.kt",
@@ -1216,7 +1257,8 @@
           "total": 6,
           "covered_percentage": 33.33
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "MessageRoutes.kt",
@@ -1245,7 +1287,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "HealthRoute.kt",
@@ -1274,7 +1317,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "ConfigRoutes.kt",
@@ -1303,7 +1347,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestCaseRoutes.kt",
@@ -1332,7 +1377,8 @@
           "total": 2,
           "covered_percentage": 50.0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestRunSystemAttributesRoutes.kt",
@@ -1361,7 +1407,8 @@
           "total": 6,
           "covered_percentage": 100.0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "UIRoutes.kt",
@@ -1390,7 +1437,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "Status.kt",
@@ -1419,7 +1467,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestRunRoutes.kt",
@@ -1448,7 +1497,8 @@
           "total": 4,
           "covered_percentage": 50.0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "VersionRoutes.kt",
@@ -1477,7 +1527,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "ResultsProcessingRepository.kt",
@@ -1506,7 +1557,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "ResultsProcessingDatabaseRepository.kt",
@@ -1535,7 +1587,8 @@
           "total": 4,
           "covered_percentage": 75.0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestSuiteDatabaseRepository.kt",
@@ -1564,7 +1617,8 @@
           "total": 4,
           "covered_percentage": 50.0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestSuiteRepository.kt",
@@ -1593,7 +1647,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestSuiteSearchCriteria.kt",
@@ -1622,7 +1677,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "TestSuiteService.kt",
@@ -1651,7 +1707,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "GzipUtil.kt",
@@ -1680,7 +1737,8 @@
           "total": 4,
           "covered_percentage": 50.0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "JooqUtil.kt",
@@ -1709,7 +1767,8 @@
           "total": 0,
           "covered_percentage": 0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "CleanupScheduledJob.kt",
@@ -1738,7 +1797,8 @@
           "total": 2,
           "covered_percentage": 100.0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "CleanupService.kt",
@@ -1767,7 +1827,8 @@
           "total": 12,
           "covered_percentage": 75.0
         }
-      }
+      },
+      "file_path": null
     },
     {
       "file_name": "CleanupConfig.kt",
@@ -1796,7 +1857,8 @@
           "total": 12,
           "covered_percentage": 58.33
         }
-      }
+      },
+      "file_path": null
     }
   ]
 }

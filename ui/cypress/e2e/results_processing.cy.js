@@ -73,4 +73,19 @@ context("results processing", () => {
       "Failed to parse results",
     );
   });
+
+  it("when test results were cleaned up should display message", () => {
+    const publicId = "12345";
+
+    cy.intercept("GET", `results/${publicId}/status`, {
+      fixture: "processing_status/processing_status_deleted.json",
+    });
+
+    cy.visit(`http://localhost:1234/tests/${publicId}`);
+
+    cy.getByTestId("results-deleted").should(
+      "contain",
+      "Test results cleaned up to save disk space",
+    );
+  });
 });
