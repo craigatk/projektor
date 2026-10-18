@@ -206,9 +206,11 @@ lease once expired. `SchedulerLock` accepts a `LockProvider` instead of building
   database functional tests. The full Cypress suite (20 specs, 23 tests) also passed against an object-store server
   when run locally.
 
-### Phase 6: docs
+### Phase 6: docs — DONE
 
-New environment variables and limitations in `../projektor-doc`, plus a release note.
+- `../projektor-doc`: new `object-store-persistence` page (marked alpha) with the environment variables,
+  supported stores and limitations, plus an "Object store persistence" section on the server page.
+- Release note for server v6.6.0 in `CHANGELOG.md`.
 
 ### Testing gap fixes
 

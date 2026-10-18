@@ -4,6 +4,9 @@
 
 Full list of releases and the packaged server .jar file for each release at: https://github.com/craigatk/projektor/releases
 
+* v6.6.0
+  * Adding alpha support for storing test results in an S3-compatible object store instead of Postgres, selected with `PERSISTENCE_TYPE=object-store`
+  * Fixing races when concurrent uploads append test results or coverage to the same test run or results group
 * v6.5.0
   * Adding support for test case failure analysis with Anthropic Claude, with an `AI_PROVIDER` setting to choose between OpenAI and Anthropic
 * v6.4.0
