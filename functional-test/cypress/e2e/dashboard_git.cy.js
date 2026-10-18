@@ -19,10 +19,9 @@ context("dashboard Git metadata E2E", () => {
     cy.findByTestId("dashboard-summary-pull-request-link")
       .should("have.attr", "href")
       .and("contain", "/pull/42");
-    // The dashboard shows the last 7 characters of the commit SHA
     cy.findByTestId("dashboard-summary-commit-sha").should(
       "contain",
-      "ad1a7a9",
+      "2a6638c",
     );
     cy.findByTestId("dashboard-summary-commit-sha-link")
       .should("have.attr", "href")

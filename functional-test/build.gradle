@@ -46,7 +46,10 @@ def serverEnvironment = [
         "SLACK_API_URL": "http://localhost:8091",
         "SLACK_BOT_TOKEN": "functional-test-token",
         // Enables the links to pull requests, commits and files in GitHub
-        "GITHUB_BASE_URL": "https://github.com/"
+        "GITHUB_BASE_URL": "https://github.com/",
+        // Store timestamps in UTC like the server-app tests (and CI), so failures those tests future-date in the
+        // shared local database don't outrank this server's for hours in admin_failures.cy.js
+        "TZ": "UTC"
 ]
 
 // https://github.com/psxpaul/gradle-execfork-plugin
