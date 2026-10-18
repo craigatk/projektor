@@ -53,7 +53,7 @@ jobs:
       run: ./gradlew check jTR
 
     - name: Projektor report URL
-      uses: craigatk/projektor-action@v15.1.0
+      uses: craigatk/projektor-action@v16.0.0
       if: failure() || success()
       with:
         print-link: true
