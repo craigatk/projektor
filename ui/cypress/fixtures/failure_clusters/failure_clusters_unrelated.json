@@ -1,0 +1,45 @@
+{
+  "total_failed_test_count": 2,
+  "clusters": [
+    {
+      "key": "first-failure",
+      "title": "AssertionError: first",
+      "failure_type": "AssertionError",
+      "normalized_message": "first",
+      "location": null,
+      "test_case_count": 1,
+      "representative": {
+        "test_suite_idx": 1,
+        "test_case_idx": 1,
+        "full_name": "projektor.example.spock.FailingSpec.should fail"
+      },
+      "test_cases": [
+        {
+          "test_suite_idx": 1,
+          "test_case_idx": 1,
+          "full_name": "projektor.example.spock.FailingSpec.should fail"
+        }
+      ]
+    },
+    {
+      "key": "second-failure",
+      "title": "AssertionError: second",
+      "failure_type": "AssertionError",
+      "normalized_message": "second",
+      "location": null,
+      "test_case_count": 1,
+      "representative": {
+        "test_suite_idx": 1,
+        "test_case_idx": 2,
+        "full_name": "projektor.example.spock.FailingSpec.should fail with output"
+      },
+      "test_cases": [
+        {
+          "test_suite_idx": 1,
+          "test_case_idx": 2,
+          "full_name": "projektor.example.spock.FailingSpec.should fail with output"
+        }
+      ]
+    }
+  ]
+}

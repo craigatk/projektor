@@ -149,9 +149,7 @@ const DashboardSummary = ({
                       )}
                       data-testid="dashboard-summary-commit-sha-link"
                     >
-                      {gitMetadata.commitSha.substring(
-                        gitMetadata.commitSha.length - 7,
-                      )}
+                      {gitMetadata.commitSha.substring(0, 7)}
                     </CleanLinkText>
                   }
                 />

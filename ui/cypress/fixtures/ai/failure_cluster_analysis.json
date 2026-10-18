@@ -1,0 +1,3 @@
+{
+  "analysis": "Both tests compare values with ==, and both fail because the shared setup returns stale data."
+}

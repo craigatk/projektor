@@ -154,6 +154,10 @@ fun GitMetadata.toDB(testRunId: Long): GitMetadataDB {
     gitMetadataDB.projectName = projectName
     gitMetadataDB.branchName = branchName
     gitMetadataDB.isMainBranch = isMainBranch
+    // Saved with the test run so they're available as soon as it is. A pull request number found when
+    // commenting on the pull request is added afterwards (see GroupedTestResultsService).
+    gitMetadataDB.pullRequestNumber = pullRequestNumber
+    gitMetadataDB.commitSha = commitSha
 
     return gitMetadataDB
 }

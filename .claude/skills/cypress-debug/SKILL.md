@@ -88,10 +88,23 @@ cy.window().then((win) => {
 });
 ```
 
-This works in Electron headless with no extra permission setup (confirmed verifying a
-"copy AI debug context" feature backed by `navigator.clipboard.writeText`/
-`react-copy-to-clipboard`) — no need to stub `document.execCommand` or grant clipboard
-permissions first.
+This works in Electron headless for text written with `navigator.clipboard.writeText`.
+It does **not** work for `react-copy-to-clipboard` (the copy buttons in this UI, e.g. the
+test case "Copy Markdown for AI" button): that copies with `document.execCommand("copy")` on
+a temporary selection, which doesn't reach the clipboard in headless Electron, so `readText()`
+resolves to `""`. For those, stub `execCommand` and record the selection at copy time (see
+`cypress/e2e/test_case_debug_context.cy.js`):
+
+```js
+cy.window().then((win) => {
+  cy.stub(win.document, "execCommand").callsFake((command) => {
+    win.copiedText = win.getSelection().toString();
+    return command === "copy";
+  });
+});
+// click the copy button, then:
+cy.window().its("copiedText").should("eq", "expected text");
+```
 
 ## A click silently does nothing (no error, handler never fires)
 

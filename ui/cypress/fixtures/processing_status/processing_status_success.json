@@ -1,1 +1,6 @@
-{ "id": "12345", "status": "SUCCESS", "error_message": null }
+{
+  "id": "12345",
+  "status": "SUCCESS",
+  "error_message": null,
+  "created_timestamp": null
+}

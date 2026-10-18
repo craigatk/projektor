@@ -57,6 +57,7 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
             val resultSet =
                 selectTestSuite(dslContext)
                     .where(conditions)
+                    .orderBy(TEST_SUITE.ID)
                     .fetchResultSet()
 
             val testSuites =

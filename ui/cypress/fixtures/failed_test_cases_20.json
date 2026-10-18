@@ -10,10 +10,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec1.should fail1(FailingSpec1.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec1.should fail1(FailingSpec1.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec1.should fail1"
   },
   {
     "idx": 2,
@@ -26,10 +37,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied2:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied2:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure2",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec2.should fail2(FailingSpec2.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec2.should fail2(FailingSpec2.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec2.should fail2"
   },
   {
     "idx": 3,
@@ -42,10 +64,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec3.should fail1(FailingSpec3.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec3.should fail1(FailingSpec3.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec3.should fail3"
   },
   {
     "idx": 4,
@@ -58,10 +91,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec4.should fail1(FailingSpec4.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec4.should fail1(FailingSpec4.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec4.should fail4"
   },
   {
     "idx": 5,
@@ -74,10 +118,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec5.should fail1(FailingSpec5.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec5.should fail1(FailingSpec5.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec5.should fail5"
   },
   {
     "idx": 6,
@@ -90,10 +145,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec6.should fail6"
   },
   {
     "idx": 7,
@@ -106,10 +172,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec7.should fail7"
   },
   {
     "idx": 8,
@@ -122,10 +199,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec8.should fail8"
   },
   {
     "idx": 9,
@@ -138,10 +226,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec9.should fail9"
   },
   {
     "idx": 10,
@@ -154,10 +253,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec10.should fail10"
   },
   {
     "idx": 11,
@@ -170,10 +280,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec11.should fail11"
   },
   {
     "idx": 12,
@@ -186,10 +307,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec12.should fail1"
   },
   {
     "idx": 13,
@@ -202,10 +334,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec13.should fail13"
   },
   {
     "idx": 14,
@@ -218,10 +361,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec14.should fail14"
   },
   {
     "idx": 15,
@@ -234,10 +388,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec15.should fail15"
   },
   {
     "idx": 16,
@@ -250,10 +415,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec16.should fail16"
   },
   {
     "idx": 17,
@@ -266,10 +442,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec17.should fail17"
   },
   {
     "idx": 18,
@@ -282,10 +469,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec18.should fail18"
   },
   {
     "idx": 19,
@@ -298,10 +496,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec19.should fail19"
   },
   {
     "idx": 20,
@@ -314,9 +523,20 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec6.should fail1(FailingSpec6.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec20.should fail20"
   }
 ]

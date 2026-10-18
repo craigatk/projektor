@@ -41,7 +41,8 @@ context("dashboard git metadata", () => {
 
     cy.findByTestId("dashboard-summary-commit-sha")
       .should("exist")
-      .should("contain", "2a6638c");
+      .should("contain", "d7efb34")
+      .and("not.contain", "2a6638c");
     cy.findByTestId("dashboard-summary-commit-sha-link")
       .should("have.attr", "href")
       .and(

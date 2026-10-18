@@ -10,10 +10,21 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n",
+      "failure_message": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\n1 \u003d\u003d 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec.should fail(FailingSpec.groovy:8)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\n1 == 2\n  |\n  false\n\n\tat projektor.example.spock.FailingSpec.should fail(FailingSpec.groovy:8)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec.should fail"
   },
   {
     "idx": 2,
@@ -26,9 +37,20 @@
     "has_system_out": true,
     "has_system_err": true,
     "failure": {
-      "failure_message": "Condition not satisfied:\n\nactual \u003d\u003d 3\n|      |\n1      false\n",
+      "failure_message": "Condition not satisfied:\n\nactual == 3\n|      |\n1      false\n",
       "failure_type": "org.spockframework.runtime.SpockComparisonFailure",
-      "failure_text": "Condition not satisfied:\n\nactual \u003d\u003d 3\n|      |\n1      false\n\n\tat projektor.example.spock.FailingSpec.should fail with output(FailingSpec.groovy:22)\n"
-    }
+      "failure_text": "Condition not satisfied:\n\nactual == 3\n|      |\n1      false\n\n\tat projektor.example.spock.FailingSpec.should fail with output(FailingSpec.groovy:22)\n"
+    },
+    "skipped": false,
+    "has_system_out_test_case": false,
+    "has_system_out_test_suite": true,
+    "has_system_err_test_case": false,
+    "has_system_err_test_suite": true,
+    "public_id": "12345",
+    "created_timestamp": "2020-04-26T13:50:10.123",
+    "test_suite_name": null,
+    "file_name": null,
+    "attachments": null,
+    "full_name": "projektor.example.spock.FailingSpec.should fail with output"
   }
 ]

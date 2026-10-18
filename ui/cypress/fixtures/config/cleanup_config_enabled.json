@@ -1,4 +1,12 @@
 {
-  "cleanup": { "enabled": true, "max_report_age_in_days": 30 },
-  "ai_config": { "test_case_failure_analysis_enabled": false }
+  "cleanup": {
+    "enabled": true,
+    "max_report_age_in_days": 30
+  },
+  "ai_config": {
+    "test_case_failure_analysis_enabled": false
+  },
+  "slack": {
+    "enabled": false
+  }
 }

@@ -5,10 +5,7 @@
   "passing_count": 1,
   "skipped_count": 0,
   "failure_count": 0,
-  "start_ts": {
-    "date": { "year": 2019, "month": 10, "day": 3 },
-    "time": { "hour": 6, "minute": 48, "second": 38, "nano": 0 }
-  },
+  "start_ts": "2019-10-03T06:48:38",
   "has_system_out": false,
   "has_system_err": false,
   "duration": 2.63,
@@ -22,7 +19,24 @@
       "passed": true,
       "skipped": false,
       "has_system_out": false,
-      "has_system_err": false
+      "has_system_err": false,
+      "has_system_out_test_case": false,
+      "has_system_out_test_suite": false,
+      "has_system_err_test_case": false,
+      "has_system_err_test_suite": false,
+      "public_id": "12345",
+      "created_timestamp": "2020-04-26T13:50:10.123",
+      "package_name": null,
+      "test_suite_name": null,
+      "file_name": null,
+      "failure": null,
+      "attachments": null,
+      "full_name": "should link to failed test cases.side nav should link to failed test cases"
     }
-  ]
+  ],
+  "file_name": null,
+  "package_name": null,
+  "hostname": null,
+  "group_name": null,
+  "group_label": null
 }

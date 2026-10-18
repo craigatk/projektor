@@ -8,5 +8,16 @@
   "passed": true,
   "skipped": false,
   "has_system_out": false,
-  "has_system_err": false
+  "has_system_err": false,
+  "has_system_out_test_case": false,
+  "has_system_out_test_suite": false,
+  "has_system_err_test_case": false,
+  "has_system_err_test_suite": false,
+  "public_id": "12345",
+  "created_timestamp": "2020-04-26T13:50:10.123",
+  "test_suite_name": null,
+  "file_name": null,
+  "failure": null,
+  "attachments": null,
+  "full_name": "projektor.example.spock.OutputSpec.should include system out and system err"
 }

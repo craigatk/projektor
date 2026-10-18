@@ -7,11 +7,15 @@
     "passing_count": 1,
     "skipped_count": 0,
     "failure_count": 0,
-    "start_ts": {
-      "date": { "year": 2019, "month": 9, "day": 4 },
-      "time": { "hour": 7, "minute": 53, "second": 28, "nano": 0 }
-    },
-    "duration": 0.067
+    "start_ts": "2019-09-04T07:53:28",
+    "duration": 0.067,
+    "has_system_out": false,
+    "has_system_err": false,
+    "file_name": null,
+    "hostname": null,
+    "group_name": null,
+    "group_label": null,
+    "test_cases": null
   },
   {
     "idx": 2,
@@ -21,10 +25,14 @@
     "passing_count": 0,
     "skipped_count": 0,
     "failure_count": 2,
-    "start_ts": {
-      "date": { "year": 2019, "month": 9, "day": 4 },
-      "time": { "hour": 7, "minute": 53, "second": 28, "nano": 0 }
-    },
-    "duration": 0.281
+    "start_ts": "2019-09-04T07:53:28",
+    "duration": 0.281,
+    "has_system_out": false,
+    "has_system_err": false,
+    "file_name": null,
+    "hostname": null,
+    "group_name": null,
+    "group_label": null,
+    "test_cases": null
   }
 ]
