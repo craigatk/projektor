@@ -70,6 +70,7 @@ import projektor.notification.slack.SlackClient
 import projektor.notification.slack.SlackClientConfig
 import projektor.notification.slack.SlackNotificationConfig
 import projektor.notification.slack.SlackNotificationService
+import projektor.objectstore.ObjectStoreTelemetry
 import projektor.organization.coverage.OrganizationCoverageService
 import projektor.performance.PerformanceResultsService
 import projektor.persistence.Persistence
@@ -116,7 +117,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     val slackNotificationConfig = SlackNotificationConfig.createSlackNotificationConfig(applicationConfig)
     val slackNotificationService = conditionallyCreateSlackNotificationService(slackNotificationConfig)
 
-    val attachmentService = conditionallyCreateAttachmentService(applicationConfig, persistence.attachmentRepository)
+    val attachmentService = conditionallyCreateAttachmentService(applicationConfig, persistence.attachmentRepository, metricRegistry)
     attachmentService?.conditionallyCreateBucketIfNotExists()
 
     val aiTestFailureAnalyzer: AITestFailureAnalyzer? = conditionallyCreateAITestFailureAnalyzer(aiConfig)
@@ -289,9 +290,14 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
 private fun conditionallyCreateAttachmentService(
     applicationConfig: ApplicationConfig,
     attachmentRepository: AttachmentRepository,
+    metricRegistry: MeterRegistry,
 ): AttachmentService? =
     if (AttachmentConfig.attachmentsEnabled(applicationConfig)) {
-        AttachmentService(AttachmentConfig.createAttachmentConfig(applicationConfig), attachmentRepository)
+        AttachmentService(
+            AttachmentConfig.createAttachmentConfig(applicationConfig),
+            attachmentRepository,
+            ObjectStoreTelemetry(metricRegistry),
+        )
     } else {
         null
     }

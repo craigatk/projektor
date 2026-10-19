@@ -117,9 +117,11 @@ class JsonObjectStore(
                 return updated
             }
 
+            client.telemetry.recordUpdateConflict(bucketName)
             backoff(attempt)
         }
 
+        client.telemetry.recordUpdateExhausted(bucketName)
         throw ConcurrentUpdateException(key, maxUpdateAttempts)
     }
 

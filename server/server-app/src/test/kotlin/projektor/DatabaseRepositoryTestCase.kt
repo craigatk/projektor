@@ -2,6 +2,7 @@ package projektor
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.jooq.DSLContext
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
@@ -42,6 +43,8 @@ import projektor.metrics.createRegistry
 import projektor.notification.NotificationConfig
 import projektor.notification.slack.SlackNotificationConfig
 import projektor.parser.grouped.GroupedResultsParser
+import projektor.persistence.PersistenceInstrumentation
+import projektor.persistence.PersistenceType
 import projektor.persistence.createDatabasePersistenceModule
 import projektor.processing.ProcessingConfig
 import java.util.TimeZone
@@ -126,7 +129,11 @@ open class DatabaseRepositoryTestCase : KoinTest {
         stopKoin()
         startKoin {
             modules(
-                createDatabasePersistenceModule(dataSource, dslContext),
+                createDatabasePersistenceModule(
+                    dataSource,
+                    dslContext,
+                    PersistenceInstrumentation(PersistenceType.DATABASE, SimpleMeterRegistry()),
+                ),
                 createAppModule(
                     AuthConfig(null),
                     createRegistry(metricsConfig),

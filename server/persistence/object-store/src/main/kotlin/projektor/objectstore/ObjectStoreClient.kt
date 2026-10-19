@@ -13,7 +13,10 @@ import io.minio.messages.DeleteRequest
 import projektor.objectstore.bucket.BucketCreationException
 import java.io.InputStream
 
-class ObjectStoreClient(config: ObjectStoreConfig) {
+class ObjectStoreClient(
+    config: ObjectStoreConfig,
+    internal val telemetry: ObjectStoreTelemetry = ObjectStoreTelemetry(),
+) {
     private val minioClient =
         MinioClient.builder()
             .endpoint(config.url)
@@ -23,32 +26,38 @@ class ObjectStoreClient(config: ObjectStoreConfig) {
     fun createBucketIfNotExists(bucketName: String) {
         try {
             if (!bucketExists(bucketName)) {
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build())
+                telemetry.record("createBucket", bucketName, null) {
+                    minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build())
+                }
             }
         } catch (e: ErrorResponseException) {
             throw BucketCreationException("Error creating bucket", e)
         }
     }
 
-    fun bucketExists(bucketName: String) =
-        minioClient.bucketExists(
-            BucketExistsArgs.builder().bucket(bucketName).build(),
-        )
+    fun bucketExists(bucketName: String): Boolean =
+        telemetry.record("bucketExists", bucketName, null) {
+            minioClient.bucketExists(
+                BucketExistsArgs.builder().bucket(bucketName).build(),
+            )
+        }
 
     fun putObject(
         bucketName: String,
         objectName: String,
         stream: InputStream,
     ) {
-        minioClient.putObject(
-            PutObjectArgs
-                .builder()
-                .bucket(bucketName)
-                .`object`(objectName)
-                .stream(stream, -1, 10485760)
-                .contentType("application/octet-stream")
-                .build(),
-        )
+        telemetry.record("put", bucketName, objectName) {
+            minioClient.putObject(
+                PutObjectArgs
+                    .builder()
+                    .bucket(bucketName)
+                    .`object`(objectName)
+                    .stream(stream, -1, 10485760)
+                    .contentType("application/octet-stream")
+                    .build(),
+            )
+        }
     }
 
     /**
@@ -71,25 +80,27 @@ class ObjectStoreClient(config: ObjectStoreConfig) {
                 is WriteCondition.IfMatch -> mapOf("If-Match" to quoteETag(condition.etag))
             }
 
-        try {
-            val response =
-                minioClient.putObject(
-                    PutObjectArgs
-                        .builder()
-                        .bucket(bucketName)
-                        .`object`(objectName)
-                        .data(bytes, bytes.size)
-                        .contentType(contentType)
-                        .headers(conditionHeaders)
-                        .build(),
-                )
+        return telemetry.record("put", bucketName, objectName) {
+            try {
+                val response =
+                    minioClient.putObject(
+                        PutObjectArgs
+                            .builder()
+                            .bucket(bucketName)
+                            .`object`(objectName)
+                            .data(bytes, bytes.size)
+                            .contentType(contentType)
+                            .headers(conditionHeaders)
+                            .build(),
+                    )
 
-            return normalizeETag(response.etag())
-        } catch (e: ErrorResponseException) {
-            if (isPreconditionFailure(e)) {
-                throw PreconditionFailedException(bucketName, objectName, condition, e)
-            } else {
-                throw e
+                normalizeETag(response.etag())
+            } catch (e: ErrorResponseException) {
+                if (isPreconditionFailure(e)) {
+                    throw PreconditionFailedException(bucketName, objectName, condition, e)
+                } else {
+                    throw e
+                }
             }
         }
     }
@@ -98,16 +109,19 @@ class ObjectStoreClient(config: ObjectStoreConfig) {
         bucketName: String,
         objectName: String,
     ): InputStream? =
-        try {
-            minioClient.getObject(
-                GetObjectArgs
-                    .builder()
-                    .bucket(bucketName)
-                    .`object`(objectName)
-                    .build(),
-            )
-        } catch (e: ErrorResponseException) {
-            null
+        // Only times the request up to the response headers, the caller reads the body from the returned stream
+        telemetry.record("get", bucketName, objectName, ::outcomeOfGet) {
+            try {
+                minioClient.getObject(
+                    GetObjectArgs
+                        .builder()
+                        .bucket(bucketName)
+                        .`object`(objectName)
+                        .build(),
+                )
+            } catch (e: ErrorResponseException) {
+                null
+            }
         }
 
     /**
@@ -117,24 +131,26 @@ class ObjectStoreClient(config: ObjectStoreConfig) {
         bucketName: String,
         objectName: String,
     ): StoredObject? =
-        try {
-            minioClient.getObject(
-                GetObjectArgs
-                    .builder()
-                    .bucket(bucketName)
-                    .`object`(objectName)
-                    .build(),
-            ).use { response ->
-                StoredObject(
-                    bytes = response.readBytes(),
-                    etag = normalizeETag(response.headers()["ETag"] ?: ""),
-                )
-            }
-        } catch (e: ErrorResponseException) {
-            if (e.errorResponse().code() == "NoSuchKey") {
-                null
-            } else {
-                throw e
+        telemetry.record("get", bucketName, objectName, ::outcomeOfGet) {
+            try {
+                minioClient.getObject(
+                    GetObjectArgs
+                        .builder()
+                        .bucket(bucketName)
+                        .`object`(objectName)
+                        .build(),
+                ).use { response ->
+                    StoredObject(
+                        bytes = response.readBytes(),
+                        etag = normalizeETag(response.headers()["ETag"] ?: ""),
+                    )
+                }
+            } catch (e: ErrorResponseException) {
+                if (e.errorResponse().code() == "NoSuchKey") {
+                    null
+                } else {
+                    throw e
+                }
             }
         }
 
@@ -170,13 +186,16 @@ class ObjectStoreClient(config: ObjectStoreConfig) {
             argsBuilder.maxKeys(minOf(limit, MAX_KEYS_PER_PAGE))
         }
 
-        // The iterable fetches further pages lazily as it's consumed, so taking the limit avoids fetching extra pages
+        // The iterable fetches further pages lazily as it's consumed, so taking the limit avoids fetching extra pages.
+        // Recorded as one operation that covers every page it fetched.
         val items =
-            minioClient.listObjects(argsBuilder.build())
-                .asSequence()
-                .map { it.get() }
-                .let { if (limit != null) it.take(limit) else it }
-                .toList()
+            telemetry.record("list", bucketName, prefix) {
+                minioClient.listObjects(argsBuilder.build())
+                    .asSequence()
+                    .map { it.get() }
+                    .let { if (limit != null) it.take(limit) else it }
+                    .toList()
+            }
 
         val (prefixItems, objectItems) = items.partition { it.isDir }
 
@@ -190,13 +209,15 @@ class ObjectStoreClient(config: ObjectStoreConfig) {
         bucketName: String,
         objectName: String,
     ) {
-        minioClient.removeObject(
-            RemoveObjectArgs
-                .builder()
-                .bucket(bucketName)
-                .`object`(objectName)
-                .build(),
-        )
+        telemetry.record("delete", bucketName, objectName) {
+            minioClient.removeObject(
+                RemoveObjectArgs
+                    .builder()
+                    .bucket(bucketName)
+                    .`object`(objectName)
+                    .build(),
+            )
+        }
     }
 
     fun removeObjects(
@@ -206,17 +227,19 @@ class ObjectStoreClient(config: ObjectStoreConfig) {
         // A single delete request can contain at most 1000 objects
         objectNames.chunked(MAX_KEYS_PER_PAGE).forEach { objectNamesChunk ->
             val objects = objectNamesChunk.map { DeleteRequest.Object(it) }
-            val results =
-                minioClient.removeObjects(
-                    RemoveObjectsArgs
-                        .builder()
-                        .bucket(bucketName)
-                        .objects(objects)
-                        .build(),
-                )
-            // removeObjects only sends the delete requests as this iterable is consumed;
-            // the iterable yields an entry for each object that failed to delete.
-            results.forEach { it.get() }
+            telemetry.record("deleteBatch", bucketName, null) {
+                val results =
+                    minioClient.removeObjects(
+                        RemoveObjectsArgs
+                            .builder()
+                            .bucket(bucketName)
+                            .objects(objects)
+                            .build(),
+                    )
+                // removeObjects only sends the delete requests as this iterable is consumed;
+                // the iterable yields an entry for each object that failed to delete.
+                results.forEach { it.get() }
+            }
         }
     }
 
@@ -233,6 +256,8 @@ class ObjectStoreClient(config: ObjectStoreConfig) {
 
     companion object {
         private const val MAX_KEYS_PER_PAGE = 1000
+
+        private fun outcomeOfGet(result: Any?) = if (result == null) ObjectStoreTelemetry.NOT_FOUND else ObjectStoreTelemetry.SUCCESS
 
         // S3 returns 412 when the condition doesn't hold, and AWS can return 409 when a conflicting
         // conditional write to the same key is in flight - both mean the caller should re-read and retry.

@@ -1,6 +1,7 @@
 package projektor.persistence
 
 import io.ktor.server.config.ApplicationConfig
+import java.time.Duration
 
 enum class PersistenceType(val configValue: String) {
     DATABASE("database"),
@@ -16,14 +17,26 @@ enum class PersistenceType(val configValue: String) {
     }
 }
 
-data class PersistenceConfig(val type: PersistenceType) {
+data class PersistenceConfig(
+    val type: PersistenceType,
+    // Repository calls that take at least this long are logged as warnings
+    val slowCallThreshold: Duration = DEFAULT_SLOW_CALL_THRESHOLD,
+) {
     companion object {
+        val DEFAULT_SLOW_CALL_THRESHOLD: Duration = Duration.ofSeconds(1)
+
         fun createPersistenceConfig(applicationConfig: ApplicationConfig) =
             PersistenceConfig(
-                applicationConfig.propertyOrNull("ktor.persistence.type")?.getString()
-                    ?.takeIf { it.isNotBlank() }
-                    ?.let { PersistenceType.fromConfigValue(it) }
-                    ?: PersistenceType.DATABASE,
+                type =
+                    applicationConfig.propertyOrNull("ktor.persistence.type")?.getString()
+                        ?.takeIf { it.isNotBlank() }
+                        ?.let { PersistenceType.fromConfigValue(it) }
+                        ?: PersistenceType.DATABASE,
+                slowCallThreshold =
+                    applicationConfig.propertyOrNull("ktor.persistence.slowCallThresholdMs")?.getString()
+                        ?.takeIf { it.isNotBlank() }
+                        ?.let { Duration.ofMillis(it.toLong()) }
+                        ?: DEFAULT_SLOW_CALL_THRESHOLD,
             )
     }
 }

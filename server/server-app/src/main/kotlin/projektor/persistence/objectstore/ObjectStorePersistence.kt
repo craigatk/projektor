@@ -1,25 +1,49 @@
 package projektor.persistence.objectstore
 
+import io.micrometer.core.instrument.MeterRegistry
 import org.koin.core.module.Module
+import org.slf4j.LoggerFactory
 import projektor.attachment.AttachmentObjectStoreRepository
 import projektor.attachment.AttachmentRepository
 import projektor.objectstore.ObjectStoreClient
 import projektor.objectstore.ObjectStoreConfig
+import projektor.objectstore.ObjectStoreTelemetry
 import projektor.objectstore.json.JsonObjectStore
 import projektor.persistence.ObjectStorePersistenceConfig
 import projektor.persistence.Persistence
+import projektor.persistence.PersistenceInstrumentation
 
-class ObjectStorePersistence(store: JsonObjectStore) : Persistence {
-    override val koinModule: Module = createObjectStorePersistenceModule(store)
+class ObjectStorePersistence(
+    store: JsonObjectStore,
+    instrumentation: PersistenceInstrumentation,
+) : Persistence {
+    override val koinModule: Module = createObjectStorePersistenceModule(store, instrumentation)
 
-    override val attachmentRepository: AttachmentRepository = AttachmentObjectStoreRepository(store)
+    override val attachmentRepository: AttachmentRepository =
+        instrumentation.instrument<AttachmentRepository>(
+            AttachmentObjectStoreRepository(store),
+        )
 
     // The object store client doesn't hold any resources that need closing
     override fun close() {}
 
     companion object {
-        fun create(config: ObjectStorePersistenceConfig): ObjectStorePersistence {
-            val client = ObjectStoreClient(ObjectStoreConfig(config.url, config.accessKey, config.secretKey))
+        private val logger = LoggerFactory.getLogger(ObjectStorePersistence::class.java)
+
+        fun create(
+            config: ObjectStorePersistenceConfig,
+            metricRegistry: MeterRegistry,
+            instrumentation: PersistenceInstrumentation,
+        ): ObjectStorePersistence {
+            logger.info(
+                "Object store persistence using bucket {} at {} with key prefix '{}'",
+                config.bucketName,
+                config.url,
+                config.keyPrefix,
+            )
+
+            val client =
+                ObjectStoreClient(ObjectStoreConfig(config.url, config.accessKey, config.secretKey), ObjectStoreTelemetry(metricRegistry))
 
             if (config.autoCreateBucket) {
                 client.createBucketIfNotExists(config.bucketName)
@@ -29,7 +53,7 @@ class ObjectStorePersistence(store: JsonObjectStore) : Persistence {
                 )
             }
 
-            return ObjectStorePersistence(JsonObjectStore(client, config.bucketName, config.keyPrefix))
+            return ObjectStorePersistence(JsonObjectStore(client, config.bucketName, config.keyPrefix), instrumentation)
         }
     }
 }

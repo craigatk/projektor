@@ -165,7 +165,7 @@ lease once expired. `SchedulerLock` accepts a `LockProvider` instead of building
     text/binary transfer mode; the object store returns the binary-mode form (`3.0`), and the parity test compares
     medians by value.
 
-### Phase 4: wiring and operations — DONE (except telemetry)
+### Phase 4: wiring and operations — DONE
 
 - `PERSISTENCE_TYPE=object-store` selects `ObjectStorePersistence`, configured by `PERSISTENCE_OBJECT_STORE_URL`,
   `_BUCKET_NAME`, `_ACCESS_KEY`, `_SECRET_KEY`, optional `_KEY_PREFIX`, and `_AUTO_CREATE_BUCKET` (otherwise startup
@@ -177,8 +177,14 @@ lease once expired. `SchedulerLock` accepts a `LockProvider` instead of building
   `ObjectStorePersistenceApplicationTest` publishes results over HTTP and checks the run, suite, case, history, git
   metadata, coverage, previous run, repository timelines, org coverage and pinning endpoints.
 - Health check needed no change (it doesn't touch the database). Local run instructions in `server-app/README.md`.
-- Not done: OpenTelemetry spans and Micrometer timers on the object-store repositories. The database backend only
-  has spans on a few methods, so this isn't a parity gap, but object-store latency won't be visible in metrics yet.
+- Telemetry (added after Phase 6), the same for both backends:
+  - `PersistenceInstrumentation` wraps every repository in a dynamic proxy: `persistence_repository_call` timer
+    (backend/repository/method/outcome), a `projektor.<Repository>.<method>` span that's current for the call
+    (database query and object store request spans nest under it), and a warning log for calls slower than
+    `PERSISTENCE_SLOW_CALL_THRESHOLD_MS` (default 1000).
+  - `ObjectStoreTelemetry` in the object-store module: `object_store_request` timer (operation/bucket/outcome) and a
+    `projektor.objectStore.<operation>` span per request, plus `object_store_update_conflict` and
+    `object_store_update_exhausted` counters from `JsonObjectStore.update`. Attachment requests are covered too.
 
 ### Phase 5: tests — DONE
 

@@ -3,6 +3,7 @@ package projektor.persistence
 import io.ktor.server.config.ApplicationConfig
 import io.micrometer.core.instrument.MeterRegistry
 import org.koin.core.module.Module
+import org.slf4j.LoggerFactory
 import projektor.attachment.AttachmentRepository
 import projektor.database.DataSourceConfig
 import projektor.persistence.objectstore.ObjectStorePersistence
@@ -19,15 +20,32 @@ interface Persistence : Closeable {
     val attachmentRepository: AttachmentRepository
 
     companion object {
+        private val logger = LoggerFactory.getLogger(Persistence::class.java)
+
         fun createPersistence(
             applicationConfig: ApplicationConfig,
             metricRegistry: MeterRegistry,
-        ): Persistence =
-            when (PersistenceConfig.createPersistenceConfig(applicationConfig).type) {
+        ): Persistence {
+            val persistenceConfig = PersistenceConfig.createPersistenceConfig(applicationConfig)
+            val instrumentation =
+                PersistenceInstrumentation(persistenceConfig.type, metricRegistry, persistenceConfig.slowCallThreshold)
+
+            logger.info(
+                "Using {} persistence, logging repository calls slower than {} ms",
+                persistenceConfig.type.configValue,
+                persistenceConfig.slowCallThreshold.toMillis(),
+            )
+
+            return when (persistenceConfig.type) {
                 PersistenceType.DATABASE ->
-                    DatabasePersistence.create(DataSourceConfig.createDataSourceConfig(applicationConfig), metricRegistry)
+                    DatabasePersistence.create(DataSourceConfig.createDataSourceConfig(applicationConfig), metricRegistry, instrumentation)
                 PersistenceType.OBJECT_STORE ->
-                    ObjectStorePersistence.create(ObjectStorePersistenceConfig.createObjectStorePersistenceConfig(applicationConfig))
+                    ObjectStorePersistence.create(
+                        ObjectStorePersistenceConfig.createObjectStorePersistenceConfig(applicationConfig),
+                        metricRegistry,
+                        instrumentation,
+                    )
             }
+        }
     }
 }

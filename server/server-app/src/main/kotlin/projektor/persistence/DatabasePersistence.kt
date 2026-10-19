@@ -46,10 +46,14 @@ import javax.sql.DataSource
 class DatabasePersistence(
     private val dataSource: HikariDataSource,
     dslContext: DSLContext,
+    instrumentation: PersistenceInstrumentation,
 ) : Persistence {
-    override val koinModule = createDatabasePersistenceModule(dataSource, dslContext)
+    override val koinModule = createDatabasePersistenceModule(dataSource, dslContext, instrumentation)
 
-    override val attachmentRepository: AttachmentRepository = AttachmentDatabaseRepository(dslContext)
+    override val attachmentRepository: AttachmentRepository =
+        instrumentation.instrument<AttachmentRepository>(
+            AttachmentDatabaseRepository(dslContext),
+        )
 
     override fun close() {
         dataSource.close()
@@ -59,12 +63,13 @@ class DatabasePersistence(
         fun create(
             dataSourceConfig: DataSourceConfig,
             metricRegistry: MeterRegistry,
+            instrumentation: PersistenceInstrumentation,
         ): DatabasePersistence {
             val dataSource = DataSourceConfig.createDataSource(dataSourceConfig, metricRegistry)
             DataSourceConfig.flywayMigrate(dataSource, dataSourceConfig)
             val dslContext = DataSourceConfig.createDSLContext(dataSource, dataSourceConfig)
 
-            return DatabasePersistence(dataSource, dslContext)
+            return DatabasePersistence(dataSource, dslContext, instrumentation)
         }
     }
 }
@@ -72,32 +77,33 @@ class DatabasePersistence(
 fun createDatabasePersistenceModule(
     dataSource: DataSource,
     dslContext: DSLContext,
+    instrumentation: PersistenceInstrumentation,
 ) = module {
     single { dslContext }
 
-    single<TestCaseRepository> { TestCaseDatabaseRepository(get()) }
-    single<TestSuiteRepository> { TestSuiteDatabaseRepository(get()) }
-    single<TestRunRepository> { TestRunDatabaseRepository(get()) }
-    single<TestRunSystemAttributesRepository> { TestRunSystemAttributesDatabaseRepository(get()) }
-    single<AttachmentRepository> { AttachmentDatabaseRepository(get()) }
-    single<ResultsProcessingRepository> { ResultsProcessingDatabaseRepository(get(), get()) }
-    single<PreviousTestRunRepository> { PreviousTestRunDatabaseRepository(get()) }
-    single<TestRunMetadataRepository> { TestRunMetadataDatabaseRepository(get()) }
-    single<ProcessingFailureRepository> { ProcessingFailureDatabaseRepository(get()) }
+    instrumentedSingle<TestCaseRepository>(instrumentation) { TestCaseDatabaseRepository(get()) }
+    instrumentedSingle<TestSuiteRepository>(instrumentation) { TestSuiteDatabaseRepository(get()) }
+    instrumentedSingle<TestRunRepository>(instrumentation) { TestRunDatabaseRepository(get()) }
+    instrumentedSingle<TestRunSystemAttributesRepository>(instrumentation) { TestRunSystemAttributesDatabaseRepository(get()) }
+    instrumentedSingle<AttachmentRepository>(instrumentation) { AttachmentDatabaseRepository(get()) }
+    instrumentedSingle<ResultsProcessingRepository>(instrumentation) { ResultsProcessingDatabaseRepository(get(), get()) }
+    instrumentedSingle<PreviousTestRunRepository>(instrumentation) { PreviousTestRunDatabaseRepository(get()) }
+    instrumentedSingle<TestRunMetadataRepository>(instrumentation) { TestRunMetadataDatabaseRepository(get()) }
+    instrumentedSingle<ProcessingFailureRepository>(instrumentation) { ProcessingFailureDatabaseRepository(get()) }
 
-    single<CoverageRepository> { CoverageDatabaseRepository(get()) }
+    instrumentedSingle<CoverageRepository>(instrumentation) { CoverageDatabaseRepository(get()) }
 
-    single<OrganizationCoverageRepository> { OrganizationCoverageDatabaseRepository(get()) }
+    instrumentedSingle<OrganizationCoverageRepository>(instrumentation) { OrganizationCoverageDatabaseRepository(get()) }
 
-    single<RepositoryCoverageRepository> { RepositoryCoverageDatabaseRepository(get()) }
-    single<RepositoryPerformanceRepository> { RepositoryPerformanceDatabaseRepository(get()) }
-    single<RepositoryTestRunRepository> { RepositoryTestRunDatabaseRepository(get()) }
+    instrumentedSingle<RepositoryCoverageRepository>(instrumentation) { RepositoryCoverageDatabaseRepository(get()) }
+    instrumentedSingle<RepositoryPerformanceRepository>(instrumentation) { RepositoryPerformanceDatabaseRepository(get()) }
+    instrumentedSingle<RepositoryTestRunRepository>(instrumentation) { RepositoryTestRunDatabaseRepository(get()) }
 
-    single<PerformanceResultsRepository> { PerformanceResultsDatabaseRepository(get()) }
+    instrumentedSingle<PerformanceResultsRepository>(instrumentation) { PerformanceResultsDatabaseRepository(get()) }
 
-    single<CodeQualityReportRepository> { CodeQualityReportDatabaseRepository(get()) }
+    instrumentedSingle<CodeQualityReportRepository>(instrumentation) { CodeQualityReportDatabaseRepository(get()) }
 
-    single<RepositorySlackChannelRepository> { RepositorySlackChannelDatabaseRepository(get()) }
+    instrumentedSingle<RepositorySlackChannelRepository>(instrumentation) { RepositorySlackChannelDatabaseRepository(get()) }
 
     single { SchedulerLock(JdbcTemplateLockProvider(dataSource)) }
 }
