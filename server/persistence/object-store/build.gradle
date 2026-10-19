@@ -11,10 +11,16 @@ dependencies {
     api "org.xerial.snappy:snappy-java:$snappy_java_version"
     api "com.squareup.okhttp3:okhttp:${ok_http3_version}"
 
+    api "io.micrometer:micrometer-core:$micrometer_version"
+    implementation platform("io.opentelemetry:opentelemetry-bom:$opentelemetry_version")
+    implementation "io.opentelemetry:opentelemetry-api"
+
     implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonDatabindVersion"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion"
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:6.1.3"
+    testImplementation platform("io.opentelemetry:opentelemetry-bom:$opentelemetry_version")
+    testImplementation "io.opentelemetry:opentelemetry-sdk-testing"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:6.1.3"
 }

@@ -20,6 +20,8 @@ import projektor.organization.coverage.OrganizationCoverageObjectStoreRepository
 import projektor.organization.coverage.OrganizationCoverageRepository
 import projektor.performance.PerformanceResultsObjectStoreRepository
 import projektor.performance.PerformanceResultsRepository
+import projektor.persistence.PersistenceInstrumentation
+import projektor.persistence.instrumentedSingle
 import projektor.quality.CodeQualityReportObjectStoreRepository
 import projektor.quality.CodeQualityReportRepository
 import projektor.repository.coverage.RepositoryCoverageObjectStoreRepository
@@ -41,30 +43,32 @@ import projektor.testsuite.TestSuiteRepository
 /**
  * Repositories and scheduler lock for the object-store persistence backend.
  */
-fun createObjectStorePersistenceModule(store: JsonObjectStore) =
-    module {
-        single { store }
-        single { TestRunDocumentStore(get()) }
-        single { TestRunIndex(get()) }
+fun createObjectStorePersistenceModule(
+    store: JsonObjectStore,
+    instrumentation: PersistenceInstrumentation,
+) = module {
+    single { store }
+    single { TestRunDocumentStore(get()) }
+    single { TestRunIndex(get()) }
 
-        single<TestRunRepository> { TestRunObjectStoreRepository(get(), get()) }
-        single<TestSuiteRepository> { TestSuiteObjectStoreRepository(get()) }
-        single<TestCaseRepository> { TestCaseObjectStoreRepository(get(), get()) }
-        single<TestRunMetadataRepository> { TestRunMetadataObjectStoreRepository(get(), get()) }
-        single<TestRunSystemAttributesRepository> { TestRunSystemAttributesObjectStoreRepository(get()) }
-        single<AttachmentRepository> { AttachmentObjectStoreRepository(get()) }
-        single<ResultsProcessingRepository> { ResultsProcessingObjectStoreRepository(get(), get()) }
-        single<ProcessingFailureRepository> { ProcessingFailureObjectStoreRepository(get()) }
-        single<PerformanceResultsRepository> { PerformanceResultsObjectStoreRepository(get(), get()) }
-        single<CodeQualityReportRepository> { CodeQualityReportObjectStoreRepository(get()) }
-        single<CoverageRepository> { CoverageObjectStoreRepository(get(), get()) }
+    instrumentedSingle<TestRunRepository>(instrumentation) { TestRunObjectStoreRepository(get(), get()) }
+    instrumentedSingle<TestSuiteRepository>(instrumentation) { TestSuiteObjectStoreRepository(get()) }
+    instrumentedSingle<TestCaseRepository>(instrumentation) { TestCaseObjectStoreRepository(get(), get()) }
+    instrumentedSingle<TestRunMetadataRepository>(instrumentation) { TestRunMetadataObjectStoreRepository(get(), get()) }
+    instrumentedSingle<TestRunSystemAttributesRepository>(instrumentation) { TestRunSystemAttributesObjectStoreRepository(get()) }
+    instrumentedSingle<AttachmentRepository>(instrumentation) { AttachmentObjectStoreRepository(get()) }
+    instrumentedSingle<ResultsProcessingRepository>(instrumentation) { ResultsProcessingObjectStoreRepository(get(), get()) }
+    instrumentedSingle<ProcessingFailureRepository>(instrumentation) { ProcessingFailureObjectStoreRepository(get()) }
+    instrumentedSingle<PerformanceResultsRepository>(instrumentation) { PerformanceResultsObjectStoreRepository(get(), get()) }
+    instrumentedSingle<CodeQualityReportRepository>(instrumentation) { CodeQualityReportObjectStoreRepository(get()) }
+    instrumentedSingle<CoverageRepository>(instrumentation) { CoverageObjectStoreRepository(get(), get()) }
 
-        single<RepositoryTestRunRepository> { RepositoryTestRunObjectStoreRepository(get(), get()) }
-        single<RepositoryCoverageRepository> { RepositoryCoverageObjectStoreRepository(get(), get()) }
-        single<RepositoryPerformanceRepository> { RepositoryPerformanceObjectStoreRepository(get()) }
-        single<PreviousTestRunRepository> { PreviousTestRunObjectStoreRepository(get(), get()) }
-        single<OrganizationCoverageRepository> { OrganizationCoverageObjectStoreRepository(get()) }
-        single<RepositorySlackChannelRepository> { RepositorySlackChannelObjectStoreRepository(get()) }
+    instrumentedSingle<RepositoryTestRunRepository>(instrumentation) { RepositoryTestRunObjectStoreRepository(get(), get()) }
+    instrumentedSingle<RepositoryCoverageRepository>(instrumentation) { RepositoryCoverageObjectStoreRepository(get(), get()) }
+    instrumentedSingle<RepositoryPerformanceRepository>(instrumentation) { RepositoryPerformanceObjectStoreRepository(get()) }
+    instrumentedSingle<PreviousTestRunRepository>(instrumentation) { PreviousTestRunObjectStoreRepository(get(), get()) }
+    instrumentedSingle<OrganizationCoverageRepository>(instrumentation) { OrganizationCoverageObjectStoreRepository(get()) }
+    instrumentedSingle<RepositorySlackChannelRepository>(instrumentation) { RepositorySlackChannelObjectStoreRepository(get()) }
 
-        single { SchedulerLock(ObjectStoreLockProvider(get())) }
-    }
+    single { SchedulerLock(ObjectStoreLockProvider(get())) }
+}

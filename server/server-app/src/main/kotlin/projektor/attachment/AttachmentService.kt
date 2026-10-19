@@ -5,6 +5,7 @@ import kotlinx.coroutines.withContext
 import org.slf4j.LoggerFactory
 import projektor.objectstore.ObjectStoreClient
 import projektor.objectstore.ObjectStoreConfig
+import projektor.objectstore.ObjectStoreTelemetry
 import projektor.objectstore.bucket.BucketCreationException
 import projektor.server.api.PublicId
 import projektor.server.api.attachments.Attachment
@@ -14,10 +15,12 @@ import java.math.BigDecimal
 class AttachmentService(
     private val config: AttachmentConfig,
     private val attachmentRepository: AttachmentRepository,
+    objectStoreTelemetry: ObjectStoreTelemetry = ObjectStoreTelemetry(),
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
-    private val objectStoreClient = ObjectStoreClient(ObjectStoreConfig(config.url, config.accessKey, config.secretKey))
+    private val objectStoreClient =
+        ObjectStoreClient(ObjectStoreConfig(config.url, config.accessKey, config.secretKey), objectStoreTelemetry)
 
     fun conditionallyCreateBucketIfNotExists() {
         if (config.autoCreateBucket) {

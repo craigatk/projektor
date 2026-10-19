@@ -1,5 +1,6 @@
 package projektor.persistence.objectstore
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.koin.core.Koin
@@ -20,6 +21,8 @@ import projektor.parser.coverage.model.CoverageReport
 import projektor.parser.coverage.model.CoverageReportStat
 import projektor.parser.coverage.model.CoverageReportStats
 import projektor.performance.PerformanceResultsRepository
+import projektor.persistence.PersistenceInstrumentation
+import projektor.persistence.PersistenceType
 import projektor.persistence.createDatabasePersistenceModule
 import projektor.quality.CodeQualityReportRepository
 import projektor.repository.coverage.RepositoryCoverageRepository
@@ -53,12 +56,33 @@ abstract class ObjectStoreParityTestCase : DatabaseRepositoryTestCase() {
 
     @BeforeEach
     fun createBackends() {
-        database = Repositories(koinApplication { modules(createDatabasePersistenceModule(dataSource, dslContext)) }.koin)
+        database =
+            Repositories(
+                koinApplication {
+                    modules(
+                        createDatabasePersistenceModule(
+                            dataSource,
+                            dslContext,
+                            PersistenceInstrumentation(PersistenceType.DATABASE, SimpleMeterRegistry()),
+                        ),
+                    )
+                }.koin,
+            )
 
         val objectStoreClient = ObjectStoreClient(ObjectStoreConfig("http://localhost:9000", "minio_access_key", "minio_secret_key"))
         objectStoreClient.createBucketIfNotExists(BUCKET_NAME)
         val jsonObjectStore = JsonObjectStore(objectStoreClient, BUCKET_NAME, "parity-${UUID.randomUUID()}")
-        objectStore = Repositories(koinApplication { modules(createObjectStorePersistenceModule(jsonObjectStore)) }.koin)
+        objectStore =
+            Repositories(
+                koinApplication {
+                    modules(
+                        createObjectStorePersistenceModule(
+                            jsonObjectStore,
+                            PersistenceInstrumentation(PersistenceType.OBJECT_STORE, SimpleMeterRegistry()),
+                        ),
+                    )
+                }.koin,
+            )
     }
 
     protected fun <T> expectSameResult(

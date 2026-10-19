@@ -2,6 +2,7 @@ package projektor.persistence
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
 import org.koin.core.Koin
@@ -54,7 +55,16 @@ class DatabaseTestBackend(maximumPoolSize: Int = 2) : PersistenceTestBackend {
         dataSource = HikariDataSource(hikariConfig)
         DataSourceConfig.flywayMigrate(dataSource, dataSourceConfig)
 
-        koin = koinApplication { modules(createDatabasePersistenceModule(dataSource, DSL.using(dataSource, SQLDialect.POSTGRES))) }.koin
+        koin =
+            koinApplication {
+                modules(
+                    createDatabasePersistenceModule(
+                        dataSource,
+                        DSL.using(dataSource, SQLDialect.POSTGRES),
+                        PersistenceInstrumentation(PersistenceType.DATABASE, SimpleMeterRegistry()),
+                    ),
+                )
+            }.koin
     }
 
     override fun close() {
@@ -76,7 +86,12 @@ class ObjectStoreTestBackend : PersistenceTestBackend {
 
         koin =
             koinApplication {
-                modules(createObjectStorePersistenceModule(JsonObjectStore(client, BUCKET_NAME, "repository-test-${UUID.randomUUID()}")))
+                modules(
+                    createObjectStorePersistenceModule(
+                        JsonObjectStore(client, BUCKET_NAME, "repository-test-${UUID.randomUUID()}"),
+                        PersistenceInstrumentation(PersistenceType.OBJECT_STORE, SimpleMeterRegistry()),
+                    ),
+                )
             }.koin
     }
 

@@ -1,5 +1,6 @@
 package projektor.persistence.objectstore
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -25,6 +26,8 @@ import projektor.parser.coverage.model.CoverageReportStat
 import projektor.parser.coverage.model.CoverageReportStats
 import projektor.parser.model.Failure
 import projektor.performance.PerformanceResultsRepository
+import projektor.persistence.PersistenceInstrumentation
+import projektor.persistence.PersistenceType
 import projektor.repository.coverage.RepositoryCoverageRepository
 import projektor.repository.performance.RepositoryPerformanceRepository
 import projektor.server.api.attachments.Attachment
@@ -67,7 +70,15 @@ class ObjectStoreRepositoriesTest {
     fun createStore() {
         objectStoreClient.createBucketIfNotExists(BUCKET_NAME)
         jsonObjectStore = JsonObjectStore(objectStoreClient, BUCKET_NAME, "repositories-${UUID.randomUUID()}")
-        koin = koinApplication { modules(createObjectStorePersistenceModule(jsonObjectStore)) }.koin
+        koin =
+            koinApplication {
+                modules(
+                    createObjectStorePersistenceModule(
+                        jsonObjectStore,
+                        PersistenceInstrumentation(PersistenceType.OBJECT_STORE, SimpleMeterRegistry()),
+                    ),
+                )
+            }.koin
     }
 
     @Test
