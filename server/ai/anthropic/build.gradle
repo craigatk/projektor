@@ -7,7 +7,7 @@ apply from: "../../../gradle/kotlin.gradle"
 dependencies {
     implementation(project(":server:ai:analysis"))
 
-    implementation("com.anthropic:anthropic-java:2.73.0") // https://github.com/anthropics/anthropic-sdk-java
+    implementation("com.anthropic:anthropic-java:2.75.0") // https://github.com/anthropics/anthropic-sdk-java
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 
