@@ -44,7 +44,7 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
                                 .and(withProjectName(currentRunInfo.projectName))
                                 .and(TEST_RUN.CREATED_TIMESTAMP.lessThan(currentRunInfo.createdTimestamp)),
                         )
-                        .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                        .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast(), TEST_RUN.ID.desc())
                         .limit(1)
                         .fetchOne(TEST_RUN.PUBLIC_ID)
 
@@ -80,7 +80,7 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
                                 .and(TEST_RUN.PUBLIC_ID.ne(publicId.id))
                                 .and(TEST_RUN.CREATED_TIMESTAMP.lessThan(currentRunInfo.createdTimestamp)),
                         )
-                        .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                        .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast(), TEST_RUN.ID.desc())
                         .limit(1)
                         .fetchOne()
 
@@ -114,7 +114,7 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
                             .and(withBranchName(branch?.branchName))
                             .and(withProjectName(projectName)),
                     )
-                    .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                    .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast(), TEST_RUN.ID.desc())
                     .limit(1)
                     .fetchOne()
 
@@ -144,7 +144,7 @@ class PreviousTestRunDatabaseRepository(private val dslContext: DSLContext) : Pr
                             .and(withBranchName(branch?.branchName))
                             .and(withProjectName(projectName)),
                     )
-                    .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                    .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast(), TEST_RUN.ID.desc())
                     .limit(1)
                     .fetchOne()
 

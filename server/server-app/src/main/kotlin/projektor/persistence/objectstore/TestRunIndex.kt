@@ -265,10 +265,11 @@ data class TestRunIndexEntry(
 }
 
 /**
- * Most recent first. Like the database's descending created timestamp order (which has no tiebreaker),
- * runs created at the same time stay in the order they were saved.
+ * Most recent first. Like the database ordering by created timestamp and then ID descending,
+ * runs created at the same time are ordered most recently saved first.
+ * Relies on this list being in the order the runs were saved, which the stable sort then preserves in reverse.
  */
-fun List<TestRunIndexEntry>.newestFirst(): List<TestRunIndexEntry> = sortedByDescending { it.createdTimestamp }
+fun List<TestRunIndexEntry>.newestFirst(): List<TestRunIndexEntry> = asReversed().sortedByDescending { it.createdTimestamp }
 
 data class CreatedMarkerDocument(val publicId: String, val createdTimestamp: Instant)
 
