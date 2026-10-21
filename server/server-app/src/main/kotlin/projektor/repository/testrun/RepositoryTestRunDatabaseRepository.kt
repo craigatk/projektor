@@ -52,7 +52,7 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                     .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
                     .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
                     .where(runInCIFromRepo(repoName, projectName))
-                    .orderBy(TEST_RUN.CREATED_TIMESTAMP.asc())
+                    .orderBy(TEST_RUN.CREATED_TIMESTAMP.asc(), TEST_RUN.ID.asc())
                     .fetchResultSet()
 
             val timelineEntries: List<RepositoryTestRunTimelineEntry> =
@@ -106,7 +106,7 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                         runInCIFromRepo(repoName, projectName)
                             .and(withBranchType(BranchType.MAINLINE)),
                     )
-                    .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc())
+                    .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc(), TEST_RUN.ID.desc())
                     .limit(limit)
                     .fetchInto(TestRunSummary::class.java)
 
@@ -168,7 +168,7 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                 .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
                 .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
                 .where(runInCIFromRepo(repoName, projectName))
-                .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast(), TEST_RUN.ID.desc())
                 .limit(maxRuns)
                 .fetchInto(String::class.java)
                 .map { PublicId(it) }
@@ -187,7 +187,7 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                     GIT_METADATA.REPO_NAME.eq(repoName)
                         .and(GIT_METADATA.PULL_REQUEST_NUMBER.eq(pullRequestNumber)),
                 )
-                .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast(), TEST_RUN.ID.desc())
                 .limit(1)
                 .fetchOne(TEST_RUN.PUBLIC_ID)
                 ?.let { PublicId(it) }
@@ -207,7 +207,7 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                     GIT_METADATA.REPO_NAME.eq(repoName)
                         .and(GIT_METADATA.PULL_REQUEST_NUMBER.eq(pullRequestNumber)),
                 )
-                .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast(), TEST_RUN.ID.desc())
                 .limit(1)
                 .fetchOne(TEST_RUN.PUBLIC_ID)
                 ?.let { PublicId(it) }
