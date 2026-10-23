@@ -2,6 +2,7 @@ package projektor.ai.anthropic
 
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.containing
+import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
@@ -28,7 +29,7 @@ class AnthropicAnalysisClientTest {
 
         wmRuntimeInfo.wireMock.verifyThat(
             postRequestedFor(urlPathEqualTo("/v1/messages"))
-                .withHeader("x-api-key", containing("api-key"))
+                .withHeader("Authorization", equalTo("Bearer api-key"))
                 .withRequestBody(containing("my-test-failure")),
         )
         expectThat(wmRuntimeInfo.wireMock.findAllUnmatchedRequests()).isEmpty()
