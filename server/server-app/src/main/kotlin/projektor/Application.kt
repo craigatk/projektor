@@ -221,6 +221,7 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     val attachmentCleanupService = attachmentService?.let { AttachmentCleanupService(cleanupConfig, testRunRepository, attachmentService) }
     val scheduler: Scheduler by inject()
     CleanupScheduledJob.conditionallyStartCleanupScheduledJob(cleanupConfig, testRunCleanupService, attachmentCleanupService, scheduler)
+    persistence.scheduleJobs(scheduler)
 
     val organizationCoverageService: OrganizationCoverageService by inject()
 

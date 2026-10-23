@@ -1,0 +1,12 @@
+{
+  "results": [
+    {
+      "name": "perf",
+      "requestsPerSecond": 10.5,
+      "requestCount": 100,
+      "average": 1.5,
+      "maximum": 3.0,
+      "p95": 2.5
+    }
+  ]
+}

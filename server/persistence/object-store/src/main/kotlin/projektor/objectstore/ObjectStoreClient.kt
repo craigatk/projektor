@@ -13,7 +13,7 @@ import io.minio.messages.DeleteRequest
 import projektor.objectstore.bucket.BucketCreationException
 import java.io.InputStream
 
-class ObjectStoreClient(
+open class ObjectStoreClient(
     config: ObjectStoreConfig,
     internal val telemetry: ObjectStoreTelemetry = ObjectStoreTelemetry(),
 ) {
@@ -66,7 +66,7 @@ class ObjectStoreClient(
      *
      * @throws PreconditionFailedException if the condition didn't hold
      */
-    fun putObject(
+    open fun putObject(
         bucketName: String,
         objectName: String,
         bytes: ByteArray,
@@ -127,7 +127,7 @@ class ObjectStoreClient(
     /**
      * Reads the full object contents along with its ETag, or returns null if the object doesn't exist.
      */
-    fun getObjectWithETag(
+    open fun getObjectWithETag(
         bucketName: String,
         objectName: String,
     ): StoredObject? =
@@ -142,7 +142,7 @@ class ObjectStoreClient(
                 ).use { response ->
                     StoredObject(
                         bytes = response.readBytes(),
-                        etag = normalizeETag(response.headers()["ETag"] ?: ""),
+                        etag = requireETag(response.headers()["ETag"], bucketName, objectName),
                     )
                 }
             } catch (e: ErrorResponseException) {
@@ -268,6 +268,18 @@ class ObjectStoreClient(
         // ETags come back from S3 wrapped in double quotes, normalize to the bare value
         internal fun normalizeETag(etag: String) = etag.trim().trim('"')
 
+        /**
+         * Conditional writes need the ETag the object was read with. Without one (e.g. a proxy stripped the header),
+         * every If-Match write would fail and look like endless concurrent updates, so fail clearly instead.
+         */
+        internal fun requireETag(
+            etag: String?,
+            bucketName: String,
+            objectName: String,
+        ): String =
+            etag?.let { normalizeETag(it) }?.takeIf { it.isNotEmpty() }
+                ?: throw MissingETagException(bucketName, objectName)
+
         private fun quoteETag(etag: String) = "\"${normalizeETag(etag)}\""
     }
 }
@@ -290,3 +302,11 @@ class PreconditionFailedException(
     condition: WriteCondition,
     cause: Throwable,
 ) : RuntimeException("Write condition $condition failed for object $objectName in bucket $bucketName", cause)
+
+class MissingETagException(
+    bucketName: String,
+    objectName: String,
+) : RuntimeException(
+        "Object $objectName in bucket $bucketName was returned without an ETag, which conditional writes need. " +
+            "Check that the object store (or a proxy in front of it) returns the ETag header.",
+    )

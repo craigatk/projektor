@@ -86,6 +86,50 @@ abstract class ConcurrentAppendTest : RepositoryTestCase() {
         }
     }
 
+    @Test
+    fun `concurrent appends to a large test run should keep every test suite and recalculate the summary from all of them`() {
+        val appendTestResultsService = AppendTestResultsService(testRunRepository, testSuiteRepository, resultsProcessingRepository)
+        val publicId = randomPublicId()
+        // More test suites than fit in one test case chunk, so recalculating the summary reads several chunks
+        val initialSuiteCount = 250
+        val appendCount = 6
+        val suitesPerAppend = 30
+
+        testRunGenerator.createGroupedTestRun(
+            publicId,
+            listOf(
+                TestSuiteGroupData(
+                    "Group",
+                    null,
+                    (1..initialSuiteCount).map { TestSuiteData("Initial$it", listOf("passing"), listOf(), listOf()) },
+                ),
+            ),
+        )
+
+        runConcurrently((1..appendCount).toList()) { appendIdx ->
+            val testSuites =
+                (1..suitesPerAppend).map { suiteIdx ->
+                    TestRunGenerator.toParsedTestSuite(
+                        TestSuiteData("Appended$appendIdx-$suiteIdx", listOf("passing"), listOf("failing"), listOf()),
+                    )
+                }
+            appendTestResultsService.appendGroupedTestRun(
+                publicId,
+                GroupedResults(listOf(GroupedTestSuites(testSuites, "Group", null, null)), listOf(), null, null, null, null),
+            )
+        }
+
+        val expectedSuiteCount = initialSuiteCount + appendCount * suitesPerAppend
+        val testSuites = runBlocking { testSuiteRepository.fetchTestSuitesWithCases(publicId) }
+        expectThat(testSuites.map { it.idx }.distinct()).hasSize(expectedSuiteCount)
+        expectThat(testSuites.sumOf { it.testCases.orEmpty().size }).isEqualTo(initialSuiteCount + appendCount * suitesPerAppend * 2)
+
+        expectThat(runBlocking { testRunRepository.fetchTestRunSummary(publicId) }).isNotNull().and {
+            get { totalTestCount }.isEqualTo(initialSuiteCount + appendCount * suitesPerAppend * 2)
+            get { totalFailureCount }.isEqualTo(appendCount * suitesPerAppend)
+        }
+    }
+
     private fun fetchCoverageSnapshot(publicId: PublicId): CoverageSnapshot =
         runBlocking {
             val groups = coverageRepository.fetchCoverageList(publicId)

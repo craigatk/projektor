@@ -6,6 +6,7 @@ import org.apache.commons.lang3.RandomStringUtils
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.until
 import org.awaitility.kotlin.untilNotNull
+import org.jooq.DSLContext
 import org.junit.jupiter.api.Test
 import projektor.compare.PreviousTestRunService
 import projektor.incomingresults.model.GroupedResults
@@ -23,16 +24,21 @@ import projektor.parser.performance.PerformanceResultsParser
 import projektor.persistence.DatabaseTestBackend
 import projektor.persistence.ObjectStoreTestBackend
 import projektor.persistence.RepositoryTestCase
+import projektor.persistence.objectstore.TestRunDocumentStore
+import projektor.persistence.objectstore.TestRunIndex
 import projektor.repository.testrun.RepositoryTestRunService
 import projektor.results.processor.TestResultsProcessor
 import projektor.server.api.PublicId
 import projektor.server.api.TestRunSummary
 import projektor.server.api.results.ResultsProcessingStatus
+import projektor.testrun.TestRunDatabaseRepository
+import projektor.testrun.TestRunObjectStoreRepository
 import projektor.testrun.TestRunRepository
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotEqualTo
 import strikt.assertions.isNull
+import java.time.Duration
 import java.util.concurrent.TimeUnit
 
 /**
@@ -81,6 +87,64 @@ abstract class GroupClaimReleaseTest : RepositoryTestCase() {
         val newPublicId = randomPublicId()
         expectThat(runBlocking { testRunRepository.claimTestRunGroup("B1", repoName, newPublicId) }).isEqualTo(newPublicId)
     }
+
+    @Test
+    fun `when the claiming upload failed processing without saving its test run should take over the group`() {
+        val repoName = "org-${RandomStringUtils.randomAlphabetic(10).lowercase()}/repo"
+        val failedPublicId = randomPublicId()
+
+        runBlocking {
+            expectThat(testRunRepository.claimTestRunGroup("B1", repoName, failedPublicId)).isEqualTo(failedPublicId)
+            resultsProcessingRepository.createResultsProcessing(failedPublicId)
+            // As if releasing the claim failed after the test run failed to save
+            resultsProcessingRepository.recordResultsProcessingError(failedPublicId, "body", "Simulated failure")
+        }
+
+        val nextPublicId = randomPublicId()
+        expectThat(runBlocking { testRunRepository.claimTestRunGroup("B1", repoName, nextPublicId) }).isEqualTo(nextPublicId)
+        expectThat(runBlocking { testRunRepository.claimTestRunGroup("B1", repoName, randomPublicId()) }).isEqualTo(nextPublicId)
+    }
+
+    @Test
+    fun `when the claiming upload is still saving its test run should keep its claim`() {
+        val repoName = "org-${RandomStringUtils.randomAlphabetic(10).lowercase()}/repo"
+        val savingPublicId = randomPublicId()
+
+        runBlocking {
+            testRunRepository.claimTestRunGroup("B1", repoName, savingPublicId)
+            resultsProcessingRepository.createResultsProcessing(savingPublicId)
+        }
+
+        expectThat(runBlocking { testRunRepository.claimTestRunGroup("B1", repoName, randomPublicId()) }).isEqualTo(savingPublicId)
+    }
+
+    @Test
+    fun `when the claim is older than the abandoned claim age and its test run was never saved should take over the group`() {
+        val repoName = "org-${RandomStringUtils.randomAlphabetic(10).lowercase()}/repo"
+        val abandonedPublicId = randomPublicId()
+        val savedPublicId = randomPublicId()
+
+        runBlocking {
+            // As if the server stopped while saving the test run, leaving its processing status RECEIVED
+            testRunRepository.claimTestRunGroup("B1", repoName, abandonedPublicId)
+            resultsProcessingRepository.createResultsProcessing(abandonedPublicId)
+
+            testRunRepository.claimTestRunGroup("B2", repoName, savedPublicId)
+            testRunGenerator.createSimpleTestRun(savedPublicId)
+        }
+
+        // Every claim counts as old enough to be abandoned
+        val repositoryWithoutClaimAge = createTestRunRepository(abandonedGroupClaimAge = Duration.ZERO)
+
+        val nextPublicId = randomPublicId()
+        expectThat(runBlocking { repositoryWithoutClaimAge.claimTestRunGroup("B1", repoName, nextPublicId) }).isEqualTo(nextPublicId)
+        expectThat(runBlocking { testRunRepository.claimTestRunGroup("B1", repoName, randomPublicId()) }).isEqualTo(nextPublicId)
+
+        // A claim whose test run was saved is never abandoned
+        expectThat(runBlocking { repositoryWithoutClaimAge.claimTestRunGroup("B2", repoName, randomPublicId()) }).isEqualTo(savedPublicId)
+    }
+
+    protected abstract fun createTestRunRepository(abandonedGroupClaimAge: Duration): TestRunRepository
 
     private fun awaitProcessingStatus(
         publicId: PublicId,
@@ -158,8 +222,14 @@ abstract class GroupClaimReleaseTest : RepositoryTestCase() {
 
 class GroupClaimReleaseDatabaseTest : GroupClaimReleaseTest() {
     override fun createBackend() = DatabaseTestBackend()
+
+    override fun createTestRunRepository(abandonedGroupClaimAge: Duration): TestRunRepository =
+        TestRunDatabaseRepository(backend.koin.get<DSLContext>(), abandonedGroupClaimAge)
 }
 
 class GroupClaimReleaseObjectStoreTest : GroupClaimReleaseTest() {
     override fun createBackend() = ObjectStoreTestBackend()
+
+    override fun createTestRunRepository(abandonedGroupClaimAge: Duration): TestRunRepository =
+        TestRunObjectStoreRepository(backend.koin.get<TestRunDocumentStore>(), backend.koin.get<TestRunIndex>(), abandonedGroupClaimAge)
 }

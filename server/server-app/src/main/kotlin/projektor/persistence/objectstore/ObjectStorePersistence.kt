@@ -12,17 +12,24 @@ import projektor.objectstore.json.JsonObjectStore
 import projektor.persistence.ObjectStorePersistenceConfig
 import projektor.persistence.Persistence
 import projektor.persistence.PersistenceInstrumentation
+import projektor.schedule.Scheduler
 
 class ObjectStorePersistence(
     store: JsonObjectStore,
     instrumentation: PersistenceInstrumentation,
 ) : Persistence {
-    override val koinModule: Module = createObjectStorePersistenceModule(store, instrumentation)
+    private val testRunIndex = TestRunIndex(TestRunDocumentStore(store))
+
+    override val koinModule: Module = createObjectStorePersistenceModule(store, instrumentation, testRunIndex)
 
     override val attachmentRepository: AttachmentRepository =
         instrumentation.instrument<AttachmentRepository>(
             AttachmentObjectStoreRepository(store),
         )
+
+    override fun scheduleJobs(scheduler: Scheduler) {
+        IndexRepairScheduledJob.scheduleIndexRepairJob(testRunIndex, scheduler)
+    }
 
     // The object store client doesn't hold any resources that need closing
     override fun close() {}
@@ -53,7 +60,12 @@ class ObjectStorePersistence(
                 )
             }
 
-            return ObjectStorePersistence(JsonObjectStore(client, config.bucketName, config.keyPrefix), instrumentation)
+            val store = JsonObjectStore(client, config.bucketName, config.keyPrefix)
+
+            // Fail at startup rather than silently losing concurrent updates on a store that ignores write conditions
+            store.verifyConditionalWrites()
+
+            return ObjectStorePersistence(store, instrumentation)
         }
     }
 }

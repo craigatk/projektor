@@ -7,6 +7,7 @@ import projektor.server.api.PublicId
 import projektor.server.api.TestRun
 import projektor.server.api.TestRunSummary
 import java.math.BigDecimal
+import java.time.Duration
 import java.time.LocalDate
 
 interface TestRunRepository {
@@ -55,6 +56,9 @@ interface TestRunRepository {
      * Claims the results group in the repo for the test run, returning the public ID of the test run that owns
      * the group: the given test run if no test run had claimed the group yet, otherwise the existing owner.
      * Atomic, so concurrent uploads with the same group agree on one test run even before it's saved.
+     *
+     * An abandoned claim is taken over by the given test run: one whose test run was never saved and either failed
+     * processing or was claimed longer than [ABANDONED_GROUP_CLAIM_AGE] ago (e.g. the server stopped mid-save).
      */
     suspend fun claimTestRunGroup(
         group: String,
@@ -76,4 +80,9 @@ interface TestRunRepository {
         group: String,
         repoName: String,
     ): PublicId?
+
+    companion object {
+        // Well past how long an appending upload waits for the claiming test run to be saved (AppendTestResultsService)
+        val ABANDONED_GROUP_CLAIM_AGE: Duration = Duration.ofMinutes(10)
+    }
 }

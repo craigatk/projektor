@@ -46,10 +46,11 @@ import projektor.testsuite.TestSuiteRepository
 fun createObjectStorePersistenceModule(
     store: JsonObjectStore,
     instrumentation: PersistenceInstrumentation,
+    testRunIndex: TestRunIndex = TestRunIndex(TestRunDocumentStore(store)),
 ) = module {
     single { store }
-    single { TestRunDocumentStore(get()) }
-    single { TestRunIndex(get()) }
+    single { testRunIndex.documentStore }
+    single { testRunIndex }
 
     instrumentedSingle<TestRunRepository>(instrumentation) { TestRunObjectStoreRepository(get(), get()) }
     instrumentedSingle<TestSuiteRepository>(instrumentation) { TestSuiteObjectStoreRepository(get()) }

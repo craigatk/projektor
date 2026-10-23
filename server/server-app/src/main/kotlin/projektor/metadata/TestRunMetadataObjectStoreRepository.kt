@@ -38,7 +38,7 @@ class TestRunMetadataObjectStoreRepository(
         withContext(Dispatchers.IO) {
             // Like the database repository, does nothing when the test run doesn't have Git metadata
             documentStore.store.update<TestRunDocument>(ObjectStoreKeys.testRun(publicId)) { current ->
-                current?.gitMetadata?.let { git ->
+                current?.takeUnless { it.deleted }?.gitMetadata?.let { git ->
                     current.copy(gitMetadata = git.copy(pullRequestNumber = pullRequestNumber, commitSha = commitSha))
                 }
             }

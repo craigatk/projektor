@@ -1,0 +1,16 @@
+{
+  "groups": [
+    {
+      "id": "6f1c1a52-1b0e-4c56-9d1e-1b2f2d1c7a10",
+      "name": "server",
+      "stats": {
+        "statementCovered": 10,
+        "statementMissed": 2,
+        "lineCovered": 20,
+        "lineMissed": 4,
+        "branchCovered": 5,
+        "branchMissed": 1
+      }
+    }
+  ]
+}

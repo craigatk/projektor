@@ -11,6 +11,7 @@ import projektor.objectstore.PreconditionFailedException
 import projektor.objectstore.WriteCondition
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.util.UUID
 import java.util.concurrent.ThreadLocalRandom
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
@@ -134,6 +135,40 @@ class JsonObjectStore(
         client.removeObject(bucketName, fullKey(key))
     }
 
+    /**
+     * Checks that the object store honors conditional writes, which every compare-and-swap update relies on.
+     * A store that ignores If-None-Match or If-Match accepts every write, which silently loses concurrent updates
+     * instead of failing.
+     *
+     * @throws ConditionalWritesNotSupportedException if the store didn't honor a write condition
+     */
+    fun verifyConditionalWrites() {
+        val key = "$CONDITIONAL_WRITE_PROBE_PREFIX${UUID.randomUUID()}.json"
+
+        fun notSupported(reason: String): Nothing = throw ConditionalWritesNotSupportedException(bucketName, reason)
+
+        try {
+            create(key, ConditionalWriteProbeDocument(1)) ?: notSupported("creating a new object with If-None-Match: * was rejected")
+
+            if (create(key, ConditionalWriteProbeDocument(2)) != null) {
+                notSupported("a write with If-None-Match: * replaced an existing object")
+            }
+
+            val current =
+                readVersioned(key, ConditionalWriteProbeDocument::class.java)
+                    ?: notSupported("the object written by the check couldn't be read back")
+
+            if (replace(key, ConditionalWriteProbeDocument(3), STALE_PROBE_ETAG) != null) {
+                notSupported("a write with If-Match and a stale ETag replaced the object")
+            }
+
+            replace(key, ConditionalWriteProbeDocument(4), current.etag)
+                ?: notSupported("a write with If-Match and the object's current ETag was rejected")
+        } finally {
+            runCatching { delete(key) }
+        }
+    }
+
     fun deletePrefix(prefix: String) {
         client.removeObjectsWithPrefix(bucketName, fullKey(prefix))
     }
@@ -185,6 +220,11 @@ class JsonObjectStore(
         private const val BASE_BACKOFF_MILLIS = 10L
         private const val MAX_BACKOFF_MILLIS = 500L
 
+        private const val CONDITIONAL_WRITE_PROBE_PREFIX = "conditional-write-check/"
+
+        // A well-formed ETag that never matches a real object
+        private const val STALE_PROBE_ETAG = "00000000000000000000000000000000"
+
         private const val JSON_CONTENT_TYPE = "application/json"
         private const val GZIP_CONTENT_TYPE = "application/gzip"
 
@@ -221,3 +261,11 @@ data class VersionedDocument<T>(val value: T, val etag: String)
 
 class ConcurrentUpdateException(key: String, attempts: Int) :
     RuntimeException("Gave up updating $key after $attempts attempts due to concurrent updates")
+
+class ConditionalWritesNotSupportedException(bucketName: String, reason: String) :
+    RuntimeException(
+        "Object store bucket $bucketName doesn't support conditional writes ($reason). " +
+            "Object-store persistence needs a store that honors If-None-Match and If-Match on PutObject, such as AWS S3 or MinIO.",
+    )
+
+internal data class ConditionalWriteProbeDocument(val value: Int)

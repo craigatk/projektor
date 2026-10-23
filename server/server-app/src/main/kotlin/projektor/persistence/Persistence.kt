@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory
 import projektor.attachment.AttachmentRepository
 import projektor.database.DataSourceConfig
 import projektor.persistence.objectstore.ObjectStorePersistence
+import projektor.schedule.Scheduler
 import java.io.Closeable
 
 /**
@@ -18,6 +19,11 @@ interface Persistence : Closeable {
 
     // Needed before Koin starts so the attachment service can be created during application startup
     val attachmentRepository: AttachmentRepository
+
+    /**
+     * Schedules the backend's own maintenance jobs, if it has any.
+     */
+    fun scheduleJobs(scheduler: Scheduler) {}
 
     companion object {
         private val logger = LoggerFactory.getLogger(Persistence::class.java)

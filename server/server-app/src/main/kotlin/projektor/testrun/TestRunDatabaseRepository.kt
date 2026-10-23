@@ -6,11 +6,13 @@ import kotlinx.coroutines.withContext
 import org.jooq.Configuration
 import org.jooq.DSLContext
 import org.jooq.impl.DSL
+import org.jooq.impl.SQLDataType
 import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import org.slf4j.LoggerFactory
 import projektor.database.generated.Tables.GIT_METADATA
 import projektor.database.generated.Tables.GIT_REPOSITORY
 import projektor.database.generated.Tables.RESULTS_METADATA
+import projektor.database.generated.Tables.RESULTS_PROCESSING
 import projektor.database.generated.Tables.TEST_RUN
 import projektor.database.generated.Tables.TEST_RUN_ATTACHMENT
 import projektor.database.generated.Tables.TEST_RUN_GROUP_CLAIM
@@ -34,11 +36,13 @@ import projektor.incomingresults.model.ResultsMetadata
 import projektor.server.api.PublicId
 import projektor.server.api.TestRun
 import projektor.server.api.TestRunSummary
+import projektor.server.api.results.ResultsProcessingStatus
 import projektor.telemetry.startSpanWithParent
 import projektor.testsuite.TestSuiteDatabaseRepository
 import projektor.util.addPrefixToFields
 import projektor.util.lockUntilTransactionEnds
 import java.math.BigDecimal
+import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -46,7 +50,10 @@ import java.time.LocalTime
 import projektor.database.generated.tables.pojos.TestSuiteGroup as TestSuiteGroupDB
 import projektor.parser.model.TestSuite as ParsedTestSuite
 
-class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRepository {
+class TestRunDatabaseRepository(
+    private val dslContext: DSLContext,
+    private val abandonedGroupClaimAge: Duration = TestRunRepository.ABANDONED_GROUP_CLAIM_AGE,
+) : TestRunRepository {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
     private val testRunMapper =
@@ -390,7 +397,19 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
                         .where(TEST_RUN_GROUP_CLAIM.REPO_NAME.eq(repoName).and(TEST_RUN_GROUP_CLAIM.GROUP_NAME.eq(group)))
                         .fetchOne(TEST_RUN_GROUP_CLAIM.TEST_RUN_PUBLIC_ID)
 
-                if (existingClaim != null) {
+                if (existingClaim != null && isAbandonedClaim(transactionContext, group, repoName, PublicId(existingClaim))) {
+                    logger.warn("Test run $publicId took over results group $group in $repoName from abandoned test run $existingClaim")
+
+                    transactionContext
+                        .update(TEST_RUN_GROUP_CLAIM)
+                        .set(TEST_RUN_GROUP_CLAIM.TEST_RUN_PUBLIC_ID, publicId.id)
+                        // Same clock as the column's now() default
+                        .set(TEST_RUN_GROUP_CLAIM.CREATED_TIMESTAMP, DSL.field("localtimestamp", SQLDataType.LOCALDATETIME))
+                        .where(TEST_RUN_GROUP_CLAIM.REPO_NAME.eq(repoName).and(TEST_RUN_GROUP_CLAIM.GROUP_NAME.eq(group)))
+                        .execute()
+
+                    publicId
+                } else if (existingClaim != null) {
                     PublicId(existingClaim)
                 } else {
                     // Test runs saved before group claims were added don't have a claim
@@ -435,6 +454,47 @@ class TestRunDatabaseRepository(private val dslContext: DSLContext) : TestRunRep
         withContext(Dispatchers.IO) {
             findTestRunWithGroup(dslContext, group, repoName)
         }
+
+    /**
+     * A claim whose test run was never saved, and that either failed processing or is older than
+     * abandonedGroupClaimAge. Compared with the database's clock, which also set the claim's created timestamp.
+     */
+    private fun isAbandonedClaim(
+        transactionContext: DSLContext,
+        group: String,
+        repoName: String,
+        owner: PublicId,
+    ): Boolean {
+        val ownerSaved = transactionContext.fetchExists(TEST_RUN, TEST_RUN.PUBLIC_ID.eq(owner.id))
+
+        if (ownerSaved) {
+            return false
+        }
+
+        val ownerFailed =
+            transactionContext.fetchExists(
+                RESULTS_PROCESSING,
+                RESULTS_PROCESSING.PUBLIC_ID.eq(owner.id).and(RESULTS_PROCESSING.STATUS.eq(ResultsProcessingStatus.ERROR.name)),
+            )
+
+        val claimExpired =
+            transactionContext.fetchExists(
+                TEST_RUN_GROUP_CLAIM,
+                TEST_RUN_GROUP_CLAIM.REPO_NAME.eq(repoName)
+                    .and(TEST_RUN_GROUP_CLAIM.GROUP_NAME.eq(group))
+                    .and(
+                        TEST_RUN_GROUP_CLAIM.CREATED_TIMESTAMP.le(
+                            DSL.field(
+                                "localtimestamp - ({0} * interval '1 millisecond')",
+                                SQLDataType.LOCALDATETIME,
+                                DSL.inline(abandonedGroupClaimAge.toMillis()),
+                            ),
+                        ),
+                    ),
+            )
+
+        return ownerFailed || claimExpired
+    }
 
     private fun findTestRunWithGroup(
         dslContext: DSLContext,
