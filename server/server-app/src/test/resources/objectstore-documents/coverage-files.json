@@ -1,0 +1,24 @@
+{
+  "files": [
+    {
+      "fileName": "File.kt",
+      "directoryName": "projektor",
+      "filePath": "src/main/kotlin/projektor/File.kt",
+      "missedLines": [
+        3,
+        4
+      ],
+      "partialLines": [
+        7
+      ],
+      "stats": {
+        "statementCovered": 10,
+        "statementMissed": 2,
+        "lineCovered": 20,
+        "lineMissed": 4,
+        "branchCovered": 5,
+        "branchMissed": 1
+      }
+    }
+  ]
+}

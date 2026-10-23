@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "summary": {
+    "totalTestCount": 3,
+    "totalPassingCount": 2,
+    "totalSkippedCount": 0,
+    "totalFailureCount": 1,
+    "passed": false,
+    "cumulativeDuration": 4.5,
+    "averageDuration": 1.5,
+    "slowestTestCaseDuration": 2.25,
+    "createdTimestamp": "2026-10-01T12:30:45.123456Z",
+    "wallClockDuration": 3.75
+  },
+  "resultsMetadata": {
+    "ci": true,
+    "group": "B1"
+  },
+  "gitMetadata": {
+    "repoName": "org/repo",
+    "orgName": "org",
+    "projectName": "proj",
+    "branchName": "main",
+    "isMainBranch": true,
+    "pullRequestNumber": 12,
+    "commitSha": "abc123"
+  },
+  "testSuiteGroups": [
+    {
+      "groupName": "Group",
+      "groupLabel": "unit",
+      "directory": "build/test-results"
+    }
+  ],
+  "testSuites": [
+    {
+      "idx": 1,
+      "fileName": "src/test/SuiteTest.kt",
+      "packageName": "projektor",
+      "className": "SuiteTest",
+      "testCount": 3,
+      "passingCount": 2,
+      "skippedCount": 0,
+      "failureCount": 1,
+      "startTs": "2026-10-01T12:30:00.5",
+      "hostname": "ci-host",
+      "duration": 4.5,
+      "hasSystemOut": true,
+      "hasSystemErr": false,
+      "groupName": "Group",
+      "groupLabel": "unit",
+      "testCaseChunk": 1
+    }
+  ],
+  "lastReservedTestSuiteIdx": 1,
+  "deleted": false
+}

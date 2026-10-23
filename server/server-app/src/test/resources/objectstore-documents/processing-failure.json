@@ -1,0 +1,7 @@
+{
+  "publicId": "ABC123",
+  "body": "<xml/>",
+  "bodyType": "TEST_RESULTS",
+  "createdTimestamp": "2026-10-01T12:30:45.123456",
+  "failureMessage": "failed"
+}

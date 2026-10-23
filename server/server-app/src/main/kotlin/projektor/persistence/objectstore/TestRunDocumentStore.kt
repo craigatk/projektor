@@ -27,10 +27,24 @@ import projektor.parser.model.TestSuite as ParsedTestSuite
 class TestRunDocumentStore(val store: JsonObjectStore) {
     private val writeConcurrency = Semaphore(MAX_CONCURRENT_WRITES)
 
-    suspend fun readTestRun(publicId: PublicId): TestRunDocument? =
+    /**
+     * The test run, or null if it doesn't exist or is being deleted.
+     */
+    suspend fun readTestRun(publicId: PublicId): TestRunDocument? = readTestRunIncludingDeleted(publicId)?.takeUnless { it.deleted }
+
+    /**
+     * The test run document even if the test run is being deleted, for retrying a delete that failed partway.
+     */
+    suspend fun readTestRunIncludingDeleted(publicId: PublicId): TestRunDocument? =
         withContext(Dispatchers.IO) {
             store.read<TestRunDocument>(ObjectStoreKeys.testRun(publicId))
         }
+
+    /**
+     * Blocking version of [readTestRun], for use inside a compare-and-swap update.
+     */
+    fun readTestRunBlocking(publicId: PublicId): TestRunDocument? =
+        store.read<TestRunDocument>(ObjectStoreKeys.testRun(publicId))?.takeUnless { it.deleted }
 
     suspend fun testRunExists(publicId: PublicId): Boolean = readTestRun(publicId) != null
 

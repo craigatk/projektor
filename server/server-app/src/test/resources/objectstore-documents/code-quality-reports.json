@@ -1,0 +1,10 @@
+{
+  "reports": [
+    {
+      "idx": 1,
+      "contents": "report contents",
+      "fileName": "detekt.txt",
+      "groupName": "lint"
+    }
+  ]
+}

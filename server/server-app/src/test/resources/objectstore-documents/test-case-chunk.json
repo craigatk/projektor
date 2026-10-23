@@ -1,0 +1,37 @@
+{
+  "testSuites": [
+    {
+      "testSuiteIdx": 1,
+      "testCases": [
+        {
+          "idx": 1,
+          "name": "passes",
+          "packageName": "projektor",
+          "className": "SuiteTest",
+          "duration": 1.25,
+          "passed": true,
+          "skipped": false,
+          "hasSystemOut": true,
+          "hasSystemErr": false,
+          "failure": null
+        },
+        {
+          "idx": 2,
+          "name": "fails",
+          "packageName": "projektor",
+          "className": "SuiteTest",
+          "duration": null,
+          "passed": false,
+          "skipped": false,
+          "hasSystemOut": false,
+          "hasSystemErr": true,
+          "failure": {
+            "failureMessage": "expected 1",
+            "failureType": "AssertionError",
+            "failureText": "stack trace"
+          }
+        }
+      ]
+    }
+  ]
+}

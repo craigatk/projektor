@@ -26,6 +26,9 @@ data class TestRunDocument(
     val testSuites: List<TestSuiteDocument>,
     // Appends reserve their test suite indexes before writing so concurrent appends don't collide
     val lastReservedTestSuiteIdx: Int,
+    // Set when deleting the test run starts, so it reads as deleted (and leaves the indexes) before any of its
+    // documents are removed. A delete that fails partway can then be retried, since this document goes last.
+    val deleted: Boolean = false,
 )
 
 data class TestRunSummaryDocument(

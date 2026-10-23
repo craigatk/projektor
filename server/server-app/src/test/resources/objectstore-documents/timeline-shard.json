@@ -1,0 +1,48 @@
+{
+  "repoName": "org/repo",
+  "entries": [
+    {
+      "publicId": "ABC123",
+      "createdTimestamp": "2026-10-01T12:30:45.123456Z",
+      "projectName": "proj",
+      "branchName": "main",
+      "isMainBranch": true,
+      "pullRequestNumber": 12,
+      "commitSha": "abc123",
+      "ci": true,
+      "group": "B1",
+      "summary": {
+        "totalTestCount": 3,
+        "totalPassingCount": 2,
+        "totalSkippedCount": 0,
+        "totalFailureCount": 1,
+        "passed": false,
+        "cumulativeDuration": 4.5,
+        "averageDuration": 1.5,
+        "slowestTestCaseDuration": 2.25,
+        "createdTimestamp": "2026-10-01T12:30:45.123456Z",
+        "wallClockDuration": 3.75
+      },
+      "hasCoverageRun": true,
+      "coverageStats": {
+        "statementCovered": 10,
+        "statementMissed": 2,
+        "lineCovered": 20,
+        "lineMissed": 4,
+        "branchCovered": 5,
+        "branchMissed": 1
+      },
+      "performanceResults": [
+        {
+          "name": "perf",
+          "requestsPerSecond": 10.5,
+          "requestCount": 100,
+          "average": 1.5,
+          "maximum": 3.0,
+          "p95": 2.5
+        }
+      ],
+      "isCI": true
+    }
+  ]
+}

@@ -15,6 +15,7 @@ import projektor.persistence.objectstore.AttachmentsDocument
 import projektor.persistence.objectstore.GitMetadataDocument
 import projektor.persistence.objectstore.ObjectStoreKeys
 import projektor.persistence.objectstore.ResultsMetadataDocument
+import projektor.persistence.objectstore.ResultsProcessingDocument
 import projektor.persistence.objectstore.SystemAttributesDocument
 import projektor.persistence.objectstore.TestRunDocument
 import projektor.persistence.objectstore.TestRunDocumentStore
@@ -28,7 +29,9 @@ import projektor.persistence.objectstore.toStoredScale
 import projektor.server.api.PublicId
 import projektor.server.api.TestRun
 import projektor.server.api.TestRunSummary
+import projektor.server.api.results.ResultsProcessingStatus
 import java.math.BigDecimal
+import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -37,6 +40,7 @@ import projektor.parser.model.TestSuite as ParsedTestSuite
 class TestRunObjectStoreRepository(
     private val documentStore: TestRunDocumentStore,
     private val testRunIndex: TestRunIndex,
+    private val abandonedGroupClaimAge: Duration = TestRunRepository.ABANDONED_GROUP_CLAIM_AGE,
 ) : TestRunRepository {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
 
@@ -199,24 +203,38 @@ class TestRunObjectStoreRepository(
     override suspend fun fetchTestRunSummary(publicId: PublicId): TestRunSummary? =
         documentStore.readTestRun(publicId)?.summary?.toApi(publicId)
 
+    /**
+     * Every step can be retried, so test run cleanup finishes a delete that failed partway:
+     * 1. Mark the test run document deleted, so the test run reads as missing and leaves the indexes.
+     * 2. Remove its timeline entry and release its group claim.
+     * 3. Delete its documents, including the test run document (a failed delete is retried from step 1).
+     * 4. Remove its created date marker. If the delete fails before this, cleanup finds the marker without a test
+     *    run and removes it (see findTestRunsCreatedBeforeAndNotPinned).
+     */
     override suspend fun deleteTestRun(publicId: PublicId) {
-        val deletedTestRun = documentStore.readTestRun(publicId)
+        val deletedTestRun =
+            withContext(Dispatchers.IO) {
+                // Returns the document as already marked deleted when retrying a delete
+                store.update<TestRunDocument>(ObjectStoreKeys.testRun(publicId)) { current ->
+                    current?.takeUnless { it.deleted }?.copy(deleted = true)
+                }
+            } ?: return
+
+        testRunIndex.removeTestRun(publicId, deletedTestRun)
+
+        val group = deletedTestRun.resultsMetadata?.group
+        val repoName = deletedTestRun.gitMetadata?.repoName
+        if (group != null && repoName != null) {
+            withContext(Dispatchers.IO) {
+                releaseGroupClaim(repoName, group, publicId)
+            }
+        }
 
         withContext(Dispatchers.IO) {
             store.deletePrefix(ObjectStoreKeys.testRunPrefix(publicId))
         }
 
-        deletedTestRun?.let { testRun ->
-            testRunIndex.removeTestRun(publicId, testRun)
-
-            val group = testRun.resultsMetadata?.group
-            val repoName = testRun.gitMetadata?.repoName
-            if (group != null && repoName != null) {
-                withContext(Dispatchers.IO) {
-                    releaseGroupClaim(repoName, group, publicId)
-                }
-            }
-        }
+        testRunIndex.removeCreatedMarker(publicId, deletedTestRun.summary.createdTimestamp)
     }
 
     override suspend fun findTestRunsCreatedBeforeAndNotPinned(createdBefore: LocalDate): List<PublicId> =
@@ -229,14 +247,54 @@ class TestRunObjectStoreRepository(
         group: String,
         repoName: String,
         publicId: PublicId,
-    ): PublicId =
-        withContext(Dispatchers.IO) {
-            val claimKey = groupClaimKey(repoName, group)
+    ): PublicId {
+        val claimKey = groupClaimKey(repoName, group)
 
-            // Only the first claim is written, every claim then reads back the winner
-            store.create(claimKey, GroupClaimDocument(publicId.id))
-            PublicId(store.read<GroupClaimDocument>(claimKey)!!.testRunPublicId)
+        repeat(MAX_CLAIM_ATTEMPTS) {
+            val newClaim = GroupClaimDocument(publicId.id, Instant.now())
+
+            if (withContext(Dispatchers.IO) { store.create(claimKey, newClaim) } != null) {
+                return publicId
+            }
+
+            // Null when the claim was released since the create, so try to claim it again
+            val existingClaim = withContext(Dispatchers.IO) { store.readVersioned(claimKey, GroupClaimDocument::class.java) }
+
+            if (existingClaim != null) {
+                if (!isAbandoned(existingClaim.value)) {
+                    return PublicId(existingClaim.value.testRunPublicId)
+                }
+
+                // Only replaces the claim if nobody else took it over first, otherwise reads the new claim
+                if (withContext(Dispatchers.IO) { store.replace(claimKey, newClaim, existingClaim.etag) } != null) {
+                    logger.warn(
+                        "Test run $publicId took over results group $group in $repoName from abandoned test run " +
+                            existingClaim.value.testRunPublicId,
+                    )
+                    return publicId
+                }
+            }
         }
+
+        throw IllegalStateException("Couldn't claim results group $group in $repoName after $MAX_CLAIM_ATTEMPTS attempts")
+    }
+
+    private suspend fun isAbandoned(claim: GroupClaimDocument): Boolean {
+        val owner = PublicId(claim.testRunPublicId)
+
+        if (documentStore.readTestRun(owner) != null) {
+            return false
+        }
+
+        val ownerFailed =
+            withContext(Dispatchers.IO) {
+                store.read<ResultsProcessingDocument>(ObjectStoreKeys.resultsProcessing(owner))
+            }?.status == ResultsProcessingStatus.ERROR.name
+        // Claims written before claims had a timestamp count as old
+        val claimedAt = claim.claimedAt ?: Instant.EPOCH
+
+        return ownerFailed || claimedAt.isBefore(Instant.now().minus(abandonedGroupClaimAge))
+    }
 
     override suspend fun releaseTestRunGroupClaim(
         group: String,
@@ -265,9 +323,17 @@ class TestRunObjectStoreRepository(
             val createdBeforeTimestamp = createdBefore.atStartOfDay().toInstant(ZoneOffset.UTC)
 
             testRunIndex.readTestRunsCreatedAtOrBefore(createdBeforeTimestamp)
-                .map { PublicId(it.publicId) }
-                .map { publicId ->
+                .map { createdMarker ->
                     async(Dispatchers.IO) {
+                        val publicId = PublicId(createdMarker.publicId)
+
+                        // Includes test runs marked deleted, so cleanup retries a delete that failed partway
+                        if (documentStore.readTestRunIncludingDeleted(publicId) == null) {
+                            // Left behind by a delete that removed the test run but failed before removing the marker
+                            testRunIndex.removeCreatedMarker(publicId, createdMarker.createdTimestamp)
+                            return@async null
+                        }
+
                         val pinned = store.read<SystemAttributesDocument>(ObjectStoreKeys.systemAttributes(publicId))?.pinned ?: false
                         val hasAttachments =
                             !withAttachmentsOnly ||
@@ -280,16 +346,26 @@ class TestRunObjectStoreRepository(
                 .filterNotNull()
         }
 
+    /**
+     * Saves the test run document and indexes it. The repair marker written first covers a crash between the two;
+     * if indexing fails, the test run is still saved and the index repair job finishes indexing it.
+     */
     private suspend fun createTestRunDocument(
         publicId: PublicId,
         testRunDocument: TestRunDocument,
     ) {
-        withContext(Dispatchers.IO) {
-            store.create(ObjectStoreKeys.testRun(publicId), testRunDocument)
-                ?: throw IllegalStateException("Test run $publicId already exists")
+        val repairMarkerKey = testRunIndex.writeRepairMarker(publicId, testRunDocument, savingTestRun = true)
+
+        val created = withContext(Dispatchers.IO) { store.create(ObjectStoreKeys.testRun(publicId), testRunDocument) }
+
+        if (created == null) {
+            testRunIndex.clearRepairMarker(repairMarkerKey)
+            throw IllegalStateException("Test run $publicId already exists")
         }
 
-        testRunIndex.addTestRun(publicId, testRunDocument)
+        if (testRunIndex.addTestRun(publicId, testRunDocument)) {
+            testRunIndex.clearRepairMarker(repairMarkerKey)
+        }
     }
 
     private suspend fun updateTestRunDocument(
@@ -298,7 +374,7 @@ class TestRunObjectStoreRepository(
     ): TestRunDocument =
         withContext(Dispatchers.IO) {
             store.update<TestRunDocument>(ObjectStoreKeys.testRun(publicId)) { current ->
-                transform(current ?: throw IllegalStateException("Test run $publicId does not exist"))
+                transform(current?.takeUnless { it.deleted } ?: throw IllegalStateException("Test run $publicId does not exist"))
             }!!
         }
 
@@ -315,9 +391,11 @@ class TestRunObjectStoreRepository(
         }
     }
 
-    data class GroupClaimDocument(val testRunPublicId: String)
+    data class GroupClaimDocument(val testRunPublicId: String, val claimedAt: Instant? = null)
 
     companion object {
+        private const val MAX_CLAIM_ATTEMPTS = 10
+
         private fun groupClaimKey(
             repoName: String,
             group: String,

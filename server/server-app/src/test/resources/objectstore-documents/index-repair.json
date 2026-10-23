@@ -1,0 +1,7 @@
+{
+  "publicId": "ABC123",
+  "repoName": "org/repo",
+  "createdTimestamp": "2026-10-01T12:30:45.123456Z",
+  "markedAt": "2026-10-01T12:31:00Z",
+  "savingTestRun": true
+}

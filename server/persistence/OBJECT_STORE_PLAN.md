@@ -253,6 +253,33 @@ Found by a coverage and behavior audit after Phase 5:
   - `fetchTestRun` doesn't order the test suites, so under load Postgres can return them in any order. The object
     store returns them in index order.
 
+### Pre-production audit fixes
+
+Found by auditing the object-store code paths before running it on a real instance:
+
+- Deleting a test run can be retried after failing partway. `deleteTestRun` first marks `run.json` deleted (reads
+  then treat the run as missing and index refreshes drop it), removes the timeline entry, releases the group claim,
+  deletes `runs/{id}/` and removes the created marker last. Cleanup removes created markers whose test run is gone.
+  Before, a delete that failed after removing `runs/{id}/` left the created marker and timeline entry forever.
+- Timeline refreshes of the same shard within a server are queued and applied together in one compare-and-swap
+  update, with the batch's entries built in parallel, so concurrent uploads to a repository don't conflict with each
+  other (only with other server instances).
+- Index updates no longer fail the change that triggered them. A failed update writes a repair marker
+  (`index-repair/{publicId}-{uuid}.json`, recording where the run's timeline entry is), and saving a test run writes
+  one before creating `run.json`, covering a crash in between. `IndexRepairScheduledJob` (every 5 minutes, via
+  `Persistence.scheduleJobs`) rebuilds the marked runs' entries. A marker for a run that was never saved is dropped
+  after 10 minutes.
+- Startup runs `JsonObjectStore.verifyConditionalWrites` and fails if the store ignores `If-None-Match` or
+  `If-Match`, instead of silently losing concurrent updates.
+- A read without an ETag throws `MissingETagException` rather than making every `If-Match` update conflict.
+- Abandoned group claims are taken over, on both backends: a claim whose test run was never saved and whose
+  processing failed, or that's older than `TestRunRepository.ABANDONED_GROUP_CLAIM_AGE` (10 minutes, e.g. after the
+  server stopped mid-save). Before, every later upload with the group waited 60 seconds and failed.
+- New tests: delete retries, index repair, 30 concurrent uploads to one shard, the conditional write check,
+  stored-format fixtures for every document (`ObjectStoreDocumentFormatTest`), special characters in repository,
+  project and group names (both backends), stray keys in the created index, pinning during a delete, a shared bucket
+  with an empty key prefix, and concurrent appends to a multi-chunk run (both backends).
+
 ## Risks and open questions
 
 - Motivation (dropping Postgres for cost/ops, or something else) decides how hard to push on cross-run performance.
