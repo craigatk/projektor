@@ -3,7 +3,7 @@
 # static resources and produces the runnable fat jar (mirrors `.github/workflows/release-server.yml`).
 # Built and pushed to GitHub Container Registry by `.github/workflows/deploy-digitalocean.yml`;
 # DO App Platform runs the pushed image rather than building from source.
-FROM eclipse-temurin:21-jdk AS build
+FROM eclipse-temurin:25-jdk AS build
 
 # Node.js + a matching Yarn Classic: `ui/build.gradle`'s YarnTask only runs `yarn build`, it does
 # not install dependencies itself, so `yarn install` has to happen before the Gradle build (same
@@ -35,7 +35,7 @@ RUN --mount=type=secret,id=honeycomb_api_key,env=HONEYCOMB_API_KEY \
     && mkdir -p server/server-app/opentelemetry
 
 # ---- Runtime image: just the JRE, the fat jar, and (if built) the OpenTelemetry javaagent ----
-FROM eclipse-temurin:21-jre-jammy
+FROM eclipse-temurin:25-jre-jammy
 
 WORKDIR /opt/app
 COPY --from=build /app/server/server-app/build/libs/server-app-1.0-all.jar app.jar
