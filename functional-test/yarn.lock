@@ -16,10 +16,10 @@
   resolved "https://registry.yarnpkg.com/@babel/helper-validator-identifier/-/helper-validator-identifier-7.29.7.tgz#bd87084ced0c796ec46bda492de6e83d29e89fc2"
   integrity sha512-qehxGkRj55h/ff8EMaJ+cYhyaKlHIxqYDn682wQD7RNp9UujOQsHog2uS0r2vzr4pW+sXf90NeeayjcNaX3fFg==
 
-"@babel/runtime@8.0.8", "@babel/runtime@^7.12.5", "@babel/runtime@^7.14.6":
-  version "8.0.8"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-8.0.8.tgz#d11580496fd44ad3bf10c4a0cb70a029c2dd464c"
-  integrity sha512-dEu8nGlRqjsJsvviUUoSMfcRHpwomCiRlXsc2mPfJ79+ffTpDm+JtfUtTMzUrqCApHQnCsVPD3gT1ZT8RgBRCQ==
+"@babel/runtime@8.0.10", "@babel/runtime@^7.12.5", "@babel/runtime@^7.14.6":
+  version "8.0.10"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-8.0.10.tgz#9aff508d3d253525438d376473f99e90aca00909"
+  integrity sha512-0QyWQOIhl2onOgg96BuOYV+oCgLINVDPC8RkVPCiQhLILVqpefDUmcY+aAsW6vp7fcuTZL6SXXlFrSDCTFIu1w==
 
 "@cypress/request@^4.0.0":
   version "4.0.1"
