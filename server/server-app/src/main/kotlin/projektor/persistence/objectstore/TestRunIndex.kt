@@ -30,7 +30,8 @@ import java.util.concurrent.Executors
  *
  * - Repository timeline: one shard document per repository per month, with an entry for each test run that has
  *   Git metadata. Repository-level queries read a repository's shards and filter the entries in memory, which stays
- *   cheap because test run cleanup bounds how many months of shards a repository has.
+ *   cheap because test run cleanup bounds how many months of shards a repository has. Queries that only need recent
+ *   runs read the newest shards first and stop once they have enough (see [readNewestEntries]).
  * - Created date: a marker per test run under its created date, for test run cleanup (which also covers test runs
  *   without Git metadata).
  * - Organization: a marker per repository under its organization.
@@ -128,6 +129,15 @@ class TestRunIndex(val documentStore: TestRunDocumentStore) {
     }
 
     /**
+     * Removes a created date marker found by [readTestRunsCreatedAtOrBefore].
+     */
+    suspend fun removeCreatedMarker(createdTestRun: CreatedTestRun) {
+        withContext(Dispatchers.IO) {
+            store.delete(createdTestRun.markerKey)
+        }
+    }
+
+    /**
      * Rebuilds the test run's repository timeline entry from its current documents, removing the entry if the
      * test run no longer exists. Does nothing for test runs without Git metadata, which aren't in the timeline.
      * If the update fails, marks the test run for repair instead of throwing.
@@ -195,6 +205,75 @@ class TestRunIndex(val documentStore: TestRunDocumentStore) {
                 .flatMap { it?.entries.orEmpty() }
         }
 
+    /**
+     * The repository's entries that match the predicate, most recent first (see [newestFirst]), reading one monthly
+     * shard at a time from the newest and stopping once at least minMatches entries have matched. Returns every match
+     * from the shards it read, so it can return more than minMatches, and fewer only when the repository has no more.
+     *
+     * @param upTo skips the shards of months after this time
+     */
+    suspend fun readNewestEntries(
+        repoName: String,
+        minMatches: Int,
+        upTo: Instant? = null,
+        predicate: (TestRunIndexEntry) -> Boolean,
+    ): List<TestRunIndexEntry> {
+        val matches = mutableListOf<TestRunIndexEntry>()
+
+        for (shardKey in shardKeysNewestFirst(repoName, upTo)) {
+            matches += readShardEntries(shardKey).filter(predicate).newestFirst()
+
+            if (matches.size >= minMatches) break
+        }
+
+        return matches
+    }
+
+    suspend fun findNewestEntry(
+        repoName: String,
+        upTo: Instant? = null,
+        predicate: (TestRunIndexEntry) -> Boolean,
+    ): TestRunIndexEntry? = readNewestEntries(repoName, minMatches = 1, upTo, predicate).firstOrNull()
+
+    /**
+     * Like [readNewestEntries], for the entries indexed before the given test run's entry (and optionally that entry).
+     * Entries with the same created timestamp stay in the order they were saved. Returns null if the test run isn't
+     * in the timeline.
+     */
+    suspend fun readNewestEntriesBefore(
+        repoName: String,
+        publicId: PublicId,
+        createdTimestamp: Instant,
+        includeEntry: Boolean,
+        minMatches: Int,
+        predicate: (TestRunIndexEntry) -> Boolean,
+    ): List<TestRunIndexEntry>? {
+        val matches = mutableListOf<TestRunIndexEntry>()
+        val entryShardKey = timelineShardKey(repoName, createdTimestamp)
+        val shardKeys = shardKeysNewestFirst(repoName, createdTimestamp)
+
+        if (shardKeys.firstOrNull() != entryShardKey) return null
+
+        for (shardKey in shardKeys) {
+            val shardEntries = readShardEntries(shardKey)
+
+            val candidates =
+                if (shardKey == entryShardKey) {
+                    val position = shardEntries.indexOfFirst { it.publicId == publicId.id }
+                    if (position < 0) return null
+                    shardEntries.subList(0, if (includeEntry) position + 1 else position)
+                } else {
+                    shardEntries
+                }
+
+            matches += candidates.filter(predicate).asReversed()
+
+            if (matches.size >= minMatches) break
+        }
+
+        return matches
+    }
+
     suspend fun readOrganizationRepositoryNames(orgName: String): List<String> =
         coroutineScope {
             val markerKeys = withContext(Dispatchers.IO) { store.list(organizationPrefix(orgName)).objectNames }
@@ -203,29 +282,31 @@ class TestRunIndex(val documentStore: TestRunDocumentStore) {
         }
 
     /**
-     * Test runs created at or before the given time, oldest first.
+     * Test runs created at or before the given time, from the oldest day. The markers' keys hold what's needed, so
+     * only the markers of the last day are read, to compare their created timestamps with the given time.
      */
-    suspend fun readTestRunsCreatedAtOrBefore(createdBefore: Instant): List<CreatedMarkerDocument> =
-        coroutineScope {
-            val lastDay = LocalDate.ofInstant(createdBefore, ZoneOffset.UTC)
+    suspend fun readTestRunsCreatedAtOrBefore(createdBefore: Instant): List<CreatedTestRun> {
+        val lastDay = LocalDate.ofInstant(createdBefore, ZoneOffset.UTC)
 
-            val dayPrefixes =
-                withContext(Dispatchers.IO) { store.list(CREATED_PREFIX, delimiter = "/").commonPrefixes }
-                    .filter { dayPrefix ->
-                        val day = parseCreatedDay(dayPrefix)
-                        day != null && day <= lastDay
+        val days =
+            withContext(Dispatchers.IO) { store.list(CREATED_PREFIX, delimiter = "/").commonPrefixes }
+                .mapNotNull { dayPrefix -> parseCreatedDay(dayPrefix)?.takeIf { it <= lastDay }?.let { Pair(dayPrefix, it) } }
+
+        return days.mapParallel { (dayPrefix, day) ->
+            val markerKeys = store.list(dayPrefix).objectNames.filter { isCreatedMarkerKey(dayPrefix, it) }
+
+            if (day < lastDay) {
+                markerKeys
+            } else {
+                markerKeys
+                    .mapParallel {
+                            key ->
+                        key.takeIf { store.read<CreatedMarkerDocument>(key)?.let { it.createdTimestamp <= createdBefore } == true }
                     }
-
-            dayPrefixes
-                .map { dayPrefix -> async(Dispatchers.IO) { store.list(dayPrefix).objectNames } }
-                .awaitAll()
-                .flatten()
-                .map { key -> async(Dispatchers.IO) { store.read<CreatedMarkerDocument>(key) } }
-                .awaitAll()
-                .filterNotNull()
-                .filter { it.createdTimestamp <= createdBefore }
-                .sortedBy { it.createdTimestamp }
-        }
+                    .filterNotNull()
+            }
+        }.flatten().map { key -> CreatedTestRun(PublicId(key.substringAfterLast('/').removeSuffix(".json")), key) }
+    }
 
     private suspend fun indexTestRun(
         publicId: PublicId,
@@ -399,6 +480,33 @@ class TestRunIndex(val documentStore: TestRunDocumentStore) {
         )
     }
 
+    private suspend fun shardKeysNewestFirst(
+        repoName: String,
+        upTo: Instant?,
+    ): List<String> {
+        val lastShardKey = upTo?.let { timelineShardKey(repoName, it) }
+
+        return withContext(Dispatchers.IO) { store.list(timelineShardPrefix(repoName)).objectNames }
+            .filter { lastShardKey == null || it <= lastShardKey }
+            .asReversed()
+    }
+
+    private suspend fun readShardEntries(shardKey: String): List<TestRunIndexEntry> =
+        withContext(Dispatchers.IO) { store.read<TimelineShardDocument>(shardKey) }?.entries.orEmpty()
+
+    private fun isCreatedMarkerKey(
+        dayPrefix: String,
+        key: String,
+    ): Boolean {
+        val isMarker = key.endsWith(".json") && !key.removePrefix(dayPrefix).contains('/')
+
+        if (!isMarker) {
+            logger.warn("Ignoring unexpected key $key in the created date index")
+        }
+
+        return isMarker
+    }
+
     private fun parseCreatedDay(dayPrefix: String): LocalDate? =
         try {
             LocalDate.parse(dayPrefix.removePrefix(CREATED_PREFIX).removeSuffix("/"))
@@ -547,6 +655,8 @@ data class TestRunIndexEntry(
 fun List<TestRunIndexEntry>.newestFirst(): List<TestRunIndexEntry> = asReversed().sortedByDescending { it.createdTimestamp }
 
 data class CreatedMarkerDocument(val publicId: String, val createdTimestamp: Instant)
+
+data class CreatedTestRun(val publicId: PublicId, val markerKey: String)
 
 data class OrganizationRepositoryDocument(val repoName: String)
 

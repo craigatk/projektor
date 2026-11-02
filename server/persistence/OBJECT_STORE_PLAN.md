@@ -280,6 +280,29 @@ Found by auditing the object-store code paths before running it on a real instan
   project and group names (both backends), stray keys in the created index, pinning during a delete, a shared bucket
   with an empty key prefix, and concurrent appends to a multi-chunk run (both backends).
 
+### Second pre-production audit fixes
+
+- A failure taking or releasing a scheduler lock, or an exception from a job, used to cancel all of that job's later
+  runs without any alert. `Scheduler` now catches and logs them, so the job runs again after its next delay.
+- Routes reject a `publicId` path parameter that isn't alphanumeric (`PublicIdValidation`), and attachment names can't
+  contain a slash. Ktor decodes path parameters, so in a bucket shared with attachments a request could otherwise
+  write to any persistence key containing a hyphen, including created markers and timeline shards. Attachment object
+  names now never contain a slash and every persistence key does, so sharing a bucket stays supported.
+- `ObjectStoreClient` builds its own HTTP client from MinIO's default: 64 concurrent requests rather than OkHttp's
+  default of 5 per host, and 10s connect / 60s read and write timeouts rather than 5 minutes.
+- `TestRunCleanupService` deletes coverage and attachments before the test run, so a failure in either is retried by
+  the next cleanup. Before, deleting the test run removed the created marker that cleanup finds it through.
+- The cleanup scan no longer reads every test run's documents. Created markers are read only for the last day (the
+  key holds the rest), existence is a HEAD request, and the attachment scan lists `attachments/` to rule out test runs
+  without attachments. A run's created marker body is no longer used for its public ID.
+- Queries for recent runs read timeline shards newest month first and stop once they have enough
+  (`TestRunIndex.readNewestEntries`). Whole-history queries (timelines, test run count, organization coverage) still
+  read every shard, and there is no shard cache. `mapParallel` bounds fan-out over test runs to 16 at a time.
+  `max_runs` on flaky test requests is capped at 500 in `RepositoryTestRunService`.
+- Updates of `run.json` take turns per test run within a server, read the test case chunks before the
+  compare-and-swap and don't re-read them on retry (chunks never change), and try 50 times rather than 20. Conflicts
+  now only come from other server instances.
+
 ## Risks and open questions
 
 - Motivation (dropping Postgres for cost/ops, or something else) decides how hard to push on cross-run performance.

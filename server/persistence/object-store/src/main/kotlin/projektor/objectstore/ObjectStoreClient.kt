@@ -2,16 +2,22 @@ package projektor.objectstore
 
 import io.minio.BucketExistsArgs
 import io.minio.GetObjectArgs
+import io.minio.Http
 import io.minio.ListObjectsArgs
 import io.minio.MakeBucketArgs
 import io.minio.MinioClient
 import io.minio.PutObjectArgs
 import io.minio.RemoveObjectArgs
 import io.minio.RemoveObjectsArgs
+import io.minio.StatObjectArgs
 import io.minio.errors.ErrorResponseException
 import io.minio.messages.DeleteRequest
+import okhttp3.ConnectionPool
+import okhttp3.Dispatcher
+import okhttp3.OkHttpClient
 import projektor.objectstore.bucket.BucketCreationException
 import java.io.InputStream
+import java.util.concurrent.TimeUnit
 
 open class ObjectStoreClient(
     config: ObjectStoreConfig,
@@ -21,6 +27,7 @@ open class ObjectStoreClient(
         MinioClient.builder()
             .endpoint(config.url)
             .credentials(config.accessKey, config.secretKey)
+            .httpClient(createHttpClient())
             .build()
 
     fun createBucketIfNotExists(bucketName: String) {
@@ -155,6 +162,32 @@ open class ObjectStoreClient(
         }
 
     /**
+     * Whether the object exists, without reading its contents.
+     */
+    open fun objectExists(
+        bucketName: String,
+        objectName: String,
+    ): Boolean =
+        telemetry.record("stat", bucketName, objectName) {
+            try {
+                minioClient.statObject(
+                    StatObjectArgs
+                        .builder()
+                        .bucket(bucketName)
+                        .`object`(objectName)
+                        .build(),
+                )
+                true
+            } catch (e: ErrorResponseException) {
+                if (e.errorResponse().code() == "NoSuchKey") {
+                    false
+                } else {
+                    throw e
+                }
+            }
+        }
+
+    /**
      * Lists the object names (full keys) under the prefix in lexicographic order.
      *
      * @param delimiter when set, keys containing the delimiter after the prefix are rolled up into
@@ -256,6 +289,34 @@ open class ObjectStoreClient(
 
     companion object {
         private const val MAX_KEYS_PER_PAGE = 1000
+
+        // Requests beyond this wait in a queue. Matches the threads of Dispatchers.IO, which all calls are made from.
+        internal const val MAX_CONCURRENT_REQUESTS = 64
+
+        private const val CONNECT_TIMEOUT_SECONDS = 10L
+
+        // Between individual reads and writes on the connection, so these don't limit how long a large object can take
+        private const val READ_WRITE_TIMEOUT_SECONDS = 60L
+
+        /**
+         * MinIO's default client, which retries requests that failed with a retryable status, with two changes. MinIO
+         * sends requests through OkHttp's dispatcher, whose default of 5 concurrent requests per host would limit
+         * this whole client to 5 requests at a time. And a stalled connection fails after a minute, not MinIO's 5.
+         */
+        internal fun createHttpClient(): OkHttpClient =
+            Http.newDefaultClient()
+                .newBuilder()
+                .dispatcher(
+                    Dispatcher().apply {
+                        maxRequests = MAX_CONCURRENT_REQUESTS
+                        maxRequestsPerHost = MAX_CONCURRENT_REQUESTS
+                    },
+                )
+                .connectionPool(ConnectionPool(MAX_CONCURRENT_REQUESTS, 5, TimeUnit.MINUTES))
+                .connectTimeout(CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+                .readTimeout(READ_WRITE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+                .writeTimeout(READ_WRITE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+                .build()
 
         private fun outcomeOfGet(result: Any?) = if (result == null) ObjectStoreTelemetry.NOT_FOUND else ObjectStoreTelemetry.SUCCESS
 

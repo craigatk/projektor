@@ -96,14 +96,16 @@ class JsonObjectStore(
      *
      * Returns the document as stored after the update (the current document if the transform returned null).
      *
+     * @param maxAttempts how many times to try before giving up, for documents that are updated more contentiously
      * @throws ConcurrentUpdateException if the update kept conflicting with other writers
      */
     fun <T : Any> update(
         key: String,
         type: Class<T>,
+        maxAttempts: Int = maxUpdateAttempts,
         transform: (T?) -> T?,
     ): T? {
-        repeat(maxUpdateAttempts) { attempt ->
+        repeat(maxAttempts) { attempt ->
             val current = readVersioned(key, type)
             val updated = transform(current?.value) ?: return current?.value
 
@@ -123,13 +125,18 @@ class JsonObjectStore(
         }
 
         client.telemetry.recordUpdateExhausted(bucketName)
-        throw ConcurrentUpdateException(key, maxUpdateAttempts)
+        throw ConcurrentUpdateException(key, maxAttempts)
     }
 
     inline fun <reified T : Any> update(
         key: String,
         noinline transform: (T?) -> T?,
-    ): T? = update(key, T::class.java, transform)
+    ): T? = update(key, T::class.java, transform = transform)
+
+    /**
+     * Whether a document exists at the key, which is cheaper than reading it when it could be large.
+     */
+    fun exists(key: String): Boolean = client.objectExists(bucketName, fullKey(key))
 
     fun delete(key: String) {
         client.removeObject(bucketName, fullKey(key))

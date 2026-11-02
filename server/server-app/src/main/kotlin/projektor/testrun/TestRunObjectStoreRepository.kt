@@ -1,9 +1,6 @@
 package projektor.testrun
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import org.slf4j.LoggerFactory
 import projektor.incomingresults.mapper.toTestRunSummary
@@ -22,6 +19,7 @@ import projektor.persistence.objectstore.TestRunDocumentStore
 import projektor.persistence.objectstore.TestRunIndex
 import projektor.persistence.objectstore.TestSuiteDocument
 import projektor.persistence.objectstore.TestSuiteGroupDocument
+import projektor.persistence.objectstore.mapParallel
 import projektor.persistence.objectstore.toApi
 import projektor.persistence.objectstore.toDocument
 import projektor.persistence.objectstore.toNestedApi
@@ -161,13 +159,16 @@ class TestRunObjectStoreRepository(
     ): TestRunSummary {
         lateinit var testRunSummary: TestRunSummary
 
+        val testCaseChunks =
+            documentStore.readTestRun(publicId)?.let { documentStore.readTestCaseChunks(publicId, it) }.orEmpty().toMutableMap()
+
         updateTestRunDocument(publicId) { current ->
             val updatedWallClockDuration: BigDecimal =
                 (current.summary.wallClockDuration ?: BigDecimal.ZERO) + (wallClockDuration ?: BigDecimal.ZERO)
 
             // Calculated from the test suites in the version of the document being replaced, so an append that
             // commits in between makes this update retry with that append's test suites included
-            val testCasesBySuite = documentStore.readAllTestCasesBlocking(publicId, current)
+            val testCasesBySuite = documentStore.readAllTestCasesBlocking(publicId, current, testCaseChunks)
             val testSuites =
                 current.testSuites.map { testSuite ->
                     testSuite.toApi(testCasesBySuite[testSuite.idx].orEmpty().map { it.toNestedApi(publicId, current, testSuite) })
@@ -213,11 +214,9 @@ class TestRunObjectStoreRepository(
      */
     override suspend fun deleteTestRun(publicId: PublicId) {
         val deletedTestRun =
-            withContext(Dispatchers.IO) {
-                // Returns the document as already marked deleted when retrying a delete
-                store.update<TestRunDocument>(ObjectStoreKeys.testRun(publicId)) { current ->
-                    current?.takeUnless { it.deleted }?.copy(deleted = true)
-                }
+            // Returns the document as already marked deleted when retrying a delete
+            documentStore.updateTestRun(publicId) { current ->
+                current?.takeUnless { it.deleted }?.copy(deleted = true)
             } ?: return
 
         testRunIndex.removeTestRun(publicId, deletedTestRun)
@@ -315,36 +314,51 @@ class TestRunObjectStoreRepository(
             .firstOrNull { it.group == group }
             ?.let { PublicId(it.publicId) }
 
+    /**
+     * Cleanup runs this over every test run past its age limit each day, including those it keeps (such as when
+     * attachments have a shorter limit than test runs), so it avoids reading each test run's document. When looking
+     * for attachments, listing the attachment documents rules out most test runs without a request for each.
+     */
     private suspend fun findTestRunsCreatedBeforeAndNotPinned(
         createdBefore: LocalDate,
         withAttachmentsOnly: Boolean,
-    ): List<PublicId> =
-        coroutineScope {
-            val createdBeforeTimestamp = createdBefore.atStartOfDay().toInstant(ZoneOffset.UTC)
+    ): List<PublicId> {
+        val createdBeforeTimestamp = createdBefore.atStartOfDay().toInstant(ZoneOffset.UTC)
+        val createdTestRuns = testRunIndex.readTestRunsCreatedAtOrBefore(createdBeforeTimestamp)
 
-            testRunIndex.readTestRunsCreatedAtOrBefore(createdBeforeTimestamp)
-                .map { createdMarker ->
-                    async(Dispatchers.IO) {
-                        val publicId = PublicId(createdMarker.publicId)
+        val candidates =
+            if (withAttachmentsOnly) {
+                val attachmentKeys =
+                    withContext(Dispatchers.IO) { store.list(ObjectStoreKeys.ATTACHMENTS_PREFIX).objectNames }.toSet()
 
-                        // Includes test runs marked deleted, so cleanup retries a delete that failed partway
-                        if (documentStore.readTestRunIncludingDeleted(publicId) == null) {
-                            // Left behind by a delete that removed the test run but failed before removing the marker
-                            testRunIndex.removeCreatedMarker(publicId, createdMarker.createdTimestamp)
-                            return@async null
-                        }
+                createdTestRuns.filter { ObjectStoreKeys.attachments(it.publicId) in attachmentKeys }
+            } else {
+                createdTestRuns
+            }
 
-                        val pinned = store.read<SystemAttributesDocument>(ObjectStoreKeys.systemAttributes(publicId))?.pinned ?: false
-                        val hasAttachments =
-                            !withAttachmentsOnly ||
-                                store.read<AttachmentsDocument>(ObjectStoreKeys.attachments(publicId))?.attachments.orEmpty().isNotEmpty()
+        return candidates
+            .mapParallel { createdTestRun ->
+                val publicId = createdTestRun.publicId
 
-                        publicId.takeIf { !pinned && hasAttachments }
-                    }
+                if (withAttachmentsOnly &&
+                    store.read<AttachmentsDocument>(ObjectStoreKeys.attachments(publicId))?.attachments.orEmpty().isEmpty()
+                ) {
+                    return@mapParallel null
                 }
-                .awaitAll()
-                .filterNotNull()
-        }
+
+                // Includes test runs marked deleted, so cleanup retries a delete that failed partway
+                if (!store.exists(ObjectStoreKeys.testRun(publicId))) {
+                    // Left behind by a delete that removed the test run but failed before removing the marker
+                    testRunIndex.removeCreatedMarker(createdTestRun)
+                    return@mapParallel null
+                }
+
+                val pinned = store.read<SystemAttributesDocument>(ObjectStoreKeys.systemAttributes(publicId))?.pinned ?: false
+
+                publicId.takeIf { !pinned }
+            }
+            .filterNotNull()
+    }
 
     /**
      * Saves the test run document and indexes it. The repair marker written first covers a crash between the two;
@@ -372,11 +386,9 @@ class TestRunObjectStoreRepository(
         publicId: PublicId,
         transform: (TestRunDocument) -> TestRunDocument,
     ): TestRunDocument =
-        withContext(Dispatchers.IO) {
-            store.update<TestRunDocument>(ObjectStoreKeys.testRun(publicId)) { current ->
-                transform(current?.takeUnless { it.deleted } ?: throw IllegalStateException("Test run $publicId does not exist"))
-            }!!
-        }
+        documentStore.updateTestRun(publicId) { current ->
+            transform(current?.takeUnless { it.deleted } ?: throw IllegalStateException("Test run $publicId does not exist"))
+        }!!
 
     // A claim is only ever written when the group has no claim, so a claim owned by this test run can't change
     // between reading and deleting it

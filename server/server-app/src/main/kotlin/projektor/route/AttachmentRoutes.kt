@@ -37,6 +37,8 @@ fun Route.attachments(
 
         if (!authService.isAuthValid(call.request.header(AuthConfig.PUBLISH_TOKEN))) {
             call.respond(HttpStatusCode.Unauthorized)
+        } else if (!isValidAttachmentName(attachmentName)) {
+            call.respond(HttpStatusCode.BadRequest, AddAttachmentResponse(null, AddAttachmentError.ATTACHMENT_FAILED))
         } else if (attachmentService != null) {
             if (attachmentService.attachmentSizeValid(contentLengthInBytes)) {
                 val addAttachmentResult =
@@ -67,7 +69,9 @@ fun Route.attachments(
         val publicId = call.parameters.getOrFail("publicId")
         val attachmentName = call.parameters.getOrFail("attachmentName")
 
-        if (attachmentService != null) {
+        if (!isValidAttachmentName(attachmentName)) {
+            call.respond(HttpStatusCode.NotFound)
+        } else if (attachmentService != null) {
             val attachment = attachmentService.getAttachment(PublicId(publicId), attachmentName)
 
             if (attachment != null) {
@@ -92,3 +96,7 @@ fun Route.attachments(
         }
     }
 }
+
+// Attachment object names can't contain a slash, which keeps them apart from every object-store persistence key
+// when the two share a bucket. Publishers send only the file's own name.
+private fun isValidAttachmentName(attachmentName: String) = !attachmentName.contains('/')

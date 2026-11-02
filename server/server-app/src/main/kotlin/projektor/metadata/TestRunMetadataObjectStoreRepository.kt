@@ -1,9 +1,5 @@
 package projektor.metadata
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import projektor.persistence.objectstore.ObjectStoreKeys
-import projektor.persistence.objectstore.TestRunDocument
 import projektor.persistence.objectstore.TestRunDocumentStore
 import projektor.persistence.objectstore.TestRunIndex
 import projektor.server.api.PublicId
@@ -35,12 +31,10 @@ class TestRunMetadataObjectStoreRepository(
         pullRequestNumber: Int?,
         commitSha: String?,
     ) {
-        withContext(Dispatchers.IO) {
-            // Like the database repository, does nothing when the test run doesn't have Git metadata
-            documentStore.store.update<TestRunDocument>(ObjectStoreKeys.testRun(publicId)) { current ->
-                current?.takeUnless { it.deleted }?.gitMetadata?.let { git ->
-                    current.copy(gitMetadata = git.copy(pullRequestNumber = pullRequestNumber, commitSha = commitSha))
-                }
+        // Like the database repository, does nothing when the test run doesn't have Git metadata
+        documentStore.updateTestRun(publicId) { current ->
+            current?.takeUnless { it.deleted }?.gitMetadata?.let { git ->
+                current.copy(gitMetadata = git.copy(pullRequestNumber = pullRequestNumber, commitSha = commitSha))
             }
         }
 

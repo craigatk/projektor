@@ -1,15 +1,12 @@
 package projektor.testcase
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import projektor.persistence.objectstore.ObjectStoreKeys
 import projektor.persistence.objectstore.OutputType
 import projektor.persistence.objectstore.TestRunDocument
 import projektor.persistence.objectstore.TestRunDocumentStore
 import projektor.persistence.objectstore.TestRunIndex
 import projektor.persistence.objectstore.TestRunIndexEntry
+import projektor.persistence.objectstore.mapParallel
 import projektor.persistence.objectstore.toApi
 import projektor.server.api.PublicId
 import projektor.server.api.TestCase
@@ -87,15 +84,13 @@ class TestCaseObjectStoreRepository(
         if (baselineRuns.isEmpty()) return noBaselines
 
         val baselineSamples =
-            coroutineScope {
-                baselineRuns
-                    .map { entry -> async(Dispatchers.IO) { Pair(entry.publicId, readAllTestCases(PublicId(entry.publicId))) } }
-                    .awaitAll()
-            }.flatMap { (publicId, testCases) ->
-                testCases
-                    .filter { it.passed && !it.skipped && it.duration != null }
-                    .map { BaselineSample(TestCaseKey(it.packageName, it.className, it.name), publicId, it.duration!!) }
-            }.groupBy { it.testCaseKey }
+            baselineRuns
+                .mapParallel { entry -> Pair(entry.publicId, readAllTestCases(PublicId(entry.publicId))) }
+                .flatMap { (publicId, testCases) ->
+                    testCases
+                        .filter { it.passed && !it.skipped && it.duration != null }
+                        .map { BaselineSample(TestCaseKey(it.packageName, it.className, it.name), publicId, it.duration!!) }
+                }.groupBy { it.testCaseKey }
 
         val targetTestCasesBySuite = documentStore.readAllTestCases(testRunPublicId, targetTestRun)
 
@@ -131,12 +126,7 @@ class TestCaseObjectStoreRepository(
 
         val recentRuns = fetchRecentRuns(testRunPublicId, targetTestRun, maxRuns, includeTargetRun = true) ?: return listOf()
 
-        val testCasesByRun =
-            coroutineScope {
-                recentRuns
-                    .map { entry -> async(Dispatchers.IO) { readAllTestCases(PublicId(entry.publicId)) } }
-                    .awaitAll()
-            }
+        val testCasesByRun = recentRuns.mapParallel { entry -> readAllTestCases(PublicId(entry.publicId)) }
 
         return recentRuns.zip(testCasesByRun).mapNotNull { (entry, testCases) ->
             testCases
@@ -178,22 +168,17 @@ class TestCaseObjectStoreRepository(
     ): List<TestRunIndexEntry>? {
         val targetGit = targetTestRun.gitMetadata ?: return null
 
-        val entries = testRunIndex.readRepositoryEntries(targetGit.repoName)
-        val targetPosition = entries.indexOfFirst { it.publicId == targetPublicId.id }
-
-        if (targetPosition < 0) return null
-
-        // Entries are in created order, with runs created at the same time in the order they were saved
-        val candidates = entries.subList(0, if (includeTargetRun) targetPosition + 1 else targetPosition)
-
-        return candidates
-            .filter { entry ->
-                entry.matchesProject(targetGit.projectName) &&
-                    entry.matchesBranchName(targetGit.branchName) &&
-                    (entry.isCI || entry.publicId == targetPublicId.id)
-            }
-            .asReversed()
-            .take(maxRuns)
+        return testRunIndex.readNewestEntriesBefore(
+            repoName = targetGit.repoName,
+            publicId = targetPublicId,
+            createdTimestamp = targetTestRun.summary.createdTimestamp,
+            includeEntry = includeTargetRun,
+            minMatches = maxRuns,
+        ) { entry ->
+            entry.matchesProject(targetGit.projectName) &&
+                entry.matchesBranchName(targetGit.branchName) &&
+                (entry.isCI || entry.publicId == targetPublicId.id)
+        }?.take(maxRuns)
     }
 
     private suspend fun readAllTestCases(publicId: PublicId): List<IndexedTestCase> {

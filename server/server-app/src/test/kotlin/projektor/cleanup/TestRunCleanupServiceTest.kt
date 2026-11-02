@@ -9,12 +9,15 @@ import projektor.DatabaseRepositoryTestCase
 import projektor.TestSuiteData
 import projektor.attachment.AttachmentConfig
 import projektor.attachment.AttachmentDatabaseRepository
+import projektor.attachment.AttachmentRepository
 import projektor.attachment.AttachmentService
 import projektor.coverage.CoverageService
 import projektor.database.generated.tables.pojos.ResultsProcessing
 import projektor.incomingresults.randomPublicId
 import projektor.parser.coverage.payload.CoverageFilePayload
 import projektor.repository.coverage.RepositoryCoverageRepository
+import projektor.server.api.PublicId
+import projektor.server.api.attachments.Attachment
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.server.example.coverage.JacocoXmlLoader
 import projektor.server.example.coverage.JacocoXmlLoader.Companion.serverAppLineCoveragePercentage
@@ -260,6 +263,45 @@ class TestRunCleanupServiceTest : DatabaseRepositoryTestCase() {
             val attachmentAfterCleanup = runBlocking { attachmentService.getAttachment(publicId, attachmentFileName) }
             expectThat(attachmentAfterCleanup).isNull()
         }
+    }
+
+    @Test
+    fun `should keep the test run to retry cleanup when deleting its attachments fails`() {
+        val attachmentsConfig =
+            AttachmentConfig(
+                "http://localhost:9000",
+                "attachmentsremoving",
+                true,
+                "minio_access_key",
+                "minio_secret_key",
+                null,
+            )
+        val workingRepository = AttachmentDatabaseRepository(dslContext)
+        val failingRepository =
+            object : AttachmentRepository by workingRepository {
+                override suspend fun listAttachments(publicId: PublicId): List<Attachment> =
+                    throw IllegalStateException("Simulated store failure")
+            }
+
+        fun cleanupService(attachmentRepository: AttachmentRepository) =
+            TestRunCleanupService(
+                CleanupConfig(30, null, false),
+                get(),
+                get(),
+                get(),
+                AttachmentService(attachmentsConfig, attachmentRepository),
+                get(),
+                get(),
+            )
+
+        val publicId = randomPublicId()
+        testRunDBGenerator.createTestRun(publicId, LocalDate.now().minusDays(45), false)
+
+        expectThat(runBlocking { cleanupService(failingRepository).conditionallyCleanupTestRuns() }).doesNotContain(publicId)
+        expectThat(testRunDao.fetchOneByPublicId(publicId.id)).isNotNull()
+
+        expectThat(runBlocking { cleanupService(workingRepository).conditionallyCleanupTestRuns() }).contains(publicId)
+        expectThat(testRunDao.fetchOneByPublicId(publicId.id)).isNull()
     }
 
     @Test

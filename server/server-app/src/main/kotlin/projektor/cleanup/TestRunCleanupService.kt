@@ -43,14 +43,18 @@ class TestRunCleanupService(
             listOf()
         }
 
+    /**
+     * Deletes the test run itself after the data stored separately from it. Cleanup finds what to delete through the
+     * test run, so if a step fails the next cleanup retries it, rather than leaving that data behind for good.
+     */
     suspend fun cleanupTestRun(publicId: PublicId) {
         preserveLastKnownCoverage(publicId)
-
-        testRunRepository.deleteTestRun(publicId)
 
         coverageService.deleteCoverage(publicId)
 
         attachmentService?.deleteAttachments(publicId)
+
+        testRunRepository.deleteTestRun(publicId)
 
         resultsProcessingRepository.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.DELETED)
     }

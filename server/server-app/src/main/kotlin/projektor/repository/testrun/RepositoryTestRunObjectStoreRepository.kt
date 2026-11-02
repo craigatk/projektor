@@ -1,12 +1,8 @@
 package projektor.repository.testrun
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import projektor.persistence.objectstore.TestRunIndex
 import projektor.persistence.objectstore.TestRunIndexEntry
-import projektor.persistence.objectstore.newestFirst
+import projektor.persistence.objectstore.mapParallel
 import projektor.persistence.objectstore.toApi
 import projektor.server.api.PublicId
 import projektor.server.api.TestCase
@@ -44,9 +40,7 @@ class RepositoryTestRunObjectStoreRepository(
         projectName: String?,
         limit: Int,
     ): List<TestRunSummary> =
-        ciRunsFromRepo(repoName, projectName)
-            .filter { it.isMainBranch }
-            .newestFirst()
+        testRunIndex.readNewestEntries(repoName, limit) { it.isCiRunOf(projectName) && it.isMainBranch }
             .take(limit)
             .map { it.summary.toApi(PublicId(it.publicId)) }
 
@@ -55,27 +49,27 @@ class RepositoryTestRunObjectStoreRepository(
         projectName: String?,
         maxRuns: Int,
         branchType: BranchType,
-    ): List<TestCase> =
-        coroutineScope {
-            val matchingRuns = ciRunsFromRepo(repoName, projectName).filter { it.matchesBranchType(branchType) }
-            val oldestRecentRun = matchingRuns.newestFirst().take(maxRuns).lastOrNull() ?: return@coroutineScope listOf()
+    ): List<TestCase> {
+        val matchingRuns =
+            testRunIndex.readNewestEntries(
+                repoName,
+                maxRuns,
+            ) { it.isCiRunOf(projectName) && it.matchesBranchType(branchType) }
+        val oldestRecentRun = matchingRuns.take(maxRuns).lastOrNull() ?: return listOf()
 
-            // Like the database query, includes every run created at or after the oldest of the most recent runs
-            matchingRuns
-                .filter { it.createdTimestamp >= oldestRecentRun.createdTimestamp && it.summary.totalFailureCount > 0 }
-                .newestFirst()
-                .map { entry -> async(Dispatchers.IO) { testCaseRepository.fetchFailedTestCases(PublicId(entry.publicId)) } }
-                .awaitAll()
-                .flatten()
-        }
+        // Like the database query, includes every run created at or after the oldest of the most recent runs
+        return matchingRuns
+            .filter { it.createdTimestamp >= oldestRecentRun.createdTimestamp && it.summary.totalFailureCount > 0 }
+            .mapParallel { entry -> testCaseRepository.fetchFailedTestCases(PublicId(entry.publicId)) }
+            .flatten()
+    }
 
     override suspend fun fetchRecentTestRunPublicIds(
         repoName: String,
         projectName: String?,
         maxRuns: Int,
     ): List<PublicId> =
-        ciRunsFromRepo(repoName, projectName)
-            .newestFirst()
+        testRunIndex.readNewestEntries(repoName, maxRuns) { it.isCiRunOf(projectName) }
             .take(maxRuns)
             .map { PublicId(it.publicId) }
 
@@ -83,18 +77,14 @@ class RepositoryTestRunObjectStoreRepository(
         repoName: String,
         pullRequestNumber: Int,
     ): PublicId? =
-        testRunIndex.readRepositoryEntries(repoName)
-            .newestFirst()
-            .firstOrNull { it.pullRequestNumber == pullRequestNumber }
+        testRunIndex.findNewestEntry(repoName) { it.pullRequestNumber == pullRequestNumber }
             ?.let { PublicId(it.publicId) }
 
     override suspend fun fetchMostRecentTestRunPublicIdWithCoverage(
         repoName: String,
         pullRequestNumber: Int,
     ): PublicId? =
-        testRunIndex.readRepositoryEntries(repoName)
-            .newestFirst()
-            .firstOrNull { it.pullRequestNumber == pullRequestNumber && it.hasCoverageRun }
+        testRunIndex.findNewestEntry(repoName) { it.pullRequestNumber == pullRequestNumber && it.hasCoverageRun }
             ?.let { PublicId(it.publicId) }
 
     override suspend fun fetchTestRunCount(
@@ -105,7 +95,9 @@ class RepositoryTestRunObjectStoreRepository(
     private suspend fun ciRunsFromRepo(
         repoName: String,
         projectName: String?,
-    ): List<TestRunIndexEntry> = testRunIndex.readRepositoryEntries(repoName).filter { it.matchesProject(projectName) && it.isCI }
+    ): List<TestRunIndexEntry> = testRunIndex.readRepositoryEntries(repoName).filter { it.isCiRunOf(projectName) }
+
+    private fun TestRunIndexEntry.isCiRunOf(projectName: String?) = matchesProject(projectName) && isCI
 }
 
 fun TestRunIndexEntry.matchesBranchType(branchType: BranchType?) = branchType != BranchType.MAINLINE || isMainBranch

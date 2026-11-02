@@ -3,7 +3,6 @@ package projektor.compare
 import projektor.persistence.objectstore.TestRunDocumentStore
 import projektor.persistence.objectstore.TestRunIndex
 import projektor.persistence.objectstore.TestRunIndexEntry
-import projektor.persistence.objectstore.newestFirst
 import projektor.repository.testrun.matchesBranchType
 import projektor.server.api.PublicId
 import projektor.server.api.repository.BranchSearch
@@ -39,7 +38,7 @@ class PreviousTestRunObjectStoreRepository(
         val currentTestRun = documentStore.readTestRun(publicId) ?: return null
         val currentGit = currentTestRun.gitMetadata ?: return null
 
-        return testRunIndex.readRepositoryEntries(currentGit.repoName).newestFirst().firstOrNull { entry ->
+        return testRunIndex.findNewestEntry(currentGit.repoName, upTo = currentTestRun.summary.createdTimestamp) { entry ->
             entry.isMainBranch &&
                 entry.publicId != publicId.id &&
                 entry.matchesProject(currentGit.projectName) &&
@@ -54,7 +53,7 @@ class PreviousTestRunObjectStoreRepository(
         branch: BranchSearch?,
         additionalCondition: (TestRunIndexEntry) -> Boolean,
     ): RecentTestRun? =
-        testRunIndex.readRepositoryEntries(repoName).newestFirst().firstOrNull { entry ->
+        testRunIndex.findNewestEntry(repoName) { entry ->
             entry.matchesBranchType(branch?.branchType) &&
                 entry.matchesBranchName(branch?.branchName) &&
                 entry.matchesProject(projectName) &&

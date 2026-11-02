@@ -4,7 +4,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import projektor.incomingresults.mapper.normalizeFilePath
@@ -27,6 +29,8 @@ import projektor.parser.model.TestSuite as ParsedTestSuite
 class TestRunDocumentStore(val store: JsonObjectStore) {
     private val writeConcurrency = Semaphore(MAX_CONCURRENT_WRITES)
 
+    private val testRunUpdateLocks = Array(TEST_RUN_UPDATE_LOCK_STRIPES) { Mutex() }
+
     /**
      * The test run, or null if it doesn't exist or is being deleted.
      */
@@ -45,6 +49,21 @@ class TestRunDocumentStore(val store: JsonObjectStore) {
      */
     fun readTestRunBlocking(publicId: PublicId): TestRunDocument? =
         store.read<TestRunDocument>(ObjectStoreKeys.testRun(publicId))?.takeUnless { it.deleted }
+
+    /**
+     * Atomically read-modify-writes the test run document, see JsonObjectStore.update. Updates of the same test run
+     * within this server take turns, so parallel appends to a test run don't conflict with each other (only with
+     * other server instances). Losing an append loses test results, so this tries harder than other updates.
+     */
+    suspend fun updateTestRun(
+        publicId: PublicId,
+        transform: (TestRunDocument?) -> TestRunDocument?,
+    ): TestRunDocument? =
+        testRunUpdateLocks[Math.floorMod(publicId.id.hashCode(), TEST_RUN_UPDATE_LOCK_STRIPES)].withLock {
+            withContext(Dispatchers.IO) {
+                store.update(ObjectStoreKeys.testRun(publicId), TestRunDocument::class.java, MAX_TEST_RUN_UPDATE_ATTEMPTS, transform)
+            }
+        }
 
     suspend fun testRunExists(publicId: PublicId): Boolean = readTestRun(publicId) != null
 
@@ -66,16 +85,36 @@ class TestRunDocumentStore(val store: JsonObjectStore) {
         }
 
     /**
+     * The test run's test case chunks, keyed by chunk. Read ahead of a compare-and-swap update to keep it short.
+     */
+    suspend fun readTestCaseChunks(
+        publicId: PublicId,
+        testRun: TestRunDocument,
+    ): Map<Int, TestCaseChunkDocument> =
+        testRun.testSuites
+            .map { it.testCaseChunk }
+            .distinct()
+            .mapParallel { chunk -> readTestCaseChunk(publicId, chunk)?.let { chunk to it } }
+            .filterNotNull()
+            .toMap()
+
+    /**
      * Blocking version of [readAllTestCases], for use inside a compare-and-swap update.
+     *
+     * @param knownChunks chunks that have already been read, and gets the ones this reads added to it. A chunk
+     * never changes once written, so a retried update only reads the chunks of test suites that are new to it.
      */
     fun readAllTestCasesBlocking(
         publicId: PublicId,
         testRun: TestRunDocument,
+        knownChunks: MutableMap<Int, TestCaseChunkDocument>,
     ): Map<Int, List<TestCaseDocument>> =
         testRun.testSuites
             .map { it.testCaseChunk }
             .distinct()
-            .flatMap { chunk -> readTestCaseChunk(publicId, chunk)?.testSuites.orEmpty() }
+            .flatMap { chunk ->
+                (knownChunks[chunk] ?: readTestCaseChunk(publicId, chunk)?.also { knownChunks[chunk] = it })?.testSuites.orEmpty()
+            }
             .associate { it.testSuiteIdx to it.testCases }
 
     suspend fun readTestCases(
@@ -239,6 +278,10 @@ class TestRunDocumentStore(val store: JsonObjectStore) {
         const val TEST_SUITES_PER_CHUNK = 100
 
         private const val MAX_CONCURRENT_WRITES = 16
+
+        private const val TEST_RUN_UPDATE_LOCK_STRIPES = 64
+
+        internal const val MAX_TEST_RUN_UPDATE_ATTEMPTS = 50
     }
 }
 
