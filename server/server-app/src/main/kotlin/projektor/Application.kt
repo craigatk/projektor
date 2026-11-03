@@ -83,6 +83,7 @@ import projektor.repository.coverage.RepositoryCoverageService
 import projektor.repository.performance.RepositoryPerformanceService
 import projektor.repository.testrun.RepositoryTestRunService
 import projektor.route.*
+import projektor.route.PublicIdValidation
 import projektor.route.attachments
 import projektor.schedule.Scheduler
 import projektor.testcase.TestCaseService
@@ -246,6 +247,8 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
     val repositorySlackChannelService: RepositorySlackChannelService by inject()
 
     routing {
+        install(PublicIdValidation)
+
         api(organizationCoverageService, repositoryCoverageService, repositoryTestRunService)
         attachments(attachmentService, authService)
         badgeCoverage(coverageBadgeService)

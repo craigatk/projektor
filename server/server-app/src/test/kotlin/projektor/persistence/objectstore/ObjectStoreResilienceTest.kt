@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.Koin
 import org.koin.dsl.koinApplication
+import projektor.attachment.AttachmentRepository
 import projektor.coverage.CoverageRepository
 import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedResults
@@ -19,6 +20,7 @@ import projektor.metadata.TestRunMetadataRepository
 import projektor.objectstore.ObjectStoreClient
 import projektor.objectstore.ObjectStoreConfig
 import projektor.objectstore.ObjectStoreTelemetry
+import projektor.objectstore.StoredObject
 import projektor.objectstore.WriteCondition
 import projektor.objectstore.json.JsonObjectStore
 import projektor.parser.coverage.model.CoverageReport
@@ -29,6 +31,7 @@ import projektor.persistence.PersistenceInstrumentation
 import projektor.persistence.PersistenceType
 import projektor.repository.testrun.RepositoryTestRunRepository
 import projektor.server.api.PublicId
+import projektor.server.api.attachments.Attachment
 import projektor.testrun.TestRunRepository
 import projektor.testrun.attributes.TestRunSystemAttributesRepository
 import strikt.api.expectThat
@@ -41,6 +44,7 @@ import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
+import java.util.concurrent.ConcurrentLinkedQueue
 import projektor.incomingresults.model.PerformanceResult as IncomingPerformanceResult
 import projektor.parser.model.TestCase as ParsedTestCase
 import projektor.parser.model.TestSuite as ParsedTestSuite
@@ -239,6 +243,140 @@ class ObjectStoreResilienceTest {
         client.removeObject(SHARED_BUCKET_NAME, attachmentObjectName)
     }
 
+    @Test
+    fun `cleanup scan should not read the documents of test runs it finds`() {
+        val publicIds =
+            listOf("2020-05-01T10:00:00Z", "2020-05-01T11:00:00Z", "2020-04-20T10:00:00Z").map {
+                saveTestRun(randomRepoName(), Instant.parse(it))
+            }
+
+        client.readKeys.clear()
+        // The last day's markers are read to compare their timestamps, so look past these test runs' days
+        expectThat(findCleanupCandidates(LocalDate.parse("2020-05-03")).toSet()).isEqualTo(publicIds.toSet())
+
+        expectThat(client.readKeys.filter { it.contains("/created/") || it.endsWith("/run.json") }).isEmpty()
+    }
+
+    @Test
+    fun `attachment cleanup scan should only read documents of test runs with attachments`() {
+        val attachmentRepository: AttachmentRepository = koin.get()
+        val withAttachment = saveTestRun(randomRepoName(), Instant.parse("2020-05-01T10:00:00Z"))
+        val withoutAttachment = saveTestRun(randomRepoName(), Instant.parse("2020-05-01T11:00:00Z"))
+        val attachmentsRemoved = saveTestRun(randomRepoName(), Instant.parse("2020-05-01T12:00:00Z"))
+
+        runBlocking {
+            attachmentRepository.addAttachment(withAttachment, Attachment("a.txt", "a", 1))
+            attachmentRepository.addAttachment(attachmentsRemoved, Attachment("b.txt", "b", 1))
+            attachmentRepository.deleteAttachment(attachmentsRemoved, "b")
+        }
+
+        client.readKeys.clear()
+        val candidates =
+            runBlocking { testRunRepository.findTestRunsCreatedBeforeAndNotPinnedWithAttachments(LocalDate.parse("2020-05-03")) }
+
+        expectThat(candidates).containsExactly(withAttachment)
+        expectThat(client.readKeys.filter { it.contains(withoutAttachment.id) }).isEmpty()
+    }
+
+    @Test
+    fun `cleanup scan should skip pinned test runs and keep runs created after the cutoff`() {
+        val systemAttributesRepository: TestRunSystemAttributesRepository = koin.get()
+        val old = saveTestRun(randomRepoName(), Instant.parse("2020-05-01T10:00:00Z"))
+        val pinned = saveTestRun(randomRepoName(), Instant.parse("2020-05-01T11:00:00Z"))
+        saveTestRun(randomRepoName(), Instant.parse("2020-05-02T00:00:01Z"))
+        runBlocking { systemAttributesRepository.pin(pinned) }
+
+        expectThat(findCleanupCandidates(LocalDate.parse("2020-05-02"))).containsExactly(old)
+    }
+
+    @Test
+    fun `recent run lookups should stop reading shards once they have enough`() {
+        val repoName = randomRepoName()
+        val oldest = saveTestRun(repoName, Instant.parse("2020-01-10T10:00:00Z"))
+        val middle = saveTestRun(repoName, Instant.parse("2020-02-10T10:00:00Z"))
+        val newest = saveTestRun(repoName, Instant.parse("2020-03-10T10:00:00Z"))
+
+        fun timelineShardsRead() = client.readKeys.filter { it.contains("/timeline/") }.map { it.substringAfterLast('/') }
+
+        client.readKeys.clear()
+        expectThat(runBlocking { repositoryTestRunRepository.fetchRecentTestRunPublicIds(repoName, null, 1) }).containsExactly(newest)
+        expectThat(timelineShardsRead()).containsExactly("2020-03.json")
+
+        client.readKeys.clear()
+        expectThat(
+            runBlocking { repositoryTestRunRepository.fetchRecentTestRunPublicIds(repoName, null, 2) },
+        ).containsExactly(newest, middle)
+        expectThat(timelineShardsRead()).containsExactly("2020-03.json", "2020-02.json")
+
+        client.readKeys.clear()
+        expectThat(runBlocking { repositoryTestRunRepository.fetchRecentTestRunPublicIds(repoName, null, 10) })
+            .containsExactly(newest, middle, oldest)
+        expectThat(timelineShardsRead()).containsExactly("2020-03.json", "2020-02.json", "2020-01.json")
+    }
+
+    @Test
+    fun `reading entries before a test run should skip newer months and keep save order for equal timestamps`() {
+        val repoName = randomRepoName()
+        val sharedTimestamp = Instant.parse("2020-02-10T10:00:00Z")
+        val older = saveTestRun(repoName, Instant.parse("2020-01-10T10:00:00Z"))
+        val firstSaved = saveTestRun(repoName, sharedTimestamp)
+        val target = saveTestRun(repoName, sharedTimestamp)
+        saveTestRun(repoName, sharedTimestamp)
+        saveTestRun(repoName, Instant.parse("2020-03-10T10:00:00Z"))
+
+        fun entriesBefore(includeEntry: Boolean) =
+            runBlocking {
+                testRunIndex.readNewestEntriesBefore(repoName, target, sharedTimestamp, includeEntry, 10) { true }
+            }?.map { it.publicId }
+
+        expectThat(entriesBefore(includeEntry = false)).isEqualTo(listOf(firstSaved.id, older.id))
+        expectThat(entriesBefore(includeEntry = true)).isEqualTo(listOf(target.id, firstSaved.id, older.id))
+
+        // A test run missing from the timeline, such as one still waiting to be indexed
+        expectThat(
+            runBlocking { testRunIndex.readNewestEntriesBefore(repoName, randomPublicId(), sharedTimestamp, true, 10) { true } },
+        ).isNull()
+    }
+
+    @Test
+    fun `concurrent appends to a test run within a server should not conflict`() {
+        val publicId = saveTestRun(randomRepoName())
+
+        runBlocking {
+            (1..UPLOAD_COUNT).map {
+                async(Dispatchers.IO) {
+                    testRunRepository.appendTestSuites(publicId, 1, listOf(GroupedTestSuites(listOf(createTestSuite()), null, null, null)))
+                    testRunRepository.updateTestRunSummary(publicId, null)
+                }
+            }.awaitAll()
+        }
+
+        val summary = runBlocking { testRunRepository.fetchTestRunSummary(publicId) }
+        expectThat(summary?.totalTestCount).isEqualTo(UPLOAD_COUNT + 1)
+        expectThat(meterRegistry.find("object_store_update_conflict").counter()?.count() ?: 0.0).isEqualTo(0.0)
+    }
+
+    @Test
+    fun `concurrent appends from different server instances should all be kept`() {
+        val otherInstanceRepository: TestRunRepository = createKoin(store).get()
+        val publicId = saveTestRun(randomRepoName())
+
+        runBlocking {
+            (1..UPLOAD_COUNT).map { uploadIdx ->
+                val repository = if (uploadIdx % 2 == 0) testRunRepository else otherInstanceRepository
+
+                async(Dispatchers.IO) {
+                    repository.appendTestSuites(publicId, 1, listOf(GroupedTestSuites(listOf(createTestSuite()), null, null, null)))
+                    repository.updateTestRunSummary(publicId, null)
+                }
+            }.awaitAll()
+        }
+
+        val summary = runBlocking { testRunRepository.fetchTestRunSummary(publicId) }
+        expectThat(summary?.totalTestCount).isEqualTo(UPLOAD_COUNT + 1)
+        expectThat(meterRegistry.find("object_store_update_exhausted").counter()?.count() ?: 0.0).isEqualTo(0.0)
+    }
+
     private fun createKoin(jsonObjectStore: JsonObjectStore) =
         koinApplication {
             modules(
@@ -312,6 +450,18 @@ class ObjectStoreResilienceTest {
     private class FailingWritesClient(config: ObjectStoreConfig, telemetry: ObjectStoreTelemetry) : ObjectStoreClient(config, telemetry) {
         @Volatile
         var failWritesContaining: String? = null
+
+        // Every object read, in order, with its full key
+        val readKeys: MutableCollection<String> = ConcurrentLinkedQueue()
+
+        override fun getObjectWithETag(
+            bucketName: String,
+            objectName: String,
+        ): StoredObject? {
+            readKeys.add(objectName)
+
+            return super.getObjectWithETag(bucketName, objectName)
+        }
 
         override fun putObject(
             bucketName: String,

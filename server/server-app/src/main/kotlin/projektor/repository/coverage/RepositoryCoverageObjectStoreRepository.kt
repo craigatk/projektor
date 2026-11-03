@@ -46,7 +46,7 @@ class RepositoryCoverageObjectStoreRepository(
     override suspend fun coverageExists(
         repoName: String,
         projectName: String?,
-    ): Boolean = testRunIndex.readRepositoryEntries(repoName).any { it.matchesProject(projectName) && it.coverageStats != null }
+    ): Boolean = testRunIndex.findNewestEntry(repoName) { it.matchesProject(projectName) && it.coverageStats != null } != null
 
     override suspend fun saveLastKnownCoverageIfNewer(
         repoName: String,

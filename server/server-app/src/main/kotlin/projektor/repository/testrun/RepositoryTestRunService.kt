@@ -20,9 +20,11 @@ class RepositoryTestRunService(private val repositoryTestRunRepository: Reposito
         flakyFailureThreshold: Int,
         branchType: BranchType,
     ): List<RepositoryFlakyTest> {
-        val failingTestCases = repositoryTestRunRepository.fetchRepositoryFailingTestCases(repoName, projectName, maxRuns, branchType)
+        val cappedMaxRuns = maxRuns.coerceIn(1, MAX_FLAKY_TEST_RUNS)
+
+        val failingTestCases = repositoryTestRunRepository.fetchRepositoryFailingTestCases(repoName, projectName, cappedMaxRuns, branchType)
         val totalTestRunCount = repositoryTestRunRepository.fetchTestRunCount(repoName, projectName)
-        val testRunCount = min(maxRuns.toLong(), totalTestRunCount)
+        val testRunCount = min(cappedMaxRuns.toLong(), totalTestRunCount)
 
         return flakyTestCalculator.calculateFlakyTests(failingTestCases, flakyFailureThreshold, testRunCount)
     }
@@ -32,4 +34,9 @@ class RepositoryTestRunService(private val repositoryTestRunRepository: Reposito
         projectName: String?,
         limit: Int,
     ): List<TestRunSummary> = repositoryTestRunRepository.fetchRepositoryTestRunSummaries(repoName, projectName, limit)
+
+    companion object {
+        // The most test runs a flaky test request can look at, since its unauthenticated callers choose how many
+        const val MAX_FLAKY_TEST_RUNS = 500
+    }
 }

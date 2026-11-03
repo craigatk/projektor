@@ -47,7 +47,9 @@ object ObjectStoreKeys {
         groupId: String,
     ) = "${coveragePrefix(publicId)}groups/$groupId.json"
 
-    fun attachments(publicId: PublicId) = "attachments/${publicId.id}.json"
+    const val ATTACHMENTS_PREFIX = "attachments/"
+
+    fun attachments(publicId: PublicId) = "$ATTACHMENTS_PREFIX${publicId.id}.json"
 
     fun resultsProcessing(publicId: PublicId) = "processing/${publicId.id}.json"
 
