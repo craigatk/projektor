@@ -12,6 +12,7 @@ import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageService
 import projektor.error.ProcessingFailureService
 import projektor.incomingresults.AppendTestResultsService
+import projektor.incomingresults.BackgroundProcessing
 import projektor.incomingresults.GroupedResultsConverter
 import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
@@ -70,7 +71,8 @@ fun createAppModule(
     single { GroupedResultsParser(processingConfig.maxPayloadSize) }
     single { PerformanceResultsParser() }
     single { GroupedResultsConverter(get(), get(), get()) }
-    single { GroupedTestResultsService(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    single { BackgroundProcessing() }
+    single { GroupedTestResultsService(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     single { MessageService(messageConfig) }
     single { PreviousTestRunService(get()) }
     single { ProcessingFailureService(get()) }
@@ -79,7 +81,7 @@ fun createAppModule(
     single { PullRequestCoverageService(get(), get()) }
     single { TestSuiteService(get()) }
     single { TestResultsProcessingService(get()) }
-    single { TestResultsService(get(), get(), get(), get()) }
+    single { TestResultsService(get(), get(), get(), get(), get()) }
     single { TestRunService(get()) }
     single { TestRunSystemAttributesService(get()) }
     single { TestRunMetadataService(get()) }

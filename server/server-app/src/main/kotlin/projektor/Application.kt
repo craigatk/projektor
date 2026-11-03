@@ -24,6 +24,7 @@ import io.ktor.server.routing.routing
 import io.micrometer.core.instrument.MeterRegistry
 import io.modelcontextprotocol.kotlin.sdk.server.mcpStatelessStreamableHttp
 import io.modelcontextprotocol.kotlin.sdk.types.McpJson
+import org.koin.ktor.ext.get
 import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.SLF4JLogger
@@ -46,6 +47,7 @@ import projektor.cleanup.TestRunCleanupService
 import projektor.compare.PreviousTestRunService
 import projektor.coverage.CoverageService
 import projektor.error.ProcessingFailureService
+import projektor.incomingresults.BackgroundProcessing
 import projektor.incomingresults.GroupedTestResultsService
 import projektor.incomingresults.TestResultsProcessingService
 import projektor.incomingresults.TestResultsService
@@ -185,6 +187,15 @@ fun Application.main(meterRegistry: MeterRegistry? = null) {
         }
     }
     install(IgnoreTrailingSlash) // Needed to treat /tests/ and /tests as the same URL
+
+    // Before persistence closes, so uploads that have been accepted can finish saving
+    val backgroundProcessing: BackgroundProcessing = get()
+
+    environment.monitor.subscribe(ApplicationStopping) {
+        if (!backgroundProcessing.awaitCompletion(processingConfig.shutdownTimeout)) {
+            log.warn("Uploads were still processing after waiting ${processingConfig.shutdownTimeout}, they will be lost")
+        }
+    }
 
     environment.monitor.subscribe(ApplicationStopped) {
         log.info("Application stopping")

@@ -44,6 +44,10 @@ if there is one):
 * Abort incomplete multipart uploads after a day or so. Attachments over 10MB are uploaded in parts, and a server that
   stops partway leaves the parts behind.
 
+The server processes uploads after accepting them. When asked to stop, it waits up to
+`PROCESSING_SHUTDOWN_TIMEOUT_SECONDS` (default 25) for them to finish, so set this below how long your host waits before
+killing the server. Uploads still processing after that, or when the server is killed, are lost.
+
 ## Stack
 
 ### Server

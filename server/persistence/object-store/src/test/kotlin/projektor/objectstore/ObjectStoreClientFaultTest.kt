@@ -4,7 +4,11 @@ import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Protocol
 import okhttp3.Response
+import okhttp3.ResponseBody.Companion.asResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
+import okio.Buffer
+import okio.ForwardingSource
+import okio.buffer
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -15,6 +19,7 @@ import strikt.api.expectThrows
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
+import java.io.IOException
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -163,6 +168,118 @@ class ObjectStoreClientFaultTest {
         denyWhen { chain -> chain.request().method == "DELETE" }
 
         expectThrows<ObjectStorePermissionException> { faultyStore.verifyPermissions() }
+    }
+
+    @Test
+    fun `should retry a write when the connection fails before it's sent`() {
+        failNextRequest("PUT") { throw IOException("Simulated connection failure") }
+
+        faultyStore.write("doc.json", Counter(1))
+
+        expectThat(plainStore.read<Counter>("doc.json")).isEqualTo(Counter(1))
+    }
+
+    @Test
+    fun `should apply an update once when the connection fails after the write committed`() {
+        plainStore.write("doc.json", Counter(0))
+        val transformRuns = AtomicInteger()
+
+        failNextRequest("PUT") { chain ->
+            chain.proceed(chain.request()).close()
+            throw IOException("Simulated connection failure")
+        }
+
+        val updated =
+            faultyStore.update<Counter>("doc.json") { current ->
+                transformRuns.incrementAndGet()
+                Counter(current!!.value + 1)
+            }
+
+        expectThat(updated).isEqualTo(Counter(1))
+        expectThat(plainStore.read<Counter>("doc.json")).isEqualTo(Counter(1))
+        expectThat(transformRuns.get()).isEqualTo(1)
+    }
+
+    @Test
+    fun `should retry a read when the connection fails partway through the response`() {
+        plainStore.write("doc.json", Counter(1))
+
+        failNextRequest("GET") { chain ->
+            val response = chain.proceed(chain.request())
+            val failingSource =
+                object : ForwardingSource(response.body.source()) {
+                    override fun read(
+                        sink: Buffer,
+                        byteCount: Long,
+                    ): Long = throw IOException("Simulated connection failure")
+                }
+
+            response.newBuilder().body(failingSource.buffer().asResponseBody(null, -1)).build()
+        }
+
+        expectThat(faultyStore.read<Counter>("doc.json")).isEqualTo(Counter(1))
+    }
+
+    @Test
+    fun `should retry listing and deleting when the connection fails`() {
+        plainStore.write("doc.json", Counter(1))
+
+        failNextRequest("GET") { throw IOException("Simulated connection failure") }
+        expectThat(faultyStore.list("").objectNames).isEqualTo(listOf("doc.json"))
+
+        failNextRequest("POST") { throw IOException("Simulated connection failure") }
+        faultyStore.deleteAll(listOf("doc.json"))
+        expectThat(plainStore.exists("doc.json")).isEqualTo(false)
+    }
+
+    @Test
+    fun `should give up after repeated network failures`() {
+        val attempts = AtomicInteger()
+
+        fault = { chain ->
+            if (chain.request().method == "PUT") {
+                attempts.incrementAndGet()
+                throw IOException("Simulated connection failure")
+            }
+            null
+        }
+
+        expectThrows<Exception> { faultyStore.write("doc.json", Counter(1)) }
+        expectThat(attempts.get()).isEqualTo(3)
+    }
+
+    @Test
+    fun `should not retry a response from the store as a network failure`() {
+        val attempts = AtomicInteger()
+
+        fault = { chain ->
+            if (chain.request().method == "PUT") {
+                attempts.incrementAndGet()
+                response(chain, 403, "<Error><Code>AccessDenied</Code><Message>Denied</Message></Error>")
+            } else {
+                null
+            }
+        }
+
+        expectThrows<Exception> { faultyStore.write("doc.json", Counter(1)) }
+        expectThat(attempts.get()).isEqualTo(1)
+    }
+
+    // Leaves the requests that find the bucket's region alone, whose method is also GET
+    private fun failNextRequest(
+        method: String,
+        failure: (Interceptor.Chain) -> Response,
+    ) {
+        var armed = true
+
+        fault = { chain ->
+            if (armed && chain.request().method == method && !chain.request().url.queryParameterNames.contains("location")) {
+                armed = false
+                failure(chain)
+            } else {
+                null
+            }
+        }
     }
 
     private fun denyWhen(predicate: (Interceptor.Chain) -> Boolean) {
