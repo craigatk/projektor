@@ -24,7 +24,12 @@ class Scheduler(private val schedulerLock: SchedulerLock) {
                 }
             }
 
-        executor.scheduleWithFixedDelay(runnableWithLock, job.scheduleDelay.value, job.scheduleDelay.value, job.scheduleDelay.unit)
+        executor.scheduleWithFixedDelay(
+            runnableWithLock,
+            job.initialDelay.unit.toMillis(job.initialDelay.value),
+            job.scheduleDelay.unit.toMillis(job.scheduleDelay.value),
+            TimeUnit.MILLISECONDS,
+        )
 
         scheduledJobs[job.name] = job
     }
@@ -34,4 +39,9 @@ class Scheduler(private val schedulerLock: SchedulerLock) {
 
 data class ScheduleDelay(val value: Long, val unit: TimeUnit)
 
-data class ScheduledJob(val name: String, val runnable: Runnable, val scheduleDelay: ScheduleDelay)
+data class ScheduledJob(
+    val name: String,
+    val runnable: Runnable,
+    val scheduleDelay: ScheduleDelay,
+    val initialDelay: ScheduleDelay = scheduleDelay,
+)

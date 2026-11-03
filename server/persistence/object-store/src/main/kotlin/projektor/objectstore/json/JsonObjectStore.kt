@@ -1,5 +1,6 @@
 package projektor.objectstore.json
 
+import com.fasterxml.jackson.core.StreamReadConstraints
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -11,6 +12,7 @@ import projektor.objectstore.PreconditionFailedException
 import projektor.objectstore.WriteCondition
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.time.Instant
 import java.util.UUID
 import java.util.concurrent.ThreadLocalRandom
 import java.util.zip.GZIPInputStream
@@ -138,8 +140,20 @@ class JsonObjectStore(
      */
     fun exists(key: String): Boolean = client.objectExists(bucketName, fullKey(key))
 
+    /**
+     * When the document was last written, or null if it doesn't exist.
+     */
+    fun lastModified(key: String): Instant? = client.objectLastModified(bucketName, fullKey(key))
+
     fun delete(key: String) {
         client.removeObject(bucketName, fullKey(key))
+    }
+
+    /**
+     * @throws projektor.objectstore.ObjectDeletionException if any of the documents couldn't be deleted
+     */
+    fun deleteAll(keys: List<String>) {
+        client.removeObjects(bucketName, keys.map { fullKey(it) })
     }
 
     /**
@@ -171,6 +185,40 @@ class JsonObjectStore(
 
             replace(key, ConditionalWriteProbeDocument(4), current.etag)
                 ?: notSupported("a write with If-Match and the object's current ETag was rejected")
+        } finally {
+            runCatching { delete(key) }
+        }
+    }
+
+    /**
+     * Checks that the credentials allow everything persistence does beyond reading and writing a document that exists.
+     * These otherwise pass startup and only fail later, for example in test run cleanup.
+     *
+     * @throws ObjectStorePermissionException if the store rejected one of the operations
+     */
+    fun verifyPermissions() {
+        val key = "$CONDITIONAL_WRITE_PROBE_PREFIX${UUID.randomUUID()}.json"
+
+        fun <T> checkOperation(
+            operation: String,
+            block: () -> T,
+        ): T =
+            try {
+                block()
+            } catch (e: Exception) {
+                throw ObjectStorePermissionException(bucketName, operation, e)
+            }
+
+        checkOperation("writing an object") { write(key, ConditionalWriteProbeDocument(1)) }
+
+        try {
+            // AWS reports a missing object as access denied when the credentials can't list the bucket
+            checkOperation("reading an object that doesn't exist") { read<ConditionalWriteProbeDocument>(key + MISSING_PROBE_SUFFIX) }
+            checkOperation("listing objects") { check(key in list(key).objectNames) { "The listing didn't include the object" } }
+            checkOperation("deleting an object") {
+                delete(key)
+                check(!exists(key)) { "The object still exists" }
+            }
         } finally {
             runCatching { delete(key) }
         }
@@ -228,6 +276,7 @@ class JsonObjectStore(
         private const val MAX_BACKOFF_MILLIS = 500L
 
         private const val CONDITIONAL_WRITE_PROBE_PREFIX = "conditional-write-check/"
+        private const val MISSING_PROBE_SUFFIX = ".missing"
 
         // A well-formed ETag that never matches a real object
         private const val STALE_PROBE_ETAG = "00000000000000000000000000000000"
@@ -237,6 +286,9 @@ class JsonObjectStore(
 
         fun createObjectMapper(): ObjectMapper =
             jacksonObjectMapper()
+                // Jackson limits strings to 20M characters when reading but not when writing, and uploads can be larger.
+                // Anything saved has to stay readable, so sizes are only limited where uploads are received.
+                .apply { factory.setStreamReadConstraints(StreamReadConstraints.builder().maxStringLength(Int.MAX_VALUE).build()) }
                 .registerModule(JavaTimeModule())
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
@@ -273,6 +325,13 @@ class ConditionalWritesNotSupportedException(bucketName: String, reason: String)
     RuntimeException(
         "Object store bucket $bucketName doesn't support conditional writes ($reason). " +
             "Object-store persistence needs a store that honors If-None-Match and If-Match on PutObject, such as AWS S3 or MinIO.",
+    )
+
+class ObjectStorePermissionException(bucketName: String, operation: String, cause: Throwable) :
+    RuntimeException(
+        "Object store bucket $bucketName failed the startup check when $operation. " +
+            "Object-store persistence needs credentials that can read, write, list and delete objects in the bucket.",
+        cause,
     )
 
 internal data class ConditionalWriteProbeDocument(val value: Int)

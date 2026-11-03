@@ -16,9 +16,18 @@ class CleanupScheduledJob(
     override fun run() {
         logger.info("Starting test run cleanup job")
 
-        runBlocking { testRunCleanupService.conditionallyCleanupTestRuns() }
+        // Separately, so failing to find test runs to clean up doesn't also stop attachments from being cleaned up
+        try {
+            runBlocking { testRunCleanupService.conditionallyCleanupTestRuns() }
+        } catch (e: Exception) {
+            logger.error("Test run cleanup failed, it will run again tomorrow", e)
+        }
 
-        attachmentCleanupService?.let { runBlocking { it.conditionallyCleanUpAttachments() } }
+        try {
+            attachmentCleanupService?.let { runBlocking { it.conditionallyCleanUpAttachments() } }
+        } catch (e: Exception) {
+            logger.error("Attachment cleanup failed, it will run again tomorrow", e)
+        }
 
         logger.info("Competed test run cleanup job.")
     }
@@ -39,6 +48,8 @@ class CleanupScheduledJob(
                         CLEANUP_JOB_NAME,
                         cleanupScheduledJob,
                         ScheduleDelay(1, TimeUnit.DAYS),
+                        // Soon after startup, since a server restarted more often than daily would otherwise never run it
+                        initialDelay = ScheduleDelay(10, TimeUnit.MINUTES),
                     )
 
                 scheduler.scheduleJob(job)

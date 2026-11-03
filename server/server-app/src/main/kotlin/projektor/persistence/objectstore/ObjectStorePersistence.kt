@@ -64,6 +64,7 @@ class ObjectStorePersistence(
 
             // Fail at startup rather than silently losing concurrent updates on a store that ignores write conditions
             store.verifyConditionalWrites()
+            store.verifyPermissions()
 
             return ObjectStorePersistence(store, instrumentation)
         }

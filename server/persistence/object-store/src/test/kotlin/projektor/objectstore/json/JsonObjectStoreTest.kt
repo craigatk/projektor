@@ -47,6 +47,16 @@ class JsonObjectStoreTest {
     }
 
     @Test
+    fun `should read back a document with a string over Jackson's default limit`() {
+        val value = "x".repeat(21_000_000)
+        val key = "large-string-${UUID.randomUUID()}.json"
+
+        store.write(key, mapOf("value" to value))
+
+        expectThat(store.read<Map<*, *>>(key)?.get("value")).isEqualTo(value)
+    }
+
+    @Test
     fun `should write and read document`() {
         val document = TestDocument("doc", 3, Instant.parse("2026-10-17T12:30:00.123Z"))
         store.write("roundtrip.json", document)

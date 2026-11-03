@@ -32,7 +32,17 @@ PERSISTENCE_OBJECT_STORE_AUTO_CREATE_BUCKET=true \
 
 `PERSISTENCE_OBJECT_STORE_KEY_PREFIX` optionally puts all keys under a prefix, so the data can share a bucket.
 The object store must support conditional writes (`If-Match` / `If-None-Match`), which MinIO, RustFS and
-AWS S3 do.
+AWS S3 do. The credentials need to read, write, list and delete objects in the bucket; startup fails otherwise.
+
+Test run cleanup doesn't remove everything, so set these bucket lifecycle rules in production (under the key prefix,
+if there is one):
+
+* Expire `failures/`, which holds the full body of every upload that failed to process, after as long as those are
+  useful for debugging.
+* Expire `processing/`, which holds each upload's status, after longer than `MAX_REPORT_AGE_DAYS` so the UI
+  can still say a test run was cleaned up.
+* Abort incomplete multipart uploads after a day or so. Attachments over 10MB are uploaded in parts, and a server that
+  stops partway leaves the parts behind.
 
 ## Stack
 

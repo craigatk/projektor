@@ -303,6 +303,38 @@ Found by auditing the object-store code paths before running it on a real instan
   compare-and-swap and don't re-read them on retry (chunks never change), and try 50 times rather than 20. Conflicts
   now only come from other server instances.
 
+### Third pre-production audit fixes
+
+- Strings over Jackson's default 20M character read limit could be written but never read back, failing the whole test
+  case chunk, output document or failure list holding them. `JsonObjectStore` no longer limits strings on read; sizes
+  are only limited where uploads are received.
+- The HTTP client retries a PUT that fails with a retryable status even if the store committed it. The retry then
+  failed its condition, which looked like a conflict, so changes were applied twice (duplicate test suites, doubled
+  wall clock duration), and a new test run was reported as already existing and never indexed. Conditional writes now
+  carry a unique ID in the object's metadata, and `ObjectStoreClient` doesn't count a failed condition as a conflict
+  when the object has that write's ID. If another writer changes the object in between, it still looks like a conflict,
+  so `appendTestSuites` also ignores indexes it has already added, and `createTestRunDocument` keeps its repair marker
+  on a conflict.
+- `removeObjects` ignored objects the store reported as failing to delete, so a test run could look deleted while its
+  documents stayed behind for good. It now throws `ObjectDeletionException`, and `deleteTestRun` deletes `run.json`
+  after the test run's other documents, since cleanup retries a delete only while `run.json` exists.
+- Cleanup scans skip a test run or day whose documents can't be read (`mapParallelSkippingFailures`) rather than failing
+  the whole scan, and attachment cleanup runs even if test run cleanup fails.
+- Scheduled jobs can have their own initial delay. Cleanup now first runs 10 minutes after startup, on both backends.
+  Before, it waited a full day, so a server restarted more often than daily never ran it.
+- Startup also runs `JsonObjectStore.verifyPermissions`: reading a missing object, listing and deleting. Those otherwise
+  only failed later, for example in cleanup.
+- Data that was never deleted:
+  - The repair marker is now written before a new test run's first document. After
+    `TestRunIndex.MISSING_TEST_RUN_REPAIR_DELAY` (now 1 hour rather than 10 minutes), the repair job deletes the
+    documents of a save that never finished.
+  - `deleteTestRun` removes the attachments document once it's empty.
+  - `TestRunRepository.findOrphanedTestRunData` finds coverage and attachments over a day old that have no test run,
+    and test run cleanup deletes them. Only the object store implements it.
+  - `failures/`, `processing/` and incomplete multipart uploads need bucket lifecycle rules (see `server-app/README.md`).
+  - Empty timeline shards are still kept. Each costs one read on whole-history queries, and deleting one could race
+    with an upload adding an entry.
+
 ## Risks and open questions
 
 - Motivation (dropping Postgres for cost/ops, or something else) decides how hard to push on cross-run performance.

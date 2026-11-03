@@ -54,8 +54,9 @@ class TestRunIndex(val documentStore: TestRunDocumentStore) {
     private val shardBatchers = Array(SHARD_BATCHER_STRIPES) { ShardBatcher() }
 
     /**
-     * Records that the test run's index entries may need rebuilding. Written before saving a new test run, so a
-     * crash between saving it and indexing it is repaired too. Returns the marker's key for [clearRepairMarker].
+     * Records that the test run's index entries may need rebuilding. Written before saving any of a new test run's
+     * documents, so a crash between saving it and indexing it is repaired too, and the documents of a save that never
+     * finished get removed. Returns the marker's key for [clearRepairMarker].
      */
     suspend fun writeRepairMarker(
         publicId: PublicId,
@@ -292,18 +293,16 @@ class TestRunIndex(val documentStore: TestRunDocumentStore) {
             withContext(Dispatchers.IO) { store.list(CREATED_PREFIX, delimiter = "/").commonPrefixes }
                 .mapNotNull { dayPrefix -> parseCreatedDay(dayPrefix)?.takeIf { it <= lastDay }?.let { Pair(dayPrefix, it) } }
 
-        return days.mapParallel { (dayPrefix, day) ->
+        return days.mapParallelSkippingFailures(logger) { (dayPrefix, day) ->
             val markerKeys = store.list(dayPrefix).objectNames.filter { isCreatedMarkerKey(dayPrefix, it) }
 
             if (day < lastDay) {
                 markerKeys
             } else {
-                markerKeys
-                    .mapParallel {
-                            key ->
-                        key.takeIf { store.read<CreatedMarkerDocument>(key)?.let { it.createdTimestamp <= createdBefore } == true }
-                    }
-                    .filterNotNull()
+                markerKeys.mapParallelSkippingFailures(logger) {
+                        key ->
+                    key.takeIf { store.read<CreatedMarkerDocument>(key)?.let { it.createdTimestamp <= createdBefore } == true }
+                }
             }
         }.flatten().map { key -> CreatedTestRun(PublicId(key.substringAfterLast('/').removeSuffix(".json")), key) }
     }
@@ -344,9 +343,12 @@ class TestRunIndex(val documentStore: TestRunDocumentStore) {
                 true
             }
             // The test run doesn't exist. If the marker was written before saving it, wait in case it's still being
-            // saved. Then remove anything left of it.
+            // saved. Then remove anything left of it, including documents written by a save that never finished.
             marker.savingTestRun && marker.markedAt.isAfter(Instant.now().minus(MISSING_TEST_RUN_REPAIR_DELAY)) -> false
             else -> {
+                if (marker.savingTestRun) {
+                    withContext(Dispatchers.IO) { store.deletePrefix(ObjectStoreKeys.testRunPrefix(publicId)) }
+                }
                 if (marker.createdTimestamp != null) {
                     marker.repoName?.let { repoName -> refreshShardEntry(publicId, repoName, marker.createdTimestamp) }
                     removeCreatedMarker(publicId, marker.createdTimestamp)
@@ -533,8 +535,9 @@ class TestRunIndex(val documentStore: TestRunDocumentStore) {
         // Refreshes are batched per shard; shards share a stripe's lock, which bounds memory
         private const val SHARD_BATCHER_STRIPES = 64
 
-        // How long a repair marker for a test run that doesn't exist is kept, in case the test run is still being saved
-        internal val MISSING_TEST_RUN_REPAIR_DELAY: Duration = Duration.ofMinutes(10)
+        // How long a repair marker for a test run that doesn't exist is kept, in case the test run is still being saved.
+        // Far longer than any save should take, since after this the documents the save has written are deleted.
+        internal val MISSING_TEST_RUN_REPAIR_DELAY: Duration = Duration.ofHours(1)
 
         // Builds a batch's entries in parallel inside the shard update, keeping the compare-and-swap window short
         private val entryBuildExecutor =
