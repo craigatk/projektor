@@ -17,9 +17,11 @@ import projektor.incomingresults.model.GroupedTestSuites
 import projektor.incomingresults.model.ResultsMetadata
 import projektor.incomingresults.randomPublicId
 import projektor.metadata.TestRunMetadataRepository
+import projektor.objectstore.ObjectDeletionException
 import projektor.objectstore.ObjectStoreClient
 import projektor.objectstore.ObjectStoreConfig
 import projektor.objectstore.ObjectStoreTelemetry
+import projektor.objectstore.PreconditionFailedException
 import projektor.objectstore.StoredObject
 import projektor.objectstore.WriteCondition
 import projektor.objectstore.json.JsonObjectStore
@@ -32,15 +34,22 @@ import projektor.persistence.PersistenceType
 import projektor.repository.testrun.RepositoryTestRunRepository
 import projektor.server.api.PublicId
 import projektor.server.api.attachments.Attachment
+import projektor.testrun.TestRunObjectStoreRepository
 import projektor.testrun.TestRunRepository
 import projektor.testrun.attributes.TestRunSystemAttributesRepository
 import strikt.api.expectThat
+import strikt.api.expectThrows
 import strikt.assertions.containsExactly
+import strikt.assertions.hasSize
 import strikt.assertions.isEmpty
 import strikt.assertions.isEqualTo
+import strikt.assertions.isFalse
+import strikt.assertions.isNotEmpty
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
+import strikt.assertions.isTrue
 import java.math.BigDecimal
+import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
@@ -89,6 +98,139 @@ class ObjectStoreResilienceTest {
         expectThat(runBlocking { repositoryTestRunRepository.fetchRepositoryTestRunTimeline(repoName, null) }).isNull()
         expectThat(findCleanupCandidates()).isEmpty()
         expectThat(store.list("created/").objectNames).isEmpty()
+    }
+
+    @Test
+    fun `a delete that fails partway should keep the test run document so cleanup retries it`() {
+        val publicId = saveTestRun(randomRepoName(), Instant.parse("2020-05-01T10:00:00Z"))
+
+        client.failObjectDeletes = true
+        expectThrows<ObjectDeletionException> { testRunRepository.deleteTestRun(publicId) }
+        client.failObjectDeletes = false
+
+        expectThat(store.exists(ObjectStoreKeys.testRun(publicId))).isTrue()
+        expectThat(findCleanupCandidates()).containsExactly(publicId)
+
+        runBlocking { testRunRepository.deleteTestRun(publicId) }
+
+        expectThat(store.list(ObjectStoreKeys.testRunPrefix(publicId)).objectNames).isEmpty()
+        expectThat(store.list("created/").objectNames).isEmpty()
+    }
+
+    @Test
+    fun `an unreadable document should only leave its own test run out of the cleanup scan`() {
+        val createdTimestamp = Instant.parse("2020-05-01T10:00:00Z")
+        val readable = saveTestRun(randomRepoName(), createdTimestamp)
+        val unreadable = saveTestRun(randomRepoName(), createdTimestamp)
+        store.write(ObjectStoreKeys.systemAttributes(unreadable), SystemAttributesDocument(false))
+
+        client.failReadsContaining = ObjectStoreKeys.systemAttributes(unreadable)
+
+        expectThat(findCleanupCandidates()).containsExactly(readable)
+    }
+
+    @Test
+    fun `repair should remove the documents of a save that never finished, but only once abandoned`() {
+        val publicId = randomPublicId()
+
+        client.failWritesContaining = ObjectStoreKeys.testRun(publicId)
+        expectThrows<IllegalStateException> { testRunRepository.saveGroupedTestRun(publicId, groupedResults(randomRepoName())) }
+        client.failWritesContaining = null
+
+        expectThat(store.list(ObjectStoreKeys.testRunPrefix(publicId)).objectNames).isNotEmpty()
+
+        runBlocking { testRunIndex.repairIndex() }
+        expectThat(store.list(ObjectStoreKeys.testRunPrefix(publicId)).objectNames).isNotEmpty()
+
+        val markerKey = store.list(TestRunIndex.indexRepairPrefix()).objectNames.single()
+        store.update<IndexRepairDocument>(markerKey) {
+            it!!.copy(markedAt = Instant.now().minus(TestRunIndex.MISSING_TEST_RUN_REPAIR_DELAY).minusSeconds(60))
+        }
+
+        runBlocking { testRunIndex.repairIndex() }
+
+        expectThat(store.list(ObjectStoreKeys.testRunPrefix(publicId)).objectNames).isEmpty()
+        expectThat(store.list(TestRunIndex.indexRepairPrefix()).objectNames).isEmpty()
+    }
+
+    @Test
+    fun `a test run whose save committed but looked like a conflict should still get indexed`() {
+        val publicId = randomPublicId()
+        val repoName = randomRepoName()
+
+        client.conflictAfterCommitting = ObjectStoreKeys.testRun(publicId) to 0
+        expectThrows<IllegalStateException> { testRunRepository.saveGroupedTestRun(publicId, groupedResults(repoName)) }
+
+        runBlocking { testRunIndex.repairIndex() }
+
+        expectThat(timelinePublicIds(repoName)).containsExactly(publicId.id)
+        expectThat(store.list("created/").objectNames).hasSize(1)
+        expectThat(store.list(TestRunIndex.indexRepairPrefix()).objectNames).isEmpty()
+    }
+
+    @Test
+    fun `an append that commits but looks like a conflict should not add its test suites twice`() {
+        val publicId = saveTestRun(randomRepoName())
+
+        // The first write reserves the indexes and the second adds the test suites
+        client.conflictAfterCommitting = ObjectStoreKeys.testRun(publicId) to 1
+
+        runBlocking {
+            testRunRepository.appendTestSuites(publicId, 2, listOf(GroupedTestSuites(listOf(createTestSuite()), null, null, null)))
+        }
+
+        val testRun = runBlocking { testRunRepository.fetchTestRun(publicId) }
+        expectThat(testRun?.testSuites?.map { it.idx }).isEqualTo(listOf(1, 3))
+    }
+
+    @Test
+    fun `deleting a test run should remove its attachments document only when it is empty`() {
+        val attachmentRepository: AttachmentRepository = koin.get()
+        val emptied = saveTestRun(randomRepoName())
+        val withAttachment = saveTestRun(randomRepoName())
+
+        runBlocking {
+            attachmentRepository.addAttachment(emptied, Attachment("a.txt", "a", 1))
+            attachmentRepository.deleteAttachment(emptied, "a")
+            attachmentRepository.addAttachment(withAttachment, Attachment("b.txt", "b", 1))
+
+            testRunRepository.deleteTestRun(emptied)
+            testRunRepository.deleteTestRun(withAttachment)
+        }
+
+        expectThat(store.exists(ObjectStoreKeys.attachments(emptied))).isFalse()
+        expectThat(store.exists(ObjectStoreKeys.attachments(withAttachment))).isTrue()
+    }
+
+    @Test
+    fun `should find old coverage and attachments without a test run, and leave ones with a test run or recently written`() {
+        val attachmentRepository: AttachmentRepository = koin.get()
+        val coverageRepository: CoverageRepository = koin.get()
+        val orphanedFinder = TestRunObjectStoreRepository(koin.get(), koin.get(), orphanedDataMinAge = Duration.ZERO)
+
+        val saved = saveTestRun(randomRepoName())
+        val coverageOnly = randomPublicId()
+        val attachmentOnly = randomPublicId()
+
+        runBlocking {
+            coverageRepository.createOrGetCoverageRun(saved)
+            coverageRepository.createOrGetCoverageRun(coverageOnly)
+            attachmentRepository.addAttachment(attachmentOnly, Attachment("a.txt", "a", 1))
+        }
+
+        expectThat(runBlocking { orphanedFinder.findOrphanedTestRunData() }.map { it.id }.toSet())
+            .isEqualTo(setOf(coverageOnly.id, attachmentOnly.id))
+        // They could still be waiting for their test run to finish saving
+        expectThat(runBlocking { testRunRepository.findOrphanedTestRunData() }).isEmpty()
+
+        runBlocking {
+            coverageRepository.deleteCoverage(coverageOnly)
+            attachmentRepository.deleteAttachment(attachmentOnly, "a")
+            testRunRepository.deleteTestRun(coverageOnly)
+            testRunRepository.deleteTestRun(attachmentOnly)
+        }
+
+        expectThat(runBlocking { orphanedFinder.findOrphanedTestRunData() }).isEmpty()
     }
 
     @Test
@@ -451,6 +593,17 @@ class ObjectStoreResilienceTest {
         @Volatile
         var failWritesContaining: String? = null
 
+        @Volatile
+        var failReadsContaining: String? = null
+
+        @Volatile
+        var failObjectDeletes = false
+
+        // Key whose conditional write commits and then fails its condition, like the retry of a write that committed,
+        // after this many other conditional writes to the key
+        @Volatile
+        var conflictAfterCommitting: Pair<String, Int>? = null
+
         // Every object read, in order, with its full key
         val readKeys: MutableCollection<String> = ConcurrentLinkedQueue()
 
@@ -459,6 +612,10 @@ class ObjectStoreResilienceTest {
             objectName: String,
         ): StoredObject? {
             readKeys.add(objectName)
+
+            failReadsContaining?.let { text ->
+                if (objectName.contains(text)) throw IllegalStateException("Simulated failure reading $objectName")
+            }
 
             return super.getObjectWithETag(bucketName, objectName)
         }
@@ -474,7 +631,29 @@ class ObjectStoreResilienceTest {
                 if (objectName.contains(text)) throw IllegalStateException("Simulated failure writing $objectName")
             }
 
-            return super.putObject(bucketName, objectName, bytes, contentType, condition)
+            val etag = super.putObject(bucketName, objectName, bytes, contentType, condition)
+
+            conflictAfterCommitting?.let { (key, writesBefore) ->
+                if (objectName.endsWith(key) && condition != WriteCondition.None) {
+                    if (writesBefore > 0) {
+                        conflictAfterCommitting = key to writesBefore - 1
+                    } else {
+                        conflictAfterCommitting = null
+                        throw PreconditionFailedException(bucketName, objectName, condition, IllegalStateException("Simulated"))
+                    }
+                }
+            }
+
+            return etag
+        }
+
+        override fun removeObjects(
+            bucketName: String,
+            objectNames: List<String>,
+        ) {
+            if (failObjectDeletes) throw ObjectDeletionException(bucketName, objectNames)
+
+            super.removeObjects(bucketName, objectNames)
         }
     }
 

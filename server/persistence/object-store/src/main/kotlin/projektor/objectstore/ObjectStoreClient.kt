@@ -17,17 +17,25 @@ import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import projektor.objectstore.bucket.BucketCreationException
 import java.io.InputStream
+import java.time.Instant
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
-open class ObjectStoreClient(
+open class ObjectStoreClient internal constructor(
     config: ObjectStoreConfig,
-    internal val telemetry: ObjectStoreTelemetry = ObjectStoreTelemetry(),
+    internal val telemetry: ObjectStoreTelemetry,
+    httpClient: OkHttpClient,
 ) {
+    constructor(
+        config: ObjectStoreConfig,
+        telemetry: ObjectStoreTelemetry = ObjectStoreTelemetry(),
+    ) : this(config, telemetry, createHttpClient())
+
     private val minioClient =
         MinioClient.builder()
             .endpoint(config.url)
             .credentials(config.accessKey, config.secretKey)
-            .httpClient(createHttpClient())
+            .httpClient(httpClient)
             .build()
 
     fun createBucketIfNotExists(bucketName: String) {
@@ -71,6 +79,11 @@ open class ObjectStoreClient(
      * Writes the object in a single request, optionally only if the given condition holds.
      * Returns the new object's ETag.
      *
+     * The HTTP client retries a request that failed with a retryable status, even if the store had committed it. The
+     * retry then fails its condition against this write's own object, which would look like a conflict with another
+     * writer and make callers apply their change twice. So conditional writes carry a unique ID in the object's
+     * metadata, and a failed condition only counts as a conflict if the object doesn't have this write's ID.
+     *
      * @throws PreconditionFailedException if the condition didn't hold
      */
     open fun putObject(
@@ -86,6 +99,8 @@ open class ObjectStoreClient(
                 WriteCondition.IfNotExists -> mapOf("If-None-Match" to "*")
                 is WriteCondition.IfMatch -> mapOf("If-Match" to quoteETag(condition.etag))
             }
+        val writeId = UUID.randomUUID().toString()
+        val userMetadata = if (condition == WriteCondition.None) mapOf() else mapOf(WRITE_ID_METADATA to writeId)
 
         return telemetry.record("put", bucketName, objectName) {
             try {
@@ -98,13 +113,15 @@ open class ObjectStoreClient(
                             .data(bytes, bytes.size)
                             .contentType(contentType)
                             .headers(conditionHeaders)
+                            .userMetadata(userMetadata)
                             .build(),
                     )
 
                 normalizeETag(response.etag())
             } catch (e: ErrorResponseException) {
                 if (isPreconditionFailure(e)) {
-                    throw PreconditionFailedException(bucketName, objectName, condition, e)
+                    eTagIfWrittenBy(writeId, bucketName, objectName)
+                        ?: throw PreconditionFailedException(bucketName, objectName, condition, e)
                 } else {
                     throw e
                 }
@@ -188,6 +205,31 @@ open class ObjectStoreClient(
         }
 
     /**
+     * When the object was last written, or null if it doesn't exist.
+     */
+    fun objectLastModified(
+        bucketName: String,
+        objectName: String,
+    ): Instant? =
+        telemetry.record("stat", bucketName, objectName) {
+            try {
+                minioClient.statObject(
+                    StatObjectArgs
+                        .builder()
+                        .bucket(bucketName)
+                        .`object`(objectName)
+                        .build(),
+                ).lastModified().toInstant()
+            } catch (e: ErrorResponseException) {
+                if (e.errorResponse().code() == "NoSuchKey") {
+                    null
+                } else {
+                    throw e
+                }
+            }
+        }
+
+    /**
      * Lists the object names (full keys) under the prefix in lexicographic order.
      *
      * @param delimiter when set, keys containing the delimiter after the prefix are rolled up into
@@ -253,7 +295,7 @@ open class ObjectStoreClient(
         }
     }
 
-    fun removeObjects(
+    open fun removeObjects(
         bucketName: String,
         objectNames: List<String>,
     ) {
@@ -269,9 +311,13 @@ open class ObjectStoreClient(
                             .objects(objects)
                             .build(),
                     )
-                // removeObjects only sends the delete requests as this iterable is consumed;
-                // the iterable yields an entry for each object that failed to delete.
-                results.forEach { it.get() }
+                // removeObjects only sends the delete requests as this iterable is consumed. The iterable yields an entry
+                // for each object that failed to delete, and get() only throws if the whole request failed.
+                val failures = results.map { it.get() }.filter { it.code() != "NoSuchKey" }
+
+                if (failures.isNotEmpty()) {
+                    throw ObjectDeletionException(bucketName, failures.map { "${it.objectName()}: ${it.code()}" })
+                }
             }
         }
     }
@@ -287,8 +333,31 @@ open class ObjectStoreClient(
         }
     }
 
+    private fun eTagIfWrittenBy(
+        writeId: String,
+        bucketName: String,
+        objectName: String,
+    ): String? =
+        try {
+            minioClient.statObject(
+                StatObjectArgs
+                    .builder()
+                    .bucket(bucketName)
+                    .`object`(objectName)
+                    .build(),
+            ).takeIf { it.userMetadata().getFirst(WRITE_ID_METADATA) == writeId }?.let { normalizeETag(it.etag()) }
+        } catch (e: ErrorResponseException) {
+            if (e.errorResponse().code() == "NoSuchKey") {
+                null
+            } else {
+                throw e
+            }
+        }
+
     companion object {
         private const val MAX_KEYS_PER_PAGE = 1000
+
+        private const val WRITE_ID_METADATA = "projektor-write-id"
 
         // Requests beyond this wait in a queue. Matches the threads of Dispatchers.IO, which all calls are made from.
         internal const val MAX_CONCURRENT_REQUESTS = 64
@@ -363,6 +432,11 @@ class PreconditionFailedException(
     condition: WriteCondition,
     cause: Throwable,
 ) : RuntimeException("Write condition $condition failed for object $objectName in bucket $bucketName", cause)
+
+class ObjectDeletionException(
+    bucketName: String,
+    failures: List<String>,
+) : RuntimeException("Failed to delete ${failures.size} objects from bucket $bucketName, including ${failures.take(5)}")
 
 class MissingETagException(
     bucketName: String,

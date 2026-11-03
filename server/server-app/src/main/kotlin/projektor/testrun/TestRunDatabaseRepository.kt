@@ -380,6 +380,9 @@ class TestRunDatabaseRepository(
     override suspend fun findTestRunsCreatedBeforeAndNotPinnedWithAttachments(createdBefore: LocalDate): List<PublicId> =
         findTestRunsCreatedBeforeAndNotPinned(createdBefore, true)
 
+    // Only the object store looks for these: database attachments are removed with their test run by a foreign key
+    override suspend fun findOrphanedTestRunData(): List<PublicId> = listOf()
+
     override suspend fun claimTestRunGroup(
         group: String,
         repoName: String,

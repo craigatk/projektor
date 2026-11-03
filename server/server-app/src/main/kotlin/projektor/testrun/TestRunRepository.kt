@@ -53,6 +53,13 @@ interface TestRunRepository {
     suspend fun findTestRunsCreatedBeforeAndNotPinnedWithAttachments(createdBefore: LocalDate): List<PublicId>
 
     /**
+     * Public IDs that have coverage or attachments stored but no test run, so test run cleanup never finds them. For
+     * example, coverage published after its test run was deleted, or an attachment published with a mistyped ID.
+     * Clean these up the same way as a test run, see TestRunCleanupService.
+     */
+    suspend fun findOrphanedTestRunData(): List<PublicId>
+
+    /**
      * Claims the results group in the repo for the test run, returning the public ID of the test run that owns
      * the group: the given test run if no test run had claimed the group yet, otherwise the existing owner.
      * Atomic, so concurrent uploads with the same group agree on one test run even before it's saved.

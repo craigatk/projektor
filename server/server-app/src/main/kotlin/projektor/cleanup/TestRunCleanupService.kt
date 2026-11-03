@@ -36,6 +36,8 @@ class TestRunCleanupService(
 
             logger.info("Removed ${cleanedUpTestRunIds.size} test runs created before $createdBefore")
 
+            cleanupOrphanedData()
+
             cleanedUpTestRunIds
         } else {
             logger.info("Test run clean up not enabled, skipping")
@@ -57,6 +59,29 @@ class TestRunCleanupService(
         testRunRepository.deleteTestRun(publicId)
 
         resultsProcessingRepository.updateResultsProcessingStatus(publicId, ResultsProcessingStatus.DELETED)
+    }
+
+    // Best-effort, like the test runs it's found again by the next cleanup if this fails
+    private suspend fun cleanupOrphanedData() {
+        try {
+            testRunRepository.findOrphanedTestRunData().forEach { publicId ->
+                try {
+                    if (!cleanupConfig.dryRun) {
+                        coverageService.deleteCoverage(publicId)
+                        attachmentService?.deleteAttachments(publicId)
+                        testRunRepository.deleteTestRun(publicId)
+
+                        logger.info("Removed coverage and attachments of test run $publicId, which doesn't exist")
+                    } else {
+                        logger.info("Not deleting coverage and attachments of missing test run $publicId since dry run is enabled")
+                    }
+                } catch (e: Exception) {
+                    logger.error("Failed to clean up coverage and attachments of missing test run $publicId", e)
+                }
+            }
+        } catch (e: Exception) {
+            logger.error("Failed to look for coverage and attachments without a test run", e)
+        }
     }
 
     // Snapshots this run's coverage into a durable, per-repo table before it's deleted, so the

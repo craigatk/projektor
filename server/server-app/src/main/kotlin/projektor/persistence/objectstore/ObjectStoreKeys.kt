@@ -38,7 +38,9 @@ object ObjectStoreKeys {
 
     fun codeQualityReports(publicId: PublicId) = "${testRunPrefix(publicId)}quality.json"
 
-    fun coveragePrefix(publicId: PublicId) = "coverage/${publicId.id}/"
+    const val COVERAGE_PREFIX = "coverage/"
+
+    fun coveragePrefix(publicId: PublicId) = "$COVERAGE_PREFIX${publicId.id}/"
 
     fun coverageRun(publicId: PublicId) = "${coveragePrefix(publicId)}coverage.json"
 

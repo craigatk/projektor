@@ -33,6 +33,7 @@ class CleanupSchedulerApplicationTest : ApplicationTestCase() {
                 .isNotNull()
                 .and {
                     get { scheduleDelay }.isEqualTo(ScheduleDelay(1, TimeUnit.DAYS))
+                    get { initialDelay }.isEqualTo(ScheduleDelay(10, TimeUnit.MINUTES))
                 }
         }
 
