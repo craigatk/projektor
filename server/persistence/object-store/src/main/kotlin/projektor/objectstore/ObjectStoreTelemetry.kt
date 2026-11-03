@@ -18,6 +18,7 @@ import io.opentelemetry.api.trace.Tracer
  * - `object_store_update_conflict` counter, tagged with `bucket`: a conditional update lost to
  *   another writer and was retried
  * - `object_store_update_exhausted` counter, tagged with `bucket`: an update gave up after its max attempts
+ * - `object_store_network_retry` counter, tagged with `bucket`: a request is being retried after a network failure
  */
 class ObjectStoreTelemetry(
     private val meterRegistry: MeterRegistry = Metrics.globalRegistry,
@@ -69,10 +70,15 @@ class ObjectStoreTelemetry(
         meterRegistry.counter(UPDATE_EXHAUSTED_COUNTER, "bucket", bucketName).increment()
     }
 
+    fun recordNetworkRetry(bucketName: String) {
+        meterRegistry.counter(NETWORK_RETRY_COUNTER, "bucket", bucketName).increment()
+    }
+
     companion object {
         const val REQUEST_TIMER = "object_store_request"
         const val UPDATE_CONFLICT_COUNTER = "object_store_update_conflict"
         const val UPDATE_EXHAUSTED_COUNTER = "object_store_update_exhausted"
+        const val NETWORK_RETRY_COUNTER = "object_store_network_retry"
 
         const val SUCCESS = "success"
         const val NOT_FOUND = "not_found"

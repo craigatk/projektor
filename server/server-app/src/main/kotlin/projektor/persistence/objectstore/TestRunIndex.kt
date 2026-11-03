@@ -14,6 +14,7 @@ import projektor.objectstore.json.JsonObjectStore
 import projektor.server.api.PublicId
 import java.net.URLDecoder
 import java.net.URLEncoder
+import java.security.MessageDigest
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
@@ -172,15 +173,23 @@ class TestRunIndex(val documentStore: TestRunDocumentStore) {
         var resolvedCount = 0
 
         markerKeys.forEach { markerKey ->
+            var marker: IndexRepairDocument? = null
+
             try {
-                val marker = withContext(Dispatchers.IO) { store.read<IndexRepairDocument>(markerKey) }
+                marker = withContext(Dispatchers.IO) { store.read<IndexRepairDocument>(markerKey) }
 
                 if (marker == null || repairTestRun(marker)) {
                     withContext(Dispatchers.IO) { store.delete(markerKey) }
                     resolvedCount++
                 }
             } catch (e: Exception) {
-                logger.warn("Failed to repair index from marker $markerKey, will retry", e)
+                if (marker != null && marker.markedAt.isBefore(Instant.now().minus(MAX_REPAIR_MARKER_AGE))) {
+                    // A marker that keeps failing would otherwise be retried forever
+                    logger.error("Giving up on repairing index from marker $markerKey marked at ${marker.markedAt}", e)
+                    runCatching { withContext(Dispatchers.IO) { store.delete(markerKey) } }
+                } else {
+                    logger.warn("Failed to repair index from marker $markerKey, will retry", e)
+                }
             }
         }
 
@@ -276,11 +285,18 @@ class TestRunIndex(val documentStore: TestRunDocumentStore) {
     }
 
     suspend fun readOrganizationRepositoryNames(orgName: String): List<String> =
-        coroutineScope {
-            val markerKeys = withContext(Dispatchers.IO) { store.list(organizationPrefix(orgName)).objectNames }
+        withContext(Dispatchers.IO) { store.list(organizationPrefix(orgName)).objectNames }
+            .mapParallel { key ->
+                val keySegment = key.removePrefix(organizationPrefix(orgName)).removeSuffix(".json")
 
-            markerKeys.map { key -> decodeKeySegment(key.removePrefix(organizationPrefix(orgName)).removeSuffix(".json")) }
-        }
+                if (keySegment.contains(UNENCODED_SEGMENT_MARKER)) {
+                    // The key doesn't hold the whole name
+                    store.read<OrganizationRepositoryDocument>(key)?.repoName
+                } else {
+                    decodeKeySegment(keySegment)
+                }
+            }
+            .filterNotNull()
 
     /**
      * Test runs created at or before the given time, from the oldest day. The markers' keys hold what's needed, so
@@ -539,6 +555,14 @@ class TestRunIndex(val documentStore: TestRunDocumentStore) {
         // Far longer than any save should take, since after this the documents the save has written are deleted.
         internal val MISSING_TEST_RUN_REPAIR_DELAY: Duration = Duration.ofHours(1)
 
+        internal val MAX_REPAIR_MARKER_AGE: Duration = Duration.ofDays(7)
+
+        // MinIO and RustFS limit each path segment to 255 bytes, and this leaves room for what's added around names
+        private const val MAX_KEY_SEGMENT_LENGTH = 200
+
+        // URLEncoder always encodes this, so it marks segments that can't be decoded back into the name
+        private const val UNENCODED_SEGMENT_MARKER = '~'
+
         // Builds a batch's entries in parallel inside the shard update, keeping the compare-and-swap window short
         private val entryBuildExecutor =
             Executors.newFixedThreadPool(16) { runnable ->
@@ -575,9 +599,23 @@ class TestRunIndex(val documentStore: TestRunDocumentStore) {
 
         /**
          * Repository and project names can contain any characters, including slashes, so they're encoded to
-         * keep each one a single key segment.
+         * keep each one a single key segment. Stores reject some segments, so names that would encode to one are
+         * stored differently: only dots (a path's . and ..) have them encoded, and no name at all or one too long for
+         * a segment gets a marker. A long name's segment is its start and a hash, which keeps different names apart.
          */
-        fun encodeKeySegment(value: String): String = URLEncoder.encode(value, Charsets.UTF_8)
+        fun encodeKeySegment(value: String): String {
+            val encoded = URLEncoder.encode(value, Charsets.UTF_8)
+
+            return when {
+                encoded.isEmpty() -> "${UNENCODED_SEGMENT_MARKER}empty"
+                encoded.all { it == '.' } -> encoded.replace(".", "%2E")
+                encoded.length <= MAX_KEY_SEGMENT_LENGTH -> encoded
+                else -> {
+                    val hash = MessageDigest.getInstance("SHA-256").digest(value.toByteArray()).joinToString("") { "%02x".format(it) }
+                    "${encoded.take(MAX_KEY_SEGMENT_LENGTH - hash.length - 1)}$UNENCODED_SEGMENT_MARKER$hash"
+                }
+            }
+        }
 
         private fun decodeKeySegment(value: String): String = URLDecoder.decode(value, Charsets.UTF_8)
 

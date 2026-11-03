@@ -335,6 +335,27 @@ Found by auditing the object-store code paths before running it on a real instan
   - Empty timeline shards are still kept. Each costs one read on whole-history queries, and deleting one could race
     with an upload adding an entry.
 
+### Fourth pre-production audit fixes
+
+- One failure could stop `POST /results` uploads being processed until a restart: an exception escaping the background
+  coroutine cancelled its plain `CoroutineScope`, after which `launch` silently did nothing while the route kept
+  accepting uploads. Recording a processing error failing was enough, which is likely when the store is unavailable.
+  Grouped uploads caught `Exception` but not an `Error`, such as running out of memory. Both now use
+  `BackgroundProcessing`, whose jobs are independent.
+- Shutting down waits for accepted uploads to finish (`ApplicationStopping`, up to
+  `PROCESSING_SHUTDOWN_TIMEOUT_SECONDS`, default 25), rather than losing them with no failure recorded and their status
+  stuck. A server that's killed, or doesn't finish in time, still loses them, and their status stays stuck.
+- `MAX_PAYLOAD_SIZE` crashed the server at startup with any value, since `ProcessingConfig` parsed the config value
+  object's `toString()`.
+- `ObjectStoreClient` retries network failures up to 3 attempts in total (`object_store_network_retry` counter). MinIO's
+  client only retries failed statuses, so one dropped connection among an upload's writes failed the whole upload.
+  Conditional writes keep their write ID across attempts. Streamed attachment uploads and downloads aren't retried.
+- `encodeKeySegment` produces segments stores accept for any name. `.`, `..`, an empty name and encoded names over 255
+  bytes were rejected by the store on RustFS, so the test run saved but its repair marker never cleared, reading the
+  repository failed, and a long results group failed its upload. Names over 200 encoded characters become their start and a
+  SHA-256 hash, with the organization index reading those names from its document. Other names keep the same keys.
+- Repair markers that keep failing are given up on after 7 days (`TestRunIndex.MAX_REPAIR_MARKER_AGE`), with an error log.
+
 ## Risks and open questions
 
 - Motivation (dropping Postgres for cost/ops, or something else) decides how hard to push on cross-run performance.

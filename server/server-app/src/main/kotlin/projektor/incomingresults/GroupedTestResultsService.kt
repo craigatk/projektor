@@ -2,9 +2,6 @@ package projektor.incomingresults
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import io.opentelemetry.api.GlobalOpenTelemetry
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 import projektor.coverage.CoverageService
 import projektor.incomingresults.model.GitMetadata
@@ -37,10 +34,9 @@ class GroupedTestResultsService(
     private val appendTestResultsService: AppendTestResultsService,
     private val codeQualityReportRepository: CodeQualityReportRepository,
     private val slackMainlineNotificationService: SlackMainlineNotificationService,
+    private val backgroundProcessing: BackgroundProcessing = BackgroundProcessing(),
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
-
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private val tracer = GlobalOpenTelemetry.getTracer("projektor.GroupedTestResultsService")
 
@@ -75,17 +71,11 @@ class GroupedTestResultsService(
         val groupOwnerPublicId = appendTestResultsService.claimTestRunGroup(group, repoAndOrgName, publicId)
         val existingPublicIdWithGroup = groupOwnerPublicId?.takeIf { it != publicId }
 
-        coroutineScope.launch {
-            // Processing errors are recorded by doAppendTestResults and doPersistTestResults, but recording them can
-            // fail too (e.g. when the server is shutting down), and nothing above this coroutine would handle that
-            try {
-                if (existingPublicIdWithGroup != null) {
-                    doAppendTestResults(existingPublicIdWithGroup, groupedResults, groupedResultsBlob)
-                } else {
-                    doPersistTestResults(publicId, groupedResults, groupedResultsBlob)
-                }
-            } catch (e: Exception) {
-                logger.error("Error processing test results $publicId", e)
+        backgroundProcessing.launch("processing test results $publicId") {
+            if (existingPublicIdWithGroup != null) {
+                doAppendTestResults(existingPublicIdWithGroup, groupedResults, groupedResultsBlob)
+            } else {
+                doPersistTestResults(publicId, groupedResults, groupedResultsBlob)
             }
         }
 

@@ -5,18 +5,24 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import org.awaitility.kotlin.await
+import org.awaitility.kotlin.until
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.Koin
 import org.koin.dsl.koinApplication
 import projektor.attachment.AttachmentRepository
 import projektor.coverage.CoverageRepository
+import projektor.incomingresults.TestResultsProcessingService
+import projektor.incomingresults.TestResultsService
 import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedResults
 import projektor.incomingresults.model.GroupedTestSuites
 import projektor.incomingresults.model.ResultsMetadata
+import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.incomingresults.randomPublicId
 import projektor.metadata.TestRunMetadataRepository
+import projektor.metrics.MetricsService
 import projektor.objectstore.ObjectDeletionException
 import projektor.objectstore.ObjectStoreClient
 import projektor.objectstore.ObjectStoreConfig
@@ -32,8 +38,10 @@ import projektor.performance.PerformanceResultsRepository
 import projektor.persistence.PersistenceInstrumentation
 import projektor.persistence.PersistenceType
 import projektor.repository.testrun.RepositoryTestRunRepository
+import projektor.results.processor.TestResultsProcessor
 import projektor.server.api.PublicId
 import projektor.server.api.attachments.Attachment
+import projektor.server.api.results.ResultsProcessingStatus
 import projektor.testrun.TestRunObjectStoreRepository
 import projektor.testrun.TestRunRepository
 import projektor.testrun.attributes.TestRunSystemAttributesRepository
@@ -45,6 +53,7 @@ import strikt.assertions.isEmpty
 import strikt.assertions.isEqualTo
 import strikt.assertions.isFalse
 import strikt.assertions.isNotEmpty
+import strikt.assertions.isNotEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 import strikt.assertions.isTrue
@@ -98,6 +107,88 @@ class ObjectStoreResilienceTest {
         expectThat(runBlocking { repositoryTestRunRepository.fetchRepositoryTestRunTimeline(repoName, null) }).isNull()
         expectThat(findCleanupCandidates()).isEmpty()
         expectThat(store.list("created/").objectNames).isEmpty()
+    }
+
+    @Test
+    fun `uploads should still get processed after failing to record an earlier upload's processing error`() {
+        val resultsProcessingRepository: ResultsProcessingRepository = koin.get()
+        val testResultsService =
+            TestResultsService(
+                TestResultsProcessor(),
+                testRunRepository,
+                TestResultsProcessingService(resultsProcessingRepository),
+                MetricsService(meterRegistry),
+            )
+        val resultsBlob =
+            "<testsuite name=\"a.B\" tests=\"1\" skipped=\"0\" failures=\"0\" errors=\"0\" time=\"1.0\">" +
+                "<testcase name=\"t\" classname=\"a.B\" time=\"1.0\"/></testsuite>"
+
+        // Fails updating the status, then recording the error that caused
+        client.failConditionalUpdatesContaining = "processing/"
+        runBlocking { testResultsService.persistTestResultsAsync(resultsBlob) }
+        Thread.sleep(500)
+        client.failConditionalUpdatesContaining = null
+
+        val laterUpload = runBlocking { testResultsService.persistTestResultsAsync(resultsBlob) }
+
+        await until {
+            runBlocking { resultsProcessingRepository.fetchResultsProcessing(laterUpload) }?.status == ResultsProcessingStatus.SUCCESS
+        }
+        expectThat(runBlocking { testRunRepository.fetchTestRunSummary(laterUpload) }).isNotNull()
+    }
+
+    @Test
+    fun `any repository name should save, index and read back without a stuck repair marker`() {
+        val unusualNames =
+            listOf(".", "..", "", "a".repeat(300), "a".repeat(1100), "ü".repeat(100), "org-${UUID.randomUUID()}/${"b".repeat(300)}")
+
+        unusualNames.forEach { repoName ->
+            val publicId = saveTestRun(repoName)
+
+            expectThat(timelinePublicIds(repoName)).containsExactly(publicId.id)
+        }
+
+        expectThat(store.list(TestRunIndex.indexRepairPrefix()).objectNames).isEmpty()
+
+        // The organization is the name up to the first slash, so most of these are their own organization
+        val longName = "a".repeat(300)
+        expectThat(runBlocking { testRunIndex.readOrganizationRepositoryNames(longName) }).containsExactly(longName)
+        expectThat(runBlocking { testRunIndex.readOrganizationRepositoryNames("..") }).containsExactly("..")
+    }
+
+    @Test
+    fun `long repository and group names that only differ at the end should be kept apart`() {
+        val commonStart = "a".repeat(300)
+
+        expectThat(TestRunIndex.encodeKeySegment("${commonStart}1")).isNotEqualTo(TestRunIndex.encodeKeySegment("${commonStart}2"))
+
+        val firstGroupOwner = randomPublicId()
+        val secondGroupOwner = randomPublicId()
+
+        runBlocking {
+            expectThat(testRunRepository.claimTestRunGroup("${commonStart}1", "org/repo", firstGroupOwner)).isEqualTo(firstGroupOwner)
+            expectThat(testRunRepository.claimTestRunGroup("${commonStart}2", "org/repo", secondGroupOwner)).isEqualTo(secondGroupOwner)
+            expectThat(testRunRepository.claimTestRunGroup("${commonStart}1", "org/repo", randomPublicId())).isEqualTo(firstGroupOwner)
+        }
+    }
+
+    @Test
+    fun `repair should give up on a marker that keeps failing once it is old, and keep retrying before then`() {
+        val publicId = saveTestRun(randomRepoName())
+        val oldMarkerKey = "${TestRunIndex.indexRepairPrefix()}old.json"
+        val newMarkerKey = "${TestRunIndex.indexRepairPrefix()}new.json"
+
+        store.write(
+            oldMarkerKey,
+            IndexRepairDocument(publicId.id, null, null, Instant.now().minus(TestRunIndex.MAX_REPAIR_MARKER_AGE).minusSeconds(60)),
+        )
+        store.write(newMarkerKey, IndexRepairDocument(publicId.id, null, null, Instant.now()))
+
+        client.failWritesContaining = "created/"
+        runBlocking { testRunIndex.repairIndex() }
+        client.failWritesContaining = null
+
+        expectThat(store.list(TestRunIndex.indexRepairPrefix()).objectNames).containsExactly(newMarkerKey)
     }
 
     @Test
@@ -594,6 +685,9 @@ class ObjectStoreResilienceTest {
         var failWritesContaining: String? = null
 
         @Volatile
+        var failConditionalUpdatesContaining: String? = null
+
+        @Volatile
         var failReadsContaining: String? = null
 
         @Volatile
@@ -629,6 +723,12 @@ class ObjectStoreResilienceTest {
         ): String {
             failWritesContaining?.let { text ->
                 if (objectName.contains(text)) throw IllegalStateException("Simulated failure writing $objectName")
+            }
+
+            failConditionalUpdatesContaining?.let { text ->
+                if (objectName.contains(text) && condition is WriteCondition.IfMatch) {
+                    throw IllegalStateException("Simulated failure updating $objectName")
+                }
             }
 
             val etag = super.putObject(bucketName, objectName, bytes, contentType, condition)

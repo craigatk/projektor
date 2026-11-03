@@ -16,9 +16,11 @@ import okhttp3.ConnectionPool
 import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import projektor.objectstore.bucket.BucketCreationException
+import java.io.IOException
 import java.io.InputStream
 import java.time.Instant
 import java.util.UUID
+import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.TimeUnit
 
 open class ObjectStoreClient internal constructor(
@@ -103,27 +105,29 @@ open class ObjectStoreClient internal constructor(
         val userMetadata = if (condition == WriteCondition.None) mapOf() else mapOf(WRITE_ID_METADATA to writeId)
 
         return telemetry.record("put", bucketName, objectName) {
-            try {
-                val response =
-                    minioClient.putObject(
-                        PutObjectArgs
-                            .builder()
-                            .bucket(bucketName)
-                            .`object`(objectName)
-                            .data(bytes, bytes.size)
-                            .contentType(contentType)
-                            .headers(conditionHeaders)
-                            .userMetadata(userMetadata)
-                            .build(),
-                    )
+            retryingNetworkFailures(bucketName) {
+                try {
+                    val response =
+                        minioClient.putObject(
+                            PutObjectArgs
+                                .builder()
+                                .bucket(bucketName)
+                                .`object`(objectName)
+                                .data(bytes, bytes.size)
+                                .contentType(contentType)
+                                .headers(conditionHeaders)
+                                .userMetadata(userMetadata)
+                                .build(),
+                        )
 
-                normalizeETag(response.etag())
-            } catch (e: ErrorResponseException) {
-                if (isPreconditionFailure(e)) {
-                    eTagIfWrittenBy(writeId, bucketName, objectName)
-                        ?: throw PreconditionFailedException(bucketName, objectName, condition, e)
-                } else {
-                    throw e
+                    normalizeETag(response.etag())
+                } catch (e: ErrorResponseException) {
+                    if (isPreconditionFailure(e)) {
+                        eTagIfWrittenBy(writeId, bucketName, objectName)
+                            ?: throw PreconditionFailedException(bucketName, objectName, condition, e)
+                    } else {
+                        throw e
+                    }
                 }
             }
         }
@@ -156,24 +160,26 @@ open class ObjectStoreClient internal constructor(
         objectName: String,
     ): StoredObject? =
         telemetry.record("get", bucketName, objectName, ::outcomeOfGet) {
-            try {
-                minioClient.getObject(
-                    GetObjectArgs
-                        .builder()
-                        .bucket(bucketName)
-                        .`object`(objectName)
-                        .build(),
-                ).use { response ->
-                    StoredObject(
-                        bytes = response.readBytes(),
-                        etag = requireETag(response.headers()["ETag"], bucketName, objectName),
-                    )
-                }
-            } catch (e: ErrorResponseException) {
-                if (e.errorResponse().code() == "NoSuchKey") {
-                    null
-                } else {
-                    throw e
+            retryingNetworkFailures(bucketName) {
+                try {
+                    minioClient.getObject(
+                        GetObjectArgs
+                            .builder()
+                            .bucket(bucketName)
+                            .`object`(objectName)
+                            .build(),
+                    ).use { response ->
+                        StoredObject(
+                            bytes = response.readBytes(),
+                            etag = requireETag(response.headers()["ETag"], bucketName, objectName),
+                        )
+                    }
+                } catch (e: ErrorResponseException) {
+                    if (e.errorResponse().code() == "NoSuchKey") {
+                        null
+                    } else {
+                        throw e
+                    }
                 }
             }
         }
@@ -186,20 +192,22 @@ open class ObjectStoreClient internal constructor(
         objectName: String,
     ): Boolean =
         telemetry.record("stat", bucketName, objectName) {
-            try {
-                minioClient.statObject(
-                    StatObjectArgs
-                        .builder()
-                        .bucket(bucketName)
-                        .`object`(objectName)
-                        .build(),
-                )
-                true
-            } catch (e: ErrorResponseException) {
-                if (e.errorResponse().code() == "NoSuchKey") {
-                    false
-                } else {
-                    throw e
+            retryingNetworkFailures(bucketName) {
+                try {
+                    minioClient.statObject(
+                        StatObjectArgs
+                            .builder()
+                            .bucket(bucketName)
+                            .`object`(objectName)
+                            .build(),
+                    )
+                    true
+                } catch (e: ErrorResponseException) {
+                    if (e.errorResponse().code() == "NoSuchKey") {
+                        false
+                    } else {
+                        throw e
+                    }
                 }
             }
         }
@@ -212,19 +220,21 @@ open class ObjectStoreClient internal constructor(
         objectName: String,
     ): Instant? =
         telemetry.record("stat", bucketName, objectName) {
-            try {
-                minioClient.statObject(
-                    StatObjectArgs
-                        .builder()
-                        .bucket(bucketName)
-                        .`object`(objectName)
-                        .build(),
-                ).lastModified().toInstant()
-            } catch (e: ErrorResponseException) {
-                if (e.errorResponse().code() == "NoSuchKey") {
-                    null
-                } else {
-                    throw e
+            retryingNetworkFailures(bucketName) {
+                try {
+                    minioClient.statObject(
+                        StatObjectArgs
+                            .builder()
+                            .bucket(bucketName)
+                            .`object`(objectName)
+                            .build(),
+                    ).lastModified().toInstant()
+                } catch (e: ErrorResponseException) {
+                    if (e.errorResponse().code() == "NoSuchKey") {
+                        null
+                    } else {
+                        throw e
+                    }
                 }
             }
         }
@@ -265,11 +275,13 @@ open class ObjectStoreClient internal constructor(
         // Recorded as one operation that covers every page it fetched.
         val items =
             telemetry.record("list", bucketName, prefix) {
-                minioClient.listObjects(argsBuilder.build())
-                    .asSequence()
-                    .map { it.get() }
-                    .let { if (limit != null) it.take(limit) else it }
-                    .toList()
+                retryingNetworkFailures(bucketName) {
+                    minioClient.listObjects(argsBuilder.build())
+                        .asSequence()
+                        .map { it.get() }
+                        .let { if (limit != null) it.take(limit) else it }
+                        .toList()
+                }
             }
 
         val (prefixItems, objectItems) = items.partition { it.isDir }
@@ -285,13 +297,15 @@ open class ObjectStoreClient internal constructor(
         objectName: String,
     ) {
         telemetry.record("delete", bucketName, objectName) {
-            minioClient.removeObject(
-                RemoveObjectArgs
-                    .builder()
-                    .bucket(bucketName)
-                    .`object`(objectName)
-                    .build(),
-            )
+            retryingNetworkFailures(bucketName) {
+                minioClient.removeObject(
+                    RemoveObjectArgs
+                        .builder()
+                        .bucket(bucketName)
+                        .`object`(objectName)
+                        .build(),
+                )
+            }
         }
     }
 
@@ -303,20 +317,22 @@ open class ObjectStoreClient internal constructor(
         objectNames.chunked(MAX_KEYS_PER_PAGE).forEach { objectNamesChunk ->
             val objects = objectNamesChunk.map { DeleteRequest.Object(it) }
             telemetry.record("deleteBatch", bucketName, null) {
-                val results =
-                    minioClient.removeObjects(
-                        RemoveObjectsArgs
-                            .builder()
-                            .bucket(bucketName)
-                            .objects(objects)
-                            .build(),
-                    )
-                // removeObjects only sends the delete requests as this iterable is consumed. The iterable yields an entry
-                // for each object that failed to delete, and get() only throws if the whole request failed.
-                val failures = results.map { it.get() }.filter { it.code() != "NoSuchKey" }
+                retryingNetworkFailures(bucketName) {
+                    val results =
+                        minioClient.removeObjects(
+                            RemoveObjectsArgs
+                                .builder()
+                                .bucket(bucketName)
+                                .objects(objects)
+                                .build(),
+                        )
+                    // removeObjects only sends the delete requests as this iterable is consumed. The iterable yields an entry
+                    // for each object that failed to delete, and get() only throws if the whole request failed.
+                    val failures = results.map { it.get() }.filter { it.code() != "NoSuchKey" }
 
-                if (failures.isNotEmpty()) {
-                    throw ObjectDeletionException(bucketName, failures.map { "${it.objectName()}: ${it.code()}" })
+                    if (failures.isNotEmpty()) {
+                        throw ObjectDeletionException(bucketName, failures.map { "${it.objectName()}: ${it.code()}" })
+                    }
                 }
             }
         }
@@ -330,6 +346,31 @@ open class ObjectStoreClient internal constructor(
 
         if (objectNames.isNotEmpty()) {
             removeObjects(bucketName, objectNames)
+        }
+    }
+
+    /**
+     * MinIO's HTTP client only retries failed statuses, so a dropped connection or timeout would otherwise fail the
+     * caller, and one failed write among the thousands in an upload would fail the upload. Every retried operation is
+     * safe to send again: conditional writes keep their write ID, so finding their own earlier write isn't a conflict.
+     * Streamed attachments aren't retried, since their stream has already been read.
+     */
+    private fun <T> retryingNetworkFailures(
+        bucketName: String,
+        block: () -> T,
+    ): T {
+        var attempt = 1
+
+        while (true) {
+            try {
+                return block()
+            } catch (e: Exception) {
+                if (attempt >= MAX_NETWORK_ATTEMPTS || !isNetworkFailure(e)) throw e
+
+                telemetry.recordNetworkRetry(bucketName)
+                Thread.sleep(ThreadLocalRandom.current().nextLong(NETWORK_RETRY_BACKOFF_MILLIS shl attempt))
+                attempt++
+            }
         }
     }
 
@@ -359,6 +400,9 @@ open class ObjectStoreClient internal constructor(
 
         private const val WRITE_ID_METADATA = "projektor-write-id"
 
+        private const val MAX_NETWORK_ATTEMPTS = 3
+        private const val NETWORK_RETRY_BACKOFF_MILLIS = 100L
+
         // Requests beyond this wait in a queue. Matches the threads of Dispatchers.IO, which all calls are made from.
         internal const val MAX_CONCURRENT_REQUESTS = 64
 
@@ -386,6 +430,10 @@ open class ObjectStoreClient internal constructor(
                 .readTimeout(READ_WRITE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
                 .writeTimeout(READ_WRITE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
                 .build()
+
+        // MinIO wraps network failures in its own exceptions. A response from the store is never a network failure.
+        private fun isNetworkFailure(e: Exception) =
+            e !is ErrorResponseException && generateSequence<Throwable>(e) { it.cause }.any { it is IOException }
 
         private fun outcomeOfGet(result: Any?) = if (result == null) ObjectStoreTelemetry.NOT_FOUND else ObjectStoreTelemetry.SUCCESS
 

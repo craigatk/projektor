@@ -1,9 +1,6 @@
 package projektor.incomingresults
 
 import com.fasterxml.jackson.core.JsonProcessingException
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 import projektor.metrics.MetricsService
 import projektor.parser.model.TestSuite
@@ -17,16 +14,15 @@ class TestResultsService(
     private val testRunRepository: TestRunRepository,
     private val testResultsProcessingService: TestResultsProcessingService,
     private val metricsService: MetricsService,
+    private val backgroundProcessing: BackgroundProcessing = BackgroundProcessing(),
 ) {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
-
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     suspend fun persistTestResultsAsync(resultsBlob: String): PublicId {
         val publicId = randomPublicId()
         testResultsProcessingService.createResultsProcessing(publicId)
 
-        coroutineScope.launch {
+        backgroundProcessing.launch("processing test results $publicId") {
             doPersistTestResults(publicId, resultsBlob)
         }
 
