@@ -28,7 +28,7 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
             val resultSet =
                 selectTestSuite(dslContext)
                     .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id).and(TEST_SUITE.IDX.eq(testSuiteIdx)))
-                    .orderBy(TEST_SUITE.ID)
+                    .orderBy(TEST_SUITE.ID, Tables.TEST_CASE.ID)
                     .fetchResultSet()
 
             val testSuite: TestSuite? =
@@ -57,7 +57,7 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
             val resultSet =
                 selectTestSuite(dslContext)
                     .where(conditions)
-                    .orderBy(TEST_SUITE.ID)
+                    .orderBy(TEST_SUITE.ID, Tables.TEST_CASE.ID)
                     .fetchResultSet()
 
             val testSuites =
@@ -124,7 +124,7 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
             val resultSet =
                 selectTestSuite(dslContext)
                     .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
-                    .orderBy(TEST_SUITE.ID)
+                    .orderBy(TEST_SUITE.ID, Tables.TEST_CASE.ID)
                     .fetchResultSet()
 
             return resultSet.use { testSuiteMapper.stream(resultSet).toList() }

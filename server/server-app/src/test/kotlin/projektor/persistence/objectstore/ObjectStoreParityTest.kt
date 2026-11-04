@@ -285,11 +285,10 @@ class ObjectStoreParityTest : ObjectStoreParityTestCase() {
 
     private fun expectSameTestRunData(publicId: PublicId) {
         // The database repository returns the test run's internal row ID as the summary ID, where the object store
-        // returns the public ID, so compare the summary separately via fetchTestRunSummary. The database's query also
-        // doesn't order the test suites, so compare them in index order.
+        // returns the public ID, so compare the summary separately via fetchTestRunSummary.
         expectSameResult { backend ->
             backend.testRunRepository.fetchTestRun(publicId)?.let { testRun ->
-                testRun.copy(summary = testRun.summary.copy(id = ""), testSuites = testRun.testSuites?.sortedBy { it.idx })
+                testRun.copy(summary = testRun.summary.copy(id = ""))
             }
         }
         expectSameResult { it.testRunRepository.fetchTestRunSummary(publicId) }
