@@ -1,6 +1,7 @@
 package projektor.incomingresults
 
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.RandomStringUtils
 import org.awaitility.kotlin.await
@@ -10,6 +11,8 @@ import org.jooq.DSLContext
 import org.junit.jupiter.api.Test
 import projektor.compare.PreviousTestRunService
 import projektor.incomingresults.model.GroupedResults
+import projektor.incomingresults.model.GroupedTestSuites
+import projektor.incomingresults.processing.ResultsProcessingRepository
 import projektor.metrics.MetricsService
 import projektor.notification.NotificationConfig
 import projektor.notification.github.GitHubPullRequestCommentService
@@ -39,7 +42,9 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isNotEqualTo
 import strikt.assertions.isNull
 import java.time.Duration
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * When the first upload with a results group fails to save its test run, its claim on the group is released
@@ -144,6 +149,51 @@ abstract class GroupClaimReleaseTest : RepositoryTestCase() {
         expectThat(runBlocking { repositoryWithoutClaimAge.claimTestRunGroup("B2", repoName, randomPublicId()) }).isEqualTo(savedPublicId)
     }
 
+    @Test
+    fun `when an append times out waiting for a test run still saving should keep that test run's group claim`() {
+        val saveGate = CompletableDeferred<Unit>()
+        val recordingProcessingRepository = RecordingResultsProcessingRepository(resultsProcessingRepository)
+        val groupedTestResultsService =
+            createGroupedTestResultsService(
+                SlowFirstSaveTestRunRepository(testRunRepository, saveGate),
+                recordingProcessingRepository,
+                1.seconds,
+            )
+        val repoName = "org-${RandomStringUtils.randomAlphabetic(10).lowercase()}/repo"
+        val resultsBody = groupedResultsBody(repoName = repoName, group = "B1")
+
+        val savingPublicId = runBlocking { groupedTestResultsService.persistTestResultsAsync(resultsBody) }
+        expectThat(runBlocking { groupedTestResultsService.persistTestResultsAsync(resultsBody) }).isEqualTo(savingPublicId)
+
+        await.atMost(30, TimeUnit.SECONDS) until { recordingProcessingRepository.errorPublicIds.isNotEmpty() }
+
+        // The append's failure says nothing about the save, which is still going
+        expectThat(recordingProcessingRepository.errorPublicIds.single()).isNotEqualTo(savingPublicId)
+        expectThat(runBlocking { resultsProcessingRepository.fetchResultsProcessing(savingPublicId)?.status })
+            .isEqualTo(ResultsProcessingStatus.RECEIVED)
+        expectThat(runBlocking { testRunRepository.claimTestRunGroup("B1", repoName, randomPublicId()) }).isEqualTo(savingPublicId)
+
+        saveGate.complete(Unit)
+        awaitProcessingStatus(savingPublicId, ResultsProcessingStatus.SUCCESS)
+    }
+
+    @Test
+    fun `when an append to a saved test run fails should record the error on that test run`() {
+        val recordingProcessingRepository = RecordingResultsProcessingRepository(resultsProcessingRepository)
+        val groupedTestResultsService =
+            createGroupedTestResultsService(FailAppendTestRunRepository(testRunRepository), recordingProcessingRepository)
+        val resultsBody = groupedResultsBody(repoName = "org-${RandomStringUtils.randomAlphabetic(10).lowercase()}/repo", group = "B1")
+
+        val savedPublicId = runBlocking { groupedTestResultsService.persistTestResultsAsync(resultsBody) }
+        awaitProcessingStatus(savedPublicId, ResultsProcessingStatus.SUCCESS)
+
+        expectThat(runBlocking { groupedTestResultsService.persistTestResultsAsync(resultsBody) }).isEqualTo(savedPublicId)
+
+        awaitProcessingStatus(savedPublicId, ResultsProcessingStatus.ERROR)
+        await.atMost(30, TimeUnit.SECONDS) until { recordingProcessingRepository.errorPublicIds.isNotEmpty() }
+        expectThat(recordingProcessingRepository.errorPublicIds.single()).isEqualTo(savedPublicId)
+    }
+
     protected abstract fun createTestRunRepository(abandonedGroupClaimAge: Duration): TestRunRepository
 
     private fun awaitProcessingStatus(
@@ -156,12 +206,16 @@ abstract class GroupClaimReleaseTest : RepositoryTestCase() {
         ) until { runBlocking { resultsProcessingRepository.fetchResultsProcessing(publicId)?.status } == status }
     }
 
-    private fun createGroupedTestResultsService(testRunRepository: TestRunRepository): GroupedTestResultsService {
+    private fun createGroupedTestResultsService(
+        testRunRepository: TestRunRepository,
+        processingRepository: ResultsProcessingRepository = resultsProcessingRepository,
+        waitForTestRunTimeout: kotlin.time.Duration = 60.seconds,
+    ): GroupedTestResultsService {
         val notificationConfig = NotificationConfig(null)
         val previousTestRunService = PreviousTestRunService(previousTestRunRepository)
 
         return GroupedTestResultsService(
-            TestResultsProcessingService(resultsProcessingRepository),
+            TestResultsProcessingService(processingRepository),
             GroupedResultsConverter(
                 GroupedResultsParser(GroupedResultsParser.DEFAULT_MAX_PAYLOAD_SIZE),
                 PerformanceResultsParser(),
@@ -173,7 +227,7 @@ abstract class GroupClaimReleaseTest : RepositoryTestCase() {
             MetricsService(SimpleMeterRegistry()),
             GitHubPullRequestCommentService(notificationConfig, null),
             coverageService,
-            AppendTestResultsService(testRunRepository, testSuiteRepository, resultsProcessingRepository),
+            AppendTestResultsService(testRunRepository, testSuiteRepository, processingRepository, waitForTestRunTimeout),
             codeQualityReportRepository,
             SlackMainlineNotificationService(
                 notificationConfig,
@@ -217,6 +271,51 @@ abstract class GroupClaimReleaseTest : RepositoryTestCase() {
 
             return delegate.saveGroupedTestRun(publicId, groupedResults)
         }
+    }
+
+    private class SlowFirstSaveTestRunRepository(
+        private val delegate: TestRunRepository,
+        private val saveGate: CompletableDeferred<Unit>,
+    ) : TestRunRepository by delegate {
+        @Volatile
+        private var holdNextSave = true
+
+        override suspend fun saveGroupedTestRun(
+            publicId: PublicId,
+            groupedResults: GroupedResults,
+        ): TestRunSummary {
+            if (holdNextSave) {
+                holdNextSave = false
+                saveGate.await()
+            }
+
+            return delegate.saveGroupedTestRun(publicId, groupedResults)
+        }
+    }
+
+    private class FailAppendTestRunRepository(private val delegate: TestRunRepository) : TestRunRepository by delegate {
+        override suspend fun appendTestSuites(
+            publicId: PublicId,
+            startingIdx: Int,
+            groupedTestSuites: List<GroupedTestSuites>,
+        ) {
+            throw IllegalStateException("Simulated failure appending to test run $publicId")
+        }
+    }
+
+    private class RecordingResultsProcessingRepository(
+        private val delegate: ResultsProcessingRepository,
+    ) : ResultsProcessingRepository by delegate {
+        val errorPublicIds = CopyOnWriteArrayList<PublicId>()
+
+        override suspend fun recordResultsProcessingError(
+            publicId: PublicId,
+            resultsBody: String,
+            errorMessage: String?,
+        ): Boolean =
+            delegate.recordResultsProcessingError(publicId, resultsBody, errorMessage).also {
+                errorPublicIds.add(publicId)
+            }
     }
 }
 

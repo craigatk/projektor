@@ -33,7 +33,7 @@ fun Route.attachments(
                 call.receiveStream()
             }
 
-        val contentLengthInBytes = call.request.header("content-length")?.toLong()
+        val contentLengthInBytes = call.request.header("content-length")?.toLongOrNull()
 
         if (!authService.isAuthValid(call.request.header(AuthConfig.PUBLISH_TOKEN))) {
             call.respond(HttpStatusCode.Unauthorized)
@@ -51,6 +51,8 @@ fun Route.attachments(
 
                 when (addAttachmentResult) {
                     AddAttachmentResult.Success -> call.respond(HttpStatusCode.OK, AddAttachmentResponse(attachmentName, null))
+                    AddAttachmentResult.TooLarge ->
+                        call.respond(HttpStatusCode.BadRequest, AddAttachmentResponse(null, AddAttachmentError.ATTACHMENT_TOO_LARGE))
                     is AddAttachmentResult.Failure ->
                         call.respond(
                             HttpStatusCode.BadRequest,

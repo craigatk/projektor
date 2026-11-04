@@ -9,10 +9,14 @@ import projektor.error.ProcessingFailureService
 
 fun Route.failure(processingFailureService: ProcessingFailureService) {
     get("/failures/recent") {
-        val count = (call.request.queryParameters["count"] ?: "5").toInt()
+        val count = (call.request.queryParameters["count"] ?: "5").toIntOrNull()
 
-        val failures = processingFailureService.fetchRecentProcessingFailures(count)
+        if (count == null) {
+            call.respond(HttpStatusCode.BadRequest)
+        } else {
+            val failures = processingFailureService.fetchRecentProcessingFailures(count)
 
-        call.respond(HttpStatusCode.OK, failures)
+            call.respond(HttpStatusCode.OK, failures)
+        }
     }
 }
