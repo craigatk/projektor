@@ -55,7 +55,7 @@ jobs:
       run: ./gradlew :server:test:load-test:loadTest
 
     - name: Projektor results
-      uses: craigatk/projektor-action@v16.0.0
+      uses: craigatk/projektor-action@v16.0.1
       if: failure() || success()
       with:
         server-url: https://live.projektor.dev
