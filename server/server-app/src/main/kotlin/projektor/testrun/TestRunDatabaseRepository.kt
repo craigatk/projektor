@@ -310,7 +310,7 @@ class TestRunDatabaseRepository(
                     .leftOuterJoin(TEST_SUITE).on(TEST_SUITE.TEST_RUN_ID.eq(TEST_RUN.ID))
                     .leftOuterJoin(TEST_SUITE_GROUP).on(TEST_SUITE.TEST_SUITE_GROUP_ID.eq(TEST_SUITE_GROUP.ID))
                     .where(TEST_RUN.PUBLIC_ID.eq(publicId.id))
-                    .orderBy(TEST_RUN.ID)
+                    .orderBy(TEST_RUN.ID, TEST_SUITE.ID)
                     .fetchResultSet()
 
             val mapperSpan = tracer.startSpanWithParent("projektor.fetchTestRun.mapper")
