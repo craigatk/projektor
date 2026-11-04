@@ -1,13 +1,11 @@
 package projektor.error
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import projektor.objectstore.json.JsonObjectStore
 import projektor.persistence.objectstore.ObjectStoreKeys
 import projektor.persistence.objectstore.ProcessingFailureDocument
+import projektor.persistence.objectstore.mapParallel
 import projektor.persistence.objectstore.toStoredPrecision
 import projektor.server.api.PublicId
 import projektor.server.api.error.FailureBodyType
@@ -40,26 +38,24 @@ class ProcessingFailureObjectStoreRepository(private val store: JsonObjectStore)
             )
         }
 
-    override suspend fun fetchRecentProcessingFailures(failureCount: Int): List<ResultsProcessingFailure> =
-        coroutineScope {
-            // Keys sort newest first
-            val failureKeys =
-                withContext(Dispatchers.IO) {
-                    store.list(ObjectStoreKeys.PROCESSING_FAILURES_PREFIX, limit = failureCount).objectNames
-                }
+    override suspend fun fetchRecentProcessingFailures(failureCount: Int): List<ResultsProcessingFailure> {
+        // Keys sort newest first
+        val failureKeys =
+            withContext(Dispatchers.IO) {
+                store.list(ObjectStoreKeys.PROCESSING_FAILURES_PREFIX, limit = failureCount).objectNames
+            }
 
-            failureKeys
-                .map { key -> async(Dispatchers.IO) { store.read<ProcessingFailureDocument>(key) } }
-                .awaitAll()
-                .filterNotNull()
-                .map {
-                    ResultsProcessingFailure(
-                        id = it.publicId,
-                        body = it.body,
-                        bodyType = FailureBodyType.valueOf(it.bodyType),
-                        createdTimestamp = it.createdTimestamp.toInstant(ZoneOffset.UTC),
-                        failureMessage = it.failureMessage,
-                    )
-                }
-        }
+        return failureKeys
+            .mapParallel { key -> store.read<ProcessingFailureDocument>(key) }
+            .filterNotNull()
+            .map {
+                ResultsProcessingFailure(
+                    id = it.publicId,
+                    body = it.body,
+                    bodyType = FailureBodyType.valueOf(it.bodyType),
+                    createdTimestamp = it.createdTimestamp.toInstant(ZoneOffset.UTC),
+                    failureMessage = it.failureMessage,
+                )
+            }
+    }
 }

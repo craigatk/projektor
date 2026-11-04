@@ -20,5 +20,10 @@ class ProcessingFailureService(private val processingFailureRepository: Processi
     }
 
     suspend fun fetchRecentProcessingFailures(failureCount: Int): List<ResultsProcessingFailure> =
-        processingFailureRepository.fetchRecentProcessingFailures(failureCount)
+        processingFailureRepository.fetchRecentProcessingFailures(failureCount.coerceIn(1, MAX_RECENT_FAILURES))
+
+    companion object {
+        // Each failure holds a whole upload's body, so this bounds the memory one request can use
+        const val MAX_RECENT_FAILURES = 100
+    }
 }

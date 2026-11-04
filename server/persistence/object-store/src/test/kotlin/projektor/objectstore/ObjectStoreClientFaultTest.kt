@@ -1,5 +1,6 @@
 package projektor.objectstore
 
+import io.minio.errors.ErrorResponseException
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Protocol
@@ -85,6 +86,30 @@ class ObjectStoreClientFaultTest {
         .message("Simulated")
         .body(body.toResponseBody("application/xml".toMediaType()))
         .build()
+
+    @Test
+    fun `getting an object should throw when the store returns an error, not report the object as missing`() {
+        val objectName = "$keyPrefix-attachment"
+
+        listOf(403 to "AccessDenied", 500 to "InternalError").forEach { (status, errorCode) ->
+            fault = { chain ->
+                if (chain.request().url.encodedPath.endsWith(objectName)) {
+                    response(chain, status, "<Error><Code>$errorCode</Code><Message>Simulated</Message></Error>")
+                        .newBuilder()
+                        .header("Content-Type", "application/xml")
+                        .build()
+                } else {
+                    null
+                }
+            }
+
+            expectThrows<ErrorResponseException> { faultyClient.getObject(bucketName, objectName) }
+        }
+
+        fault = { null }
+
+        expectThat(faultyClient.getObject(bucketName, objectName)).isNull()
+    }
 
     @Test
     fun `creating a document should succeed when the client retries a write that committed`() {

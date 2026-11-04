@@ -73,7 +73,7 @@ class GroupedTestResultsService(
 
         backgroundProcessing.launch("processing test results $publicId") {
             if (existingPublicIdWithGroup != null) {
-                doAppendTestResults(existingPublicIdWithGroup, groupedResults, groupedResultsBlob)
+                doAppendTestResults(existingPublicIdWithGroup, publicId, groupedResults, groupedResultsBlob)
             } else {
                 doPersistTestResults(publicId, groupedResults, groupedResultsBlob)
             }
@@ -155,6 +155,7 @@ class GroupedTestResultsService(
 
     private suspend fun doAppendTestResults(
         publicId: PublicId,
+        uploadPublicId: PublicId,
         groupedResults: GroupedResults,
         groupedResultsBlob: String,
     ) {
@@ -178,10 +179,21 @@ class GroupedTestResultsService(
         } catch (e: Exception) {
             val errorMessage = "Error appending test results: ${e.message}"
             logger.error(errorMessage, e)
-            testResultsProcessingService.recordResultsProcessingError(publicId, groupedResultsBlob, errorMessage)
+            // An error on a test run that isn't saved yet means its own save failed, which other uploads act on by
+            // giving up on it and taking over its group. It may just be slow, so this upload's error stays on its own ID.
+            val errorPublicId = if (testRunIsSaved(publicId)) publicId else uploadPublicId
+            testResultsProcessingService.recordResultsProcessingError(errorPublicId, groupedResultsBlob, errorMessage)
             metricsService.incrementResultsProcessFailureCounter()
         }
     }
+
+    private suspend fun testRunIsSaved(publicId: PublicId): Boolean =
+        try {
+            testRunRepository.fetchTestRunSummary(publicId) != null
+        } catch (e: Exception) {
+            logger.error("Error checking whether test run $publicId is saved", e)
+            false
+        }
 
     private suspend fun saveCoverage(
         publicId: PublicId,

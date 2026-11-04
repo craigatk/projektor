@@ -60,6 +60,12 @@ class ProcessingFailureApplicationTest : ApplicationTestCase() {
             }
         }
 
+    @Test
+    fun `should reject a count that isn't a number`() =
+        projektorTestApplication {
+            expectThat(client.get("/failures/recent?count=lots").status).isEqualTo(HttpStatusCode.BadRequest)
+        }
+
     private fun insertProcessingFailure(
         publicId: PublicId,
         body: String,

@@ -32,13 +32,16 @@ class AttachmentService(
         }
     }
 
-    fun attachmentSizeValid(attachmentSizeInBytes: Long?): Boolean {
-        val maxSizeInBytes = config.maxSizeMB?.let { it * BigDecimal.valueOf(1024) * BigDecimal.valueOf(1024) }
+    private val maxSizeInBytes = config.maxSizeMB?.let { it * BigDecimal.valueOf(1024) * BigDecimal.valueOf(1024) }
 
-        return maxSizeInBytes == null ||
+    /**
+     * Rejects an attachment before reading it when its size is known. An upload that doesn't send its size
+     * is held to the limit by [addAttachment] instead.
+     */
+    fun attachmentSizeValid(attachmentSizeInBytes: Long?): Boolean =
+        maxSizeInBytes == null ||
             attachmentSizeInBytes == null ||
             attachmentSizeInBytes.toBigDecimal() <= maxSizeInBytes
-    }
 
     suspend fun addAttachment(
         publicId: PublicId,
@@ -47,10 +50,11 @@ class AttachmentService(
         attachmentSize: Long?,
     ): AddAttachmentResult {
         val objectName = attachmentObjectName(publicId, fileName)
+        val limitedStream = SizeLimitedInputStream(attachmentStream, maxSizeInBytes?.toLong() ?: Long.MAX_VALUE)
 
         return try {
             withContext(Dispatchers.IO) {
-                objectStoreClient.putObject(config.bucketName, objectName, attachmentStream)
+                objectStoreClient.putObject(config.bucketName, objectName, limitedStream)
             }
 
             attachmentRepository.addAttachment(
@@ -60,8 +64,13 @@ class AttachmentService(
 
             AddAttachmentResult.Success
         } catch (e: Exception) {
-            logger.error("Error saving attachment '$fileName' for test run ${publicId.id}", e)
-            AddAttachmentResult.Failure(e.message)
+            if (limitedStream.limitExceeded) {
+                logger.info("Rejected attachment '$fileName' for test run ${publicId.id} over the maximum size")
+                AddAttachmentResult.TooLarge
+            } else {
+                logger.error("Error saving attachment '$fileName' for test run ${publicId.id}", e)
+                AddAttachmentResult.Failure(e.message)
+            }
         }
     }
 

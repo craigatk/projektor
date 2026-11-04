@@ -356,6 +356,21 @@ Found by auditing the object-store code paths before running it on a real instan
   SHA-256 hash, with the organization index reading those names from its document. Other names keep the same keys.
 - Repair markers that keep failing are given up on after 7 days (`TestRunIndex.MAX_REPAIR_MARKER_AGE`), with an error log.
 
+### Fifth pre-production audit fixes
+
+- A slow save could split a results group into two test runs, on both backends. An append that timed out waiting for the
+  group's test run recorded `ERROR` on that test run while it was still saving, which made other waiting uploads fail
+  and the next upload take over the group. An append's failure now only goes on the test run once it's saved, and
+  otherwise on the upload's own public ID. The append's results are still not added when it times out.
+- `ObjectStoreClient.getObject` returned null for every error from the store, so an attachment store outage looked like
+  a 404 and was counted as `not_found`. Only a missing object returns null now, and other errors fail the request with
+  a 500.
+- `GET /failures/recent` limits `count` to 1-100 (`ProcessingFailureService.MAX_RECENT_FAILURES`) and returns a 400 if it
+  isn't a number. The object store reads at most 16 failures at a time, since each holds a whole upload's body.
+- The attachment size limit only checked `Content-Length`, so an upload without one had no limit.
+  `SizeLimitedInputStream` now enforces it while reading, returning `ATTACHMENT_TOO_LARGE`. An invalid `Content-Length`
+  no longer causes a 500.
+
 ## Risks and open questions
 
 - Motivation (dropping Postgres for cost/ops, or something else) decides how hard to push on cross-run performance.

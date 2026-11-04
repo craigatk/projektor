@@ -148,7 +148,11 @@ open class ObjectStoreClient internal constructor(
                         .build(),
                 )
             } catch (e: ErrorResponseException) {
-                null
+                if (e.errorResponse().code() == "NoSuchKey") {
+                    null
+                } else {
+                    throw e
+                }
             }
         }
 
