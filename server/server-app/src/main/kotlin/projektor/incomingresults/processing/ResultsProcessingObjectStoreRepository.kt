@@ -19,11 +19,11 @@ class ResultsProcessingObjectStoreRepository(
 ) : ResultsProcessingRepository {
     override suspend fun createResultsProcessing(publicId: PublicId): ResultsProcessing =
         withContext(Dispatchers.IO) {
-            val createdTimestamp = LocalDateTime.now()
+            val createdTimestamp = LocalDateTime.now().toStoredPrecision()
 
             store.create(
                 ObjectStoreKeys.resultsProcessing(publicId),
-                ResultsProcessingDocument(ResultsProcessingStatus.RECEIVED.name, createdTimestamp.toStoredPrecision(), null),
+                ResultsProcessingDocument(ResultsProcessingStatus.RECEIVED.name, createdTimestamp, null),
             ) ?: throw IllegalStateException("Results processing for $publicId already exists")
 
             ResultsProcessing(publicId.id, ResultsProcessingStatus.RECEIVED, createdTimestamp, null)

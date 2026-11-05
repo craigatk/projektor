@@ -7,6 +7,7 @@ import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables
 import projektor.database.generated.tables.daos.ResultsProcessingDao
 import projektor.error.ProcessingFailureRepository
+import projektor.persistence.objectstore.toStoredPrecision
 import projektor.server.api.PublicId
 import projektor.server.api.error.FailureBodyType
 import projektor.server.api.results.ResultsProcessing
@@ -28,7 +29,7 @@ class ResultsProcessingDatabaseRepository(
 
     override suspend fun createResultsProcessing(publicId: PublicId): ResultsProcessing =
         withContext(Dispatchers.IO) {
-            val createdTimestamp = LocalDateTime.now()
+            val createdTimestamp = LocalDateTime.now().toStoredPrecision()
 
             val resultsProcessingDB =
                 ResultsProcessingDB()

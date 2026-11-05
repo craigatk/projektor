@@ -5,6 +5,7 @@ import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
 import projektor.database.generated.Tables
 import projektor.database.generated.tables.daos.ResultsProcessingFailureDao
+import projektor.persistence.objectstore.toStoredPrecision
 import projektor.server.api.PublicId
 import projektor.server.api.error.FailureBodyType
 import projektor.server.api.error.ResultsProcessingFailure
@@ -26,7 +27,7 @@ class ProcessingFailureDatabaseRepository(private val dslContext: DSLContext) : 
         resultsProcessingFailureDB.body = body
         resultsProcessingFailureDB.bodyType = bodyType.name
         resultsProcessingFailureDB.failureMessage = failureMessage
-        resultsProcessingFailureDB.createdTimestamp = LocalDateTime.now()
+        resultsProcessingFailureDB.createdTimestamp = LocalDateTime.now().toStoredPrecision()
         resultsProcessingFailureDao.insert(resultsProcessingFailureDB)
 
         return ResultsProcessingFailure(
