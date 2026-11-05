@@ -4,6 +4,14 @@
 
 Full list of releases and the packaged server .jar file for each release at: https://github.com/craigatk/projektor/releases
 
+* v6.7.1
+  * Fixing server startup crashes from conflicting BouncyCastle versions and when `MAX_PAYLOAD_SIZE` is set
+  * Fixing uploads not being processed after an earlier upload failed, and scheduled jobs stopping after a failure
+  * Hardening object store persistence with request retries, index repair, more thorough cleanup, and startup checks of the store
+  * Adding `PROCESSING_SHUTDOWN_TIMEOUT_SECONDS` to set how long the server waits on shutdown for accepted uploads to finish (default 25)
+  * Rejecting non-alphanumeric public IDs and attachment names containing a slash
+* v6.7.0
+  * Adding metrics, tracing, and slow-call logging to the persistence layer
 * v6.6.0
   * Adding alpha support for storing test results in an S3-compatible object store instead of Postgres, selected with `PERSISTENCE_TYPE=object-store`
   * Fixing races when concurrent uploads append test results or coverage to the same test run or results group
