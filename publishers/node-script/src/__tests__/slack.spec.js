@@ -7,7 +7,9 @@ const {
 const fs = require("fs");
 
 describe("slack messages", () => {
-  const slackMessageFileName = "projektor_failure_message.json";
+  // Unique name so this doesn't collide with index-slack.spec.js, which uses
+  // the default file name and may run in parallel in another Jest worker
+  const slackMessageFileName = "projektor_slack_spec_message.json";
 
   afterEach(() => {
     if (fs.existsSync(slackMessageFileName)) {
