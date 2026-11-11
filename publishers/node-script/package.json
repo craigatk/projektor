@@ -55,7 +55,7 @@
       "js-yaml": "5.5.0"
     },
     "glob": "14.0.4",
-    "minimatch": "11.0.6"
+    "minimatch": "11.0.8"
   },
   "resolutions": {
     "wrap-ansi": "10.0.2",
