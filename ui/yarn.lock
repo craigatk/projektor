@@ -3021,10 +3021,10 @@ glob-parent@^5.1.2:
   dependencies:
     is-glob "^4.0.1"
 
-glob@14.0.3, glob@14.0.4, glob@^13.0.1, glob@^14.0.3, glob@^7.1.6:
-  version "14.0.4"
-  resolved "https://registry.yarnpkg.com/glob/-/glob-14.0.4.tgz#008a99c94b6e617b5f13fe9784adef2a78af977e"
-  integrity sha512-mMiwNKoJZ4HAIRVJxotO6LsNRReA30gQwP9E2/p94tfLv+jygCNpKDjhhSL6OLY6LE371EZm5EAf7RpYuUqlsw==
+glob@14.0.3, glob@14.0.5, glob@^13.0.1, glob@^14.0.3, glob@^7.1.6:
+  version "14.0.5"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-14.0.5.tgz#54cdf0bfe9de24f140d7cbb244f7395165450182"
+  integrity sha512-nbKW5Sl53DEM5PkmZ5Jwfeyss1ohuqcgOBjOarSjz1fp8W4ss4EOOvKADQRbApD6JmVBX+HkpZYfBez4wXbeQQ==
   dependencies:
     minimatch "^11.0.5"
     minipass "^7.1.3"
