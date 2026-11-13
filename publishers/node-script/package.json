@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "axios": "1.21.1",
-    "glob": "14.0.5",
+    "glob": "14.0.6",
     "lodash": "4.18.1",
     "minimist": "1.2.8",
     "node-gzip": "1.1.2"
@@ -54,7 +54,7 @@
     "@istanbuljs/load-nyc-config": {
       "js-yaml": "5.5.0"
     },
-    "glob": "14.0.5",
+    "glob": "14.0.6",
     "minimatch": "11.0.8"
   },
   "resolutions": {
