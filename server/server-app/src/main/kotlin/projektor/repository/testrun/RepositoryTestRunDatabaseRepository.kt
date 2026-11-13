@@ -8,7 +8,6 @@ import org.jooq.DSLContext
 import org.jooq.impl.DSL.count
 import org.jooq.impl.DSL.min
 import org.jooq.impl.DSL.noCondition
-import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables.CODE_COVERAGE_RUN
 import projektor.database.generated.Tables.GIT_METADATA
 import projektor.database.generated.Tables.RESULTS_METADATA
@@ -21,25 +20,19 @@ import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.RepositoryTestRunTimeline
 import projektor.server.api.repository.RepositoryTestRunTimelineEntry
 import projektor.telemetry.startSpanWithParent
-import projektor.testcase.TestCaseDatabaseRepository
 import projektor.testcase.TestCaseDatabaseRepository.Companion.selectTestCase
-import kotlin.streams.toList
+import projektor.testcase.TestCaseDatabaseRepository.Companion.toTestCase
+import projektor.util.toInstantInDefaultZone
 
 class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : RepositoryTestRunRepository {
     private val tracer = GlobalOpenTelemetry.getTracer("projektor.RepositoryTestRunDatabaseRepository")
-
-    private val timelineEntryMapper =
-        JdbcMapperFactory.newInstance()
-            .addKeys("public_id")
-            .ignorePropertyNotFound()
-            .newMapper(RepositoryTestRunTimelineEntry::class.java)
 
     override suspend fun fetchRepositoryTestRunTimeline(
         repoName: String,
         projectName: String?,
     ): RepositoryTestRunTimeline? =
         withContext(Dispatchers.IO) {
-            val resultSet =
+            val timelineEntries =
                 dslContext.select(
                     TEST_RUN.PUBLIC_ID,
                     TEST_RUN.CREATED_TIMESTAMP,
@@ -53,12 +46,16 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
                     .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
                     .where(runInCIFromRepo(repoName, projectName))
                     .orderBy(TEST_RUN.CREATED_TIMESTAMP.asc(), TEST_RUN.ID.asc())
-                    .fetchResultSet()
-
-            val timelineEntries: List<RepositoryTestRunTimelineEntry> =
-                resultSet.use {
-                    timelineEntryMapper.stream(resultSet).toList()
-                }
+                    .fetch { record ->
+                        RepositoryTestRunTimelineEntry(
+                            publicId = record.get(TEST_RUN.PUBLIC_ID),
+                            createdTimestamp = record.get(TEST_RUN.CREATED_TIMESTAMP).toInstantInDefaultZone(),
+                            cumulativeDuration = record.get(TEST_RUN.CUMULATIVE_DURATION),
+                            wallClockDuration = record.get(TEST_RUN.WALL_CLOCK_DURATION),
+                            totalTestCount = record.get(TEST_RUN.TOTAL_TEST_COUNT),
+                            passed = record.get(TEST_RUN.PASSED),
+                        )
+                    }
 
             if (timelineEntries.isNotEmpty()) RepositoryTestRunTimeline(timelineEntries) else null
         }
@@ -122,38 +119,33 @@ class RepositoryTestRunDatabaseRepository(private val dslContext: DSLContext) : 
         branchType: BranchType,
     ): List<TestCase> =
         withContext(Dispatchers.IO) {
-            val resultSet =
-                selectTestCase(dslContext)
-                    .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
-                    .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
-                    .where(
-                        runInCIFromRepo(repoName, projectName)
-                            .and(TEST_CASE.PASSED.eq(false))
-                            .and(withBranchType(branchType))
-                            .and(
-                                TEST_RUN.CREATED_TIMESTAMP.ge(
-                                    dslContext
-                                        .select(min(TEST_RUN.`as`("x").CREATED_TIMESTAMP))
-                                        .from(
-                                            (
-                                                dslContext.select(TEST_RUN.CREATED_TIMESTAMP)
-                                                    .from(TEST_RUN)
-                                                    .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
-                                                    .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
-                                                    .where(runInCIFromRepo(repoName, projectName).and(withBranchType(branchType)))
-                                                    .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
-                                                    .limit(maxRuns)
-                                            ).asTable("x"),
-                                        ),
-                                ),
+            selectTestCase(dslContext)
+                .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
+                .where(
+                    runInCIFromRepo(repoName, projectName)
+                        .and(TEST_CASE.PASSED.eq(false))
+                        .and(withBranchType(branchType))
+                        .and(
+                            TEST_RUN.CREATED_TIMESTAMP.ge(
+                                dslContext
+                                    .select(min(TEST_RUN.`as`("x").CREATED_TIMESTAMP))
+                                    .from(
+                                        (
+                                            dslContext.select(TEST_RUN.CREATED_TIMESTAMP)
+                                                .from(TEST_RUN)
+                                                .innerJoin(GIT_METADATA).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
+                                                .innerJoin(RESULTS_METADATA).on(TEST_RUN.ID.eq(RESULTS_METADATA.TEST_RUN_ID))
+                                                .where(runInCIFromRepo(repoName, projectName).and(withBranchType(branchType)))
+                                                .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                                                .limit(maxRuns)
+                                        ).asTable("x"),
+                                    ),
                             ),
-                    )
-                    .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
-                    .fetchResultSet()
-
-            val testCases = resultSet.use { TestCaseDatabaseRepository.testCaseMapper.stream(it).toList() }
-
-            testCases
+                        ),
+                )
+                .orderBy(TEST_RUN.CREATED_TIMESTAMP.desc().nullsLast())
+                .fetch { it.toTestCase() }
         }
 
     override suspend fun fetchRecentTestRunPublicIds(

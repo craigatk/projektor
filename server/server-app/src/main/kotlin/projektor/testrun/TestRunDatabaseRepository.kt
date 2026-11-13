@@ -7,7 +7,6 @@ import org.jooq.Configuration
 import org.jooq.DSLContext
 import org.jooq.impl.DSL
 import org.jooq.impl.SQLDataType
-import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import org.slf4j.LoggerFactory
 import projektor.database.generated.Tables.GIT_METADATA
 import projektor.database.generated.Tables.GIT_REPOSITORY
@@ -26,6 +25,7 @@ import projektor.database.generated.tables.daos.TestFailureDao
 import projektor.database.generated.tables.daos.TestRunDao
 import projektor.database.generated.tables.daos.TestSuiteDao
 import projektor.database.generated.tables.daos.TestSuiteGroupDao
+import projektor.database.generated.tables.records.TestRunRecord
 import projektor.incomingresults.mapper.toDB
 import projektor.incomingresults.mapper.toTestRunSummary
 import projektor.incomingresults.mapper.toTestRunSummaryFromApi
@@ -39,8 +39,11 @@ import projektor.server.api.TestRunSummary
 import projektor.server.api.results.ResultsProcessingStatus
 import projektor.telemetry.startSpanWithParent
 import projektor.testsuite.TestSuiteDatabaseRepository
-import projektor.util.addPrefixToFields
+import projektor.testsuite.TestSuiteDatabaseRepository.Companion.testSuiteFieldsToSelect
+import projektor.testsuite.TestSuiteDatabaseRepository.Companion.testSuiteGroupFieldsToSelect
+import projektor.testsuite.TestSuiteDatabaseRepository.Companion.toTestSuite
 import projektor.util.lockUntilTransactionEnds
+import projektor.util.toInstantInDefaultZone
 import java.math.BigDecimal
 import java.time.Duration
 import java.time.Instant
@@ -55,12 +58,6 @@ class TestRunDatabaseRepository(
     private val abandonedGroupClaimAge: Duration = TestRunRepository.ABANDONED_GROUP_CLAIM_AGE,
 ) : TestRunRepository {
     private val logger = LoggerFactory.getLogger(javaClass.canonicalName)
-
-    private val testRunMapper =
-        JdbcMapperFactory.newInstance()
-            .addKeys("id", "test_suites_id")
-            .ignorePropertyNotFound()
-            .newMapper(TestRun::class.java)
 
     private val tracer = GlobalOpenTelemetry.getTracer("projektor.TestRunDatabaseRepository")
 
@@ -299,25 +296,34 @@ class TestRunDatabaseRepository(
         withContext(Dispatchers.IO) {
             val span = tracer.startSpanWithParent("projektor.fetchTestRun")
 
-            val resultSet =
+            val rows =
                 dslContext
-                    .select(TEST_RUN.PUBLIC_ID.`as`("id"))
-                    .select(TEST_RUN.addPrefixToFields("summary"))
-                    .select(TEST_SUITE.addPrefixToFields("test_suites_"))
-                    .select(TEST_SUITE_GROUP.GROUP_LABEL.`as`("test_suites_group_label"))
-                    .select(TEST_SUITE_GROUP.GROUP_NAME.`as`("test_suites_group_name"))
+                    .select(TEST_RUN.fields().toList())
+                    .select(testSuiteFieldsToSelect)
+                    .select(testSuiteGroupFieldsToSelect)
                     .from(TEST_RUN)
                     .leftOuterJoin(TEST_SUITE).on(TEST_SUITE.TEST_RUN_ID.eq(TEST_RUN.ID))
                     .leftOuterJoin(TEST_SUITE_GROUP).on(TEST_SUITE.TEST_SUITE_GROUP_ID.eq(TEST_SUITE_GROUP.ID))
                     .where(TEST_RUN.PUBLIC_ID.eq(publicId.id))
                     .orderBy(TEST_RUN.ID, TEST_SUITE.ID)
-                    .fetchResultSet()
+                    .fetch()
 
             val mapperSpan = tracer.startSpanWithParent("projektor.fetchTestRun.mapper")
 
             val testRun: TestRun? =
-                resultSet.use {
-                    testRunMapper.stream(resultSet).findFirst().orElse(null)
+                rows.firstOrNull()?.let { firstRow ->
+                    val testRunRecord = firstRow.into(TEST_RUN)
+
+                    TestRun(
+                        id = testRunRecord.publicId,
+                        summary = testRunRecord.toTestRunSummaryWithRowId(),
+                        // Test suites fetched with a test run don't include their test cases
+                        testSuites =
+                            rows
+                                .filter { it.get(TEST_SUITE.ID) != null }
+                                .distinctBy { it.get(TEST_SUITE.ID) }
+                                .map { it.toTestSuite(null) },
+                    )
                 }
 
             mapperSpan.end()
@@ -546,5 +552,21 @@ class TestRunDatabaseRepository(
 
     companion object {
         private fun testRunLockKey(publicId: PublicId) = "test-run:${publicId.id}"
+
+        // The summary ID is the test run's internal row ID, not its public ID (see OBJECT_STORE_PLAN.md)
+        private fun TestRunRecord.toTestRunSummaryWithRowId() =
+            TestRunSummary(
+                id = id.toString(),
+                totalTestCount = totalTestCount,
+                totalPassingCount = totalPassingCount,
+                totalSkippedCount = totalSkippedCount,
+                totalFailureCount = totalFailureCount,
+                passed = passed,
+                cumulativeDuration = cumulativeDuration,
+                averageDuration = averageDuration,
+                slowestTestCaseDuration = slowestTestCaseDuration,
+                createdTimestamp = createdTimestamp.toInstantInDefaultZone(),
+                wallClockDuration = wallClockDuration,
+            )
     }
 }

@@ -7,17 +7,19 @@ import org.jooq.Record
 import org.jooq.SelectOnConditionStep
 import org.jooq.TableField
 import org.jooq.impl.DSL
-import org.simpleflatmapper.jdbc.JdbcMapperFactory
-import projektor.database.generated.Tables
+import projektor.database.generated.Tables.TEST_CASE
+import projektor.database.generated.Tables.TEST_FAILURE
 import projektor.database.generated.Tables.TEST_RUN
 import projektor.database.generated.Tables.TEST_SUITE
+import projektor.database.generated.Tables.TEST_SUITE_GROUP
 import projektor.database.generated.tables.records.TestSuiteRecord
 import projektor.server.api.PublicId
+import projektor.server.api.TestCase
 import projektor.server.api.TestOutput
 import projektor.server.api.TestSuite
-import projektor.util.addPrefixToFields
-import kotlin.streams.toList
-import kotlin.use
+import projektor.testcase.TestCaseDatabaseRepository.Companion.testCaseFieldsToSelect
+import projektor.testcase.TestCaseDatabaseRepository.Companion.testFailureFieldsToSelect
+import projektor.testcase.TestCaseDatabaseRepository.Companion.toNestedTestCase
 
 class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuiteRepository {
     override suspend fun fetchTestSuite(
@@ -25,18 +27,12 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
         testSuiteIdx: Int,
     ): TestSuite? =
         withContext(Dispatchers.IO) {
-            val resultSet =
-                selectTestSuite(dslContext)
-                    .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id).and(TEST_SUITE.IDX.eq(testSuiteIdx)))
-                    .orderBy(TEST_SUITE.ID, Tables.TEST_CASE.ID)
-                    .fetchResultSet()
-
-            val testSuite: TestSuite? =
-                resultSet.use {
-                    testSuiteMapper.stream(resultSet).findFirst().orElse(null)
-                }
-
-            testSuite
+            selectTestSuite(dslContext)
+                .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id).and(TEST_SUITE.IDX.eq(testSuiteIdx)))
+                .orderBy(TEST_SUITE.ID, TEST_CASE.ID)
+                .fetch()
+                .toTestSuitesWithCases()
+                .firstOrNull()
         }
 
     override suspend fun fetchTestSuites(
@@ -54,18 +50,11 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
                 conditions.add(TEST_SUITE.FAILURE_COUNT.ge(1))
             }
 
-            val resultSet =
-                selectTestSuite(dslContext)
-                    .where(conditions)
-                    .orderBy(TEST_SUITE.ID, Tables.TEST_CASE.ID)
-                    .fetchResultSet()
-
-            val testSuites =
-                resultSet.use {
-                    testSuiteMapper.stream(resultSet).toList()
-                }
-
-            testSuites
+            selectTestSuite(dslContext)
+                .where(conditions)
+                .orderBy(TEST_SUITE.ID, TEST_CASE.ID)
+                .fetch()
+                .toTestSuitesWithCases()
         }
 
     override suspend fun fetchTestSuitesWithCases(testRunPublicId: PublicId): List<TestSuite> =
@@ -110,41 +99,74 @@ class TestSuiteDatabaseRepository(private val dslContext: DSLContext) : TestSuit
         }
 
     companion object {
-        private val testSuiteMapper =
-            JdbcMapperFactory.newInstance()
-                .addKeys("id", "test_cases_id", "test_cases_failure_id")
-                .ignorePropertyNotFound()
-                .newMapper(TestSuite::class.java)
-
         // Takes the DSLContext so it can be used inside a transaction
         fun fetchTestSuitesWithCases(
             dslContext: DSLContext,
             testRunPublicId: PublicId,
-        ): List<TestSuite> {
-            val resultSet =
-                selectTestSuite(dslContext)
-                    .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
-                    .orderBy(TEST_SUITE.ID, Tables.TEST_CASE.ID)
-                    .fetchResultSet()
-
-            return resultSet.use { testSuiteMapper.stream(resultSet).toList() }
-        }
+        ): List<TestSuite> =
+            selectTestSuite(dslContext)
+                .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
+                .orderBy(TEST_SUITE.ID, TEST_CASE.ID)
+                .fetch()
+                .toTestSuitesWithCases()
 
         val testSuiteFieldsToSelect = TEST_SUITE.fields().toList().minus(listOf(TEST_SUITE.SYSTEM_ERR, TEST_SUITE.SYSTEM_OUT))
 
+        val testSuiteGroupFieldsToSelect = listOf(TEST_SUITE_GROUP.GROUP_NAME, TEST_SUITE_GROUP.GROUP_LABEL)
+
+        /**
+         * Selects test suites with one row per test case (and failure), to map with [toTestSuitesWithCases].
+         */
         fun selectTestSuite(dslContext: DSLContext): SelectOnConditionStep<Record> =
             dslContext
                 .select(testSuiteFieldsToSelect)
-                .select(Tables.TEST_CASE.addPrefixToFields("test_cases_"))
-                .select(TEST_RUN.PUBLIC_ID.`as`("test_cases_public_id"))
-                .select(TEST_SUITE.IDX.`as`("test_cases_test_suite_idx"))
-                .select(TEST_RUN.CREATED_TIMESTAMP.`as`("test_cases_created_timestamp"))
-                .select(Tables.TEST_FAILURE.addPrefixToFields("test_cases_failure_"))
-                .select(Tables.TEST_SUITE_GROUP.fields().toList())
+                .select(testSuiteGroupFieldsToSelect)
+                .select(testCaseFieldsToSelect)
+                .select(testFailureFieldsToSelect)
+                .select(TEST_RUN.PUBLIC_ID, TEST_RUN.CREATED_TIMESTAMP)
                 .from(TEST_SUITE)
                 .innerJoin(TEST_RUN).on(TEST_SUITE.TEST_RUN_ID.eq(TEST_RUN.ID))
-                .leftOuterJoin(Tables.TEST_CASE).on(Tables.TEST_CASE.TEST_SUITE_ID.eq(TEST_SUITE.ID))
-                .leftOuterJoin(Tables.TEST_FAILURE).on(Tables.TEST_FAILURE.TEST_CASE_ID.eq(Tables.TEST_CASE.ID))
-                .leftOuterJoin(Tables.TEST_SUITE_GROUP).on(Tables.TEST_SUITE_GROUP.ID.eq(TEST_SUITE.TEST_SUITE_GROUP_ID))
+                .leftOuterJoin(TEST_CASE).on(TEST_CASE.TEST_SUITE_ID.eq(TEST_SUITE.ID))
+                .leftOuterJoin(TEST_FAILURE).on(TEST_FAILURE.TEST_CASE_ID.eq(TEST_CASE.ID))
+                .leftOuterJoin(TEST_SUITE_GROUP).on(TEST_SUITE_GROUP.ID.eq(TEST_SUITE.TEST_SUITE_GROUP_ID))
+
+        /**
+         * Groups the rows from [selectTestSuite] into test suites with their test cases, in row order.
+         */
+        fun List<Record>.toTestSuitesWithCases(): List<TestSuite> =
+            groupBy { it.get(TEST_SUITE.ID) }
+                .values
+                .map { testSuiteRows ->
+                    val testCases =
+                        testSuiteRows
+                            .filter { it.get(TEST_CASE.ID) != null }
+                            .distinctBy { it.get(TEST_CASE.ID) }
+                            .map { it.toNestedTestCase() }
+
+                    testSuiteRows.first().toTestSuite(testCases)
+                }
+
+        /**
+         * Requires the [testSuiteFieldsToSelect] and [testSuiteGroupFieldsToSelect].
+         */
+        fun Record.toTestSuite(testCases: List<TestCase>?) =
+            TestSuite(
+                idx = get(TEST_SUITE.IDX),
+                fileName = get(TEST_SUITE.FILE_NAME),
+                packageName = get(TEST_SUITE.PACKAGE_NAME),
+                className = get(TEST_SUITE.CLASS_NAME),
+                testCount = get(TEST_SUITE.TEST_COUNT),
+                passingCount = get(TEST_SUITE.PASSING_COUNT),
+                skippedCount = get(TEST_SUITE.SKIPPED_COUNT),
+                failureCount = get(TEST_SUITE.FAILURE_COUNT),
+                startTs = get(TEST_SUITE.START_TS),
+                hostname = get(TEST_SUITE.HOSTNAME),
+                duration = get(TEST_SUITE.DURATION),
+                hasSystemOut = get(TEST_SUITE.HAS_SYSTEM_OUT),
+                hasSystemErr = get(TEST_SUITE.HAS_SYSTEM_ERR),
+                groupName = get(TEST_SUITE_GROUP.GROUP_NAME),
+                groupLabel = get(TEST_SUITE_GROUP.GROUP_LABEL),
+                testCases = testCases,
+            )
     }
 }

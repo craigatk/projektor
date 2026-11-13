@@ -5,9 +5,9 @@ import kotlinx.coroutines.withContext
 import org.jooq.Condition
 import org.jooq.Configuration
 import org.jooq.DSLContext
+import org.jooq.Record
 import org.jooq.impl.DSL
 import org.jooq.impl.DSL.sum
-import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables.CODE_COVERAGE_FILE
 import projektor.database.generated.Tables.CODE_COVERAGE_GROUP
 import projektor.database.generated.Tables.CODE_COVERAGE_RUN
@@ -21,32 +21,16 @@ import projektor.database.generated.tables.pojos.CodeCoverageGroup
 import projektor.database.generated.tables.pojos.CodeCoverageRun
 import projektor.database.generated.tables.pojos.CodeCoverageStats
 import projektor.parser.coverage.model.CoverageReport
+import projektor.parser.coverage.model.CoverageReportStat
 import projektor.parser.coverage.model.CoverageReportStats
 import projektor.server.api.PublicId
 import projektor.server.api.coverage.CoverageFile
 import projektor.server.api.coverage.CoverageStat
+import projektor.server.api.coverage.CoverageStats
 import projektor.util.lockUntilTransactionEnds
-import kotlin.streams.toList
+import java.math.BigDecimal
 
 class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageRepository {
-    private val coverageReportMapper =
-        JdbcMapperFactory.newInstance()
-            .addKeys("id")
-            .ignorePropertyNotFound()
-            .newMapper(CoverageReport::class.java)
-
-    private val overallStatsMapper =
-        JdbcMapperFactory.newInstance()
-            .addKeys("id")
-            .ignorePropertyNotFound()
-            .newMapper(CoverageReportStats::class.java)
-
-    private val coverageFileMapper =
-        JdbcMapperFactory.newInstance()
-            .addKeys("id")
-            .ignorePropertyNotFound()
-            .newMapper(CoverageFile::class.java)
-
     override suspend fun createOrGetCoverageRun(publicId: PublicId) {
         withContext(Dispatchers.IO) {
             dslContext.transaction { configuration ->
@@ -288,27 +272,28 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
 
     override suspend fun fetchOverallStats(publicId: PublicId): CoverageReportStats =
         withContext(Dispatchers.IO) {
-            val resultSet =
-                dslContext.select(
-                    sum(CODE_COVERAGE_STATS.BRANCH_COVERED).`as`("branch_stat_covered"),
-                    sum(CODE_COVERAGE_STATS.BRANCH_MISSED).`as`("branch_stat_missed"),
-                    sum(CODE_COVERAGE_STATS.STATEMENT_COVERED).`as`("statement_stat_covered"),
-                    sum(CODE_COVERAGE_STATS.STATEMENT_MISSED).`as`("statement_stat_missed"),
-                    sum(CODE_COVERAGE_STATS.LINE_COVERED).`as`("line_stat_covered"),
-                    sum(CODE_COVERAGE_STATS.LINE_MISSED).`as`("line_stat_missed"),
-                )
-                    .from(CODE_COVERAGE_STATS)
-                    .innerJoin(CODE_COVERAGE_GROUP).on(CODE_COVERAGE_STATS.ID.eq(CODE_COVERAGE_GROUP.STATS_ID))
-                    .innerJoin(CODE_COVERAGE_RUN).on(CODE_COVERAGE_RUN.ID.eq(CODE_COVERAGE_GROUP.CODE_COVERAGE_RUN_ID))
-                    .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id).and(CODE_COVERAGE_STATS.SCOPE.eq("GROUP")))
-                    .fetchResultSet()
+            val branchCovered = sum(CODE_COVERAGE_STATS.BRANCH_COVERED)
+            val branchMissed = sum(CODE_COVERAGE_STATS.BRANCH_MISSED)
+            val statementCovered = sum(CODE_COVERAGE_STATS.STATEMENT_COVERED)
+            val statementMissed = sum(CODE_COVERAGE_STATS.STATEMENT_MISSED)
+            val lineCovered = sum(CODE_COVERAGE_STATS.LINE_COVERED)
+            val lineMissed = sum(CODE_COVERAGE_STATS.LINE_MISSED)
 
-            val overallStatus: CoverageReportStats =
-                resultSet.use {
-                    overallStatsMapper.stream(resultSet).findFirst().orElse(null)
+            // The sums are null when there's no coverage
+            fun BigDecimal?.toCount() = this?.toInt() ?: 0
+
+            dslContext.select(branchCovered, branchMissed, statementCovered, statementMissed, lineCovered, lineMissed)
+                .from(CODE_COVERAGE_STATS)
+                .innerJoin(CODE_COVERAGE_GROUP).on(CODE_COVERAGE_STATS.ID.eq(CODE_COVERAGE_GROUP.STATS_ID))
+                .innerJoin(CODE_COVERAGE_RUN).on(CODE_COVERAGE_RUN.ID.eq(CODE_COVERAGE_GROUP.CODE_COVERAGE_RUN_ID))
+                .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id).and(CODE_COVERAGE_STATS.SCOPE.eq("GROUP")))
+                .fetchSingle { record ->
+                    CoverageReportStats(
+                        statementStat = CoverageReportStat(record.get(statementCovered).toCount(), record.get(statementMissed).toCount()),
+                        lineStat = CoverageReportStat(record.get(lineCovered).toCount(), record.get(lineMissed).toCount()),
+                        branchStat = CoverageReportStat(record.get(branchCovered).toCount(), record.get(branchMissed).toCount()),
+                    )
                 }
-
-            overallStatus
         }
 
     override suspend fun coverageGroupExists(publicId: PublicId): Boolean =
@@ -332,55 +317,55 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
     private fun fetchCoverageFiles(
         dslContext: DSLContext,
         condition: Condition,
-    ): List<CoverageFile> {
-        val resultSet =
-            dslContext.select(
-                CODE_COVERAGE_FILE.DIRECTORY_NAME,
-                CODE_COVERAGE_FILE.FILE_NAME,
-                CODE_COVERAGE_FILE.FILE_PATH,
-                CODE_COVERAGE_FILE.MISSED_LINES,
-                CODE_COVERAGE_FILE.PARTIAL_LINES,
-                CODE_COVERAGE_STATS.BRANCH_COVERED.`as`("stats_branch_stat_covered"),
-                CODE_COVERAGE_STATS.BRANCH_MISSED.`as`("stats_branch_stat_missed"),
-                CODE_COVERAGE_STATS.STATEMENT_COVERED.`as`("stats_statement_stat_covered"),
-                CODE_COVERAGE_STATS.STATEMENT_MISSED.`as`("stats_statement_stat_missed"),
-                CODE_COVERAGE_STATS.LINE_COVERED.`as`("stats_line_stat_covered"),
-                CODE_COVERAGE_STATS.LINE_MISSED.`as`("stats_line_stat_missed"),
-            )
-                .from(CODE_COVERAGE_FILE)
-                .innerJoin(CODE_COVERAGE_RUN).on(CODE_COVERAGE_FILE.CODE_COVERAGE_RUN_ID.eq(CODE_COVERAGE_RUN.ID))
-                .innerJoin(CODE_COVERAGE_GROUP).on(CODE_COVERAGE_FILE.CODE_COVERAGE_GROUP_ID.eq(CODE_COVERAGE_GROUP.ID))
-                .innerJoin(CODE_COVERAGE_STATS).on(CODE_COVERAGE_FILE.STATS_ID.eq(CODE_COVERAGE_STATS.ID))
-                .where(condition)
-                .fetchResultSet()
-
-        return resultSet.use { coverageFileMapper.stream(resultSet).toList() }
-    }
+    ): List<CoverageFile> =
+        dslContext.select(
+            CODE_COVERAGE_FILE.DIRECTORY_NAME,
+            CODE_COVERAGE_FILE.FILE_NAME,
+            CODE_COVERAGE_FILE.FILE_PATH,
+            CODE_COVERAGE_FILE.MISSED_LINES,
+            CODE_COVERAGE_FILE.PARTIAL_LINES,
+            *statsFields,
+        )
+            .from(CODE_COVERAGE_FILE)
+            .innerJoin(CODE_COVERAGE_RUN).on(CODE_COVERAGE_FILE.CODE_COVERAGE_RUN_ID.eq(CODE_COVERAGE_RUN.ID))
+            .innerJoin(CODE_COVERAGE_GROUP).on(CODE_COVERAGE_FILE.CODE_COVERAGE_GROUP_ID.eq(CODE_COVERAGE_GROUP.ID))
+            .innerJoin(CODE_COVERAGE_STATS).on(CODE_COVERAGE_FILE.STATS_ID.eq(CODE_COVERAGE_STATS.ID))
+            .where(condition)
+            .fetch { record ->
+                CoverageFile(
+                    fileName = record.get(CODE_COVERAGE_FILE.FILE_NAME),
+                    directoryName = record.get(CODE_COVERAGE_FILE.DIRECTORY_NAME),
+                    missedLines = record.get(CODE_COVERAGE_FILE.MISSED_LINES),
+                    partialLines = record.get(CODE_COVERAGE_FILE.PARTIAL_LINES),
+                    stats =
+                        CoverageStats(
+                            statementStat = CoverageStat(record.statementCovered(), record.statementMissed()),
+                            lineStat = CoverageStat(record.lineCovered(), record.lineMissed()),
+                            branchStat = CoverageStat(record.branchCovered(), record.branchMissed()),
+                        ),
+                    filePath = record.get(CODE_COVERAGE_FILE.FILE_PATH),
+                )
+            }
 
     override suspend fun fetchCoverageList(publicId: PublicId): List<CoverageReport> =
         withContext(Dispatchers.IO) {
-            val resultSet =
-                dslContext.select(
-                    CODE_COVERAGE_GROUP.NAME.`as`("name"),
-                    CODE_COVERAGE_STATS.BRANCH_COVERED.`as`("total_stats_branch_stat_covered"),
-                    CODE_COVERAGE_STATS.BRANCH_MISSED.`as`("total_stats_branch_stat_missed"),
-                    CODE_COVERAGE_STATS.STATEMENT_COVERED.`as`("total_stats_statement_stat_covered"),
-                    CODE_COVERAGE_STATS.STATEMENT_MISSED.`as`("total_stats_statement_stat_missed"),
-                    CODE_COVERAGE_STATS.LINE_COVERED.`as`("total_stats_line_stat_covered"),
-                    CODE_COVERAGE_STATS.LINE_MISSED.`as`("total_stats_line_stat_missed"),
-                )
-                    .from(CODE_COVERAGE_RUN)
-                    .innerJoin(CODE_COVERAGE_GROUP).on(CODE_COVERAGE_RUN.ID.eq(CODE_COVERAGE_GROUP.CODE_COVERAGE_RUN_ID))
-                    .innerJoin(CODE_COVERAGE_STATS).on(CODE_COVERAGE_GROUP.STATS_ID.eq(CODE_COVERAGE_STATS.ID))
-                    .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id).and(CODE_COVERAGE_STATS.SCOPE.eq("GROUP")))
-                    .fetchResultSet()
-
-            val coverageReports: List<CoverageReport> =
-                resultSet.use {
-                    coverageReportMapper.stream(resultSet).toList()
+            dslContext.select(CODE_COVERAGE_GROUP.NAME, *statsFields)
+                .from(CODE_COVERAGE_RUN)
+                .innerJoin(CODE_COVERAGE_GROUP).on(CODE_COVERAGE_RUN.ID.eq(CODE_COVERAGE_GROUP.CODE_COVERAGE_RUN_ID))
+                .innerJoin(CODE_COVERAGE_STATS).on(CODE_COVERAGE_GROUP.STATS_ID.eq(CODE_COVERAGE_STATS.ID))
+                .where(CODE_COVERAGE_RUN.TEST_RUN_PUBLIC_ID.eq(publicId.id).and(CODE_COVERAGE_STATS.SCOPE.eq("GROUP")))
+                .fetch { record ->
+                    CoverageReport(
+                        name = record.get(CODE_COVERAGE_GROUP.NAME),
+                        totalStats =
+                            CoverageReportStats(
+                                statementStat = CoverageReportStat(record.statementCovered(), record.statementMissed()),
+                                lineStat = CoverageReportStat(record.lineCovered(), record.lineMissed()),
+                                branchStat = CoverageReportStat(record.branchCovered(), record.branchMissed()),
+                            ),
+                        files = null,
+                    )
                 }
-
-            coverageReports
         }
 
     override suspend fun deleteCoverage(publicId: PublicId): Boolean =
@@ -392,5 +377,28 @@ class CoverageDatabaseRepository(private val dslContext: DSLContext) : CoverageR
 
     companion object {
         private fun coverageLockKey(publicId: PublicId) = "coverage:${publicId.id}"
+
+        private val statsFields =
+            arrayOf(
+                CODE_COVERAGE_STATS.STATEMENT_COVERED,
+                CODE_COVERAGE_STATS.STATEMENT_MISSED,
+                CODE_COVERAGE_STATS.LINE_COVERED,
+                CODE_COVERAGE_STATS.LINE_MISSED,
+                CODE_COVERAGE_STATS.BRANCH_COVERED,
+                CODE_COVERAGE_STATS.BRANCH_MISSED,
+            )
+
+        // Null counts map to 0, like the mapper this replaced did for the stats' int properties
+        private fun Record.statementCovered() = get(CODE_COVERAGE_STATS.STATEMENT_COVERED) ?: 0
+
+        private fun Record.statementMissed() = get(CODE_COVERAGE_STATS.STATEMENT_MISSED) ?: 0
+
+        private fun Record.lineCovered() = get(CODE_COVERAGE_STATS.LINE_COVERED) ?: 0
+
+        private fun Record.lineMissed() = get(CODE_COVERAGE_STATS.LINE_MISSED) ?: 0
+
+        private fun Record.branchCovered() = get(CODE_COVERAGE_STATS.BRANCH_COVERED) ?: 0
+
+        private fun Record.branchMissed() = get(CODE_COVERAGE_STATS.BRANCH_MISSED) ?: 0
     }
 }
