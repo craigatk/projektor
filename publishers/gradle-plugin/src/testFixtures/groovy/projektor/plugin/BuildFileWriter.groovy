@@ -3,6 +3,17 @@ package projektor.plugin
 import org.junit.rules.TemporaryFolder
 
 class BuildFileWriter {
+    // CodeNarc's default Groovy version can't read Java 25 class files, so force a newer Groovy onto its classpath
+    private static final String CODENARC_GROOVY_VERSION_OVERRIDE = """
+            configurations.codenarc {
+                resolutionStrategy.eachDependency {
+                    if (it.requested.group == 'org.apache.groovy') {
+                        it.useVersion('4.0.33')
+                    }
+                }
+            }
+    """.stripIndent()
+
     static File createProjectBuildFile(
             TemporaryFolder projectDir,
             ProjectBuildFileConfig config = new ProjectBuildFileConfig()
@@ -41,9 +52,9 @@ class BuildFileWriter {
             }
             
             dependencies {
-                implementation('org.apache.groovy:groovy-all:4.0.28')
+                implementation('org.apache.groovy:groovy-all:4.0.33')
 
-                testImplementation('org.spockframework:spock-core:2.4-M6-groovy-4.0')
+                testImplementation('org.spockframework:spock-core:2.4-groovy-4.0')
                 testRuntimeOnly('org.junit.platform:junit-platform-launcher')
             }
 
@@ -54,6 +65,8 @@ class BuildFileWriter {
             ${config.includeJacocoPlugin ? "jacocoTestReport { dependsOn test }": ""}
 
             ${config.includeCodeNarcPlugin ? "codenarc { reportFormat 'text' }": ""}
+
+            ${config.includeCodeNarcPlugin ? CODENARC_GROOVY_VERSION_OVERRIDE : ""}
         """.stripIndent()
     }
 
@@ -114,6 +127,18 @@ class BuildFileWriter {
                 testRuntimeOnly "org.junit.platform:junit-platform-launcher"
             }
             
+            // Kotlin 2.2 (needed by the older Kover versions under test) can't target Java 25,
+            // so pin the JVM target when the build runs on a newer JDK
+            java {
+                sourceCompatibility = JavaVersion.VERSION_21
+                targetCompatibility = JavaVersion.VERSION_21
+            }
+            kotlin {
+                compilerOptions {
+                    jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
+                }
+            }
+
             ${koverConfigSetup}
             ${koverCoverageEngine}
 

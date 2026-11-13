@@ -7,6 +7,16 @@ plugins {
     id 'groovy'
 }
 
+java {
+    // Keep the published plugin's bytecode (and its Gradle module metadata) at Java 21 so users
+    // don't have to run their Gradle builds on Java 25, even though this repo builds on Java 25.
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+    // The test source sets depend on server modules compiled for Java 25, so don't let the
+    // Java 21 target above block resolving them.
+    disableAutoTargetJvm()
+}
+
 sourceSets {
     functionalTest {
         groovy.srcDir file('src/functionalTest/groovy')

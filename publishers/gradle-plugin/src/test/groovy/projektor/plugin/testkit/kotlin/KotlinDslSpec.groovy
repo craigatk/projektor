@@ -29,7 +29,8 @@ class KotlinDslSpec extends ProjectSpec {
             }
             
             dependencies {
-                "testImplementation"("org.spockframework:spock-core:2.4-M5-groovy-4.0")
+                "testImplementation"("org.apache.groovy:groovy-all:4.0.33")
+                "testImplementation"("org.spockframework:spock-core:2.4-groovy-4.0")
             }
 
             tasks.named<Test>("test") {

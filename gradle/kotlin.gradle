@@ -2,10 +2,10 @@ apply plugin: "kotlin"
 apply plugin: "org.jlleitschuh.gradle.ktlint"
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "21"
+    kotlinOptions.jvmTarget = "25"
 }
 compileTestKotlin {
-    kotlinOptions.jvmTarget =  "21"
+    kotlinOptions.jvmTarget = "25"
 }
 
 dependencies {

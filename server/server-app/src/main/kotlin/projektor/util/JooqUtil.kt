@@ -1,14 +1,15 @@
 package projektor.util
 
 import org.jooq.DSLContext
-import org.jooq.Field
-import org.jooq.impl.TableImpl
 import projektor.database.generated.Tables.TEST_RUN
 import projektor.server.api.PublicId
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 
-fun TableImpl<*>.addPrefixToFields(prefix: String): List<Field<*>> {
-    return fields().map { it.`as`("${prefix}${it.name}") }
-}
+// Timestamp columns are stored without a time zone. Interprets them in the JVM's default time zone,
+// the same as JDBC's Timestamp.toInstant() (and the SimpleFlatMapper mapping this replaced).
+fun LocalDateTime.toInstantInDefaultZone(): Instant = atZone(ZoneId.systemDefault()).toInstant()
 
 /**
  * Takes a Postgres advisory lock on the key until the current transaction ends, serializing transactions that

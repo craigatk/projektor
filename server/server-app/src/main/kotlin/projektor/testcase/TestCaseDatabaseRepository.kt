@@ -7,7 +7,6 @@ import org.jooq.Record
 import org.jooq.SelectOnConditionStep
 import org.jooq.TableField
 import org.jooq.impl.DSL
-import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables.GIT_METADATA
 import projektor.database.generated.Tables.RESULTS_METADATA
 import projektor.database.generated.Tables.TEST_CASE
@@ -19,27 +18,23 @@ import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companio
 import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withProjectName
 import projektor.server.api.PublicId
 import projektor.server.api.TestCase
+import projektor.server.api.TestFailure
 import projektor.server.api.TestOutput
 import projektor.server.api.history.TestCaseHistoryEntry
 import projektor.testcase.slow.TestCaseDurationBaseline
 import projektor.testcase.slow.TestCaseDurationBaselines
-import projektor.util.addPrefixToFields
 import java.math.BigDecimal
-import kotlin.streams.toList
 
 class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseRepository {
     override suspend fun fetchFailedTestCases(testRunPublicId: PublicId): List<TestCase> =
         withContext(Dispatchers.IO) {
-            val resultSet =
-                selectTestCase(dslContext)
-                    .where(
-                        TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
-                            .and(TEST_CASE.PASSED.eq(false)),
-                    )
-                    .orderBy(TEST_CASE.ID)
-                    .fetchResultSet()
-
-            resultSet.use { testCaseMapper.stream(it).toList() }
+            selectTestCase(dslContext)
+                .where(
+                    TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
+                        .and(TEST_CASE.PASSED.eq(false)),
+                )
+                .orderBy(TEST_CASE.ID)
+                .fetch { it.toTestCase() }
         }
 
     override suspend fun fetchSlowTestCases(
@@ -47,14 +42,11 @@ class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseR
         limit: Int,
     ): List<TestCase> =
         withContext(Dispatchers.IO) {
-            val resultSet =
-                selectTestCase(dslContext)
-                    .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
-                    .orderBy(TEST_CASE.DURATION.desc())
-                    .limit(limit)
-                    .fetchResultSet()
-
-            resultSet.use { testCaseMapper.stream(it).toList() }
+            selectTestCase(dslContext)
+                .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
+                .orderBy(TEST_CASE.DURATION.desc())
+                .limit(limit)
+                .fetch { it.toTestCase() }
         }
 
     override suspend fun fetchTestCase(
@@ -63,22 +55,15 @@ class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseR
         testCaseIdx: Int,
     ): TestCase? =
         withContext(Dispatchers.IO) {
-            val resultSet =
-                selectTestCase(dslContext)
-                    .where(
-                        TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
-                            .and(TEST_SUITE.IDX.eq(testSuiteIdx))
-                            .and(TEST_CASE.IDX.eq(testCaseIdx)),
-                    )
-                    .orderBy(TEST_CASE.ID)
-                    .fetchResultSet()
-
-            val testCase: TestCase? =
-                resultSet.use {
-                    testCaseMapper.stream(resultSet).findFirst().orElse(null)
-                }
-
-            testCase
+            selectTestCase(dslContext)
+                .where(
+                    TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id)
+                        .and(TEST_SUITE.IDX.eq(testSuiteIdx))
+                        .and(TEST_CASE.IDX.eq(testCaseIdx)),
+                )
+                .orderBy(TEST_CASE.ID)
+                .limit(1)
+                .fetchOne { it.toTestCase() }
         }
 
     override suspend fun fetchTestCaseHistory(
@@ -167,13 +152,10 @@ class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseR
 
     override suspend fun fetchTestCases(testRunPublicId: PublicId): List<TestCase> =
         withContext(Dispatchers.IO) {
-            val resultSet =
-                selectTestCase(dslContext)
-                    .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
-                    .orderBy(TEST_CASE.ID)
-                    .fetchResultSet()
-
-            resultSet.use { testCaseMapper.stream(it).toList() }
+            selectTestCase(dslContext)
+                .where(TEST_RUN.PUBLIC_ID.eq(testRunPublicId.id))
+                .orderBy(TEST_CASE.ID)
+                .fetch { it.toTestCase() }
         }
 
     override suspend fun fetchTestCaseDurationBaselines(
@@ -294,30 +276,112 @@ class TestCaseDatabaseRepository(private val dslContext: DSLContext) : TestCaseR
     }
 
     companion object {
-        val testCaseMapper =
-            JdbcMapperFactory.newInstance()
-                .addKeys("id", "failure_id")
-                .ignorePropertyNotFound()
-                .newMapper(TestCase::class.java)
+        // The test case's own columns, without its potentially large output
+        val testCaseFieldsToSelect =
+            listOf(
+                TEST_CASE.ID,
+                TEST_CASE.IDX,
+                TEST_CASE.NAME,
+                TEST_CASE.PACKAGE_NAME,
+                TEST_CASE.CLASS_NAME,
+                TEST_CASE.DURATION,
+                TEST_CASE.PASSED,
+                TEST_CASE.SKIPPED,
+                TEST_CASE.HAS_SYSTEM_OUT,
+                TEST_CASE.HAS_SYSTEM_ERR,
+            )
 
+        val testFailureFieldsToSelect =
+            listOf(
+                TEST_FAILURE.ID,
+                TEST_FAILURE.FAILURE_MESSAGE,
+                TEST_FAILURE.FAILURE_TYPE,
+                TEST_FAILURE.FAILURE_TEXT,
+            )
+
+        /**
+         * Selects test cases along with their test suite data, to map with [toTestCase].
+         */
         fun selectTestCase(dslContext: DSLContext): SelectOnConditionStep<Record> =
             dslContext
-                .select(TEST_CASE.fields().toList())
-                .select(TEST_SUITE.IDX.`as`("test_suite_idx"))
-                .select(TEST_CASE.HAS_SYSTEM_ERR.`as`("has_system_err_test_case"))
-                .select(TEST_CASE.HAS_SYSTEM_OUT.`as`("has_system_out_test_case"))
-                .select(TEST_SUITE.HAS_SYSTEM_ERR.`as`("has_system_err_test_suite"))
-                .select(TEST_SUITE.HAS_SYSTEM_OUT.`as`("has_system_out_test_suite"))
-                .select(TEST_SUITE.FILE_NAME.`as`("file_name"))
-                .select(TEST_SUITE.PACKAGE_NAME.`as`("package_name"))
-                .select(TEST_SUITE.CLASS_NAME.`as`("test_suite_name"))
-                .select(TEST_RUN.PUBLIC_ID.`as`("public_id"))
-                .select(TEST_RUN.CREATED_TIMESTAMP.`as`("created_timestamp"))
-                .select(TEST_FAILURE.addPrefixToFields("failure_"))
+                .select(testCaseFieldsToSelect)
+                .select(
+                    TEST_SUITE.IDX,
+                    TEST_SUITE.PACKAGE_NAME,
+                    TEST_SUITE.CLASS_NAME,
+                    TEST_SUITE.FILE_NAME,
+                    TEST_SUITE.HAS_SYSTEM_OUT,
+                    TEST_SUITE.HAS_SYSTEM_ERR,
+                    TEST_RUN.PUBLIC_ID,
+                    TEST_RUN.CREATED_TIMESTAMP,
+                )
+                .select(testFailureFieldsToSelect)
                 .from(TEST_CASE)
                 .innerJoin(TEST_SUITE).on(TEST_SUITE.ID.eq(TEST_CASE.TEST_SUITE_ID))
                 .innerJoin(TEST_RUN).on(TEST_SUITE.TEST_RUN_ID.eq(TEST_RUN.ID))
                 .leftOuterJoin(TEST_FAILURE).on(TEST_FAILURE.TEST_CASE_ID.eq(TEST_CASE.ID))
+
+        /**
+         * A test case fetched with [selectTestCase], which includes data from its test suite.
+         */
+        fun Record.toTestCase() =
+            TestCase(
+                idx = get(TEST_CASE.IDX),
+                testSuiteIdx = get(TEST_SUITE.IDX),
+                name = get(TEST_CASE.NAME),
+                packageName = get(TEST_SUITE.PACKAGE_NAME),
+                testSuiteName = get(TEST_SUITE.CLASS_NAME),
+                className = get(TEST_CASE.CLASS_NAME),
+                fileName = get(TEST_SUITE.FILE_NAME),
+                duration = get(TEST_CASE.DURATION),
+                passed = get(TEST_CASE.PASSED),
+                skipped = get(TEST_CASE.SKIPPED),
+                hasSystemOutTestCase = get(TEST_CASE.HAS_SYSTEM_OUT) ?: false,
+                hasSystemErrTestCase = get(TEST_CASE.HAS_SYSTEM_ERR) ?: false,
+                hasSystemOutTestSuite = get(TEST_SUITE.HAS_SYSTEM_OUT),
+                hasSystemErrTestSuite = get(TEST_SUITE.HAS_SYSTEM_ERR),
+                publicId = get(TEST_RUN.PUBLIC_ID),
+                createdTimestamp = get(TEST_RUN.CREATED_TIMESTAMP),
+                failure = toTestFailure(),
+            )
+
+        /**
+         * A test case nested in a test suite, which only includes the test case's own data
+         * (its own output flags, but not its test suite's). Requires the [testCaseFieldsToSelect],
+         * [testFailureFieldsToSelect], test suite index, and test run public ID and created timestamp.
+         */
+        fun Record.toNestedTestCase() =
+            TestCase(
+                idx = get(TEST_CASE.IDX),
+                testSuiteIdx = get(TEST_SUITE.IDX),
+                name = get(TEST_CASE.NAME),
+                packageName = get(TEST_CASE.PACKAGE_NAME),
+                testSuiteName = null,
+                className = get(TEST_CASE.CLASS_NAME),
+                fileName = null,
+                duration = get(TEST_CASE.DURATION),
+                passed = get(TEST_CASE.PASSED),
+                skipped = get(TEST_CASE.SKIPPED),
+                hasSystemOutTestCase = get(TEST_CASE.HAS_SYSTEM_OUT) ?: false,
+                hasSystemErrTestCase = get(TEST_CASE.HAS_SYSTEM_ERR) ?: false,
+                hasSystemOutTestSuite = false,
+                hasSystemErrTestSuite = false,
+                publicId = get(TEST_RUN.PUBLIC_ID),
+                createdTimestamp = get(TEST_RUN.CREATED_TIMESTAMP),
+                failure = toTestFailure(),
+            )
+
+        // Null when the left join to the test failure didn't find one
+        private fun Record.toTestFailure(): TestFailure? =
+            if (get(TEST_FAILURE.ID) != null) {
+                TestFailure(
+                    failureMessage = get(TEST_FAILURE.FAILURE_MESSAGE),
+                    failureType = get(TEST_FAILURE.FAILURE_TYPE),
+                    failureText = get(TEST_FAILURE.FAILURE_TEXT),
+                )
+            } else {
+                null
+            }
     }
 
     override suspend fun fetchTestCaseSystemErr(

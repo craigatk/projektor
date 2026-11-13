@@ -4,13 +4,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
 import org.jooq.impl.DSL
-import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.coverage.toCoverageStats
 import projektor.database.generated.Tables.CODE_COVERAGE_RUN
 import projektor.database.generated.Tables.CODE_COVERAGE_STATS
 import projektor.database.generated.Tables.GIT_METADATA
 import projektor.database.generated.Tables.REPOSITORY_CURRENT_COVERAGE
 import projektor.database.generated.Tables.TEST_RUN
+import projektor.parser.coverage.model.CoverageReportStat
 import projektor.parser.coverage.model.CoverageReportStats
 import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withBranchType
 import projektor.repository.testrun.RepositoryTestRunDatabaseRepository.Companion.withProjectName
@@ -19,35 +19,38 @@ import projektor.server.api.repository.BranchType
 import projektor.server.api.repository.coverage.RepositoryCoverageTimeline
 import projektor.server.api.repository.coverage.RepositoryCoverageTimelineEntry
 import projektor.server.api.repository.coverage.RepositoryCurrentCoverage
+import projektor.util.toInstantInDefaultZone
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import kotlin.streams.toList
 
 class RepositoryCoverageDatabaseRepository(private val dslContext: DSLContext) : RepositoryCoverageRepository {
-    private val repositoryCoverageTimelineEntryMapper =
-        JdbcMapperFactory.newInstance()
-            .addKeys("public_id")
-            .ignorePropertyNotFound()
-            .newMapper(ReportTimelineEntry::class.java)
-
     override suspend fun fetchRepositoryCoverageTimeline(
         branchType: BranchType,
         repoName: String,
         projectName: String?,
     ): RepositoryCoverageTimeline? =
         withContext(Dispatchers.IO) {
-            val resultSet =
+            val branchCovered = DSL.sum(CODE_COVERAGE_STATS.BRANCH_COVERED)
+            val branchMissed = DSL.sum(CODE_COVERAGE_STATS.BRANCH_MISSED)
+            val statementCovered = DSL.sum(CODE_COVERAGE_STATS.STATEMENT_COVERED)
+            val statementMissed = DSL.sum(CODE_COVERAGE_STATS.STATEMENT_MISSED)
+            val lineCovered = DSL.sum(CODE_COVERAGE_STATS.LINE_COVERED)
+            val lineMissed = DSL.sum(CODE_COVERAGE_STATS.LINE_MISSED)
+
+            fun BigDecimal?.toCount() = this?.toInt() ?: 0
+
+            val timelineEntries =
                 dslContext.select(
                     TEST_RUN.PUBLIC_ID,
                     TEST_RUN.CREATED_TIMESTAMP,
-                    DSL.sum(CODE_COVERAGE_STATS.BRANCH_COVERED).`as`("coverage_stats_branch_stat_covered"),
-                    DSL.sum(CODE_COVERAGE_STATS.BRANCH_MISSED).`as`("coverage_stats_branch_stat_missed"),
-                    DSL.sum(CODE_COVERAGE_STATS.STATEMENT_COVERED).`as`("coverage_stats_statement_stat_covered"),
-                    DSL.sum(CODE_COVERAGE_STATS.STATEMENT_MISSED).`as`("coverage_stats_statement_stat_missed"),
-                    DSL.sum(CODE_COVERAGE_STATS.LINE_COVERED).`as`("coverage_stats_line_stat_covered"),
-                    DSL.sum(CODE_COVERAGE_STATS.LINE_MISSED).`as`("coverage_stats_line_stat_missed"),
+                    branchCovered,
+                    branchMissed,
+                    statementCovered,
+                    statementMissed,
+                    lineCovered,
+                    lineMissed,
                 )
                     .from(GIT_METADATA)
                     .innerJoin(TEST_RUN).on(TEST_RUN.ID.eq(GIT_METADATA.TEST_RUN_ID))
@@ -61,14 +64,26 @@ class RepositoryCoverageDatabaseRepository(private val dslContext: DSLContext) :
                     )
                     .groupBy(TEST_RUN.PUBLIC_ID, TEST_RUN.CREATED_TIMESTAMP)
                     .orderBy(TEST_RUN.CREATED_TIMESTAMP.asc())
-                    .fetchResultSet()
+                    .fetch { record ->
+                        val coverageStats =
+                            CoverageReportStats(
+                                statementStat =
+                                    CoverageReportStat(
+                                        record.get(statementCovered).toCount(),
+                                        record.get(statementMissed).toCount(),
+                                    ),
+                                lineStat = CoverageReportStat(record.get(lineCovered).toCount(), record.get(lineMissed).toCount()),
+                                branchStat = CoverageReportStat(record.get(branchCovered).toCount(), record.get(branchMissed).toCount()),
+                            )
 
-            val timelineEntries: List<ReportTimelineEntry> =
-                resultSet.use {
-                    repositoryCoverageTimelineEntryMapper.stream(resultSet).toList()
-                }
+                        RepositoryCoverageTimelineEntry(
+                            publicId = record.get(TEST_RUN.PUBLIC_ID),
+                            createdTimestamp = record.get(TEST_RUN.CREATED_TIMESTAMP).toInstantInDefaultZone(),
+                            coverageStats = coverageStats.toCoverageStats(null),
+                        )
+                    }
 
-            if (timelineEntries.isNotEmpty()) RepositoryCoverageTimeline(timelineEntries.map { it.toFullEntry() }) else null
+            if (timelineEntries.isNotEmpty()) RepositoryCoverageTimeline(timelineEntries) else null
         }
 
     override suspend fun coverageExists(
@@ -145,17 +160,4 @@ class RepositoryCoverageDatabaseRepository(private val dslContext: DSLContext) :
                     )
                 }
         }
-
-    data class ReportTimelineEntry(
-        val publicId: String,
-        val createdTimestamp: Instant,
-        val coverageStats: CoverageReportStats,
-    ) {
-        fun toFullEntry() =
-            RepositoryCoverageTimelineEntry(
-                publicId = publicId,
-                createdTimestamp = createdTimestamp,
-                coverageStats = coverageStats.toCoverageStats(null),
-            )
-    }
 }

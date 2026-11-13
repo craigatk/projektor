@@ -65,8 +65,6 @@ dependencies {
 
     implementation "net.javacrumbs.shedlock:shedlock-provider-jdbc-template:7.11.0"
 
-    implementation 'org.simpleflatmapper:sfm-jooq:9.0.2'
-
     implementation "ch.qos.logback:logback-classic:$logbackVersion"
     implementation "net.logstash.logback:logstash-logback-encoder:9.0"
     implementation "org.codehaus.janino:janino:3.1.12" // Needed for conditionals in logback.xml

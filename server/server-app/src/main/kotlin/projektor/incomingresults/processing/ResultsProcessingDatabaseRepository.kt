@@ -3,7 +3,6 @@ package projektor.incomingresults.processing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jooq.DSLContext
-import org.simpleflatmapper.jdbc.JdbcMapperFactory
 import projektor.database.generated.Tables
 import projektor.database.generated.tables.daos.ResultsProcessingDao
 import projektor.error.ProcessingFailureRepository
@@ -20,12 +19,6 @@ class ResultsProcessingDatabaseRepository(
     private val processingFailureRepository: ProcessingFailureRepository,
 ) : ResultsProcessingRepository {
     private val resultsProcessingDao = ResultsProcessingDao(dslContext.configuration())
-
-    private val resultsProcessingMapper =
-        JdbcMapperFactory.newInstance()
-            .addKeys("public_id")
-            .ignorePropertyNotFound()
-            .newMapper(ResultsProcessing::class.java)
 
     override suspend fun createResultsProcessing(publicId: PublicId): ResultsProcessing =
         withContext(Dispatchers.IO) {
@@ -77,15 +70,17 @@ class ResultsProcessingDatabaseRepository(
 
     override suspend fun fetchResultsProcessing(publicId: PublicId): ResultsProcessing? =
         withContext(Dispatchers.IO) {
-            val resultSet =
-                dslContext
-                    .select(Tables.RESULTS_PROCESSING.fields().toList())
-                    .select(Tables.RESULTS_PROCESSING.PUBLIC_ID.`as`("id"))
-                    .from(Tables.RESULTS_PROCESSING)
-                    .where(Tables.RESULTS_PROCESSING.PUBLIC_ID.eq(publicId.id))
-                    .limit(1)
-                    .fetchResultSet()
-
-            resultSet.use { resultsProcessingMapper.stream(it).findFirst().orElse(null) }
+            dslContext
+                .selectFrom(Tables.RESULTS_PROCESSING)
+                .where(Tables.RESULTS_PROCESSING.PUBLIC_ID.eq(publicId.id))
+                .limit(1)
+                .fetchOne { record ->
+                    ResultsProcessing(
+                        id = record.publicId,
+                        status = ResultsProcessingStatus.valueOf(record.status),
+                        createdTimestamp = record.createdTimestamp,
+                        errorMessage = record.errorMessage,
+                    )
+                }
         }
 }

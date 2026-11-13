@@ -60,10 +60,15 @@ Conventions to follow:
   e.g. `import projektor.database.generated.tables.pojos.TestRun as TestRunDB`.
 - Simple reads: jOOQ DSL directly (`.select().from().where().fetchOneInto(...)` /
   `.fetchInto(...)`).
-- Joined/nested reads: `.fetchResultSet()` piped through a SimpleFlatMapper
-  `JdbcMapperFactory` mapper (see `testRunMapper` in `TestRunDatabaseRepository` for the
-  `.addKeys(...)`/`.ignorePropertyNotFound()` pattern) — use the `addPrefixToFields`
-  extension (`projektor.util.JooqUtil`) to alias a joined table's columns before flattening.
+- Joined/nested reads: select the qualified table fields (no column aliases needed) and map
+  each row explicitly with `.fetch { record -> ... }` / `record.get(TABLE.FIELD)` — jOOQ
+  resolves `get` by qualified name, so joined tables with clashing column names (`id`,
+  `package_name`, ...) are fine. For one-to-many results, `groupBy` the rows on the parent's
+  ID (see `toTestSuitesWithCases` in `TestSuiteDatabaseRepository`); share select field lists
+  and `Record.toX()` mappers between repositories (e.g. `selectTestCase` + `toTestCase`).
+  Convert `LocalDateTime` columns to `Instant` with `toInstantInDefaultZone()`
+  (`projektor.util.JooqUtil`). SimpleFlatMapper was removed (unmaintained, and its bundled
+  ASM can't read Java 25 class files) — don't reintroduce a reflection/bytecode-based mapper.
 - Writes: generated **DAOs** (`TestRunDao(configuration)`, `.insert(pojo)`, `.update(pojo)`,
   `.deleteById(...)`, `.fetchOneByPublicId(...)`), not hand-written INSERT/UPDATE DSL, unless
   the operation doesn't map cleanly to a DAO method (e.g. `.onDuplicateKeyUpdate()` upserts).
