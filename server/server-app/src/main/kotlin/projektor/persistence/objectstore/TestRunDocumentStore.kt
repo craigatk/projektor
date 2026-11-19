@@ -29,6 +29,10 @@ import projektor.parser.model.TestSuite as ParsedTestSuite
 class TestRunDocumentStore(val store: JsonObjectStore) {
     private val writeConcurrency = Semaphore(MAX_CONCURRENT_WRITES)
 
+    // Shared by every request, so queries that read many test runs' chunks at once (such as test case history,
+    // which reads several runs in parallel) can't take every IO thread from the server's other object store calls
+    private val chunkReadConcurrency = Semaphore(MAX_CONCURRENT_CHUNK_READS)
+
     private val testRunUpdateLocks = Array(TEST_RUN_UPDATE_LOCK_STRIPES) { Mutex() }
 
     /**
@@ -78,7 +82,7 @@ class TestRunDocumentStore(val store: JsonObjectStore) {
             testRun.testSuites
                 .map { it.testCaseChunk }
                 .distinct()
-                .map { chunk -> async(Dispatchers.IO) { readTestCaseChunk(publicId, chunk) } }
+                .map { chunk -> async { readTestCaseChunkLimited(publicId, chunk) } }
                 .awaitAll()
                 .flatMap { it?.testSuites ?: listOf() }
                 .associate { it.testSuiteIdx to it.testCases }
@@ -91,12 +95,15 @@ class TestRunDocumentStore(val store: JsonObjectStore) {
         publicId: PublicId,
         testRun: TestRunDocument,
     ): Map<Int, TestCaseChunkDocument> =
-        testRun.testSuites
-            .map { it.testCaseChunk }
-            .distinct()
-            .mapParallel { chunk -> readTestCaseChunk(publicId, chunk)?.let { chunk to it } }
-            .filterNotNull()
-            .toMap()
+        coroutineScope {
+            testRun.testSuites
+                .map { it.testCaseChunk }
+                .distinct()
+                .map { chunk -> async { readTestCaseChunkLimited(publicId, chunk)?.let { chunk to it } } }
+                .awaitAll()
+                .filterNotNull()
+                .toMap()
+        }
 
     /**
      * Blocking version of [readAllTestCases], for use inside a compare-and-swap update.
@@ -273,11 +280,23 @@ class TestRunDocumentStore(val store: JsonObjectStore) {
         firstTestSuiteIdx: Int,
     ): TestCaseChunkDocument? = store.read<TestCaseChunkDocument>(ObjectStoreKeys.testCaseChunk(publicId, firstTestSuiteIdx))
 
+    // Waits for a permit before taking an IO thread, so queued reads don't hold threads while they wait
+    private suspend fun readTestCaseChunkLimited(
+        publicId: PublicId,
+        firstTestSuiteIdx: Int,
+    ): TestCaseChunkDocument? =
+        chunkReadConcurrency.withPermit {
+            withContext(Dispatchers.IO) { readTestCaseChunk(publicId, firstTestSuiteIdx) }
+        }
+
     companion object {
         // Bounds how many test suites' test cases are read to fetch a single test suite or test case
         const val TEST_SUITES_PER_CHUNK = 100
 
         private const val MAX_CONCURRENT_WRITES = 16
+
+        // Half of Dispatchers.IO's 64 threads, leaving the rest for other object store calls
+        internal const val MAX_CONCURRENT_CHUNK_READS = 32
 
         private const val TEST_RUN_UPDATE_LOCK_STRIPES = 64
 
