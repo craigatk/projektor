@@ -2,6 +2,7 @@ package projektor.persistence.objectstore
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
+import projektor.DatabaseCleanupLock
 import projektor.incomingresults.model.GitMetadata
 import projektor.incomingresults.model.GroupedResults
 import projektor.incomingresults.model.GroupedTestSuites
@@ -23,6 +24,7 @@ import projektor.incomingresults.model.PerformanceResult as IncomingPerformanceR
 /**
  * Checks that the object-store backend returns the same data for a single test run as the database backend.
  */
+@DatabaseCleanupLock(DatabaseCleanupLock.Mode.CREATES_CLEANUP_ELIGIBLE_TEST_RUNS)
 class ObjectStoreParityTest : ObjectStoreParityTestCase() {
     @Test
     fun `grouped test run should match`() {
