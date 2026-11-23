@@ -5019,10 +5019,10 @@ type-fest@^0.8.0:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
 
-typescript-plugin-css-modules@5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/typescript-plugin-css-modules/-/typescript-plugin-css-modules-5.3.0.tgz#45f5fad1eede32fd02da325beda0dc1bad2f884a"
-  integrity sha512-ZCSp+b7MmI2bqvSg55hHUk6XDnRPSsZQnoFacLBLTlNrHmiK/vKDMOfcGg+j5yT8nphah54UBg8EPzf8xCwdcA==
+typescript-plugin-css-modules@5.3.1:
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/typescript-plugin-css-modules/-/typescript-plugin-css-modules-5.3.1.tgz#d7342ac12f6b3afebfa9e6bf51171905cf7835a2"
+  integrity sha512-H4b2uxM2fI1+NXcOA7MfbSqIrqxxGmfY8PyPa+xpM9dYMjFz/ImW4ra2yCF/UxmN8yFxJ95zNvxDtk0R5Be/4A==
   dependencies:
     "@types/postcss-modules-local-by-default" "^4.0.2"
     "@types/postcss-modules-scope" "^3.0.4"
