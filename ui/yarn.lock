@@ -4373,13 +4373,12 @@ recast@^0.23.5:
     tiny-invariant "^1.3.3"
     tslib "^2.0.1"
 
-recharts@3.11.0:
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/recharts/-/recharts-3.11.0.tgz#1a5513dab84cb934638724fef2e0142b5004185a"
-  integrity sha512-Hs7vXskAYl82TKKkeikPxMFOaOqVJBoqxay6a4Oj+sBURVorpSKk8J732vyNsmedxK08lpPhyj2GL4E6ZMHR6Q==
+recharts@3.11.2:
+  version "3.11.2"
+  resolved "https://registry.yarnpkg.com/recharts/-/recharts-3.11.2.tgz#e9961b36dae1dd7858630b7d520821029c265dee"
+  integrity sha512-Shr5Cj5YoZWwxQozz1kLjXeKeupyxOP+VgOkbeEiY5SXM+HI3hruH4VIRH4ShGNS/GNKuuZxKEfvxiVcVrX/Jw==
   dependencies:
     "@reduxjs/toolkit" "^1.9.0 || 2.x.x"
-    clsx "^2.1.1"
     decimal.js-light "^2.5.1"
     es-toolkit "^1.39.3"
     eventemitter3 "^5.0.1"
@@ -4388,7 +4387,7 @@ recharts@3.11.0:
     reselect "5.2.0"
     tiny-invariant "^1.3.3"
     use-sync-external-store "^1.2.2"
-    victory-vendor "^37.0.2"
+    victory-vendor "^38.1.1"
 
 redent@^3.0.0:
   version "3.0.0"
@@ -5139,10 +5138,10 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-victory-vendor@^37.0.2:
-  version "37.3.6"
-  resolved "https://registry.yarnpkg.com/victory-vendor/-/victory-vendor-37.3.6.tgz#401ac4b029a0b3d33e0cba8e8a1d765c487254da"
-  integrity sha512-SbPDPdDBYp+5MJHhBCAyI7wKM3d5ivekigc2Dk2s7pgbZ9wIgIBYGVw4zGHBml/qTFbexrofXW6Gu4noGxrOwQ==
+victory-vendor@^38.1.1:
+  version "38.1.1"
+  resolved "https://registry.yarnpkg.com/victory-vendor/-/victory-vendor-38.1.1.tgz#aefbcefb44febb8b2cebe833958c58eb5aff34e7"
+  integrity sha512-noEFohUwHCd21U8wbPsUqPk1K3w3N1XvdH9UNffEvI3gQdZb6JTKhILbCXLPRorGGubk0C6Da3yXbc2xUEWYgg==
   dependencies:
     "@types/d3-array" "^3.0.3"
     "@types/d3-ease" "^3.0.0"
